@@ -597,3 +597,13 @@
   lgac: [epidemiologia-infecciosas]
   linea_especifica: covid19-sarscov2-epidemiologia
   miembros: [briseno-ramirez]
+# --- Manuscritos en preparación (sin DOI; añadidos manualmente) ---
+- doi: ""
+  titulo: "Probabilistic dengue forecasting and early warning for the 32 states of Mexico (1985–2026): a machine-learning and statistical ensemble with conformal calibration"
+  anio: "2026"
+  revista: ""
+  tipo: "article"
+  estado: "en-preparacion"
+  lgac: [epidemiologia-infecciosas, ciencia-datos-poblacionales]
+  linea_especifica: vigilancia-series-tiempo-infecciosas
+  miembros: [de-arcos-jimenez, briseno-ramirez]

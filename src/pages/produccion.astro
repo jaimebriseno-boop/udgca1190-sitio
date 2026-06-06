@@ -15,13 +15,16 @@ const integrantes = await getCollection('integrantes');
 const nombreMap = Object.fromEntries(integrantes.map((e) => [e.id, e.data.nombre]));
 const apellido = (n) => (n ? n.replace(/^\S+\s+/, '') : '');
 
+const enPrepRank = (p) => (p.estado === 'en-preparacion' ? 0 : 1);
 const produccion = getProduccion()
   .slice()
-  .sort((a, b) => (parseInt(b.anio) || 0) - (parseInt(a.anio) || 0));
+  .sort((a, b) => enPrepRank(a) - enPrepRank(b) || (parseInt(b.anio) || 0) - (parseInt(a.anio) || 0));
 
 const nPorLgac = {};
 for (const p of produccion) for (const lg of p.lgac) nPorLgac[lg] = (nPorLgac[lg] || 0) + 1;
 const total = produccion.length;
+const publicadas = produccion.filter((p) => p.estado !== 'en-preparacion').length;
+const enPrep = total - publicadas;
 ---
 <Base titulo="Producción académica" descripcion="Producción del CA UDG-CA-1190, etiquetada por línea específica y LGAC, con DOI.">
   <section class="section">
@@ -34,9 +37,10 @@ const total = produccion.length;
         </div>
       </div>
       <p class="prose text-muted pg-intro">
-        <strong id="pub-count">{total}</strong> de {total} publicaciones con DOI
-        (ORCID/PubMed). Cada una indica a qué <em>línea específica</em> y a qué
-        <em>LGAC</em> abona. Filtra por línea general:
+        <strong id="pub-count">{total}</strong> de {total} registros — {publicadas}
+        publicaciones con DOI verificado (ORCID/PubMed) y {enPrep} manuscrito{enPrep === 1 ? '' : 's'}
+        en preparación. Cada uno indica a qué <em>línea específica</em> y a qué <em>LGAC</em>
+        abona. Filtra por línea general:
       </p>
 
       <div class="filtros" role="group" aria-label="Filtrar por LGAC">
@@ -63,6 +67,9 @@ const total = produccion.length;
                   )}
                 </p>
                 <div class="pub__badges">
+                  {p.estado === 'en-preparacion' && (
+                    <span class="tag tag--fill" style="--tag-color: var(--c-teal)">En preparación</span>
+                  )}
                   {p.lgac.map((lid) => {
                     const lg = lgacMap[lid] || {};
                     return (
