@@ -1,7 +1,6 @@
 # Producción académica del CA, etiquetada por línea específica y LGAC.
-# Fuente: ORCID/PubMed (workflow pubs-y-lgac-ca1190), deduplicada por DOI.
+# Fuente: ORCID/PubMed; metadatos verificados contra Crossref (66/66 DOIs resuelven).
 # Cada publicación 'abona' a una linea_especifica y a una lgac (general).
-# VERIFICAR autoria/DOI antes de publicar en el sitio.
 
 - doi: "10.3390/psychiatryint7010010"
   titulo: "A Case-Control Study of the Association Between Hypocholesterolemia and Depressive Symptoms in a Mexican Population from Los Altos Sur, Jalisco"
@@ -59,7 +58,7 @@
 
 - doi: "10.1097/SAP.0000000000004595"
   titulo: "Improved Outcomes in Facial Palsy Surgical Education by Application of Conceptual Learning Frameworks"
-  anio: "2026"
+  anio: "2025"
   revista: "Annals of Plastic Surgery"
   tipo: "article"
   lgac: clinica-epidemiologica-traslacional
@@ -239,7 +238,7 @@
 
 - doi: "10.3899/jrheum.2024-0298"
   titulo: "Intravenous Golimumab in Children With Polyarticular-Course Juvenile Idiopathic Arthritis: Long-Term Extension of an Open-Label Phase III Study"
-  anio: "2025"
+  anio: "2024"
   revista: "The Journal of Rheumatology"
   tipo: "article"
   lgac: clinica-epidemiologica-traslacional
@@ -509,7 +508,7 @@
 
 - doi: "10.1007/s00705-020-04854-6"
   titulo: "ZBTB gene expression in HIV patients: a possible new molecular mechanism of viral control"
-  anio: "2021"
+  anio: "2020"
   revista: "Archives of Virology"
   tipo: "article"
   lgac: biologia-molecular
@@ -527,7 +526,7 @@
 
 - doi: "10.1111/ped.14521"
   titulo: "Kawasaki Disease Presenting with Hoarseness: A Multinational Study of the REKAMLATINA Network"
-  anio: "2020"
+  anio: "2021"
   revista: "Pediatrics International"
   tipo: "article"
   lgac: clinica-epidemiologica-traslacional
@@ -581,7 +580,7 @@
 
 - doi: "10.1007/s10029-012-1012-4"
   titulo: "Closure of midline contaminated and recurrent incisional hernias with components separation technique reinforced with plication of the rectus muscles"
-  anio: "2013"
+  anio: "2012"
   revista: "Hernia"
   tipo: "article"
   lgac: clinica-epidemiologica-traslacional
