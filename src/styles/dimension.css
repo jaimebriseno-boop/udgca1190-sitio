@@ -45,10 +45,11 @@ body.home { margin: 0; }
   text-align: center; color: #fff;
   max-width: 900px; padding: var(--sp-6) var(--sp-4);
 }
-.dim__plaque {
-  display: inline-flex; background: #fff; padding: var(--sp-2) var(--sp-3); margin-bottom: var(--sp-4);
+/* Logo grande reverse (texto blanco) — sin placa, sobre el fondo oscuro */
+.dim__logo {
+  width: min(720px, 92%); height: auto; display: block; margin: 0 auto var(--sp-4);
+  filter: drop-shadow(0 4px 30px rgba(0, 0, 0, 0.55));
 }
-.dim__plaque img { height: 46px; width: auto; display: block; }
 .dim__kicker {
   font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.18em;
   font-size: var(--fs-xs); color: #c7ccd6;

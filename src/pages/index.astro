@@ -40,11 +40,13 @@ const nav = [
     <div class="dim__overlay"></div>
 
     <div class="dim__content">
-      <span class="dim__plaque">
-        <img src="/logos/UDG-CA-1190_logo_horizontal.png" alt="Cuerpo Académico UDG-CA-1190" width="200" height="87" />
-      </span>
-      <p class="dim__kicker">Cuerpo Académico · {sitio.adscripcion}</p>
-      <h1 class="dim__title">{sitio.nombre}</h1>
+      <h1 class="sr-only">{sitio.nombre}</h1>
+      <img
+        class="dim__logo"
+        src="/logos/UDG-CA-1190_logo_horizontal_reverse.png"
+        alt={`Cuerpo Académico UDG-CA-1190 — ${sitio.nombre}`}
+        width="1878" height="820" />
+      <p class="dim__kicker">{sitio.adscripcion}</p>
       <p class="dim__lead">{sitio.mision}</p>
       <nav class="dim__nav" aria-label="Secciones">
         {nav.map(([href, label]) => <a href={href}>{label}</a>)}

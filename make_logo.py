@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Generador del logotipo del Cuerpo Académico UDG-CA-1190.
 Compone el escudo oficial de la UdeG con el nombre del CA usando la
-paleta cromática de The Lancet (ggsci 'lanonc'). Salida: PNG transparente HiRes.
+paleta cromática de The Lancet (ggsci 'lanonc').
+Genera versiones transparente, con fondo blanco y REVERSE (texto blanco para
+fondos oscuros). Salida en public/logos/.
 """
 from PIL import Image, ImageDraw, ImageFont
 
@@ -14,6 +16,8 @@ PURPLE = "#925E9F"
 WINE   = "#AD002A"
 BLACK  = "#1B1919"
 GRAY   = "#5B6770"
+WHITE  = "#FFFFFF"
+LIGHT  = "#C7CCD6"   # gris claro para reglas/barra en la versión reverse
 
 LOGO_PATH = "/Users/jaibri/Documents/CEIC CUTLAJO/FILOSOFIA DE DISEÑO DE CUTLAJOMULCO/UdeG logo color.png"
 OPTIMA  = "/System/Library/Fonts/Optima.ttc"
@@ -30,7 +34,6 @@ def load_logo(target_h):
     return logo.resize((target_w, target_h), Image.LANCZOS)
 
 def draw_tracked(draw, xy, text, fnt, fill, tracking):
-    """Texto con espaciado entre letras (tracking en px). Devuelve ancho total."""
     x, y = xy
     for ch in text:
         draw.text((x, y), ch, font=fnt, fill=fill)
@@ -48,7 +51,12 @@ NAME_LINES = [
 ]
 
 # ----------------------------------------------------------------------------
-def build_horizontal():
+def build_horizontal(reverse=False):
+    col_kick = WHITE if reverse else TEAL
+    col_bar  = WHITE if reverse else BLUE
+    col_acr  = WHITE if reverse else BLUE
+    col_rule = LIGHT if reverse else GRAY
+
     W, H = 2800, 1000
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
@@ -58,36 +66,34 @@ def build_horizontal():
     lx, ly = 70, (H - logo_h) // 2
     img.alpha_composite(logo, (lx, ly))
 
-    # Barra vertical de acento (azul Lancet)
     bar_x = lx + logo.size[0] + 70
-    d.rounded_rectangle([bar_x, 150, bar_x + 12, H - 150], radius=6, fill=BLUE)
+    d.rounded_rectangle([bar_x, 150, bar_x + 12, H - 150], radius=6, fill=col_bar)
 
     tx = bar_x + 70
-
-    # Kicker
     f_kick = font(OPTIMA, 46, 1)
-    draw_tracked(d, (tx, 168), "CUERPO ACADÉMICO", f_kick, TEAL, 8)
+    draw_tracked(d, (tx, 168), "CUERPO ACADÉMICO", f_kick, col_kick, 8)
 
-    # Acrónimo
     f_acr = font(OPTIMA, 168, 1)
-    d.text((tx - 4, 222), "UDG-CA-1190", font=f_acr, fill=BLUE)
+    d.text((tx - 4, 222), "UDG-CA-1190", font=f_acr, fill=col_acr)
 
-    # Regla
     acr_w = d.textlength("UDG-CA-1190", font=f_acr)
     rule_y = 430
-    d.rectangle([tx, rule_y, tx + acr_w, rule_y + 5], fill=GRAY)
+    d.rectangle([tx, rule_y, tx + acr_w, rule_y + 5], fill=col_rule)
 
-    # Nombre (3 líneas, segmentos Lancet)
     f_name = font(OPTIMA, 92, 1)
     y = rule_y + 48
     for txt, col in NAME_LINES:
-        d.text((tx - 2, y), txt, font=f_name, fill=col)
+        d.text((tx - 2, y), txt, font=f_name, fill=(WHITE if reverse else col))
         y += 112
 
     return img.crop(img.getbbox())
 
 # ----------------------------------------------------------------------------
-def build_vertical():
+def build_vertical(reverse=False):
+    col_kick = WHITE if reverse else TEAL
+    col_acr  = WHITE if reverse else BLUE
+    col_rule = LIGHT if reverse else GRAY
+
     W, H = 1900, 2150
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
@@ -102,22 +108,22 @@ def build_vertical():
 
     f_kick = font(OPTIMA, 50, 1)
     kw = tracked_width(d, "CUERPO ACADÉMICO", f_kick, 10)
-    draw_tracked(d, (cx - kw / 2, y), "CUERPO ACADÉMICO", f_kick, TEAL, 10)
+    draw_tracked(d, (cx - kw / 2, y), "CUERPO ACADÉMICO", f_kick, col_kick, 10)
     y += 92
 
     f_acr = font(OPTIMA, 180, 1)
     aw = d.textlength("UDG-CA-1190", font=f_acr)
-    d.text((cx - aw / 2, y), "UDG-CA-1190", font=f_acr, fill=BLUE)
+    d.text((cx - aw / 2, y), "UDG-CA-1190", font=f_acr, fill=col_acr)
     y += 232
 
     rw = 900
-    d.rectangle([cx - rw / 2, y, cx + rw / 2, y + 6], fill=GRAY)
+    d.rectangle([cx - rw / 2, y, cx + rw / 2, y + 6], fill=col_rule)
     y += 54
 
     f_name = font(OPTIMA, 98, 1)
     for txt, col in NAME_LINES:
         tw = d.textlength(txt, font=f_name)
-        d.text((cx - tw / 2, y), txt, font=f_name, fill=col)
+        d.text((cx - tw / 2, y), txt, font=f_name, fill=(WHITE if reverse else col))
         y += 122
 
     return img.crop(img.getbbox())
@@ -129,11 +135,13 @@ def with_white_bg(im, pad=80):
     bg.alpha_composite(im, (pad, pad))
     return bg
 
-OUT = "/Users/jaibri/Documents/UDG-CA-1190"
-h = build_horizontal()
-v = build_vertical()
+OUT = "/Users/jaibri/Documents/UDG-CA-1190/public/logos"
+h  = build_horizontal();             v  = build_vertical()
+hr = build_horizontal(reverse=True); vr = build_vertical(reverse=True)
 h.save(f"{OUT}/UDG-CA-1190_logo_horizontal.png")
 v.save(f"{OUT}/UDG-CA-1190_logo_vertical.png")
+hr.save(f"{OUT}/UDG-CA-1190_logo_horizontal_reverse.png")
+vr.save(f"{OUT}/UDG-CA-1190_logo_vertical_reverse.png")
 with_white_bg(h).convert("RGB").save(f"{OUT}/UDG-CA-1190_logo_horizontal_blanco.png")
 with_white_bg(v).convert("RGB").save(f"{OUT}/UDG-CA-1190_logo_vertical_blanco.png")
-print("OK", h.size, v.size)
+print("OK", h.size, v.size, "| reverse:", hr.size, vr.size)
