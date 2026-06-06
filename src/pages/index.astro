@@ -17,8 +17,8 @@ const lineas = (await getCollection('lineas')).sort((a, b) => (a.data.orden ?? 9
           <h1 class="display hero__name">{sitio.nombre}</h1>
           <p class="hero__mision prose text-muted">{sitio.mision}</p>
           <div class="hero__cta">
-            <a class="btn" href="/estilo">Ver design system →</a>
-            <a class="btn btn--ghost" href="/lineas">Líneas de investigación</a>
+            <a class="btn" href="/lineas">Líneas de investigación →</a>
+            <a class="btn btn--ghost" href="/produccion">Producción académica</a>
           </div>
         </div>
         <aside class="hero__block" aria-hidden="true">
@@ -40,12 +40,6 @@ const lineas = (await getCollection('lineas')).sort((a, b) => (a.data.orden ?? 9
         </div>
       </div>
 
-      <p class="nota panel">
-        <strong>Scaffold + design system.</strong> Esta es la base del sitio (Concepto
-        «Swiss Data Grid»). Las páginas de contenido —Integrantes, Producción académica,
-        Herramientas, Actividades— se construyen en el siguiente paso. Visita
-        <a href="/estilo">/estilo</a> para revisar el sistema visual completo.
-      </p>
     </div>
   </section>
 </Base>
