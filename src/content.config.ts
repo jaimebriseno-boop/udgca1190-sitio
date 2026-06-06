@@ -32,6 +32,7 @@ const lineas = defineCollection({
   schema: z.object({
     titulo: z.string(),
     titulo_corto: z.string().optional(),
+    orden: z.number().optional(),
     color: z.enum(COLORES),
     resumen: z.string(),
     descripcion: z.string().optional(),

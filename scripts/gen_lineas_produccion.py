@@ -48,8 +48,9 @@ L.append("# Derivadas/validadas contra el corpus real de publicaciones (ORCID/Pu
 L.append("# color: nombre de la paleta Lancet (design/tokens/colors.json).")
 L.append("# `especificas`: sublíneas reales que convergen en cada LGAC.")
 L.append("")
-for l in syn["lgac"]:
+for idx, l in enumerate(syn["lgac"], 1):
     L.append(f"- id: {l['id']}")
+    L.append(f"  orden: {idx}")
     L.append(f"  titulo: {q(l['titulo'])}")
     L.append(f"  titulo_corto: {q(l['titulo_corto'])}")
     L.append(f"  color: {l['color']}")

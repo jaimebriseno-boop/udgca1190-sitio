@@ -4,6 +4,7 @@
 # `especificas`: sublíneas reales que convergen en cada LGAC.
 
 - id: clinica-epidemiologica-traslacional
+  orden: 1
   titulo: "Investigación clínica, epidemiológica y traslacional aplicada al estudio integral del proceso salud-enfermedad"
   titulo_corto: "Clínica, epidemiológica y traslacional"
   color: blue
@@ -19,6 +20,7 @@
       titulo: "Revisiones sistemáticas y metaanálisis diagnóstico-terapéuticos"
 
 - id: ciencia-datos-poblacionales
+  orden: 2
   titulo: "Ciencia de datos poblacionales en la identificación de determinantes del proceso salud-enfermedad"
   titulo_corto: "Ciencia de datos poblacionales"
   color: teal
@@ -30,6 +32,7 @@
       titulo: "Salud ambiental, ocupacional y función respiratoria poblacional"
 
 - id: epidemiologia-infecciosas
+  orden: 3
   titulo: "Epidemiología y control de enfermedades infecciosas"
   titulo_corto: "Epidemiología de infecciosas"
   color: red
@@ -43,6 +46,7 @@
       titulo: "Epidemiología y desenlaces de COVID-19/SARS-CoV-2"
 
 - id: nutricion-microbioma
+  orden: 4
   titulo: "Nutrición y microbioma en la prevención y manejo de enfermedades"
   titulo_corto: "Nutrición y microbioma"
   color: green
@@ -54,6 +58,7 @@
       titulo: "Nutrición, biofilm, obesidad e inflamación de bajo grado"
 
 - id: biologia-molecular
+  orden: 5
   titulo: "Biología Molecular en el diagnóstico, biomarcadores, epidemiología y tratamiento de enfermedades infecciosas"
   titulo_corto: "Biología molecular y biomarcadores"
   color: purple

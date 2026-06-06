@@ -6,7 +6,7 @@ import Kpis from '../components/Kpis.astro';
 import BadgeLinea from '../components/BadgeLinea.astro';
 
 const sitio = getSitio();
-const lineas = await getCollection('lineas');
+const lineas = (await getCollection('lineas')).sort((a, b) => (a.data.orden ?? 99) - (b.data.orden ?? 99));
 ---
 <Base titulo="UDG-CA-1190" descripcion={sitio.mision}>
   <section class="section">

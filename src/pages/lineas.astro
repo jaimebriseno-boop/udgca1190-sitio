@@ -1,0 +1,131 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { getProduccion } from '../lib/datos.mjs';
+
+const lineas = (await getCollection('lineas')).sort((a, b) => (a.data.orden ?? 99) - (b.data.orden ?? 99));
+const produccion = getProduccion();
+const integrantes = (await getCollection('integrantes')).map((e) => ({ id: e.id, ...e.data }));
+
+// Conteos de publicaciones por LGAC y por línea específica
+const nPorLgac = {};
+const nPorEsp = {};
+for (const p of produccion) {
+  nPorLgac[p.lgac] = (nPorLgac[p.lgac] || 0) + 1;
+  nPorEsp[p.linea_especifica] = (nPorEsp[p.linea_especifica] || 0) + 1;
+}
+const apellido = (n) => n.replace(/^\S+\s+/, ''); // quita el primer nombre
+const integrantesDe = (lgacId) =>
+  integrantes.filter((m) => (m.lineas || []).includes(lgacId));
+---
+<Base titulo="Líneas de investigación" descripcion="Las 5 Líneas de Generación y Aplicación del Conocimiento (LGAC) del CA UDG-CA-1190.">
+  <section class="section">
+    <div class="container">
+      <div class="pg-head">
+        <span class="pg-block" aria-hidden="true"></span>
+        <div>
+          <p class="kicker">Líneas de Generación y Aplicación del Conocimiento</p>
+          <h1 class="pg-title">Líneas de investigación</h1>
+        </div>
+      </div>
+      <p class="prose text-muted pg-intro">
+        Cinco LGAC oficiales en las que converge la producción del Cuerpo Académico.
+        Cada una se sustenta en líneas específicas derivadas del trabajo publicado de
+        sus integrantes.
+      </p>
+
+      <div class="lgac-list">
+        {lineas.map((l, i) => {
+          const d = l.data;
+          const miembros = integrantesDe(l.id);
+          return (
+            <article class="lgac" style={`--lgac-color: var(--c-${d.color})`}>
+              <div class="lgac__bar" aria-hidden="true"></div>
+              <div class="lgac__head">
+                <span class="lgac__num">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <p class="lgac__kicker">{d.titulo_corto}</p>
+                  <h2 class="lgac__titulo">{d.titulo}</h2>
+                </div>
+                <span class="lgac__count">{nPorLgac[l.id] || 0}<small>pubs</small></span>
+              </div>
+              <p class="lgac__desc prose">{d.resumen}</p>
+
+              {d.especificas?.length > 0 && (
+                <div class="lgac__esp">
+                  <p class="kicker">Líneas específicas</p>
+                  <ul>
+                    {d.especificas.map((e) => (
+                      <li>
+                        <span class="lgac__esp-dot" aria-hidden="true"></span>
+                        <span>{e.titulo}</span>
+                        <span class="lgac__esp-n">{nPorEsp[e.id] || 0}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {miembros.length > 0 && (
+                <div class="lgac__miembros">
+                  <p class="kicker">Integrantes</p>
+                  <div class="lgac__chips">
+                    {miembros.map((m) => (
+                      <a class="lgac__chip" href={`/integrantes`}>{apellido(m.nombre)}</a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .pg-head { display: flex; align-items: center; gap: var(--sp-3); }
+  .pg-block { width: 16px; height: 48px; background: var(--c-blue); flex: none; }
+  .pg-title { font-size: var(--fs-s3); }
+  .pg-intro { margin-top: var(--sp-3); }
+
+  .lgac-list { margin-top: var(--sp-8); display: flex; flex-direction: column; gap: var(--sp-4); }
+  .lgac {
+    border: 1px solid var(--c-line);
+    border-left: 6px solid var(--lgac-color);
+    padding: var(--sp-4);
+    display: grid;
+    gap: var(--sp-3);
+  }
+  .lgac__head { display: grid; grid-template-columns: auto 1fr auto; gap: var(--sp-3); align-items: start; }
+  .lgac__num { font-family: var(--font-mono); font-size: var(--fs-s2); color: var(--lgac-color); font-weight: 700; line-height: 1; }
+  .lgac__kicker {
+    font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--lgac-color); font-weight: 600;
+  }
+  .lgac__titulo { font-size: var(--fs-s1); font-weight: var(--fw-semibold); margin-top: 2px; }
+  .lgac__count {
+    font-family: var(--font-sans); font-size: var(--fs-s2); font-weight: 700; color: var(--c-ink);
+    line-height: 1; text-align: right; display: flex; flex-direction: column; align-items: flex-end;
+  }
+  .lgac__count small { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-gray); font-weight: 400; }
+  .lgac__desc { color: var(--c-gray); }
+
+  .lgac__esp ul { list-style: none; padding: 0; margin-top: var(--sp-2); display: grid; gap: 6px; }
+  .lgac__esp li { display: grid; grid-template-columns: auto 1fr auto; gap: var(--sp-2); align-items: baseline; font-size: var(--fs-sm); }
+  .lgac__esp-dot { width: 8px; height: 8px; background: var(--lgac-color); margin-top: 6px; }
+  .lgac__esp-n { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-gray); }
+
+  .lgac__chips { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-2); }
+  .lgac__chip {
+    font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-ink);
+    border: 1px solid var(--c-line); padding: 2px 8px; text-decoration: none;
+  }
+  .lgac__chip:hover { border-color: var(--lgac-color); color: var(--lgac-color); text-decoration: none; }
+
+  @media (max-width: 640px) {
+    .lgac__head { grid-template-columns: auto 1fr; }
+    .lgac__count { grid-column: 2; flex-direction: row; gap: 6px; align-items: baseline; text-align: left; }
+  }
+</style>

@@ -9,3 +9,8 @@ const ROOT = process.cwd();
 export function getSitio() {
   return yaml.load(readFileSync(join(ROOT, 'data/sitio.yml'), 'utf8'));
 }
+
+/** Lee data/produccion.yml (publicaciones etiquetadas por línea específica y LGAC). */
+export function getProduccion() {
+  return yaml.load(readFileSync(join(ROOT, 'data/produccion.yml'), 'utf8')) || [];
+}

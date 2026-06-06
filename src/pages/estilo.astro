@@ -12,7 +12,7 @@ import typo from '../../design/tokens/typography.json';
 import spacing from '../../design/tokens/spacing.json';
 
 const sitio = getSitio();
-const lineas = await getCollection('lineas');
+const lineas = (await getCollection('lineas')).sort((a, b) => (a.data.orden ?? 99) - (b.data.orden ?? 99));
 const herramientas = await getCollection('herramientas');
 const pubs = loadPublicaciones();
 
