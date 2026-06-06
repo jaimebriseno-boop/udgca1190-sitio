@@ -1,0 +1,25 @@
+{
+  "_comment": "Espaciado estricto en escala de 8px y parámetros de retícula del Concepto 'Swiss Data Grid'. Esquinas rectas (suizo).",
+  "space": {
+    "0": "0",
+    "1": "8px",
+    "2": "16px",
+    "3": "24px",
+    "4": "32px",
+    "6": "48px",
+    "8": "64px",
+    "12": "96px",
+    "16": "128px"
+  },
+  "radius": {
+    "none": "0",
+    "sm": "2px"
+  },
+  "grid": {
+    "columns": "12",
+    "gutter": "16px",
+    "maxw": "1200px",
+    "margin": "64px",
+    "prose": "680px"
+  }
+}

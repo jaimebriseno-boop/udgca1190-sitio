@@ -1,0 +1,62 @@
+# Líneas de Generación y Aplicación del Conocimiento (LGAC) del CA.
+# `color` usa un nombre de la paleta Lancet (ver design/tokens/colors.json):
+# blue | teal | red | green | wine | purple | gray
+# El sitio mapea ese nombre a var(--c-<color>).
+
+- id: resistencia-antimicrobiana
+  titulo: "Resistencia antimicrobiana"
+  color: red
+  resumen: "Vigilancia, predicción y optimización del uso de antimicrobianos frente a la RAM."
+  descripcion: |
+    Estudio integrativo de determinantes microbiológicos, clínicos y poblacionales
+    de la resistencia antimicrobiana: antibiogramas acumulados ponderados (WISCA),
+    tendencias hospitalarias y modelos de apoyo a la decisión terapéutica empírica.
+
+- id: infectologia-clinica
+  titulo: "Infectología clínica"
+  color: blue
+  resumen: "Síndromes infecciosos específicos y predicción de desenlaces."
+  descripcion: |
+    Endocarditis infecciosa, candidosis invasiva, infecciones del SNC, neumonía
+    adquirida en la comunidad e infecciones osteoarticulares, con modelos clínicos
+    de predicción de mortalidad y riesgo.
+
+- id: epidemiologia-espacial
+  titulo: "Epidemiología espacial y brotes"
+  color: teal
+  resumen: "Dinámica de brotes, número reproductivo y análisis geográfico."
+  descripcion: |
+    Modelado de brotes (sarampión, dengue) con número reproductivo instantáneo (Rt),
+    autocorrelación espacial (Moran's I, LISA) y análisis de desiertos de atención.
+
+- id: covid-vulnerable
+  titulo: "COVID-19 y poblaciones vulnerables"
+  color: wine
+  resumen: "Determinantes socioeconómicos y comorbilidad en COVID-19."
+  descripcion: |
+    Impacto de la enfermedad renal crónica y el nivel socioeconómico municipal sobre
+    desenlaces de COVID-19 (UCI, ventilación, mortalidad) a escala nacional.
+
+- id: genomica
+  titulo: "Genómica de patógenos"
+  color: purple
+  resumen: "Caracterización genómica y filogenética de patógenos clínicos."
+  descripcion: |
+    Pipelines de secuenciación de genoma completo (S. aureus) y filogenética
+    (dengue LATAM): tipificación, resistencia genotípica y dinámica evolutiva.
+
+- id: educacion-medica
+  titulo: "Educación médica"
+  color: green
+  resumen: "Recursos educativos abiertos y formación de especialistas."
+  descripcion: |
+    Libro de enfermedades infecciosas (Springer, acceso abierto), wiki clínica y
+    metodología curricular para programas del área de la salud del CUTlajomulco.
+
+- id: seguridad-hospitalaria
+  titulo: "Calidad y seguridad hospitalaria"
+  color: gray
+  resumen: "Mejora de procesos y seguridad del paciente."
+  descripcion: |
+    Automatización de procesos, gobernanza de datos clínicos y herramientas de
+    apoyo operativo en hospitales de alta especialidad.

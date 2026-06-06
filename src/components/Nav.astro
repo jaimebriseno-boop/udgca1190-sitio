@@ -1,0 +1,53 @@
+---
+const items = [
+  { href: '/', label: 'Inicio' },
+  { href: '/integrantes', label: 'Integrantes' },
+  { href: '/lineas', label: 'Líneas' },
+  { href: '/publicaciones', label: 'Producción' },
+  { href: '/herramientas', label: 'Herramientas' },
+  { href: '/actividades', label: 'Actividades' },
+  { href: '/contacto', label: 'Contacto' },
+];
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<nav class="site-nav" aria-label="Principal">
+  <ul>
+    {items.map((it) => (
+      <li>
+        <a
+          href={it.href}
+          class:list={['site-nav__link', { 'is-active': isActive(it.href) }]}
+          aria-current={isActive(it.href) ? 'page' : undefined}>{it.label}</a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .site-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    list-style: none;
+    padding: 0;
+  }
+  .site-nav__link {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--c-ink);
+    padding-bottom: 4px;
+    position: relative;
+  }
+  .site-nav__link:hover { color: var(--c-blue); text-decoration: none; }
+  .site-nav__link.is-active { color: var(--c-blue); }
+  .site-nav__link.is-active::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 3px;
+    background: var(--c-blue);
+  }
+</style>

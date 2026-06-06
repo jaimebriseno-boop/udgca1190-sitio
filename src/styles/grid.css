@@ -1,0 +1,120 @@
+/* grid.css — retícula visible y primitivas del Concepto "Swiss Data Grid".
+   Esquinas rectas, líneas hairline, bloques de color planos. */
+
+.container {
+  width: 100%;
+  max-width: var(--grid-maxw);
+  margin-inline: auto;
+  padding-inline: var(--sp-3);
+}
+@media (min-width: 768px) { .container { padding-inline: var(--grid-margin); } }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--grid-gutter);
+}
+
+.section { padding-block: var(--sp-12); }
+@media (max-width: 767px) { .section { padding-block: var(--sp-8); } }
+
+/* Regla y divisores hairline */
+.rule { border: 0; border-top: 1px solid var(--c-line); }
+
+/* Bloque de color sólido (swatch suizo) */
+.color-block { aspect-ratio: 1 / 1; display: flex; align-items: flex-end; padding: var(--sp-2); }
+
+/* Panel con borde hairline */
+.panel { background: var(--c-panel); border: 1px solid var(--c-line); }
+
+/* ---- KPIs en celdas con retícula hairline ---- */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid var(--c-line);
+  border-left: 1px solid var(--c-line);
+}
+@media (min-width: 768px) { .kpis { grid-template-columns: repeat(4, 1fr); } }
+.kpi {
+  border-right: 1px solid var(--c-line);
+  border-bottom: 1px solid var(--c-line);
+  padding: var(--sp-4) var(--sp-3);
+}
+.kpi__num {
+  font-family: var(--font-sans);
+  font-size: var(--fs-s4);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tr-display);
+  color: var(--c-blue);
+  font-variant-numeric: tabular-nums;
+}
+.kpi__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--c-gray);
+  margin-top: var(--sp-1);
+}
+
+/* ---- Badge de línea (cuadro de color sólido) ---- */
+.badge-linea {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-ink);
+}
+.badge-linea__sq { width: 12px; height: 12px; background: var(--badge-color, var(--c-gray)); flex: none; }
+a.badge-linea { color: var(--c-ink); text-decoration: none; }
+a.badge-linea:hover { color: var(--c-blue); text-decoration: none; }
+
+/* ---- Etiqueta de tecnología/estado tipo "chip" plano ---- */
+.tag {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border: 1px solid var(--c-line);
+  background: var(--c-bg);
+  color: var(--c-gray);
+  display: inline-block;
+}
+.tag--fill { color: #fff; border-color: transparent; background: var(--tag-color, var(--c-blue)); }
+
+/* Botón sólido (bloque suizo) */
+.btn {
+  display: inline-block;
+  background: var(--c-blue);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: var(--sp-2) var(--sp-3);
+  border: 0;
+  cursor: pointer;
+}
+.btn:hover { background: var(--c-ink); text-decoration: none; color: #fff; }
+.btn--ghost { background: transparent; color: var(--c-blue); border: 1px solid var(--c-blue); }
+.btn--ghost:hover { background: var(--c-blue); color: #fff; }
+
+/* Guía de columnas (solo demostración en la style guide) */
+.col-guide {
+  position: relative;
+}
+.col-guide::before {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--c-line) 0, var(--c-line) 1px,
+    transparent 1px, transparent calc((100% - 11 * var(--grid-gutter)) / 12 + var(--grid-gutter))
+  );
+  opacity: 0.5;
+}

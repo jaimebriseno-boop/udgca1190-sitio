@@ -1,0 +1,69 @@
+/* ============================================================
+   tokens.css — GENERADO por scripts/tokens-to-css.mjs
+   NO EDITAR A MANO. Editar design/tokens/*.json + `npm run tokens`.
+   Paleta Lancet sincronizada con make_logo.py.
+   ============================================================ */
+:root {
+  /* Color · marca */
+  --c-blue: #00468B;
+  --c-teal: #0099B4;
+  /* Color · semántico (líneas / estados / tecnología) */
+  --c-red: #ED0000;
+  --c-green: #42B540;
+  --c-wine: #AD002A;
+  --c-purple: #925E9F;
+  --c-gray: #5B6770;
+  /* Color · tinta y superficies */
+  --c-ink: #1B1919;
+  --c-bg: #FFFFFF;
+  --c-panel: #F4F5F7;
+  --c-line: #DADEE3;
+  /* Color · institucional (solo footer) */
+  --c-navy: #202945;
+  --c-gold: #FDCF85;
+  /* Tipografía · familias */
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: 'Source Serif 4 Variable', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Tipografía · escala modular (1.333) */
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-s1: 1.333rem;
+  --fs-s2: 1.777rem;
+  --fs-s3: 2.369rem;
+  --fs-s4: 3.157rem;
+  --fs-s5: 4.209rem;
+  --fs-s6: 5.61rem;
+  /* Tipografía · pesos */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  /* Tipografía · interlineado y tracking */
+  --lh-tight: 1.05;
+  --lh-snug: 1.2;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.65;
+  --tr-display: -0.02em;
+  --tr-kicker: 0.14em;
+  /* Espaciado · escala 8px */
+  --sp-0: 0;
+  --sp-1: 8px;
+  --sp-2: 16px;
+  --sp-3: 24px;
+  --sp-4: 32px;
+  --sp-6: 48px;
+  --sp-8: 64px;
+  --sp-12: 96px;
+  --sp-16: 128px;
+  /* Forma */
+  --radius-none: 0;
+  --radius-sm: 2px;
+  /* Retícula */
+  --grid-columns: 12;
+  --grid-gutter: 16px;
+  --grid-maxw: 1200px;
+  --grid-margin: 64px;
+  --grid-prose: 680px;
+}

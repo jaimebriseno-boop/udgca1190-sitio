@@ -1,0 +1,31 @@
+# Configuración global del sitio: identidad, contacto, redes, textos de portada y KPIs.
+nombre: "Investigación Integrativa de Factores Biológicos del Proceso Salud-Enfermedad"
+sigla: "UDG-CA-1190"
+adscripcion: "Universidad de Guadalajara · CUTlajomulco"
+lema: "Investigación integrativa de los factores biológicos del proceso salud-enfermedad."
+
+# Misión (una frase para el hero / inicio)
+mision: >-
+  Generar conocimiento sobre los factores biológicos del proceso salud-enfermedad
+  mediante investigación clínica, epidemiológica y estadística reproducible, y
+  trasladarlo a herramientas de apoyo a la decisión y a la formación de especialistas.
+
+contacto:
+  email: "contacto@udgca1190.com.mx"   # alias por configurar en el registrador
+  ciudad: "Guadalajara, Jalisco, México"
+
+redes:
+  scholar: ""
+  github: ""
+  x: ""
+
+# KPIs del inicio (números grandes en celdas). label en versalitas.
+kpis:
+  - num: "7"
+    label: "Líneas"
+  - num: "11"
+    label: "Integrantes"
+  - num: "~10"
+    label: "Publicaciones"
+  - num: "5"
+    label: "Herramientas"

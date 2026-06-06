@@ -1,0 +1,36 @@
+---
+// Layout base: fuentes (Fontsource self-hosted), tokens/estilos, header y footer.
+import '@fontsource-variable/inter';
+import '@fontsource-variable/source-serif-4';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/500.css';
+import '../styles/base.css';
+import '../styles/grid.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props { titulo?: string; descripcion?: string }
+const { titulo = 'UDG-CA-1190', descripcion = '' } = Astro.props;
+const tituloPagina = titulo === 'UDG-CA-1190'
+  ? 'UDG-CA-1190 · Cuerpo Académico'
+  : `${titulo} · UDG-CA-1190`;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloPagina}</title>
+    {descripcion && <meta name="description" content={descripcion} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#00468B" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

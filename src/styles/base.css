@@ -1,0 +1,62 @@
+/* base.css — reset, tipografía y ritmo. Importa tokens (generados). */
+@import './tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-relaxed);
+  color: var(--c-ink);
+  background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-sans);
+  line-height: var(--lh-snug);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tr-display);
+  text-wrap: balance;
+}
+h1 { font-size: var(--fs-s4); line-height: var(--lh-tight); }
+h2 { font-size: var(--fs-s2); }
+h3 { font-size: var(--fs-s1); }
+
+a { color: var(--c-blue); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+code, kbd, samp, .mono { font-family: var(--font-mono); }
+img { max-width: 100%; height: auto; display: block; }
+
+::selection { background: var(--c-blue); color: #fff; }
+:focus-visible { outline: 2px solid var(--c-teal); outline-offset: 2px; }
+
+/* ---- Utilidades tipográficas ---- */
+.serif { font-family: var(--font-serif); }
+
+.kicker {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--tr-kicker);
+  font-size: var(--fs-xs);
+  color: var(--c-teal);
+  font-weight: var(--fw-medium);
+}
+
+.prose { max-width: var(--grid-prose); }
+.prose p + p { margin-top: var(--sp-3); }
+
+.text-muted { color: var(--c-gray); }
+.display { font-family: var(--font-serif); font-weight: var(--fw-semibold); letter-spacing: var(--tr-display); line-height: var(--lh-tight); }
+
+/* Salto a contenido (accesibilidad) */
+.skip-link {
+  position: absolute; left: -9999px; top: 0;
+  background: var(--c-blue); color: #fff; padding: var(--sp-1) var(--sp-2); z-index: 100;
+}
+.skip-link:focus { left: 0; }

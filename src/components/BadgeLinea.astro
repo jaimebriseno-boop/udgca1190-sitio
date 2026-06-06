@@ -1,0 +1,9 @@
+---
+interface Props { titulo: string; color?: string; href?: string }
+const { titulo, color = 'gray', href } = Astro.props;
+const style = `--badge-color: var(--c-${color})`;
+const Tag = href ? 'a' : 'span';
+---
+<Tag class="badge-linea" style={style} {...(href ? { href } : {})}>
+  <span class="badge-linea__sq" aria-hidden="true"></span>{titulo}
+</Tag>

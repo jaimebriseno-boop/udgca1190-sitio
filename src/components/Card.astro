@@ -1,0 +1,21 @@
+---
+interface Props { titulo?: string; kicker?: string; color?: string }
+const { titulo, kicker, color } = Astro.props;
+---
+<article class="card">
+  {color && <div class="card__bar" style={`background: var(--c-${color})`}></div>}
+  {kicker && <p class="kicker">{kicker}</p>}
+  {titulo && <h3 class="card__title">{titulo}</h3>}
+  <div class="card__body"><slot /></div>
+</article>
+
+<style>
+  .card { border: 1px solid var(--c-line); background: var(--c-bg); padding: var(--sp-3); }
+  .card__bar {
+    height: 6px;
+    margin: calc(-1 * var(--sp-3)) calc(-1 * var(--sp-3)) var(--sp-3);
+  }
+  .card__title { font-size: var(--fs-s1); margin-top: var(--sp-1); font-weight: var(--fw-semibold); }
+  .card__body { color: var(--c-ink); }
+  .card__body > :global(p) { color: var(--c-gray); }
+</style>

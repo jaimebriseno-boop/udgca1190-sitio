@@ -1,0 +1,35 @@
+---
+import Nav from './Nav.astro';
+---
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-header__brand" href="/" aria-label="Inicio — UDG-CA-1190">
+      <img
+        src="/logos/UDG-CA-1190_logo_horizontal.png"
+        alt="Cuerpo Académico UDG-CA-1190"
+        width="220" height="96" />
+    </a>
+    <Nav />
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--c-bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    min-height: 64px;
+    flex-wrap: wrap;
+  }
+  .site-header__brand img { height: 40px; width: auto; display: block; }
+  @media (max-width: 640px) { .site-header__brand img { height: 32px; } }
+</style>

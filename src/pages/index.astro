@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { getSitio } from '../lib/datos.mjs';
+import Kpis from '../components/Kpis.astro';
+import BadgeLinea from '../components/BadgeLinea.astro';
+
+const sitio = getSitio();
+const lineas = await getCollection('lineas');
+---
+<Base titulo="UDG-CA-1190" descripcion={sitio.mision}>
+  <section class="section">
+    <div class="container">
+      <div class="hero">
+        <div class="hero__text">
+          <p class="kicker">Cuerpo Académico · {sitio.adscripcion}</p>
+          <h1 class="display hero__name">{sitio.nombre}</h1>
+          <p class="hero__mision prose text-muted">{sitio.mision}</p>
+          <div class="hero__cta">
+            <a class="btn" href="/estilo">Ver design system →</a>
+            <a class="btn btn--ghost" href="/lineas">Líneas de investigación</a>
+          </div>
+        </div>
+        <aside class="hero__block" aria-hidden="true">
+          <div class="hero__swatch"></div>
+          <p class="hero__sigla">{sitio.sigla}</p>
+        </aside>
+      </div>
+
+      <div class="hero__kpis">
+        <Kpis items={sitio.kpis} />
+      </div>
+
+      <div class="hero__lineas">
+        <p class="kicker">Líneas de investigación</p>
+        <div class="lineas-badges">
+          {lineas.map((l) => (
+            <BadgeLinea titulo={l.data.titulo} color={l.data.color} href="/lineas" />
+          ))}
+        </div>
+      </div>
+
+      <p class="nota panel">
+        <strong>Scaffold + design system.</strong> Esta es la base del sitio (Concepto
+        «Swiss Data Grid»). Las páginas de contenido —Integrantes, Producción académica,
+        Herramientas, Actividades— se construyen en el siguiente paso. Visita
+        <a href="/estilo">/estilo</a> para revisar el sistema visual completo.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { display: grid; grid-template-columns: 1fr; gap: var(--sp-6); align-items: start; }
+  @media (min-width: 900px) {
+    .hero { grid-template-columns: 7fr 5fr; gap: var(--sp-8); }
+  }
+  .hero__name { font-size: var(--fs-s4); margin-top: var(--sp-2); }
+  @media (min-width: 900px) { .hero__name { font-size: var(--fs-s5); } }
+  .hero__mision { margin-top: var(--sp-3); font-size: var(--fs-s1); line-height: var(--lh-normal); color: var(--c-gray); }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-4); }
+
+  .hero__block { border: 1px solid var(--c-line); }
+  .hero__swatch { aspect-ratio: 4 / 3; background: var(--c-blue); }
+  .hero__sigla {
+    font-family: var(--font-mono);
+    font-size: var(--fs-s1);
+    letter-spacing: 0.02em;
+    padding: var(--sp-2) var(--sp-3);
+    border-top: 1px solid var(--c-line);
+    color: var(--c-ink);
+  }
+
+  .hero__kpis { margin-top: var(--sp-8); }
+  .hero__lineas { margin-top: var(--sp-8); }
+  .lineas-badges { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-3); }
+
+  .nota {
+    margin-top: var(--sp-8);
+    padding: var(--sp-3) var(--sp-4);
+    font-size: var(--fs-sm);
+    color: var(--c-gray);
+    border-left: 4px solid var(--c-teal);
+  }
+  .nota strong { color: var(--c-ink); }
+</style>

@@ -1,0 +1,43 @@
+# Integrantes del CA. Ejemplos de arranque.
+# IMPORTANTE: los campos `orcid` y `email` marcados "verificar" deben confirmarse
+# contra ORCID/registro institucional antes de publicar (ver memoria
+# feedback_verify_agent_refs). NO publicar datos sin verificar.
+#
+# rol: lider | integrante | colaborador | estudiante
+# lineas: ids de data/lineas.yml
+
+- id: briseno-ramirez
+  nombre: "Jaime Briseño Ramírez"
+  rol: lider
+  grado: "Médico Internista e Infectólogo, Dr."
+  institucion: "Universidad de Guadalajara — CUTlajomulco"
+  lineas: [infectologia-clinica, resistencia-antimicrobiana]
+  foto: "/integrantes/placeholder.svg"
+  orcid: ""            # verificar
+  email: ""            # verificar
+  perfiles:
+    scopus: "36459543300"
+    scholar: ""
+  bio_corta: >-
+    Líder del Cuerpo Académico. Profesor-Investigador Titular (UdeG, SNI I) y Director
+    de la División de la Salud del CUTlajomulco. Investigación integrativa de los
+    factores biológicos del proceso salud-enfermedad, con énfasis en infectología,
+    resistencia antimicrobiana y modelos predictivos clínicos.
+  intereses: ["Resistencia antimicrobiana", "Modelos predictivos clínicos", "Bioestadística (R)"]
+  destacado: true
+
+- id: integrante-ejemplo
+  nombre: "Nombre Apellido Apellido"        # plantilla — reemplazar
+  rol: integrante
+  grado: "Grado, especialidad"
+  institucion: "Universidad de Guadalajara"
+  lineas: [resistencia-antimicrobiana]
+  foto: "/integrantes/placeholder.svg"
+  orcid: ""            # verificar
+  email: ""            # verificar
+  perfiles:
+    scopus: ""
+    scholar: ""
+  bio_corta: "Breve semblanza del integrante (2–3 líneas)."
+  intereses: ["Tema 1", "Tema 2"]
+  destacado: false

@@ -1,0 +1,24 @@
+{
+  "_comment": "Fuente ÚNICA de verdad del color. Sincronizada con make_logo.py (paleta Lancet ggsci 'lanonc'). Editar aquí y correr `npm run tokens` para regenerar src/styles/tokens.css.",
+  "brand": {
+    "blue":  { "hex": "#00468B", "rol": "Primario/marca: titulares de marca, links, bloques sólidos. AA sobre blanco 8.6:1." },
+    "teal":  { "hex": "#0099B4", "rol": "Acento: kickers, indicador activo. Solo texto >=24px/bold o como fill con texto blanco (3.3:1)." }
+  },
+  "semantic": {
+    "red":    { "hex": "#ED0000", "rol": "Línea RAM / estado; solo bold/grande o fill con blanco." },
+    "green":  { "hex": "#42B540", "rol": "Línea educación / estado 'publicado'." },
+    "wine":   { "hex": "#AD002A", "rol": "Línea COVID / acento fuerte." },
+    "purple": { "hex": "#925E9F", "rol": "Línea genómica." },
+    "gray":   { "hex": "#5B6770", "rol": "Texto suave, metadatos, líneas. AA sobre blanco 5.6:1." }
+  },
+  "ink":     { "hex": "#1B1919", "rol": "Texto de cuerpo. AA sobre blanco 17:1." },
+  "surface": {
+    "bg":    { "hex": "#FFFFFF", "rol": "Fondo base (lienzo suizo)." },
+    "panel": { "hex": "#F4F5F7", "rol": "Paneles, celdas alternas, cards." },
+    "line":  { "hex": "#DADEE3", "rol": "Líneas de retícula hairline (papel milimétrico)." }
+  },
+  "institutional": {
+    "navy":  { "hex": "#202945", "rol": "Footer institucional (azul marino UdeG, Pantone 533C). Solo footer." },
+    "gold":  { "hex": "#FDCF85", "rol": "Filete dorado UdeG (1345C). NUNCA como texto (falla AA); solo filete/fill con navy encima." }
+  }
+}

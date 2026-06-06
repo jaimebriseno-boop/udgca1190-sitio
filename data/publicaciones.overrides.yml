@@ -1,0 +1,24 @@
+# Metadatos web extra por publicación, indexados por la *citation key* del .bib.
+# No contaminan el BibTeX. Campos: destacado, estado, temas[], lineas[], pdf, resumen_es.
+# estado: publicado | sometido | en-revision | en-preparacion
+
+briseno2026endocarditis:
+  destacado: true
+  estado: publicado
+  temas: ["endocarditis", "WISCA", "predicción"]
+  lineas: [infectologia-clinica, resistencia-antimicrobiana]
+  pdf: ""
+  resumen_es: >-
+    Cohorte de siete años: modelo clínico de tres variables para mortalidad
+    intrahospitalaria y antibiograma ponderado bayesiano (WISCA) en endocarditis
+    infecciosa.
+
+ckd2024covid:
+  destacado: false
+  estado: publicado
+  temas: ["COVID-19", "enfermedad renal crónica"]
+  lineas: [covid-vulnerable]
+  pdf: ""
+  resumen_es: >-
+    Análisis nacional de cinco años sobre la relación entre enfermedad renal
+    crónica y desenlaces de COVID-19 en México.

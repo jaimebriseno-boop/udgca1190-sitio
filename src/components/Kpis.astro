@@ -1,0 +1,12 @@
+---
+interface Props { items?: { num: string; label: string }[] }
+const { items = [] } = Astro.props;
+---
+<div class="kpis">
+  {items.map((k) => (
+    <div class="kpi">
+      <div class="kpi__num">{k.num}</div>
+      <div class="kpi__label">{k.label}</div>
+    </div>
+  ))}
+</div>

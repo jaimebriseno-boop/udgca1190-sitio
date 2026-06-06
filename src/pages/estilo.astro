@@ -1,0 +1,233 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import Kpis from '../components/Kpis.astro';
+import BadgeLinea from '../components/BadgeLinea.astro';
+import Card from '../components/Card.astro';
+import { getSitio } from '../lib/datos.mjs';
+import { loadPublicaciones } from '../content-loaders/bibtex.mjs';
+import { formatCita } from '../lib/formatCita.mjs';
+import colors from '../../design/tokens/colors.json';
+import typo from '../../design/tokens/typography.json';
+import spacing from '../../design/tokens/spacing.json';
+
+const sitio = getSitio();
+const lineas = await getCollection('lineas');
+const herramientas = await getCollection('herramientas');
+const pubs = loadPublicaciones();
+
+// Grupos de color para los swatches
+const grupos: [string, Record<string, { hex: string; rol: string }>][] = [
+  ['Marca', colors.brand as any],
+  ['Semántico · líneas / estados', colors.semantic as any],
+  ['Tinta', { ink: colors.ink } as any],
+  ['Superficie', colors.surface as any],
+  ['Institucional · footer', colors.institutional as any],
+];
+
+const escala = Object.entries(typo.scale);
+const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
+---
+<Base titulo="Design System" descripcion="Guía visual del sitio del CA UDG-CA-1190 (Concepto Swiss Data Grid).">
+  <section class="section">
+    <div class="container">
+      <p class="kicker">Design System · Swiss Data Grid</p>
+      <h1 class="sg-title">Guía de estilo</h1>
+      <p class="prose text-muted sg-intro">
+        Sistema visual del sitio del Cuerpo Académico UDG-CA-1190. Fuente de verdad del
+        color: <code>design/tokens/colors.json</code> (sincronizada con
+        <code>make_logo.py</code>, paleta Lancet). Edita los tokens y corre
+        <code>npm run tokens</code> para regenerar el CSS.
+      </p>
+
+      <!-- PALETA -->
+      <h2 class="sg-h2">Paleta</h2>
+      {grupos.map(([nombre, grupo]) => (
+        <div class="sg-group">
+          <p class="kicker">{nombre}</p>
+          <div class="swatches">
+            {Object.entries(grupo).map(([k, v]) => (
+              <figure class="swatch">
+                <div class="swatch__chip" style={`background:${v.hex}`}></div>
+                <figcaption>
+                  <span class="swatch__name">--c-{k}</span>
+                  <span class="swatch__hex mono">{v.hex}</span>
+                  <span class="swatch__rol">{v.rol}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <!-- TIPOGRAFÍA -->
+      <h2 class="sg-h2">Tipografía</h2>
+      <div class="sg-fonts">
+        <div class="sg-font">
+          <p class="kicker">Sans · titulares y UI</p>
+          <p class="sg-font__sample" style={`font-family:${typo.families.sans}`}>Inter Variable</p>
+          <p class="sg-font__meta mono">{typo.families.sans}</p>
+        </div>
+        <div class="sg-font">
+          <p class="kicker">Serif · nombre del CA</p>
+          <p class="sg-font__sample" style={`font-family:${typo.families.serif}`}>Source Serif 4</p>
+          <p class="sg-font__meta mono">{typo.families.serif}</p>
+        </div>
+        <div class="sg-font">
+          <p class="kicker">Mono · datos / DOI</p>
+          <p class="sg-font__sample" style={`font-family:${typo.families.mono}`}>IBM Plex Mono</p>
+          <p class="sg-font__meta mono">{typo.families.mono}</p>
+        </div>
+      </div>
+
+      <p class="kicker sg-sub">Escala modular (1.333)</p>
+      <div class="sg-scale">
+        {escala.map(([k, v]) => (
+          <div class="sg-scale__row">
+            <span class="sg-scale__tok mono">--fs-{k}</span>
+            <span class="sg-scale__val mono">{v}</span>
+            <span class="sg-scale__demo" style={`font-size:${v}`}>Salud-Enfermedad</span>
+          </div>
+        ))}
+      </div>
+
+      <!-- RETÍCULA Y ESPACIADO -->
+      <h2 class="sg-h2">Retícula y espaciado</h2>
+      <p class="prose text-muted">Retícula de 12 columnas, líneas hairline visibles, espaciado estricto en escala de 8px.</p>
+      <div class="grid col-guide sg-gridcols">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div class="sg-col"><span class="mono">{i + 1}</span></div>
+        ))}
+      </div>
+      <p class="kicker sg-sub">Escala de espaciado (8px)</p>
+      <div class="sg-space">
+        {espacios.map(([k, v]) => (
+          <div class="sg-space__row">
+            <span class="sg-space__tok mono">--sp-{k}</span>
+            <span class="sg-space__bar" style={`width:${v}`}></span>
+            <span class="sg-space__val mono">{v}</span>
+          </div>
+        ))}
+      </div>
+
+      <!-- COMPONENTES -->
+      <h2 class="sg-h2">Componentes</h2>
+
+      <p class="kicker sg-sub">KPIs en celdas</p>
+      <Kpis items={sitio.kpis} />
+
+      <p class="kicker sg-sub">Badges de línea (color = significado)</p>
+      <div class="lineas-badges">
+        {lineas.map((l) => (
+          <BadgeLinea titulo={l.data.titulo} color={l.data.color} />
+        ))}
+      </div>
+
+      <p class="kicker sg-sub">Etiquetas de tecnología y estado</p>
+      <div class="sg-tags">
+        <span class="tag tag--fill" style="--tag-color: var(--c-blue)">R</span>
+        <span class="tag tag--fill" style="--tag-color: var(--c-teal)">Python</span>
+        <span class="tag tag--fill" style="--tag-color: var(--c-green)">Activa</span>
+        <span class="tag tag--fill" style="--tag-color: var(--c-teal)">Beta</span>
+        <span class="tag">En desarrollo</span>
+      </div>
+
+      <p class="kicker sg-sub">Cards (herramientas)</p>
+      <div class="sg-cards">
+        {herramientas.map((h) => (
+          <Card titulo={h.data.nombre} kicker={h.data.tipo} color={lineas.find((l) => l.id === h.data.linea)?.data.color}>
+            <p>{h.data.resumen}</p>
+            <div class="sg-cardtags">
+              {h.data.tecnologias.map((t) => <span class="tag">{t}</span>)}
+              <span class="tag tag--fill" style="--tag-color: var(--c-gray)">{h.data.estado}</span>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      <p class="kicker sg-sub">Ítem de publicación (BibTeX → Vancouver)</p>
+      <ol class="sg-pubs">
+        {pubs.map((p, i) => (
+          <li class="sg-pub">
+            <span class="sg-pub__n mono">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <p class="sg-pub__cita" set:html={formatCita(p)} />
+              {p.estado && <span class="tag tag--fill" style="--tag-color: var(--c-green)">{p.estado}</span>}
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <p class="nota panel">
+        <strong>Nota.</strong> Esta página es la guía del design system, no una sección
+        del sitio público. Demuestra tokens, tipografía, retícula y componentes base del
+        Concepto «Swiss Data Grid». Las secciones de contenido se construyen en el paso
+        siguiente reutilizando estos componentes.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sg-title { font-size: var(--fs-s4); margin-top: var(--sp-1); }
+  .sg-intro { margin-top: var(--sp-3); }
+  .sg-h2 {
+    margin-top: var(--sp-12);
+    padding-top: var(--sp-3);
+    border-top: 2px solid var(--c-ink);
+    font-size: var(--fs-s2);
+  }
+  .sg-sub { margin-top: var(--sp-6); }
+  code { background: var(--c-panel); padding: 1px 5px; font-size: 0.85em; border: 1px solid var(--c-line); }
+
+  /* Swatches */
+  .sg-group { margin-top: var(--sp-4); }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--sp-2); margin-top: var(--sp-2); }
+  .swatch { border: 1px solid var(--c-line); }
+  .swatch__chip { height: 72px; }
+  .swatch figcaption { padding: var(--sp-2); display: flex; flex-direction: column; gap: 2px; }
+  .swatch__name { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: var(--fw-medium); }
+  .swatch__hex { color: var(--c-gray); font-size: var(--fs-xs); }
+  .swatch__rol { font-size: var(--fs-xs); color: var(--c-gray); line-height: var(--lh-snug); margin-top: 2px; }
+
+  /* Fuentes */
+  .sg-fonts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-4); margin-top: var(--sp-3); }
+  .sg-font { border: 1px solid var(--c-line); padding: var(--sp-3); }
+  .sg-font__sample { font-size: var(--fs-s2); margin-top: var(--sp-1); }
+  .sg-font__meta { font-size: 10px; color: var(--c-gray); margin-top: var(--sp-2); word-break: break-word; }
+
+  /* Escala tipográfica */
+  .sg-scale { margin-top: var(--sp-2); border-top: 1px solid var(--c-line); }
+  .sg-scale__row { display: grid; grid-template-columns: 80px 80px 1fr; gap: var(--sp-3); align-items: baseline; padding: var(--sp-2) 0; border-bottom: 1px solid var(--c-line); }
+  .sg-scale__tok, .sg-scale__val { color: var(--c-gray); font-size: var(--fs-xs); }
+  .sg-scale__demo { font-family: var(--font-sans); font-weight: var(--fw-semibold); letter-spacing: var(--tr-display); line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Retícula */
+  .sg-gridcols { margin-top: var(--sp-3); }
+  .sg-col { background: var(--c-panel); border: 1px solid var(--c-line); min-height: 56px; display: flex; align-items: flex-end; justify-content: center; padding: var(--sp-1); }
+  .sg-col .mono { font-size: var(--fs-xs); color: var(--c-gray); }
+
+  /* Espaciado */
+  .sg-space { margin-top: var(--sp-2); display: flex; flex-direction: column; gap: var(--sp-1); }
+  .sg-space__row { display: grid; grid-template-columns: 80px 1fr 56px; gap: var(--sp-2); align-items: center; }
+  .sg-space__tok, .sg-space__val { font-size: var(--fs-xs); color: var(--c-gray); }
+  .sg-space__bar { height: 16px; background: var(--c-teal); }
+
+  /* Componentes varios */
+  .lineas-badges { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-3); }
+  .sg-tags { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-3); }
+  .sg-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--sp-3); margin-top: var(--sp-3); }
+  .sg-cardtags { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-3); }
+
+  /* Publicaciones */
+  .sg-pubs { list-style: none; padding: 0; margin-top: var(--sp-3); border-top: 1px solid var(--c-line); }
+  .sg-pub { display: grid; grid-template-columns: 40px 1fr; gap: var(--sp-3); padding: var(--sp-3) 0; border-bottom: 1px solid var(--c-line); }
+  .sg-pub__n { font-size: var(--fs-s1); color: var(--c-line); font-weight: 700; line-height: 1; }
+  .sg-pub__cita { line-height: var(--lh-normal); }
+  .sg-pub__cita :global(.cita__titulo) { font-weight: var(--fw-semibold); }
+  .sg-pub__cita :global(.cita__doi) { font-family: var(--font-mono); font-size: var(--fs-xs); }
+  .sg-pub .tag { margin-top: var(--sp-2); }
+
+  .nota { margin-top: var(--sp-12); padding: var(--sp-3) var(--sp-4); font-size: var(--fs-sm); color: var(--c-gray); border-left: 4px solid var(--c-teal); }
+  .nota strong { color: var(--c-ink); }
+</style>

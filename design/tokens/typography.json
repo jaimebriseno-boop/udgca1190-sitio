@@ -1,0 +1,35 @@
+{
+  "_comment": "Tipografía del Concepto 'Swiss Data Grid'. Fuentes vía Fontsource (self-hosted, importadas en Base.astro). Escala modular ratio 1.333, base 16px.",
+  "families": {
+    "sans":  "'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    "serif": "'Source Serif 4 Variable', Georgia, 'Times New Roman', serif",
+    "mono":  "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+  },
+  "scale": {
+    "xs":   "0.75rem",
+    "sm":   "0.875rem",
+    "base": "1rem",
+    "s1":   "1.333rem",
+    "s2":   "1.777rem",
+    "s3":   "2.369rem",
+    "s4":   "3.157rem",
+    "s5":   "4.209rem",
+    "s6":   "5.61rem"
+  },
+  "weights": {
+    "regular": "400",
+    "medium":  "500",
+    "semibold":"600",
+    "bold":    "700"
+  },
+  "leading": {
+    "tight":   "1.05",
+    "snug":    "1.2",
+    "normal":  "1.5",
+    "relaxed": "1.65"
+  },
+  "tracking": {
+    "display": "-0.02em",
+    "kicker":  "0.14em"
+  }
+}

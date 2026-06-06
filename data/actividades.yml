@@ -1,0 +1,24 @@
+# Actividades del CA: docencia, edición, revisión por pares, divulgación, eventos.
+# tipo: docencia | edicion | revision | divulgacion | evento
+# fecha en formato AAAA-MM (o AAAA). Plantilla de arranque.
+
+- id: libro-infecto-springer
+  tipo: edicion
+  titulo: "Libro de enfermedades infecciosas (Springer, acceso abierto)"
+  descripcion: "Edición de una guía clínica basada en evidencia (~46 capítulos) para estudiantes, residentes y especialistas."
+  fecha: "2026"
+  enlace: ""
+
+- id: revision-pares
+  tipo: revision
+  titulo: "Revisión por pares en revistas biomédicas"
+  descripcion: "Evaluación de manuscritos en infectología, resistencia antimicrobiana y bioestadística aplicada (MDPI, Springer, Dove)."
+  fecha: "2026"
+  enlace: ""
+
+- id: actividad-ejemplo
+  tipo: evento
+  titulo: "Título de la actividad (plantilla)"
+  descripcion: "Descripción breve de la actividad o evento académico."
+  fecha: "2026-06"
+  enlace: ""
