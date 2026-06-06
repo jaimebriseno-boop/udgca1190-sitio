@@ -35,7 +35,7 @@ const lineas = await getCollection('lineas');
         <p class="kicker">Líneas de investigación</p>
         <div class="lineas-badges">
           {lineas.map((l) => (
-            <BadgeLinea titulo={l.data.titulo} color={l.data.color} href="/lineas" />
+            <BadgeLinea titulo={l.data.titulo_corto || l.data.titulo} color={l.data.color} href="/lineas" />
           ))}
         </div>
       </div>

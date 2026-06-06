@@ -1,0 +1,598 @@
+# Producción académica del CA, etiquetada por línea específica y LGAC.
+# Fuente: ORCID/PubMed (workflow pubs-y-lgac-ca1190), deduplicada por DOI.
+# Cada publicación 'abona' a una linea_especifica y a una lgac (general).
+# VERIFICAR autoria/DOI antes de publicar en el sitio.
+
+- doi: "10.3390/psychiatryint7010010"
+  titulo: "A Case-Control Study of the Association Between Hypocholesterolemia and Depressive Symptoms in a Mexican Population from Los Altos Sur, Jalisco"
+  anio: "2026"
+  revista: "Psychiatry International"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cohortes-clinicas-nefro-cronicas
+  miembros: [briseno-ramirez]
+
+- doi: "10.3389/fimmu.2026.1664409"
+  titulo: "Aberrant STAT3 activation and overproduction of IL-21 in systemic lupus erythematosus: role of miR-155 and miR-21 in target genes SOCS1, PTEN and PIAS3"
+  anio: "2026"
+  revista: "Frontiers in Immunology"
+  tipo: "article"
+  lgac: biologia-molecular
+  linea_especifica: biomarcadores-moleculares-patogenesis-viral-inmune
+  miembros: [vega-cornejo]
+
+- doi: "10.1016/j.jpra.2026.03.028"
+  titulo: "Breast implant explantation and capsulectomy in symptomatic patients. Is there any improvement with the procedure? Systematic review and meta-analysis"
+  anio: "2026"
+  revista: "JPRAS Open"
+  tipo: "review"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: revisiones-sistematicas-metaanalisis-clinicos
+  miembros: [fernandez-diaz]
+
+- doi: "10.1515/med-2025-1348"
+  titulo: "Drug-induced gingival overgrowth in renal transplants patients"
+  anio: "2026"
+  revista: "Open Medicine"
+  tipo: "article"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.20944/preprints202605.1808.v1"
+  titulo: "Health-Promoting Lifestyle Profiles, Academic Stress, and Health-Professional Advice Seeking among Undergraduate Nursing Students: A Cross-Sectional Study"
+  anio: "2026"
+  revista: "Preprints (MDPI)"
+  tipo: "other"
+  lgac: nutricion-microbioma
+  linea_especifica: nutricion-biofilm-inflamacion-obesidad
+  miembros: [briseno-ramirez]
+
+- doi: "10.3390/healthcare14070890"
+  titulo: "Healthcare Deserts and Avoidable Mortality in Mexico: A Municipal-Level Ecological Analysis of Health System Resources, Social Deprivation, and Preventable Deaths, 2015-2024"
+  anio: "2026"
+  revista: "Healthcare"
+  tipo: "article"
+  lgac: ciencia-datos-poblacionales
+  linea_especifica: determinantes-sociales-mortalidad-evitable
+  miembros: [briseno-ramirez, de-arcos-jimenez]
+
+- doi: "10.1097/SAP.0000000000004595"
+  titulo: "Improved Outcomes in Facial Palsy Surgical Education by Application of Conceptual Learning Frameworks"
+  anio: "2026"
+  revista: "Annals of Plastic Surgery"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cirugia-traslacional-desenlaces
+  miembros: [fernandez-diaz]
+
+- doi: "10.3390/medsci14020214"
+  titulo: "In-Hospital Mortality Predictors and a Bayesian Weighted-Incidence Antibiogram in Infective Endocarditis: A Seven-Year Cohort Study from a Mexican Tertiary University Hospital"
+  anio: "2026"
+  revista: "Medical Sciences"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: wisca-resistencia-antimicrobiana
+  miembros: [briseno-ramirez, de-arcos-jimenez]
+
+- doi: "10.1016/S2665-9913(25)00346-7"
+  titulo: "Ixekizumab in children with active psoriatic and enthesitis-related juvenile idiopathic arthritis (COSPIRIT-JIA): a multicentre, open-label, 16-week, Bayesian trial including a randomised reference group to adalimumab"
+  anio: "2026"
+  revista: "The Lancet Rheumatology"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: reumatologia-pediatrica-autoinmunes
+  miembros: [vega-cornejo]
+
+- doi: "10.1155/ijod/8893504"
+  titulo: "Overexpression of the IL-23/IL-17A Axis and Their Receptors (IL-23R and IL-17RA) in Gingival Tissue of Patients With Periodontitis"
+  anio: "2026"
+  revista: "International Journal of Dentistry"
+  tipo: "article"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.1016/j.jse.2026.04.045"
+  titulo: "Pectoralis Minor Reattachment in Latarjet Procedure: Improvement of Scapular Stability in High-Performance Contact Athletes — Retrospective Cohort Comparison"
+  anio: "2026"
+  revista: "Journal of Shoulder and Elbow Surgery"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cirugia-traslacional-desenlaces
+  miembros: [briseno-ramirez]
+
+- doi: "10.1016/j.jseint.2026.101743"
+  titulo: "Prognostic value of the Mayo-FJD classification for non-surgical proximal humerus fractures: a morphological approach to predicting functional outcomes"
+  anio: "2026"
+  revista: "JSES International"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cirugia-traslacional-desenlaces
+  miembros: [briseno-ramirez]
+
+- doi: "10.1016/j.jor.2025.11.006"
+  titulo: "Real-world management of native knee septic arthritis at a university hospital, 2018-2025: A retrospective cohort with comparative surgical outcomes and development of a weighted-incidence syndromic combination antibiogram"
+  anio: "2026"
+  revista: "Journal of Orthopaedics"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: wisca-resistencia-antimicrobiana
+  miembros: [briseno-ramirez, de-arcos-jimenez]
+
+- doi: "10.65937/ciudadglocal.2026.22.2.1"
+  titulo: "Salud ambiental y función pulmonar en trabajadores de la industria ladrillera de Tlajomulco de Zúñiga"
+  anio: "2026"
+  revista: "CG Ciudad Glocal Revista Científica Mexicana de Movilidad Urbana, Transporte y Territorio"
+  tipo: "article"
+  lgac: ciencia-datos-poblacionales
+  linea_especifica: salud-ambiental-ocupacional-poblacional
+  miembros: [rosales-chavez]
+
+- doi: "10.3390/v18020219"
+  titulo: "Social Determinants and Outbreak Dynamics of the 2025 Measles Epidemic in Mexico: A Nationwide Analysis of Linked Surveillance Data"
+  anio: "2026"
+  revista: "Viruses"
+  tipo: "article"
+  lgac: ciencia-datos-poblacionales
+  linea_especifica: determinantes-sociales-mortalidad-evitable
+  miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez, fernandez-diaz]
+
+- doi: "10.3390/idr18030039"
+  titulo: "Spontaneous Pneumomediastinum, Subcutaneous Emphysema, and Pneumoperitoneum in RT-PCR-Confirmed Measles: A Pediatric Case Report"
+  anio: "2026"
+  revista: "Infectious Disease Reports"
+  tipo: "other"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: vigilancia-series-tiempo-infecciosas
+  miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez]
+
+- doi: "10.34067/KID.0000001133"
+  titulo: "Temporal Evolution of the Impact of CKD on COVID-19 Outcomes: A Five-Year Nationwide Analysis"
+  anio: "2026"
+  revista: "Kidney360"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cohortes-clinicas-nefro-cronicas
+  miembros: [briseno-ramirez, de-arcos-jimenez]
+
+- doi: "10.3390/antibiotics15030242"
+  titulo: "Trends, Seasonality, and the Impact of COVID-19 on Clinical Staphylococcus aureus and MRSA Isolates in Western Mexico (2016-2025): A Time-Series Analysis at a University Referral Hospital"
+  anio: "2026"
+  revista: "Antibiotics"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: vigilancia-series-tiempo-infecciosas
+  miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez]
+
+- doi: "10.12998/wjcc.v13.i8.100839"
+  titulo: "Application of nanotechnology to dentistry: Impact of graphene nanocomposites on clinical air quality"
+  anio: "2025"
+  revista: "World Journal of Clinical Cases"
+  tipo: "article"
+  lgac: nutricion-microbioma
+  linea_especifica: nutricion-biofilm-inflamacion-obesidad
+  miembros: [rodriguez-montano]
+
+- doi: "10.1155/ijin/7405066"
+  titulo: "Are Salivary and Plasma Levels of Toll-Like Receptors 2 and 4 Elevated in Subjects With Chronic Periodontitis?: A Systematic Review and Meta-Analysis"
+  anio: "2025"
+  revista: "International Journal of Inflammation"
+  tipo: "review"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.1016/j.jor.2025.06.003"
+  titulo: "Comparative effectiveness of repeated joint aspiration, arthroscopic lavage, and open arthrotomy in adult native knee septic arthritis: A systematic review and network meta-analysis"
+  anio: "2025"
+  revista: "Journal of Orthopaedics"
+  tipo: "review"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: revisiones-sistematicas-metaanalisis-clinicos
+  miembros: [briseno-ramirez, de-arcos-jimenez]
+
+- doi: "10.54589/aol.38/1/49"
+  titulo: "Dental biofilm in children with normal weight, overweight and obesity: a pilot study"
+  anio: "2025"
+  revista: "Acta Odontológica Latinoamericana"
+  tipo: "article"
+  lgac: nutricion-microbioma
+  linea_especifica: nutricion-biofilm-inflamacion-obesidad
+  miembros: [rodriguez-montano]
+
+- doi: "10.1186/s12879-025-10677-0"
+  titulo: "Development of a Weighted-Incidence Syndromic Combination Antibiogram (WISCA) to guide empiric antibiotic treatment for ventilator-associated pneumonia in a Mexican tertiary care university hospital"
+  anio: "2025"
+  revista: "BMC Infectious Diseases"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: wisca-resistencia-antimicrobiana
+  miembros: [briseno-ramirez, de-arcos-jimenez]
+
+- doi: "10.3390/medsci13030175"
+  titulo: "Diagnostic Accuracy of Neutrophil Gelatinase-Associated Lipocalin in Peritoneal Effluent and Ascitic Fluid for Early Detection of Peritonitis: A Systematic Review and Meta-Analysis"
+  anio: "2025"
+  revista: "Medical Sciences"
+  tipo: "review"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: revisiones-sistematicas-metaanalisis-clinicos
+  miembros: [briseno-ramirez, de-arcos-jimenez, rodriguez-montano]
+
+- doi: "10.1002/iid3.70147"
+  titulo: "Genetic Variants of the IL-23/IL-17 Axis and Its Association With Periodontal Disease: A Systematic Review"
+  anio: "2025"
+  revista: "Immunity, Inflammation and Disease"
+  tipo: "review"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.1177/20406223251368090"
+  titulo: "Hepatitis and periodontal health: an emerging oral-liver axis"
+  anio: "2025"
+  revista: "Therapeutic Advances in Chronic Disease"
+  tipo: "review"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.3899/jrheum.2024-0298"
+  titulo: "Intravenous Golimumab in Children With Polyarticular-Course Juvenile Idiopathic Arthritis: Long-Term Extension of an Open-Label Phase III Study"
+  anio: "2025"
+  revista: "The Journal of Rheumatology"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: reumatologia-pediatrica-autoinmunes
+  miembros: [vega-cornejo]
+
+- doi: "10.1002/jcla.70040"
+  titulo: "Levels of IL-1β, MMP-8, and MMP-9 in the Saliva of Subjects With Periodontitis: A Systematic Review and Meta-Analysis"
+  anio: "2025"
+  revista: "Journal of Clinical Laboratory Analysis"
+  tipo: "review"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.3390/diagnostics15131650"
+  titulo: "Periodontal Disease Elevates IL-6 Levels During Initial Symptoms of COVID-19"
+  anio: "2025"
+  revista: "Diagnostics"
+  tipo: "article"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.3390/v17010103"
+  titulo: "Population-Level SARS-CoV-2 RT-PCR Cycle Threshold Values and Their Relationships with COVID-19 Transmission and Outcome Metrics: A Time Series Analysis Across Pandemic Years"
+  anio: "2025"
+  revista: "Viruses"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: covid19-sarscov2-epidemiologia
+  miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez, fernandez-diaz, rodriguez-montano, rosales-chavez]
+
+- doi: "10.1111/jcmm.70545"
+  titulo: "Relationship Between MCP-1 Levels in GCF and Periodontitis: A Systematic Review With Meta-Analysis and Analysis of Molecular Interactions"
+  anio: "2025"
+  revista: "Journal of Cellular and Molecular Medicine"
+  tipo: "review"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.1186/s12860-025-00541-z"
+  titulo: "TRAIL (DR5) receptor and the modulation of TRAIL pathway in PLWHIV: key mechanisms in the progression of HIV disease"
+  anio: "2025"
+  revista: "BMC Molecular and Cell Biology"
+  tipo: "article"
+  lgac: biologia-molecular
+  linea_especifica: biomarcadores-moleculares-patogenesis-viral-inmune
+  miembros: [de-arcos-jimenez]
+
+- doi: "10.3390/antibiotics14020187"
+  titulo: "The Clinical Implications of Inappropriate Therapy in Community-Onset Urinary Tract Infections and the Development of a Bayesian Hierarchical Weighted-Incidence Syndromic Combination Antibiogram"
+  anio: "2025"
+  revista: "Antibiotics"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: wisca-resistencia-antimicrobiana
+  miembros: [briseno-ramirez, de-arcos-jimenez]
+
+- doi: "10.1002/jcla.70071"
+  titulo: "The Role of Interleukin-23 and Interleukin-17 in Peri-Implant Crevicular Fluid of Subjects With Peri-Implant Disease: A Systematic Review"
+  anio: "2025"
+  revista: "Journal of Clinical Laboratory Analysis"
+  tipo: "review"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.1016/j.annepidem.2025.10.022"
+  titulo: "Trends and cyclical patterns of dengue disease in Mexico: A 40-year time series analysis"
+  anio: "2025"
+  revista: "Annals of Epidemiology"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: vigilancia-series-tiempo-infecciosas
+  miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez]
+
+- doi: "10.3389/fpubh.2025.1494463"
+  titulo: "Trends of respiratory viruses and factors associated with severe acute respiratory infection in patients presenting at a university hospital: a 6-year retrospective study across the COVID-19 pandemic"
+  anio: "2025"
+  revista: "Frontiers in Public Health"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: vigilancia-series-tiempo-infecciosas
+  miembros: [briseno-ramirez, de-arcos-jimenez]
+
+- doi: "10.3390/microorganisms13030684"
+  titulo: "Whole-Genome Sequencing of Linezolid-Resistant and Linezolid-Intermediate-Susceptibility Enterococcus faecalis Clinical Isolates in a Mexican Tertiary Care University Hospital"
+  anio: "2025"
+  revista: "Microorganisms"
+  tipo: "article"
+  lgac: biologia-molecular
+  linea_especifica: genomica-resistencia-microbiana
+  miembros: [briseno-ramirez, de-arcos-jimenez]
+
+- doi: "10.3389/fneur.2024.1385945"
+  titulo: "Clinical predictors for mechanical ventilation assistance in Guillain-Barré syndrome"
+  anio: "2024"
+  revista: "Frontiers in Neurology"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cohortes-clinicas-nefro-cronicas
+  miembros: [briseno-ramirez]
+
+- doi: "10.3390/app14041464"
+  titulo: "Comparison of the Effects of Ketorolac and Acetaminophen on RANK-L Levels in the Gingival Crevicular Fluid during Orthodontic Tooth Movement: A Pilot Study"
+  anio: "2024"
+  revista: "Applied Sciences"
+  tipo: "article"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.1016/j.diagmicrobio.2024.116654"
+  titulo: "Detection of Enterococcus faecalis and the red complex bacteria analyzed by the Checkerboard technique for DNA-DNA hybridization in endodontic infections: A systematic review and meta-analysis"
+  anio: "2024"
+  revista: "Diagnostic Microbiology and Infectious Disease"
+  tipo: "review"
+  lgac: biologia-molecular
+  linea_especifica: genomica-resistencia-microbiana
+  miembros: [rodriguez-montano]
+
+- doi: "10.1186/s12903-024-04077-0"
+  titulo: "IL-23/IL-17 axis levels in gingival crevicular fluid of subjects with periodontal disease: a systematic review"
+  anio: "2024"
+  revista: "BMC Oral Health"
+  tipo: "review"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.1097/GOX.0000000000005642"
+  titulo: "Maintaining Functionality in Temporal Skin Tumor Surgery: A Focus on Nerve Injury and Excision Margins"
+  anio: "2024"
+  revista: "Plastic and Reconstructive Surgery - Global Open"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cirugia-traslacional-desenlaces
+  miembros: [fernandez-diaz]
+
+- doi: "10.1097/GOX.0000000000005757"
+  titulo: "Management of Immobile Scalp Skin Tumors and Analysis of Skin Graft Survival on Burred Calvaria"
+  anio: "2024"
+  revista: "Plastic and Reconstructive Surgery - Global Open"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cirugia-traslacional-desenlaces
+  miembros: [fernandez-diaz]
+
+- doi: "10.35702/gas.10012"
+  titulo: "Protocol of the Percutaneous Tracheostomy Technique in a Porcine Model: Experimental Study"
+  anio: "2024"
+  revista: "Gastro Research"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cirugia-traslacional-desenlaces
+  miembros: [damian-negrete]
+
+- doi: "10.3390/v16121892"
+  titulo: "Seasonal Shifts in Influenza, Respiratory Syncytial Virus, and Other Respiratory Viruses After the COVID-19 Pandemic: An Eight-Year Retrospective Study in Jalisco, Mexico"
+  anio: "2024"
+  revista: "Viruses"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: vigilancia-series-tiempo-infecciosas
+  miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez, rosales-chavez, vega-cornejo]
+
+- doi: "10.1007/s42804-024-00223-1"
+  titulo: "Specific indications for the management with minimally invasive surgery (MIS) in thoracoabdominal trauma in pediatrics"
+  anio: "2024"
+  revista: "Journal of Pediatric Endoscopic Surgery"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cirugia-traslacional-desenlaces
+  miembros: [damian-negrete]
+
+- doi: "10.1097/GOX.0000000000004969"
+  titulo: "A Systematic Review and Meta-analysis of Clinical Outcomes in Autologous Breast Reconstruction Using Internal Mammary Artery Perforators as Recipient Vessels"
+  anio: "2023"
+  revista: "Plastic and Reconstructive Surgery - Global Open"
+  tipo: "review"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: revisiones-sistematicas-metaanalisis-clinicos
+  miembros: [fernandez-diaz]
+
+- doi: "10.1186/s12969-023-00802-1"
+  titulo: "Juvenile idiopathic arthritis patients with positive family history of autoimmune thyroid disease might benefit from serological screening: analysis of the international Pharmachild registry"
+  anio: "2023"
+  revista: "Pediatric Rheumatology Online Journal"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: reumatologia-pediatrica-autoinmunes
+  miembros: [vega-cornejo]
+
+- doi: "10.3390/app12168051"
+  titulo: "Levels of IL-23/IL-17 Axis in Plasma and Gingival Tissue of Periodontitis Patients According to the New Classification"
+  anio: "2022"
+  revista: "Applied Sciences"
+  tipo: "article"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.3899/jrheum.200154"
+  titulo: "Absence of Association Between Abatacept Exposure and Initial Infection in Patients With Juvenile Idiopathic Arthritis"
+  anio: "2021"
+  revista: "The Journal of Rheumatology"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: reumatologia-pediatrica-autoinmunes
+  miembros: [vega-cornejo]
+
+- doi: "10.53902/sioaj.2021.01.000502"
+  titulo: "Functional Respiratory Changes in Patients with Chest Wall Deformities Secondary to Autologous Costal Cartilage Harvest for Auricle Reconstruction"
+  anio: "2021"
+  revista: "Surgery International Open Access Journal"
+  tipo: "article"
+  lgac: ciencia-datos-poblacionales
+  linea_especifica: salud-ambiental-ocupacional-poblacional
+  miembros: [rosales-chavez]
+
+- doi: "10.1002/jcla.23963"
+  titulo: "IL-23/IL-17 axis and soluble receptors isoforms sIL-23R and sIL-17RA in patients with rheumatoid arthritis-presenting periodontitis"
+  anio: "2021"
+  revista: "Journal of Clinical Laboratory Analysis"
+  tipo: "article"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.5051/jpis.2005380269"
+  titulo: "Inverse behavior of IL-23R and IL-17RA in chronic and aggressive periodontitis"
+  anio: "2021"
+  revista: "Journal of Periodontal & Implant Science"
+  tipo: "article"
+  lgac: nutricion-microbioma
+  linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
+  miembros: [rodriguez-montano]
+
+- doi: "10.1093/rheumatology/keab021"
+  titulo: "Open-label phase 3 study of intravenous golimumab in patients with polyarticular juvenile idiopathic arthritis"
+  anio: "2021"
+  revista: "Rheumatology (Oxford)"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: reumatologia-pediatrica-autoinmunes
+  miembros: [vega-cornejo]
+
+- doi: "10.29262/ram.v67i3.893"
+  titulo: "Prevalencia de eosinofilia en sangre en adultos con EPOC según el punto de corte"
+  anio: "2021"
+  revista: "Revista Alergia México"
+  tipo: "article"
+  lgac: ciencia-datos-poblacionales
+  linea_especifica: salud-ambiental-ocupacional-poblacional
+  miembros: [rosales-chavez]
+
+- doi: "10.1016/j.bjps.2020.08.039"
+  titulo: "St Andrew's COVID-19 surgery safety (StACS) study: Elective plastic surgery, trauma & burns"
+  anio: "2021"
+  revista: "Journal of Plastic, Reconstructive & Aesthetic Surgery"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: covid19-sarscov2-epidemiologia
+  miembros: [fernandez-diaz]
+
+- doi: "10.1007/s00705-020-04854-6"
+  titulo: "ZBTB gene expression in HIV patients: a possible new molecular mechanism of viral control"
+  anio: "2021"
+  revista: "Archives of Virology"
+  tipo: "article"
+  lgac: biologia-molecular
+  linea_especifica: biomarcadores-moleculares-patogenesis-viral-inmune
+  miembros: [de-arcos-jimenez]
+
+- doi: "10.1186/s12950-020-00262-4"
+  titulo: "Association of intestinal and systemic inflammatory biomarkers with immune reconstitution in HIV+ patients on ART"
+  anio: "2020"
+  revista: "Journal of Inflammation (United Kingdom)"
+  tipo: "article"
+  lgac: biologia-molecular
+  linea_especifica: biomarcadores-moleculares-patogenesis-viral-inmune
+  miembros: [de-arcos-jimenez]
+
+- doi: "10.1111/ped.14521"
+  titulo: "Kawasaki Disease Presenting with Hoarseness: A Multinational Study of the REKAMLATINA Network"
+  anio: "2020"
+  revista: "Pediatrics International"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: reumatologia-pediatrica-autoinmunes
+  miembros: [vega-cornejo]
+
+- doi: "10.1186/s12263-020-00674-0"
+  titulo: "Low-grade chronic inflammation is attenuated by exercise training in obese adults through down-regulation of ASC gene in peripheral blood: a pilot study"
+  anio: "2020"
+  revista: "Genes & Nutrition"
+  tipo: "article"
+  lgac: nutricion-microbioma
+  linea_especifica: nutricion-biofilm-inflamacion-obesidad
+  miembros: [rosales-chavez]
+
+- doi: "10.1186/s12969-020-0410-x"
+  titulo: "Maintenance of antibody response to diphtheria/tetanus vaccine in patients aged 2-5 years with polyarticular-course juvenile idiopathic arthritis receiving subcutaneous abatacept"
+  anio: "2020"
+  revista: "Pediatric Rheumatology Online Journal"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: reumatologia-pediatrica-autoinmunes
+  miembros: [vega-cornejo]
+
+- doi: "10.1186/s13075-020-02167-2"
+  titulo: "Opportunistic infections in immunosuppressed patients with juvenile idiopathic arthritis: analysis by the Pharmachild Safety Adjudication Committee"
+  anio: "2020"
+  revista: "Arthritis Research & Therapy"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: reumatologia-pediatrica-autoinmunes
+  miembros: [vega-cornejo]
+
+- doi: "10.1002/art.40466"
+  titulo: "Subcutaneous Abatacept in Patients With Polyarticular-Course Juvenile Idiopathic Arthritis: Results From a Phase III Open-Label Study"
+  anio: "2018"
+  revista: "Arthritis & Rheumatology"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: reumatologia-pediatrica-autoinmunes
+  miembros: [vega-cornejo]
+
+- doi: "10.4103/0971-4065.200514"
+  titulo: "The effect of resolution time of acute kidney injury on clinical outcomes"
+  anio: "2017"
+  revista: "Indian Journal of Nephrology"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cohortes-clinicas-nefro-cronicas
+  miembros: [briseno-ramirez]
+
+- doi: "10.1007/s10029-012-1012-4"
+  titulo: "Closure of midline contaminated and recurrent incisional hernias with components separation technique reinforced with plication of the rectus muscles"
+  anio: "2013"
+  revista: "Hernia"
+  tipo: "article"
+  lgac: clinica-epidemiologica-traslacional
+  linea_especifica: cirugia-traslacional-desenlaces
+  miembros: [fernandez-diaz]
+
+- doi: "10.1371/journal.pone.0010658"
+  titulo: "Hospital triage system for adult patients using an influenza-like illness scoring system during the 2009 pandemic - Mexico"
+  anio: "2010"
+  revista: "PLoS ONE"
+  tipo: "article"
+  lgac: epidemiologia-infecciosas
+  linea_especifica: covid19-sarscov2-epidemiologia
+  miembros: [briseno-ramirez]

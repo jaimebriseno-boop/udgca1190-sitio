@@ -13,7 +13,7 @@
     torrente sanguíneo. Evaluado en un estudio cuasi-experimental (antes-después)
     en urgencias, con aumento de la tasa de positivos verdaderos.
   tecnologias: ["R", "Stan", "tidyverse"]
-  linea: resistencia-antimicrobiana
+  linea: epidemiologia-infecciosas
   enlace_app: ""        # URL de la app/Shiny cuando exista
   repositorio: ""
   doi: ""               # verificar al publicar
@@ -31,7 +31,7 @@
     bayesiano. Aplicado a endocarditis infecciosa y candidosis invasiva; permite
     estimar cobertura por síndrome y estratos comunitario/asociado a la atención.
   tecnologias: ["R", "brms", "Stan"]
-  linea: resistencia-antimicrobiana
+  linea: epidemiologia-infecciosas
   enlace_app: ""
   repositorio: ""
   doi: ""               # verificar al publicar

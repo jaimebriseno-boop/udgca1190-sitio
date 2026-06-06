@@ -21,11 +21,11 @@ redes:
 
 # KPIs del inicio (números grandes en celdas). label en versalitas.
 kpis:
-  - num: "7"
-    label: "Líneas"
+  - num: "5"
+    label: "Líneas (LGAC)"
   - num: "7"
     label: "Integrantes"
-  - num: "~10"
+  - num: "66"
     label: "Publicaciones"
   - num: "5"
     label: "Herramientas"

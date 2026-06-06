@@ -9,7 +9,7 @@
   rol: lider
   grado: "Médico Internista e Infectólogo"
   institucion: "Universidad de Guadalajara — CUTlajomulco"
-  lineas: [resistencia-antimicrobiana, infectologia-clinica, epidemiologia-espacial]
+  lineas: [epidemiologia-infecciosas, ciencia-datos-poblacionales, clinica-epidemiologica-traslacional]
   foto: "/integrantes/jaime-briseno.jpg"
   orcid: "0009-0006-1901-392X"
   email: "jaime.briseno@academicos.udg.mx"
@@ -38,7 +38,7 @@
   rol: integrante
   grado: "Doctora en Ciencias en Biología Molecular en Medicina · QFB"
   institucion: "Universidad de Guadalajara — CUTlajomulco"
-  lineas: [resistencia-antimicrobiana, genomica, epidemiologia-espacial]
+  lineas: [epidemiologia-infecciosas, biologia-molecular, ciencia-datos-poblacionales]
   foto: "/integrantes/de-arcos-jimenez.jpg"
   orcid: "0000-0003-0251-6425"
   email: "judith.dearcos@academicos.udg.mx"
@@ -64,7 +64,7 @@
   rol: integrante
   grado: "Pediatra Reumatólogo · Maestro en Nutrición"
   institucion: "Universidad de Guadalajara"
-  lineas: [infectologia-clinica, educacion-medica, covid-vulnerable]
+  lineas: [clinica-epidemiologica-traslacional, biologia-molecular, epidemiologia-infecciosas]
   foto: "/integrantes/vega-cornejo.jpg"
   orcid: "0000-0001-7637-2933"
   email: "gabriel.vega@academicos.udg.mx"
@@ -90,7 +90,7 @@
   rol: integrante
   grado: "Cirujano Plástico Reconstructivo · M.Sc. Microcirugía"
   institucion: "Universidad de Guadalajara — CUTlajomulco"
-  lineas: [educacion-medica, seguridad-hospitalaria]
+  lineas: [clinica-epidemiologica-traslacional, epidemiologia-infecciosas, ciencia-datos-poblacionales]
   foto: "/integrantes/fernandez-diaz.jpg"
   orcid: "0000-0003-4698-5063"
   email: "oscar.fernandezdiaz@academicos.udg.mx"
@@ -115,7 +115,7 @@
   rol: integrante
   grado: "Doctora en Ciencias Biomédicas (Inmunología) · Cirujana Dentista"
   institucion: "Universidad de Guadalajara — CUTlajomulco"
-  lineas: [infectologia-clinica, educacion-medica]
+  lineas: [nutricion-microbioma, biologia-molecular, clinica-epidemiologica-traslacional]
   foto: "/integrantes/rodriguez-montano.jpg"
   orcid: "0000-0002-0712-0334"
   email: "ruth.rodriguez@academicos.udg.mx"
@@ -141,7 +141,7 @@
   rol: integrante
   grado: "Cirujano Pediatra · Pediatra Médico"
   institucion: "Universidad de Guadalajara — CUTlajomulco"
-  lineas: [educacion-medica, seguridad-hospitalaria]
+  lineas: [epidemiologia-infecciosas, ciencia-datos-poblacionales, clinica-epidemiologica-traslacional]
   foto: "/integrantes/damian-negrete.jpg"
   orcid: "0000-0003-3424-1382"
   email: "roberto.damian@cutlajomulco.udg.mx"
@@ -168,7 +168,7 @@
   rol: integrante
   grado: ""                # completar (CV pendiente)
   institucion: "Hospital Civil de Guadalajara"
-  lineas: []
+  lineas: [ciencia-datos-poblacionales, epidemiologia-infecciosas, nutricion-microbioma]
   foto: "/integrantes/rosales-chavez.jpg"
   orcid: "0000-0002-8275-8004"
   email: "grosales@hcg.gob.mx"

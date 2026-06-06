@@ -1,7 +1,7 @@
 ---
 // Ficha de integrante (Concepto Swiss Data Grid): foto B/N → color en hover,
 // datos en barra inferior, badges de línea, enlaces ORCID/Scholar/correo.
-interface Linea { titulo: string; color: string }
+interface Linea { titulo: string; titulo_corto?: string; color: string }
 interface Props {
   data: any;                       // datos del integrante (de data/integrantes.yml)
   lineasMap: Record<string, Linea>;
@@ -25,7 +25,7 @@ const lineas = (d.lineas ?? []).map((id: string) => lineasMap[id]).filter(Boolea
       <div class="card-int__lineas">
         {lineas.map((l: Linea) => (
           <span class="badge-linea" style={`--badge-color: var(--c-${l.color})`}>
-            <span class="badge-linea__sq" aria-hidden="true"></span>{l.titulo}
+            <span class="badge-linea__sq" aria-hidden="true"></span>{l.titulo_corto || l.titulo}
           </span>
         ))}
       </div>

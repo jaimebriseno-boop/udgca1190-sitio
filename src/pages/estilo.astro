@@ -119,7 +119,7 @@ const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
       <p class="kicker sg-sub">Badges de línea (color = significado)</p>
       <div class="lineas-badges">
         {lineas.map((l) => (
-          <BadgeLinea titulo={l.data.titulo} color={l.data.color} />
+          <BadgeLinea titulo={l.data.titulo_corto || l.data.titulo} color={l.data.color} />
         ))}
       </div>
 

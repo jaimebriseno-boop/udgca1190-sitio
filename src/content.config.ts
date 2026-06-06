@@ -31,9 +31,13 @@ const lineas = defineCollection({
   loader: file('data/lineas.yml', { parser: parseYaml }),
   schema: z.object({
     titulo: z.string(),
+    titulo_corto: z.string().optional(),
     color: z.enum(COLORES),
     resumen: z.string(),
     descripcion: z.string().optional(),
+    especificas: z
+      .array(z.object({ id: z.string(), titulo: z.string() }))
+      .default([]),
   }),
 });
 

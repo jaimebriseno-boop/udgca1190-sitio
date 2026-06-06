@@ -1,62 +1,65 @@
-# Líneas de Generación y Aplicación del Conocimiento (LGAC) del CA.
-# `color` usa un nombre de la paleta Lancet (ver design/tokens/colors.json):
-# blue | teal | red | green | wine | purple | gray
-# El sitio mapea ese nombre a var(--c-<color>).
+# Líneas de Generación y Aplicación del Conocimiento (LGAC) OFICIALES del CA.
+# Derivadas/validadas contra el corpus real de publicaciones (ORCID/PubMed).
+# color: nombre de la paleta Lancet (design/tokens/colors.json).
+# `especificas`: sublíneas reales que convergen en cada LGAC.
 
-- id: resistencia-antimicrobiana
-  titulo: "Resistencia antimicrobiana"
-  color: red
-  resumen: "Vigilancia, predicción y optimización del uso de antimicrobianos frente a la RAM."
-  descripcion: |
-    Estudio integrativo de determinantes microbiológicos, clínicos y poblacionales
-    de la resistencia antimicrobiana: antibiogramas acumulados ponderados (WISCA),
-    tendencias hospitalarias y modelos de apoyo a la decisión terapéutica empírica.
-
-- id: infectologia-clinica
-  titulo: "Infectología clínica"
+- id: clinica-epidemiologica-traslacional
+  titulo: "Investigación clínica, epidemiológica y traslacional aplicada al estudio integral del proceso salud-enfermedad"
+  titulo_corto: "Clínica, epidemiológica y traslacional"
   color: blue
-  resumen: "Síndromes infecciosos específicos y predicción de desenlaces."
-  descripcion: |
-    Endocarditis infecciosa, candidosis invasiva, infecciones del SNC, neumonía
-    adquirida en la comunidad e infecciones osteoarticulares, con modelos clínicos
-    de predicción de mortalidad y riesgo.
+  resumen: "Estudio integral del proceso salud-enfermedad mediante cohortes clínicas, ensayos, revisiones sistemáticas y metaanálisis, integrando desenlaces clínicos con marcadores biológicos en enfermedades crónicas, autoinmunes, renales y quirúrgicas. Articula la práctica clínica con la generación de evidencia traslacional aplicable a la toma de decisiones."
+  especificas:
+    - id: cohortes-clinicas-nefro-cronicas
+      titulo: "Cohortes clínicas en nefrología y enfermedad crónica"
+    - id: reumatologia-pediatrica-autoinmunes
+      titulo: "Reumatología pediátrica, enfermedades autoinmunes y terapias biológicas"
+    - id: cirugia-traslacional-desenlaces
+      titulo: "Cirugía clínica, reconstructiva y desenlaces quirúrgicos"
+    - id: revisiones-sistematicas-metaanalisis-clinicos
+      titulo: "Revisiones sistemáticas y metaanálisis diagnóstico-terapéuticos"
 
-- id: epidemiologia-espacial
-  titulo: "Epidemiología espacial y brotes"
+- id: ciencia-datos-poblacionales
+  titulo: "Ciencia de datos poblacionales en la identificación de determinantes del proceso salud-enfermedad"
+  titulo_corto: "Ciencia de datos poblacionales"
   color: teal
-  resumen: "Dinámica de brotes, número reproductivo y análisis geográfico."
-  descripcion: |
-    Modelado de brotes (sarampión, dengue) con número reproductivo instantáneo (Rt),
-    autocorrelación espacial (Moran's I, LISA) y análisis de desiertos de atención.
+  resumen: "Análisis de grandes bases de datos de vigilancia y registros nacionales mediante series de tiempo, modelos espaciales y métodos ecológicos para identificar determinantes sociales, ambientales y estructurales de la salud. Cuantifica desigualdades, desiertos de atención y mortalidad evitable a escala poblacional."
+  especificas:
+    - id: determinantes-sociales-mortalidad-evitable
+      titulo: "Determinantes sociales, desiertos de atención y mortalidad evitable"
+    - id: salud-ambiental-ocupacional-poblacional
+      titulo: "Salud ambiental, ocupacional y función respiratoria poblacional"
 
-- id: covid-vulnerable
-  titulo: "COVID-19 y poblaciones vulnerables"
-  color: wine
-  resumen: "Determinantes socioeconómicos y comorbilidad en COVID-19."
-  descripcion: |
-    Impacto de la enfermedad renal crónica y el nivel socioeconómico municipal sobre
-    desenlaces de COVID-19 (UCI, ventilación, mortalidad) a escala nacional.
+- id: epidemiologia-infecciosas
+  titulo: "Epidemiología y control de enfermedades infecciosas"
+  titulo_corto: "Epidemiología de infecciosas"
+  color: red
+  resumen: "Vigilancia, dinámica de brotes y análisis temporal de enfermedades infecciosas emergentes y reemergentes (sarampión, dengue, COVID-19, virus respiratorios) y de la resistencia antimicrobiana, con desarrollo de antibiogramas sindrómicos ponderados (WISCA) bayesianos para guiar la terapia empírica."
+  especificas:
+    - id: wisca-resistencia-antimicrobiana
+      titulo: "Antibiogramas sindrómicos ponderados (WISCA) bayesianos y terapia empírica"
+    - id: vigilancia-series-tiempo-infecciosas
+      titulo: "Vigilancia y series de tiempo de infecciosas emergentes/reemergentes"
+    - id: covid19-sarscov2-epidemiologia
+      titulo: "Epidemiología y desenlaces de COVID-19/SARS-CoV-2"
 
-- id: genomica
-  titulo: "Genómica de patógenos"
-  color: purple
-  resumen: "Caracterización genómica y filogenética de patógenos clínicos."
-  descripcion: |
-    Pipelines de secuenciación de genoma completo (S. aureus) y filogenética
-    (dengue LATAM): tipificación, resistencia genotípica y dinámica evolutiva.
-
-- id: educacion-medica
-  titulo: "Educación médica"
+- id: nutricion-microbioma
+  titulo: "Nutrición y microbioma en la prevención y manejo de enfermedades"
+  titulo_corto: "Nutrición y microbioma"
   color: green
-  resumen: "Recursos educativos abiertos y formación de especialistas."
-  descripcion: |
-    Libro de enfermedades infecciosas (Springer, acceso abierto), wiki clínica y
-    metodología curricular para programas del área de la salud del CUTlajomulco.
+  resumen: "Estudio de la interacción entre estado nutricional, inflamación de bajo grado, microbioma/biofilm y comorbilidades sistémicas, así como de estilos de vida saludables, obesidad y ejes oral-sistémicos en la prevención y el manejo de la enfermedad."
+  especificas:
+    - id: inmunoinflamacion-periodontal-oral-sistemica
+      titulo: "Inmunoinflamación periodontal y ejes oral-sistémicos"
+    - id: nutricion-biofilm-inflamacion-obesidad
+      titulo: "Nutrición, biofilm, obesidad e inflamación de bajo grado"
 
-- id: seguridad-hospitalaria
-  titulo: "Calidad y seguridad hospitalaria"
-  color: gray
-  resumen: "Mejora de procesos y seguridad del paciente."
-  descripcion: |
-    Automatización de procesos, gobernanza de datos clínicos y herramientas de
-    apoyo operativo en hospitales de alta especialidad.
+- id: biologia-molecular
+  titulo: "Biología Molecular en el diagnóstico, biomarcadores, epidemiología y tratamiento de enfermedades infecciosas"
+  titulo_corto: "Biología molecular y biomarcadores"
+  color: purple
+  resumen: "Aplicación de herramientas moleculares (secuenciación de genoma completo, perfiles de expresión génica, citocinas y biomarcadores inmunoinflamatorios) al diagnóstico, la tipificación epidemiológica y el tratamiento de infecciones y enfermedades inmunomediadas, incluyendo determinantes moleculares de resistencia antimicrobiana y patogénesis viral."
+  especificas:
+    - id: genomica-resistencia-microbiana
+      titulo: "Genómica microbiana y determinantes moleculares de resistencia"
+    - id: biomarcadores-moleculares-patogenesis-viral-inmune
+      titulo: "Biomarcadores moleculares y patogénesis viral/inmunomediada"
