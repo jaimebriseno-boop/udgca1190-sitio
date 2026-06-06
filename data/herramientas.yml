@@ -1,6 +1,7 @@
 # Herramientas estadístico-epidemiológicas y predictivas del CA.
 # tipo:   predictiva | estadistica | pipeline
 # estado: activa | beta | desarrollo
+# linea:  id de una LGAC (data/lineas.yml)
 
 - id: hemopredicta
   nombre: "HEMOPREDICTA"
@@ -14,9 +15,9 @@
     en urgencias, con aumento de la tasa de positivos verdaderos.
   tecnologias: ["R", "Stan", "tidyverse"]
   linea: epidemiologia-infecciosas
-  enlace_app: ""        # URL de la app/Shiny cuando exista
+  enlace_app: ""
   repositorio: ""
-  doi: ""               # verificar al publicar
+  doi: ""
   captura: "/herramientas/placeholder.svg"
   destacado: true
 
@@ -28,12 +29,67 @@
   descripcion: |
     Estimación de cobertura empírica mediante antibiogramas acumulados ponderados
     (Weighted-Incidence Syndromic Combination Antibiogram) con agrupamiento parcial
-    bayesiano. Aplicado a endocarditis infecciosa y candidosis invasiva; permite
-    estimar cobertura por síndrome y estratos comunitario/asociado a la atención.
+    bayesiano. Aplicado a endocarditis, candidosis invasiva, ITU comunitaria,
+    neumonía asociada a ventilador y artritis séptica; estima cobertura por síndrome
+    y estratos comunitario/asociado a la atención.
   tecnologias: ["R", "brms", "Stan"]
   linea: epidemiologia-infecciosas
   enlace_app: ""
   repositorio: ""
-  doi: ""               # verificar al publicar
+  doi: ""
   captura: "/herramientas/placeholder.svg"
   destacado: true
+
+- id: genomica-wgs
+  nombre: "Pipeline de genómica microbiana (WGS)"
+  tipo: pipeline
+  estado: activa
+  resumen: "Ensamblado, tipificación y resistencia genotípica desde secuenciación."
+  descripcion: |
+    Flujo reproducible de secuenciación de genoma completo para aislados clínicos:
+    control de calidad, ensamblado, tipificación (MLST/SCCmec) y detección de
+    determinantes de resistencia. Aplicado a S. aureus/MRSA y a Enterococcus
+    faecalis resistente a linezolid.
+  tecnologias: ["Nextflow", "SPAdes", "ABRicate", "Python"]
+  linea: biologia-molecular
+  enlace_app: ""
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: false
+
+- id: series-tiempo-epi
+  nombre: "Series de tiempo epidemiológicas"
+  tipo: estadistica
+  estado: activa
+  resumen: "Tendencias, estacionalidad y número reproductivo de enfermedades."
+  descripcion: |
+    Conjunto de métodos para analizar tendencias, estacionalidad y disrupciones en
+    series de vigilancia (sarampión, dengue, virus respiratorios, RAM): descomposición
+    STL, modelos GAM/Fourier, número reproductivo instantáneo (Rt) y series de tiempo
+    interrumpidas (ITS).
+  tecnologias: ["R", "EpiEstim", "forecast"]
+  linea: ciencia-datos-poblacionales
+  enlace_app: ""
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: false
+
+- id: analisis-espacial
+  nombre: "Análisis espacial y determinantes poblacionales"
+  tipo: estadistica
+  estado: desarrollo
+  resumen: "Autocorrelación espacial y determinantes a escala municipal."
+  descripcion: |
+    Análisis ecológico a escala poblacional para identificar desigualdades,
+    desiertos de atención y mortalidad evitable: autocorrelación espacial (Moran's I,
+    LISA), modelos multinivel y vinculación de registros nacionales con índices de
+    marginación.
+  tecnologias: ["R", "sf", "spdep"]
+  linea: ciencia-datos-poblacionales
+  enlace_app: ""
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: false
