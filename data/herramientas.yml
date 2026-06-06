@@ -3,17 +3,17 @@
 # estado: activa | beta | desarrollo
 # linea:  id de una LGAC (data/lineas.yml)
 
-- id: hemopredicta
-  nombre: "HEMOPREDICTA"
+- id: dengue-forecast
+  nombre: "Dengue Forecast"
   tipo: predictiva
-  estado: beta
-  resumen: "Priorización bayesiana de hemocultivos en urgencias."
+  estado: desarrollo
+  resumen: "Pronóstico y alerta temprana de dengue a partir de patrones cíclicos."
   descripcion: |
-    Sistema de apoyo a la decisión que estratifica el rendimiento esperado de los
-    hemocultivos y prioriza su toma en pacientes con sospecha de infección del
-    torrente sanguíneo. Evaluado en un estudio cuasi-experimental (antes-después)
-    en urgencias, con aumento de la tasa de positivos verdaderos.
-  tecnologias: ["R", "Stan", "tidyverse"]
+    Modelo de pronóstico (forecasting) de la incidencia de dengue en México que
+    aprovecha los patrones cíclicos y estacionales identificados en series de
+    tiempo de 40 años, orientado a sistemas de alerta y respuesta temprana (EWARS).
+    En desarrollo, construido sobre el análisis publicado de tendencias y ciclos del CA.
+  tecnologias: ["R", "forecast", "EpiEstim"]
   linea: epidemiologia-infecciosas
   enlace_app: ""
   repositorio: ""
