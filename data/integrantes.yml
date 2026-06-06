@@ -137,7 +137,7 @@
     - "Periodontitis asociada a artritis reumatoide"
   destacado: false
 
-# --- Pendiente de CV: Gustavo Rosales (identidad verificada por roster; semblanza por completar). ---
+# --- Los 7 integrantes con CV procesado. ---
 - id: damian-negrete
   nombre: "Roberto Miguel Damián-Negrete"
   rol: integrante
@@ -168,14 +168,25 @@
 - id: rosales-chavez
   nombre: "Gustavo Rosales-Chávez"
   rol: integrante
-  grado: ""                # completar (CV pendiente)
-  institucion: "Hospital Civil de Guadalajara"
-  lineas: [ciencia-datos-poblacionales, epidemiologia-infecciosas, nutricion-microbioma]
+  grado: "Médico Internista y Neumólogo · Maestro en Ciencias Médicas"
+  institucion: "Universidad de Guadalajara — CUTlajomulco"
+  lineas: [epidemiologia-infecciosas, ciencia-datos-poblacionales, clinica-epidemiologica-traslacional]
   foto: "/integrantes/rosales-chavez.jpg"
   orcid: "0000-0002-8275-8004"
   email: "grosales@hcg.gob.mx"
   perfiles:
     scholar: "https://scholar.google.com/citations?hl=es&user=VCyUf-wAAAAJ"
-  bio_corta: "Semblanza por completar (CV pendiente)."
-  intereses: []
+  bio_corta: >-
+    Médico Internista y Neumólogo con Maestría en Ciencias Médicas y alta
+    especialidad en rehabilitación pulmonar. Profesor de asignatura en el
+    CUTlajomulco (UdeG) y médico adscrito de Neumología del Hospital Civil de
+    Guadalajara «Juan I. Menchaca»; ex Presidente de la Asociación de Neumología de
+    Jalisco. Su trabajo abarca la epidemiología de virus respiratorios y COVID-19,
+    la función pulmonar y la metodología de investigación clínica, y es investigador
+    principal regional de un proyecto nacional de cáncer de pulmón (INCAN).
+  intereses:
+    - "Neumología y rehabilitación pulmonar"
+    - "Epidemiología de virus respiratorios y COVID-19"
+    - "Cáncer de pulmón (proyecto INCAN)"
+    - "Metodología de investigación clínica y bioestadística"
   destacado: false
