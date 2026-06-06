@@ -1,80 +1,57 @@
 ---
-import Base from '../layouts/Base.astro';
-import { getCollection } from 'astro:content';
+import Home from '../layouts/Home.astro';
 import { getSitio } from '../lib/datos.mjs';
-import Kpis from '../components/Kpis.astro';
-import BadgeLinea from '../components/BadgeLinea.astro';
 
 const sitio = getSitio();
-const lineas = (await getCollection('lineas')).sort((a, b) => (a.data.orden ?? 99) - (b.data.orden ?? 99));
+const bg = sitio.home_bg || '';
+const stats = (sitio.kpis || []).map((k) => `${k.num} ${k.label}`).join('   ·   ');
+const nav = [
+  ['/lineas', 'Líneas'],
+  ['/produccion', 'Producción'],
+  ['/integrantes', 'Integrantes'],
+  ['/herramientas', 'Herramientas'],
+  ['/contacto', 'Contacto'],
+];
 ---
-<Base titulo="UDG-CA-1190" descripcion={sitio.mision}>
-  <section class="section">
-    <div class="container">
-      <div class="hero">
-        <div class="hero__text">
-          <p class="kicker">Cuerpo Académico · {sitio.adscripcion}</p>
-          <h1 class="display hero__name">{sitio.nombre}</h1>
-          <p class="hero__mision prose text-muted">{sitio.mision}</p>
-          <div class="hero__cta">
-            <a class="btn" href="/lineas">Líneas de investigación →</a>
-            <a class="btn btn--ghost" href="/produccion">Producción académica</a>
-          </div>
-        </div>
-        <aside class="hero__block" aria-hidden="true">
-          <div class="hero__swatch"></div>
-          <p class="hero__sigla">{sitio.sigla}</p>
-        </aside>
-      </div>
-
-      <div class="hero__kpis">
-        <Kpis items={sitio.kpis} />
-      </div>
-
-      <div class="hero__lineas">
-        <p class="kicker">Líneas de investigación</p>
-        <div class="lineas-badges">
-          {lineas.map((l) => (
-            <BadgeLinea titulo={l.data.titulo_corto || l.data.titulo} color={l.data.color} href="/lineas" />
-          ))}
-        </div>
-      </div>
-
+<Home titulo="UDG-CA-1190 · Cuerpo Académico" descripcion={sitio.mision}>
+  <section id="dimension">
+    <div
+      class="dim__bg"
+      data-img={bg ? 'true' : undefined}
+      style={bg ? `--home-bg: url('${bg}')` : undefined}>
     </div>
+
+    {!bg && (
+      <div class="dim__deco" aria-hidden="true">
+        <svg viewBox="0 0 1200 600" preserveAspectRatio="none">
+          <g stroke="#ffffff" stroke-opacity="0.5" stroke-width="1">
+            <line x1="0" y1="150" x2="1200" y2="150" />
+            <line x1="0" y1="300" x2="1200" y2="300" />
+            <line x1="0" y1="450" x2="1200" y2="450" />
+          </g>
+          <polyline fill="none" stroke="#9fd0e0" stroke-width="3"
+            points="0,490 150,430 300,450 450,300 600,330 750,180 900,250 1050,120 1200,180" />
+          <polyline fill="none" stroke="#c9a0d8" stroke-width="2"
+            points="0,520 150,500 300,460 450,470 600,400 750,420 900,360 1050,380 1200,300" />
+        </svg>
+      </div>
+    )}
+
+    <div class="dim__overlay"></div>
+
+    <div class="dim__content">
+      <span class="dim__plaque">
+        <img src="/logos/UDG-CA-1190_logo_horizontal.png" alt="Cuerpo Académico UDG-CA-1190" width="200" height="87" />
+      </span>
+      <p class="dim__kicker">Cuerpo Académico · {sitio.adscripcion}</p>
+      <h1 class="dim__title">{sitio.nombre}</h1>
+      <p class="dim__lead">{sitio.mision}</p>
+      <nav class="dim__nav" aria-label="Secciones">
+        {nav.map(([href, label]) => <a href={href}>{label}</a>)}
+      </nav>
+      <p class="dim__stats">{stats}</p>
+    </div>
+
+    <p class="dim__foot">Universidad de Guadalajara · CUTlajomulco</p>
   </section>
-</Base>
-
-<style>
-  .hero { display: grid; grid-template-columns: 1fr; gap: var(--sp-6); align-items: start; }
-  @media (min-width: 900px) {
-    .hero { grid-template-columns: 7fr 5fr; gap: var(--sp-8); }
-  }
-  .hero__name { font-size: var(--fs-s4); margin-top: var(--sp-2); }
-  @media (min-width: 900px) { .hero__name { font-size: var(--fs-s5); } }
-  .hero__mision { margin-top: var(--sp-3); font-size: var(--fs-s1); line-height: var(--lh-normal); color: var(--c-gray); }
-  .hero__cta { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-4); }
-
-  .hero__block { border: 1px solid var(--c-line); }
-  .hero__swatch { aspect-ratio: 4 / 3; background: var(--c-blue); }
-  .hero__sigla {
-    font-family: var(--font-mono);
-    font-size: var(--fs-s1);
-    letter-spacing: 0.02em;
-    padding: var(--sp-2) var(--sp-3);
-    border-top: 1px solid var(--c-line);
-    color: var(--c-ink);
-  }
-
-  .hero__kpis { margin-top: var(--sp-8); }
-  .hero__lineas { margin-top: var(--sp-8); }
-  .lineas-badges { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-3); }
-
-  .nota {
-    margin-top: var(--sp-8);
-    padding: var(--sp-3) var(--sp-4);
-    font-size: var(--fs-sm);
-    color: var(--c-gray);
-    border-left: 4px solid var(--c-teal);
-  }
-  .nota strong { color: var(--c-ink); }
-</style>
+</Home>

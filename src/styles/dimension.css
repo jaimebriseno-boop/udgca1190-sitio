@@ -1,0 +1,71 @@
+/* dimension.css — portada a pantalla completa (inspirado en HTML5UP Dimension)
+   Fondo: una figura estadística del CA + capa oscura. Identidad UDG-CA-1190. */
+
+body.home { margin: 0; }
+
+#dimension {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Fondo (imagen de gráfica) + degradado de respaldo */
+.dim__bg {
+  position: absolute; inset: 0;
+  background-color: var(--c-navy);
+  background-size: cover; background-position: center;
+  background-image:
+    radial-gradient(120% 120% at 70% 20%, #243049 0%, #1a2231 55%, #11161f 100%);
+}
+.dim__bg[data-img] { background-image: var(--home-bg); }
+.dim__overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(13, 16, 22, 0.74) 0%, rgba(13, 16, 22, 0.86) 100%);
+}
+/* sparkline decorativa de respaldo (cuando no hay imagen) */
+.dim__deco { position: absolute; inset: 0; opacity: 0.18; }
+.dim__deco svg { width: 100%; height: 100%; }
+
+.dim__content {
+  position: relative; z-index: 3;
+  text-align: center; color: #fff;
+  max-width: 900px; padding: var(--sp-6) var(--sp-4);
+}
+.dim__plaque {
+  display: inline-flex; background: #fff; padding: var(--sp-2) var(--sp-3); margin-bottom: var(--sp-4);
+}
+.dim__plaque img { height: 46px; width: auto; display: block; }
+.dim__kicker {
+  font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.18em;
+  font-size: var(--fs-xs); color: #c7ccd6;
+}
+.dim__title {
+  font-family: var(--font-serif); font-weight: var(--fw-semibold);
+  font-size: var(--fs-s2); line-height: 1.12; letter-spacing: var(--tr-display);
+  margin: var(--sp-3) 0; color: #fff; text-wrap: balance;
+}
+@media (min-width: 760px) { .dim__title { font-size: var(--fs-s3); } }
+@media (min-width: 1100px) { .dim__title { font-size: var(--fs-s4); } }
+.dim__lead { color: #cdd3dc; font-size: var(--fs-base); line-height: var(--lh-normal); max-width: 62ch; margin: 0 auto var(--sp-5); }
+
+.dim__nav { display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: center; }
+.dim__nav a {
+  border: 1px solid rgba(255, 255, 255, 0.45); color: #fff;
+  padding: var(--sp-2) var(--sp-3);
+  font-family: var(--font-mono); font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: 0.06em;
+  text-decoration: none; transition: background 0.15s ease, color 0.15s ease;
+}
+.dim__nav a:hover { background: #fff; color: var(--c-navy); text-decoration: none; }
+
+.dim__stats {
+  margin-top: var(--sp-5);
+  font-family: var(--font-mono); font-size: var(--fs-xs); color: #aab2bf; letter-spacing: 0.04em;
+}
+.dim__foot {
+  position: absolute; bottom: var(--sp-3); left: 0; right: 0; z-index: 3; text-align: center;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; color: #8b93a3;
+}

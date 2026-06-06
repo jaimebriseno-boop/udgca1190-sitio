@@ -1,0 +1,45 @@
+---
+import { getSitio } from '../lib/datos.mjs';
+const sitio = getSitio();
+const email = sitio.contacto?.email || '';
+const ciudad = sitio.contacto?.ciudad || '';
+
+const items = [
+  { href: '/', label: 'Inicio' },
+  { href: '/integrantes', label: 'Integrantes' },
+  { href: '/lineas', label: 'Líneas de investigación' },
+  { href: '/produccion', label: 'Producción académica' },
+  { href: '/herramientas', label: 'Herramientas' },
+  { href: '/actividades', label: 'Actividades' },
+  { href: '/contacto', label: 'Contacto' },
+];
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<aside id="sidebar">
+  <div class="sidebar__inner">
+    <a class="sidebar__logo" href="/" aria-label="Inicio — UDG-CA-1190">
+      <img src="/logos/UDG-CA-1190_logo_horizontal.png" alt="Cuerpo Académico UDG-CA-1190" width="250" height="109" />
+    </a>
+    <p class="sidebar__tag">{sitio.adscripcion}</p>
+
+    <nav class="sidebar__menu" aria-label="Principal">
+      <ul>
+        {items.map((it) => (
+          <li>
+            <a
+              href={it.href}
+              class:list={[{ 'is-active': isActive(it.href) }]}
+              aria-current={isActive(it.href) ? 'page' : undefined}>{it.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="sidebar__contact">
+      <p class="kicker">Contacto</p>
+      {email && <p><a href={`mailto:${email}`}>{email}</a></p>}
+      {ciudad && <p class="text-muted">{ciudad}</p>}
+    </div>
+  </div>
+</aside>

@@ -1,12 +1,13 @@
 ---
-// Layout base: fuentes (Fontsource self-hosted), tokens/estilos, header y footer.
+// Layout de páginas internas: barra lateral fija (estilo Editorial) + contenido.
 import '@fontsource-variable/inter';
 import '@fontsource-variable/source-serif-4';
 import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/base.css';
 import '../styles/grid.css';
-import Header from '../components/Header.astro';
+import '../styles/editorial.css';
+import Sidebar from '../components/Sidebar.astro';
 import Footer from '../components/Footer.astro';
 
 interface Props { titulo?: string; descripcion?: string }
@@ -23,14 +24,29 @@ const tituloPagina = titulo === 'UDG-CA-1190'
     <title>{tituloPagina}</title>
     {descripcion && <meta name="description" content={descripcion} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#00468B" />
+    <meta name="theme-color" content="#1D2533" />
   </head>
   <body>
     <a class="skip-link" href="#main">Saltar al contenido</a>
-    <Header />
-    <main id="main">
-      <slot />
-    </main>
-    <Footer />
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+    <div id="navOverlay"></div>
+    <div id="wrapper">
+      <Sidebar />
+      <main id="main">
+        <slot />
+        <Footer />
+      </main>
+    </div>
+    <script>
+      const t = document.getElementById('navToggle');
+      const ov = document.getElementById('navOverlay');
+      const close = () => { document.body.classList.remove('nav-open'); t?.setAttribute('aria-expanded', 'false'); };
+      t?.addEventListener('click', () => {
+        const open = document.body.classList.toggle('nav-open');
+        t.setAttribute('aria-expanded', String(open));
+      });
+      ov?.addEventListener('click', close);
+      document.querySelectorAll('#sidebar a').forEach((a) => a.addEventListener('click', close));
+    </script>
   </body>
 </html>

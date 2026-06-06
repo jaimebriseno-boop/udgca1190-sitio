@@ -1,0 +1,85 @@
+/* editorial.css — armazón de barra lateral fija + contenido (inspirado en HTML5UP Editorial)
+   Adaptado a la identidad UDG-CA-1190 (paleta oscura, Inter/Source Serif, líneas hairline). */
+
+#wrapper { display: flex; align-items: stretch; min-height: 100vh; }
+
+/* ---------- Sidebar ---------- */
+#sidebar {
+  width: 340px;
+  flex: 0 0 340px;
+  background: var(--c-bg);
+  border-right: 1px solid var(--c-line);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.sidebar__inner { display: flex; flex-direction: column; min-height: 100%; padding: var(--sp-4); gap: var(--sp-4); }
+.sidebar__logo { display: block; }
+.sidebar__logo img { width: 100%; max-width: 250px; height: auto; display: block; }
+.sidebar__tag {
+  font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: 0.06em;
+  color: var(--c-gray); text-transform: uppercase; line-height: var(--lh-snug);
+}
+.sidebar__menu { border-top: 1px solid var(--c-line); }
+.sidebar__menu ul { list-style: none; padding: 0; margin: 0; }
+.sidebar__menu li { border-bottom: 1px solid var(--c-line); }
+.sidebar__menu a {
+  display: block; padding: var(--sp-2) 0;
+  font-family: var(--font-sans); font-size: var(--fs-base); color: var(--c-ink);
+  text-decoration: none;
+}
+.sidebar__menu a:hover { color: var(--c-blue); padding-left: 8px; transition: padding 0.15s ease; text-decoration: none; }
+.sidebar__menu a.is-active { color: var(--c-blue); font-weight: var(--fw-semibold); }
+.sidebar__menu a.is-active::before { content: "▸ "; }
+.sidebar__contact { margin-top: auto; border-top: 1px solid var(--c-line); padding-top: var(--sp-3); font-size: var(--fs-sm); }
+.sidebar__contact p { margin: 0 0 4px; }
+.sidebar__contact a { color: var(--c-blue); }
+
+/* ---------- Main ---------- */
+#main { flex: 1 1 auto; min-width: 0; background: var(--c-bg); display: flex; flex-direction: column; }
+
+/* ---------- Banner (hero editorial) ---------- */
+.banner { padding-block: var(--sp-12) var(--sp-6); }
+.banner__title {
+  font-family: var(--font-serif); font-weight: var(--fw-semibold);
+  font-size: var(--fs-s4); line-height: var(--lh-tight); letter-spacing: var(--tr-display);
+  margin-top: var(--sp-2);
+}
+@media (min-width: 900px) { .banner__title { font-size: var(--fs-s5); } }
+.banner__lead { margin-top: var(--sp-3); font-size: var(--fs-s1); color: var(--c-gray); max-width: var(--grid-prose); line-height: var(--lh-normal); }
+
+/* ---------- Features (LGAC) ---------- */
+.features { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--sp-3); margin-top: var(--sp-3); }
+.feature {
+  border: 1px solid var(--c-line);
+  border-top: 4px solid var(--feat, var(--c-blue));
+  padding: var(--sp-3); display: flex; flex-direction: column; gap: 6px;
+  text-decoration: none; color: var(--c-ink); background: var(--c-bg);
+}
+.feature:hover { background: var(--c-panel); text-decoration: none; }
+.feature__n { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--feat, var(--c-blue)); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.feature__title { font-size: var(--fs-s1); font-weight: var(--fw-semibold); line-height: var(--lh-snug); }
+.feature__text {
+  font-size: var(--fs-sm); color: var(--c-gray);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.feature__count { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-gray); margin-top: auto; padding-top: var(--sp-1); }
+
+/* ---------- Toggle móvil + overlay ---------- */
+.nav-toggle { display: none; }
+#navOverlay { display: none; }
+@media (max-width: 1024px) {
+  #sidebar {
+    position: fixed; left: 0; top: 0; z-index: 55;
+    transform: translateX(-100%); transition: transform 0.25s ease;
+  }
+  body.nav-open #sidebar { transform: translateX(0); box-shadow: 0 0 40px rgba(0, 0, 0, 0.25); }
+  body.nav-open #navOverlay { display: block; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.35); z-index: 54; }
+  .nav-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    position: fixed; top: 10px; left: 10px; z-index: 60;
+    width: 44px; height: 44px; background: var(--c-blue); color: #fff; border: 0; cursor: pointer; font-size: 20px;
+  }
+  #main { padding-top: 56px; }
+}

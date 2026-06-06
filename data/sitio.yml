@@ -14,6 +14,10 @@ contacto:
   email: "contacto@udgca1190.com.mx"   # alias por configurar en el registrador
   ciudad: "Guadalajara, Jalisco, México"
 
+# Imagen de fondo de la PORTADA (estilo Dimension): una figura/gráfica del CA.
+# Pon la ruta a un archivo en public/ (p. ej. "/fondo/grafica.jpg"). Vacío = fondo decorativo.
+home_bg: ""
+
 # Clave de acceso de Web3Forms para el formulario de contacto.
 # Crear cuenta gratis en https://web3forms.com (verificar el correo destino) y pegar la access key.
 # Mientras esté vacía, el formulario muestra un aviso de "pendiente de configurar".
