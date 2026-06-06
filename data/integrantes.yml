@@ -135,20 +135,32 @@
     - "Periodontitis asociada a artritis reumatoide"
   destacado: false
 
-# --- Sin CV todavía: identidad verificada (roster). Semblanza y grado por completar. ---
+# --- Pendiente de CV: Gustavo Rosales (identidad verificada por roster; semblanza por completar). ---
 - id: damian-negrete
   nombre: "Roberto Miguel Damián-Negrete"
   rol: integrante
-  grado: ""                # completar (CV pendiente)
+  grado: "Cirujano Pediatra · Pediatra Médico"
   institucion: "Universidad de Guadalajara — CUTlajomulco"
-  lineas: []
+  lineas: [educacion-medica, seguridad-hospitalaria]
   foto: "/integrantes/damian-negrete.jpg"
   orcid: "0000-0003-3424-1382"
   email: "roberto.damian@cutlajomulco.udg.mx"
   perfiles:
     scholar: "https://scholar.google.com/citations?hl=es&user=2qbY9iQAAAAJ"
-  bio_corta: "Semblanza por completar (CV pendiente)."
-  intereses: []
+  bio_corta: >-
+    Médico Cirujano y Partero con especialidades en Pediatría Médica y Cirugía
+    Pediátrica por la Universidad de Guadalajara, con adiestramiento en cirugía
+    endoscópica. Médico adscrito al servicio de Cirugía Pediátrica del Hospital
+    Civil «Fray Antonio Alcalde», encargado de la clínica de Trauma de Tórax y
+    Abdomen, y Jefe del Departamento Materno Infantil del CUTlajomulco, donde es
+    Profesor de Asignatura B. Coautor de un libro con publicación internacional y
+    de artículos y capítulos en pediatría y cirugía pediátrica, con énfasis en la
+    medicina basada en evidencia.
+  intereses:
+    - "Cirugía pediátrica"
+    - "Trauma de tórax y abdomen en pediatría"
+    - "Pediatría médica"
+    - "Medicina basada en evidencia y educación médica"
   destacado: false
 
 - id: rosales-chavez
