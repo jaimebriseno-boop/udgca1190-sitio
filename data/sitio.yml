@@ -16,7 +16,7 @@ contacto:
 
 # Imagen de fondo de la PORTADA (estilo Dimension): una figura/gráfica del CA.
 # Pon la ruta a un archivo en public/ (p. ej. "/fondo/grafica.jpg"). Vacío = fondo decorativo.
-home_bg: ""
+home_bg: "/fondo/genomica.jpg"
 
 # Clave de acceso de Web3Forms para el formulario de contacto.
 # Crear cuenta gratis en https://web3forms.com (verificar el correo destino) y pegar la access key.
