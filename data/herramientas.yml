@@ -7,13 +7,16 @@
   nombre: "Dengue Forecast"
   tipo: predictiva
   estado: desarrollo
-  resumen: "Pronóstico y alerta temprana de dengue a partir de patrones cíclicos."
+  resumen: "Pronóstico probabilístico y alerta temprana de dengue para los 32 estados de México."
   descripcion: |
-    Modelo de pronóstico (forecasting) de la incidencia de dengue en México que
-    aprovecha los patrones cíclicos y estacionales identificados en series de
-    tiempo de 40 años, orientado a sistemas de alerta y respuesta temprana (EWARS).
-    En desarrollo, construido sobre el análisis publicado de tendencias y ciclos del CA.
-  tecnologias: ["R", "forecast", "EpiEstim"]
+    Ensamble de pronóstico que combina modelos estadísticos (regresión con rezagos
+    climáticos), aprendizaje automático (gradient boosting) y modelos espaciales
+    bayesianos sobre un panel mensual de 15,591 observaciones por estado (1985–2026),
+    con recalibración en línea por predicción conforme y un clasificador de alarma de
+    brote (AUC 0.846 a un mes). Genera pronósticos a 1, 3, 6 y 12 meses para alerta y
+    respuesta temprana (EWARS). Manuscrito en preparación (De Arcos-Jiménez y
+    Briseño-Ramírez).
+  tecnologias: ["R", "Gradient boosting", "Bayesian", "Conformal prediction"]
   linea: epidemiologia-infecciosas
   enlace_app: ""
   repositorio: ""
