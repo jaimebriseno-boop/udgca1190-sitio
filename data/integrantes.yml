@@ -65,7 +65,7 @@
   grado: "Pediatra Reumatólogo · Maestro en Nutrición"
   institucion: "Universidad de Guadalajara"
   lineas: [infectologia-clinica, educacion-medica, covid-vulnerable]
-  foto: "/integrantes/placeholder.svg"
+  foto: "/integrantes/vega-cornejo.jpg"
   orcid: "0000-0001-7637-2933"
   email: "gabriel.vega@academicos.udg.mx"
   perfiles:
@@ -142,7 +142,7 @@
   grado: ""                # completar (CV pendiente)
   institucion: "Universidad de Guadalajara — CUTlajomulco"
   lineas: []
-  foto: "/integrantes/placeholder.svg"
+  foto: "/integrantes/damian-negrete.jpg"
   orcid: "0000-0003-3424-1382"
   email: "roberto.damian@cutlajomulco.udg.mx"
   perfiles:
@@ -157,7 +157,7 @@
   grado: ""                # completar (CV pendiente)
   institucion: "Hospital Civil de Guadalajara"
   lineas: []
-  foto: "/integrantes/placeholder.svg"
+  foto: "/integrantes/rosales-chavez.jpg"
   orcid: "0000-0002-8275-8004"
   email: "grosales@hcg.gob.mx"
   perfiles:
