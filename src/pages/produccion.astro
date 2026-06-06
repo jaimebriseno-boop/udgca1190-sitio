@@ -13,7 +13,16 @@ for (const l of lineas) {
 
 const integrantes = await getCollection('integrantes');
 const nombreMap = Object.fromEntries(integrantes.map((e) => [e.id, e.data.nombre]));
-const apellido = (n) => (n ? n.replace(/^\S+\s+/, '') : '');
+const APELLIDOS = {
+  'briseno-ramirez': 'Briseño-Ramírez',
+  'de-arcos-jimenez': 'De Arcos-Jiménez',
+  'vega-cornejo': 'Vega-Cornejo',
+  'fernandez-diaz': 'Fernández-Díaz',
+  'rodriguez-montano': 'Rodríguez-Montaño',
+  'damian-negrete': 'Damián-Negrete',
+  'rosales-chavez': 'Rosales-Chávez',
+};
+const apellido = (id) => APELLIDOS[id] || (nombreMap[id] || '').replace(/^\S+\s+/, '');
 
 const enPrepRank = (p) => (p.estado === 'en-preparacion' ? 0 : 1);
 const produccion = getProduccion()
@@ -62,7 +71,7 @@ const enPrep = total - publicadas;
                   {p.revista && <span class="pub__revista">{p.revista}</span>}
                   {p.miembros?.length > 0 && (
                     <span class="pub__autores">
-                      {p.miembros.map((id) => apellido(nombreMap[id])).filter(Boolean).join(' · ')}
+                      {p.miembros.map((id) => apellido(id)).filter(Boolean).join(' · ')}
                     </span>
                   )}
                 </p>

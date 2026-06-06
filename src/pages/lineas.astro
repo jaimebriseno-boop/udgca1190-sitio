@@ -14,7 +14,13 @@ for (const p of produccion) {
   for (const lg of p.lgac) nPorLgac[lg] = (nPorLgac[lg] || 0) + 1;
   nPorEsp[p.linea_especifica] = (nPorEsp[p.linea_especifica] || 0) + 1;
 }
-const apellido = (n) => n.replace(/^\S+\s+/, ''); // quita el primer nombre
+const APELLIDOS = {
+  'briseno-ramirez': 'Briseño-Ramírez', 'de-arcos-jimenez': 'De Arcos-Jiménez',
+  'vega-cornejo': 'Vega-Cornejo', 'fernandez-diaz': 'Fernández-Díaz',
+  'rodriguez-montano': 'Rodríguez-Montaño', 'damian-negrete': 'Damián-Negrete',
+  'rosales-chavez': 'Rosales-Chávez',
+};
+const apellido = (m) => APELLIDOS[m.id] || (m.nombre || '').replace(/^\S+\s+/, '');
 const integrantesDe = (lgacId) =>
   integrantes.filter((m) => (m.lineas || []).includes(lgacId));
 ---
@@ -71,7 +77,7 @@ const integrantesDe = (lgacId) =>
                   <p class="kicker">Integrantes</p>
                   <div class="lgac__chips">
                     {miembros.map((m) => (
-                      <a class="lgac__chip" href={`/integrantes`}>{apellido(m.nombre)}</a>
+                      <a class="lgac__chip" href={`/integrantes`}>{apellido(m)}</a>
                     ))}
                   </div>
                 </div>
