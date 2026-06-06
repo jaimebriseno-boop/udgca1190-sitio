@@ -23,7 +23,7 @@ redes:
 kpis:
   - num: "7"
     label: "Líneas"
-  - num: "11"
+  - num: "7"
     label: "Integrantes"
   - num: "~10"
     label: "Publicaciones"

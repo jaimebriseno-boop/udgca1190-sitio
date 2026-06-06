@@ -5,3 +5,6 @@ dist/
 .env
 *.log
 .vercel/
+
+# Material privado (no publicar): CVs y roster con datos personales
+data/CVs de integrantes/

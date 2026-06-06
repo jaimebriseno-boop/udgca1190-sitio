@@ -1,43 +1,167 @@
-# Integrantes del CA. Ejemplos de arranque.
-# IMPORTANTE: los campos `orcid` y `email` marcados "verificar" deben confirmarse
-# contra ORCID/registro institucional antes de publicar (ver memoria
-# feedback_verify_agent_refs). NO publicar datos sin verificar.
-#
+# Integrantes del CA UDG-CA-1190.
+# Identidad (nombre, ORCID, correo, Scholar) = roster oficial MIEMBROS.xlsx (verificado).
+# Grado / bio / intereses / líneas = extraídos de los CVs (los 2 sin CV quedan por completar).
+# Las líneas asignadas son sugeridas a partir del CV; ajústalas libremente.
 # rol: lider | integrante | colaborador | estudiante
-# lineas: ids de data/lineas.yml
 
 - id: briseno-ramirez
-  nombre: "Jaime Briseño Ramírez"
+  nombre: "Jaime Briseño-Ramírez"
   rol: lider
-  grado: "Médico Internista e Infectólogo, Dr."
+  grado: "Médico Internista e Infectólogo"
   institucion: "Universidad de Guadalajara — CUTlajomulco"
-  lineas: [infectologia-clinica, resistencia-antimicrobiana]
-  foto: "/integrantes/placeholder.svg"
-  orcid: ""            # verificar
-  email: ""            # verificar
+  lineas: [resistencia-antimicrobiana, infectologia-clinica, epidemiologia-espacial]
+  foto: "/integrantes/jaime-briseno.jpg"
+  orcid: "0009-0006-1901-392X"
+  email: "jaime.briseno@academicos.udg.mx"
   perfiles:
+    scholar: "https://scholar.google.com/citations?user=tE-mZXkAAAAJ&hl=es"
     scopus: "36459543300"
-    scholar: ""
   bio_corta: >-
-    Líder del Cuerpo Académico. Profesor-Investigador Titular (UdeG, SNI I) y Director
-    de la División de la Salud del CUTlajomulco. Investigación integrativa de los
-    factores biológicos del proceso salud-enfermedad, con énfasis en infectología,
-    resistencia antimicrobiana y modelos predictivos clínicos.
-  intereses: ["Resistencia antimicrobiana", "Modelos predictivos clínicos", "Bioestadística (R)"]
+    Médico especialista en Medicina Interna e Infectología, egresado de la
+    Universidad de Guadalajara y del Instituto Nacional de Ciencias Médicas y
+    Nutrición «Salvador Zubirán». Profesor e Investigador Titular A de la UdeG,
+    Director de la División de Salud del CUTlajomulco y médico adscrito al Servicio
+    de Medicina Interna del Antiguo Hospital Civil de Guadalajara «Fray Antonio
+    Alcalde». Sus líneas incluyen enfermedades infecciosas emergentes, vigilancia
+    epidemiológica molecular, infecciones nosocomiales, resistencia antimicrobiana
+    y la atención del paciente críticamente enfermo.
+  intereses:
+    - "Enfermedades infecciosas emergentes y reemergentes"
+    - "Vigilancia epidemiológica molecular"
+    - "Resistencia antimicrobiana y antibiogramas WISCA"
+    - "Infecciones nosocomiales"
+    - "Predicción de desenlaces clínicos"
   destacado: true
 
-- id: integrante-ejemplo
-  nombre: "Nombre Apellido Apellido"        # plantilla — reemplazar
+- id: de-arcos-jimenez
+  nombre: "Judith Carolina De Arcos-Jiménez"
   rol: integrante
-  grado: "Grado, especialidad"
-  institucion: "Universidad de Guadalajara"
-  lineas: [resistencia-antimicrobiana]
-  foto: "/integrantes/placeholder.svg"
-  orcid: ""            # verificar
-  email: ""            # verificar
+  grado: "Doctora en Ciencias en Biología Molecular en Medicina · QFB"
+  institucion: "Universidad de Guadalajara — CUTlajomulco"
+  lineas: [resistencia-antimicrobiana, genomica, epidemiologia-espacial]
+  foto: "/integrantes/de-arcos-jimenez.jpg"
+  orcid: "0000-0003-0251-6425"
+  email: "judith.dearcos@academicos.udg.mx"
   perfiles:
-    scopus: ""
+    scholar: "https://scholar.google.com/citations?user=G2nrUagAAAAJ&hl=es"
+  bio_corta: >-
+    Química Farmacobióloga y Doctora en Ciencias en Biología Molecular en Medicina
+    por la Universidad de Guadalajara. Profesora e Investigadora Asociada A de
+    tiempo completo (con definitividad) en el CUTlajomulco y Responsable del Área
+    de Biología Molecular del Laboratorio Estatal de Salud Pública de Jalisco. Su
+    trabajo integra vigilancia molecular, resistencia antimicrobiana, microbiología
+    clínica mediante secuenciación de genoma completo y biomarcadores moleculares.
+  intereses:
+    - "Vigilancia y diagnóstico molecular de patógenos"
+    - "Resistencia antimicrobiana y microbiología clínica"
+    - "Secuenciación de nueva generación y genómica (S. aureus/MRSA)"
+    - "Virus respiratorios (SARS-CoV-2, influenza, dengue, sarampión)"
+    - "Inmunopatología y biomarcadores"
+  destacado: false
+
+- id: vega-cornejo
+  nombre: "Gabriel Vega-Cornejo"
+  rol: integrante
+  grado: "Pediatra Reumatólogo · Maestro en Nutrición"
+  institucion: "Universidad de Guadalajara"
+  lineas: [infectologia-clinica, educacion-medica, covid-vulnerable]
+  foto: "/integrantes/placeholder.svg"
+  orcid: "0000-0001-7637-2933"
+  email: "gabriel.vega@academicos.udg.mx"
+  perfiles:
     scholar: ""
-  bio_corta: "Breve semblanza del integrante (2–3 líneas)."
-  intereses: ["Tema 1", "Tema 2"]
+  bio_corta: >-
+    Médico cirujano y partero con especialidad en pediatría y formación de posgrado
+    en reumatología pediátrica, además de maestrías en nutrición y dietética. Fundó
+    el servicio de reumatología pediátrica del Hospital General de Occidente, dirige
+    un centro de investigación (CREA) y es profesor e investigador asociado de
+    tiempo completo en la Universidad de Guadalajara. Trabaja en artritis idiopática
+    juvenil y terapias biológicas, vasculitis pediátricas, infecciones oportunistas
+    en inmunosuprimidos y diagnóstico molecular de neumonía comunitaria infantil.
+  intereses:
+    - "Reumatología pediátrica y terapias biológicas"
+    - "Vasculitis pediátricas (Kawasaki, Takayasu)"
+    - "Infecciones oportunistas en inmunosuprimidos"
+    - "Diagnóstico molecular de neumonía comunitaria infantil"
+  destacado: false
+
+- id: fernandez-diaz
+  nombre: "Oscar F. Fernández-Díaz"
+  rol: integrante
+  grado: "Cirujano Plástico Reconstructivo · M.Sc. Microcirugía"
+  institucion: "Universidad de Guadalajara — CUTlajomulco"
+  lineas: [educacion-medica, seguridad-hospitalaria]
+  foto: "/integrantes/fernandez-diaz.jpg"
+  orcid: "0000-0003-4698-5063"
+  email: "oscar.fernandezdiaz@academicos.udg.mx"
+  perfiles:
+    scholar: "https://scholar.google.com/citations?hl=es&user=URLpG0kAAAAJ"
+  bio_corta: >-
+    Médico cirujano por la Universidad de Guadalajara, con especialidades en cirugía
+    general y endocrina (UNAM) y en cirugía plástica y reconstructiva, además de alta
+    especialidad y maestría en ciencias en microcirugía reconstructiva en el Reino
+    Unido. Profesor de asignatura en la Carrera de Medicina del CUTlajomulco, enfocado
+    en medicina basada en evidencia y fisiopatología clínica. Su producción se centra
+    en microcirugía y reconstrucción mamaria, y en la educación de cirujanos plásticos.
+  intereses:
+    - "Microcirugía y reconstrucción mamaria autóloga"
+    - "Cirugía plástica, estética y reconstructiva"
+    - "Cirugía endocrina"
+    - "Medicina basada en evidencia y educación quirúrgica"
+  destacado: false
+
+- id: rodriguez-montano
+  nombre: "Ruth Rodríguez-Montaño"
+  rol: integrante
+  grado: "Doctora en Ciencias Biomédicas (Inmunología) · Cirujana Dentista"
+  institucion: "Universidad de Guadalajara — CUTlajomulco"
+  lineas: [infectologia-clinica, educacion-medica]
+  foto: "/integrantes/rodriguez-montano.jpg"
+  orcid: "0000-0002-0712-0334"
+  email: "ruth.rodriguez@academicos.udg.mx"
+  perfiles:
+    scholar: "https://scholar.google.com/citations?hl=es&user=1n8GpncAAAAJ"
+  bio_corta: >-
+    Doctora en Ciencias Biomédicas con orientación en Inmunología y Cirujana Dentista
+    por la Universidad de Guadalajara, donde es Profesora de Asignatura B en el
+    CUTlajomulco con nivel Candidata del SNII. Su investigación aborda la inmunología
+    de las enfermedades orales y su relación con enfermedades sistémicas, con énfasis
+    en el eje IL-23/IL-17, los niveles de RANKL y la periodontitis asociada a artritis
+    reumatoide. Mantiene amplia labor docente y de dirección de tesis.
+  intereses:
+    - "Inmunología de enfermedades orales y sistémicas"
+    - "Eje IL-23/IL-17 y receptores solubles en periodontitis"
+    - "RANKL en periodontitis y movimiento dental"
+    - "Periodontitis asociada a artritis reumatoide"
+  destacado: false
+
+# --- Sin CV todavía: identidad verificada (roster). Semblanza y grado por completar. ---
+- id: damian-negrete
+  nombre: "Roberto Miguel Damián-Negrete"
+  rol: integrante
+  grado: ""                # completar (CV pendiente)
+  institucion: "Universidad de Guadalajara — CUTlajomulco"
+  lineas: []
+  foto: "/integrantes/placeholder.svg"
+  orcid: "0000-0003-3424-1382"
+  email: "roberto.damian@cutlajomulco.udg.mx"
+  perfiles:
+    scholar: "https://scholar.google.com/citations?hl=es&user=2qbY9iQAAAAJ"
+  bio_corta: "Semblanza por completar (CV pendiente)."
+  intereses: []
+  destacado: false
+
+- id: rosales-chavez
+  nombre: "Gustavo Rosales-Chávez"
+  rol: integrante
+  grado: ""                # completar (CV pendiente)
+  institucion: "Hospital Civil de Guadalajara"
+  lineas: []
+  foto: "/integrantes/placeholder.svg"
+  orcid: "0000-0002-8275-8004"
+  email: "grosales@hcg.gob.mx"
+  perfiles:
+    scholar: "https://scholar.google.com/citations?hl=es&user=VCyUf-wAAAAJ"
+  bio_corta: "Semblanza por completar (CV pendiente)."
+  intereses: []
   destacado: false

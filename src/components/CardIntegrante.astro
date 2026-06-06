@@ -1,0 +1,69 @@
+---
+// Ficha de integrante (Concepto Swiss Data Grid): foto B/N → color en hover,
+// datos en barra inferior, badges de línea, enlaces ORCID/Scholar/correo.
+interface Linea { titulo: string; color: string }
+interface Props {
+  data: any;                       // datos del integrante (de data/integrantes.yml)
+  lineasMap: Record<string, Linea>;
+}
+const { data: d, lineasMap } = Astro.props;
+const lineas = (d.lineas ?? []).map((id: string) => lineasMap[id]).filter(Boolean);
+---
+<article class:list={['card-int', { 'card-int--lider': d.rol === 'lider' }]}>
+  <div class="card-int__photo">
+    <img
+      src={d.foto || '/integrantes/placeholder.svg'}
+      alt={`Fotografía de ${d.nombre}`}
+      loading="lazy" width="320" height="320" />
+  </div>
+  <div class="card-int__body">
+    {d.rol === 'lider' && <span class="card-int__rol">Líder del CA</span>}
+    <h3 class="card-int__name">{d.nombre}</h3>
+    {d.grado && <p class="card-int__grade">{d.grado}</p>}
+    {d.bio_corta && <p class="card-int__bio">{d.bio_corta}</p>}
+    {lineas.length > 0 && (
+      <div class="card-int__lineas">
+        {lineas.map((l: Linea) => (
+          <span class="badge-linea" style={`--badge-color: var(--c-${l.color})`}>
+            <span class="badge-linea__sq" aria-hidden="true"></span>{l.titulo}
+          </span>
+        ))}
+      </div>
+    )}
+    <div class="card-int__links">
+      {d.orcid && <a class="card-int__link" href={`https://orcid.org/${d.orcid}`} target="_blank" rel="noopener">ORCID ↗</a>}
+      {d.perfiles?.scholar && <a class="card-int__link" href={d.perfiles.scholar} target="_blank" rel="noopener">Scholar ↗</a>}
+      {d.email && <a class="card-int__link" href={`mailto:${d.email}`}>Correo ↗</a>}
+    </div>
+  </div>
+</article>
+
+<style>
+  .card-int { border: 1px solid var(--c-line); background: var(--c-bg); display: flex; flex-direction: column; }
+  .card-int__photo { aspect-ratio: 1 / 1; overflow: hidden; border-bottom: 1px solid var(--c-line); }
+  .card-int__photo img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    filter: grayscale(1) contrast(1.02);
+    transition: filter 0.35s ease;
+  }
+  .card-int:hover .card-int__photo img { filter: grayscale(0); }
+  .card-int__body { padding: var(--sp-3); display: flex; flex-direction: column; gap: var(--sp-1); }
+  .card-int__rol {
+    font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase;
+    letter-spacing: 0.08em; color: #fff; background: var(--c-blue);
+    align-self: flex-start; padding: 1px 8px; margin-bottom: var(--sp-1);
+  }
+  .card-int__name { font-size: var(--fs-s1); font-weight: var(--fw-semibold); line-height: var(--lh-snug); }
+  .card-int__grade { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-gray); }
+  .card-int__bio { font-size: var(--fs-sm); color: var(--c-ink); margin-top: var(--sp-1); }
+  .card-int__lineas { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-2); }
+  .card-int__links { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-2); }
+  .card-int__link { font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: 0.04em; }
+
+  /* El líder ocupa dos columnas y muestra foto al lado en pantallas amplias */
+  @media (min-width: 700px) {
+    .card-int--lider { grid-column: 1 / -1; flex-direction: row; }
+    .card-int--lider .card-int__photo { width: 320px; flex: none; border-bottom: 0; border-right: 1px solid var(--c-line); }
+    .card-int--lider .card-int__body { justify-content: center; }
+  }
+</style>
