@@ -3,7 +3,9 @@ import Home from '../layouts/Home.astro';
 import { getSitio } from '../lib/datos.mjs';
 
 const sitio = getSitio();
-const bg = sitio.home_bg || '';
+const bgs = (Array.isArray(sitio.home_bgs) && sitio.home_bgs.length)
+  ? sitio.home_bgs
+  : (sitio.home_bg ? [sitio.home_bg] : []);
 const stats = (sitio.kpis || []).map((k) => `${k.num} ${k.label}`).join('   ·   ');
 const nav = [
   ['/lineas', 'Líneas'],
@@ -15,27 +17,25 @@ const nav = [
 ---
 <Home titulo="UDG-CA-1190 · Cuerpo Académico" descripcion={sitio.mision}>
   <section id="dimension">
-    <div
-      class="dim__bg"
-      data-img={bg ? 'true' : undefined}
-      style={bg ? `--home-bg: url('${bg}')` : undefined}>
+    <div class="dim__slides" aria-hidden="true">
+      {bgs.length > 0 ? (
+        bgs.map((src, i) => (
+          <div class:list={['dim__slide', { 'is-active': i === 0 }]} style={`background-image: url('${src}')`}></div>
+        ))
+      ) : (
+        <div class="dim__deco">
+          <svg viewBox="0 0 1200 600" preserveAspectRatio="none">
+            <g stroke="#ffffff" stroke-opacity="0.5" stroke-width="1">
+              <line x1="0" y1="150" x2="1200" y2="150" />
+              <line x1="0" y1="300" x2="1200" y2="300" />
+              <line x1="0" y1="450" x2="1200" y2="450" />
+            </g>
+            <polyline fill="none" stroke="#9fd0e0" stroke-width="3"
+              points="0,490 150,430 300,450 450,300 600,330 750,180 900,250 1050,120 1200,180" />
+          </svg>
+        </div>
+      )}
     </div>
-
-    {!bg && (
-      <div class="dim__deco" aria-hidden="true">
-        <svg viewBox="0 0 1200 600" preserveAspectRatio="none">
-          <g stroke="#ffffff" stroke-opacity="0.5" stroke-width="1">
-            <line x1="0" y1="150" x2="1200" y2="150" />
-            <line x1="0" y1="300" x2="1200" y2="300" />
-            <line x1="0" y1="450" x2="1200" y2="450" />
-          </g>
-          <polyline fill="none" stroke="#9fd0e0" stroke-width="3"
-            points="0,490 150,430 300,450 450,300 600,330 750,180 900,250 1050,120 1200,180" />
-          <polyline fill="none" stroke="#c9a0d8" stroke-width="2"
-            points="0,520 150,500 300,460 450,470 600,400 750,420 900,360 1050,380 1200,300" />
-        </svg>
-      </div>
-    )}
 
     <div class="dim__overlay"></div>
 
@@ -55,3 +55,17 @@ const nav = [
     <p class="dim__foot">Universidad de Guadalajara · CUTlajomulco</p>
   </section>
 </Home>
+
+<script>
+  // Slideshow de la portada: rota entre las figuras de fondo (crossfade).
+  const slides = Array.from(document.querySelectorAll('.dim__slide'));
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (slides.length > 1 && !reduce) {
+    let i = 0;
+    setInterval(() => {
+      slides[i].classList.remove('is-active');
+      i = (i + 1) % slides.length;
+      slides[i].classList.add('is-active');
+    }, 6500);
+  }
+</script>

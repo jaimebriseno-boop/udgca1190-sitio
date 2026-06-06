@@ -13,15 +13,23 @@ body.home { margin: 0; }
   overflow: hidden;
 }
 
-/* Fondo (imagen de gráfica) + degradado de respaldo */
-.dim__bg {
+/* Fondo: slideshow de figuras (crossfade + paneo lento Ken Burns) */
+.dim__slides { position: absolute; inset: 0; background-color: #11161f; }
+.dim__slide {
   position: absolute; inset: 0;
-  background-color: var(--c-navy);
   background-size: cover; background-position: center;
-  background-image:
-    radial-gradient(120% 120% at 70% 20%, #243049 0%, #1a2231 55%, #11161f 100%);
+  opacity: 0; transition: opacity 1.6s ease-in-out;
+  will-change: opacity, transform;
 }
-.dim__bg[data-img] { background-image: var(--home-bg); }
+.dim__slide.is-active { opacity: 1; animation: dimPan 8.5s ease-out both; }
+@keyframes dimPan {
+  from { transform: scale(1.04) translateX(-1.6%); }
+  to   { transform: scale(1.11) translateX(1.6%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dim__slide { transition: none; }
+  .dim__slide.is-active { animation: none; transform: none; }
+}
 .dim__overlay {
   position: absolute; inset: 0;
   background:

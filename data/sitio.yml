@@ -7,8 +7,9 @@ lema: "Investigación integrativa de los factores biológicos del proceso salud-
 # Misión (una frase para el hero / inicio)
 mision: >-
   Generar conocimiento sobre los factores biológicos del proceso salud-enfermedad
-  mediante investigación clínica, epidemiológica y estadística reproducible, y
-  trasladarlo a herramientas de apoyo a la decisión y a la formación de especialistas.
+  mediante investigación básica, clínica, traslacional, epidemiológica y estadística
+  reproducible, y trasladarlo a herramientas que apoyen tanto la toma de decisiones
+  clínicas como la construcción de políticas en salud.
 
 contacto:
   email: "contacto@udgca1190.com.mx"   # alias por configurar en el registrador
@@ -16,7 +17,13 @@ contacto:
 
 # Imagen de fondo de la PORTADA (estilo Dimension): una figura/gráfica del CA.
 # Pon la ruta a un archivo en public/ (p. ej. "/fondo/grafica.jpg"). Vacío = fondo decorativo.
-home_bg: "/fondo/genomica.jpg"
+home_bg: "/fondo/genomica.jpg"   # respaldo (1 sola imagen) si no hay home_bgs
+# Slideshow de la portada: rota entre estas figuras (crossfade + paneo lento).
+home_bgs:
+  - "/fondo/genomica.jpg"
+  - "/fondo/mapas-mexico.jpg"
+  - "/fondo/dengue-series.jpg"
+  - "/fondo/endocarditis.jpg"
 
 # Clave de acceso de Web3Forms para el formulario de contacto.
 # Crear cuenta gratis en https://web3forms.com (verificar el correo destino) y pegar la access key.
