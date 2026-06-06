@@ -5,14 +5,14 @@
    ============================================================ */
 :root {
   /* Color · marca */
-  --c-blue: #00468B;
-  --c-teal: #0099B4;
+  --c-blue: #1D2533;
+  --c-teal: #213642;
   /* Color · semántico (líneas / estados / tecnología) */
-  --c-red: #ED0000;
-  --c-green: #42B540;
-  --c-wine: #AD002A;
-  --c-purple: #925E9F;
-  --c-gray: #5B6770;
+  --c-red: #5C2424;
+  --c-green: #5C7A57;
+  --c-wine: #670E0E;
+  --c-purple: #76717A;
+  --c-gray: #393A3C;
   /* Color · tinta y superficies */
   --c-ink: #1B1919;
   --c-bg: #FFFFFF;

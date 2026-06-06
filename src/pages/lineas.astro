@@ -11,7 +11,7 @@ const integrantes = (await getCollection('integrantes')).map((e) => ({ id: e.id,
 const nPorLgac = {};
 const nPorEsp = {};
 for (const p of produccion) {
-  nPorLgac[p.lgac] = (nPorLgac[p.lgac] || 0) + 1;
+  for (const lg of p.lgac) nPorLgac[lg] = (nPorLgac[lg] || 0) + 1;
   nPorEsp[p.linea_especifica] = (nPorEsp[p.linea_especifica] || 0) + 1;
 }
 const apellido = (n) => n.replace(/^\S+\s+/, ''); // quita el primer nombre

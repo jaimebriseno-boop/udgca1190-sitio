@@ -1,13 +1,15 @@
 # Producción académica del CA, etiquetada por línea específica y LGAC.
-# Fuente: ORCID/PubMed; metadatos verificados contra Crossref (66/66 DOIs resuelven).
-# Cada publicación 'abona' a una linea_especifica y a una lgac (general).
+# Fuente: ORCID/PubMed; metadatos verificados contra Crossref (66/66 DOIs).
+# lgac es una LISTA: una publicación puede abonar a más de una línea general
+# (la inmunología clínica periodontal abona a nutrición/microbioma Y a clínica/traslacional).
+# Conteo GLOBAL = publicaciones únicas (66); los conteos por LGAC pueden traslaparse.
 
 - doi: "10.3390/psychiatryint7010010"
   titulo: "A Case-Control Study of the Association Between Hypocholesterolemia and Depressive Symptoms in a Mexican Population from Los Altos Sur, Jalisco"
   anio: "2026"
   revista: "Psychiatry International"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cohortes-clinicas-nefro-cronicas
   miembros: [briseno-ramirez]
 
@@ -16,7 +18,7 @@
   anio: "2026"
   revista: "Frontiers in Immunology"
   tipo: "article"
-  lgac: biologia-molecular
+  lgac: [biologia-molecular]
   linea_especifica: biomarcadores-moleculares-patogenesis-viral-inmune
   miembros: [vega-cornejo]
 
@@ -25,7 +27,7 @@
   anio: "2026"
   revista: "JPRAS Open"
   tipo: "review"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: revisiones-sistematicas-metaanalisis-clinicos
   miembros: [fernandez-diaz]
 
@@ -34,7 +36,7 @@
   anio: "2026"
   revista: "Open Medicine"
   tipo: "article"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -43,7 +45,7 @@
   anio: "2026"
   revista: "Preprints (MDPI)"
   tipo: "other"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: nutricion-biofilm-inflamacion-obesidad
   miembros: [briseno-ramirez]
 
@@ -52,7 +54,7 @@
   anio: "2026"
   revista: "Healthcare"
   tipo: "article"
-  lgac: ciencia-datos-poblacionales
+  lgac: [ciencia-datos-poblacionales]
   linea_especifica: determinantes-sociales-mortalidad-evitable
   miembros: [briseno-ramirez, de-arcos-jimenez]
 
@@ -61,7 +63,7 @@
   anio: "2025"
   revista: "Annals of Plastic Surgery"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cirugia-traslacional-desenlaces
   miembros: [fernandez-diaz]
 
@@ -70,7 +72,7 @@
   anio: "2026"
   revista: "Medical Sciences"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: wisca-resistencia-antimicrobiana
   miembros: [briseno-ramirez, de-arcos-jimenez]
 
@@ -79,7 +81,7 @@
   anio: "2026"
   revista: "The Lancet Rheumatology"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: reumatologia-pediatrica-autoinmunes
   miembros: [vega-cornejo]
 
@@ -88,7 +90,7 @@
   anio: "2026"
   revista: "International Journal of Dentistry"
   tipo: "article"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -97,7 +99,7 @@
   anio: "2026"
   revista: "Journal of Shoulder and Elbow Surgery"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cirugia-traslacional-desenlaces
   miembros: [briseno-ramirez]
 
@@ -106,7 +108,7 @@
   anio: "2026"
   revista: "JSES International"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cirugia-traslacional-desenlaces
   miembros: [briseno-ramirez]
 
@@ -115,7 +117,7 @@
   anio: "2026"
   revista: "Journal of Orthopaedics"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: wisca-resistencia-antimicrobiana
   miembros: [briseno-ramirez, de-arcos-jimenez]
 
@@ -124,7 +126,7 @@
   anio: "2026"
   revista: "CG Ciudad Glocal Revista Científica Mexicana de Movilidad Urbana, Transporte y Territorio"
   tipo: "article"
-  lgac: ciencia-datos-poblacionales
+  lgac: [ciencia-datos-poblacionales]
   linea_especifica: salud-ambiental-ocupacional-poblacional
   miembros: [rosales-chavez]
 
@@ -133,7 +135,7 @@
   anio: "2026"
   revista: "Viruses"
   tipo: "article"
-  lgac: ciencia-datos-poblacionales
+  lgac: [ciencia-datos-poblacionales]
   linea_especifica: determinantes-sociales-mortalidad-evitable
   miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez, fernandez-diaz]
 
@@ -142,7 +144,7 @@
   anio: "2026"
   revista: "Infectious Disease Reports"
   tipo: "other"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: vigilancia-series-tiempo-infecciosas
   miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez]
 
@@ -151,7 +153,7 @@
   anio: "2026"
   revista: "Kidney360"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cohortes-clinicas-nefro-cronicas
   miembros: [briseno-ramirez, de-arcos-jimenez]
 
@@ -160,7 +162,7 @@
   anio: "2026"
   revista: "Antibiotics"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: vigilancia-series-tiempo-infecciosas
   miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez]
 
@@ -169,7 +171,7 @@
   anio: "2025"
   revista: "World Journal of Clinical Cases"
   tipo: "article"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: nutricion-biofilm-inflamacion-obesidad
   miembros: [rodriguez-montano]
 
@@ -178,7 +180,7 @@
   anio: "2025"
   revista: "International Journal of Inflammation"
   tipo: "review"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -187,7 +189,7 @@
   anio: "2025"
   revista: "Journal of Orthopaedics"
   tipo: "review"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: revisiones-sistematicas-metaanalisis-clinicos
   miembros: [briseno-ramirez, de-arcos-jimenez]
 
@@ -196,7 +198,7 @@
   anio: "2025"
   revista: "Acta Odontológica Latinoamericana"
   tipo: "article"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: nutricion-biofilm-inflamacion-obesidad
   miembros: [rodriguez-montano]
 
@@ -205,7 +207,7 @@
   anio: "2025"
   revista: "BMC Infectious Diseases"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: wisca-resistencia-antimicrobiana
   miembros: [briseno-ramirez, de-arcos-jimenez]
 
@@ -214,7 +216,7 @@
   anio: "2025"
   revista: "Medical Sciences"
   tipo: "review"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: revisiones-sistematicas-metaanalisis-clinicos
   miembros: [briseno-ramirez, de-arcos-jimenez, rodriguez-montano]
 
@@ -223,7 +225,7 @@
   anio: "2025"
   revista: "Immunity, Inflammation and Disease"
   tipo: "review"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -232,7 +234,7 @@
   anio: "2025"
   revista: "Therapeutic Advances in Chronic Disease"
   tipo: "review"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -241,7 +243,7 @@
   anio: "2024"
   revista: "The Journal of Rheumatology"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: reumatologia-pediatrica-autoinmunes
   miembros: [vega-cornejo]
 
@@ -250,7 +252,7 @@
   anio: "2025"
   revista: "Journal of Clinical Laboratory Analysis"
   tipo: "review"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -259,7 +261,7 @@
   anio: "2025"
   revista: "Diagnostics"
   tipo: "article"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -268,7 +270,7 @@
   anio: "2025"
   revista: "Viruses"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: covid19-sarscov2-epidemiologia
   miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez, fernandez-diaz, rodriguez-montano, rosales-chavez]
 
@@ -277,7 +279,7 @@
   anio: "2025"
   revista: "Journal of Cellular and Molecular Medicine"
   tipo: "review"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -286,7 +288,7 @@
   anio: "2025"
   revista: "BMC Molecular and Cell Biology"
   tipo: "article"
-  lgac: biologia-molecular
+  lgac: [biologia-molecular]
   linea_especifica: biomarcadores-moleculares-patogenesis-viral-inmune
   miembros: [de-arcos-jimenez]
 
@@ -295,7 +297,7 @@
   anio: "2025"
   revista: "Antibiotics"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: wisca-resistencia-antimicrobiana
   miembros: [briseno-ramirez, de-arcos-jimenez]
 
@@ -304,7 +306,7 @@
   anio: "2025"
   revista: "Journal of Clinical Laboratory Analysis"
   tipo: "review"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -313,7 +315,7 @@
   anio: "2025"
   revista: "Annals of Epidemiology"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: vigilancia-series-tiempo-infecciosas
   miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez]
 
@@ -322,7 +324,7 @@
   anio: "2025"
   revista: "Frontiers in Public Health"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: vigilancia-series-tiempo-infecciosas
   miembros: [briseno-ramirez, de-arcos-jimenez]
 
@@ -331,7 +333,7 @@
   anio: "2025"
   revista: "Microorganisms"
   tipo: "article"
-  lgac: biologia-molecular
+  lgac: [biologia-molecular]
   linea_especifica: genomica-resistencia-microbiana
   miembros: [briseno-ramirez, de-arcos-jimenez]
 
@@ -340,7 +342,7 @@
   anio: "2024"
   revista: "Frontiers in Neurology"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cohortes-clinicas-nefro-cronicas
   miembros: [briseno-ramirez]
 
@@ -349,7 +351,7 @@
   anio: "2024"
   revista: "Applied Sciences"
   tipo: "article"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -358,7 +360,7 @@
   anio: "2024"
   revista: "Diagnostic Microbiology and Infectious Disease"
   tipo: "review"
-  lgac: biologia-molecular
+  lgac: [biologia-molecular]
   linea_especifica: genomica-resistencia-microbiana
   miembros: [rodriguez-montano]
 
@@ -367,7 +369,7 @@
   anio: "2024"
   revista: "BMC Oral Health"
   tipo: "review"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -376,7 +378,7 @@
   anio: "2024"
   revista: "Plastic and Reconstructive Surgery - Global Open"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cirugia-traslacional-desenlaces
   miembros: [fernandez-diaz]
 
@@ -385,7 +387,7 @@
   anio: "2024"
   revista: "Plastic and Reconstructive Surgery - Global Open"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cirugia-traslacional-desenlaces
   miembros: [fernandez-diaz]
 
@@ -394,7 +396,7 @@
   anio: "2024"
   revista: "Gastro Research"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cirugia-traslacional-desenlaces
   miembros: [damian-negrete]
 
@@ -403,7 +405,7 @@
   anio: "2024"
   revista: "Viruses"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: vigilancia-series-tiempo-infecciosas
   miembros: [briseno-ramirez, damian-negrete, de-arcos-jimenez, rosales-chavez, vega-cornejo]
 
@@ -412,7 +414,7 @@
   anio: "2024"
   revista: "Journal of Pediatric Endoscopic Surgery"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cirugia-traslacional-desenlaces
   miembros: [damian-negrete]
 
@@ -421,7 +423,7 @@
   anio: "2023"
   revista: "Plastic and Reconstructive Surgery - Global Open"
   tipo: "review"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: revisiones-sistematicas-metaanalisis-clinicos
   miembros: [fernandez-diaz]
 
@@ -430,7 +432,7 @@
   anio: "2023"
   revista: "Pediatric Rheumatology Online Journal"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: reumatologia-pediatrica-autoinmunes
   miembros: [vega-cornejo]
 
@@ -439,7 +441,7 @@
   anio: "2022"
   revista: "Applied Sciences"
   tipo: "article"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -448,7 +450,7 @@
   anio: "2021"
   revista: "The Journal of Rheumatology"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: reumatologia-pediatrica-autoinmunes
   miembros: [vega-cornejo]
 
@@ -457,7 +459,7 @@
   anio: "2021"
   revista: "Surgery International Open Access Journal"
   tipo: "article"
-  lgac: ciencia-datos-poblacionales
+  lgac: [ciencia-datos-poblacionales]
   linea_especifica: salud-ambiental-ocupacional-poblacional
   miembros: [rosales-chavez]
 
@@ -466,7 +468,7 @@
   anio: "2021"
   revista: "Journal of Clinical Laboratory Analysis"
   tipo: "article"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -475,7 +477,7 @@
   anio: "2021"
   revista: "Journal of Periodontal & Implant Science"
   tipo: "article"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: inmunoinflamacion-periodontal-oral-sistemica
   miembros: [rodriguez-montano]
 
@@ -484,7 +486,7 @@
   anio: "2021"
   revista: "Rheumatology (Oxford)"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: reumatologia-pediatrica-autoinmunes
   miembros: [vega-cornejo]
 
@@ -493,7 +495,7 @@
   anio: "2021"
   revista: "Revista Alergia México"
   tipo: "article"
-  lgac: ciencia-datos-poblacionales
+  lgac: [ciencia-datos-poblacionales]
   linea_especifica: salud-ambiental-ocupacional-poblacional
   miembros: [rosales-chavez]
 
@@ -502,7 +504,7 @@
   anio: "2021"
   revista: "Journal of Plastic, Reconstructive & Aesthetic Surgery"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: covid19-sarscov2-epidemiologia
   miembros: [fernandez-diaz]
 
@@ -511,7 +513,7 @@
   anio: "2020"
   revista: "Archives of Virology"
   tipo: "article"
-  lgac: biologia-molecular
+  lgac: [biologia-molecular]
   linea_especifica: biomarcadores-moleculares-patogenesis-viral-inmune
   miembros: [de-arcos-jimenez]
 
@@ -520,7 +522,7 @@
   anio: "2020"
   revista: "Journal of Inflammation (United Kingdom)"
   tipo: "article"
-  lgac: biologia-molecular
+  lgac: [biologia-molecular]
   linea_especifica: biomarcadores-moleculares-patogenesis-viral-inmune
   miembros: [de-arcos-jimenez]
 
@@ -529,7 +531,7 @@
   anio: "2021"
   revista: "Pediatrics International"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: reumatologia-pediatrica-autoinmunes
   miembros: [vega-cornejo]
 
@@ -538,7 +540,7 @@
   anio: "2020"
   revista: "Genes & Nutrition"
   tipo: "article"
-  lgac: nutricion-microbioma
+  lgac: [nutricion-microbioma, clinica-epidemiologica-traslacional]
   linea_especifica: nutricion-biofilm-inflamacion-obesidad
   miembros: [rosales-chavez]
 
@@ -547,7 +549,7 @@
   anio: "2020"
   revista: "Pediatric Rheumatology Online Journal"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: reumatologia-pediatrica-autoinmunes
   miembros: [vega-cornejo]
 
@@ -556,7 +558,7 @@
   anio: "2020"
   revista: "Arthritis Research & Therapy"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: reumatologia-pediatrica-autoinmunes
   miembros: [vega-cornejo]
 
@@ -565,7 +567,7 @@
   anio: "2018"
   revista: "Arthritis & Rheumatology"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: reumatologia-pediatrica-autoinmunes
   miembros: [vega-cornejo]
 
@@ -574,7 +576,7 @@
   anio: "2017"
   revista: "Indian Journal of Nephrology"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cohortes-clinicas-nefro-cronicas
   miembros: [briseno-ramirez]
 
@@ -583,7 +585,7 @@
   anio: "2012"
   revista: "Hernia"
   tipo: "article"
-  lgac: clinica-epidemiologica-traslacional
+  lgac: [clinica-epidemiologica-traslacional]
   linea_especifica: cirugia-traslacional-desenlaces
   miembros: [fernandez-diaz]
 
@@ -592,6 +594,6 @@
   anio: "2010"
   revista: "PLoS ONE"
   tipo: "article"
-  lgac: epidemiologia-infecciosas
+  lgac: [epidemiologia-infecciosas]
   linea_especifica: covid19-sarscov2-epidemiologia
   miembros: [briseno-ramirez]

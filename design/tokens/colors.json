@@ -1,15 +1,15 @@
 {
-  "_comment": "Fuente ÚNICA de verdad del color. Sincronizada con make_logo.py (paleta Lancet ggsci 'lanonc'). Editar aquí y correr `npm run tokens` para regenerar src/styles/tokens.css.",
+  "_comment": "Fuente ÚNICA de verdad del color del SITIO. Paleta oscura/sobria personalizada (ya NO la paleta Lancet original; el logo en make_logo.py conserva los colores Lancet brillantes). Editar aquí y correr `npm run tokens` para regenerar src/styles/tokens.css.",
   "brand": {
-    "blue":  { "hex": "#00468B", "rol": "Primario/marca: titulares de marca, links, bloques sólidos. AA sobre blanco 8.6:1." },
-    "teal":  { "hex": "#0099B4", "rol": "Acento: kickers, indicador activo. Solo texto >=24px/bold o como fill con texto blanco (3.3:1)." }
+    "blue":  { "hex": "#1D2533", "rol": "Primario/marca: titulares de marca, links, bloques sólidos." },
+    "teal":  { "hex": "#213642", "rol": "Acento: kickers, indicador activo." }
   },
   "semantic": {
-    "red":    { "hex": "#ED0000", "rol": "Línea RAM / estado; solo bold/grande o fill con blanco." },
-    "green":  { "hex": "#42B540", "rol": "Línea educación / estado 'publicado'." },
-    "wine":   { "hex": "#AD002A", "rol": "Línea COVID / acento fuerte." },
-    "purple": { "hex": "#925E9F", "rol": "Línea genómica." },
-    "gray":   { "hex": "#5B6770", "rol": "Texto suave, metadatos, líneas. AA sobre blanco 5.6:1." }
+    "red":    { "hex": "#5C2424", "rol": "Línea (estado); badges y fills." },
+    "green":  { "hex": "#5C7A57", "rol": "Línea educación / estado 'publicado'." },
+    "wine":   { "hex": "#670E0E", "rol": "Línea / acento fuerte." },
+    "purple": { "hex": "#76717A", "rol": "Línea genómica." },
+    "gray":   { "hex": "#393A3C", "rol": "Texto suave, metadatos." }
   },
   "ink":     { "hex": "#1B1919", "rol": "Texto de cuerpo. AA sobre blanco 17:1." },
   "surface": {

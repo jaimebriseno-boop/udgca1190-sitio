@@ -88,7 +88,11 @@ for p in pubs:
     P.append(f"  anio: {q(p['anio'])}")
     P.append(f"  revista: {q(m.get('revista',''))}")
     P.append(f"  tipo: {q(m.get('tipo','article'))}")
-    P.append(f"  lgac: {p['lgac']}")
+    lg = [p['lgac']]
+    # La inmunología clínica periodontal (nutrición/microbioma) también abona a clínica/traslacional
+    if 'nutricion-microbioma' in lg and 'clinica-epidemiologica-traslacional' not in lg:
+        lg.append('clinica-epidemiologica-traslacional')
+    P.append(f"  lgac: [{', '.join(lg)}]")
     P.append(f"  linea_especifica: {p['linea_especifica']}")
     P.append(f"  miembros: [{', '.join(miembros)}]")
     P.append("")

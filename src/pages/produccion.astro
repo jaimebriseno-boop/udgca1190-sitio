@@ -20,7 +20,7 @@ const produccion = getProduccion()
   .sort((a, b) => (parseInt(b.anio) || 0) - (parseInt(a.anio) || 0));
 
 const nPorLgac = {};
-for (const p of produccion) nPorLgac[p.lgac] = (nPorLgac[p.lgac] || 0) + 1;
+for (const p of produccion) for (const lg of p.lgac) nPorLgac[lg] = (nPorLgac[lg] || 0) + 1;
 const total = produccion.length;
 ---
 <Base titulo="Producción académica" descripcion="Producción del CA UDG-CA-1190, etiquetada por línea específica y LGAC, con DOI.">
@@ -49,10 +49,8 @@ const total = produccion.length;
       </div>
 
       <ol class="pubs">
-        {produccion.map((p, i) => {
-          const lg = lgacMap[p.lgac] || {};
-          return (
-            <li class="pub" data-lgac={p.lgac}>
+        {produccion.map((p) => (
+            <li class="pub" data-lgac={p.lgac.join(' ')}>
               <div class="pub__year">{p.anio}</div>
               <div class="pub__main">
                 <p class="pub__titulo">{p.titulo}</p>
@@ -65,9 +63,14 @@ const total = produccion.length;
                   )}
                 </p>
                 <div class="pub__badges">
-                  <span class="badge-linea" style={`--badge-color: var(--c-${lg.color || 'gray'})`}>
-                    <span class="badge-linea__sq" aria-hidden="true"></span>{lg.titulo_corto || p.lgac}
-                  </span>
+                  {p.lgac.map((lid) => {
+                    const lg = lgacMap[lid] || {};
+                    return (
+                      <span class="badge-linea" style={`--badge-color: var(--c-${lg.color || 'gray'})`}>
+                        <span class="badge-linea__sq" aria-hidden="true"></span>{lg.titulo_corto || lid}
+                      </span>
+                    );
+                  })}
                   <span class="tag">{espMap[p.linea_especifica] || p.linea_especifica}</span>
                   {p.doi && (
                     <a class="pub__doi" href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener">doi:{p.doi} ↗</a>
@@ -75,8 +78,7 @@ const total = produccion.length;
                 </div>
               </div>
             </li>
-          );
-        })}
+        ))}
       </ol>
     </div>
   </section>
@@ -125,7 +127,7 @@ const total = produccion.length;
   function apply(f) {
     let shown = 0;
     rows.forEach((r) => {
-      const vis = f === 'all' || r.dataset.lgac === f;
+      const vis = f === 'all' || r.dataset.lgac.split(' ').includes(f);
       r.hidden = !vis;
       if (vis) shown++;
     });
