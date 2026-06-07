@@ -1,0 +1,46 @@
+---
+// Conmutador de idioma ES / EN. Enlaza a la página equivalente en el otro idioma.
+import { altPaths, t } from '../i18n.mjs';
+interface Props { lang: 'es' | 'en'; variant?: 'sidebar' | 'hero' }
+const { lang, variant = 'sidebar' } = Astro.props;
+const { es, en } = altPaths(Astro.url.pathname);
+---
+<div class:list={['lang-switch', `lang-switch--${variant}`]} role="group" aria-label={t(lang, 'aria.lang')}>
+  <a
+    href={es}
+    class:list={['lang-switch__opt', { 'is-active': lang === 'es' }]}
+    hreflang="es"
+    aria-current={lang === 'es' ? 'true' : undefined}>ES</a>
+  <span class="lang-switch__sep" aria-hidden="true">/</span>
+  <a
+    href={en}
+    class:list={['lang-switch__opt', { 'is-active': lang === 'en' }]}
+    hreflang="en"
+    aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+</div>
+
+<style>
+  .lang-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.08em;
+  }
+  .lang-switch__opt {
+    color: var(--c-gray);
+    text-decoration: none;
+    padding: 2px 4px;
+    border-bottom: 2px solid transparent;
+  }
+  .lang-switch__opt:hover { color: var(--c-ink); text-decoration: none; }
+  .lang-switch__opt.is-active { color: var(--c-ink); border-bottom-color: var(--c-blue); font-weight: 600; }
+  .lang-switch__sep { color: var(--c-line); }
+
+  /* Variante para la portada (sobre fondo oscuro). */
+  .lang-switch--hero .lang-switch__opt { color: rgba(255, 255, 255, 0.65); }
+  .lang-switch--hero .lang-switch__opt:hover { color: #fff; }
+  .lang-switch--hero .lang-switch__opt.is-active { color: #fff; border-bottom-color: #fff; }
+  .lang-switch--hero .lang-switch__sep { color: rgba(255, 255, 255, 0.4); }
+</style>

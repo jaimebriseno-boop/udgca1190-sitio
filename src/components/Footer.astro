@@ -1,4 +1,8 @@
 ---
+import { t, getSitioL } from '../i18n.mjs';
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+const sitio = getSitioL(lang);
 const anio = 2026;
 ---
 <footer class="site-footer">
@@ -8,10 +12,10 @@ const anio = 2026;
       <img src="/logos/UDG-CA-1190_logo_horizontal.png" alt="Cuerpo Académico UDG-CA-1190" />
     </div>
     <div class="site-footer__meta">
-      <p class="site-footer__name">Cuerpo Académico UDG-CA-1190</p>
-      <p class="site-footer__sub">Universidad de Guadalajara · CUTlajomulco</p>
+      <p class="site-footer__name">{t(lang, 'org.name')}</p>
+      <p class="site-footer__sub">{sitio.adscripcion}</p>
       <p class="site-footer__legal">
-        © {anio} · Investigación Integrativa de Factores Biológicos del Proceso Salud-Enfermedad
+        © {anio} · {sitio.nombre}
       </p>
     </div>
   </div>

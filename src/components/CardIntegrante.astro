@@ -1,12 +1,14 @@
 ---
 // Ficha de integrante (Concepto Swiss Data Grid): foto B/N → color en hover,
 // datos en barra inferior, badges de línea, enlaces ORCID/Scholar/correo.
+import { t } from '../i18n.mjs';
 interface Linea { titulo: string; titulo_corto?: string; color: string }
 interface Props {
-  data: any;                       // datos del integrante (de data/integrantes.yml)
+  data: any;                       // datos del integrante (de data/integrantes.yml, ya localizados)
   lineasMap: Record<string, Linea>;
+  lang?: 'es' | 'en';
 }
-const { data: d, lineasMap } = Astro.props;
+const { data: d, lineasMap, lang = 'es' } = Astro.props;
 const lineas = (d.lineas ?? []).map((id: string) => lineasMap[id]).filter(Boolean);
 ---
 <article class:list={['card-int', { 'card-int--lider': d.rol === 'lider' }]}>
@@ -17,7 +19,7 @@ const lineas = (d.lineas ?? []).map((id: string) => lineasMap[id]).filter(Boolea
       loading="lazy" width="320" height="320" />
   </div>
   <div class="card-int__body">
-    {d.rol === 'lider' && <span class="card-int__rol">Líder del CA</span>}
+    {d.rol === 'lider' && <span class="card-int__rol">{t(lang, 'members.lead')}</span>}
     <h3 class="card-int__name">{d.nombre}</h3>
     {d.grado && <p class="card-int__grade">{d.grado}</p>}
     {d.bio_corta && <p class="card-int__bio">{d.bio_corta}</p>}
@@ -31,9 +33,9 @@ const lineas = (d.lineas ?? []).map((id: string) => lineasMap[id]).filter(Boolea
       </div>
     )}
     <div class="card-int__links">
-      {d.orcid && <a class="card-int__link" href={`https://orcid.org/${d.orcid}`} target="_blank" rel="noopener">ORCID ↗</a>}
-      {d.perfiles?.scholar && <a class="card-int__link" href={d.perfiles.scholar} target="_blank" rel="noopener">Scholar ↗</a>}
-      {d.email && <a class="card-int__link" href={`mailto:${d.email}`}>Correo ↗</a>}
+      {d.orcid && <a class="card-int__link" href={`https://orcid.org/${d.orcid}`} target="_blank" rel="noopener">{t(lang, 'card.orcid')}</a>}
+      {d.perfiles?.scholar && <a class="card-int__link" href={d.perfiles.scholar} target="_blank" rel="noopener">{t(lang, 'card.scholar')}</a>}
+      {d.email && <a class="card-int__link" href={`mailto:${d.email}`}>{t(lang, 'card.email')}</a>}
     </div>
   </div>
 </article>

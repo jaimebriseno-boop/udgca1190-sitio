@@ -1,29 +1,37 @@
 ---
-import { getSitio } from '../lib/datos.mjs';
-const sitio = getSitio();
+import { t, getSitioL, localePath } from '../i18n.mjs';
+import LangSwitcher from './LangSwitcher.astro';
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+const sitio = getSitioL(lang);
 const email = sitio.contacto?.email || '';
 const ciudad = sitio.contacto?.ciudad || '';
 
 const items = [
-  { href: '/', label: 'Inicio' },
-  { href: '/integrantes', label: 'Integrantes' },
-  { href: '/lineas', label: 'Líneas de investigación' },
-  { href: '/produccion', label: 'Producción académica' },
-  { href: '/herramientas', label: 'Herramientas' },
-  { href: '/actividades', label: 'Actividades' },
-  { href: '/contacto', label: 'Contacto' },
-];
+  { href: '/', key: 'nav.home' },
+  { href: '/integrantes', key: 'nav.members' },
+  { href: '/lineas', key: 'nav.lines' },
+  { href: '/produccion', key: 'nav.production' },
+  { href: '/herramientas', key: 'nav.tools' },
+  { href: '/actividades', key: 'nav.activities' },
+  { href: '/contacto', key: 'nav.contact' },
+].map((it) => ({ href: localePath(it.href, lang), label: t(lang, it.key) }));
+
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const home = localePath('/', lang).replace(/\/$/, '') || '/';
+const isActive = (href: string) => {
+  const h = href.replace(/\/$/, '') || '/';
+  return h === home ? path === home : path.startsWith(h);
+};
 ---
 <aside id="sidebar">
   <div class="sidebar__inner">
-    <a class="sidebar__logo" href="/" aria-label="Inicio — UDG-CA-1190">
+    <a class="sidebar__logo" href={localePath('/', lang)} aria-label={t(lang, 'aria.home')}>
       <img src="/logos/UDG-CA-1190_logo_horizontal.png" alt="Cuerpo Académico UDG-CA-1190" width="250" height="109" />
     </a>
     <p class="sidebar__tag">{sitio.adscripcion}</p>
 
-    <nav class="sidebar__menu" aria-label="Principal">
+    <nav class="sidebar__menu" aria-label={t(lang, 'aria.main_nav')}>
       <ul>
         {items.map((it) => (
           <li>
@@ -37,9 +45,14 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
     </nav>
 
     <div class="sidebar__contact">
-      <p class="kicker">Contacto</p>
+      <p class="kicker">{t(lang, 'nav.contact')}</p>
       {email && <p><a href={`mailto:${email}`}>{email}</a></p>}
       {ciudad && <p class="text-muted">{ciudad}</p>}
+      <div class="sidebar__lang"><LangSwitcher lang={lang} variant="sidebar" /></div>
     </div>
   </div>
 </aside>
+
+<style>
+  .sidebar__lang { margin-top: var(--sp-3); }
+</style>

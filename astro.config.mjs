@@ -8,12 +8,19 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://udgca1190.com.mx',
   integrations: [
-    // Genera /sitemap-index.xml (excluye la guía de estilo interna /estilo).
-    sitemap({ filter: (page) => !page.includes('/estilo') }),
+    // Genera /sitemap-index.xml con alternativas hreflang (es/en); excluye /estilo.
+    sitemap({
+      filter: (page) => !page.includes('/estilo'),
+      i18n: {
+        defaultLocale: 'es',
+        locales: { es: 'es-MX', en: 'en-US' },
+      },
+    }),
   ],
-  // i18n preparado: español como idioma base; 'en' se añadirá en una fase posterior.
+  // Bilingüe: español en la raíz (canónico), inglés bajo /en/.
   i18n: {
     defaultLocale: 'es',
-    locales: ['es'],
+    locales: ['es', 'en'],
+    routing: { prefixDefaultLocale: false },
   },
 });

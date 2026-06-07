@@ -1,0 +1,89 @@
+---
+import Home from '../../layouts/Home.astro';
+import LangSwitcher from '../LangSwitcher.astro';
+import { t, getSitioL, localePath } from '../../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+const sitio = getSitioL(lang);
+const bgs = (Array.isArray(sitio.home_bgs) && sitio.home_bgs.length)
+  ? sitio.home_bgs
+  : (sitio.home_bg ? [sitio.home_bg] : []);
+const stats = (sitio.kpis || []).map((k: any) => `${k.num} ${k.label}`).join('   ·   ');
+const nav: [string, string][] = [
+  [localePath('/lineas', lang), t(lang, 'navshort.lines')],
+  [localePath('/produccion', lang), t(lang, 'navshort.production')],
+  [localePath('/integrantes', lang), t(lang, 'navshort.members')],
+  [localePath('/herramientas', lang), t(lang, 'navshort.tools')],
+  [localePath('/contacto', lang), t(lang, 'navshort.contact')],
+];
+const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190 · Cuerpo Académico';
+---
+<Home titulo={homeTitle} descripcion={sitio.mision} lang={lang}>
+  <section id="dimension">
+    <div class="dim__slides" aria-hidden="true">
+      {bgs.length > 0 ? (
+        bgs.map((src: string, i: number) => (
+          <div class:list={['dim__slide', { 'is-active': i === 0 }]} style={`background-image: url('${src}')`}></div>
+        ))
+      ) : (
+        <div class="dim__deco">
+          <svg viewBox="0 0 1200 600" preserveAspectRatio="none">
+            <g stroke="#ffffff" stroke-opacity="0.5" stroke-width="1">
+              <line x1="0" y1="150" x2="1200" y2="150" />
+              <line x1="0" y1="300" x2="1200" y2="300" />
+              <line x1="0" y1="450" x2="1200" y2="450" />
+            </g>
+            <polyline fill="none" stroke="#9fd0e0" stroke-width="3"
+              points="0,490 150,430 300,450 450,300 600,330 750,180 900,250 1050,120 1200,180" />
+          </svg>
+        </div>
+      )}
+    </div>
+
+    <div class="dim__overlay"></div>
+
+    <div class="dim__lang"><LangSwitcher lang={lang} variant="hero" /></div>
+
+    <div class="dim__content">
+      <h1 class="sr-only">{sitio.nombre}</h1>
+      <img
+        class="dim__logo"
+        src="/logos/UDG-CA-1190_logo_horizontal_reverse.png"
+        alt={`Cuerpo Académico UDG-CA-1190 — ${sitio.nombre}`}
+        width="1878" height="820" />
+      <p class="dim__kicker">{sitio.adscripcion}</p>
+      <p class="dim__lead">{sitio.mision}</p>
+      <nav class="dim__nav" aria-label={t(lang, 'aria.sections')}>
+        {nav.map(([href, label]) => <a href={href}>{label}</a>)}
+      </nav>
+      <p class="dim__stats">{stats}</p>
+    </div>
+
+    <p class="dim__foot">{sitio.adscripcion}</p>
+  </section>
+</Home>
+
+<style>
+  .dim__lang {
+    position: absolute;
+    top: clamp(1rem, 3vw, 2rem);
+    right: clamp(1rem, 4vw, 3rem);
+    z-index: 4;
+  }
+</style>
+
+<script>
+  // Slideshow de la portada: rota entre las figuras de fondo (crossfade).
+  const slides = Array.from(document.querySelectorAll('.dim__slide'));
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (slides.length > 1 && !reduce) {
+    let i = 0;
+    setInterval(() => {
+      slides[i].classList.remove('is-active');
+      i = (i + 1) % slides.length;
+      slides[i].classList.add('is-active');
+    }, 6500);
+  }
+</script>

@@ -1,0 +1,229 @@
+# Traducciones al INGLÉS del contenido del sitio (overrides de data/*.yml).
+# Generado por scripts/build_en_i18n.mjs (traducción + revisión por editor nativo).
+# Mismas claves de campo que el español; src/i18n.mjs → localize() las fusiona cuando lang === "en".
+# Para ajustar el inglés, edita aquí; el español se edita en los data/*.yml originales.
+
+sitio:
+  nombre: Integrative Research on Biological Factors of the Health-Disease Process
+  adscripcion: University of Guadalajara · CUTlajomulco
+  mision: >-
+    To generate knowledge about the biological factors of the health-disease process through reproducible
+    basic, clinical, translational, epidemiological, and statistical research, and to translate it into tools
+    that support clinical decision-making and the development of health policy.
+  contacto:
+    ciudad: Guadalajara, Jalisco, Mexico
+  kpis:
+    - num: "5"
+      label: Research lines (LGAC)
+    - num: "7"
+      label: Members
+    - num: "66"
+      label: Publications
+    - num: "5"
+      label: Tools
+  page_intros:
+    members: Research professors who make up the UDG-CA-1190 Research Group, led by Dr. Jaime Briseño Ramírez.
+    lines: >-
+      The five official LGAC research lines on which the group's output converges. Each builds on specific
+      research themes drawn from its members' published work.
+    tools: >-
+      Statistical, epidemiological, and predictive methods developed by the research group in R and Python to
+      support clinical decision-making and population-level analysis.
+    activities: >-
+      The research group's academic activities: training of specialists, editing and peer review, and
+      scientific communication.
+integrantes:
+  briseno-ramirez:
+    grado: Internal Medicine physician and Infectious Diseases specialist
+    institucion: University of Guadalajara — CUTlajomulco
+    bio_corta: >-
+      Physician specializing in Internal Medicine and Infectious Diseases, trained at the University of
+      Guadalajara and the Instituto Nacional de Ciencias Médicas y Nutrición "Salvador Zubirán" (INCMNSZ). He
+      is a Tenured Full Professor-Researcher (Titular A) at the University of Guadalajara, Director of the
+      Health Sciences Division at CUTlajomulco, and an attending physician in the Internal Medicine Service of
+      the Antiguo Hospital Civil de Guadalajara "Fray Antonio Alcalde," as well as Director of the Hospital
+      Civil de Oriente (a unit of the OPD Hospital Civil de Guadalajara). His research lines span emerging
+      infectious diseases, molecular epidemiological surveillance, healthcare-associated infections,
+      antimicrobial resistance (AMR), and critical care.
+  de-arcos-jimenez:
+    grado: Ph.D. in Molecular Biology in Medicine · Pharmaceutical Chemist Biologist (QFB)
+    institucion: University of Guadalajara — CUTlajomulco
+    bio_corta: >-
+      Pharmaceutical Chemist Biologist (QFB) with a Ph.D. in Molecular Biology in Medicine from the University
+      of Guadalajara. She is a full-time, tenured Associate Professor-Researcher (Asociado A) at CUTlajomulco
+      and Head of the Molecular Biology Area at the Jalisco State Public Health Laboratory. Her work
+      integrates molecular surveillance, antimicrobial resistance (AMR), clinical microbiology, whole-genome
+      sequencing (WGS), and molecular biomarkers.
+  vega-cornejo:
+    grado: Pediatric Rheumatologist · M.Sc. in Nutrition and Dietetics
+    institucion: University of Guadalajara
+    bio_corta: >-
+      Physician and surgeon with specialty training in pediatrics and a postgraduate qualification in
+      pediatric rheumatology, together with master's degrees in nutrition and dietetics. He founded the
+      pediatric rheumatology service at the Hospital General de Occidente, directs a research center (CREA),
+      and is a full-time Associate Professor-Researcher at the University of Guadalajara. His work addresses
+      juvenile idiopathic arthritis and biologic therapies, pediatric vasculitides, opportunistic infections
+      in immunosuppressed patients, and the molecular diagnosis of pediatric community-acquired pneumonia.
+  fernandez-diaz:
+    grado: Plastic and Reconstructive Surgeon · M.Sc. in Microsurgery
+    institucion: University of Guadalajara — CUTlajomulco
+    bio_corta: >-
+      Physician and surgeon from the University of Guadalajara, with specialties in general and endocrine
+      surgery (UNAM) and in plastic and reconstructive surgery, along with advanced subspecialty training and
+      an M.Sc. in reconstructive microsurgery in the United Kingdom. He is an Adjunct Lecturer in the Medicine
+      program at CUTlajomulco, focusing on evidence-based medicine and clinical pathophysiology. His research
+      centers on microsurgery and breast reconstruction, and on the training of plastic surgeons.
+  rodriguez-montano:
+    grado: Ph.D. in Biomedical Sciences (Immunology) · Dental Surgeon (DDS)
+    institucion: University of Guadalajara — CUTlajomulco
+    bio_corta: >-
+      Ph.D. in Biomedical Sciences specializing in Immunology and Dental Surgeon (DDS) from the University of
+      Guadalajara, where she is an Adjunct Lecturer (Asignatura B) at CUTlajomulco and holds the Candidate
+      level of Mexico's National System of Researchers (SNII). Her research addresses the immunology of oral
+      diseases and their relationship with systemic conditions, with emphasis on the IL-23/IL-17 axis, RANKL
+      levels, and rheumatoid arthritis-associated periodontitis. She has an extensive teaching and
+      thesis-supervision record.
+  damian-negrete:
+    grado: Pediatric Surgeon · Pediatrician
+    institucion: University of Guadalajara — CUTlajomulco
+    bio_corta: >-
+      Physician and surgeon with specialties in Pediatrics and Pediatric Surgery from the University of
+      Guadalajara, with training in endoscopic surgery. He is an attending physician in the Pediatric Surgery
+      Service of the Hospital Civil "Fray Antonio Alcalde," leads the Thoracic and Abdominal Trauma clinic,
+      and serves as Head of the Maternal and Child Department at CUTlajomulco, where he is an Adjunct Lecturer
+      (Asignatura B). He has co-authored an internationally published book as well as articles and book
+      chapters in pediatrics and pediatric surgery, with an emphasis on evidence-based medicine.
+  rosales-chavez:
+    grado: Internal Medicine physician and Pulmonologist · M.Sc. in Medical Sciences
+    institucion: University of Guadalajara — CUTlajomulco
+    bio_corta: >-
+      Internal Medicine physician and Pulmonologist with an M.Sc. in Medical Sciences and advanced
+      subspecialty training in pulmonary rehabilitation. He is an Adjunct Lecturer at CUTlajomulco (University
+      of Guadalajara), an attending pulmonologist at the Hospital Civil de Guadalajara "Juan I. Menchaca," and
+      former President of the Pulmonology Association of Jalisco. His work spans the epidemiology of
+      respiratory viruses and COVID-19, pulmonary function, and clinical research methodology, and he serves
+      as regional principal investigator for a national lung cancer project (INCAN).
+lineas:
+  clinica-epidemiologica-traslacional:
+    titulo: >-
+      Clinical, Epidemiological, and Translational Research Applied to the Comprehensive Study of the
+      Health-Disease Process
+    titulo_corto: Clinical, Epidemiological, and Translational
+    resumen: >-
+      Comprehensive study of the health-disease process through clinical cohorts, trials, systematic reviews,
+      and meta-analyses, integrating clinical outcomes with biological markers in chronic, autoimmune, renal,
+      and surgical conditions. This line bridges clinical practice with the generation of translational
+      evidence to inform decision-making.
+    especificas:
+      - id: cohortes-clinicas-nefro-cronicas
+        titulo: Clinical Cohorts in Nephrology and Chronic Disease
+      - id: reumatologia-pediatrica-autoinmunes
+        titulo: Pediatric Rheumatology, Autoimmune Diseases, and Biologic Therapies
+      - id: cirugia-traslacional-desenlaces
+        titulo: Clinical and Reconstructive Surgery and Surgical Outcomes
+      - id: revisiones-sistematicas-metaanalisis-clinicos
+        titulo: Systematic Reviews and Diagnostic-Therapeutic Meta-Analyses
+  ciencia-datos-poblacionales:
+    titulo: Population Data Science for Identifying Determinants of the Health-Disease Process
+    titulo_corto: Population Data Science
+    resumen: >-
+      Analysis of large surveillance databases and national registries through time series, spatial models,
+      and ecological methods to identify the social, environmental, and structural determinants of health.
+      This line quantifies inequalities, healthcare deserts, and amenable (avoidable) mortality at the
+      population level.
+    especificas:
+      - id: determinantes-sociales-mortalidad-evitable
+        titulo: Social Determinants, Healthcare Deserts, and Amenable (Avoidable) Mortality
+      - id: salud-ambiental-ocupacional-poblacional
+        titulo: Environmental and Occupational Health and Population-Level Respiratory Function
+  epidemiologia-infecciosas:
+    titulo: Epidemiology and Control of Infectious Diseases
+    titulo_corto: Infectious Disease Epidemiology
+    resumen: >-
+      Surveillance, outbreak dynamics, and temporal analysis of emerging and re-emerging infectious diseases
+      (measles, dengue, COVID-19, respiratory viruses) and of antimicrobial resistance, including the
+      development of Bayesian weighted-incidence syndromic combination antibiograms (WISCA) to guide empirical
+      therapy.
+    especificas:
+      - id: wisca-resistencia-antimicrobiana
+        titulo: Bayesian Weighted-Incidence Syndromic Combination Antibiograms (WISCA) and Empirical Therapy
+      - id: vigilancia-series-tiempo-infecciosas
+        titulo: Surveillance and Time Series of Emerging and Re-emerging Infectious Diseases
+      - id: covid19-sarscov2-epidemiologia
+        titulo: Epidemiology and Outcomes of COVID-19/SARS-CoV-2
+  nutricion-microbioma:
+    titulo: Nutrition and Microbiome in the Prevention and Management of Disease
+    titulo_corto: Nutrition and Microbiome
+    resumen: >-
+      Study of the interaction among nutritional status, low-grade inflammation, the microbiome/biofilm, and
+      systemic comorbidities, together with healthy lifestyles, obesity, and oral-systemic axes in the
+      prevention and management of disease.
+    especificas:
+      - id: inmunoinflamacion-periodontal-oral-sistemica
+        titulo: Periodontal Immunoinflammation and Oral-Systemic Axes
+      - id: nutricion-biofilm-inflamacion-obesidad
+        titulo: Nutrition, Biofilm, Obesity, and Low-Grade Inflammation
+  biologia-molecular:
+    titulo: Molecular Biology in the Diagnosis, Biomarkers, Epidemiology, and Treatment of Infectious Diseases
+    titulo_corto: Molecular Biology and Biomarkers
+    resumen: >-
+      Application of molecular tools (whole-genome sequencing (WGS), gene expression profiling, cytokines, and
+      immunoinflammatory biomarkers) to the diagnosis, epidemiological typing, and treatment of infectious and
+      immune-mediated diseases, including the molecular determinants of antimicrobial resistance (AMR) and
+      viral pathogenesis.
+    especificas:
+      - id: genomica-resistencia-microbiana
+        titulo: Microbial Genomics and Molecular Determinants of Resistance
+      - id: biomarcadores-moleculares-patogenesis-viral-inmune
+        titulo: Molecular Biomarkers and Viral/Immune-Mediated Pathogenesis
+herramientas:
+  dengue-forecast:
+    nombre: Dengue Forecast
+    resumen: Probabilistic dengue forecasting and early warning for all 32 states of Mexico.
+    descripcion: >-
+      A forecasting ensemble combining statistical models (regression with climatic lags), machine learning
+      (gradient boosting), and Bayesian spatial models over a monthly state-level panel of 15,591 observations
+      (1985-2026), with online recalibration via conformal prediction and an outbreak-alarm classifier (AUC
+      0.846 at one month). It generates 1-, 3-, 6-, and 12-month forecasts to support early warning and
+      response (EWARS). Manuscript in preparation (De Arcos-Jiménez and Briseño-Ramírez).
+  wisca-bayesiano:
+    nombre: Bayesian WISCA
+    resumen: Weighted-incidence syndromic combination antibiograms (WISCA) with Bayesian modeling.
+    descripcion: >-
+      Estimation of empirical coverage using weighted-incidence syndromic combination antibiograms (WISCA)
+      with Bayesian partial pooling. Applied to endocarditis, invasive candidiasis, community-acquired urinary
+      tract infection, ventilator-associated pneumonia, and septic arthritis, it estimates coverage by
+      syndrome and across community-acquired and healthcare-associated strata.
+  genomica-wgs:
+    nombre: Microbial genomics pipeline (WGS)
+    resumen: Assembly, typing, and genotypic resistance from sequencing data.
+    descripcion: >-
+      A reproducible whole-genome sequencing (WGS) workflow for clinical isolates: quality control, assembly,
+      typing (MLST/SCCmec), and detection of resistance determinants. Applied to S. aureus/MRSA and to
+      linezolid-resistant Enterococcus faecalis.
+  series-tiempo-epi:
+    nombre: Epidemiological time series
+    resumen: Disease trends, seasonality, and the reproduction number.
+    descripcion: >-
+      A suite of methods for analyzing trends, seasonality, and disruptions in surveillance time series
+      (measles, dengue, respiratory viruses, AMR): STL decomposition, GAM/Fourier models, the instantaneous
+      reproduction number (Rt), and interrupted time series (ITS).
+  analisis-espacial:
+    nombre: Spatial analysis and population-level determinants
+    resumen: Spatial autocorrelation and determinants at the municipal scale.
+    descripcion: >-
+      Population-level ecological analysis to identify inequalities, healthcare deserts, and amenable
+      (avoidable) mortality: spatial autocorrelation (Moran's I, LISA), multilevel models, and linkage of
+      national registries with marginalization indices.
+actividades:
+  libro-infecto-springer:
+    titulo: Infectious Diseases Textbook (Springer, open access)
+    descripcion: Editing an evidence-based clinical reference (~46 chapters) for students, residents, and specialists.
+  revision-pares:
+    titulo: Peer review for biomedical journals
+    descripcion: >-
+      Evaluating manuscripts in infectious diseases, antimicrobial resistance, and applied biostatistics
+      (MDPI, Springer, Dove).
+  actividad-ejemplo:
+    titulo: Activity title (template)
+    descripcion: Brief description of the academic activity or event.

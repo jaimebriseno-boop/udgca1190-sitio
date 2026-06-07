@@ -6,11 +6,17 @@ import '@fontsource/ibm-plex-mono/400.css';
 import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/base.css';
 import '../styles/dimension.css';
+import { altPaths } from '../i18n.mjs';
 
-interface Props { titulo?: string; descripcion?: string }
-const { titulo = 'UDG-CA-1190 · Cuerpo Académico', descripcion = '' } = Astro.props;
+interface Props { titulo?: string; descripcion?: string; lang?: 'es' | 'en' }
+const { titulo = 'UDG-CA-1190 · Cuerpo Académico', descripcion = '', lang = 'es' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og/og-default.jpg', Astro.site).href;
+const alt = altPaths(Astro.url.pathname);
+const esUrl = new URL(alt.es, Astro.site).href;
+const enUrl = new URL(alt.en, Astro.site).href;
+const ogLocale = lang === 'en' ? 'en_US' : 'es_MX';
+const ogLocaleAlt = lang === 'en' ? 'es_MX' : 'en_US';
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ResearchOrganization',
@@ -23,7 +29,7 @@ const jsonLd = {
 };
 ---
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,9 +38,13 @@ const jsonLd = {
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#11161f" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="es" href={esUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={esUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Cuerpo Académico UDG-CA-1190" />
-    <meta property="og:locale" content="es_MX" />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlt} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={titulo} />
     {descripcion && <meta property="og:description" content={descripcion} />}

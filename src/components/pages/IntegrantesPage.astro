@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import CardIntegrante from '../CardIntegrante.astro';
+import { t, getSitioL, localize } from '../../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+const lineasCol = await getCollection('lineas');
+const lineasMap = Object.fromEntries(lineasCol.map((l) => [l.id, localize('lineas', l.id, l.data, lang)]));
+
+const orden: Record<string, number> = { lider: 0, integrante: 1, colaborador: 2, estudiante: 3 };
+const incompleto = (d: any) => (/por completar/i.test(d.bio_corta || '') ? 1 : 0);
+const integrantes = (await getCollection('integrantes'))
+  .map((e) => localize('integrantes', e.id, e.data, lang))
+  // líder primero; perfiles "por completar" al final
+  .sort((a, b) => (orden[a.rol] ?? 9) - (orden[b.rol] ?? 9) || incompleto(a) - incompleto(b));
+
+const intro = getSitioL(lang).page_intros?.members || '';
+---
+<Base titulo={t(lang, 'nav.members')} descripcion={t(lang, 'meta.members')} lang={lang}>
+  <section class="section">
+    <div class="container">
+      <div class="pg-head">
+        <span class="pg-block" aria-hidden="true"></span>
+        <div>
+          <p class="kicker">{t(lang, 'members.kicker')}</p>
+          <h1 class="pg-title">{t(lang, 'members.title')}</h1>
+        </div>
+      </div>
+      <p class="prose text-muted pg-intro">{intro}</p>
+
+      <div class="int-grid">
+        {integrantes.map((d) => <CardIntegrante data={d} lineasMap={lineasMap} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .pg-head { display: flex; align-items: center; gap: var(--sp-3); }
+  .pg-block { width: 16px; height: 48px; background: var(--c-blue); flex: none; }
+  .pg-title { font-size: var(--fs-s3); }
+  .pg-intro { margin-top: var(--sp-3); }
+  .int-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--sp-3);
+    margin-top: var(--sp-6);
+  }
+</style>

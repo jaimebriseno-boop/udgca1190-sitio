@@ -1,22 +1,22 @@
 ---
 // Tarjeta de herramienta (Swiss Data Grid): barra de color por LGAC, glifo de método,
 // badge de estado y tecnología.
+import { t } from '../i18n.mjs';
 interface Props {
   data: any;
   lineasMap: Record<string, { titulo_corto?: string; titulo: string; color: string }>;
+  lang?: 'es' | 'en';
 }
-const { data: h, lineasMap } = Astro.props;
+const { data: h, lineasMap, lang = 'es' } = Astro.props;
 const lg = lineasMap[h.linea];
 const estadoColor: Record<string, string> = { activa: 'green', beta: 'teal', desarrollo: 'gray' };
-const estadoLabel: Record<string, string> = { activa: 'Activa', beta: 'Beta', desarrollo: 'En desarrollo' };
-const tipoLabel: Record<string, string> = { predictiva: 'Predictiva', estadistica: 'Estadística', pipeline: 'Pipeline' };
 const eColor = estadoColor[h.estado] || 'gray';
 ---
 <article class="tool" style={`--tool-color: var(--c-${lg?.color || 'blue'})`}>
   <div class="tool__bar" aria-hidden="true"></div>
   <div class="tool__top">
     <div>
-      <p class="tool__kicker">{tipoLabel[h.tipo] || h.tipo}</p>
+      <p class="tool__kicker">{t(lang, 'tool.tipo.' + h.tipo)}</p>
       <h3 class="tool__name">{h.nombre}</h3>
     </div>
     <svg class="tool__glyph" viewBox="0 0 48 32" aria-hidden="true" fill="none">
@@ -51,14 +51,14 @@ const eColor = estadoColor[h.estado] || 'gray';
         <span class="badge-linea__sq" aria-hidden="true"></span>{lg.titulo_corto || lg.titulo}
       </span>
     )}
-    <span class="tool__estado" style={`--e: var(--c-${eColor})`}>{estadoLabel[h.estado] || h.estado}</span>
+    <span class="tool__estado" style={`--e: var(--c-${eColor})`}>{t(lang, 'tool.estado.' + h.estado)}</span>
   </div>
 
   {(h.enlace_app || h.repositorio || h.doi) && (
     <div class="tool__links">
-      {h.enlace_app && <a class="tool__link" href={h.enlace_app} target="_blank" rel="noopener">App ↗</a>}
-      {h.repositorio && <a class="tool__link" href={h.repositorio} target="_blank" rel="noopener">Repositorio ↗</a>}
-      {h.doi && <a class="tool__link" href={`https://doi.org/${h.doi}`} target="_blank" rel="noopener">DOI ↗</a>}
+      {h.enlace_app && <a class="tool__link" href={h.enlace_app} target="_blank" rel="noopener">{t(lang, 'tool.link_app')}</a>}
+      {h.repositorio && <a class="tool__link" href={h.repositorio} target="_blank" rel="noopener">{t(lang, 'tool.link_repo')}</a>}
+      {h.doi && <a class="tool__link" href={`https://doi.org/${h.doi}`} target="_blank" rel="noopener">{t(lang, 'tool.link_doi')}</a>}
     </div>
   )}
 </article>

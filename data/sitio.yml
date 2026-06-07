@@ -11,6 +11,13 @@ mision: >-
   reproducible, y trasladarlo a herramientas que apoyen tanto la toma de decisiones
   clínicas como la construcción de políticas en salud.
 
+# Párrafos introductorios de cada sección (su traducción inglesa vive en data/i18n/en.yml).
+page_intros:
+  members: "Profesores-investigadores que integran el CA UDG-CA-1190. El liderazgo recae en el Dr. Jaime Briseño Ramírez."
+  lines: "Cinco LGAC oficiales en las que converge la producción del Cuerpo Académico. Cada una se sustenta en líneas específicas derivadas del trabajo publicado de sus integrantes."
+  tools: "Métodos estadístico-epidemiológicos y predictivos desarrollados por el CA, en R y Python, para apoyar la decisión clínica y el análisis poblacional."
+  activities: "Actividades académicas del Cuerpo Académico: formación de especialistas, edición y revisión por pares, y comunicación científica."
+
 contacto:
   email: "contacto@udgca1190.com.mx"   # alias por configurar en el registrador
   ciudad: "Guadalajara, Jalisco, México"

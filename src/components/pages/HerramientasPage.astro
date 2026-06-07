@@ -1,0 +1,57 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import CardHerramienta from '../CardHerramienta.astro';
+import { t, getSitioL, localize } from '../../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+const lineas = await getCollection('lineas');
+const lineasMap = Object.fromEntries(lineas.map((l) => [l.id, localize('lineas', l.id, l.data, lang)]));
+
+const orden: Record<string, number> = { activa: 0, beta: 1, desarrollo: 2 };
+const herramientas = (await getCollection('herramientas'))
+  .map((e) => localize('herramientas', e.id, e.data, lang))
+  .sort((a, b) => Number(b.destacado) - Number(a.destacado) || (orden[a.estado] ?? 9) - (orden[b.estado] ?? 9));
+
+const intro = getSitioL(lang).page_intros?.tools || '';
+---
+<Base titulo={t(lang, 'nav.tools')} descripcion={t(lang, 'meta.tools')} lang={lang}>
+  <section class="section">
+    <div class="container">
+      <div class="pg-head">
+        <span class="pg-block" aria-hidden="true"></span>
+        <div>
+          <p class="kicker">{t(lang, 'tools.kicker')}</p>
+          <h1 class="pg-title">{t(lang, 'tools.title')}</h1>
+        </div>
+      </div>
+      <p class="prose text-muted pg-intro">{intro}</p>
+
+      <div class="tools-grid">
+        {herramientas.map((h) => <CardHerramienta data={h} lineasMap={lineasMap} lang={lang} />)}
+      </div>
+
+      <p class="stack-line">
+        <span class="kicker">{t(lang, 'tools.stack_label')}</span>
+        <span class="mono">R · Python · Stan / brms · sf · spdep · EpiEstim · Nextflow · tidyverse</span>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .pg-head { display: flex; align-items: center; gap: var(--sp-3); }
+  .pg-block { width: 16px; height: 48px; background: var(--c-blue); flex: none; }
+  .pg-title { font-size: var(--fs-s3); }
+  .pg-intro { margin-top: var(--sp-3); }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--sp-3);
+    margin-top: var(--sp-6);
+  }
+  .stack-line { margin-top: var(--sp-6); display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: baseline; color: var(--c-gray); }
+  .stack-line .mono { font-size: var(--fs-sm); }
+</style>
