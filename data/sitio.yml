@@ -28,7 +28,7 @@ home_bgs:
 # Clave de acceso de Web3Forms para el formulario de contacto.
 # Crear cuenta gratis en https://web3forms.com (verificar el correo destino) y pegar la access key.
 # Mientras esté vacía, el formulario muestra un aviso de "pendiente de configurar".
-web3forms_key: ""
+web3forms_key: "5762b222-80ca-4079-aaa6-c26199f8bd11"
 
 redes:
   scholar: ""
