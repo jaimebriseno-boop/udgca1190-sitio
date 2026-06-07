@@ -19,7 +19,9 @@ GRAY   = "#5B6770"
 WHITE  = "#FFFFFF"
 LIGHT  = "#C7CCD6"   # gris claro para reglas/barra en la versión reverse
 
-LOGO_PATH = "/Users/jaibri/Documents/CEIC CUTLAJO/FILOSOFIA DE DISEÑO DE CUTLAJOMULCO/UdeG logo color.png"
+# Escudo UdeG con FONDO TRANSPARENTE (recortado por componentes conexas del PNG
+# original con fondo blanco; conserva el texto del listón). Ver design/.
+LOGO_PATH = "/Users/jaibri/Documents/UDG-CA-1190/design/escudo_udeg_transparente.png"
 OPTIMA  = "/System/Library/Fonts/Optima.ttc"
 PALAT   = "/System/Library/Fonts/Palatino.ttc"
 
