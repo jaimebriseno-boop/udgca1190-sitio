@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /estilo
+
+Sitemap: https://udgca1190.com.mx/sitemap-index.xml

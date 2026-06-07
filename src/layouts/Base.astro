@@ -15,6 +15,18 @@ const { titulo = 'UDG-CA-1190', descripcion = '' } = Astro.props;
 const tituloPagina = titulo === 'UDG-CA-1190'
   ? 'UDG-CA-1190 · Cuerpo Académico'
   : `${titulo} · UDG-CA-1190`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og/og-default.jpg', Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ResearchOrganization',
+  name: 'Cuerpo Académico UDG-CA-1190 — Investigación Integrativa de Factores Biológicos del Proceso Salud-Enfermedad',
+  alternateName: 'UDG-CA-1190',
+  url: 'https://udgca1190.com.mx',
+  logo: ogImage,
+  parentOrganization: { '@type': 'CollegeOrUniversity', name: 'Universidad de Guadalajara', url: 'https://www.udg.mx' },
+  areaServed: 'MX',
+};
 ---
 <!doctype html>
 <html lang="es">
@@ -25,6 +37,19 @@ const tituloPagina = titulo === 'UDG-CA-1190'
     {descripcion && <meta name="description" content={descripcion} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#1D2533" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cuerpo Académico UDG-CA-1190" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={tituloPagina} />
+    {descripcion && <meta property="og:description" content={descripcion} />}
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={tituloPagina} />
+    {descripcion && <meta name="twitter:description" content={descripcion} />}
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <a class="skip-link" href="#main">Saltar al contenido</a>
