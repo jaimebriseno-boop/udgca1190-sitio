@@ -10,11 +10,11 @@ body.home { margin: 0; }
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  padding-block: var(--sp-8);
 }
 
 /* Fondo: slideshow de figuras (crossfade + paneo lento Ken Burns) */
-.dim__slides { position: absolute; inset: 0; background-color: #11161f; }
+.dim__slides { position: absolute; inset: 0; background-color: #11161f; overflow: hidden; }
 .dim__slide {
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
@@ -42,12 +42,12 @@ body.home { margin: 0; }
 
 .dim__content {
   position: relative; z-index: 3;
-  text-align: center; color: #fff;
-  max-width: 900px; padding: var(--sp-6) var(--sp-4);
+  text-align: left; color: #fff;
+  max-width: 940px; padding: var(--sp-6) var(--sp-4);
 }
 /* Logo grande reverse (texto blanco) — sin placa, sobre el fondo oscuro */
 .dim__logo {
-  width: min(720px, 92%); height: auto; display: block; margin: 0 auto var(--sp-4);
+  width: min(720px, 92%); height: auto; display: block; margin: 0 0 var(--sp-4);
   filter: drop-shadow(0 4px 30px rgba(0, 0, 0, 0.55));
 }
 .dim__kicker {
@@ -62,9 +62,21 @@ body.home { margin: 0; }
 }
 @media (min-width: 760px) { .dim__title { font-size: var(--fs-s3); } }
 @media (min-width: 1100px) { .dim__title { font-size: var(--fs-s4); } }
-.dim__lead { color: #e3e7ee; font-size: var(--fs-base); line-height: var(--lh-normal); max-width: 62ch; margin: 0 auto var(--sp-5); text-shadow: 0 1px 14px rgba(0, 0, 0, 0.6); }
+/* Leyenda/misión: declaración grande, alineada a la izquierda, con aire */
+.dim__lead {
+  text-align: left;
+  color: #eef1f5;
+  font-size: 1.3rem;
+  font-weight: var(--fw-regular);
+  letter-spacing: 0.05em;
+  line-height: 1.85;
+  max-width: 40ch;
+  margin: var(--sp-3) 0 var(--sp-6);
+  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.6);
+}
+@media (min-width: 760px) { .dim__lead { font-size: 1.6rem; max-width: 36ch; } }
 
-.dim__nav { display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: center; }
+.dim__nav { display: flex; flex-wrap: wrap; gap: var(--sp-2); justify-content: flex-start; }
 .dim__nav a {
   border: 1px solid rgba(255, 255, 255, 0.45); color: #fff;
   padding: var(--sp-2) var(--sp-3);
