@@ -5,8 +5,9 @@ body.home { margin: 0; }
 
 #dimension {
   position: relative;
-  min-height: 100vh;
-  min-height: 100svh;
+  /* Portada recortada: ya no ocupa la pantalla completa (fallback vh antes de svh) */
+  min-height: clamp(560px, 78vh, 900px);
+  min-height: clamp(560px, 78svh, 900px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,14 +94,19 @@ body.home { margin: 0; }
 /* Foco visible sobre fotografía: solo blanco funciona en el peor caso */
 #dimension :is(a, button):focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
-.dim__stats {
-  margin-top: var(--sp-5);
-  font-family: var(--font-mono); font-size: var(--fs-xs); color: #dde2ea; letter-spacing: 0.04em;
+/* CTA primario rojo (único botón rojo de la vista), debajo de la fila nav */
+.dim__cta { margin-top: var(--sp-4); }
+
+/* Indicador de scroll: chevron blanco discreto, abajo-centro del hero */
+.dim__scroll {
+  position: absolute; left: 50%; bottom: var(--sp-3); z-index: 4;
+  transform: translateX(-50%);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; color: #fff; opacity: 0.85;
+  transition: opacity 150ms ease;
 }
-.dim__foot {
-  position: absolute; bottom: var(--sp-3); left: 0; right: 0; z-index: 3; text-align: center;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.04em; color: #8b93a3;
-}
+.dim__scroll:hover { opacity: 1; }
+.dim__scroll svg { width: 22px; height: 22px; display: block; fill: none; stroke: currentColor; stroke-width: 2; }
 
 /* Botón pausar/reanudar el slideshow (oculto si hay 1 slide o reduced-motion) */
 .dim__playpause {
@@ -120,13 +126,15 @@ body.home { margin: 0; }
 
 /* Móvil: nav en rejilla, logo y lead más contenidos */
 @media (max-width: 600px) {
-  #dimension { padding-block: var(--sp-6); }
+  #dimension {
+    /* en pantallas pequeñas el contenido puede pedir más alto */
+    min-height: clamp(560px, 88vh, 900px);
+    min-height: clamp(560px, 88svh, 900px);
+    padding-block: var(--sp-6);
+  }
   .dim__logo { width: min(440px, 88%); }
   .dim__lead { font-size: 1.0625rem; line-height: 1.6; }
   .dim__nav { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-1); }
   .dim__nav a { text-align: center; padding: 10px 6px; font-size: 11px; }
   .dim__nav a:nth-child(5) { grid-column: 1 / -1; }
-}
-@media (max-width: 600px), (max-height: 700px) {
-  .dim__foot { display: none; }
 }

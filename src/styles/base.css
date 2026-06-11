@@ -66,3 +66,20 @@ img { max-width: 100%; height: auto; display: block; }
   background: var(--udg-navy-900); color: #fff; padding: var(--sp-1) var(--sp-2); z-index: 100;
 }
 .skip-link:focus { left: 0; }
+
+/* View transitions cross-document — enhancement progresivo (Chrome/Edge/Safari 18+; otros lo ignoran) */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}

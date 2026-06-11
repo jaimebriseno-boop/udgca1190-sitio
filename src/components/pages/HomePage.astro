@@ -1,15 +1,21 @@
 ---
 import Home from '../../layouts/Home.astro';
 import LangSwitcher from '../LangSwitcher.astro';
+import Footer from '../Footer.astro';
+import Kpis from '../Kpis.astro';
 import { Picture, getImage } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import type { ImageMetadata } from 'astro';
 import logoReverse from '../../assets/logos/UDG-CA-1190_logo_horizontal_reverse.png';
-import { t, getSitioL, localePath } from '../../i18n.mjs';
+import { getProduccion } from '../../lib/datos.mjs';
+import { t, getSitioL, localize, localePath } from '../../i18n.mjs';
 
 interface Props { lang?: 'es' | 'en' }
 const { lang = 'es' } = Astro.props;
 
 const sitio = getSitioL(lang);
+
+// ---- Fondo del hero (slideshow AVIF; SIN cambios) ----
 const bgPaths: string[] = (Array.isArray(sitio.home_bgs) && sitio.home_bgs.length)
   ? sitio.home_bgs
   : (sitio.home_bg ? [sitio.home_bg] : []);
@@ -43,7 +49,6 @@ if (bgs.length > 0) {
   preload = { src: primero.src, srcset: primero.srcSet.attribute, sizes: SLIDE_SIZES };
 }
 
-const stats = (sitio.kpis || []).map((k: any) => `${k.num} ${k.label}`).join('   ·   ');
 const nav: [string, string][] = [
   [localePath('/lineas', lang), t(lang, 'navshort.lines')],
   [localePath('/produccion', lang), t(lang, 'navshort.production')],
@@ -52,6 +57,41 @@ const nav: [string, string][] = [
   [localePath('/contacto', lang), t(lang, 'navshort.contact')],
 ];
 const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190 · Cuerpo Académico';
+
+// ---- Datos para las secciones de contenido (reusan utilidades existentes) ----
+const produccion = getProduccion();
+
+// LGAC: 5 líneas + conteo de publicaciones por LGAC (misma lógica que LineasPage)
+const lineas = (await getCollection('lineas'))
+  .map((l) => ({ id: l.id, data: localize('lineas', l.id, l.data, lang) }))
+  .sort((a, b) => (a.data.orden ?? 99) - (b.data.orden ?? 99));
+const nPorLgac: Record<string, number> = {};
+for (const p of produccion) for (const lg of p.lgac) nPorLgac[lg] = (nPorLgac[lg] || 0) + 1;
+
+// Equipo: líder primero (mismo orden que IntegrantesPage)
+const ordenRol: Record<string, number> = { lider: 0, integrante: 1, colaborador: 2, estudiante: 3 };
+const equipo = (await getCollection('integrantes'))
+  .map((e) => ({ id: e.id, ...localize('integrantes', e.id, e.data, lang) }))
+  .sort((a, b) => (ordenRol[a.rol] ?? 9) - (ordenRol[b.rol] ?? 9));
+
+// Avatares optimizados: fotos en src/assets/integrantes/*.jpg, resueltas por basename.
+// Si no matchea (placeholder .svg u otra ruta), cae al <img src> string.
+const avatarGlob = import.meta.glob<ImageMetadata>('../../assets/integrantes/*.jpg', {
+  eager: true,
+  import: 'default',
+});
+const avatarPorNombre = new Map(
+  Object.entries(avatarGlob).map(([ruta, img]) => [ruta.split('/').pop() ?? '', img])
+);
+const avatarDe = (foto?: string): ImageMetadata | undefined =>
+  foto ? avatarPorNombre.get(foto.split('/').pop() ?? '') : undefined;
+
+// Publicaciones recientes: 3 ya publicadas, año DESC (misma lógica que ProduccionPage)
+const pubsRecientes = produccion
+  .filter((p: any) => p.estado !== 'en-preparacion')
+  .slice()
+  .sort((a: any, b: any) => (parseInt(b.anio) || 0) - (parseInt(a.anio) || 0))
+  .slice(0, 3);
 ---
 <Home titulo={homeTitle} descripcion={sitio.mision} lang={lang} preload={preload}>
   <section id="dimension">
@@ -101,7 +141,7 @@ const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190
         sizes="(max-width: 782px) 92vw, 720px"
         formats={['avif', 'webp']}
         fallbackFormat="png"
-        alt={`Cuerpo Académico UDG-CA-1190 — ${sitio.nombre}`}
+        alt={`${t(lang, 'org.name')} — ${sitio.nombre}`}
         loading="eager"
       />
       <p class="dim__kicker">{sitio.adscripcion}</p>
@@ -109,10 +149,14 @@ const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190
       <nav class="dim__nav" aria-label={t(lang, 'aria.sections')}>
         {nav.map(([href, label]) => <a href={href}>{label}</a>)}
       </nav>
-      <p class="dim__stats">{stats}</p>
+      <p class="dim__cta"><a class="btn" href="#contenido">{t(lang, 'home.cta')}</a></p>
     </div>
 
-    <p class="dim__foot">{sitio.adscripcion}</p>
+    <a class="dim__scroll" href="#contenido" aria-label={t(lang, 'home.scroll')}>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </a>
 
     <button
       type="button"
@@ -131,6 +175,103 @@ const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190
       </svg>
     </button>
   </section>
+
+  <main id="contenido">
+    {/* a. Franja de KPIs (migrada del hero) */}
+    <section class="home-sec">
+      <div class="container">
+        <p class="kicker">{t(lang, 'home.kpi.kicker')}</p>
+        <h2 class="home-sec__title">{t(lang, 'home.kpi.title')}</h2>
+        <div class="home-sec__kpis"><Kpis items={sitio.kpis} /></div>
+      </div>
+    </section>
+
+    {/* b. LGAC */}
+    <section class="home-sec">
+      <div class="container">
+        <p class="kicker">{t(lang, 'lines.kicker')}</p>
+        <h2 class="home-sec__title">{t(lang, 'nav.lines')}</h2>
+        <div class="features">
+          {lineas.map((l, i) => (
+            <a class="feature" href={localePath('/lineas', lang)} style={`--feat: var(--c-${l.data.color})`}>
+              <span class="feature__n">{String(i + 1).padStart(2, '0')}</span>
+              <span class="feature__title">{l.data.titulo_corto || l.data.titulo}</span>
+              <span class="feature__text">{l.data.resumen}</span>
+              <span class="feature__count">{nPorLgac[l.id] || 0} {t(lang, 'lines.pubs_unit')}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* c. Equipo */}
+    <section class="home-sec">
+      <div class="container">
+        <p class="kicker">{t(lang, 'members.kicker')}</p>
+        <h2 class="home-sec__title">{t(lang, 'members.title')}</h2>
+        <div class="team-row">
+          <ul class="team-avatars">
+            {equipo.map((m) => {
+              const av = avatarDe(m.foto);
+              return (
+                <li>
+                  <a class="team-avatar" href={localePath('/integrantes', lang)} title={m.nombre} aria-label={m.nombre}>
+                    {av ? (
+                      <Picture
+                        class="team-avatar__img"
+                        src={av}
+                        widths={[112, 160, 224, 320]}
+                        sizes="64px"
+                        formats={['avif']}
+                        fallbackFormat="jpg"
+                        alt={m.nombre}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <img
+                        class="team-avatar__img"
+                        src={m.foto || '/integrantes/placeholder.svg'}
+                        alt={m.nombre}
+                        width="64" height="64" loading="lazy"
+                      />
+                    )}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+          <a class="team-more" href={localePath('/integrantes', lang)}>{t(lang, 'home.team.more')}</a>
+        </div>
+      </div>
+    </section>
+
+    {/* d. Publicaciones recientes */}
+    <section class="home-sec">
+      <div class="container">
+        <p class="kicker">{t(lang, 'prod.kicker')}</p>
+        <h2 class="home-sec__title">{t(lang, 'home.pubs.title')}</h2>
+        <ol class="home-pubs">
+          {pubsRecientes.map((p: any) => (
+            <li class="home-pub">
+              <span class="home-pub__year">{p.anio}</span>
+              <div class="home-pub__main">
+                <p class="home-pub__titulo">{p.titulo}</p>
+                <p class="home-pub__meta">
+                  {p.revista && <span class="home-pub__revista">{p.revista}</span>}
+                  {p.doi && (
+                    <a class="home-pub__doi" href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener">doi:{p.doi} ↗</a>
+                  )}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <a class="home-pub__more" href={localePath('/produccion', lang)}>{t(lang, 'home.pubs.more')}</a>
+      </div>
+    </section>
+  </main>
+
+  <Footer lang={lang} />
 </Home>
 
 <style>
@@ -140,6 +281,56 @@ const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190
     right: clamp(1rem, 4vw, 3rem);
     z-index: 4;
   }
+
+  /* ---- Secciones de contenido sobre blanco ---- */
+  .home-sec { background: var(--c-bg); padding-block: var(--sp-8); }
+  @media (min-width: 768px) { .home-sec { padding-block: var(--sp-12); } }
+  .home-sec + .home-sec { border-top: 1px solid var(--udg-gray-200); }
+  .home-sec__title { font-size: var(--fs-s2); font-weight: var(--fw-semibold); margin-top: var(--sp-1); }
+  .home-sec__kpis { margin-top: var(--sp-4); }
+
+  /* ---- Equipo: fila de avatares circulares ---- */
+  .team-row {
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: var(--sp-3) var(--sp-4); margin-top: var(--sp-4);
+  }
+  .team-avatars { display: flex; flex-wrap: wrap; gap: var(--sp-2); list-style: none; padding: 0; margin: 0; }
+  .team-avatar {
+    display: block; width: 64px; height: 64px; border-radius: 50%; overflow: hidden;
+    box-shadow: 0 0 0 2px var(--udg-gray-200);
+    transition: box-shadow 150ms ease;
+  }
+  .team-avatar:hover { box-shadow: 0 0 0 2px var(--udg-gray-300); }
+  .team-avatar__img {
+    width: 64px; height: 64px; object-fit: cover; display: block;
+    filter: grayscale(1) contrast(1.02); transition: filter 200ms ease;
+  }
+  .team-avatar:hover .team-avatar__img { filter: grayscale(0); }
+  .team-more {
+    font-family: var(--font-mono); font-size: var(--fs-sm);
+    color: var(--udg-navy-700); transition: color 150ms ease;
+  }
+
+  /* ---- Publicaciones recientes (formato compacto) ---- */
+  .home-pubs { list-style: none; padding: 0; margin: var(--sp-4) 0 0; }
+  .home-pub {
+    display: grid; grid-template-columns: 64px 1fr; gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-2); margin-inline: calc(-1 * var(--sp-2));
+    border-bottom: 1px solid var(--udg-gray-200);
+    transition: background-color 150ms ease;
+  }
+  .home-pub:hover { background: var(--udg-gray-50); }
+  .home-pub__year { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--udg-gray-700); font-variant-numeric: tabular-nums; }
+  .home-pub__titulo { font-weight: var(--fw-medium); line-height: var(--lh-snug); }
+  .home-pub__meta { margin-top: 4px; font-size: var(--fs-sm); color: var(--udg-gray-700); display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: baseline; }
+  .home-pub__revista { font-style: italic; }
+  .home-pub__doi { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); }
+  .home-pub__more { display: inline-block; margin-top: var(--sp-3); font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--udg-navy-700); }
+  @media (max-width: 560px) { .home-pub { grid-template-columns: 1fr; gap: var(--sp-1); } }
+
+  /* ---- Scroll reveal (estado inicial aplicado SOLO vía JS) ---- */
+  .reveal-init { opacity: 0; transform: translateY(8px); transition: opacity 200ms ease-out, transform 200ms ease-out; }
+  .reveal-in { opacity: 1; transform: none; }
 </style>
 
 <script>
@@ -184,5 +375,24 @@ const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190
       if (document.hidden) detener();
       else if (!pausaManual) iniciar();
     });
+  }
+</script>
+
+<script>
+  // Scroll reveal sutil de las secciones del contenido. Sin JS = todo visible:
+  // el estado inicial (opacity 0 + translateY) se aplica DESDE el script.
+  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduce && 'IntersectionObserver' in window) {
+    const secciones = Array.from(document.querySelectorAll<HTMLElement>('#contenido > section'));
+    secciones.forEach((s) => s.classList.add('reveal-init'));
+    const io = new IntersectionObserver((entries, obs) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.add('reveal-in');
+          obs.unobserve(e.target);
+        }
+      }
+    }, { threshold: 0.1 });
+    secciones.forEach((s) => io.observe(s));
   }
 </script>

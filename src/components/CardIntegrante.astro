@@ -2,6 +2,8 @@
 // Ficha de integrante (sistema CEIC): tarjeta plana con avatar circular,
 // foto B/N → color al hover de la tarjeta, badge de rol, badges de línea
 // y enlaces ORCID/Scholar/correo.
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import { t } from '../i18n.mjs';
 interface Linea { titulo: string; titulo_corto?: string; color: string }
 interface Props {
@@ -11,6 +13,20 @@ interface Props {
 }
 const { data: d, lineasMap, lang = 'es' } = Astro.props;
 const lineas = (d.lineas ?? []).map((id: string) => lineasMap[id]).filter(Boolean);
+
+// Las fotos viven en src/assets/integrantes/*.jpg (optimizadas por astro:assets);
+// data/integrantes.yml guarda rutas string ("/integrantes/x.jpg"). Se resuelven por
+// basename; si no matchea (placeholder .svg u otra ruta), cae al <img src> string.
+const fotoGlob = import.meta.glob<ImageMetadata>('../assets/integrantes/*.jpg', {
+  eager: true,
+  import: 'default',
+});
+const fotoPorNombre = new Map(
+  Object.entries(fotoGlob).map(([ruta, img]) => [ruta.split('/').pop() ?? '', img])
+);
+const fotoAsset: ImageMetadata | undefined = d.foto
+  ? fotoPorNombre.get(d.foto.split('/').pop() ?? '')
+  : undefined;
 
 // Etiqueta y color del rol (roles del esquema: lider | integrante | colaborador | estudiante)
 const rolLabels: Record<string, { es: string; en: string }> = {
@@ -30,11 +46,23 @@ const fotoAlt = lang === 'es' ? `Fotografía de ${d.nombre}` : `Photograph of ${
 ---
 <article class:list={['card-flat', 'card-int', { 'card-int--lider': d.rol === 'lider' }]}>
   <div class="card-int__head">
-    <img
-      class="card-int__avatar"
-      src={d.foto || '/integrantes/placeholder.svg'}
-      alt={fotoAlt}
-      loading="lazy" width="320" height="320" />
+    {fotoAsset ? (
+      <Picture
+        class="card-int__avatar"
+        src={fotoAsset}
+        widths={[112, 160, 224, 320]}
+        sizes="(min-width: 700px) 112px, 80px"
+        formats={['avif']}
+        fallbackFormat="jpg"
+        alt={fotoAlt}
+        loading="lazy" />
+    ) : (
+      <img
+        class="card-int__avatar"
+        src={d.foto || '/integrantes/placeholder.svg'}
+        alt={fotoAlt}
+        loading="lazy" width="320" height="320" />
+    )}
     <div class="card-int__id">
       {rolLabel && <span class="badge-rol" style={`--rol-color: ${rolColor}`}>{rolLabel}</span>}
       <h3 class="card-int__name">{d.nombre}</h3>

@@ -67,7 +67,7 @@
   text-decoration: none; color: var(--c-ink); background: var(--c-bg);
 }
 .feature:hover { background: var(--c-panel); text-decoration: none; }
-.feature__n { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--feat, var(--c-blue)); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.feature__n { font-family: var(--font-mono); font-size: var(--fs-xs); color: color-mix(in srgb, var(--feat, var(--c-blue)) 80%, var(--c-ink)); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
 .feature__title { font-size: var(--fs-s1); font-weight: var(--fw-semibold); line-height: var(--lh-snug); }
 .feature__text {
   font-size: var(--fs-sm); color: var(--c-gray);

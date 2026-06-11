@@ -86,6 +86,14 @@ const UI = {
     // Portada (slideshow)
     'hero.pause': 'Pausar presentación de fondo',
     'hero.play': 'Reanudar presentación de fondo',
+    // Portada (secciones de contenido)
+    'home.cta': 'Conócenos',
+    'home.scroll': 'Ir al contenido',
+    'home.kpi.kicker': 'En cifras',
+    'home.kpi.title': 'El Cuerpo Académico en cifras',
+    'home.team.more': 'Conoce al equipo →',
+    'home.pubs.title': 'Publicaciones recientes',
+    'home.pubs.more': 'Ver toda la producción →',
     // Comunes / accesibilidad
     'org.name': 'Cuerpo Académico UDG-CA-1190',
     'skip': 'Saltar al contenido',
@@ -172,6 +180,13 @@ const UI = {
     'navshort.contact': 'Contact',
     'hero.pause': 'Pause background slideshow',
     'hero.play': 'Resume background slideshow',
+    'home.cta': 'Get to know us',
+    'home.scroll': 'Skip to content',
+    'home.kpi.kicker': 'By the numbers',
+    'home.kpi.title': 'The research group in numbers',
+    'home.team.more': 'Meet the team →',
+    'home.pubs.title': 'Recent publications',
+    'home.pubs.more': 'View all publications →',
     'org.name': 'UDG-CA-1190 Research Group',
     'skip': 'Skip to content',
     'aria.open_menu': 'Open menu',
