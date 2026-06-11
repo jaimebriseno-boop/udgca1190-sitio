@@ -8,9 +8,6 @@ const anio = 2026;
 <footer class="site-footer">
   <div class="site-footer__accent"></div>
   <div class="container site-footer__inner">
-    <div class="site-footer__plaque">
-      <img src="/logos/UDG-CA-1190_logo_horizontal.png" alt="Cuerpo Académico UDG-CA-1190" />
-    </div>
     <div class="site-footer__meta">
       <p class="site-footer__name">{t(lang, 'org.name')}</p>
       <p class="site-footer__sub">{sitio.adscripcion}</p>
@@ -22,22 +19,19 @@ const anio = 2026;
 </footer>
 
 <style>
-  .site-footer { background: var(--c-navy); color: #fff; margin-top: var(--sp-16); }
+  .site-footer { background: var(--udg-navy-900); color: #fff; margin-top: var(--sp-16); }
   .site-footer__accent { height: 4px; background: var(--c-gold); }
   .site-footer__inner {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-6);
-    align-items: center;
-    justify-content: space-between;
     padding-block: var(--sp-8);
+    display: flex;
+    justify-content: flex-end;
   }
-  .site-footer__plaque { background: #fff; padding: var(--sp-2) var(--sp-3); display: inline-flex; }
-  .site-footer__plaque img { height: 52px; width: auto; display: block; }
+  .site-footer__meta { text-align: right; }
+  .site-footer__legal { margin-left: auto; }
   .site-footer__name { font-weight: var(--fw-semibold); }
-  .site-footer__sub { color: #c7ccd6; font-size: var(--fs-sm); }
+  .site-footer__sub { color: var(--udg-navy-300); font-size: var(--fs-sm); }
   .site-footer__legal {
-    color: #8b93a3;
+    color: var(--udg-navy-300);
     font-size: var(--fs-xs);
     margin-top: var(--sp-2);
     font-family: var(--font-mono);

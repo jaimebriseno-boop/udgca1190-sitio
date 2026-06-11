@@ -1,0 +1,48 @@
+---
+// PageHeader — banda institucional full-bleed para subsecciones (sistema CEIC).
+// API estable: los componentes de página (ES + EN comparten wrappers) dependen de ella.
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  variant?: 'red' | 'navy';
+}
+const { eyebrow, title, description, variant = 'red' } = Astro.props;
+---
+<header class:list={['page-header', 'page-header--' + variant]}>
+  <div class="container page-header__inner">
+    {eyebrow && <p class="page-header__eyebrow">{eyebrow}</p>}
+    <h1 class="page-header__title">{title}</h1>
+    {description && <p class="page-header__desc">{description}</p>}
+    <slot />
+  </div>
+  <div class="page-header__accent" aria-hidden="true"></div>
+</header>
+
+<style>
+  .page-header {
+    background: var(--udg-red-600);
+    color: #fff;
+  }
+  .page-header--navy { background: var(--udg-navy-900); }
+  .page-header__inner { padding-block: var(--sp-6); }
+  .page-header__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tr-kicker);
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .page-header__title {
+    color: #fff;
+    font-size: var(--fs-s3);
+    margin-top: var(--sp-1);
+  }
+  .page-header__desc {
+    color: rgba(255, 255, 255, 0.8);
+    max-width: var(--grid-prose);
+    margin-top: var(--sp-2);
+  }
+  .page-header__accent { height: 4px; background: var(--udg-red-700); }
+  .page-header--navy .page-header__accent { background: var(--udg-navy-700); }
+</style>

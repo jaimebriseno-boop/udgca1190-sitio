@@ -38,6 +38,12 @@ const { es, en } = altPaths(Astro.url.pathname);
   .lang-switch__opt.is-active { color: var(--c-ink); border-bottom-color: var(--c-blue); font-weight: 600; }
   .lang-switch__sep { color: var(--c-line); }
 
+  /* Variante para la sidebar (sobre navy institucional). */
+  .lang-switch--sidebar .lang-switch__opt { color: var(--udg-navy-300); }
+  .lang-switch--sidebar .lang-switch__opt:hover { color: #fff; }
+  .lang-switch--sidebar .lang-switch__opt.is-active { color: #fff; border-bottom-color: var(--udg-red-500); }
+  .lang-switch--sidebar .lang-switch__sep { color: rgba(255, 255, 255, 0.3); }
+
   /* Variante para la portada (sobre fondo oscuro). */
   .lang-switch--hero .lang-switch__opt { color: rgba(255, 255, 255, 0.65); }
   .lang-switch--hero .lang-switch__opt:hover { color: #fff; }

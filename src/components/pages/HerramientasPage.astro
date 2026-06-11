@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
 import { getCollection } from 'astro:content';
 import CardHerramienta from '../CardHerramienta.astro';
 import { t, getSitioL, localize } from '../../i18n.mjs';
@@ -18,17 +19,9 @@ const herramientas = (await getCollection('herramientas'))
 const intro = getSitioL(lang).page_intros?.tools || '';
 ---
 <Base titulo={t(lang, 'nav.tools')} descripcion={t(lang, 'meta.tools')} lang={lang}>
+  <PageHeader eyebrow={t(lang, 'tools.kicker')} title={t(lang, 'tools.title')} description={intro} />
   <section class="section">
     <div class="container">
-      <div class="pg-head">
-        <span class="pg-block" aria-hidden="true"></span>
-        <div>
-          <p class="kicker">{t(lang, 'tools.kicker')}</p>
-          <h1 class="pg-title">{t(lang, 'tools.title')}</h1>
-        </div>
-      </div>
-      <p class="prose text-muted pg-intro">{intro}</p>
-
       <div class="tools-grid">
         {herramientas.map((h) => <CardHerramienta data={h} lineasMap={lineasMap} lang={lang} />)}
       </div>
@@ -42,15 +35,11 @@ const intro = getSitioL(lang).page_intros?.tools || '';
 </Base>
 
 <style>
-  .pg-head { display: flex; align-items: center; gap: var(--sp-3); }
-  .pg-block { width: 16px; height: 48px; background: var(--c-blue); flex: none; }
-  .pg-title { font-size: var(--fs-s3); }
-  .pg-intro { margin-top: var(--sp-3); }
+  .section { padding-block-start: var(--sp-6); }
   .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: var(--sp-3);
-    margin-top: var(--sp-6);
   }
   .stack-line { margin-top: var(--sp-6); display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: baseline; color: var(--c-gray); }
   .stack-line .mono { font-size: var(--fs-sm); }

@@ -46,7 +46,7 @@
   font-weight: var(--fw-bold);
   line-height: var(--lh-tight);
   letter-spacing: var(--tr-display);
-  color: var(--c-blue);
+  color: var(--udg-navy-900);
   font-variant-numeric: tabular-nums;
 }
 .kpi__label {
@@ -80,28 +80,77 @@ a.badge-linea:hover { color: var(--c-blue); text-decoration: none; }
   letter-spacing: 0.04em;
   padding: 2px 8px;
   border: 1px solid var(--c-line);
+  border-radius: var(--radius-md);
   background: var(--c-bg);
-  color: var(--c-gray);
+  color: var(--udg-gray-700);
   display: inline-block;
 }
-.tag--fill { color: #fff; border-color: transparent; background: var(--tag-color, var(--c-blue)); }
+.tag--fill { color: #fff; border-color: transparent; background: var(--tag-color, var(--udg-navy-800)); }
 
-/* Botón sólido (bloque suizo) */
+/* Botón institucional (CEIC): plano, 40px, radio 4 */
 .btn {
-  display: inline-block;
-  background: var(--c-blue);
-  color: #fff;
-  font-family: var(--font-mono);
-  font-size: var(--fs-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: var(--sp-2) var(--sp-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 var(--sp-3);
   border: 0;
+  border-radius: var(--radius-md);
+  background: var(--udg-red-700);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
   cursor: pointer;
+  transition: background-color 150ms ease;
 }
-.btn:hover { background: var(--c-ink); text-decoration: none; color: #fff; }
-.btn--ghost { background: transparent; color: var(--c-blue); border: 1px solid var(--c-blue); }
-.btn--ghost:hover { background: var(--c-blue); color: #fff; }
+.btn:hover { background: var(--udg-red-500); color: #fff; text-decoration: none; }
+.btn:active { background: var(--udg-red-650); }
+.btn--secondary { background: var(--udg-navy-900); }
+.btn--secondary:hover { background: var(--udg-navy-800); }
+.btn--ghost { background: #fff; color: var(--udg-gray-900); border: 1px solid var(--udg-gray-300); }
+.btn--ghost:hover { background: var(--udg-gray-50); color: var(--udg-gray-900); }
+
+/* ---- Tarjeta plana (CEIC): borde 1px, radio 6, hover sutil ---- */
+.card-flat {
+  background: #fff;
+  border: 1px solid var(--udg-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-3);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+.card-flat:hover {
+  border-color: var(--udg-gray-300);
+  box-shadow: 0 1px 2px rgba(20, 24, 31, 0.06);
+}
+
+/* ---- Badge de rol (pill tintado al 10% del color del rol) ---- */
+.badge-rol {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: var(--fw-semibold);
+  background: color-mix(in srgb, var(--rol-color, var(--udg-navy-900)) 10%, white);
+  color: var(--rol-color, var(--udg-navy-900));
+}
+
+/* ---- Pills semánticos de estado ---- */
+.pill-ok, .pill-warn, .pill-err, .pill-info {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: var(--fw-semibold);
+}
+.pill-ok { background: var(--udg-ok-bg); color: var(--udg-ok-fg); }
+.pill-warn { background: var(--udg-warn-bg); color: var(--udg-warn-fg); }
+.pill-err { background: var(--udg-err-bg); color: var(--udg-err-fg); }
+.pill-info { background: var(--udg-info-bg); color: var(--udg-info-fg); }
 
 /* Guía de columnas (solo demostración en la style guide) */
 .col-guide {

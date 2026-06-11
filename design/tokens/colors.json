@@ -1,21 +1,60 @@
 {
-  "_comment": "Fuente ÚNICA de verdad del color del SITIO. Paleta oscura/sobria personalizada (ya NO la paleta Lancet original; el logo en make_logo.py conserva los colores Lancet brillantes). Editar aquí y correr `npm run tokens` para regenerar src/styles/tokens.css.",
+  "_comment": "Fuente ÚNICA de verdad del color del SITIO. Sistema institucional UdeG (CEIC) + acentos LGAC (el logo en make_logo.py conserva los colores Lancet brillantes). Editar aquí y correr `npm run tokens` para regenerar src/styles/tokens.css.",
   "brand": {
-    "blue":  { "hex": "#1D2533", "rol": "Primario/marca: titulares de marca, links, bloques sólidos." },
-    "teal":  { "hex": "#213642", "rol": "Acento: kickers, indicador activo." }
+    "blue":  { "hex": "#1D2533", "rol": "Acento LGAC línea 1 (lineas.yml color:blue). DEPRECADO para UI de marca." },
+    "teal":  { "hex": "#213642", "rol": "Acento LGAC línea 2 (lineas.yml color:teal). DEPRECADO para UI de marca." }
+  },
+  "udg": {
+    "red": {
+      "700": { "hex": "#701d14", "rol": "Botón primario, acento PageHeader." },
+      "650": { "hex": "#86212b", "rol": "Estado active del botón primario." },
+      "600": { "hex": "#90303a", "rol": "Fondo PageHeader (rojo institucional UdeG)." },
+      "500": { "hex": "#9a2c1c", "rol": "Hover del botón primario, barra del ítem activo en sidebar." }
+    },
+    "navy": {
+      "900": { "hex": "#27334F", "rol": "Sidebar, headers de tabla." },
+      "800": { "hex": "#36476E", "rol": "Hover sobre navy." },
+      "700": { "hex": "#455A8C", "rol": "Links, focus ring." },
+      "300": { "hex": "#B0BCD8", "rol": "Texto sobre navy." }
+    },
+    "gray": {
+      "50":  { "hex": "#f7f8fa", "rol": "Fondo tintado suave (paneles, hover de fila)." },
+      "100": { "hex": "#eef0f4", "rol": "Fondo tintado medio." },
+      "200": { "hex": "#dde1e8", "rol": "Borde estándar 1px." },
+      "300": { "hex": "#c3c9d4", "rol": "Bordes de inputs." },
+      "500": { "hex": "#6b7585", "rol": "Texto secundario SOLO sobre blanco." },
+      "700": { "hex": "#4b5462", "rol": "Texto secundario sobre fondos tintados." },
+      "900": { "hex": "#14181f", "rol": "Texto principal." }
+    },
+    "ok":   {
+      "fg": { "hex": "#1a6b42", "rol": "Texto de estado OK/activo." },
+      "bg": { "hex": "#e7f2ec", "rol": "Fondo de pill OK/activo." }
+    },
+    "warn": {
+      "fg": { "hex": "#8a5c0a", "rol": "Texto de estado advertencia/en preparación." },
+      "bg": { "hex": "#fbf3dd", "rol": "Fondo de pill advertencia." }
+    },
+    "err":  {
+      "fg": { "hex": "#a61e12", "rol": "Texto de estado error." },
+      "bg": { "hex": "#fbeae8", "rol": "Fondo de pill error." }
+    },
+    "info": {
+      "fg": { "hex": "#455A8C", "rol": "Texto de estado informativo/beta." },
+      "bg": { "hex": "#edf1f8", "rol": "Fondo de pill informativo." }
+    }
   },
   "semantic": {
     "red":    { "hex": "#5C2424", "rol": "Línea (estado); badges y fills." },
     "green":  { "hex": "#5C7A57", "rol": "Línea educación / estado 'publicado'." },
     "wine":   { "hex": "#670E0E", "rol": "Línea / acento fuerte." },
     "purple": { "hex": "#76717A", "rol": "Línea genómica." },
-    "gray":   { "hex": "#393A3C", "rol": "Texto suave, metadatos." }
+    "gray":   { "hex": "#4b5462", "rol": "Texto suave, metadatos." }
   },
-  "ink":     { "hex": "#1B1919", "rol": "Texto de cuerpo. AA sobre blanco 17:1." },
+  "ink":     { "hex": "#14181f", "rol": "Texto de cuerpo. AA sobre blanco 17:1." },
   "surface": {
     "bg":    { "hex": "#FFFFFF", "rol": "Fondo base (lienzo suizo)." },
-    "panel": { "hex": "#F4F5F7", "rol": "Paneles, celdas alternas, cards." },
-    "line":  { "hex": "#DADEE3", "rol": "Líneas de retícula hairline (papel milimétrico)." }
+    "panel": { "hex": "#f7f8fa", "rol": "Paneles, celdas alternas, cards." },
+    "line":  { "hex": "#dde1e8", "rol": "Líneas de retícula hairline (papel milimétrico)." }
   },
   "institutional": {
     "navy":  { "hex": "#202945", "rol": "Footer institucional (azul marino UdeG, Pantone 533C). Solo footer." },

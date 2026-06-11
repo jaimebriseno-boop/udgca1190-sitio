@@ -1,6 +1,7 @@
 ---
-// Ficha de integrante (Concepto Swiss Data Grid): foto B/N → color en hover,
-// datos en barra inferior, badges de línea, enlaces ORCID/Scholar/correo.
+// Ficha de integrante (sistema CEIC): tarjeta plana con avatar circular,
+// foto B/N → color al hover de la tarjeta, badge de rol, badges de línea
+// y enlaces ORCID/Scholar/correo.
 import { t } from '../i18n.mjs';
 interface Linea { titulo: string; titulo_corto?: string; color: string }
 interface Props {
@@ -10,18 +11,37 @@ interface Props {
 }
 const { data: d, lineasMap, lang = 'es' } = Astro.props;
 const lineas = (d.lineas ?? []).map((id: string) => lineasMap[id]).filter(Boolean);
+
+// Etiqueta y color del rol (roles del esquema: lider | integrante | colaborador | estudiante)
+const rolLabels: Record<string, { es: string; en: string }> = {
+  integrante: { es: 'Integrante', en: 'Member' },
+  colaborador: { es: 'Colaborador', en: 'Collaborator' },
+  estudiante: { es: 'Estudiante', en: 'Student' },
+};
+const rolLabel = d.rol === 'lider' ? t(lang, 'members.lead') : (rolLabels[d.rol]?.[lang] ?? d.rol);
+const rolColors: Record<string, string> = {
+  lider: 'var(--udg-red-600)',
+  integrante: 'var(--udg-navy-900)',
+  colaborador: 'var(--udg-gray-700)',
+  estudiante: '#4a6346', /* --c-green (#5C7A57) oscurecido: AA 4.5:1 sobre tinte 10% del badge */
+};
+const rolColor = rolColors[d.rol] ?? 'var(--udg-gray-700)';
+const fotoAlt = lang === 'es' ? `Fotografía de ${d.nombre}` : `Photograph of ${d.nombre}`;
 ---
-<article class:list={['card-int', { 'card-int--lider': d.rol === 'lider' }]}>
-  <div class="card-int__photo">
+<article class:list={['card-flat', 'card-int', { 'card-int--lider': d.rol === 'lider' }]}>
+  <div class="card-int__head">
     <img
+      class="card-int__avatar"
       src={d.foto || '/integrantes/placeholder.svg'}
-      alt={`Fotografía de ${d.nombre}`}
+      alt={fotoAlt}
       loading="lazy" width="320" height="320" />
+    <div class="card-int__id">
+      {rolLabel && <span class="badge-rol" style={`--rol-color: ${rolColor}`}>{rolLabel}</span>}
+      <h3 class="card-int__name">{d.nombre}</h3>
+      {d.grado && <p class="card-int__grade">{d.grado}</p>}
+    </div>
   </div>
   <div class="card-int__body">
-    {d.rol === 'lider' && <span class="card-int__rol">{t(lang, 'members.lead')}</span>}
-    <h3 class="card-int__name">{d.nombre}</h3>
-    {d.grado && <p class="card-int__grade">{d.grado}</p>}
     {d.bio_corta && <p class="card-int__bio">{d.bio_corta}</p>}
     {lineas.length > 0 && (
       <div class="card-int__lineas">
@@ -41,31 +61,48 @@ const lineas = (d.lineas ?? []).map((id: string) => lineasMap[id]).filter(Boolea
 </article>
 
 <style>
-  .card-int { border: 1px solid var(--c-line); background: var(--c-bg); display: flex; flex-direction: column; }
-  .card-int__photo { aspect-ratio: 1 / 1; overflow: hidden; border-bottom: 1px solid var(--c-line); }
-  .card-int__photo img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    filter: grayscale(1) contrast(1.02);
-    transition: filter 0.35s ease;
-  }
-  .card-int:hover .card-int__photo img { filter: grayscale(0); }
-  .card-int__body { padding: var(--sp-3); display: flex; flex-direction: column; gap: var(--sp-1); }
-  .card-int__rol {
-    font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase;
-    letter-spacing: 0.08em; color: #fff; background: var(--c-blue);
-    align-self: flex-start; padding: 1px 8px; margin-bottom: var(--sp-1);
-  }
-  .card-int__name { font-size: var(--fs-s1); font-weight: var(--fw-semibold); line-height: var(--lh-snug); }
-  .card-int__grade { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-gray); }
-  .card-int__bio { font-size: var(--fs-sm); color: var(--c-ink); margin-top: var(--sp-1); }
-  .card-int__lineas { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-2); }
-  .card-int__links { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-2); }
-  .card-int__link { font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: 0.04em; }
+  .card-int { display: flex; flex-direction: column; }
 
-  /* El líder ocupa dos columnas y muestra foto al lado en pantallas amplias */
+  /* Cabecera en fila: avatar circular a la izquierda, rol + nombre + grado a la derecha */
+  .card-int__head { display: flex; align-items: center; gap: var(--sp-3); }
+  .card-int__avatar {
+    width: 80px;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: none;
+    box-shadow: 0 0 0 2px var(--udg-gray-200);
+    filter: grayscale(1) contrast(1.02);
+    transition: filter 200ms ease;
+  }
+  .card-int:hover .card-int__avatar { filter: grayscale(0); }
+  .card-int__id { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .card-int__id .badge-rol { align-self: flex-start; margin-bottom: 2px; }
+  .card-int__name { font-size: var(--fs-s1); font-weight: var(--fw-semibold); line-height: var(--lh-snug); }
+  .card-int__grade { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-gray-700); }
+
+  .card-int__body { display: flex; flex-direction: column; gap: var(--sp-1); margin-top: var(--sp-2); }
+  .card-int__bio { font-size: var(--fs-sm); color: var(--c-ink); }
+  .card-int__lineas { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-1); }
+  .card-int__links { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-2); }
+  .card-int__link {
+    font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: 0.04em;
+    color: var(--udg-navy-700);
+    transition: color 150ms ease;
+  }
+
+  /* Variante líder: tarjeta a lo ancho, en fila, con avatar mayor */
+  .card-int--lider .card-int__avatar { width: 112px; }
   @media (min-width: 700px) {
-    .card-int--lider { grid-column: 1 / -1; flex-direction: row; }
-    .card-int--lider .card-int__photo { width: 320px; flex: none; border-bottom: 0; border-right: 1px solid var(--c-line); }
-    .card-int--lider .card-int__body { justify-content: center; }
+    .card-int--lider {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--sp-5);
+      padding: var(--sp-4);
+    }
+    .card-int--lider .card-int__head { flex: none; max-width: 360px; }
+    .card-int--lider .card-int__body { margin-top: 0; }
   }
 </style>

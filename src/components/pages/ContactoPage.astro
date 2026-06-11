@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
 import { t, getSitioL } from '../../i18n.mjs';
 
 interface Props { lang?: 'es' | 'en' }
@@ -11,16 +12,10 @@ const email = sitio.contacto?.email || '';
 const ciudad = sitio.contacto?.ciudad || '';
 ---
 <Base titulo={t(lang, 'nav.contact')} descripcion={t(lang, 'meta.contact')} lang={lang}>
-  <section class="section">
-    <div class="container">
-      <div class="pg-head">
-        <span class="pg-block" aria-hidden="true"></span>
-        <div>
-          <p class="kicker">{t(lang, 'nav.contact')}</p>
-          <h1 class="pg-title">{t(lang, 'contact.title')}</h1>
-        </div>
-      </div>
+  <PageHeader eyebrow={t(lang, 'nav.contact')} title={t(lang, 'contact.title')} />
 
+  <section class="section pg-section">
+    <div class="container">
       <div class="contact">
         <div class="contact__form">
           {key ? (
@@ -46,14 +41,14 @@ const ciudad = sitio.contacto?.ciudad || '';
               <button class="btn" type="submit">{t(lang, 'contact.submit')}</button>
             </form>
           ) : (
-            <p class="aviso panel">
+            <p class="aviso">
               <strong>{t(lang, 'contact.pending')}</strong>
               {email && <> <a href={`mailto:${email}`}>{email}</a></>}.
             </p>
           )}
         </div>
 
-        <aside class="contact__info">
+        <aside class="card-flat contact__info">
           <p class="kicker">{t(lang, 'contact.aside_kicker')}</p>
           <p class="contact__name">UDG-CA-1190</p>
           <p class="contact__sub text-muted">{sitio.adscripcion}</p>
@@ -77,30 +72,57 @@ const ciudad = sitio.contacto?.ciudad || '';
 </Base>
 
 <style>
-  .pg-head { display: flex; align-items: center; gap: var(--sp-3); }
-  .pg-block { width: 16px; height: 48px; background: var(--c-blue); flex: none; }
-  .pg-title { font-size: var(--fs-s3); }
+  .pg-section { padding-block-start: var(--sp-6); }
 
-  .contact { display: grid; grid-template-columns: 1fr; gap: var(--sp-6); margin-top: var(--sp-6); }
+  .contact { display: grid; grid-template-columns: 1fr; gap: var(--sp-6); }
   @media (min-width: 820px) { .contact { grid-template-columns: 1.4fr 1fr; gap: var(--sp-8); } }
 
   .hp { position: absolute; left: -9999px; }
+
   .field { display: block; margin-bottom: var(--sp-3); }
-  .field span { display: block; font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--c-gray); margin-bottom: 6px; }
+  .field span {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--udg-gray-700);
+    margin-bottom: 6px;
+  }
   .field input, .field textarea {
     width: 100%; font: inherit; color: var(--c-ink);
-    border: 1px solid var(--c-line); background: var(--c-bg); padding: var(--sp-2);
-    border-radius: 0;
+    background: #fff;
+    border: 1px solid var(--udg-gray-300);
+    border-radius: var(--radius-md);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
   }
-  .field input:focus, .field textarea:focus { outline: 2px solid var(--c-teal); outline-offset: 0; border-color: var(--c-teal); }
+  .field input { height: 40px; padding: 0 12px; }
+  .field textarea { padding: 10px 12px; }
+  .field input:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--udg-navy-700);
+    box-shadow: 0 0 0 2px rgba(69, 90, 140, 0.25);
+  }
 
-  .aviso { padding: var(--sp-3) var(--sp-4); font-size: var(--fs-sm); color: var(--c-gray); border-left: 4px solid var(--c-teal); }
-  .aviso strong { color: var(--c-ink); }
+  .aviso {
+    padding: var(--sp-3) var(--sp-4);
+    font-size: var(--fs-sm);
+    background: var(--udg-info-bg);
+    color: var(--udg-info-fg);
+    border-left: 3px solid var(--udg-navy-700);
+    border-radius: var(--radius-md);
+  }
 
-  .contact__info { border: 1px solid var(--c-line); padding: var(--sp-4); align-self: start; }
-  .contact__name { font-size: var(--fs-s2); font-weight: var(--fw-bold); color: var(--c-blue); }
+  .contact__info { align-self: start; }
+  .contact__name { font-size: var(--fs-s2); font-weight: var(--fw-bold); color: var(--udg-navy-900); }
   .contact__sub { font-size: var(--fs-sm); margin-top: 2px; }
   .contact__info .rule { margin: var(--sp-3) 0; }
   .contact__row { display: flex; flex-direction: column; gap: 2px; margin-bottom: var(--sp-2); }
-  .contact__lbl { font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--c-gray); }
+  .contact__lbl {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--udg-gray-700);
+  }
 </style>

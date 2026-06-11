@@ -5,7 +5,7 @@
  * (src/styles/tokens.css). ESTE archivo CSS es GENERADO — no editarlo a mano;
  * editar los JSON y correr `npm run tokens`.
  *
- * Mantiene la paleta sincronizada con make_logo.py (fuente de verdad del color).
+ * Sistema institucional UdeG (CEIC) + acentos LGAC (make_logo.py conserva el logo).
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -22,7 +22,7 @@ const lines = [];
 lines.push('/* ============================================================');
 lines.push('   tokens.css — GENERADO por scripts/tokens-to-css.mjs');
 lines.push('   NO EDITAR A MANO. Editar design/tokens/*.json + `npm run tokens`.');
-lines.push('   Paleta Lancet sincronizada con make_logo.py.');
+lines.push('   Sistema institucional UdeG (CEIC) + acentos LGAC.');
 lines.push('   ============================================================ */');
 lines.push(':root {');
 
@@ -36,6 +36,10 @@ lines.push(`  --c-ink: ${colors.ink.hex};`);
 for (const [k, v] of Object.entries(colors.surface)) lines.push(`  --c-${k}: ${v.hex};`);
 lines.push('  /* Color · institucional (solo footer) */');
 for (const [k, v] of Object.entries(colors.institutional)) lines.push(`  --c-${k}: ${v.hex};`);
+lines.push('  /* Color · sistema institucional UdeG (CEIC): --udg-{familia}-{paso} */');
+for (const [familia, pasos] of Object.entries(colors.udg)) {
+  for (const [paso, v] of Object.entries(pasos)) lines.push(`  --udg-${familia}-${paso}: ${v.hex};`);
+}
 
 // --- Tipografía ---
 lines.push('  /* Tipografía · familias */');

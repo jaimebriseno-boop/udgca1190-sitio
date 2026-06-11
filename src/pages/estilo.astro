@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import Kpis from '../components/Kpis.astro';
 import BadgeLinea from '../components/BadgeLinea.astro';
 import Card from '../components/Card.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { getSitio } from '../lib/datos.mjs';
 import { loadPublicaciones } from '../content-loaders/bibtex.mjs';
 import { formatCita } from '../lib/formatCita.mjs';
@@ -16,41 +17,66 @@ const lineas = (await getCollection('lineas')).sort((a, b) => (a.data.orden ?? 9
 const herramientas = await getCollection('herramientas');
 const pubs = loadPublicaciones();
 
-// Grupos de color para los swatches
-const grupos: [string, Record<string, { hex: string; rol: string }>][] = [
-  ['Marca', colors.brand as any],
-  ['Semántico · líneas / estados', colors.semantic as any],
-  ['Tinta', { ink: colors.ink } as any],
-  ['Superficie', colors.surface as any],
-  ['Institucional · footer', colors.institutional as any],
+// Sistema institucional UdeG (CEIC): familias --udg-*
+const udg = colors.udg as Record<string, Record<string, { hex: string; rol: string }>>;
+const familiasUdg: [string, string][] = [
+  ['Rojo institucional', 'red'],
+  ['Navy', 'navy'],
+  ['Grises fríos', 'gray'],
 ];
+const semanticos: [string, { fg: { hex: string; rol: string }; bg: { hex: string; rol: string } }][] = [
+  ['ok', udg.ok as any],
+  ['warn', udg.warn as any],
+  ['err', udg.err as any],
+  ['info', udg.info as any],
+];
+
+// Acentos LGAC (se conservan; color = línea de investigación, no UI de marca)
+const lgac: { token: string; hex: string; rol: string }[] = [
+  { token: '--c-blue', ...(colors.brand as any).blue },
+  { token: '--c-teal', ...(colors.brand as any).teal },
+  { token: '--c-red', ...(colors.semantic as any).red },
+  { token: '--c-green', ...(colors.semantic as any).green },
+  { token: '--c-purple', ...(colors.semantic as any).purple },
+];
+
+const institucional = Object.entries(colors.institutional as Record<string, { hex: string; rol: string }>);
 
 const escala = Object.entries(typo.scale);
 const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
+
+// Estado → pill semántico (mismo mapeo que Herramientas/Producción)
+const pillEstado = (e: string) => {
+  const k = (e || '').toLowerCase();
+  if (k.includes('activ') || k.includes('public')) return 'pill-ok';
+  if (k.includes('beta')) return 'pill-info';
+  return 'pill-warn';
+};
 ---
-<Base titulo="Design System" descripcion="Guía visual del sitio del CA UDG-CA-1190 (Concepto Swiss Data Grid).">
+<Base titulo="Design System" descripcion="Guía visual del sitio del CA UDG-CA-1190: sistema institucional UdeG (CEIC) + acentos LGAC.">
   <section class="section">
     <div class="container">
-      <p class="kicker">Design System · Swiss Data Grid</p>
+      <p class="kicker">Design System · UdeG (CEIC)</p>
       <h1 class="sg-title">Guía de estilo</h1>
       <p class="prose text-muted sg-intro">
-        Sistema visual del sitio del Cuerpo Académico UDG-CA-1190. Fuente de verdad del
-        color: <code>design/tokens/colors.json</code> (sincronizada con
-        <code>make_logo.py</code>, paleta Lancet). Edita los tokens y corre
+        Sistema visual del sitio del Cuerpo Académico UDG-CA-1190:
+        <strong>sistema institucional UdeG (CEIC) + acentos LGAC</strong>. Fuente de verdad
+        del color: <code>design/tokens/colors.json</code>. Edita los tokens y corre
         <code>npm run tokens</code> para regenerar el CSS.
       </p>
 
       <!-- PALETA -->
       <h2 class="sg-h2">Paleta</h2>
-      {grupos.map(([nombre, grupo]) => (
+
+      {familiasUdg.map(([nombre, fam]) => (
         <div class="sg-group">
-          <p class="kicker">{nombre}</p>
+          <p class="kicker">Sistema UdeG · {nombre}</p>
           <div class="swatches">
-            {Object.entries(grupo).map(([k, v]) => (
+            {Object.entries(udg[fam]).map(([paso, v]) => (
               <figure class="swatch">
                 <div class="swatch__chip" style={`background:${v.hex}`}></div>
                 <figcaption>
-                  <span class="swatch__name">--c-{k}</span>
+                  <span class="swatch__name">--udg-{fam}-{paso}</span>
                   <span class="swatch__hex mono">{v.hex}</span>
                   <span class="swatch__rol">{v.rol}</span>
                 </figcaption>
@@ -59,6 +85,61 @@ const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
           </div>
         </div>
       ))}
+
+      <div class="sg-group">
+        <p class="kicker">Sistema UdeG · Semánticos de estado (fg / bg)</p>
+        <div class="swatches">
+          {semanticos.map(([k, v]) => (
+            <figure class="swatch">
+              <div class="swatch__chip swatch__chip--pair" style={`background:${v.bg.hex}`}>
+                <span class={`pill-${k}`}>{k}</span>
+              </div>
+              <figcaption>
+                <span class="swatch__name">--udg-{k}-fg / --udg-{k}-bg</span>
+                <span class="swatch__hex mono">{v.fg.hex} · {v.bg.hex}</span>
+                <span class="swatch__rol">{v.fg.rol}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+
+      <div class="sg-group">
+        <p class="kicker">Acentos LGAC</p>
+        <p class="sg-note">
+          Los 5 colores de las líneas de investigación se conservan exclusivamente como acentos
+          (badges, barras de línea, filtros). Deprecados para UI de marca: botones, links y
+          navegación usan los tokens <code>--udg-*</code>.
+        </p>
+        <div class="swatches">
+          {lgac.map((c) => (
+            <figure class="swatch">
+              <div class="swatch__chip" style={`background:${c.hex}`}></div>
+              <figcaption>
+                <span class="swatch__name">{c.token}</span>
+                <span class="swatch__hex mono">{c.hex}</span>
+                <span class="swatch__rol">{c.rol}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+
+      <div class="sg-group">
+        <p class="kicker">Institucional · footer</p>
+        <div class="swatches">
+          {institucional.map(([k, v]) => (
+            <figure class="swatch">
+              <div class="swatch__chip" style={`background:${v.hex}`}></div>
+              <figcaption>
+                <span class="swatch__name">--c-{k}</span>
+                <span class="swatch__hex mono">{v.hex}</span>
+                <span class="swatch__rol">{v.rol}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
 
       <!-- TIPOGRAFÍA -->
       <h2 class="sg-h2">Tipografía</h2>
@@ -113,23 +194,118 @@ const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
       <!-- COMPONENTES -->
       <h2 class="sg-h2">Componentes</h2>
 
+      <p class="kicker sg-sub">PageHeader · variante <code>red</code> (por defecto)</p>
+      <div class="sg-demo-frame">
+        <PageHeader
+          eyebrow="Sección"
+          title="Producción académica"
+          description="Banda institucional full-bleed para encabezar subsecciones. Rojo UdeG #90303a con barra de acento inferior rojo-700."
+        />
+      </div>
+
+      <p class="kicker sg-sub">PageHeader · variante <code>navy</code></p>
+      <div class="sg-demo-frame">
+        <PageHeader
+          variant="navy"
+          eyebrow="Sección"
+          title="Líneas de investigación"
+          description="Misma API con fondo navy-900 y barra de acento navy-700. Nunca se mezclan rojo y navy dentro del mismo encabezado."
+        />
+      </div>
+
+      <p class="kicker sg-sub">Botones</p>
+      <div class="sg-row">
+        <button type="button" class="btn">Primario</button>
+        <button type="button" class="btn btn--secondary">Secundario</button>
+        <button type="button" class="btn btn--ghost">Ghost</button>
+      </div>
+      <p class="sg-note">
+        40px de alto, radio 4, planos. Estados: hover <code>--udg-red-500</code> /
+        <code>--udg-navy-800</code> / <code>--udg-gray-50</code>; active <code>--udg-red-650</code>.
+        Transición 150 ms solo de color. Máximo un botón primario por vista.
+      </p>
+
+      <p class="kicker sg-sub">Campo de formulario (focus ring)</p>
+      <div class="sg-field">
+        <label class="sg-label" for="sg-input">Correo institucional</label>
+        <input class="sg-input" id="sg-input" type="email" placeholder="nombre@academicos.udg.mx" autocomplete="off" />
+      </div>
+      <p class="sg-note">
+        Borde <code>--udg-gray-300</code>, radio 4; al enfocar: borde <code>--udg-navy-700</code>
+        + anillo <code>rgba(69,90,140,.25)</code>.
+      </p>
+
+      <p class="kicker sg-sub">Badges de rol (<code>.badge-rol</code>, tinte 10 % del color)</p>
+      <div class="sg-row">
+        <span class="badge-rol" style="--rol-color: var(--udg-red-600)">Líder</span>
+        <span class="badge-rol" style="--rol-color: var(--udg-navy-900)">Integrante</span>
+        <span class="badge-rol" style="--rol-color: var(--udg-gray-700)">Colaborador</span>
+        <span class="badge-rol" style="--rol-color: #4a6346">Estudiante</span><!-- --c-green oscurecido para AA -->
+
+      </div>
+
+      <p class="kicker sg-sub">Pills semánticos de estado</p>
+      <div class="sg-row">
+        <span class="pill-ok">Activa</span>
+        <span class="pill-info">Beta</span>
+        <span class="pill-warn">En preparación</span>
+        <span class="pill-err">Error</span>
+      </div>
+
+      <p class="kicker sg-sub">Tarjeta plana (<code>.card-flat</code>)</p>
+      <div class="sg-flatgrid">
+        <article class="card-flat">
+          <p class="kicker">Tarjeta</p>
+          <h3 class="sg-flat__title">Plana, institucional</h3>
+          <p class="sg-flat__txt">
+            Fondo blanco, borde 1px <code>--udg-gray-200</code>, radio 6. Sin sombras en reposo.
+          </p>
+        </article>
+        <article class="card-flat">
+          <p class="kicker">Hover</p>
+          <h3 class="sg-flat__title">Sutil al pasar</h3>
+          <p class="sg-flat__txt">
+            Borde <code>--udg-gray-300</code> + sombra <code>0 1px 2px rgba(20,24,31,.06)</code>,
+            transición 150 ms.
+          </p>
+        </article>
+      </div>
+
+      <p class="kicker sg-sub">Fila de lista (border-bottom + hover gray-50)</p>
+      <ul class="sg-list">
+        <li class="sg-list__row">
+          <span class="sg-list__year mono">2025</span>
+          <span>Patrón de listado para producción y actividades: solo <code>border-bottom</code> gray-200.</span>
+          <span class="pill-ok">Publicado</span>
+        </li>
+        <li class="sg-list__row">
+          <span class="sg-list__year mono">2025</span>
+          <span>Al pasar el cursor la fila se tiñe con <code>--udg-gray-50</code> (150 ms).</span>
+          <span class="pill-warn">En preparación</span>
+        </li>
+        <li class="sg-list__row">
+          <span class="sg-list__year mono">2024</span>
+          <span>Sin tarjetas ni sombras: la retícula hairline lleva el ritmo vertical.</span>
+          <span class="pill-info">Beta</span>
+        </li>
+      </ul>
+
       <p class="kicker sg-sub">KPIs en celdas</p>
       <Kpis items={sitio.kpis} />
 
-      <p class="kicker sg-sub">Badges de línea (color = significado)</p>
+      <p class="kicker sg-sub">Badges de línea (acento LGAC = significado)</p>
       <div class="lineas-badges">
         {lineas.map((l) => (
           <BadgeLinea titulo={l.data.titulo_corto || l.data.titulo} color={l.data.color} />
         ))}
       </div>
 
-      <p class="kicker sg-sub">Etiquetas de tecnología y estado</p>
+      <p class="kicker sg-sub">Etiquetas de tecnología</p>
       <div class="sg-tags">
-        <span class="tag tag--fill" style="--tag-color: var(--c-blue)">R</span>
-        <span class="tag tag--fill" style="--tag-color: var(--c-teal)">Python</span>
-        <span class="tag tag--fill" style="--tag-color: var(--c-green)">Activa</span>
-        <span class="tag tag--fill" style="--tag-color: var(--c-teal)">Beta</span>
-        <span class="tag">En desarrollo</span>
+        <span class="tag">R</span>
+        <span class="tag">Python</span>
+        <span class="tag">QGIS</span>
+        <span class="tag tag--fill" style="--tag-color: var(--c-green)">Línea educación</span>
       </div>
 
       <p class="kicker sg-sub">Cards (herramientas)</p>
@@ -139,7 +315,7 @@ const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
             <p>{h.data.resumen}</p>
             <div class="sg-cardtags">
               {h.data.tecnologias.map((t) => <span class="tag">{t}</span>)}
-              <span class="tag tag--fill" style="--tag-color: var(--c-gray)">{h.data.estado}</span>
+              <span class={pillEstado(h.data.estado)}>{h.data.estado}</span>
             </div>
           </Card>
         ))}
@@ -147,22 +323,23 @@ const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
 
       <p class="kicker sg-sub">Ítem de publicación (BibTeX → Vancouver)</p>
       <ol class="sg-pubs">
-        {pubs.map((p, i) => (
+        {pubs.map((p: any, i: number) => (
           <li class="sg-pub">
             <span class="sg-pub__n mono">{String(i + 1).padStart(2, '0')}</span>
             <div>
               <p class="sg-pub__cita" set:html={formatCita(p)} />
-              {p.estado && <span class="tag tag--fill" style="--tag-color: var(--c-green)">{p.estado}</span>}
+              {p.estado && <span class={pillEstado(p.estado)}>{p.estado}</span>}
             </div>
           </li>
         ))}
       </ol>
 
       <p class="nota panel">
-        <strong>Nota.</strong> Esta página es la guía del design system, no una sección
-        del sitio público. Demuestra tokens, tipografía, retícula y componentes base del
-        Concepto «Swiss Data Grid». Las secciones de contenido se construyen en el paso
-        siguiente reutilizando estos componentes.
+        <strong>Nota.</strong> Esta página es la guía del design system, no una sección del
+        sitio público. Demuestra los tokens del sistema institucional UdeG (CEIC), los acentos
+        LGAC, la tipografía, la retícula y los componentes base. Reglas duras: sin gradientes,
+        sin sombras pesadas, radios ≤ 8px, y nunca rojo + navy dentro de un mismo componente
+        (única excepción: la barra de 3px del ítem activo en la sidebar).
       </p>
     </div>
   </section>
@@ -178,13 +355,14 @@ const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
     font-size: var(--fs-s2);
   }
   .sg-sub { margin-top: var(--sp-6); }
-  code { background: var(--c-panel); padding: 1px 5px; font-size: 0.85em; border: 1px solid var(--c-line); }
+  code { background: var(--c-panel); padding: 1px 5px; font-size: 0.85em; border: 1px solid var(--c-line); border-radius: var(--radius-sm); }
 
   /* Swatches */
   .sg-group { margin-top: var(--sp-4); }
   .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--sp-2); margin-top: var(--sp-2); }
-  .swatch { border: 1px solid var(--c-line); }
+  .swatch { border: 1px solid var(--c-line); border-radius: var(--radius-lg); overflow: hidden; }
   .swatch__chip { height: 72px; }
+  .swatch__chip--pair { display: flex; align-items: center; justify-content: center; }
   .swatch figcaption { padding: var(--sp-2); display: flex; flex-direction: column; gap: 2px; }
   .swatch__name { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: var(--fw-medium); }
   .swatch__hex { color: var(--c-gray); font-size: var(--fs-xs); }
@@ -192,7 +370,7 @@ const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
 
   /* Fuentes */
   .sg-fonts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-4); margin-top: var(--sp-3); }
-  .sg-font { border: 1px solid var(--c-line); padding: var(--sp-3); }
+  .sg-font { border: 1px solid var(--c-line); border-radius: var(--radius-lg); padding: var(--sp-3); }
   .sg-font__sample { font-size: var(--fs-s2); margin-top: var(--sp-1); }
   .sg-font__meta { font-size: 10px; color: var(--c-gray); margin-top: var(--sp-2); word-break: break-word; }
 
@@ -211,13 +389,59 @@ const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
   .sg-space { margin-top: var(--sp-2); display: flex; flex-direction: column; gap: var(--sp-1); }
   .sg-space__row { display: grid; grid-template-columns: 80px 1fr 56px; gap: var(--sp-2); align-items: center; }
   .sg-space__tok, .sg-space__val { font-size: var(--fs-xs); color: var(--c-gray); }
-  .sg-space__bar { height: 16px; background: var(--c-teal); }
+  .sg-space__bar { height: 16px; background: var(--udg-navy-700); }
+
+  /* Demos de componentes */
+  .sg-demo-frame { margin-top: var(--sp-2); border: 1px solid var(--udg-gray-200); border-radius: var(--radius-lg); overflow: hidden; }
+  .sg-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); margin-top: var(--sp-2); }
+  .sg-note { font-size: var(--fs-xs); color: var(--udg-gray-500); margin-top: var(--sp-1); max-width: var(--grid-prose); line-height: var(--lh-normal); }
+
+  .sg-field { margin-top: var(--sp-2); max-width: 360px; display: flex; flex-direction: column; gap: var(--sp-1); }
+  .sg-label { font-size: var(--fs-sm); font-weight: var(--fw-medium); }
+  .sg-input {
+    height: 40px;
+    padding: 0 var(--sp-2);
+    border: 1px solid var(--udg-gray-300);
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--udg-gray-900);
+    font: inherit;
+    font-size: var(--fs-sm);
+    transition: border-color 150ms ease;
+  }
+  .sg-input::placeholder { color: var(--udg-gray-500); }
+  .sg-input:focus {
+    outline: none;
+    border-color: var(--udg-navy-700);
+    box-shadow: 0 0 0 3px rgba(69, 90, 140, 0.25);
+  }
+
+  .sg-flatgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--sp-3); margin-top: var(--sp-2); }
+  .sg-flat__title { font-size: var(--fs-s1); font-weight: var(--fw-semibold); margin-top: var(--sp-1); }
+  .sg-flat__txt { color: var(--c-gray); margin-top: var(--sp-1); font-size: var(--fs-sm); line-height: var(--lh-normal); }
+
+  .sg-list { list-style: none; padding: 0; margin-top: var(--sp-2); border-top: 1px solid var(--udg-gray-200); }
+  .sg-list__row {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: var(--sp-2);
+    align-items: baseline;
+    padding: var(--sp-2);
+    border-bottom: 1px solid var(--udg-gray-200);
+    transition: background-color 150ms ease;
+  }
+  .sg-list__row:hover { background: var(--udg-gray-50); }
+  .sg-list__year { font-size: var(--fs-xs); color: var(--udg-gray-700); }
+  @media (max-width: 600px) {
+    .sg-list__row { grid-template-columns: 48px 1fr; }
+    .sg-list__row > :global(.pill-ok), .sg-list__row > :global(.pill-warn), .sg-list__row > :global(.pill-info) { grid-column: 2; justify-self: start; }
+  }
 
   /* Componentes varios */
   .lineas-badges { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-3); }
   .sg-tags { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-3); }
   .sg-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--sp-3); margin-top: var(--sp-3); }
-  .sg-cardtags { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-3); }
+  .sg-cardtags { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1); margin-top: var(--sp-3); }
 
   /* Publicaciones */
   .sg-pubs { list-style: none; padding: 0; margin-top: var(--sp-3); border-top: 1px solid var(--c-line); }
@@ -226,8 +450,8 @@ const espacios = Object.entries(spacing.space).filter(([k]) => k !== '0');
   .sg-pub__cita { line-height: var(--lh-normal); }
   .sg-pub__cita :global(.cita__titulo) { font-weight: var(--fw-semibold); }
   .sg-pub__cita :global(.cita__doi) { font-family: var(--font-mono); font-size: var(--fs-xs); }
-  .sg-pub .tag { margin-top: var(--sp-2); }
+  .sg-pub :global(.pill-ok), .sg-pub :global(.pill-warn), .sg-pub :global(.pill-info) { margin-top: var(--sp-2); display: inline-block; }
 
-  .nota { margin-top: var(--sp-12); padding: var(--sp-3) var(--sp-4); font-size: var(--fs-sm); color: var(--c-gray); border-left: 4px solid var(--c-teal); }
+  .nota { margin-top: var(--sp-12); padding: var(--sp-3) var(--sp-4); font-size: var(--fs-sm); color: var(--c-gray); border-left: 4px solid var(--udg-navy-700); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
   .nota strong { color: var(--c-ink); }
 </style>

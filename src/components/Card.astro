@@ -10,10 +10,21 @@ const { titulo, kicker, color } = Astro.props;
 </article>
 
 <style>
-  .card { border: 1px solid var(--c-line); background: var(--c-bg); padding: var(--sp-3); }
+  .card {
+    border: 1px solid var(--udg-gray-200);
+    background: var(--c-bg);
+    padding: var(--sp-3);
+    border-radius: var(--radius-lg);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .card:hover {
+    border-color: var(--udg-gray-300);
+    box-shadow: 0 1px 2px rgba(20, 24, 31, 0.06);
+  }
   .card__bar {
     height: 6px;
     margin: calc(-1 * var(--sp-3)) calc(-1 * var(--sp-3)) var(--sp-3);
+    border-radius: calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px) 0 0;
   }
   .card__title { font-size: var(--fs-s1); margin-top: var(--sp-1); font-weight: var(--fw-semibold); }
   .card__body { color: var(--c-ink); }

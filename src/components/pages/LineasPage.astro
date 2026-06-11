@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
 import { getCollection } from 'astro:content';
 import { getProduccion } from '../../lib/datos.mjs';
 import { t, getSitioL, localize, localePath } from '../../i18n.mjs';
@@ -33,17 +34,13 @@ const integrantesDe = (lgacId: string) =>
 const intro = getSitioL(lang).page_intros?.lines || '';
 ---
 <Base titulo={t(lang, 'nav.lines')} descripcion={t(lang, 'meta.lines')} lang={lang}>
+  <PageHeader
+    eyebrow={t(lang, 'lines.kicker')}
+    title={t(lang, 'lines.title')}
+    description={intro}
+  />
   <section class="section">
     <div class="container">
-      <div class="pg-head">
-        <span class="pg-block" aria-hidden="true"></span>
-        <div>
-          <p class="kicker">{t(lang, 'lines.kicker')}</p>
-          <h1 class="pg-title">{t(lang, 'lines.title')}</h1>
-        </div>
-      </div>
-      <p class="prose text-muted pg-intro">{intro}</p>
-
       <div class="lgac-list">
         {lineas.map((l, i) => {
           const d = l.data;
@@ -95,18 +92,23 @@ const intro = getSitioL(lang).page_intros?.lines || '';
 </Base>
 
 <style>
-  .pg-head { display: flex; align-items: center; gap: var(--sp-3); }
-  .pg-block { width: 16px; height: 48px; background: var(--c-blue); flex: none; }
-  .pg-title { font-size: var(--fs-s3); }
-  .pg-intro { margin-top: var(--sp-3); }
+  .section { padding-block-start: var(--sp-6); }
 
-  .lgac-list { margin-top: var(--sp-8); display: flex; flex-direction: column; gap: var(--sp-4); }
+  .lgac-list { display: flex; flex-direction: column; gap: var(--sp-4); }
   .lgac {
-    border: 1px solid var(--c-line);
+    background: #fff;
+    border: 1px solid var(--udg-gray-200);
     border-left: 6px solid var(--lgac-color);
+    border-radius: var(--radius-lg);
     padding: var(--sp-4);
     display: grid;
     gap: var(--sp-3);
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .lgac:hover {
+    border-color: var(--udg-gray-300);
+    border-left-color: var(--lgac-color);
+    box-shadow: 0 1px 2px rgba(20, 24, 31, 0.06);
   }
   .lgac__head { display: grid; grid-template-columns: auto 1fr auto; gap: var(--sp-3); align-items: start; }
   .lgac__num { font-family: var(--font-mono); font-size: var(--fs-s2); color: var(--lgac-color); font-weight: 700; line-height: 1; }
@@ -119,18 +121,20 @@ const intro = getSitioL(lang).page_intros?.lines || '';
     font-family: var(--font-sans); font-size: var(--fs-s2); font-weight: 700; color: var(--c-ink);
     line-height: 1; text-align: right; display: flex; flex-direction: column; align-items: flex-end;
   }
-  .lgac__count small { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-gray); font-weight: 400; }
-  .lgac__desc { color: var(--c-gray); }
+  .lgac__count small { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-gray-700); font-weight: 400; }
+  .lgac__desc { color: var(--udg-gray-700); }
 
   .lgac__esp ul { list-style: none; padding: 0; margin-top: var(--sp-2); display: grid; gap: 6px; }
   .lgac__esp li { display: grid; grid-template-columns: auto 1fr auto; gap: var(--sp-2); align-items: baseline; font-size: var(--fs-sm); }
   .lgac__esp-dot { width: 8px; height: 8px; background: var(--lgac-color); margin-top: 6px; }
-  .lgac__esp-n { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-gray); }
+  .lgac__esp-n { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-gray-700); }
 
   .lgac__chips { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-2); }
   .lgac__chip {
     font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-ink);
-    border: 1px solid var(--c-line); padding: 2px 8px; text-decoration: none;
+    border: 1px solid var(--udg-gray-200); border-radius: var(--radius-md);
+    padding: 2px 8px; text-decoration: none;
+    transition: border-color 150ms ease, color 150ms ease;
   }
   .lgac__chip:hover { border-color: var(--lgac-color); color: var(--lgac-color); text-decoration: none; }
 

@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
 import { getCollection } from 'astro:content';
 import { getProduccion } from '../../lib/datos.mjs';
 import { t, localize } from '../../i18n.mjs';
@@ -33,26 +34,20 @@ const apellido = (id: string) => APELLIDOS[id] || (nombreMap[id] || '').replace(
 const enPrepRank = (p: any) => (p.estado === 'en-preparacion' ? 0 : 1);
 const produccion = getProduccion()
   .slice()
-  .sort((a, b) => enPrepRank(a) - enPrepRank(b) || (parseInt(b.anio) || 0) - (parseInt(a.anio) || 0));
+  .sort((a: any, b: any) => enPrepRank(a) - enPrepRank(b) || (parseInt(b.anio) || 0) - (parseInt(a.anio) || 0));
 
 const nPorLgac: Record<string, number> = {};
 for (const p of produccion) for (const lg of p.lgac) nPorLgac[lg] = (nPorLgac[lg] || 0) + 1;
 const total = produccion.length;
-const publicadas = produccion.filter((p) => p.estado !== 'en-preparacion').length;
+const publicadas = produccion.filter((p: any) => p.estado !== 'en-preparacion').length;
 const enPrep = total - publicadas;
 const introMid = t(lang, 'prod.intro_mid', { total, pub: publicadas, prep: enPrep, s: enPrep === 1 ? '' : 's' });
 ---
 <Base titulo={t(lang, 'nav.production')} descripcion={t(lang, 'meta.production')} lang={lang}>
+  <PageHeader eyebrow={t(lang, 'prod.kicker')} title={t(lang, 'prod.title')} />
   <section class="section">
     <div class="container">
-      <div class="pg-head">
-        <span class="pg-block" aria-hidden="true"></span>
-        <div>
-          <p class="kicker">{t(lang, 'prod.kicker')}</p>
-          <h1 class="pg-title">{t(lang, 'prod.title')}</h1>
-        </div>
-      </div>
-      <p class="prose text-muted pg-intro">
+      <p class="prose text-muted">
         <strong id="pub-count">{total}</strong> <Fragment set:html={introMid} />
       </p>
 
@@ -66,7 +61,7 @@ const introMid = t(lang, 'prod.intro_mid', { total, pub: publicadas, prep: enPre
       </div>
 
       <ol class="pubs">
-        {produccion.map((p) => (
+        {produccion.map((p: any) => (
             <li class="pub" data-lgac={p.lgac.join(' ')}>
               <div class="pub__year">{p.anio}</div>
               <div class="pub__main">
@@ -81,7 +76,7 @@ const introMid = t(lang, 'prod.intro_mid', { total, pub: publicadas, prep: enPre
                 </p>
                 <div class="pub__badges">
                   {p.estado === 'en-preparacion' && (
-                    <span class="tag tag--fill" style="--tag-color: var(--c-teal)">{t(lang, 'prod.en_prep')}</span>
+                    <span class="pill-warn">{t(lang, 'prod.en_prep')}</span>
                   )}
                   {p.lgac.map((lid: string) => {
                     const lg = lgacMap[lid] || {};
@@ -105,54 +100,56 @@ const introMid = t(lang, 'prod.intro_mid', { total, pub: publicadas, prep: enPre
 </Base>
 
 <style>
-  .pg-head { display: flex; align-items: center; gap: var(--sp-3); }
-  .pg-block { width: 16px; height: 48px; background: var(--c-blue); flex: none; }
-  .pg-title { font-size: var(--fs-s3); }
-  .pg-intro { margin-top: var(--sp-3); }
+  .section { padding-block-start: var(--sp-6); }
 
   .filtros { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-4); }
   .filtro {
     font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: 0.03em;
-    background: var(--c-bg); border: 1px solid var(--c-line); color: var(--c-ink);
-    padding: 6px 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; border: 1px solid var(--udg-gray-300); border-radius: var(--radius-lg);
+    color: var(--udg-gray-700); height: 34px; padding: 0 12px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
   }
-  .filtro__sq { width: 10px; height: 10px; background: var(--f, var(--c-gray)); flex: none; }
-  .filtro span { color: var(--c-gray); }
-  .filtro:hover { border-color: var(--f, var(--c-ink)); }
-  .filtro.is-active { background: var(--f, var(--c-ink)); color: #fff; border-color: transparent; }
+  .filtro__sq { width: 10px; height: 10px; background: var(--f, var(--udg-gray-500)); flex: none; }
+  .filtro span { color: var(--udg-gray-500); }
+  .filtro:hover { border-color: var(--f, var(--udg-gray-700)); }
+  .filtro.is-active { background: var(--f, var(--udg-gray-900)); color: #fff; border-color: transparent; }
   .filtro.is-active span { color: rgba(255,255,255,0.85); }
   .filtro.is-active .filtro__sq { background: #fff; }
 
-  .pubs { list-style: none; padding: 0; margin-top: var(--sp-6); border-top: 1px solid var(--c-line); }
+  .pubs { list-style: none; padding: 0; margin-top: var(--sp-6); }
   .pub {
     display: grid; grid-template-columns: 64px 1fr; gap: var(--sp-3);
-    padding: var(--sp-3) 0; border-bottom: 1px solid var(--c-line);
+    padding: var(--sp-3) var(--sp-2); margin-inline: calc(-1 * var(--sp-2));
+    border-bottom: 1px solid var(--udg-gray-200);
+    transition: background-color 150ms ease;
   }
+  .pub:hover { background: var(--udg-gray-50); }
   .pub[hidden] { display: none; }
-  .pub__year { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--c-gray); font-variant-numeric: tabular-nums; }
+  .pub__year { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--udg-gray-700); font-variant-numeric: tabular-nums; }
   .pub__titulo { font-weight: var(--fw-medium); line-height: var(--lh-snug); }
-  .pub__meta { margin-top: 4px; font-size: var(--fs-sm); color: var(--c-gray); display: flex; flex-wrap: wrap; gap: 6px 12px; }
+  .pub__meta { margin-top: 4px; font-size: var(--fs-sm); color: var(--udg-gray-700); display: flex; flex-wrap: wrap; gap: 6px 12px; }
   .pub__revista { font-style: italic; }
   .pub__autores { font-family: var(--font-mono); font-size: var(--fs-xs); }
   .pub__badges { margin-top: var(--sp-2); display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
-  .pub__doi { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-blue); }
+  .pub__doi { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); }
 
   @media (max-width: 560px) { .pub { grid-template-columns: 1fr; gap: var(--sp-1); } }
 </style>
 
 <script>
-  const chips = document.querySelectorAll('.filtro');
-  const rows = document.querySelectorAll('.pub');
+  const chips = document.querySelectorAll<HTMLButtonElement>('.filtro');
+  const rows = document.querySelectorAll<HTMLElement>('.pub');
   const counter = document.getElementById('pub-count');
-  function apply(f) {
+  function apply(f: string) {
     let shown = 0;
     rows.forEach((r) => {
-      const vis = f === 'all' || r.dataset.lgac.split(' ').includes(f);
+      const vis = f === 'all' || (r.dataset.lgac || '').split(' ').includes(f);
       r.hidden = !vis;
       if (vis) shown++;
     });
     if (counter) counter.textContent = String(shown);
     chips.forEach((c) => c.classList.toggle('is-active', c.dataset.filter === f));
   }
-  chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter)));
+  chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter || 'all')));
 </script>

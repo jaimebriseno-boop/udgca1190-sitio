@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
 import { getCollection } from 'astro:content';
 import { t, getSitioL, localize } from '../../i18n.mjs';
 
@@ -16,17 +17,13 @@ const actividades = (await getCollection('actividades'))
 const intro = getSitioL(lang).page_intros?.activities || '';
 ---
 <Base titulo={t(lang, 'nav.activities')} descripcion={t(lang, 'meta.activities')} lang={lang}>
+  <PageHeader
+    eyebrow={t(lang, 'acts.kicker')}
+    title={t(lang, 'acts.title')}
+    description={intro}
+  />
   <section class="section">
     <div class="container">
-      <div class="pg-head">
-        <span class="pg-block" aria-hidden="true"></span>
-        <div>
-          <p class="kicker">{t(lang, 'acts.kicker')}</p>
-          <h1 class="pg-title">{t(lang, 'acts.title')}</h1>
-        </div>
-      </div>
-      <p class="prose text-muted pg-intro">{intro}</p>
-
       <ol class="acts">
         {actividades.map((a) => (
           <li class="act" style={`--act-color: var(--c-${tipoColor[a.tipo] || 'gray'})`}>
@@ -48,23 +45,24 @@ const intro = getSitioL(lang).page_intros?.activities || '';
 </Base>
 
 <style>
-  .pg-head { display: flex; align-items: center; gap: var(--sp-3); }
-  .pg-block { width: 16px; height: 48px; background: var(--c-blue); flex: none; }
-  .pg-title { font-size: var(--fs-s3); }
-  .pg-intro { margin-top: var(--sp-3); }
+  .section { padding-block-start: var(--sp-6); }
 
-  .acts { list-style: none; padding: 0; margin-top: var(--sp-6); border-top: 1px solid var(--c-line); }
+  .acts { list-style: none; padding: 0; margin: 0; }
   .act {
     display: grid; grid-template-columns: 160px 1fr auto; gap: var(--sp-3);
-    padding: var(--sp-4) 0; border-bottom: 1px solid var(--c-line);
+    padding: var(--sp-4) var(--sp-2); margin-inline: calc(-1 * var(--sp-2));
+    border-bottom: 1px solid var(--udg-gray-200);
+    transition: background-color 150ms ease;
   }
+  .act:first-child { border-top: 1px solid var(--udg-gray-200); }
+  .act:hover { background: var(--udg-gray-50); }
   .act__tipo { display: flex; align-items: center; gap: var(--sp-1); }
   .act__dot { width: 10px; height: 10px; background: var(--act-color); flex: none; }
   .act__tipo-label { font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--act-color); }
   .act__titulo { font-size: var(--fs-s1); font-weight: var(--fw-semibold); line-height: var(--lh-snug); }
   .act__desc { color: var(--c-gray); margin-top: var(--sp-1); font-size: var(--fs-sm); }
   .act__link { font-family: var(--font-mono); font-size: var(--fs-xs); display: inline-block; margin-top: var(--sp-1); }
-  .act__fecha { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--c-gray); }
+  .act__fecha { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--udg-gray-700); }
 
   @media (max-width: 640px) {
     .act { grid-template-columns: 1fr; gap: var(--sp-1); }

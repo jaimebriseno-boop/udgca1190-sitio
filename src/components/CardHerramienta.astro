@@ -1,6 +1,6 @@
 ---
-// Tarjeta de herramienta (Swiss Data Grid): barra de color por LGAC, glifo de método,
-// badge de estado y tecnología.
+// Tarjeta de herramienta (estilo CEIC plano): tarjeta .card-flat con barra superior
+// de color LGAC, glifo de método, pill semántico de estado y tags de tecnología.
 import { t } from '../i18n.mjs';
 interface Props {
   data: any;
@@ -9,10 +9,10 @@ interface Props {
 }
 const { data: h, lineasMap, lang = 'es' } = Astro.props;
 const lg = lineasMap[h.linea];
-const estadoColor: Record<string, string> = { activa: 'green', beta: 'teal', desarrollo: 'gray' };
-const eColor = estadoColor[h.estado] || 'gray';
+const estadoPill: Record<string, string> = { activa: 'pill-ok', beta: 'pill-info', desarrollo: 'pill-warn' };
+const pillClass = estadoPill[h.estado] || 'pill-warn';
 ---
-<article class="tool" style={`--tool-color: var(--c-${lg?.color || 'blue'})`}>
+<article class="tool card-flat" style={`--tool-color: var(--c-${lg?.color || 'blue'})`}>
   <div class="tool__bar" aria-hidden="true"></div>
   <div class="tool__top">
     <div>
@@ -51,7 +51,7 @@ const eColor = estadoColor[h.estado] || 'gray';
         <span class="badge-linea__sq" aria-hidden="true"></span>{lg.titulo_corto || lg.titulo}
       </span>
     )}
-    <span class="tool__estado" style={`--e: var(--c-${eColor})`}>{t(lang, 'tool.estado.' + h.estado)}</span>
+    <span class={pillClass}>{t(lang, 'tool.estado.' + h.estado)}</span>
   </div>
 
   {(h.enlace_app || h.repositorio || h.doi) && (
@@ -65,14 +65,16 @@ const eColor = estadoColor[h.estado] || 'gray';
 
 <style>
   .tool {
-    border: 1px solid var(--c-line);
-    background: var(--c-bg);
-    padding: var(--sp-3);
     display: flex;
     flex-direction: column;
     gap: var(--sp-2);
   }
-  .tool__bar { height: 6px; background: var(--tool-color); margin: calc(-1 * var(--sp-3)) calc(-1 * var(--sp-3)) var(--sp-1); }
+  .tool__bar {
+    height: 6px;
+    background: var(--tool-color);
+    border-radius: 6px 6px 0 0;
+    margin: calc(-1 * var(--sp-3)) calc(-1 * var(--sp-3)) var(--sp-1);
+  }
   .tool__top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-2); }
   .tool__kicker { font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--tool-color); font-weight: 600; }
   .tool__name { font-size: var(--fs-s1); font-weight: var(--fw-semibold); line-height: var(--lh-snug); margin-top: 2px; }
@@ -80,10 +82,6 @@ const eColor = estadoColor[h.estado] || 'gray';
   .tool__resumen { color: var(--c-gray); font-size: var(--fs-sm); }
   .tool__tech { display: flex; flex-wrap: wrap; gap: 6px; }
   .tool__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2); margin-top: var(--sp-1); }
-  .tool__estado {
-    font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em;
-    color: #fff; background: var(--e, var(--c-gray)); padding: 2px 8px;
-  }
-  .tool__links { display: flex; flex-wrap: wrap; gap: var(--sp-3); border-top: 1px solid var(--c-line); padding-top: var(--sp-2); }
-  .tool__link { font-family: var(--font-mono); font-size: var(--fs-xs); }
+  .tool__links { display: flex; flex-wrap: wrap; gap: var(--sp-3); border-top: 1px solid var(--udg-gray-200); padding-top: var(--sp-2); }
+  .tool__link { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); transition: color 150ms ease; }
 </style>

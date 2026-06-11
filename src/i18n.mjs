@@ -83,6 +83,9 @@ const UI = {
     'navshort.members': 'Integrantes',
     'navshort.tools': 'Herramientas',
     'navshort.contact': 'Contacto',
+    // Portada (slideshow)
+    'hero.pause': 'Pausar presentación de fondo',
+    'hero.play': 'Reanudar presentación de fondo',
     // Comunes / accesibilidad
     'org.name': 'Cuerpo Académico UDG-CA-1190',
     'skip': 'Saltar al contenido',
@@ -167,6 +170,8 @@ const UI = {
     'navshort.members': 'Members',
     'navshort.tools': 'Tools',
     'navshort.contact': 'Contact',
+    'hero.pause': 'Pause background slideshow',
+    'hero.play': 'Resume background slideshow',
     'org.name': 'UDG-CA-1190 Research Group',
     'skip': 'Skip to content',
     'aria.open_menu': 'Open menu',

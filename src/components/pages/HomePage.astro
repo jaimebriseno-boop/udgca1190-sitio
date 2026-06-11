@@ -1,15 +1,48 @@
 ---
 import Home from '../../layouts/Home.astro';
 import LangSwitcher from '../LangSwitcher.astro';
+import { Picture, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import logoReverse from '../../assets/logos/UDG-CA-1190_logo_horizontal_reverse.png';
 import { t, getSitioL, localePath } from '../../i18n.mjs';
 
 interface Props { lang?: 'es' | 'en' }
 const { lang = 'es' } = Astro.props;
 
 const sitio = getSitioL(lang);
-const bgs = (Array.isArray(sitio.home_bgs) && sitio.home_bgs.length)
+const bgPaths: string[] = (Array.isArray(sitio.home_bgs) && sitio.home_bgs.length)
   ? sitio.home_bgs
   : (sitio.home_bg ? [sitio.home_bg] : []);
+
+// data/sitio.yml guarda rutas tipo "/fondo/x.jpg"; se resuelven por basename
+// contra los originales en src/assets/fondo (optimizados por astro:assets).
+const fondoGlob = import.meta.glob<ImageMetadata>('../../assets/fondo/*.jpg', {
+  eager: true,
+  import: 'default',
+});
+const fondoPorNombre = new Map(
+  Object.entries(fondoGlob).map(([ruta, img]) => [ruta.split('/').pop() ?? '', img])
+);
+const bgs: ImageMetadata[] = bgPaths
+  .map((p) => fondoPorNombre.get(p.split('/').pop() ?? ''))
+  .filter((img): img is ImageMetadata => Boolean(img));
+
+const SLIDE_WIDTHS = [768, 1280, 1920, 2200];
+const SLIDE_SIZES = '100vw';
+const SLIDE_QUALITY = 55;
+
+// Preload del primer slide (mismos parámetros, AVIF) para acelerar el LCP.
+let preload: { src: string; srcset: string; sizes: string } | undefined;
+if (bgs.length > 0) {
+  const primero = await getImage({
+    src: bgs[0],
+    widths: SLIDE_WIDTHS,
+    format: 'avif',
+    quality: SLIDE_QUALITY,
+  });
+  preload = { src: primero.src, srcset: primero.srcSet.attribute, sizes: SLIDE_SIZES };
+}
+
 const stats = (sitio.kpis || []).map((k: any) => `${k.num} ${k.label}`).join('   ·   ');
 const nav: [string, string][] = [
   [localePath('/lineas', lang), t(lang, 'navshort.lines')],
@@ -20,12 +53,25 @@ const nav: [string, string][] = [
 ];
 const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190 · Cuerpo Académico';
 ---
-<Home titulo={homeTitle} descripcion={sitio.mision} lang={lang}>
+<Home titulo={homeTitle} descripcion={sitio.mision} lang={lang} preload={preload}>
   <section id="dimension">
     <div class="dim__slides" aria-hidden="true">
       {bgs.length > 0 ? (
-        bgs.map((src: string, i: number) => (
-          <div class:list={['dim__slide', { 'is-active': i === 0 }]} style={`background-image: url('${src}')`}></div>
+        bgs.map((img, i) => (
+          <div class:list={['dim__slide', { 'is-active': i === 0 }]}>
+            <Picture
+              src={img}
+              widths={SLIDE_WIDTHS}
+              sizes={SLIDE_SIZES}
+              formats={['avif']}
+              fallbackFormat="jpg"
+              quality={SLIDE_QUALITY}
+              alt=""
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : 'low'}
+              decoding="async"
+            />
+          </div>
         ))
       ) : (
         <div class="dim__deco">
@@ -48,11 +94,16 @@ const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190
 
     <div class="dim__content">
       <h1 class="sr-only">{sitio.nombre}</h1>
-      <img
+      <Picture
         class="dim__logo"
-        src="/logos/UDG-CA-1190_logo_horizontal_reverse.png"
+        src={logoReverse}
+        widths={[720, 1440]}
+        sizes="(max-width: 782px) 92vw, 720px"
+        formats={['avif', 'webp']}
+        fallbackFormat="png"
         alt={`Cuerpo Académico UDG-CA-1190 — ${sitio.nombre}`}
-        width="1878" height="820" />
+        loading="eager"
+      />
       <p class="dim__kicker">{sitio.adscripcion}</p>
       <p class="dim__lead">{sitio.mision}</p>
       <nav class="dim__nav" aria-label={t(lang, 'aria.sections')}>
@@ -62,6 +113,23 @@ const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190
     </div>
 
     <p class="dim__foot">{sitio.adscripcion}</p>
+
+    <button
+      type="button"
+      class="dim__playpause"
+      aria-pressed="false"
+      aria-label={t(lang, 'hero.pause')}
+      data-label-pause={t(lang, 'hero.pause')}
+      data-label-play={t(lang, 'hero.play')}
+      hidden
+    >
+      <svg class="ico-pause" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M3.5 2h3.2v12H3.5zM9.3 2h3.2v12H9.3z" />
+      </svg>
+      <svg class="ico-play" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path d="M4.5 2.2 13.5 8l-9 5.8z" />
+      </svg>
+    </button>
   </section>
 </Home>
 
@@ -75,15 +143,46 @@ const homeTitle = lang === 'en' ? 'UDG-CA-1190 · Research Group' : 'UDG-CA-1190
 </style>
 
 <script>
-  // Slideshow de la portada: rota entre las figuras de fondo (crossfade).
-  const slides = Array.from(document.querySelectorAll('.dim__slide'));
+  // Slideshow de la portada: crossfade entre figuras, con pausa accesible.
+  const slides = Array.from(document.querySelectorAll<HTMLElement>('.dim__slide'));
+  const boton = document.querySelector<HTMLButtonElement>('.dim__playpause');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   if (slides.length > 1 && !reduce) {
     let i = 0;
-    setInterval(() => {
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let pausaManual = false;
+
+    const avanzar = async () => {
+      const siguiente = (i + 1) % slides.length;
+      const img = slides[siguiente].querySelector('img');
+      if (img) {
+        try { await img.decode(); } catch { /* se muestra aunque falle el decode */ }
+      }
       slides[i].classList.remove('is-active');
-      i = (i + 1) % slides.length;
+      i = siguiente;
       slides[i].classList.add('is-active');
-    }, 6500);
+    };
+    const iniciar = () => { if (timer === null) timer = setInterval(avanzar, 6500); };
+    const detener = () => { if (timer !== null) { clearInterval(timer); timer = null; } };
+
+    iniciar();
+
+    if (boton) {
+      boton.hidden = false;
+      boton.addEventListener('click', () => {
+        pausaManual = !pausaManual;
+        boton.setAttribute('aria-pressed', String(pausaManual));
+        const label = pausaManual ? boton.dataset.labelPlay : boton.dataset.labelPause;
+        if (label) boton.setAttribute('aria-label', label);
+        if (pausaManual) detener();
+        else iniciar();
+      });
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) detener();
+      else if (!pausaManual) iniciar();
+    });
   }
 </script>
