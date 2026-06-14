@@ -1,0 +1,539 @@
+/* ==========================================================================
+   Dengue Forecast — static web viewer theme
+   Paper palette (Parasites & Vectors revision). System fonts, no web fonts.
+   Owns: visual variables, layout, controls bar, small-multiples grid,
+   .warn / .note callouts, chip/toggle/slider styling.
+   ========================================================================== */
+
+:root {
+  /* --- Paper palette (full saturation) --- */
+  --c-red:    #7A2929;
+  --c-blue:   #22354A;
+  --c-gray:   #6D7073;
+  --c-green:  #4D5C4B;
+  --c-gold:   #AB9E54;
+
+  /* --- Light tints --- */
+  --l-red:    #E4D4D4;
+  --l-blue:   #D3D7DB;
+  --l-gray:   #E2E2E3;
+  --l-green:  #DBDEDB;
+  --l-gold:   #EEECDD;
+
+  /* --- Observed-cases ink --- */
+  --c-obs:    #1A1A1A;
+
+  /* --- Neutrals / surfaces --- */
+  --bg:           #FFFFFF;
+  --bg-soft:      #FAFAF9;
+  --surface:      #FFFFFF;
+  --surface-alt:  #F5F5F4;
+  --ink:          #1A1A1A;
+  --ink-soft:     #4A4D50;
+  --ink-mute:     #6D7073;
+  --border:       #DEDCD7;
+  --border-soft:  #ECEAE5;
+
+  /* --- Callouts --- */
+  --warn-bg:      #FBF3E0;
+  --warn-border:  #C9A227;
+  --warn-ink:     #6B5410;
+  --note-bg:      #F1F1F0;
+  --note-border:  #C7C7C5;
+  --note-ink:     #4A4D50;
+
+  /* --- Geometry --- */
+  --maxw:        960px;
+  --radius:      8px;
+  --radius-sm:   6px;
+  --gap:         16px;
+  --shadow:      0 1px 2px rgba(26,26,26,.06), 0 2px 8px rgba(26,26,26,.05);
+
+  /* --- Type --- */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+               monospace;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg-soft);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#app {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 24px 20px 56px;
+}
+
+a { color: var(--c-blue); }
+a:hover { color: var(--c-red); }
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+#header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 3px solid var(--c-red);
+  margin-bottom: 20px;
+}
+
+#header .header-text { min-width: 0; }
+
+#title {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--c-blue);
+  line-height: 1.15;
+}
+
+#subtitle {
+  margin: 4px 0 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--c-gray);
+}
+
+#lead {
+  margin: 12px 0 0;
+  max-width: 64ch;
+  color: var(--ink-soft);
+  font-size: .95rem;
+}
+
+/* Language toggle */
+#langToggle {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--c-blue);
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+  transition: background .15s, color .15s, border-color .15s;
+}
+#langToggle:hover { background: var(--l-blue); border-color: var(--c-blue); }
+#langToggle:active { transform: translateY(1px); }
+
+/* ==========================================================================
+   Controls bar
+   ========================================================================== */
+#controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px 18px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 18px;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.control-label {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* Make the origin slider control flex to fill the row */
+.control--slider { flex: 1 1 280px; }
+
+/* Select */
+#stateSelect {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 8px 32px 8px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface)
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%2322354A' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>")
+    no-repeat right 10px center;
+  color: var(--ink);
+  font: inherit;
+  font-size: .9rem;
+  min-width: 200px;
+  cursor: pointer;
+}
+#stateSelect:focus-visible {
+  outline: 2px solid var(--c-blue);
+  outline-offset: 1px;
+  border-color: var(--c-blue);
+}
+
+/* ==========================================================================
+   Buttons / chips / toggles (shared)
+   ========================================================================== */
+.btn-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.btn,
+.chip {
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  cursor: pointer;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background .14s, color .14s, border-color .14s, box-shadow .14s;
+}
+.btn:hover,
+.chip:hover {
+  border-color: var(--c-blue);
+  background: var(--l-blue);
+  color: var(--c-blue);
+}
+.btn:active,
+.chip:active { transform: translateY(1px); }
+
+/* Active / selected state */
+.btn.active,
+.chip.active,
+.btn[aria-pressed="true"],
+.chip[aria-pressed="true"] {
+  background: var(--c-blue);
+  border-color: var(--c-blue);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+}
+
+/* Horizon chips use the red accent when active to echo the median line */
+#horizonChips .chip.active,
+#horizonChips .chip[aria-pressed="true"] {
+  background: var(--c-red);
+  border-color: var(--c-red);
+}
+
+.btn:focus-visible,
+.chip:focus-visible {
+  outline: 2px solid var(--c-blue);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Origin slider
+   ========================================================================== */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#originSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1 1 auto;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--l-red), var(--l-blue));
+  outline: none;
+  cursor: pointer;
+  margin: 8px 0;
+}
+#originSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--c-red);
+  border: 3px solid #fff;
+  box-shadow: 0 1px 3px rgba(26,26,26,.35);
+  cursor: pointer;
+}
+#originSlider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--c-red);
+  border: 3px solid #fff;
+  box-shadow: 0 1px 3px rgba(26,26,26,.35);
+  cursor: pointer;
+}
+#originSlider:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--c-blue); outline-offset: 2px; }
+#originSlider:focus-visible::-moz-range-thumb     { outline: 2px solid var(--c-blue); outline-offset: 2px; }
+
+#originLabel {
+  flex: 0 0 auto;
+  min-width: 9ch;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--c-red);
+  background: var(--l-red);
+  border-radius: var(--radius-sm);
+  padding: 4px 9px;
+}
+
+/* ==========================================================================
+   Checkboxes
+   ========================================================================== */
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: .85rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+  user-select: none;
+}
+.check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--c-blue);
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Legend
+   ========================================================================== */
+#legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  align-items: center;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  font-size: .82rem;
+  color: var(--ink-soft);
+}
+.legend-item { display: inline-flex; align-items: center; gap: 7px; }
+.legend-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 12px;
+  border-radius: 3px;
+  flex: 0 0 auto;
+}
+.legend-swatch--obs   { background: var(--c-obs); opacity: .55; }
+.legend-swatch--median{ background: var(--c-red); height: 3px; border-radius: 2px; }
+.legend-swatch--band  { background: rgba(122,41,41,.20); border: 1px solid rgba(122,41,41,.4); }
+.legend-swatch--cutoff{
+  background: repeating-linear-gradient(0deg, var(--c-obs) 0 3px, transparent 3px 6px);
+  width: 3px; height: 14px;
+}
+
+/* ==========================================================================
+   Chart + Grid
+   ========================================================================== */
+#chart {
+  width: 100%;
+  min-height: 460px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+/* Grid cells (chart.js emits .grid-cell / .grid-cell--wide / .grid-cell__title /
+   .grid-cell__plot). The first cell (National) spans the full grid width. */
+.grid-cell {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  padding: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.grid-cell--wide { grid-column: 1 / -1; }
+
+.grid-cell__title {
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--c-blue);
+  margin: 2px 4px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The plot div needs an explicit height or Plotly renders at 0px. */
+.grid-cell__plot {
+  width: 100%;
+  height: 160px;
+}
+.grid-cell--wide .grid-cell__plot {
+  height: 220px;
+}
+
+/* Show one region at a time */
+.view-single #grid { display: none; }
+.view-grid   #chart { display: none; }
+
+/* ==========================================================================
+   Callouts: .warn (amber) / .note (gray)
+   ========================================================================== */
+.callout {
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  font-size: .86rem;
+  line-height: 1.5;
+  margin: 14px 0 0;
+  border: 1px solid transparent;
+}
+.callout .callout-title {
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+.warn {
+  background: var(--warn-bg);
+  border-color: var(--warn-border);
+  color: var(--warn-ink);
+}
+.warn .callout-title { color: var(--warn-ink); }
+
+.note {
+  background: var(--note-bg);
+  border-color: var(--note-border);
+  color: var(--note-ink);
+}
+
+/* Live forward-forecast callout: a distinct gold-accented banner so it never
+   reads like the amber national-band .warn. Bold left rule + "VIGENTE/LIVE"
+   pill to flag that this is the genuine out-of-sample projection. */
+.live {
+  background: var(--l-gold);
+  border-color: var(--c-gold);
+  border-left: 5px solid var(--c-gold);
+  color: var(--c-blue);
+  position: relative;
+}
+.live .callout-title {
+  color: var(--c-blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.live .callout-title::before {
+  content: "● LIVE";
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: #fff;
+  background: var(--c-gold);
+  border-radius: 999px;
+  padding: 2px 9px;
+  line-height: 1.3;
+}
+html[lang="es"] .live .callout-title::before { content: "● VIGENTE"; }
+
+/* Hidden caveats by default (JS toggles them per origin / selection) */
+#caveat[hidden],
+#liveCaveat[hidden] { display: none; }
+
+/* "· pronóstico vigente / live forecast" tag appended to the origin label.
+   The origin <output> normally shows the red mono cutoff; in forward mode it
+   gets the .is-live class so it switches to the gold accent. */
+#originLabel.is-live {
+  color: var(--c-blue);
+  background: var(--l-gold);
+}
+.origin-live-tag {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: .72rem;
+  letter-spacing: .02em;
+  text-transform: none;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+#footer {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: .8rem;
+  color: var(--ink-mute);
+  line-height: 1.6;
+}
+#footer a { font-weight: 600; }
+
+/* ==========================================================================
+   Embed mode (?embed=1) — strip chrome for clean iframe
+   ========================================================================== */
+body.embed #app { padding: 12px; }
+body.embed #header { border-bottom-width: 2px; margin-bottom: 12px; }
+body.embed #lead,
+body.embed #footer { display: none; }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 680px) {
+  #app { padding: 18px 14px 44px; }
+  #title { font-size: 1.5rem; }
+  #header { flex-direction: column; }
+  #langToggle { align-self: flex-start; }
+  #controls { gap: 12px 14px; }
+  .control--slider { flex-basis: 100%; }
+  #stateSelect { min-width: 0; width: 100%; }
+  #chart { min-height: 380px; }
+  #grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
