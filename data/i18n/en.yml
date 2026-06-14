@@ -179,6 +179,7 @@ lineas:
 herramientas:
   dengue-forecast:
     nombre: Dengue Forecast
+    enlace_app: /en/herramientas/dengue-forecast
     resumen: Probabilistic dengue forecasting and early warning for all 32 states of Mexico.
     descripcion: >-
       A forecasting ensemble combining statistical models (regression with climatic lags), machine learning

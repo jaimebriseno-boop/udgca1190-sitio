@@ -8,3 +8,8 @@ dist/
 
 # Material privado (no publicar): CVs y roster con datos personales
 data/CVs de integrantes/
+
+# Artefactos locales de trabajo (no son parte del sitio publicado)
+.claude/
+# Fuente del visor de herramientas: el sitio solo sirve la copia en public/
+herramientas/

@@ -6,7 +6,7 @@
 - id: dengue-forecast
   nombre: "Dengue Forecast"
   tipo: predictiva
-  estado: desarrollo
+  estado: beta
   resumen: "Pronóstico probabilístico y alerta temprana de dengue para los 32 estados de México."
   descripcion: |
     Ensamble de pronóstico que combina modelos estadísticos (regresión con rezagos
@@ -18,7 +18,7 @@
     Briseño-Ramírez).
   tecnologias: ["R", "Gradient boosting", "Bayesian", "Conformal prediction"]
   linea: epidemiologia-infecciosas
-  enlace_app: ""
+  enlace_app: "/herramientas/dengue-forecast"
   repositorio: ""
   doi: ""
   captura: "/herramientas/placeholder.svg"

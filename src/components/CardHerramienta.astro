@@ -11,6 +11,9 @@ const { data: h, lineasMap, lang = 'es' } = Astro.props;
 const lg = lineasMap[h.linea];
 const estadoPill: Record<string, string> = { activa: 'pill-ok', beta: 'pill-info', desarrollo: 'pill-warn' };
 const pillClass = estadoPill[h.estado] || 'pill-warn';
+// Enlace interno (página del sitio) abre en la misma pestaña con un CTA destacado;
+// los enlaces externos conservan target="_blank".
+const appInterno = typeof h.enlace_app === 'string' && h.enlace_app.startsWith('/');
 ---
 <article class="tool card-flat" style={`--tool-color: var(--c-${lg?.color || 'blue'})`}>
   <div class="tool__bar" aria-hidden="true"></div>
@@ -56,7 +59,9 @@ const pillClass = estadoPill[h.estado] || 'pill-warn';
 
   {(h.enlace_app || h.repositorio || h.doi) && (
     <div class="tool__links">
-      {h.enlace_app && <a class="tool__link" href={h.enlace_app} target="_blank" rel="noopener">{t(lang, 'tool.link_app')}</a>}
+      {h.enlace_app && (appInterno
+        ? <a class="tool__link tool__link--cta" href={h.enlace_app}>{t(lang, 'tool.open')}</a>
+        : <a class="tool__link" href={h.enlace_app} target="_blank" rel="noopener">{t(lang, 'tool.link_app')}</a>)}
       {h.repositorio && <a class="tool__link" href={h.repositorio} target="_blank" rel="noopener">{t(lang, 'tool.link_repo')}</a>}
       {h.doi && <a class="tool__link" href={`https://doi.org/${h.doi}`} target="_blank" rel="noopener">{t(lang, 'tool.link_doi')}</a>}
     </div>
@@ -84,4 +89,6 @@ const pillClass = estadoPill[h.estado] || 'pill-warn';
   .tool__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-2); margin-top: var(--sp-1); }
   .tool__links { display: flex; flex-wrap: wrap; gap: var(--sp-3); border-top: 1px solid var(--udg-gray-200); padding-top: var(--sp-2); }
   .tool__link { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); transition: color 150ms ease; }
+  .tool__link:hover { color: var(--tool-color); }
+  .tool__link--cta { font-weight: var(--fw-semibold); color: var(--tool-color); }
 </style>

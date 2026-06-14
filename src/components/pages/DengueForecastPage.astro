@@ -1,0 +1,74 @@
+---
+// Página de la herramienta "Dengue Forecast": marco institucional del sitio
+// (Base + PageHeader) con el visor estático embebido por iframe. El visor vive en
+// public/herramientas/dengue-forecast/app/ y es autocontenido (Plotly + JSON).
+// Opción B de las INSTRUCCIONES del visor; auto-ajuste de altura por postMessage.
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
+import { t } from '../../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+// Sin `state` => default Nacional. `origin=2022-01` abre en el inicio del resurgimiento
+// DENV-3, para que el usuario mueva el slider y vea cómo el modelo predice hacia adelante.
+const appBase = '/herramientas/dengue-forecast/app/';
+const embedSrc = `${appBase}?lang=${lang}&origin=2022-01&embed=1`;
+const fullSrc = `${appBase}?lang=${lang}&origin=2022-01`;
+---
+<Base titulo={t(lang, 'dengue.title')} descripcion={t(lang, 'dengue.meta')} lang={lang}>
+  <PageHeader eyebrow={t(lang, 'dengue.kicker')} title={t(lang, 'dengue.title')} description={t(lang, 'dengue.intro')} />
+  <section class="section">
+    <div class="container">
+      <div class="tool-toolbar">
+        <a class="fullscreen-link" href={fullSrc} target="_blank" rel="noopener">{t(lang, 'dengue.fullscreen')}</a>
+      </div>
+      <div class="viewer-frame">
+        <iframe
+          id="dengueFrame"
+          src={embedSrc}
+          title={t(lang, 'dengue.iframe_title')}
+          loading="lazy"
+          referrerpolicy="no-referrer"></iframe>
+      </div>
+      <p class="viewer-note">{t(lang, 'dengue.note')}</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section { padding-block-start: var(--sp-6); }
+  .tool-toolbar { display: flex; justify-content: flex-end; margin-bottom: var(--sp-2); }
+  .fullscreen-link { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); }
+  .fullscreen-link:hover { color: var(--udg-red-600); }
+  .viewer-frame {
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg, #fff);
+  }
+  #dengueFrame {
+    display: block;
+    width: 100%;
+    border: 0;
+    /* respaldo si el postMessage de altura no llegara */
+    min-height: 1100px;
+  }
+  .viewer-note {
+    margin-top: var(--sp-2);
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+  }
+</style>
+
+<script>
+  // El visor reporta su altura al contenedor: { type: 'dengue-height', height }.
+  const frame = document.getElementById('dengueFrame') as HTMLIFrameElement | null;
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if (frame && d && d.type === 'dengue-height' && typeof d.height === 'number' && d.height > 0) {
+      frame.style.height = d.height + 'px';
+      frame.style.minHeight = '0';
+    }
+  });
+</script>
