@@ -14,13 +14,13 @@
     bayesianos sobre un panel mensual de 15,591 observaciones por estado (1985–2026),
     con recalibración en línea por predicción conforme y un clasificador de alarma de
     brote (AUC 0.846 a un mes). Genera pronósticos a 1, 3, 6 y 12 meses para alerta y
-    respuesta temprana (EWARS). Manuscrito en preparación (De Arcos-Jiménez y
-    Briseño-Ramírez).
+    respuesta temprana (EWARS). Preprint en evaluación por pares (Briseño-Ramírez
+    et al., Research Square 2026).
   tecnologias: ["R", "Gradient boosting", "Bayesian", "Conformal prediction"]
   linea: epidemiologia-infecciosas
   enlace_app: "/herramientas/dengue-forecast"
   repositorio: ""
-  doi: ""
+  doi: "10.21203/rs.3.rs-10035640/v1"
   captura: "/herramientas/placeholder.svg"
   destacado: true
 

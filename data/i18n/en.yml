@@ -186,7 +186,7 @@ herramientas:
       (gradient boosting), and Bayesian spatial models over a monthly state-level panel of 15,591 observations
       (1985-2026), with online recalibration via conformal prediction and an outbreak-alarm classifier (AUC
       0.846 at one month). It generates 1-, 3-, 6-, and 12-month forecasts to support early warning and
-      response (EWARS). Manuscript in preparation (De Arcos-Jiménez and Briseño-Ramírez).
+      response (EWARS). Preprint under peer review (Briseño-Ramírez et al., Research Square 2026).
   wisca-bayesiano:
     nombre: Bayesian WISCA
     resumen: Weighted-incidence syndromic combination antibiograms (WISCA) with Bayesian modeling.

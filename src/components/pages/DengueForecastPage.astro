@@ -15,6 +15,10 @@ const { lang = 'es' } = Astro.props;
 const appBase = '/herramientas/dengue-forecast/app/';
 const embedSrc = `${appBase}?lang=${lang}&origin=2022-01&embed=1`;
 const fullSrc = `${appBase}?lang=${lang}&origin=2022-01`;
+
+// Preprint que respalda la herramienta (en evaluación por pares, Research Square).
+const citeDoi = '10.21203/rs.3.rs-10035640/v1';
+const citeUrl = `https://doi.org/${citeDoi}`;
 ---
 <Base titulo={t(lang, 'dengue.title')} descripcion={t(lang, 'dengue.meta')} lang={lang}>
   <PageHeader eyebrow={t(lang, 'dengue.kicker')} title={t(lang, 'dengue.title')} description={t(lang, 'dengue.intro')} />
@@ -32,6 +36,18 @@ const fullSrc = `${appBase}?lang=${lang}&origin=2022-01`;
           referrerpolicy="no-referrer"></iframe>
       </div>
       <p class="viewer-note">{t(lang, 'dengue.note')}</p>
+
+      <aside class="cite" aria-label={t(lang, 'dengue.cite_heading')}>
+        <div class="cite__head">
+          <h2 class="cite__title">{t(lang, 'dengue.cite_heading')}</h2>
+          <span class="cite__status">{t(lang, 'dengue.cite_status')}</span>
+        </div>
+        <p class="cite__text">{t(lang, 'dengue.cite_text')}</p>
+        <p class="cite__doi">
+          <a href={citeUrl} target="_blank" rel="noopener">{t(lang, 'dengue.cite_doi')}</a>
+          <span class="cite__id">DOI: {citeDoi}</span>
+        </p>
+      </aside>
     </div>
   </section>
 </Base>
@@ -58,6 +74,60 @@ const fullSrc = `${appBase}?lang=${lang}&origin=2022-01`;
     margin-top: var(--sp-2);
     color: var(--c-gray);
     font-size: var(--fs-sm);
+  }
+  .cite {
+    margin-top: var(--sp-4);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-left: 3px solid var(--udg-red-600);
+    border-radius: var(--radius-md, 8px);
+    background: var(--udg-gray-50, #f7f7f8);
+  }
+  .cite__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-2);
+  }
+  .cite__title {
+    font-size: var(--fs-s1);
+    font-weight: var(--fw-semibold);
+    margin: 0;
+  }
+  .cite__status {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--udg-navy-700);
+    background: var(--udg-gray-200);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .cite__text {
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed, 1.6);
+    margin: 0 0 var(--sp-2);
+  }
+  .cite__doi {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-3);
+    margin: 0;
+  }
+  .cite__doi a {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--udg-red-600);
+    font-weight: var(--fw-semibold);
+  }
+  .cite__id {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--c-gray);
   }
 </style>
 
