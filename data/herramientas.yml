@@ -3,6 +3,30 @@
 # estado: activa | beta | desarrollo
 # linea:  id de una LGAC (data/lineas.yml)
 
+- id: propedeutica-basada-en-evidencia
+  nombre: "Propedéutica médica basada en evidencia"
+  tipo: estadistica
+  estado: activa
+  resumen: "Buscador de signos de exploración física con su rendimiento diagnóstico medido."
+  descripcion: |
+    Herramienta docente que reúne 1 185 hallazgos de exploración física con su
+    rendimiento diagnóstico: sensibilidad, especificidad, razones de verosimilitud
+    con intervalo de confianza y patrón de referencia declarado. Incluye buscador
+    por signo, epónimo, condición diana o maniobra; calculadora de probabilidad
+    posprueba con nomograma de Fagan; y una guía de lectura crítica sobre bandas
+    de LR, concordancia interobservador y sesgos de diseño de los estudios de
+    pruebas diagnósticas. De los 1 185 hallazgos, 309 provienen de investigación
+    propia del CA verificada contra el resumen de cada PMID y se publican con
+    cifras completas; los 876 restantes funcionan como índice localizador hacia
+    la obra de referencia. Bilingüe (es/en).
+  tecnologias: ["Python", "JavaScript", "PubMed", "Crossref"]
+  linea: clinica-epidemiologica-traslacional
+  enlace_app: "/herramientas/propedeutica"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: true
+
 - id: dengue-forecast
   nombre: "Dengue Forecast"
   tipo: predictiva
