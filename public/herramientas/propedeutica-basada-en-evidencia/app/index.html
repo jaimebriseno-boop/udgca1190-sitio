@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propedéutica médica basada en evidencia · UDG-CA-1190</title>
+<meta name="description" content="Buscador de signos de exploración física con su rendimiento diagnóstico y calculadora de probabilidad posprueba. Cuerpo Académico UDG-CA-1190, Universidad de Guadalajara.">
+<link rel="stylesheet" href="./css/theme.css">
+</head>
+<body>
+<div id="app" class="app" hidden>
+
+  <nav class="tabs" role="tablist" aria-label="Módulos">
+    <button class="tab is-on" role="tab" data-tab="buscador" aria-selected="true"><span data-i="tab.buscar"></span></button>
+    <button class="tab" role="tab" data-tab="calculadora" aria-selected="false"><span data-i="tab.calc"></span></button>
+    <button class="tab" role="tab" data-tab="guia" aria-selected="false"><span data-i="tab.guia"></span></button>
+    <span class="tabs__spacer"></span>
+    <span class="tabs__count" id="cuentaGlobal"></span>
+  </nav>
+
+  <!-- ══════════════ BUSCADOR ══════════════ -->
+  <section class="panel is-on" id="p-buscador" role="tabpanel">
+    <div class="buscador">
+      <div class="buscador__bar">
+        <svg class="ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6.2" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="13.6" y1="13.6" x2="18" y2="18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input type="search" id="q" autocomplete="off" spellcheck="false" data-i-ph="buscar.ph" aria-label="Buscar">
+        <span class="cuenta" id="cuenta"></span>
+      </div>
+
+      <div class="filtros">
+        <select id="fDom" aria-label="Región"></select>
+        <select id="fCond" aria-label="Condición"></select>
+        <span class="sep" aria-hidden="true"></span>
+        <button class="chip" data-v="confirma"><span data-i="v.confirma"></span></button>
+        <button class="chip" data-v="descarta"><span data-i="v.descarta"></span></button>
+        <button class="chip" data-v="ajusta"><span data-i="v.ajusta"></span></button>
+        <button class="chip" data-v="debil"><span data-i="v.debil"></span></button>
+        <button class="chip" data-v="nulo"><span data-i="v.nulo"></span></button>
+        <span class="sep" aria-hidden="true"></span>
+        <button class="chip" data-g="full"><span data-i="f.full"></span></button>
+        <button class="chip" data-g="ep"><span data-i="f.ep"></span></button>
+        <button class="chip" data-g="mn"><span data-i="f.mn"></span></button>
+        <button class="chip chip--clear" id="limpiar"><span data-i="f.limpiar"></span></button>
+      </div>
+
+      <div class="split">
+        <div class="lista" id="lista">
+          <div class="lista__cab">
+            <span data-i="col.signo"></span>
+            <span data-i="col.veredicto"></span>
+            <span data-i="col.fuente"></span>
+          </div>
+          <div id="filas"></div>
+        </div>
+        <aside class="ficha" id="ficha" aria-live="polite"></aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CALCULADORA ══════════════ -->
+  <section class="panel" id="p-calculadora" role="tabpanel">
+    <div class="calc">
+      <div class="calc__col">
+        <h2 class="h2" data-i="calc.titulo"></h2>
+        <p class="lead" data-i="calc.intro"></p>
+
+        <div class="ctrl">
+          <label for="cPre" data-i="calc.pre"></label>
+          <input type="range" id="cPre" min="1" max="95" step="1" value="25">
+          <output id="cPreV">25 %</output>
+        </div>
+        <div class="ctrl">
+          <label for="cLr" data-i="calc.lr"></label>
+          <input type="range" id="cLr" min="0" max="60" step="1" value="30">
+          <output id="cLrV">4.1</output>
+        </div>
+
+        <div class="viaje">
+          <div class="caja"><span class="et" data-i="calc.pre_corto"></span><b id="vPre">25 %</b></div>
+          <span class="op">×</span>
+          <div class="caja caja--lr"><span class="et">LR</span><b id="vLr">4.1</b></div>
+          <span class="op">→</span>
+          <div class="caja caja--post"><span class="et" data-i="calc.post_corto"></span><b id="vPost">58 %</b></div>
+        </div>
+
+        <div class="termo"><i id="tBarra"></i><u id="tMarca"></u></div>
+        <div class="termo__esc"><span>0 %</span><span id="tEtq" data-i="calc.marca"></span><span>100 %</span></div>
+
+        <pre class="cuenta-mat" id="cuentaMat"></pre>
+
+        <div class="presets" id="presets"></div>
+      </div>
+
+      <div class="calc__col">
+        <h3 class="h3" data-i="calc.nomo"></h3>
+        <svg id="fagan" viewBox="0 0 320 460" class="fagan" role="img" aria-label="Nomograma de Fagan"></svg>
+        <p class="nota" data-i="calc.nomo_pie"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ GUÍA ══════════════ -->
+  <section class="panel" id="p-guia" role="tabpanel">
+    <div class="guia" id="guia"></div>
+  </section>
+
+  <footer class="pie">
+    <p id="pieTexto"></p>
+  </footer>
+</div>
+
+<div id="cargando" class="cargando"><span></span></div>
+
+<script src="./js/app.js"></script>
+</body>
+</html>

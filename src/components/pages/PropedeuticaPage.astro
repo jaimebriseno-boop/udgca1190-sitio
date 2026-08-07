@@ -1,0 +1,117 @@
+---
+// Página de la herramienta "Propedéutica médica basada en evidencia": marco
+// institucional del sitio (Base + PageHeader) con la app estática embebida por
+// iframe. La app vive en public/herramientas/propedeutica-basada-en-evidencia/app/
+// y es autocontenida (sin dependencias externas); reporta su altura por
+// postMessage, igual que el visor de Dengue Forecast.
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
+import { t } from '../../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+const appBase = '/herramientas/propedeutica-basada-en-evidencia/app/';
+// Se apunta al archivo, no al directorio: el servidor de desarrollo de Astro no
+// resuelve «.../app/» a su index.html, aunque Vercel sí lo haga en producción.
+const embedSrc = `${appBase}index.html?lang=${lang}&embed=1`;
+const fullSrc = `${appBase}index.html?lang=${lang}`;
+---
+<Base titulo={t(lang, 'pebm.title')} descripcion={t(lang, 'pebm.meta')} lang={lang}>
+  <PageHeader eyebrow={t(lang, 'pebm.kicker')} title={t(lang, 'pebm.title')} description={t(lang, 'pebm.intro')} />
+  <section class="section">
+    <div class="container">
+      <div class="tool-toolbar">
+        <a class="fullscreen-link" href={fullSrc} target="_blank" rel="noopener">{t(lang, 'pebm.fullscreen')}</a>
+      </div>
+      <div class="viewer-frame">
+        <iframe
+          id="pebmFrame"
+          src={embedSrc}
+          title={t(lang, 'pebm.iframe_title')}
+          loading="lazy"
+          referrerpolicy="no-referrer"></iframe>
+      </div>
+      <p class="viewer-note">{t(lang, 'pebm.note')}</p>
+
+      <aside class="fuentes" aria-label={t(lang, 'pebm.sources_heading')}>
+        <div class="fuentes__head">
+          <h2 class="fuentes__title">{t(lang, 'pebm.sources_heading')}</h2>
+          <span class="fuentes__status">{t(lang, 'pebm.sources_status')}</span>
+        </div>
+        <p class="fuentes__text" set:html={t(lang, 'pebm.sources_own')} />
+        <p class="fuentes__text" set:html={t(lang, 'pebm.sources_index')} />
+      </aside>
+
+      <aside class="cite" aria-label={t(lang, 'pebm.cite_heading')}>
+        <h2 class="cite__title">{t(lang, 'pebm.cite_heading')}</h2>
+        <p class="cite__text">{t(lang, 'pebm.cite_text')}</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section { padding-block-start: var(--sp-6); }
+  .tool-toolbar { display: flex; justify-content: flex-end; margin-bottom: var(--sp-2); }
+  .fullscreen-link { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); }
+  .fullscreen-link:hover { color: var(--udg-red-600); }
+  .viewer-frame {
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #fff;
+  }
+  #pebmFrame {
+    display: block;
+    width: 100%;
+    border: 0;
+    /* respaldo si el postMessage de altura no llegara */
+    min-height: 1000px;
+  }
+  .viewer-note {
+    margin-top: var(--sp-2);
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+  }
+  .fuentes, .cite {
+    margin-top: var(--sp-4);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-left: 3px solid var(--udg-navy-700);
+    border-radius: var(--radius-md, 8px);
+    background: var(--udg-gray-50, #f7f7f8);
+  }
+  .cite { border-left-color: var(--udg-red-600); }
+  .fuentes__head {
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: var(--sp-2); margin-bottom: var(--sp-2);
+  }
+  .fuentes__title, .cite__title {
+    font-size: var(--fs-s1); font-weight: var(--fw-semibold); margin: 0;
+  }
+  .cite__title { margin-bottom: var(--sp-2); }
+  .fuentes__status {
+    font-family: var(--font-mono); font-size: var(--fs-xs);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--udg-navy-700); background: var(--udg-gray-200);
+    padding: 2px 8px; border-radius: 999px;
+  }
+  .fuentes__text, .cite__text {
+    color: var(--c-gray); font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed, 1.6); margin: 0 0 var(--sp-2);
+  }
+  .fuentes__text:last-child { margin-bottom: 0; }
+</style>
+
+<script>
+  // La app reporta su altura al contenedor: { type: 'pebm-height', height }.
+  const frame = document.getElementById('pebmFrame') as HTMLIFrameElement | null;
+  window.addEventListener('message', (e) => {
+    const d = e.data;
+    if (frame && d && d.type === 'pebm-height' && typeof d.height === 'number' && d.height > 0) {
+      frame.style.height = d.height + 'px';
+      frame.style.minHeight = '0';
+    }
+  });
+</script>
