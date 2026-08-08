@@ -18,6 +18,7 @@ const embedSrc = `${appBase}index.html?lang=${lang}&embed=1`;
 const fullSrc = `${appBase}index.html?lang=${lang}`;
 ---
 <Base titulo={t(lang, 'pebm.title')} descripcion={t(lang, 'pebm.meta')} lang={lang}>
+  <div class="tool-page">
   <PageHeader eyebrow={t(lang, 'pebm.kicker')} title={t(lang, 'pebm.title')} description={t(lang, 'pebm.intro')} />
   <section class="section">
     <div class="container">
@@ -49,9 +50,13 @@ const fullSrc = `${appBase}index.html?lang=${lang}`;
       </aside>
     </div>
   </section>
+  </div>
 </Base>
 
 <style>
+  /* Esta página (herramienta ancha) puede crecer más que la columna de prosa:
+     header + visor usan hasta 1600px en pantallas amplias. */
+  .tool-page :global(.container) { max-width: 1600px; }
   .section { padding-block-start: var(--sp-6); }
   .tool-toolbar { display: flex; justify-content: flex-end; margin-bottom: var(--sp-2); }
   .fullscreen-link { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); }
