@@ -13,3 +13,6 @@ data/CVs de integrantes/
 .claude/
 # Fuente del visor de herramientas (solo la carpeta raíz): el sitio sirve la copia en public/
 /herramientas/
+
+# PDFs de artículos originales (no se publican; solo fuente de extracción)
+herramientas/Exploracion_fisica_EBM/
