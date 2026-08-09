@@ -6,23 +6,39 @@ Lo único que se regenera es `app/data/signos.json`.
 ## Origen de los datos
 
 El archivo se produce desde la base de trabajo del proyecto *«Del síntoma al
-diagnóstico»* (repositorio propio, rama `CULS`), a partir de tres archivos:
+diagnóstico»*, cuya copia canónica vive (desde 2026-08-08) en el vault privado:
+
+    /Users/jaibri/Jaibri/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs
+
+a partir de tres archivos:
 
 | Archivo de origen | Aporta |
 |---|---|
-| `datos/maestra_borrador.jsonl` | 876 hallazgos parseados de McGee 3.ª ed. |
-| `datos/externos_verificado.jsonl` | 309 hallazgos de PubMed verificados por el CA |
-| `datos/enriquecimiento.jsonl` | Nomenclatura en español, epónimos y maniobras |
+| `maestra_borrador.jsonl` | Hallazgos parseados de McGee 3.ª ed. que aún funcionan como índice |
+| `externos_verificado.jsonl` | Hallazgos con cifras del artículo original, verificadas verbatim |
+| `enriquecimiento.jsonl` | Nomenclatura en español, epónimos y maniobras |
+
+**Importante:** la maestra contiene la compilación protegida de McGee y este
+repo es público — los datos crudos NO se versionan aquí, solo en el vault.
 
 ## Comando
 
 ```sh
 python3 scripts/propedeutica_generar_signos.py \
-  --datos  "/ruta/al/worktree/CULS/datos" \
+  --datos  "/Users/jaibri/Jaibri/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs" \
   --salida "public/herramientas/propedeutica-basada-en-evidencia/app/data/signos.json"
 ```
 
 No requiere dependencias: solo la biblioteca estándar de Python 3.
+
+## Sustitución de registros índice → full
+
+Los registros `idx` se van convirtiendo en `full` conforme se localizan y
+verifican las cifras en el artículo original (PubMed, texto completo OA o PDF
+aportado). El pipeline completo (resolución de referencias, descarga de
+abstracts, búsquedas alternativas, generación de digests para agentes,
+verificación verbatim y conversión) está versionado en
+`scripts/propedeutica_sustitucion/` — ver su README.
 
 ## Qué se publica y qué no
 
