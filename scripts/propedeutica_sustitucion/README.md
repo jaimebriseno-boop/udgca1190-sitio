@@ -2,10 +2,16 @@
 
 Convierte registros `idx` (que solo llevan localizador McGee, sin cifras) en
 registros `full` con cifras diagnósticas extraídas del **artículo original**
-(PubMed / texto completo), con la regla de oro del proyecto:
+(PubMed / texto completo). Regla del proyecto (actualizada 2026-08-10 por
+decisión del director):
 
-> Toda cifra publicada debe aparecer VERBATIM en la fuente citada (abstract
-> o texto completo del PMID declarado). Nunca se calcula, estima ni combina.
+> 1. Preferida: cifra VERBATIM en la fuente citada (Sn/Sp/LR impresas).
+> 2. Permitida: cálculo propio de Sn/Sp/LR desde frecuencias por grupo o
+>    conteos 2×2 publicados (Sp = 100 − P(signo|D−); LR+ = Sn/(100−Sp);
+>    LR− = (100−Sn)/Sp; Sn = 100·a/b de fracciones). El registro lleva
+>    `cifras_calculadas` y la ficha muestra la nota.
+> 3. Prohibido: calcular desde gráficas, estimar, combinar estudios, o
+>    atribuir cifras de otro umbral/modelo. Ante la duda: sin_cifras.
 
 Los datos (`maestra_borrador.jsonl`, `externos_verificado.jsonl`) NO viven en
 este repo (es público y la maestra contiene la compilación protegida de
