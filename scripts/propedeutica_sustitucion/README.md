@@ -76,4 +76,25 @@ el texto cuando el agente la deformó pero los números son correctos.
 | Abstracts de refs McGee | 151+86 | 64 |
 | Texto completo OA (PMC+Unpaywall) | 63 | 5 |
 | Estudios alternativos | 279 | 14 |
-| PDFs usuario (3) + pasada manual | 46 | 9 |
+| PDFs usuario tanda 1 (50) + pasadas manuales | 328 | 24 |
+| PDFs usuario tanda 2 (48) | 106 | 17 |
+
+## POCUS (ultrasonido de cabecera)
+
+Línea paralela: registros NUEVOS con `tipo_hallazgo: "pocus"` y
+`tipo_fuente: "metaanalisis"` (no sustituyen nada del índice McGee).
+La literatura POCUS es moderna y los meta-análisis suelen traer Sn/Sp
+agrupadas en el abstract — la regla verbatim funciona sin texto completo.
+
+```
+p01_buscar_pocus.py      catálogo de aplicaciones + esearch → pocus_hits.json
+p02_digest_pocus.py      abstracts → oraciones con cifras → digest para agente
+p03_convertir_pocus.py   salida verificada → registros externos nuevos
+```
+
+El agente elige UN candidato por aplicación (meta-análisis > revisión >
+primario) con Sn/Sp explícitas; s06_verificar.py valida verbatim contra el
+abstract. Si la fuente reporta rango entre estudios (no cifra única), las
+cifras quedan en None y el rango va en la cita textual (`--rangos`).
+
+Rendimiento: ola 1-2: 16/16 aplicaciones con cifras · ola 3: 12 en curso.
