@@ -325,6 +325,7 @@ def main():
             "th": x.get("tipo_hallazgo"),
             "sn": num(x.get("sensibilidad")), "sp": num(x.get("especificidad")),
             "lp": lp, "ln": ln,
+            "vpp": num(x.get("vpp")), "vpn": num(x.get("vpn")),
             "snic": x.get("sensibilidad_ic95"), "spic": x.get("especificidad_ic95"),
             "lpic": x.get("lr_pos_ic95"), "lnic": x.get("lr_neg_ic95"),
             "v": veredicto(lp, ln, False, False),

@@ -31,6 +31,8 @@
       'cuenta': '{n} de {t} hallazgos', 'vacio': 'Sin resultados. Pruebe otro término o limpie los filtros.',
       'mas': 'Mostrar {n} más', 'ficha.vacia': 'Seleccione un hallazgo de la lista para ver su ficha.',
       'm.sn': 'Sensibilidad', 'm.sp': 'Especificidad', 'm.lp': 'LR+', 'm.ln': 'LR−',
+      'm.vpp': 'VPP', 'm.vpn': 'VPN',
+      'm.vpnota': 'VPP: probabilidad de tener la condición si el signo está presente. VPN: probabilidad de no tenerla si está ausente. Ambos dependen de la prevalencia (aquí, la del estudio citado); para su paciente use la calculadora con la LR.',
       'b.maniobra': 'Cómo se busca', 'b.patron': 'Patrón de referencia', 'b.poblacion': 'Población estudiada',
       'b.cita': 'Cita textual de la fuente', 'b.loc': 'Dónde consultar la cifra', 'b.region': 'Región',
       'b.calc': 'Qué hace en este paciente', 'b.pre': 'Preprueba',
@@ -66,6 +68,8 @@
       'cuenta': '{n} of {t} findings', 'vacio': 'No results. Try another term or clear the filters.',
       'mas': 'Show {n} more', 'ficha.vacia': 'Select a finding from the list to see its full record.',
       'm.sn': 'Sensitivity', 'm.sp': 'Specificity', 'm.lp': 'LR+', 'm.ln': 'LR−',
+      'm.vpp': 'PPV', 'm.vpn': 'NPV',
+      'm.vpnota': 'PPV: probability of having the condition when the sign is present. NPV: probability of not having it when absent. Both depend on prevalence (here, the cited study’s); for your patient use the calculator with the LR.',
       'b.maniobra': 'How it is elicited', 'b.patron': 'Reference standard', 'b.poblacion': 'Population studied',
       'b.cita': 'Verbatim quote from the source', 'b.loc': 'Where to find the figure', 'b.region': 'Region',
       'b.calc': 'What it does in this patient', 'b.pre': 'Pre-test',
@@ -268,7 +272,13 @@
         celda(t('m.sp'), r.sp == null ? '—' : rango(r.sp) + ' %', r.spic) +
         celda(t('m.lp'), r.lp == null ? '—' : fmtLr(r.lp), r.lpic) +
         celda(t('m.ln'), r.ln == null ? '—' : fmtLr(r.ln), r.lnic) +
+        ((r.vpp != null || r.vpn != null)
+          ? celda(t('m.vpp'), r.vpp == null ? '—' : rango(r.vpp) + ' %') +
+            celda(t('m.vpn'), r.vpn == null ? '—' : rango(r.vpn) + ' %')
+          : '') +
         '</div>';
+      if (r.vpp != null || r.vpn != null)
+        h += '<p class="nota" style="margin:0 0 8px">' + esc(t('m.vpnota')) + '</p>';
     } else {
       h += '<div class="aviso-idx">' + t('idx.aviso') + '</div>';
     }
