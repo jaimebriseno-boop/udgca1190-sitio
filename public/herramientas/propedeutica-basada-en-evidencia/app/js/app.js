@@ -282,6 +282,12 @@
       (r.ne ? ' · ' + r.ne + (LANG === 'en' ? ' studies' : ' estudios') : ''));
     if (r.cit) h += '<div class="bloque"><div class="t">' + esc(t('b.cita')) +
       '</div><div class="x cita">' + esc(r.cit) + '</div></div>';
+    if (r.calc) h += '<div class="bloque"><div class="t">' +
+      (LANG === 'en' ? 'Note on the figures' : 'Nota sobre las cifras') +
+      '</div><div class="x">' + esc(LANG === 'en'
+        ? 'Figures calculated by the project from the published frequencies/counts in the quote.'
+        : 'Cifras calculadas por el proyecto a partir de las frecuencias o conteos publicados en la cita.') +
+      '</div></div>';
 
     if (r.loc || r.pmid || r.doi) {
       h += '<div class="loc"><div class="t">' + esc(t('b.loc')) + '</div><div class="x">';

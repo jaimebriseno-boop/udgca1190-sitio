@@ -336,6 +336,7 @@ def main():
             "tf": x.get("tipo_fuente"),
             "pmid": x.get("pmid"), "doi": x.get("doi"),
             "cit": x.get("cita_textual"),          # cita en inglés: no se toca
+            "calc": x.get("cifras_calculadas"),     # nota si las cifras son cálculo propio
             "nc": x.get("nivel_confianza"),
         }
         recs.append(limpio(r)); i += 1
