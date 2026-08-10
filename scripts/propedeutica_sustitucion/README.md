@@ -97,4 +97,4 @@ primario) con Sn/Sp explícitas; s06_verificar.py valida verbatim contra el
 abstract. Si la fuente reporta rango entre estudios (no cifra única), las
 cifras quedan en None y el rango va en la cita textual (`--rangos`).
 
-Rendimiento: ola 1-2: 16/16 aplicaciones con cifras · ola 3: 12 en curso.
+Rendimiento: ola 1-2: 16/16 aplicaciones con cifras · ola 3: 8/12 (1 dup de ola 1, 3 sin Sn/Sp en abstract).
