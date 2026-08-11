@@ -121,6 +121,13 @@ a{color:var(--red-600)}
 .met .e{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--g-500);font-weight:600}
 .met .v{font-family:var(--font-mono);font-size:var(--fs-s1);font-weight:600;color:var(--navy-900);line-height:1.25}
 .met .ic{font-family:var(--font-mono);font-size:10.5px;color:var(--g-500)}
+.vptab{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--g-200);
+  border-radius:var(--r-md);overflow:hidden}
+.vptab th{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--g-500);
+  font-weight:600;text-align:left;padding:6px 10px;border-bottom:1px solid var(--g-200)}
+.vptab td{font-family:var(--font-mono);font-size:var(--fs-sm);color:var(--navy-900);
+  padding:6px 10px;border-bottom:1px solid var(--g-200)}
+.vptab tr:last-child td{border-bottom:none}
 .bloque{margin-top:var(--sp-2)}
 .bloque .t{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--navy-700);
   font-weight:700;margin-bottom:3px}

@@ -264,6 +264,39 @@ def veredicto(lp, ln, lpns, lnns):
 def limpio(d):
     return {k: v for k, v in d.items() if v not in (None, "", [], {})}
 
+# Escenarios de prevalencia preprueba (%) para los VPP/VPN calculados.
+# Son prevalencias SUPUESTAS (sospecha baja/intermedia/alta), no del estudio;
+# la ficha lo aclara y remite a la calculadora con la LR para el paciente concreto.
+ESCENARIOS_VPP = [5, 20, 50]
+
+def vp_escenarios(sn, sp, lp, ln):
+    """VPP/VPN (%) por escenario de prevalencia preprueba.
+
+    Prefiere Sn+Sp (fórmula directa); si faltan, usa LR+ para el VPP y
+    LR− para el VPN (odds post = LR · odds pre). Devuelve
+    [[p, vpp, vpn], …] o None si ningún escenario es calculable.
+    """
+    filas, alguno = [], False
+    for p in ESCENARIOS_VPP:
+        vpp = vpn = None
+        if sn is not None and sp is not None:
+            d_pos = sn * p + (100 - sp) * (100 - p)
+            d_neg = sp * (100 - p) + (100 - sn) * p
+            if d_pos: vpp = 100 * sn * p / d_pos
+            if d_neg: vpn = 100 * sp * (100 - p) / d_neg
+        else:
+            odds_pre = p / (100 - p)
+            if lp is not None:
+                odds = lp * odds_pre
+                vpp = 100 * odds / (1 + odds)
+            if ln is not None:
+                odds = ln * odds_pre
+                vpn = 100 * (1 - odds / (1 + odds))
+        alguno = alguno or vpp is not None or vpn is not None
+        filas.append([p, round(vpp, 1) if vpp is not None else None,
+                        round(vpn, 1) if vpn is not None else None])
+    return filas if alguno else None
+
 # ──────────────────────────────── Programa ────────────────────────────────
 def main():
     ap = argparse.ArgumentParser()
@@ -325,7 +358,8 @@ def main():
             "th": x.get("tipo_hallazgo"),
             "sn": num(x.get("sensibilidad")), "sp": num(x.get("especificidad")),
             "lp": lp, "ln": ln,
-            "vpp": num(x.get("vpp")), "vpn": num(x.get("vpn")),
+            "vps": vp_escenarios(num(x.get("sensibilidad")),
+                                 num(x.get("especificidad")), lp, ln),
             "snic": x.get("sensibilidad_ic95"), "spic": x.get("especificidad_ic95"),
             "lpic": x.get("lr_pos_ic95"), "lnic": x.get("lr_neg_ic95"),
             "v": veredicto(lp, ln, False, False),

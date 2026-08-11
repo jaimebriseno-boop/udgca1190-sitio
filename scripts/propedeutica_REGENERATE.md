@@ -44,10 +44,12 @@ verificación verbatim y conversión) está versionado en
 
 El generador separa los registros en dos clases mediante el campo `f`:
 
-- **`f: "full"`** — los 309 hallazgos de investigación propia del Cuerpo
-  Académico. Se publican todas las cifras (sensibilidad, especificidad, razones
+- **`f: "full"`** — los hallazgos con cifras verificadas contra su fuente
+  primaria. Se publican todas las cifras (sensibilidad, especificidad, razones
   de verosimilitud e intervalos), la población estudiada, el PMID, el DOI y la
-  **cita textual del resumen** que respalda cada dato.
+  **cita textual del resumen** que respalda cada dato. Cuando hay Sn+Sp o LR,
+  la ficha muestra además los **VPP/VPN calculados por el proyecto** a
+  prevalencias preprueba supuestas (5 %, 20 % y 50 %), con nota aclaratoria.
 
 - **`f: "idx"`** — los 876 hallazgos cuyo rendimiento diagnóstico está compilado
   en McGee S. *Evidence-Based Physical Diagnosis*, 3.ª ed. (Elsevier, 2012).

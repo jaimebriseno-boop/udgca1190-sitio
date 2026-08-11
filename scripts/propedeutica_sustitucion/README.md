@@ -31,6 +31,9 @@ s05_generar_digest.py      abstracts/textos completos → ventanas → digest JS
         ▼  (los digests se reparten a agentes LLM; contrato abajo)
 s06_verificar.py           salida de agentes → filtro verbatim independiente
 s07_convertir.py           líneas verificadas → externos_verificado + poda maestra
+s08_calcular_lr.py         backfill de LR faltantes desde Sn/Sp (Sp=100 → LR+ ∞: se deja vacío)
+s09_reporte_faltantes.py   faltantes.json + FALTANTES.md en el vault: idx pendientes,
+                           full con cifras incompletas y ranking de artículos candidatos
 ```
 
 Después: `python3 scripts/propedeutica_generar_signos.py --datos <vault> --salida ...`
