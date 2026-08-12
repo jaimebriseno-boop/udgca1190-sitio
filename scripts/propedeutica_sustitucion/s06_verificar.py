@@ -43,8 +43,13 @@ def main():
     if a.textos:
         for f in glob.glob(os.path.join(a.textos, "*")):
             pid = os.path.splitext(os.path.basename(f))[0].replace("ft_", "")
+            # quita solo etiquetas HTML reales; un texto plano con «p < 0.05 … >»
+            # no debe perder el contenido intermedio (falsos negativos verbatim)
             fuentes[pid] = norm(fuentes.get(pid, "")) + " " + norm(
-                re.sub(r"<[^>]+>", " ", open(f, encoding="utf-8", errors="ignore").read()))
+                re.sub(r"</?(?:div|span|table|thead|tbody|tr|td|th|p|br|html|head|"
+                       r"body|section|article|sup|sub|em|strong|b|i|u|a|li|ul|ol)"
+                       r"\b[^>]*>", " ",
+                       open(f, encoding="utf-8", errors="ignore").read()))
 
     ok = bad = 0
     with open(a.ok, "w") as fok, open(a.rechazadas, "w") as fbad:
