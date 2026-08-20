@@ -1,0 +1,88 @@
+---
+// Página de la herramienta "VIROLOGÍA": marco institucional del sitio
+// (Base + PageHeader) con la app estática embebida por iframe. La app vive en
+// public/herramientas/virologia/app/ y es un mini-sitio multipágina
+// (índice → árboles taxonómicos → 28 fichas), por lo que el iframe usa altura
+// fija con desplazamiento propio en lugar del postMessage de altura de los
+// visores de una sola página (Dengue, Propedéutica).
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
+import { t } from '../../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+const appBase = '/herramientas/virologia/app/';
+// Se apunta al archivo, no al directorio: el servidor de desarrollo de Astro no
+// resuelve «.../app/» a su index.html, aunque Vercel sí lo haga en producción.
+const embedSrc = `${appBase}index.html`;
+const fullSrc = `${appBase}index.html`;
+---
+<Base titulo={t(lang, 'viro.title')} descripcion={t(lang, 'viro.meta')} lang={lang}>
+  <PageHeader eyebrow={t(lang, 'viro.kicker')} title={t(lang, 'viro.title')} description={t(lang, 'viro.intro')} />
+  <section class="section">
+    <div class="container">
+      <div class="tool-toolbar">
+        <a class="fullscreen-link" href={fullSrc} target="_blank" rel="noopener">{t(lang, 'viro.fullscreen')}</a>
+      </div>
+      <div class="viewer-frame">
+        <iframe
+          id="viroFrame"
+          src={embedSrc}
+          title={t(lang, 'viro.iframe_title')}
+          loading="lazy"
+          referrerpolicy="no-referrer"></iframe>
+      </div>
+      <p class="viewer-note">{t(lang, 'viro.note')}</p>
+
+      <aside class="uso" aria-label={t(lang, 'viro.use_heading')}>
+        <h2 class="uso__title">{t(lang, 'viro.use_heading')}</h2>
+        <p class="uso__text">{t(lang, 'viro.use_text')}</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section { padding-block-start: var(--sp-6); }
+  .tool-toolbar { display: flex; justify-content: flex-end; margin-bottom: var(--sp-2); }
+  .fullscreen-link { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); }
+  .fullscreen-link:hover { color: var(--udg-red-600); }
+  .viewer-frame {
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--udg-gray-50);
+  }
+  #viroFrame {
+    display: block;
+    width: 100%;
+    border: 0;
+    /* mini-sitio multipágina: altura de visor con scroll interno */
+    height: min(78vh, 900px);
+  }
+  .viewer-note {
+    margin-top: var(--sp-2);
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+  }
+  .uso {
+    margin-top: var(--sp-4);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-left: 3px solid var(--udg-red-600);
+    border-radius: var(--radius-md, 8px);
+    background: var(--udg-gray-50, #f7f7f8);
+  }
+  .uso__title {
+    font-size: var(--fs-s1);
+    font-weight: var(--fw-semibold);
+    margin: 0 0 var(--sp-2);
+  }
+  .uso__text {
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed, 1.6);
+    margin: 0;
+  }
+</style>

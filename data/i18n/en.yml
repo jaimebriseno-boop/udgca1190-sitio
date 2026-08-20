@@ -177,6 +177,19 @@ lineas:
       - id: biomarcadores-moleculares-patogenesis-viral-inmune
         titulo: Molecular Biomarkers and Viral/Immune-Mediated Pathogenesis
 herramientas:
+  virologia:
+    nombre: VIROLOGY
+    enlace_app: /en/herramientas/virologia
+    resumen: An active-learning tool for medical virology.
+    descripcion: |
+      A teaching tool for the Microbiology II course. The journey starts at two
+      interactive taxonomic trees (DNA and RNA viruses) and descends to 28
+      family study cards, each covering history, taxonomy, microbiology,
+      pathophysiology, clinical picture, diagnosis and treatment, with original
+      figures, comparative tables, mnemonics and exam pitfalls. Includes a
+      search box by family, genus, virus or syndrome. Content referenced to
+      Mandell PPID 10th edition and the guidelines cited at the footer of each
+      card. Content is in Spanish.
   propedeutica-basada-en-evidencia:
     nombre: Evidence-based physical diagnosis
     enlace_app: /en/herramientas/propedeutica

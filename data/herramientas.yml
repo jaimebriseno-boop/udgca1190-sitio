@@ -1,5 +1,5 @@
-# Herramientas estadístico-epidemiológicas y predictivas del CA.
-# tipo:   predictiva | estadistica | pipeline
+# Herramientas estadístico-epidemiológicas, predictivas y docentes del CA.
+# tipo:   predictiva | estadistica | pipeline | docente
 # estado: activa | beta | desarrollo
 # linea:  id de una LGAC (data/lineas.yml)
 
@@ -45,6 +45,28 @@
   enlace_app: "/herramientas/dengue-forecast"
   repositorio: ""
   doi: "10.21203/rs.3.rs-10035640/v1"
+  captura: "/herramientas/placeholder.svg"
+  destacado: true
+
+- id: virologia
+  nombre: "VIROLOGÍA"
+  tipo: docente
+  estado: activa
+  resumen: "Herramienta con estrategias de aprendizaje activo en Virología."
+  descripcion: |
+    Herramienta didáctica de virología médica para la unidad de aprendizaje
+    Microbiología II. El recorrido parte de dos árboles taxonómicos interactivos
+    (virus DNA y virus RNA) y desciende hasta 28 fichas de familia, cada una con
+    historia, taxonomía, microbiología, fisiopatología, cuadro clínico,
+    diagnóstico y tratamiento, con figuras propias, tablas comparativas,
+    nemotecnias y trampas de examen. Incluye buscador por familia, género,
+    virus o síndrome. Contenido referenciado a Mandell PPID 10.ª edición y a
+    las guías citadas al pie de cada ficha.
+  tecnologias: ["HTML", "SVG", "JavaScript"]
+  linea: epidemiologia-infecciosas
+  enlace_app: "/herramientas/virologia"
+  repositorio: ""
+  doi: ""
   captura: "/herramientas/placeholder.svg"
   destacado: true
 

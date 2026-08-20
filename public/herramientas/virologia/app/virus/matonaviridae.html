@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matonaviridae — Virus RNA</title>
+<meta name="description" content="Matonaviridae. Virus de la rubéola">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Matonaviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 7 de 18 · Virología médica</p>
+    <h1>Matonaviridae</h1>
+    <p class="sub">Virus de la rubéola</p>
+    <div class="chips"><span class="chip g">+ssRNA no segmentado · 9.8–10 kb</span>
+  <span class="chip">Envuelto · esférico 70 nm · gema en el Golgi</span>
+  <span class="chip">Replicación citoplásmica (vacuola citopática)</span>
+  <span class="chip r">SRC en 80–90 % si la madre se infecta &lt;12 SDG</span>
+  <span class="chip gold">SRP/MMR — cepa viva atenuada RA 27/3</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Matonaviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Género y especie</dt><dd><i>Rubivirus</i> · <i>Rubivirus rubellae</i> (virus de la rubéola). <b>Un solo serotipo</b></dd></div>
+  <div class="cell"><dt>Reservorio</dt><dd><b>Humano exclusivo</b> — sin vector artrópodo ni reservorio animal; por eso es erradicable</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Gotas respiratorias y fómites · <b>vertical transplacentaria</b> · R<sub>0</sub> 3.4–7.8 (menor que sarampión)</dd></div>
+  <div class="cell"><dt>Contagiosidad</dt><dd>De <b>7 días antes a 7 días después</b> del exantema; pico de −2 a +2 días</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd><b>12–23 días</b> (mediana 18). ~50 % de las infecciones son subclínicas</dd></div>
+  <div class="cell"><dt>Receptor y antígeno</dt><dd><b>MOG</b> (glicoproteína de mielina de oligodendrocito) · <b>E1</b> = blanco de anticuerpos neutralizantes</dd></div>
+  <div class="cell"><dt>Tríada clínica</dt><dd>Exantema craneocaudal de 3 días + <b>adenopatía retroauricular, occipital y cervical posterior</b> + conjuntivitis</dd></div>
+  <div class="cell"><dt>Lo que importa</dt><dd><b>Síndrome de rubéola congénita</b>: sordera neurosensorial + catarata + persistencia del conducto arterioso</dd></div>
+  <div class="cell"><dt>Prevención</dt><dd>SRP 12–15 meses y 4–6 años · seroconversión 95 % con 1 dosis, ~99 % con 2 · <b>contraindicada en el embarazo</b></dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">De enfermedad trivial a teratógeno</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1752–1814</b> — De Bergen, Orlow y sobre todo <b>George de Maton</b> la separan en Alemania del sarampión y la escarlatina: de ahí <b>«sarampión alemán»</b> y, dos siglos después, el nombre <b>Matonaviridae</b>. <i>Rubella</i> = «rojito».</li>
+      <li><b>1881</b> — el Congreso Internacional de Medicina de Londres la declara entidad distinta. Todo el siglo XIX se la consideró banal.</li>
+      <li><b>1941</b> — <b>Norman Gregg</b>, oftalmólogo australiano, detecta una avalancha de <b>cataratas congénitas</b> tras un brote de rubéola: nace el concepto de virus teratógeno.</li>
+      <li><b>1964–65</b> — pandemia. Solo en EE. UU.: <b>12 millones de casos, 20 000 SRC, 2 000 encefalitis</b>, 3 580 niños con déficit auditivo o visual y 1 800 con retraso del desarrollo.</li>
+      <li><b>1969–1979</b> — se licencia la vacuna HPV-77, se integra a la <b>SRP en 1971</b> y se sustituye a finales de los setenta por la cepa <b>RA 27/3</b>, la que se usa hoy.</li>
+      <li><b>2015</b> — la <b>OPS certifica a las Américas</b> —México incluido— como la primera región del mundo libre de rubéola y de SRC endémicos.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué 1941 cambió todo</span>
+      <p>La rubéola posnatal es una enfermedad leve: el motivo por el que existe una vacuna no es proteger al niño que la padece, sino <b>proteger al feto de una mujer que aún no está embarazada</b>. Toda la estrategia —vacunar a los 12 meses, tamizar IgG antes de concebir, vacunar en el puerperio— se entiende desde esa premisa.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">El togavirus que se quedó sin mosquito</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd>Matonaviridae — creada en <b>2018</b>, en honor a George de Maton. Contiene un solo género con virus humano.</dd>
+      <dt>Género</dt><dd><i>Rubivirus</i> (además de rubivirus de murciélago sin patogenicidad humana conocida).</dd>
+      <dt>Especie</dt><dd><i>Rubivirus rubellae</i> — virus de la rubéola, <b>el único patógeno humano de la familia</b>.</dd>
+      <dt>Antes</dt><dd>Estuvo en <b>Togaviridae</b> junto a los alfavirus, con los que comparte arquitectura de virión y estrategia de genoma, pero <b>no el vector artrópodo</b>. Esa diferencia biológica justificó separarla.</dd>
+    </dl>
+
+    <div class="vblock">
+      <div class="vhd"><span class="vn">Virus de la rubéola</span><span class="vg">Rubivirus</span></div>
+      <div class="vbd">
+        <p><b>Un solo serotipo en todo el mundo.</b> Esa es la razón de que una vacuna monovalente diseñada en los años sesenta siga funcionando y de que la eliminación global sea un objetivo realista.</p>
+        <p><b>Genotipos</b>: la Red Global de Sarampión y Rubéola de la OMS vigila los linajes; los circulantes dominantes son <b>1E, 1G y 2B</b> (1E en Medio Oriente, Europa, China, Sudeste Asiático, África y Pacífico Occidental; 1G en Europa y África). Los genotipos sirven para <b>rastrear cadenas de transmisión e importaciones</b>, no para elegir vacuna: la protección es cruzada entre todos.</p>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«Rubéola es alfavirus sin mosquito»</b> — misma cápside icosaédrica envuelta, mismo genoma (+) con ORF no estructural y ORF estructural subgenómico, misma pareja de glicoproteínas… pero transmisión <b>respiratoria</b> y reservorio <b>humano</b>. Por eso salió de Togaviridae en 2018.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Tres proteínas estructurales, dos no estructurales</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión de la rubéola con las glicoproteínas E1 y E2, la cápside y el mapa del genoma">
+        <rect width="900" height="350" fill="#FFFFFF"/>
+
+        <circle cx="180" cy="125" r="72" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.6"/>
+        <circle cx="180" cy="125" r="66" fill="none" stroke="#90303a" stroke-width="4" opacity=".45"/>
+        <g stroke="#701d14" stroke-width="2.2" stroke-linecap="round">
+          <line x1="252" y1="125" x2="272" y2="125"/>
+          <line x1="242" y1="161" x2="260" y2="171"/>
+          <line x1="216" y1="187" x2="226" y2="205"/>
+          <line x1="180" y1="197" x2="180" y2="217"/>
+          <line x1="144" y1="187" x2="134" y2="205"/>
+          <line x1="118" y1="161" x2="100" y2="171"/>
+          <line x1="108" y1="125" x2="88" y2="125"/>
+          <line x1="118" y1="89" x2="100" y2="79"/>
+          <line x1="144" y1="63" x2="134" y2="45"/>
+          <line x1="180" y1="53" x2="180" y2="33"/>
+          <line x1="216" y1="63" x2="226" y2="45"/>
+          <line x1="242" y1="89" x2="260" y2="79"/>
+        </g>
+        <g fill="#701d14">
+          <circle cx="272" cy="125" r="3.6"/><circle cx="260" cy="171" r="3.6"/><circle cx="226" cy="205" r="3.6"/>
+          <circle cx="180" cy="217" r="3.6"/><circle cx="134" cy="205" r="3.6"/><circle cx="100" cy="171" r="3.6"/>
+          <circle cx="88" cy="125" r="3.6"/><circle cx="100" cy="79" r="3.6"/><circle cx="134" cy="45" r="3.6"/>
+          <circle cx="180" cy="33" r="3.6"/><circle cx="226" cy="45" r="3.6"/><circle cx="260" cy="79" r="3.6"/>
+        </g>
+        <circle cx="180" cy="125" r="40" fill="rgba(92,122,87,.16)" stroke="#5C7A57" stroke-width="1.6"/>
+        <g fill="#5C7A57" opacity=".55">
+          <circle cx="160" cy="105" r="6"/><circle cx="200" cy="105" r="6"/><circle cx="150" cy="135" r="6"/>
+          <circle cx="188" cy="145" r="6"/><circle cx="212" cy="132" r="6"/><circle cx="172" cy="122" r="6"/>
+        </g>
+        <path d="M152 125 q10 -13 20 0 t20 0 t20 0" fill="none" stroke="#27334F" stroke-width="2"/>
+
+        <g font-family="'Inter', sans-serif" fill="#14181f">
+          <line x1="274" y1="123" x2="412" y2="56" stroke="#455A8C" stroke-width="1"/>
+          <text x="420" y="52" font-size="11.5" font-weight="600" fill="#701d14">E1 — glicoproteína de la espiga</text>
+          <text x="420" y="68" font-size="10" fill="#6b7585">Se une al receptor MOG y dispara la endocitosis</text>
+          <text x="420" y="82" font-size="10" fill="#6b7585">Blanco principal de anticuerpos neutralizantes (aa 202–285)</text>
+
+          <line x1="248" y1="164" x2="412" y2="112" stroke="#455A8C" stroke-width="1"/>
+          <text x="420" y="108" font-size="11.5" font-weight="600" fill="#90303a">E2 — glicoproteína de la base</text>
+          <text x="420" y="124" font-size="10" fill="#6b7585">Ensambla y orienta la espiga E1; ancla la cápside a la envoltura</text>
+
+          <line x1="212" y1="140" x2="412" y2="162" stroke="#455A8C" stroke-width="1"/>
+          <text x="420" y="158" font-size="11.5" font-weight="600" fill="#1a6b42">C — proteína de la cápside</text>
+          <text x="420" y="174" font-size="10" fill="#6b7585">Homodímero que amarra el RNA genómico y se une a E2</text>
+
+          <line x1="184" y1="200" x2="412" y2="210" stroke="#455A8C" stroke-width="1"/>
+          <text x="420" y="206" font-size="11.5" font-weight="600" fill="#27334F">Envoltura de origen golgiano</text>
+          <text x="420" y="222" font-size="10" fill="#6b7585">Gema en el Golgi y sale por exocitosis — no por membrana plasmática</text>
+        </g>
+
+        <text x="60" y="252" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">GENOMA · +ssRNA ~10 KB · ACTÚA COMO mRNA</text>
+        <rect x="60" y="262" width="410" height="26" rx="3" fill="rgba(39,51,79,.14)" stroke="#27334F" stroke-width="1.2"/>
+        <line x1="270" y1="262" x2="270" y2="288" stroke="#27334F" stroke-width="1.2"/>
+        <rect x="510" y="262" width="330" height="26" rx="3" fill="rgba(112,29,20,.10)" stroke="#701d14" stroke-width="1.2"/>
+        <line x1="600" y1="262" x2="600" y2="288" stroke="#701d14" stroke-width="1.2"/>
+        <line x1="700" y1="262" x2="700" y2="288" stroke="#701d14" stroke-width="1.2"/>
+        <line x1="470" y1="275" x2="510" y2="275" stroke="#6b7585" stroke-width="1.2" stroke-dasharray="3 3"/>
+        <g font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f" text-anchor="middle">
+          <text x="165" y="279" font-weight="600">p150</text>
+          <text x="370" y="279" font-weight="600">p90</text>
+          <text x="555" y="279" font-weight="600">C</text>
+          <text x="650" y="279" font-weight="600">E2</text>
+          <text x="770" y="279" font-weight="600">E1</text>
+        </g>
+        <text x="42" y="279" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#6b7585">5′</text>
+        <text x="850" y="279" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#6b7585">3′</text>
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">
+          <text x="60" y="306">ORF no estructural: se traduce como <tspan font-weight="600" fill="#27334F">p200</tspan>, que se autocorta</text>
+          <text x="60" y="320">p150 = metiltransferasa + proteasa · p90 = helicasa + <tspan font-weight="600">RdRp</tspan></text>
+          <text x="510" y="306">ORF estructural: se traduce de un <tspan font-weight="600" fill="#701d14">RNA subgenómico</tspan></text>
+          <text x="510" y="320">Poliproteína C–E2–E1 procesada por peptidasa de señal del RE</text>
+        </g>
+        <text x="60" y="340" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Un solo serotipo en todo el planeta: la vacuna de 1969 sigue vigente.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión y el genoma. Retén tres cosas: <b>E1</b> es la espiga, el receptor y el antígeno neutralizante; el genoma <b>(+)</b> es infeccioso por sí mismo porque funciona como mRNA; la maduración ocurre <b>en el Golgi</b>, no en la membrana plasmática.</figcaption>
+    </figure>
+
+    <h4>Biología esencial</h4>
+    <ul>
+      <li><b>Virión</b>: envuelto, esférico de ~70 nm (con formas alargadas tubulares), nucleocápside de subunidades globulares. Tres proteínas estructurales: <b>C</b> (cápside), <b>E2</b> (base de la espiga) y <b>E1</b> (proyección de la espiga).</li>
+      <li><b>Genoma</b>: RNA monocatenario de <b>polaridad positiva</b>, ~10 kb. El extremo 5′ codifica la poliproteína no estructural <b>p200</b>, que se autocorta en <b>p150</b> (metiltransferasa y proteasa) y <b>p90</b> (helicasa y RNA-polimerasa RNA-dependiente). Las estructurales se traducen de un RNA subgenómico.</li>
+      <li><b>Fábrica viral</b>: el RNA se sintetiza dentro de la <b>vacuola citopática</b>, un endosoma modificado rodeado de retículo endoplásmico, mitocondrias y Golgi. Todo el ciclo es <b>citoplásmico</b>.</li>
+      <li><b>Ciclo lento y poco citopático</b>: apenas hay RNA viral detectable en las primeras 12 h y el pico llega a las 24 h. Se propaga en líneas deficientes en interferón (<b>BHK-21</b>, <b>Vero</b>). Esa cinética lenta explica la larga incubación y la escasa citólisis directa.</li>
+      <li><b>Estabilidad y antigenicidad</b>: termolábil, se inactiva con desinfectantes habituales. <b>Un solo serotipo</b>; la infección natural deja inmunidad de por vida, aunque existe <b>reinfección</b> —casi siempre asintomática, con viremia mínima y bajo riesgo fetal—.</li>
+    </ul>
+    <div class="box clin"><span class="lbl">Traducción clínica</span>
+      <p>Que E1 sea el único blanco neutralizante relevante y que exista un solo serotipo es la razón de que la <b>IgG anti-rubéola documentada equivalga a protección</b>: no hay variantes de escape que obliguen a retitular. Un solo resultado positivo previo al embarazo cierra el tema.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Todo depende de la semana gestacional</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruta del virus de la rubéola desde la nasofaringe hasta el feto y gradiente de riesgo de síndrome de rubéola congénita según la semana gestacional">
+        <rect width="900" height="380" fill="#FFFFFF"/>
+
+        <text x="40" y="26" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">A · RUTA EN EL HUÉSPED — 12 A 23 DÍAS</text>
+        <line x1="50" y1="80" x2="850" y2="80" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="852,80 842,75 842,85" fill="#455A8C"/>
+
+        <g>
+          <circle cx="90" cy="80" r="16" fill="#27334F"/>
+          <text x="90" y="84" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">1</text>
+          <text x="90" y="114" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Nasofaringe</text>
+          <text x="90" y="128" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Replicación epitelial</text>
+          <text x="90" y="141" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">limitada</text>
+        </g>
+        <g>
+          <circle cx="250" cy="80" r="16" fill="#27334F"/>
+          <text x="250" y="84" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">2</text>
+          <text x="250" y="114" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Ganglios regionales</text>
+          <text x="250" y="128" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Retroauriculares, occipitales</text>
+          <text x="250" y="141" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">y cervicales posteriores</text>
+        </g>
+        <g>
+          <circle cx="420" cy="80" r="16" fill="#8a5c0a"/>
+          <text x="420" y="84" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">3</text>
+          <text x="420" y="114" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#8a5c0a">Viremia 1.ª y 2.ª</text>
+          <text x="420" y="128" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Ya contagia: 7 días antes</text>
+          <text x="420" y="141" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">de que aparezca el exantema</text>
+        </g>
+        <g>
+          <circle cx="590" cy="80" r="16" fill="#5C7A57"/>
+          <text x="590" y="84" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">4</text>
+          <text x="590" y="114" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Piel y sinovial</text>
+          <text x="590" y="128" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">El exantema surge cuando la</text>
+          <text x="590" y="141" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">viremia cede y llega la IgG</text>
+        </g>
+        <g>
+          <circle cx="780" cy="80" r="16" fill="#701d14"/>
+          <text x="780" y="84" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">5</text>
+          <text x="780" y="114" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Placenta → feto</text>
+          <text x="780" y="128" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Endotelio de la base placentaria</text>
+          <text x="780" y="141" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">= puerta de entrada fetal</text>
+        </g>
+
+        <rect x="600" y="40" width="280" height="24" rx="4" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1"/>
+        <text x="614" y="56" font-family="'Inter', sans-serif" font-size="10" fill="#701d14">Infección fetal <tspan font-weight="600">crónica y persistente</tspan>: no se elimina</text>
+
+        <line x1="40" y1="168" x2="860" y2="168" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+        <text x="40" y="192" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">B · RIESGO DE SÍNDROME DE RUBÉOLA CONGÉNITA POR SEMANA GESTACIONAL</text>
+
+        <line x1="70" y1="330" x2="860" y2="330" stroke="#14181f" stroke-width="1.2"/>
+        <rect x="70" y="248" width="220" height="82" rx="3" fill="rgba(112,29,20,.20)" stroke="#701d14" stroke-width="1.2"/>
+        <rect x="292" y="284" width="90" height="46" rx="3" fill="rgba(144,48,58,.24)" stroke="#90303a" stroke-width="1.2"/>
+        <rect x="384" y="308" width="96" height="22" rx="3" fill="rgba(138,92,10,.22)" stroke="#8a5c0a" stroke-width="1.2"/>
+        <rect x="482" y="322" width="378" height="8" rx="3" fill="rgba(92,122,87,.24)" stroke="#5C7A57" stroke-width="1.2"/>
+
+        <g font-family="'Inter', sans-serif" text-anchor="middle">
+          <text x="180" y="240" font-size="12" font-weight="600" fill="#701d14">80–90 %</text>
+          <text x="337" y="276" font-size="12" font-weight="600" fill="#90303a">~50 %</text>
+          <text x="432" y="300" font-size="11.5" font-weight="600" fill="#8a5c0a">&lt;10 %</text>
+          <text x="671" y="314" font-size="11.5" font-weight="600" fill="#1a6b42">Mínimo</text>
+        </g>
+        <g font-family="'Inter', sans-serif" font-size="10" fill="#14181f" text-anchor="middle">
+          <text x="180" y="346" font-weight="600">&lt;12 semanas</text>
+          <text x="180" y="360" font-size="9.5" fill="#6b7585">Organogénesis · 20 % aborta</text>
+          <text x="337" y="346" font-weight="600">13–16 semanas</text>
+          <text x="337" y="360" font-size="9.5" fill="#6b7585">Sordera predominante</text>
+          <text x="432" y="346" font-weight="600">17–20 sem</text>
+          <text x="432" y="360" font-size="9.5" fill="#6b7585">Solo sordera</text>
+          <text x="671" y="346" font-weight="600">&gt;20 semanas</text>
+          <text x="671" y="360" font-size="9.5" fill="#6b7585" text-anchor="middle">El feto se infecta, pero ya no hay defectos</text>
+        </g>
+        <text x="70" y="216" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El gradiente no mide cuánto virus llega, sino qué se está formando ese día.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Ruta patogénica y ventana teratogénica. La caída abrupta del riesgo después de la semana 16 no se debe a que el virus deje de infectar —sigue replicando en órganos fetales— sino a que <b>la organogénesis ya terminó</b>.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Mecanismo del daño fetal</span>
+        <ul>
+          <li><b>Infección directa</b> de corazón, cristalino, oído medio, cerebro, dientes e hígado en desarrollo.</li>
+          <li>Células blanco: <b>endotelio</b> y monocitos, más <b>astrocitos y progenitores neurales</b> en el cerebro y <b>cardiomiocitos</b> en el corazón.</li>
+          <li>Doble mecanismo demostrado in vitro: <b>apoptosis</b> y <b>arresto del ciclo celular</b> —el «clon inhibido» que deja órganos hipoplásicos—, sumado al daño endotelial.</li>
+          <li>La <b>placenta basal</b> concentra la infección endotelial: es la ruta principal hacia el feto.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Persistencia: los tres fenotipos crónicos</span>
+        <ul>
+          <li><b>Excreción neonatal prolongada</b>: el lactante con SRC elimina virus en orina y secreciones durante <b>meses o años</b> pese a tener IgG muy alta.</li>
+          <li><b>Panencefalitis progresiva por rubéola</b>: deterioro cognitivo y motor <b>10–20 años</b> después, con proteínas e IgG altas en LCR y mineralización cerebral. Nunca se ha recuperado virus del cerebro.</li>
+          <li><b>Enfermedad inflamatoria asociada a rubéola</b>: ciclitis heterocrómica de Fuchs y <b>granulomas cutáneos por iVDRV</b> (virus derivado de vacuna, muy mutado) en inmunodeficiencia de células T.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">La paradoja del exantema</span>
+      <p>El exantema <b>aparece cuando la viremia se está apagando</b> y ya hay anticuerpos: es un fenómeno inmunomediado, no citolítico. De ahí dos consecuencias de examen: el paciente <b>ya contagió durante la semana previa</b>, y en el momento del exantema la <b>IgM puede aún no ser detectable</b>, por lo que un resultado negativo temprano no descarta.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Trivial en el niño, catastrófica en el feto</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Rubéola posnatal</h4>
+    <ol class="steps">
+      <li><b>Incubación 12–23 días</b> Silente. La edad es el mejor predictor de síntomas: <b>~50 % de los niños cursa asintomático</b> o solo con exantema leve, catarro o conjuntivitis sin fiebre.</li>
+      <li><b>Pródromo 1–3 días</b> Casi exclusivo de adolescentes y adultos: malestar, febrícula, anorexia. La <b>adenopatía</b> aparece aquí, antes que el exantema.</li>
+      <li><b>Exantema (3 días)</b> Maculopapular rosado tenue que empieza en la <b>cara</b> y desciende a tronco y extremidades. No confluye ni deja pigmentación como el del sarampión; puede haber descamación fina en la convalecencia. <b>Manchas de Forchheimer</b>: petequias en paladar blando (sugestivas, no patognomónicas).</li>
+      <li><b>Convalecencia</b> La fiebre —síntoma poco frecuente— cede con el exantema o uno o dos días después. Puede quedar <b>artritis</b> durante semanas.</li>
+    </ol>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">La tríada que hace el diagnóstico a pie de cama</span>
+        <ul>
+          <li><b>Adenopatía retroauricular, suboccipital y cervical posterior</b> — contrasta con la <b>cervical anterior</b> de una infección respiratoria banal. Puede haber esplenomegalia.</li>
+          <li><b>Conjuntivitis</b> — en el brote japonés de 2012–13 (&gt;16 000 casos, sobre todo varones adultos) estuvo en <b>94 %</b> y la adenopatía en <b>86 %</b>; los autores la propusieron como el signo clave en el adulto.</li>
+          <li><b>Exantema craneocaudal</b> — la progresión de la cara hacia abajo es el rasgo más útil cuando la erupción es tenue.</li>
+          <li>Otros hallazgos del mismo brote: congestión nasal 61 %, <b>artralgia 32 %</b>, cefalea 24 %, síntomas gastrointestinales ~10 %.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Diagnóstico diferencial</span>
+        <p><b>Sarampión</b> (exantema confluente, fiebre alta, Koplik, tos-coriza-conjuntivitis, descama), <b>escarlatina</b> (lija, líneas de Pastia, faringitis), <b>parvovirus B19</b> (mejilla abofeteada, encaje reticular, artritis en mujer adulta — <b>el gran imitador</b>), <b>exantema súbito</b>, <b>enterovirus</b>, <b>mononucleosis</b> y <b>toxoplasmosis</b>. A diferencia del sarampión, <b>la sobreinfección bacteriana es rara</b>.</p>
+      </div>
+    </div>
+
+    <h4>Complicaciones — infección natural frente a vacuna</h4>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Complicación</th><th>Infección natural</th><th>Asociada a la vacuna</th></tr></thead>
+      <tbody>
+        <tr><td><b>Artralgia / artritis</b></td><td class="num">&gt;50 % de mujeres adultas</td><td class="num">Hasta 40 % de mujeres no vacunadas previamente</td></tr>
+        <tr><td><b>Encefalopatía aguda</b></td><td class="num">1:6 000</td><td class="num">2:100 000 — casi siempre por el componente de sarampión o parotiditis</td></tr>
+        <tr><td><b>Panencefalitis progresiva</b></td><td class="num">Rara, 10–20 años después</td><td class="num">No descrita</td></tr>
+        <tr><td><b>Púrpura trombocitopénica</b></td><td class="num">1:1 500</td><td class="num">2.5:100 000, a las 2–6 semanas</td></tr>
+        <tr><td><b>Guillain-Barré</b></td><td class="num">Rara</td><td class="num">No descrita</td></tr>
+        <tr><td><b>Anemia hemolítica</b></td><td class="num">Rara</td><td class="num">Solo reportes de caso</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p><b>Artritis</b>: con el exantema o uno o dos días después, en manos, muñecas y rodillas; el virus se ha aislado de la sinovial. Resuelve sola en semanas; AINE. <b>Encefalitis</b>: la complicación temida. En el brote tunecino, <b>95 % tuvo crisis y 76 % estado epiléptico</b>, con Glasgow ≤8, hiponatremia frecuente, LCR de 5–25 células/µL y RM normal; el diagnóstico se hizo por <b>IgM o RT-PCR en LCR</b>.</p>
+
+    <h4>Síndrome de rubéola congénita (SRC)</h4>
+    <p>Dos tercios de los fetos infectados en el <b>primer trimestre</b> tendrán anomalías o se perderán (<b>20 % de aborto espontáneo</b>). La mortalidad global del SRC llega al <b>30 % en el primer año de vida</b>. Es una de las infecciones <b>TORCH</b>.</p>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Aparato</th><th>Manifestación temprana (primer año)</th><th>Manifestación tardía (&gt;1 año)</th></tr></thead>
+      <tbody>
+        <tr><td><b>Oído</b></td><td><b>Hipoacusia neurosensorial</b> — la más frecuente y a menudo la única</td><td>Hipoacusia progresiva</td></tr>
+        <tr><td><b>Ojo</b></td><td><b>Catarata</b>, retinopatía «sal y pimienta», microftalmia, córnea turbia, glaucoma, coloboma, atrofia óptica</td><td>Miopía, glaucoma tardío</td></tr>
+        <tr><td><b>Corazón</b></td><td><b>Persistencia del conducto arterioso</b> y <b>estenosis de ramas pulmonares</b>; CIV, estenosis aórtica, tetralogía, miocarditis</td><td>Hipertensión pulmonar</td></tr>
+        <tr><td><b>Neurológico</b></td><td><b>Microcefalia</b>, fontanela amplia, meningoencefalitis, diplejía espástica</td><td>Retraso del desarrollo, crisis, trastornos del lenguaje y conductuales, <b>panencefalitis progresiva</b></td></tr>
+        <tr><td><b>Piel y sangre</b></td><td><b>«Blueberry muffin»</b> (hematopoyesis dérmica extramedular), petequias, ictericia, trombocitopenia, anemia hemolítica</td><td>—</td></tr>
+        <tr><td><b>Otros</b></td><td>Restricción del crecimiento intrauterino, hepatoesplenomegalia, neumonitis, adenopatía generalizada, <b>bandas radiolúcidas metafisarias («tallo de apio»)</b></td><td><b>Diabetes mellitus</b>, tiroidopatía, pubertad precoz, hipoplasia del esmalte</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box clin"><span class="lbl">Enfermedad inflamatoria crónica asociada a rubéola</span>
+      <p><b>Ciclitis heterocrómica de Fuchs</b>: uveítis anterior <b>unilateral</b> de la 3.ª–4.ª década que despigmenta el iris y cambia su color; explica <b>2–11 % de las uveítis anteriores</b> y hoy suele deberse a la <b>cepa vacunal</b>. <b>Granulomas asociados a rubéola</b>: lesiones cutáneas o de cualquier órgano por virus vacunal muy mutado (<b>iVDRV</b>) en pacientes con <b>compromiso de células T</b>; aparecen de semanas a décadas tras la SRP y responden mal al tratamiento.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">La pregunta real es si hay embarazo</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Algoritmo diagnóstico de rubéola en la embarazada y en el lactante con sospecha de síndrome de rubéola congénita">
+        <rect width="900" height="330" fill="#FFFFFF"/>
+
+        <rect x="20" y="18" width="250" height="44" rx="6" fill="#27334F"/>
+        <text x="145" y="40" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#f7f8fa">Embarazada con exantema</text>
+        <text x="145" y="55" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="rgba(247,248,250,.74)">O CONTACTO CON CASO CONFIRMADO</text>
+
+        <line x1="145" y1="62" x2="145" y2="82" stroke="#455A8C" stroke-width="1.2"/>
+        <text x="145" y="96" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.1em" fill="#6b7585">¿IGG PREVIA DOCUMENTADA?</text>
+        <line x1="145" y1="104" x2="145" y2="118" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="70" y1="118" x2="240" y2="118" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="70" y1="118" x2="70" y2="134" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="240" y1="118" x2="240" y2="134" stroke="#455A8C" stroke-width="1.2"/>
+
+        <rect x="16" y="134" width="112" height="66" rx="6" fill="rgba(92,122,87,.13)" stroke="#5C7A57" stroke-width="1.1"/>
+        <text x="72" y="154" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Sí — inmune</text>
+        <text x="72" y="170" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Un solo serotipo:</text>
+        <text x="72" y="183" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">no repetir serología</text>
+        <text x="72" y="196" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Riesgo fetal ínfimo</text>
+
+        <rect x="150" y="134" width="180" height="66" rx="6" fill="rgba(138,92,10,.12)" stroke="#8a5c0a" stroke-width="1.2"/>
+        <text x="240" y="154" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">No o desconocida</text>
+        <text x="240" y="170" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Suero agudo: IgM + IgG</text>
+        <text x="240" y="183" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">RT-PCR de hisopado nasofaríngeo</text>
+        <text x="240" y="196" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">y de orina</text>
+
+        <line x1="240" y1="200" x2="240" y2="218" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="120" y1="218" x2="360" y2="218" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="120" y1="218" x2="120" y2="234" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="360" y1="218" x2="360" y2="234" stroke="#455A8C" stroke-width="1.2"/>
+
+        <rect x="24" y="234" width="192" height="70" rx="6" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1.3"/>
+        <text x="120" y="254" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">IgM + · PCR + · seroconversión</text>
+        <text x="120" y="270" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Infección aguda confirmada</text>
+        <text x="120" y="284" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Consejería según semana gestacional</text>
+        <text x="120" y="298" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Notificación obligatoria</text>
+
+        <rect x="264" y="234" width="192" height="70" rx="6" fill="rgba(69,90,140,.14)" stroke="#455A8C" stroke-width="1.1"/>
+        <text x="360" y="254" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">IgM aislada, sin clínica</text>
+        <text x="360" y="270" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Descartar falso positivo por</text>
+        <text x="360" y="284" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">reactividad cruzada antes de</text>
+        <text x="360" y="298" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#701d14">decidir nada sobre el embarazo</text>
+
+        <line x1="490" y1="16" x2="490" y2="314" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+        <text x="516" y="26" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">LACTANTE CON SOSPECHA DE SRC</text>
+
+        <rect x="516" y="40" width="360" height="66" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="516" y="40" width="4" height="66" rx="2" fill="#5C7A57"/>
+        <text x="532" y="60" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">1 · Detección directa</text>
+        <text x="532" y="77" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">RT-PCR de nasofaringe y orina: el virus abunda</text>
+        <text x="532" y="91" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">También en placenta. Excreción de meses a años</text>
+
+        <rect x="516" y="120" width="360" height="80" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="516" y="120" width="4" height="80" rx="2" fill="#27334F"/>
+        <text x="532" y="140" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">2 · Serología con reloj</text>
+        <text x="532" y="157" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">IgM por ELISA: detectable del nacimiento a los 6 meses</text>
+        <text x="532" y="171" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">IgG materna desaparece a los 6–9 meses</text>
+        <text x="532" y="185" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">IgG propia sube durante los 9 primeros meses:</text>
+        <text x="532" y="196" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#27334F">comparar dos muestras separadas 1–3 meses</text>
+
+        <rect x="516" y="214" width="360" height="76" rx="6" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1.2"/>
+        <text x="532" y="234" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">Errores que invalidan el estudio</text>
+        <text x="532" y="251" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">1. Usar RT-PCR en líquido amniótico: <tspan font-weight="600">no validada</tspan></text>
+        <text x="532" y="265" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">2. Descartar por una IgM negativa el día del exantema</text>
+        <text x="532" y="279" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">3. Confundir IgG materna transferida con respuesta propia</text>
+
+        <text x="516" y="312" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">En el brote, la clínica basta; fuera del brote, nunca.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Diagnóstico en los dos escenarios que importan. Fuera de un brote activo la rubéola esporádica es <b>indistinguible clínicamente</b> de otros exantemas: el laboratorio es obligatorio antes de tomar cualquier decisión sobre un embarazo.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Hisopado nasofaríngeo</b></td><td>RT-PCR · cultivo</td><td>Muestra de elección; máximo rendimiento <b>cerca del inicio del exantema</b>. Permite genotipificar para vigilancia.</td></tr>
+        <tr><td><b>Orina</b></td><td>RT-PCR</td><td>Especialmente útil en el <b>lactante con SRC</b>, que excreta grandes cantidades de virus.</td></tr>
+        <tr><td><b>Suero</b></td><td>IgM ELISA · IgG pareada</td><td><b>IgM positiva</b> o <b>seroconversión / aumento significativo de IgG</b> en sueros pareados confirman infección reciente. <b>IgG previa = inmunidad</b>.</td></tr>
+        <tr><td><b>LCR</b></td><td>IgM · RT-PCR</td><td>En encefalitis fue el único hallazgo específico: IgM positiva en todos los casos de la serie tunecina.</td></tr>
+        <tr><td><b>Placenta</b></td><td>RT-PCR</td><td>Útil para confirmar SRC. <b>El líquido amniótico no está validado</b> y no debe usarse para confirmar.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Definición de caso (CDC)</span>
+      <p><b>Probable</b>: exantema maculopapular agudo <b>+</b> temperatura &gt;37.2 °C si se midió <b>+</b> artralgia, artritis, adenopatía o conjuntivitis <b>+</b> sin vínculo epidemiológico con un caso confirmado <b>+</b> sin pruebas de laboratorio o no concluyentes. <b>Confirmado</b>: aislamiento viral, RT-PCR positiva o evidencia serológica de infección reciente —o bien clínica compatible con <b>nexo epidemiológico</b> a un caso confirmado por laboratorio—. Es <b>enfermedad de notificación obligatoria</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">No hay antiviral: todo es vacuna</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="box trap"><span class="lbl">Tratamiento</span>
+      <p><b>No existe antiviral de beneficio probado.</b> Manejo sintomático: antipirético, hidratación y AINE para la artritis. <b>Nitazoxanida y ribavirina</b> tienen actividad in vitro pero beneficio incierto en enfermedad aguda o crónica; la rubéola <b>no responde al interferón</b>. La <b>inmunoglobulina</b> puede considerarse en la embarazada, pero su eficacia es incierta: <b>no previene de manera confiable la transmisión vertical</b> y solo se plantea cuando la interrupción del embarazo no es una opción. En el inmunodeficiente con infección crónica por rubéola, el <b>trasplante de células hematopoyéticas</b> ha resultado eficaz.</p>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Control de infecciones</span>
+        <ul>
+          <li><b>Precauciones de gotas durante 7 días</b> tras el inicio del exantema.</li>
+          <li><b>SRC</b>: precauciones de contacto prolongadas —el lactante excreta virus durante meses o años; es un riesgo real en guarderías y unidades neonatales.</li>
+          <li>La contención clásica es difícil: hay <b>excreción presintomática</b> desde 7 días antes y una <b>alta tasa de infección asintomática</b>. Por eso la vacuna, y no el aislamiento, es la estrategia.</li>
+          <li><b>SRC</b>: seguimiento multidisciplinario con <b>tamizaje auditivo repetido</b> — la hipoacusia puede ser progresiva.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Vacuna SRP — lo esencial</span>
+        <ul>
+          <li><b>Viva atenuada</b>, cepa <b>RA 27/3</b> desde finales de los setenta (sustituyó a HPV-77, de 1969); combinada como SRP desde 1971 y como SRPV.</li>
+          <li><b>Esquema infantil</b>: 12–15 meses y 4–6 años. <b>Adulto sin inmunidad</b>: 2 dosis separadas ≥4 semanas.</li>
+          <li><b>Seroconversión ~95 % con una dosis y ~99 % con dos.</b> Tras el brote japonés de 2012–13, el 25 % de las madres de niños con SRC tenía <b>una sola dosis</b> y ninguna tenía dos: la segunda dosis también protege contra el SRC.</li>
+          <li><b>Estrategia poblacional</b>: la vacunación <b>infantil universal elimina</b> la rubéola; vacunar solo a mujeres en edad fértil previene casos pero <b>no elimina</b> la circulación.</li>
+          <li>Se prioriza la vacunación temprana porque los eventos adversos —sobre todo artralgia— son más frecuentes en la <b>mujer adulta</b>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Embarazo y contraindicaciones</h4>
+    <ul>
+      <li><b>Contraindicada durante el embarazo</b> y se recomienda evitar la concepción durante <b>4 semanas</b> después de la dosis.</li>
+      <li><b>Pero</b>: la vigilancia del CDC en mujeres vacunadas inadvertidamente estando embarazadas <b>no encontró ningún caso de SRC</b>, hallazgo replicado en grandes estudios de Brasil y Costa Rica. La cepa vacunal cruza la placenta y se ha aislado de tejido fetal, pero la atenuación abolió la teratogenicidad. <b>La vacunación accidental no es indicación de interrumpir el embarazo.</b></li>
+      <li><b>Tamizaje de IgG</b> preconcepcional o prenatal: si es seronegativa, <b>vacunar en el puerperio</b>, nunca durante la gestación. Es la intervención que más SRC previene.</li>
+      <li><b>Inmunosupresión</b>: contraindicada en inmunodeficiencia grave y si hay un hermano con inmunodeficiencia. En cambio, es <b>segura</b> en niños con VIH sin inmunosupresión grave y en el <b>síndrome de DiGeorge / deleción 22q11.2</b>, pese al recuento bajo de células T.</li>
+    </ul>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Evento adverso tras SRP</th><th>Por millón de dosis distribuidas</th><th>Comentario</th></tr></thead>
+      <tbody>
+        <tr><td>Fiebre</td><td class="num">5.49</td><td>El más reportado</td></tr>
+        <tr><td>Exantema</td><td class="num">4.63</td><td><i>Forme fruste</i> de rubéola por viremia vacunal</td></tr>
+        <tr><td>Crisis febril</td><td class="num">1.34</td><td>—</td></tr>
+        <tr><td><b>Autismo</b></td><td class="num">0.75</td><td><b>Igual que en la población general: no hay asociación</b></td></tr>
+        <tr><td>Artritis</td><td class="num">0.67</td><td>Artritis crónica: relación causal muy dudosa</td></tr>
+        <tr><td>Trombocitopenia</td><td class="num">0.45</td><td>2–6 semanas tras la dosis</td></tr>
+        <tr><td>Anafilaxia</td><td class="num">0.40</td><td>—</td></tr>
+        <tr><td>Encefalitis / encefalopatía</td><td class="num">0.22</td><td>Encefalitis por cuerpos de inclusión de sarampión en inmunocomprometidos</td></tr>
+        <tr><td>Meningitis aséptica</td><td class="num">0.10</td><td>Habitualmente por el <b>componente de parotiditis</b></td></tr>
+        <tr><td>Guillain-Barré</td><td class="num">0.05</td><td>—</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>E1</b> = espiga, receptor (<b>MOG</b>) y antígeno neutralizante. <b>Un solo serotipo</b>.</li>
+          <li>Único togavirus «huérfano»: <b>sin vector artrópodo</b>, reservorio humano exclusivo, familia propia desde 2018.</li>
+          <li><b>Adenopatía retroauricular y suboccipital</b> + exantema de 3 días que baja de la cara = rubéola.</li>
+          <li><b>Artritis en la mujer adulta</b> (&gt;50 %) — y en hasta 40 % de las vacunadas no inmunes.</li>
+          <li>SRC: <b>sordera neurosensorial es la manifestación más frecuente</b> y puede ser la única.</li>
+          <li><b>Blueberry muffin</b> = hematopoyesis dérmica extramedular; diferencial con las demás TORCH.</li>
+          <li><b>Riesgo de SRC: 80–90 % antes de las 12 semanas; casi nulo después de las 20.</b></li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«Las 3 C de Gregg»</b> — <b>C</b>atarata · <b>C</b>orazón (conducto arterioso persistente) · <b>C</b>óclea (sordera neurosensorial).</p>
+        <p><b>«Rubéola es la de los tres tres»</b> — exantema de <b>3 días</b>, <b>3 cadenas ganglionares</b> (retroauricular, suboccipital, cervical posterior) y <b>3 proteínas estructurales</b> (C, E1, E2).</p>
+        <p><b>«El sarampión desciende y descama; la rubéola desciende y desaparece»</b> — mismo sentido craneocaudal, distinto final.</p>
+        <p><b>«Si ya tiene IgG, se acabó la consulta»</b> — un serotipo, inmunidad de por vida, no se retitula.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas y escenario mexicano</span>
+      <ul>
+        <li><b>México y las Américas están libres de rubéola endémica desde la certificación de la OPS en 2015.</b> El caso que verás será <b>importado</b> —India, China, Sudeste Asiático, África, Medio Oriente, donde persisten más de 10 000 casos y 600 SRC anuales— o en una comunidad con cobertura baja. Ante un exantema con adenopatía retroauricular, <b>pregunta por viajes y por la cartilla</b>, y notifica.</li>
+        <li><b>IgM aislada positiva en embarazada asintomática</b>: nunca es base suficiente para asesorar sobre interrumpir un embarazo. Confirma con sueros pareados y RT-PCR antes de decir una palabra.</li>
+        <li><b>Vacunación inadvertida en el embarazo</b>: no se ha documentado ningún caso de SRC por cepa vacunal. <b>No es indicación de aborto</b>; se tranquiliza y se vigila.</li>
+        <li><b>IgM negativa el día del exantema no descarta</b>: el exantema es inmunomediado y la IgM puede tardar. Repite la serología.</li>
+        <li><b>Granulomas cutáneos crónicos en un paciente con inmunodeficiencia de células T</b>: piensa en <b>iVDRV</b>, virus vacunal de rubéola persistente. Diagnóstico que casi nadie considera.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/Rubeola.md</code> · Mandell PPID 10e, cap. 159 «Rubella virus (German measles)», Perelygina L, Sullivan KE, pp. 1983-1990 (tablas 159.1 a 159.3) · CDC, <i>Manual for the Surveillance of Vaccine-Preventable Diseases</i>, capítulo de rubéola y SRC · OMS, <i>Rubella vaccines: WHO position paper — July 2020</i>, WER 2020;95(27):301-324 · Plotkin SA, <i>Clin Infect Dis</i> 2006;43(Suppl 3):S164-S168 · First Aid for the USMLE Step 1 2025, p. 166.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="togaviridae.html"><span class="k">← Anterior</span><span class="v">Togaviridae</span></a>
+        <a class="next" href="flaviviridae.html"><span class="k">Siguiente →</span><span class="v">Flaviviridae</span></a></div>
+      <footer class="pf">
+        <span>Matonaviridae · 7 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

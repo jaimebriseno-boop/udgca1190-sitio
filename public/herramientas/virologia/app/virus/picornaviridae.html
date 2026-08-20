@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Picornaviridae — Virus RNA</title>
+<meta name="description" content="Picornaviridae. Enterovirus · Rinovirus · VHA · Parechovirus">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Picornaviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 1 de 18 · Virología médica</p>
+    <h1>Picornaviridae</h1>
+    <p class="sub">Enterovirus · Rinovirus · VHA · Parechovirus</p>
+    <div class="chips"><span class="chip g">+ssRNA 7,5 kb · monocistrónico · poliproteína</span>
+  <span class="chip">Sin envoltura · icosaédrico 27–30 nm</span>
+  <span class="chip">Replicación citoplásmica · 5–10 h por ciclo</span>
+  <span class="chip r">&gt;300 tipos humanos · sin protección cruzada</span>
+  <span class="chip gold">IPV/OPV · vacuna VHA inactivada · EV-A71</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Picornaviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros humanos</dt><dd><i>Enterovirus</i> (polio, coxsackie, echo, EV numerados y <b>rinovirus</b>) · <i>Hepatovirus</i> · <i>Parechovirus</i></dd></div>
+  <div class="cell"><dt>Virión</dt><dd>Cápside desnuda de <b>60 protómeros</b>; 60 copias de VP1, VP2, VP3 (superficie) y VP4 (interna)</dd></div>
+  <div class="cell"><dt>Receptores</dt><dd><b>CD155</b> polio · CAR/DAF coxsackie B · <b>SCARB2</b> EV-A71 · ICAM-5 EV-D68 · FcRn echovirus · ICAM-1 RV-A/B · <b>CDHR3</b> RV-C · <b>HAVCR1/TIM-1</b> VHA</dd></div>
+  <div class="cell"><dt>Estabilidad</dt><dd>Enterovirus y VHA <b>estables a pH 3–9</b> (sobreviven el estómago) · <b>rinovirus lábil a pH &lt;5–6</b> · todos resisten éter, cloroformo y alcohol</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Fecal-oral · respiratoria y por fómites (rinovirus, EV-D68) · vesicular en mano-pie-boca · alimentos y agua en VHA</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd>Enterovirus <b>3–6 días</b> · rinovirus <b>1–2 días</b> · VHA <b>15–50 días</b> (media 28)</dd></div>
+  <div class="cell"><dt>Excreción</dt><dd>Faringe 1–3 semanas · <b>heces 4–8 semanas</b> · prolongada e indefinida en agammaglobulinemia</dd></div>
+  <div class="cell"><dt>Estacionalidad</dt><dd>Enterovirus y parechovirus: <b>verano–otoño</b> en clima templado · rinovirus: picos de <b>otoño y primavera</b></dd></div>
+  <div class="cell"><dt>Tratamiento</dt><dd><b>Soporte.</b> Ningún antiviral aprobado; pleconaril, pocapavir y V-7404 siguen en investigación</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">Del mono de Landsteiner al Nobel del cultivo celular</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1908</b> — <b>Landsteiner y Popper</b> transmiten la poliomielitis a monos con un filtrado de médula espinal: el primer picornavirus humano demostrado.</li>
+      <li><b>1948</b> — <b>Dalldorf y Sickles</b> recuperan de las heces de dos niños con parálisis, en el pueblo de <b>Coxsackie, Nueva York</b>, un virus que paraliza al ratón lactante pero no al primate: el intestino alberga muchos más virus que el poliovirus.</li>
+      <li><b>1949</b> — <b>Enders, Weller y Robbins</b> cultivan poliovirus en tejido <b>no neural</b>: el hito que permite producirlo en masa y fabricar una vacuna. <b>Nobel 1954</b>. Poco después aparecen los <b>echovirus</b>, aislados de heces de niños sanos y «huérfanos» de enfermedad conocida.</li>
+      <li><b>1955 y 1961</b> — <b>Salk</b> licencia la vacuna inactivada (IPV) y <b>Sabin</b> la oral atenuada (OPV). Los primeros rinovirus del catarro común se aíslan en cultivo celular <b>a partir de 1956</b>.</li>
+      <li><b>1973</b> — <b>Feinstone</b> visualiza el VHA en heces por inmunomicroscopia electrónica; en los noventa llegan las vacunas inactivadas.</li>
+      <li><b>1988 → hoy</b> — la Iniciativa Global de Erradicación declara <b>PV2 erradicado en 2015</b> y <b>PV3 en 2019</b>; el poliovirus salvaje tipo 1 solo persiste en <b>Pakistán y Afganistán</b>.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">La lección que dejó la familia</span>
+      <p>Un virus puede <b>replicarse lejos de su órgano diana</b> (intestino → SNC), el <b>cultivo celular</b> lo convierte en vacuna, y la <b>diversidad antigénica</b> —tres serotipos de polio frente a más de 160 de rinovirus— decide si esa vacuna es posible.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Picornavirales → Picornaviridae</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Orden</dt><dd>Picornavirales</dd>
+      <dt>Familia</dt><dd>Picornaviridae — de <i>pico</i> («pequeño») + RNA: el virus de RNA más pequeño de la patología humana</dd>
+      <dt>Géneros con patógenos humanos</dt><dd><i>Enterovirus</i> · <i>Hepatovirus</i> · <i>Parechovirus</i></dd>
+      <dt>Nota de clasificación</dt><dd>Los <b>rinovirus dejaron de ser género propio</b>: el ICTV los ubica dentro de <i>Enterovirus</i>. Se mantienen aparte en el árbol porque su comportamiento clínico es el opuesto.</dd>
+      <dt>Tipificación</dt><dd>Por <b>secuenciación parcial de VP1</b>, ya no por neutralización.</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Enterovirus A–D</span><span class="vg">&gt;100 tipos</span></div>
+        <div class="vbd">
+          <p><b>EV-A</b> — coxsackie A2–A8, A10, A12, A16 y <b>EV-A71</b>: mano-pie-boca, herpangina, rombencefalitis.</p>
+          <p><b>EV-B</b> — coxsackie B1–B6, coxsackie A9 y los <b>echovirus E-1 a E-33</b>: meningitis aséptica, pleurodinia, miopericarditis y sepsis neonatal.</p>
+          <p><b>EV-C</b> — <b>poliovirus 1, 2 y 3</b> más varios coxsackie A (A1, A11, A13, A17–A22, A24).</p>
+          <p><b>EV-D</b> — <b>EV-D68</b> (mielitis flácida aguda) y <b>EV-D70</b> (conjuntivitis hemorrágica aguda).</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Rhinovirus A, B y C</span><span class="vg">&gt;160 tipos</span></div>
+        <div class="vbd">
+          <p><b>RV-A</b> (80 tipos) y <b>RV-B</b> (32) usan <b>ICAM-1</b>; diez tipos minoritarios de RV-A, el receptor de LDL.</p>
+          <p><b>RV-C</b> (57 tipos) usa <b>CDHR3</b>; identificado apenas en <b>2006</b> por métodos moleculares porque <b>no crece en cultivo estándar</b>. Es el subtipo ligado a bronquiolitis y asma pediátrica grave.</p>
+          <p>Sin reactividad cruzada entre tipos: de ahí 2–3 catarros al año en el adulto y 6–12 en el niño, toda la vida.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Hepatovirus A</span><span class="vg">1 serotipo</span></div>
+        <div class="vbd">
+          <p><b>Un solo serotipo humano</b> con seis genotipos (I–VI; predominan IA, IB y IIIA). Esa unicidad antigénica es la razón de que <b>una vacuna monovalente proteja en todo el mundo</b>.</p>
+          <p>Se clasificó como «enterovirus 72» hasta que la secuenciación le dio género propio.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Parechovirus</span><span class="vg">PeV-A, 18 tipos</span></div>
+        <div class="vbd">
+          <p>Aislados en <b>1956</b> de niños con diarrea y clasificados como <b>echovirus 22 y 23</b> hasta que la genómica los separó: no cortan eIF4G y producen <b>tres</b> proteínas capsídicas maduras en vez de cuatro.</p>
+          <p>Solo la especie <i>Parechovirus ahumpari</i> (PeV-A, 18 tipos) enferma al humano; <b>PeV-A3</b> es el neurotropo del lactante.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«PERCH»</b> — <b>P</b>oliovirus · <b>E</b>chovirus · <b>R</b>hinovirus · <b>C</b>oxsackievirus · <b>H</b>AV. Los cinco picornavirus del examen, posados sobre el «pico» de una montaña.</p>
+      <p><b>Echo</b> = <i>Enteric Cytopathic Human Orphan</i>; <b>Coxsackie</b> = el pueblo de Nueva York donde se aisló; <b>Parecho</b> = «para-echo», el que se parecía a un echovirus pero no lo era.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Una sola poliproteína, doce pentámeros</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura de la cápside del picornavirus y organización de su genoma en poliproteína">
+        <rect width="900" height="380" fill="#FFFFFF"/>
+        <text x="40" y="30" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">VIRIÓN DESNUDO · 27–30 NM · 60 PROTÓMEROS</text>
+
+        <circle cx="148" cy="168" r="86" fill="rgba(69,90,140,.13)" stroke="#36476E" stroke-width="1.6"/>
+        <polygon points="148,90 222,144 194,231 102,231 74,144" fill="rgba(70,97,125,.20)" stroke="#36476E" stroke-width="1.3"/>
+        <line x1="148" y1="168" x2="148" y2="90" stroke="#36476E" stroke-width="1"/>
+        <line x1="148" y1="168" x2="222" y2="144" stroke="#36476E" stroke-width="1"/>
+        <line x1="148" y1="168" x2="194" y2="231" stroke="#36476E" stroke-width="1"/>
+        <line x1="148" y1="168" x2="102" y2="231" stroke="#36476E" stroke-width="1"/>
+        <line x1="148" y1="168" x2="74" y2="144" stroke="#36476E" stroke-width="1"/>
+        <text x="176" y="128" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#27334F">VP1</text>
+        <text x="184" y="196" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#27334F">VP2</text>
+        <text x="104" y="206" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#27334F">VP3</text>
+        <path d="M112 168 q12 -15 24 0 t24 0 t24 0" fill="none" stroke="#5C7A57" stroke-width="2.2"/>
+        <circle cx="108" cy="170" r="4.6" fill="#8a5c0a"/>
+        <text x="148" y="272" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">UN PENTÁMERO = 5 PROTÓMEROS</text>
+        <text x="148" y="286" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">12 PENTÁMEROS = CÁPSIDE COMPLETA</text>
+
+        <g font-family="'Inter', sans-serif" font-size="10.5" fill="#6b7585">
+          <line x1="226" y1="120" x2="300" y2="106" stroke="#455A8C" stroke-width="1"/>
+          <text x="308" y="102" font-size="11.5" font-weight="600" fill="#27334F">VP1 · VP2 · VP3 — superficie</text>
+          <text x="308" y="118">60 copias de cada una; portan los epítopos</text>
+          <text x="308" y="131">neutralizantes y definen el serotipo</text>
+          <line x1="200" y1="150" x2="300" y2="152" stroke="#455A8C" stroke-width="1"/>
+          <text x="308" y="150" font-size="11.5" font-weight="600" fill="#701d14">El «canyon» de VP1</text>
+          <text x="308" y="166">Hendidura donde se une el receptor y bolsillo</text>
+          <text x="308" y="179">hidrofóbico que anclan pleconaril y pocapavir</text>
+          <line x1="186" y1="218" x2="300" y2="200" stroke="#455A8C" stroke-width="1"/>
+          <text x="308" y="198" font-size="11.5" font-weight="600" fill="#90303a">VP4 — interna y miristoilada</text>
+          <text x="308" y="214">Se expulsa al desencapsidar y abre el poro por</text>
+          <text x="308" y="227">donde el RNA pasa al citoplasma</text>
+          <line x1="120" y1="176" x2="300" y2="248" stroke="#455A8C" stroke-width="1"/>
+          <text x="308" y="246" font-size="11.5" font-weight="600" fill="#5C7A57">RNA (+) de 7,5 kb con VPg en el 5′</text>
+          <text x="308" y="262">Es infeccioso por sí solo: al entrar funciona</text>
+          <text x="308" y="275">directamente como mRNA, sin polimerasa previa</text>
+        </g>
+
+        <text x="40" y="308" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">GENOMA MONOCISTRÓNICO → UNA POLIPROTEÍNA DE 250 KDA</text>
+        <circle cx="46" cy="330" r="5" fill="#8a5c0a"/>
+        <text x="40" y="352" font-family="'Inter', sans-serif" font-size="8.5" fill="#8a5c0a">VPg</text>
+        <rect x="56" y="318" width="104" height="24" rx="3" fill="rgba(138,92,10,.14)" stroke="#8a5c0a" stroke-width="1"/>
+        <text x="108" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#8a5c0a">5′ NTR · IRES</text>
+        <rect x="160" y="318" width="250" height="24" rx="3" fill="rgba(39,51,79,.16)" stroke="#27334F" stroke-width="1"/>
+        <text x="184" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#27334F">VP4</text>
+        <text x="234" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#27334F">VP2</text>
+        <text x="294" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#27334F">VP3</text>
+        <text x="368" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#27334F">VP1</text>
+        <rect x="410" y="318" width="150" height="24" rx="3" fill="rgba(144,48,58,.16)" stroke="#90303a" stroke-width="1"/>
+        <text x="435" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#701d14">2A</text>
+        <text x="485" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#701d14">2B</text>
+        <text x="535" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#701d14">2C</text>
+        <rect x="560" y="318" width="252" height="24" rx="3" fill="rgba(92,122,87,.18)" stroke="#5C7A57" stroke-width="1"/>
+        <text x="580" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#1a6b42">3A</text>
+        <text x="618" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#1a6b42">3B</text>
+        <text x="666" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#1a6b42">3C</text>
+        <text x="756" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#1a6b42">3D</text>
+        <rect x="812" y="318" width="66" height="24" rx="3" fill="rgba(110,110,118,.14)" stroke="#6b7585" stroke-width="1"/>
+        <text x="845" y="334" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8" fill="#6b7585">3′ + polyA</text>
+        <line x1="160" y1="312" x2="410" y2="312" stroke="#27334F" stroke-width="1.2"/>
+        <text x="285" y="308" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#27334F">P1 · ESTRUCTURALES</text>
+        <line x1="410" y1="312" x2="812" y2="312" stroke="#5C7A57" stroke-width="1.2"/>
+        <text x="611" y="308" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#1a6b42">P2 Y P3 · NO ESTRUCTURALES</text>
+        <text x="56" y="358" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Traducción sin caperuza</text>
+        <text x="418" y="358" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">2A corta eIF4G: apaga la traducción del huésped</text>
+        <text x="640" y="358" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">3C procesa · 3D es la RdRp sin corrección</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión y su genoma. Retén dos cosas: <b>VP1 es a la vez el serotipo, el receptor y la diana de los antivirales de cápside</b>, y el genoma se traduce como <b>una sola poliproteína</b> que las proteasas virales 2A y 3C cortan en cascada.</figcaption>
+    </figure>
+
+    <h4>Ciclo de replicación</h4>
+    <ol class="steps">
+      <li><b>Adsorción y desencapsidación</b> El receptor se inserta en el canyon de VP1; VP4 se libera, se abre un poro y el RNA entra al citoplasma en minutos.</li>
+      <li><b>Traducción cap-independiente</b> El 5′ no lleva caperuza sino <b>VPg</b> y un <b>IRES</b> de ~740 nucleótidos que recluta el ribosoma. Se sintetiza una poliproteína única de 250 kDa desde el 90 % del genoma.</li>
+      <li><b>Corte proteolítico en cascada</b> <b>2A</b> corta <b>eIF4G</b> y apaga la síntesis proteica del huésped en 3 h; <b>3C y 3CD</b> procesan el resto. Excepción: los parechovirus <b>no cortan eIF4G</b>.</li>
+      <li><b>Replicación en vesículas membranosas</b> <b>3D</b> es la RdRp. Síntesis asimétrica: 30–70 hebras positivas por cada negativa, hasta ~50 000 genomas por célula.</li>
+      <li><b>Ensamblaje y lisis</b> Cinco copias de VP1, VP3 y VP0 forman un pentámero; doce pentámeros cierran la cápside. La encapsidación dispara el corte final <b>VP0 → VP2 + VP4</b>. A las 6–7 h hay viriones; la célula se lisa con 10<sup>4</sup>–10<sup>5</sup> partículas.</li>
+    </ol>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Variabilidad</span>
+        <ul>
+          <li>3D <b>carece de corrección de pruebas</b>: cada genoma nuevo lleva ~1 mutación. La población infectante es una <b>cuasiespecie</b>, no un clon.</li>
+          <li>La <b>recombinación</b> entre enterovirus de la misma especie es el motor de los <b>poliovirus derivados de vacuna (cVDPV)</b>: el Sabin revierte la atenuación del IRES y recombina con enterovirus C circulantes donde la cobertura es baja.</li>
+          <li>La zona más conservada es el <b>5′ NTR</b> —por eso las PCR pan-enterovirus lo amplifican— y la más variable, la de los epítopos neutralizantes de VP1.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Estabilidad ambiental</span>
+        <ul>
+          <li><b>Sin envoltura</b> ⇒ enterovirus y VHA resisten éter, cloroformo y alcohol: frente a ellos el <b>alcohol-gel es insuficiente</b> y la medida real es agua y jabón. <b>El rinovirus sí se inactiva</b> con los geles de etanol sobre la piel.</li>
+          <li>Inactivan: <b>formaldehído, hipoclorito, fenol y UV</b>. El VHA tolera 60 °C una hora y sobrevive semanas en agua y alimentos refrigerados; se destruye con cocción &gt;85 °C por 1 minuto e hipoclorito 1:10.</li>
+          <li>El <b>cloruro de magnesio molar</b> los termoestabiliza: es lo que permite que la OPV conserve potencia con cadena de frío imperfecta.</li>
+          <li><b>Rinovirus rompe el patrón</b>: se destruye a pH &lt;3 y replica óptimamente a <b>33–35 °C</b>; por eso jamás coloniza el tubo digestivo.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Intestino → viremia → órgano diana</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruta patogénica de los enterovirus desde el intestino hasta los órganos diana y las excepciones del rinovirus y el virus de la hepatitis A">
+        <rect width="900" height="360" fill="#FFFFFF"/>
+        <rect x="20" y="24" width="252" height="22" rx="4" fill="rgba(69,90,140,.18)"/>
+        <text x="30" y="39" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#27334F">FASE 1 · IMPLANTE MUCOSO — DÍAS 0–3</text>
+        <rect x="284" y="24" width="280" height="22" rx="4" fill="rgba(92,122,87,.16)"/>
+        <text x="294" y="39" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#1a6b42">FASE 2 · VIREMIA MENOR Y AMPLIFICACIÓN</text>
+        <rect x="576" y="24" width="304" height="22" rx="4" fill="rgba(112,29,20,.10)"/>
+        <text x="586" y="39" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#701d14">FASE 3 · VIREMIA MAYOR = INICIO DE LA FIEBRE</text>
+
+        <line x1="46" y1="112" x2="860" y2="112" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="860,112 850,107 850,117" fill="#455A8C"/>
+
+        <circle cx="88" cy="112" r="16" fill="#27334F"/>
+        <text x="88" y="116" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">1</text>
+        <text x="88" y="150" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Ingestión</text>
+        <text x="88" y="165" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Resiste el pH gástrico</text>
+
+        <circle cx="240" cy="112" r="16" fill="#27334F"/>
+        <text x="240" y="116" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">2</text>
+        <text x="240" y="150" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Faringe e íleon</text>
+        <text x="240" y="165" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Células M y placas de Peyer</text>
+        <text x="240" y="178" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">(sin lesión histológica)</text>
+
+        <circle cx="400" cy="112" r="16" fill="#5C7A57"/>
+        <text x="400" y="116" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">3</text>
+        <text x="400" y="150" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Ganglio regional</text>
+        <text x="400" y="165" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Viremia menor, transitoria</text>
+
+        <circle cx="556" cy="112" r="16" fill="#5C7A57"/>
+        <text x="556" y="116" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">4</text>
+        <text x="556" y="150" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Sistema reticuloendotelial</text>
+        <text x="556" y="165" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Hígado, bazo, médula ósea</text>
+        <text x="556" y="178" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Aquí se detiene el 95 % de los casos</text>
+
+        <circle cx="736" cy="112" r="16" fill="#701d14"/>
+        <text x="736" y="116" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">5</text>
+        <text x="736" y="150" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Viremia mayor</text>
+        <text x="736" y="165" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Coincide con el inicio clínico</text>
+
+        <circle cx="846" cy="112" r="16" fill="#701d14"/>
+        <text x="846" y="116" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">6</text>
+        <text x="846" y="150" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Órgano diana</text>
+
+        <line x1="20" y1="200" x2="880" y2="200" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+        <text x="20" y="218" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">EL RECEPTOR DECIDE EL ÓRGANO Y EL SÍNDROME</text>
+
+        <rect x="20" y="228" width="206" height="94" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="20" y="228" width="4" height="94" rx="2" fill="#27334F"/>
+        <text x="36" y="248" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Sistema nervioso</text>
+        <text x="36" y="265" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Polio · CD155 en la motoneurona</text>
+        <text x="36" y="278" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">del asta anterior; también entra</text>
+        <text x="36" y="291" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">por transporte axonal retrógrado</text>
+        <text x="36" y="308" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">EV-A71 · SCARB2 → rombencéfalo</text>
+
+        <rect x="238" y="228" width="196" height="94" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="238" y="228" width="4" height="94" rx="2" fill="#701d14"/>
+        <text x="254" y="248" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Corazón</text>
+        <text x="254" y="265" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Coxsackie B · receptor CAR</text>
+        <text x="254" y="278" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Lisis directa del miocito más</text>
+        <text x="254" y="291" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">inmunopatología por CD8</text>
+        <text x="254" y="308" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">→ miocardiopatía dilatada</text>
+
+        <rect x="446" y="228" width="196" height="94" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="446" y="228" width="4" height="94" rx="2" fill="#90303a"/>
+        <text x="462" y="248" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#90303a">Piel y mucosa</text>
+        <text x="462" y="265" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Coxsackie A16 y A6, EV-A71</text>
+        <text x="462" y="278" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Replicación en queratinocitos</text>
+        <text x="462" y="291" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">→ mano-pie-boca y herpangina</text>
+
+        <rect x="654" y="228" width="226" height="94" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="654" y="228" width="4" height="94" rx="2" fill="#5C7A57"/>
+        <text x="670" y="248" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Hígado — VHA</text>
+        <text x="670" y="265" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">HAVCR1/TIM-1 en el hepatocito</text>
+        <text x="670" y="278" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">El virus NO es citopático: el daño</text>
+        <text x="670" y="291" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">lo hacen los CD8, las NK e IFN-γ</text>
+        <text x="670" y="308" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Sale por la bilis: 10⁸–10¹⁰ por gramo</text>
+
+        <text x="20" y="346" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La excepción es el rinovirus: lábil a pH ácido y con óptimo a 33–35 °C, se queda en el epitelio ciliado nasal y nunca hace viremia.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Del intestino al órgano diana. La <b>viremia mayor coincide con el inicio de la fiebre</b>: cuando el paciente consulta, el virus ya está en el órgano blanco, y esa es la razón de que ningún antiviral llegue a tiempo.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Mecanismos de daño</span>
+        <ul>
+          <li><b>Lisis directa</b> en poliovirus —destrucción irreversible de la motoneurona del asta anterior; la <b>sensibilidad se conserva</b> porque las vías sensitivas no expresan CD155— y en el miocito del coxsackie B.</li>
+          <li><b>Inmunopatología</b> en el VHA: el hepatocito muere por los CD8 citotóxicos, no por el virus; el pico de transaminasas es la firma de la respuesta inmune, no de la replicación.</li>
+          <li><b>Inflamación sin destrucción</b> en el rinovirus: el daño epitelial es mínimo y los síntomas los produce la <b>IL-8 con su infiltrado neutrofílico</b> — por eso la <b>rinorrea purulenta es viral</b>.</li>
+          <li><b>Evasión</b>: el VHA circula como partícula <b>cuasi-envuelta (eHAV)</b>, cubierta de membrana del huésped, que la esconde de los anticuerpos; en heces sale desnuda.</li>
+        </ul>
+      </div>
+      <div class="box hy"><span class="lbl">La prueba de que la inmunidad es humoral</span>
+        <p>El paciente con <b>agammaglobulinemia ligada al X (Bruton)</b> desarrolla <b>meningoencefalitis enteroviral crónica</b> y excreción fecal que dura años: el experimento natural que demuestra que el brazo protector es el <b>anticuerpo neutralizante tipo-específico</b>, no la inmunidad celular. De ahí que la inmunoglobulina —y no un antiviral— sea el recurso terapéutico, y que el neonato de madre sin anticuerpos frente al serotipo circulante sea el más vulnerable.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Un serotipo, un síndrome</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Mapa de síndromes por virus</h4>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Síndrome</th><th>Agente típico</th><th>Clave clínica</th></tr></thead>
+      <tbody>
+        <tr><td><b>Mano-pie-boca</b></td><td>CV-A16, <b>CV-A6</b>, EV-A71</td><td>Úlceras orales + vesículas en palmas, plantas y glúteos en menores de 5 años. <b>CV-A6</b>: exantema más extenso y ampolloso, con <b>onicomadesis</b> tardía.</td></tr>
+        <tr><td><b>Herpangina</b></td><td>Coxsackie A</td><td>Fiebre alta + vesículas en <b>pilares anteriores, úvula y paladar blando</b>. Respeta encías y lengua — ahí la diferencia con la gingivoestomatitis herpética.</td></tr>
+        <tr><td><b>Pleurodinia</b> (enfermedad de Bornholm)</td><td>Coxsackie B</td><td>Dolor torácico o abdominal <b>paroxístico y lancinante</b> («el diablo de Bornholm»), con fiebre y mialgias; resuelve en días a semanas.</td></tr>
+        <tr><td><b>Miopericarditis</b></td><td>Coxsackie B</td><td>Causa viral más frecuente de <b>miocardiopatía dilatada idiopática</b>; fulminante en el neonato, puede requerir ECMO.</td></tr>
+        <tr><td><b>Meningitis aséptica</b></td><td>Echovirus, coxsackie B, EV-A71</td><td><b>Más del 50 %</b> de las meningitis virales con etiología identificada en niños. Pleocitosis linfocítica (PMN en las primeras horas), glucosa normal. Benigna.</td></tr>
+        <tr><td><b>Rombencefalitis</b></td><td><b>EV-A71</b></td><td>Mioclonías, ataxia y parálisis de pares craneales tras un mano-pie-boca; puede llegar a <b>edema pulmonar neurogénico</b> y colapso cardiovascular. Brotes en Asia-Pacífico desde 1997.</td></tr>
+        <tr><td><b>Mielitis flácida aguda</b></td><td><b>EV-D68</b></td><td>Cuadro tipo polio: parálisis flácida asimétrica proximal precedida de infección respiratoria, con <b>lesiones del asta anterior en la RM</b>. Brotes bienales desde 2014.</td></tr>
+        <tr><td><b>Conjuntivitis hemorrágica aguda</b></td><td>EV-D70, CV-A24</td><td>Hemorragia subconjuntival de inicio brusco, muy contagiosa; resuelve en días.</td></tr>
+        <tr><td><b>Sepsis neonatal enteroviral</b></td><td><b>Echovirus 11</b>, coxsackie B</td><td>Fiebre, letargia y choque en las dos primeras semanas de vida con <b>hepatitis necrotizante, coagulopatía y miocarditis</b>. Riesgo máximo si la madre enferma en el periparto, sin tiempo de transferir anticuerpos.</td></tr>
+        <tr><td><b>Catarro común</b></td><td>Rinovirus A/B/C</td><td><b>30–50 % de las IRS del adulto</b> y 50–80 % de las del niño. Incubación 1–2 días, pico a los 2–4, mediana 7–10 días; fiebre rara en el adulto, presente en un tercio de los niños.</td></tr>
+        <tr><td><b>Hepatitis aguda</b></td><td>VHA</td><td>Pródromo de 1–2 semanas → ictericia, coluria y acolia. <b>70 % de los menores de 6 años, asintomáticos</b>; 70–80 % de los adultos, sintomáticos.</td></tr>
+        <tr><td><b>Síndrome tipo sepsis del lactante</b></td><td><b>Parechovirus A3</b></td><td>Menores de 3 meses con fiebre, irritabilidad, taquicardia, exantema en tronco, <b>palmas y plantas</b>, a veces choque — con <b>LCR normal</b>.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h4>Poliomielitis: el espectro completo</h4>
+    <ul>
+      <li><b>Asintomática — 70 a 95 %</b> de los infectados.</li>
+      <li><b>Polio abortiva — 4 a 8 %</b>: fiebre, cefalea, faringitis y molestias digestivas; autolimitada en 24–72 h e indistinguible de cualquier viriasis.</li>
+      <li><b>Polio no paralítica — 1 a 2 %</b>: meningitis aséptica con LCR linfocítico; resuelve sin secuela.</li>
+      <li><b>Polio paralítica — ~1 de cada 200</b> infectados por PV1: <b>parálisis flácida asimétrica</b>, arreflexia, fasciculaciones y atrofia, con <b>sensibilidad preservada</b>. La forma <b>bulbar</b> toma los pares IX–XI con disfagia y falla respiratoria: la de mayor mortalidad.</li>
+      <li><b>Síndrome pospolio — 25 a 40 %</b> de los sobrevivientes, años o décadas después: nueva debilidad progresiva, fatiga y dolor por sobrecarga de las motoneuronas supervivientes. <b>No es reinfección ni reactivación.</b></li>
+    </ul>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th></th><th>Poliomielitis</th><th>Guillain-Barré</th><th>Mielitis flácida aguda (EV-D68)</th></tr></thead>
+      <tbody>
+        <tr><td><b>Patrón</b></td><td><b>Asimétrico</b>, de predominio proximal</td><td><b>Simétrico y ascendente</b></td><td>Asimétrico, proximal, tras cuadro respiratorio</td></tr>
+        <tr><td><b>Sensibilidad</b></td><td><b>Conservada</b></td><td><b>Alterada</b>, con parestesias</td><td>Conservada</td></tr>
+        <tr><td><b>LCR</b></td><td>Pleocitosis linfocítica, proteínas algo altas</td><td><b>Disociación albúmino-citológica</b></td><td>Pleocitosis leve</td></tr>
+        <tr><td><b>Imagen</b></td><td>—</td><td>Realce de raíces</td><td><b>Hiperintensidad del asta anterior</b> en T2</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h4>Poblaciones especiales</h4>
+    <div class="g2">
+      <div class="card"><span class="lbl">Neonato</span>
+        <p>Echovirus 11 y coxsackie B dan el cuadro más grave de la familia; <b>el parechovirus A3 lo imita con LCR limpio</b>. A la embarazada cercana al término se le indica evitar contacto con enfermos con sospecha enteroviral.</p>
+      </div>
+      <div class="card"><span class="lbl">Hepatopatía y edad</span>
+        <p>La hepatitis A fulminante ocurre en &lt;1 % global, sube a <b>2–3 % después de los 50 años</b> y es mucho más letal sobre <b>hepatopatía crónica previa</b>. Ese es el argumento para vacunar a todo cirrótico.</p>
+      </div>
+    </div>
+
+    <div class="box clin"><span class="lbl">Rinovirus más allá del catarro</span>
+      <ul>
+        <li><b>Segunda causa de bronquiolitis</b> tras el VSR, con <b>RV-C</b> como subtipo dominante en los cuadros graves.</li>
+        <li>Dispara <b>hasta el 85 % de las exacerbaciones de asma pediátrica</b> y cerca del 50 % de las del adulto; es también el detonante viral más frecuente de exacerbación de EPOC.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">PCR para casi todo, serología solo para el VHA</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario</th><th>Muestra y prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Meningitis aséptica</b></td><td>RT-PCR de enterovirus <b>en LCR</b></td><td>Sensible y específica, con resultado en 24 h: <b>acorta la estancia y suspende antibióticos</b>. La prueba de mayor impacto asistencial de la familia.</td></tr>
+        <tr><td><b>Lactante &lt;3 meses con fiebre sin foco</b></td><td>RT-PCR de <b>parechovirus</b> en LCR y sangre</td><td>Se pide <b>aparte</b>: los paneles pan-enterovirus <b>no lo detectan</b>. El LCR es normal en la mayoría; si hay pleocitosis, &lt;25 células/mm³.</td></tr>
+        <tr><td><b>Encefalitis o mielitis</b></td><td>RT-PCR en LCR + <b>heces y exudado faríngeo</b> · RM</td><td>En EV-D68 y EV-A71 la PCR de LCR suele ser <b>negativa</b>: el rendimiento está en muestras respiratorias y fecales. La RM muestra asta anterior o rombencéfalo.</td></tr>
+        <tr><td><b>Poliomielitis sospechada</b></td><td><b>Cultivo viral de heces</b> ×2–3 muestras separadas 24 h + tipificación por PCR</td><td>Estándar de la vigilancia global; <b>notificación inmediata</b> dentro del sistema de parálisis flácida aguda en menores de 15 años.</td></tr>
+        <tr><td><b>Hepatitis aguda</b></td><td><b>IgM anti-VHA</b></td><td>Aparece 5–10 días <b>antes</b> de los síntomas y persiste 3–6 meses. IgG aislada = inmunidad. El RNA solo se pide para brotes o serología equívoca.</td></tr>
+        <tr><td><b>Infección respiratoria</b></td><td>Panel molecular multiplex</td><td>Solo cambia la conducta en <b>inmunodeprimido, neumonía grave o brote nosocomial</b>. El catarro común no se estudia.</td></tr>
+        <tr><td><b>Tipificación epidemiológica</b></td><td>Secuenciación de <b>VP1</b></td><td>Método actual de asignación de tipo; reemplazó a la neutralización con sueros de referencia.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Línea de tiempo de los marcadores virológicos y serológicos de la hepatitis A tras la exposición">
+        <rect width="900" height="320" fill="#FFFFFF"/>
+        <text x="40" y="26" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">HEPATITIS A · MARCADORES POR SEMANA DESDE LA EXPOSICIÓN</text>
+
+        <rect x="208" y="40" width="128" height="18" rx="3" fill="rgba(138,92,10,.18)"/>
+        <text x="272" y="53" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#8a5c0a">ICTERICIA</text>
+        <rect x="112" y="40" width="96" height="18" rx="3" fill="rgba(112,29,20,.10)"/>
+        <text x="160" y="53" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#701d14">PRÓDROMO</text>
+
+        <line x1="80" y1="250" x2="866" y2="250" stroke="#455A8C" stroke-width="1.3"/>
+        <line x1="80" y1="250" x2="80" y2="70" stroke="#455A8C" stroke-width="1.3"/>
+
+        <path d="M104 248 C132 150 160 84 196 86 C236 88 268 180 320 240 L344 249" fill="none" stroke="#5C7A57" stroke-width="2.4"/>
+        <path d="M176 249 C208 220 224 122 252 112 C288 100 330 182 400 230 C430 246 448 250 470 250" fill="none" stroke="#701d14" stroke-width="2.4"/>
+        <path d="M180 249 C210 232 226 162 262 142 C300 122 330 130 360 134 C420 142 500 162 560 212 C600 244 630 250 660 250" fill="none" stroke="#27334F" stroke-width="2.4"/>
+        <path d="M240 249 C280 232 310 182 360 166 C430 148 560 142 858 140" fill="none" stroke="#8a5c0a" stroke-width="2.4"/>
+
+        <text x="196" y="76" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#5C7A57">RNA en heces · 10⁸–10¹⁰ por gramo</text>
+        <text x="286" y="106" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">ALT/AST 1000–2000 UI/L</text>
+        <text x="470" y="176" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">IgM anti-VHA — dura 3 a 6 meses</text>
+        <text x="600" y="132" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">IgG anti-VHA — de por vida</text>
+
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#6b7585">
+          <text x="80" y="266" text-anchor="middle">0</text>
+          <text x="144" y="266" text-anchor="middle">2</text>
+          <text x="208" y="266" text-anchor="middle">4</text>
+          <text x="272" y="266" text-anchor="middle">6</text>
+          <text x="336" y="266" text-anchor="middle">8</text>
+          <text x="465" y="266" text-anchor="middle">12</text>
+          <text x="593" y="266" text-anchor="middle">16</text>
+          <text x="850" y="266" text-anchor="middle">24</text>
+        </g>
+        <text x="80" y="288" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">SEMANAS</text>
+
+        <line x1="144" y1="62" x2="144" y2="250" stroke="#8a5c0a" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="150" y="228" font-family="'Inter', sans-serif" font-size="9.5" fill="#8a5c0a">contagia desde aquí</text>
+
+        <text x="40" y="310" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La excreción fecal es máxima dos semanas antes de la ictericia: cuando se hace el diagnóstico, el contagio en el hogar ya ocurrió.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Cronología de la hepatitis A. La ventana de transmisibilidad va de <b>2 semanas antes a 1 semana después del inicio de la ictericia</b>, lo que explica por qué el aislamiento tardío tiene poco impacto y la profilaxis de contactos sí lo tiene.</figcaption>
+    </figure>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li><b>Detectar no es causar.</b> La excreción enteroviral dura semanas en heces y el rinovirus persiste en el niño y el trasplantado: una PCR positiva de heces o nasofaringe <b>no cierra el caso</b> si hay otro diagnóstico posible.</li>
+        <li><b>El LCR normal no descarta parechovirus</b> ni EV-D68. En el lactante séptico sin foco, pedir PCR de parechovirus por separado es lo que evita mantener antibióticos.</li>
+        <li><b>La serología de rinovirus es inútil</b>: más de 160 tipos sin reactividad cruzada.</li>
+        <li>La <b>IgM anti-VHA da falsos positivos</b> con factor reumatoide y en otras hepatitis agudas: sin clínica compatible, correlacionar antes de declarar el caso.</li>
+        <li>En hepatitis aguda, el marcador pronóstico no es la transaminasa sino el <b>INR</b>: &gt;1,5 con encefalopatía define falla hepática aguda y obliga a contactar un centro de trasplante.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Sin antiviral, con tres vacunas</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="box trap"><span class="lbl">No hay antiviral aprobado</span>
+      <p>Toda la familia se trata con <b>soporte</b>. <b>Pleconaril</b>, que ocupa el bolsillo hidrofóbico de VP1 e impide la desencapsidación, mejoró la supervivencia de neonatos con sepsis enteroviral y acortó la cefalea de la meningitis del adulto, pero <b>la FDA no lo aprobó</b> por inducción del CYP3A4. <b>Pocapavir</b> acelera el aclaramiento del poliovirus pero selecciona resistencia con rapidez; <b>V-7404</b> (inhibidor de la proteasa 3C) y <b>rupintrivir</b> siguen en fase temprana. La inmunoglobulina intravenosa solo tiene uso reglado en el <b>déficit de células B</b> y en casos neonatales seleccionados.</p>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Manejo por escenario</span>
+        <ul>
+          <li><b>Mano-pie-boca</b>: hidratación y analgesia; lo que ingresa a estos niños es el dolor oral, no la fiebre.</li>
+          <li><b>Miocarditis fulminante</b>: soporte en terapia intensiva y <b>ECMO</b>.</li>
+          <li><b>Mielitis flácida aguda</b>: soporte respiratorio y rehabilitación neuromuscular intensiva; corticoides e inmunoglobulina, con <b>evidencia controvertida</b>.</li>
+          <li><b>Catarro común</b>: paracetamol o AINE, descongestivo tópico <b>menos de 3 días</b>, ipratropio nasal para la rinorrea. <b>Nunca antibiótico.</b> En el niño pequeño, antitusivos y descongestivos hacen más daño que bien.</li>
+          <li><b>Hepatitis A</b>: soporte, suspender hepatotóxicos y alcohol, colestiramina si hay prurito. Hospitalizar ante vómito incoercible, INR &gt;1,5, encefalopatía o hipoglucemia.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Vacunas de la familia</span>
+        <ul>
+          <li><b>IPV (Salk)</b> — parenteral, sin riesgo de parálisis asociada a vacuna, pero <b>no genera inmunidad mucosa intestinal</b>: protege al individuo sin cortar la transmisión fecal-oral. Se usa en países sin circulación.</li>
+          <li><b>OPV (Sabin)</b> — oral, <b>sí genera inmunidad intestinal</b>: lo que detiene los brotes. Precio: <b>parálisis asociada a la vacuna ~1 por 750 000</b> primeras dosis y <b>cVDPV</b> donde la cobertura es baja. El <b>nOPV2</b>, más estable, se usa hoy contra brotes de cVDPV2.</li>
+          <li><b>VHA inactivada</b> — 2 dosis IM a los <b>0 y 6–18 meses</b>. Seroconversión &gt;95 % con la primera y ~100 % con la segunda; protección estimada de <b>25 a 40 años</b>. Al ser inactivada, <b>segura en embarazo e inmunosupresión</b>.</li>
+          <li><b>EV-A71 inactivada</b> — licenciada en China, eficacia 90–100 % contra el mano-pie-boca por ese tipo; <b>no disponible en México</b>.</li>
+          <li><b>No hay vacuna de rinovirus</b>, y probablemente no la habrá: &gt;160 tipos sin reactividad cruzada y tres receptores.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Esquemas e indicaciones</h4>
+    <dl class="kv">
+      <dt>Polio en México</dt><dd><b>IPV</b> en el esquema nacional desde 2007: <b>2, 4 y 6 meses, refuerzo a los 18 meses y a los 4–6 años</b>. Sin poliovirus salvaje autóctono desde 1990. <b>Refuerzo de IPV al adulto viajero</b> a Pakistán, Afganistán o zonas con brote de cVDPV.</dd>
+      <dt>VHA en México</dt><dd>Endemicidad intermedia, seroprevalencia adulta histórica &gt;80 %. Vacunación infantil <b>a los 12 meses desde 2008</b>. Al caer la inmunidad por infección natural, crece la población adulta susceptible y con ella el riesgo de brotes sintomáticos.</dd>
+      <dt>Indicaciones dirigidas de vacuna VHA</dt><dd>Viajeros a endemicidad intermedia o alta (idealmente ≥2 semanas antes; la primera dosis ya protege) · <b>hombres que tienen sexo con hombres</b> · usuarios de drogas · personas en situación de calle · <b>hepatopatía crónica</b> · receptores de factores de coagulación · personal de laboratorio expuesto · pre y postrasplante hepático.</dd>
+      <dt>Profilaxis postexposición de VHA</dt><dd>Dentro de <b>14 días</b>. <b>Vacuna</b> en sanos de <b>12 meses a 40 años</b>; <b>inmunoglobulina 0,1 mL/kg</b> en menores de 12 meses, mayores de 40 con riesgo, inmunocomprometidos, hepatopatía crónica y alergia a la vacuna. En contactos de muy alto riesgo, ambas en sitios distintos.</dd>
+    </dl>
+
+    <div class="box clin"><span class="lbl">Control de infecciones</span>
+      <p><b>Agua y jabón</b> frente a enterovirus y VHA: resisten el etanol y el alcohol-gel no basta (el rinovirus, en cambio, sí se inactiva con etanol en la piel). Superficies con hipoclorito. En guarderías y salas de neonatos, <b>cohortar</b> a los infectados; en unidades de trasplante, aislamiento de gotas y contacto ante cualquier infección respiratoria alta. Para el VHA: cloración del agua, cocción de moluscos bivalvos, control de manipuladores de alimentos, vigilancia de aguas residuales y notificación obligatoria con vacunación de contactos.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>+ssRNA traducido como una sola poliproteína</b> cortada por proteasas virales: la definición de la familia.</li>
+          <li>Receptores: <b>CD155</b> polio · <b>ICAM-1</b> rinovirus · <b>CAR</b> coxsackie B · <b>SCARB2</b> EV-A71 · <b>CDHR3</b> RV-C · <b>TIM-1</b> VHA.</li>
+          <li><b>Polio: parálisis flácida asimétrica con sensibilidad conservada.</b> Guillain-Barré: simétrica y ascendente, con sensibilidad alterada y disociación albúmino-citológica.</li>
+          <li>El VHA <b>nunca cronifica</b> ni produce hepatocarcinoma; la recurrencia bifásica del 5–10 % no es cronicidad.</li>
+          <li>La <b>IgM anti-VHA</b> hace el diagnóstico; la IgG solo indica inmunidad, sin distinguir vacuna de infección.</li>
+          <li><b>Rinorrea purulenta = sigue siendo viral.</b> Es infiltrado neutrofílico por IL-8, no sobreinfección.</li>
+          <li>Solo se sospecha sobreinfección bacteriana ante <b>persistencia &gt;10–14 días</b> o <b>doble curva</b>.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«PERCH»</b> — <b>P</b>olio, <b>E</b>cho, <b>R</b>ino, <b>C</b>oxsackie y <b>H</b>AV posados sobre el «pico».</p>
+        <p><b>«Las vocales van a los intestinos»</b> — hepatitis <b>A</b> y <b>E</b> son las desnudas y las fecal-orales; las consonantes (B, C, D) van por sangre.</p>
+        <p><b>«Coxsackie A arriba, B abajo»</b> — <b>A</b> = boca (herpangina, mano-pie-boca); <b>B</b> = tronco (pleurodinia, miocarditis, <b>B</b>ornholm, <b>B</b>ody).</p>
+        <p><b>«Rino se queda en la nariz»</b> — lábil a pH ácido y óptimo a 33–35 °C: nunca hace viremia ni transmisión fecal-oral.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas y escenario mexicano</span>
+      <ul>
+        <li><b>Lactante de 6 semanas con fiebre, exantema palmoplantar y aspecto séptico, con LCR rigurosamente normal.</b> El reflejo es bacteriemia oculta; la respuesta es <b>parechovirus A3</b>, que no aparece en el panel pan-enterovirus y hay que pedir aparte. La RM muestra lesiones de sustancia blanca aun sin crisis convulsivas.</li>
+        <li><b>Niño con parálisis flácida aguda en México.</b> No hay polio salvaje autóctona desde 1990, pero el caso <b>se notifica igual y de inmediato</b>: esa vigilancia es la que sostiene la certificación. El diagnóstico probable es <b>EV-D68 o EV-A71</b>, no poliovirus.</li>
+        <li><b>Trasplantado de progenitores hematopoyéticos con «solo un catarro».</b> El rinovirus progresa a neumonía con mortalidad de 30–40 % en ese huésped: se aísla, se estudia y se vigila.</li>
+        <li><b>Cirrótico o portador de VHC sin vacuna de hepatitis A.</b> La omisión clásica de consulta: sobre hepatopatía crónica, el VHA banal se vuelve fulminante.</li>
+        <li>La <b>OPV puede causar</b> la enfermedad que previene; la <b>IPV nunca</b>, pero tampoco corta la transmisión intestinal. Ese dilema es el corazón del «endgame» de la erradicación.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/</code>: <code>Enterovirus_Coxsackie.md</code>, <code>Poliovirus.md</code>, <code>Rinovirus.md</code>, <code>Hepatitis_A.md</code>, <code>Enterovirus.md</code> · Mandell PPID 10e, caps. 176 (introducción a enterovirus y parechovirus), 177 (poliovirus), 178 (coxsackie, echovirus y enterovirus numerados), 179 (parechovirus humanos), 180 (virus de hepatitis A, pp. 2215-2232) y 181 (rinovirus) · Nelson et al., <i>MMWR Recomm Rep</i> 2020;69(RR-5) (prevención de hepatitis A, ACIP) · OMS, <i>Polio Eradication Strategy 2022-2026</i> (GPEI) · OMS, documento de posición sobre vacunas contra hepatitis A, <i>WER</i> 2022;97(40):493-512 · First Aid for the USMLE Step 1 2025, pp. 163-165 y 170-171.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="../index.html"><span class="k">← Índice</span><span class="v">Virología</span></a>
+        <a class="next" href="caliciviridae.html"><span class="k">Siguiente →</span><span class="v">Caliciviridae</span></a></div>
+      <footer class="pf">
+        <span>Picornaviridae · 1 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

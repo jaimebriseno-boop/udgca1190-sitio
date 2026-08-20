@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caliciviridae — Virus RNA</title>
+<meta name="description" content="Caliciviridae. Norovirus · Sapovirus">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Caliciviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 2 de 18 · Virología médica</p>
+    <h1>Caliciviridae</h1>
+    <p class="sub">Norovirus · Sapovirus</p>
+    <div class="chips"><span class="chip g">+ssRNA lineal 7.5 kb · 3 ORF</span>
+  <span class="chip">Desnudo · icosaédrico 27–38 nm</span>
+  <span class="chip">Replicación citoplásmica en enterocito</span>
+  <span class="chip r">≈685 millones de casos/año · 18 % de toda la diarrea</span>
+  <span class="chip gold">Sin antiviral ni vacuna licenciada</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Caliciviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros humanos</dt><dd><i>Norovirus</i> (GI, GII, GIV) · <i>Sapovirus</i> (GI, GII, GIV, GV). De los 11 géneros de la familia, solo estos dos infectan al humano</dd></div>
+  <div class="cell"><dt>Genotipo dominante</dt><dd><b>GII.4</b> en norovirus (variantes nuevas cada 2–5 años; <b>Sydney 2012</b> sigue explicando la mayoría) · <b>GI.1</b> en sapovirus</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Fecal-oral · <b>aerosol del vómito</b> · fómites · alimentos (bivalvos crudos, hoja verde, bayas) y agua · manipulador de alimentos infectado</dd></div>
+  <div class="cell"><dt>Dosis infectante</dt><dd><b>10–100 viriones</b>; la DI<sub>50</sub> modelada llega a ser de <b>18 partículas</b>. Explica los brotes explosivos</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd><b>12–48 h</b> (mediana 24–48 h en brote; 10–51 h en infección experimental con Norwalk)</dd></div>
+  <div class="cell"><dt>Atracadero celular</dt><dd><b>Antígenos histo-grupo sanguíneo (HBGA)</b> según el gen <b>FUT2</b>. Los <b>no secretores (~20 %)</b> resisten GI.1 y GII.4. Los sapovirus no usan HBGA</dd></div>
+  <div class="cell"><dt>Síndrome</dt><dd>Vómito súbito y explosivo + diarrea acuosa <b>no inflamatoria</b> (4–8 evacuaciones/24 h), 12–60 h. Sin sangre ni leucocitos fecales</dd></div>
+  <div class="cell"><dt>Control</dt><dd><b>Agua y jabón &gt; alcohol-gel</b> · hipoclorito <b>1 000–5 000 ppm</b> · aislamiento entérico y de contacto · exclusión laboral tras ceder</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">De una escuela de Ohio a los enteroides</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>Década de 1920</b> — se describe la <i>winter vomiting disease</i>: un síndrome epidémico de vómito invernal sin bacteria identificable.</li>
+      <li><b>Años 1940–60</b> — filtrados de heces <b>libres de bacterias</b> reproducen la gastroenteritis en voluntarios: la prueba de que el agente es un virus.</li>
+      <li><b>Octubre de 1968</b> — brote en una escuela primaria de <b>Norwalk, Ohio</b>. Un hisopado rectal filtrado, administrado a voluntarios adultos, enferma a dos de tres.</li>
+      <li><b>1972</b> — <b>Albert Kapikian</b> visualiza por <b>microscopía inmunoelectrónica</b> una partícula de <b>27 nm</b> usando suero convaleciente como fuente de anticuerpo. Nace el virus de Norwalk, cepa prototipo del género.</li>
+      <li><b>1971–1976</b> — aparecen los otros «pequeños virus redondos estructurados», antigénicamente distintos: <b>Hawaii</b> (Honolulú, 1971) y <b>Snow Mountain</b> (Colorado, 1976).</li>
+      <li><b>1976–1979</b> — se detectan los primeros sapovirus en el Reino Unido y se caracteriza la cepa prototipo <b>Sapporo</b> en un brote de una casa cuna en Japón.</li>
+      <li><b>Última década</b> — tras <b>más de 40 años sin sistema de cultivo</b>, el norovirus humano se replica al fin en <b>linfocitos B</b>, en <b>enteroides intestinales humanos</b> y en pez cebra. El sapovirus también crece en enteroides. Herramientas de investigación, no de diagnóstico.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué la historia explica la biología</span>
+      <p>Casi todo lo que se sabe de patogenia e inmunidad viene de <b>modelos de infección humana controlada</b> (voluntarios), no de modelos animales: no existe ningún animal que reproduzca el cuadro completo. De ahí que los datos de incubación, excreción y duración estén tan bien acotados y que los correlatos de protección se conozcan tan mal.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Del latín <i>calyx</i>, la copa</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd>Caliciviridae — del latín <i>calyx</i>, «cáliz», por las <b>depresiones en forma de copa</b> que se ven en la superficie del virión al microscopio electrónico</dd>
+      <dt>Géneros</dt><dd>11 en total: siete infectan mamíferos, dos aves y dos peces. <b>Solo <i>Norovirus</i> y <i>Sapovirus</i> infectan al humano</b></dd>
+      <dt>Clasificación interna</dt><dd>Genogrupos y genotipos según la secuencia de aminoácidos de <b>VP1</b>; además, P-tipos según la <b>RdRp (NS7)</b></dd>
+      <dt>Cepas prototipo</dt><dd>Virus de <b>Norwalk</b> (GI.1) para norovirus · virus <b>Sapporo</b> para sapovirus</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Norovirus</span><span class="vg">10 genogrupos · 48 genotipos</span></div>
+        <div class="vbd">
+          <p><b>Infectan al humano: GI, GII, GIV, GVIII y GIX.</b> El resto circula en animales; <b>no hay evidencia de infección humana por norovirus animales</b>, aunque sí se han documentado perros, cerdos y bovinos infectados con cepas humanas.</p>
+          <p><b>GII.4 es el genotipo dominante en el mundo</b> y el responsable de las olas pandémicas. Otros genotipos han emergido localmente como causa principal en algunos años (<b>GII.17</b>, <b>GII.2</b>).</p>
+          <p>Los <b>GI</b> se asocian más a transmisión <b>hídrica</b> (son más estables en agua); los <b>GII.4</b> a transmisión <b>persona a persona</b>; los no-GII.4 a brotes <b>alimentarios</b>.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Sapovirus</span><span class="vg">19 genogrupos · 18 genotipos</span></div>
+        <div class="vbd">
+          <p>Humanos: <b>GI, GII, GIV y GV</b>; el genotipo más frecuente es <b>GI.1</b>, seguido de GII.1, GII.2 y GIV.1.</p>
+          <p>Se detecta en <b>1–17 %</b> de los cuadros diarreicos según región y edad; en EE. UU. se halló en el <b>10 %</b> de los niños atendidos por diarrea. En la cohorte multipaís MAL-ED fue la <b>segunda causa atribuible</b> de gastroenteritis entre los 12 y 24 meses.</p>
+          <p>A diferencia del norovirus, muestra <b>escasa diversificación intragenotípica y casi nada de recombinación</b>: no protagoniza olas pandémicas.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«NOro es NOrwalk; SApo es SApporo»</b>. Y para el par de números: <b>GII.4 en norovirus, GI.1 en sapovirus</b> — el genotipo más frecuente de cada género.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Una cápside desnuda y tres marcos de lectura</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión de calicivirus y organización genómica comparada de norovirus y sapovirus">
+        <rect width="900" height="370" fill="#FFFFFF"/>
+
+        <circle cx="115" cy="120" r="72" fill="rgba(69,90,140,.13)" stroke="#36476E" stroke-width="1.6"/>
+        <g fill="#FFFFFF" stroke="#36476E" stroke-width="1.1">
+          <circle cx="115" cy="58" r="10"/><circle cx="169" cy="88" r="10"/><circle cx="169" cy="152" r="10"/>
+          <circle cx="115" cy="182" r="10"/><circle cx="61" cy="152" r="10"/><circle cx="61" cy="88" r="10"/>
+          <circle cx="115" cy="120" r="10"/>
+        </g>
+        <path d="M84 118 q10 -12 20 0 t20 0 t20 0" fill="none" stroke="#5C7A57" stroke-width="2"/>
+        <circle cx="82" cy="118" r="4" fill="#8a5c0a"/>
+
+        <g font-family="'Inter', sans-serif" fill="#14181f">
+          <line x1="188" y1="66" x2="244" y2="60" stroke="#455A8C" stroke-width="1"/>
+          <text x="252" y="60" font-size="11.5" font-weight="600" fill="#27334F">Cápside desnuda de 27–38 nm</text>
+          <text x="252" y="75" font-size="10" fill="#6b7585">Sin envoltura: resiste ácido gástrico, desecación,</text>
+          <text x="252" y="88" font-size="10" fill="#6b7585">congelación, 60 °C breves y alcohol-gel</text>
+
+          <line x1="186" y1="106" x2="244" y2="112" stroke="#455A8C" stroke-width="1"/>
+          <text x="252" y="112" font-size="11.5" font-weight="600" fill="#36476E">VP1 · dominio S (concha)</text>
+          <text x="252" y="127" font-size="10" fill="#6b7585">Conservado; sostiene la partícula y define el genogrupo</text>
+
+          <line x1="186" y1="150" x2="244" y2="152" stroke="#455A8C" stroke-width="1"/>
+          <text x="252" y="152" font-size="11.5" font-weight="600" fill="#701d14">VP1 · dominio P (P1 + P2), protruye</text>
+          <text x="252" y="167" font-size="10" fill="#6b7585">P2 se une a los HBGA y concentra los epítopos:</text>
+          <text x="252" y="180" font-size="10" fill="#6b7585">es la zona que deriva en GII.4 cada 2–5 años</text>
+
+          <line x1="120" y1="196" x2="244" y2="196" stroke="#455A8C" stroke-width="1"/>
+          <text x="252" y="196" font-size="11.5" font-weight="600" fill="#8a5c0a">VPg en el extremo 5′ · cola poli-A en 3′</text>
+          <text x="252" y="211" font-size="10" fill="#6b7585">El RNA (+) se traduce apenas entra: es infeccioso por sí solo</text>
+        </g>
+
+        <line x1="20" y1="226" x2="880" y2="226" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+        <text x="20" y="248" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">NOROVIRUS · 3 ORF · ~7.5 KB</text>
+
+        <g>
+          <rect x="70" y="256" width="90" height="24" fill="#455A8C"/>
+          <rect x="160" y="256" width="85" height="24" fill="#5B7291"/>
+          <rect x="245" y="256" width="70" height="24" fill="#455A8C"/>
+          <rect x="315" y="256" width="45" height="24" fill="#8a5c0a"/>
+          <rect x="360" y="256" width="75" height="24" fill="#5B7291"/>
+          <rect x="435" y="256" width="135" height="24" fill="#27334F"/>
+          <rect x="570" y="256" width="210" height="24" fill="#701d14"/>
+          <rect x="780" y="256" width="70" height="24" fill="#90303a"/>
+        </g>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.06em" fill="#f7f8fa" text-anchor="middle">
+          <text x="115" y="272">NS1/2</text><text x="202" y="272">NTPASA</text><text x="280" y="272">P22</text>
+          <text x="337" y="272">VPG</text><text x="397" y="272">PROT</text><text x="502" y="272">RDRP</text>
+          <text x="675" y="272">VP1 — CÁPSIDE MAYOR</text><text x="815" y="272">VP2</text>
+        </g>
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585" text-anchor="middle">
+          <text x="320" y="294">ORF1 — poliproteína no estructural (NS1/2 a NS7)</text>
+          <text x="675" y="294">ORF2</text><text x="815" y="294">ORF3</text>
+        </g>
+
+        <text x="20" y="318" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">SAPOVIRUS · 2 ORF</text>
+        <g>
+          <rect x="70" y="326" width="410" height="24" fill="#5B7291"/>
+          <rect x="480" y="326" width="240" height="24" fill="#701d14"/>
+          <rect x="720" y="326" width="80" height="24" fill="#90303a"/>
+        </g>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.06em" fill="#f7f8fa" text-anchor="middle">
+          <text x="275" y="342">NS1–NS7 · PROTEASA Y POLIMERASA FUSIONADAS</text>
+          <text x="600" y="342">VP1 — DENTRO DEL MISMO ORF1</text><text x="760" y="342">VP2</text>
+        </g>
+        <text x="20" y="364" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La diferencia estructural que hay que retener: en sapovirus la VP1 vive dentro del ORF1 y la proteasa-polimerasa nunca se corta.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. Virión y genoma. Todo el antigénico útil está en el <b>dominio P2 de VP1</b>: es el que se une al receptor, el que reconocen los anticuerpos bloqueadores y el que muta para escapar. Por eso las vacunas candidatas son <b>partículas tipo virus (VLP) hechas solo de VP1</b>.</figcaption>
+    </figure>
+
+    <h4>Biología esencial</h4>
+    <ul>
+      <li><b>Genoma</b>: RNA monocatenario <b>de polaridad positiva</b>, lineal, 6.4–8.5 kb (7.5 kb en norovirus), con <b>VPg unida covalentemente al 5′</b> en lugar de caperuza y poli-A en el 3′. Al ser (+) se traduce directamente: no hace falta polimerasa dentro del virión.</li>
+      <li><b>Proteínas no estructurales</b>: NS1/2 (p48), NS3 (NTPasa), NS4 (p22, análoga a la 3A de los picornavirus), NS5 (VPg), NS6 (proteasa) y NS7 (RdRp). El parecido con los picornavirus no es casual: misma estrategia de poliproteína cortada por proteasa viral.</li>
+      <li><b>Estabilidad ambiental</b> — el rasgo que define su epidemiología: sobrevive <b>semanas en superficies inanimadas</b>, tolera congelación, pH ácido y temperaturas de 60 °C por periodos cortos. <b>Los fenólicos y los alcoholes son poco eficaces</b>; se inactiva con <b>hipoclorito 1 000–5 000 ppm</b> y peróxido de hidrógeno acelerado.</li>
+      <li><b>Cultivo</b>: imposible durante más de 40 años. Hoy se replica en <b>enteroides intestinales humanos</b>, en linfocitos B (requiere bacterias entéricas que expresen HBGA) y en pez cebra. Aún no se conocen los <b>serotipos</b> del norovirus humano porque nunca hubo ensayo de neutralización clásico.</li>
+      <li><b>Variabilidad antigénica</b>: dos motores. <b>Deriva epocal</b> por mutaciones puntuales en VP1 bajo presión de la inmunidad poblacional (variantes GII.4 en 1995-96, 2002, 2004, 2006, 2009 y <b>2012 Sydney</b>) y <b>recombinación en la unión ORF1–ORF2</b>, que genera quimeras con nueva combinación VP1–RdRp (la variante Sydney reciente incorporó una polimerasa <b>GII.P16</b>).</li>
+    </ul>
+
+    <div class="box clin"><span class="lbl">Traducción clínica</span>
+      <p>Cápside desnuda = <b>alcohol-gel insuficiente</b> y supervivencia prolongada en manijas, teléfonos y grifos. La misma resistencia explica por qué los <b>bivalvos filtradores</b> concentran el virus del drenaje y por qué los brotes en cruceros reaparecen tras el desembarco: el barco queda contaminado.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Vellosidad aplanada, adenilato ciclasa normal</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruta patogénica del norovirus desde la ingesta hasta la excreción fecal">
+        <rect width="900" height="310" fill="#FFFFFF"/>
+        <rect x="20" y="20" width="420" height="22" rx="4" fill="rgba(69,90,140,.18)"/>
+        <text x="30" y="35" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#27334F">LUMEN → EPITELIO · INTESTINO DELGADO PROXIMAL</text>
+        <rect x="452" y="20" width="428" height="22" rx="4" fill="rgba(112,29,20,.10)"/>
+        <text x="462" y="35" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#701d14">DAÑO FUNCIONAL, NO INVASIÓN · SALIDA Y CONTAGIO</text>
+
+        <rect x="40" y="60" width="380" height="26" rx="4" fill="rgba(138,92,10,.13)" stroke="#8a5c0a" stroke-width="1"/>
+        <text x="52" y="77" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">Puerta molecular: HBGA secretor, gen FUT2</text>
+        <rect x="452" y="60" width="428" height="26" rx="4" fill="rgba(92,122,87,.14)" stroke="#5C7A57" stroke-width="1"/>
+        <text x="464" y="77" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Mucosa íntegra · sin sangre ni leucocitos en heces</text>
+
+        <line x1="40" y1="128" x2="862" y2="128" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="862,128 852,123 852,133" fill="#455A8C"/>
+
+        <g>
+          <circle cx="80" cy="128" r="17" fill="#27334F"/>
+          <text x="80" y="132" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">1</text>
+          <text x="80" y="170" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Ingesta</text>
+          <text x="80" y="185" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Bastan 10–100 viriones;</text>
+          <text x="80" y="198" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">DI₅₀ modelada de 18</text>
+        </g>
+        <g>
+          <circle cx="225" cy="128" r="17" fill="#27334F"/>
+          <text x="225" y="132" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">2</text>
+          <text x="225" y="170" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Cruza el estómago</text>
+          <text x="225" y="185" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">La cápside desnuda tolera</text>
+          <text x="225" y="198" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">el pH ácido sin dañarse</text>
+        </g>
+        <g>
+          <circle cx="375" cy="128" r="17" fill="#8a5c0a"/>
+          <text x="375" y="132" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">3</text>
+          <text x="375" y="170" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#8a5c0a">Anclaje al enterocito</text>
+          <text x="375" y="185" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">P2 se une a los HBGA del</text>
+          <text x="375" y="198" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">duodeno y el yeyuno</text>
+        </g>
+        <g>
+          <circle cx="525" cy="128" r="17" fill="#701d14"/>
+          <text x="525" y="132" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">4</text>
+          <text x="525" y="170" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Lesión de la vellosidad</text>
+          <text x="525" y="185" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Vellosidad aplanada, uniones</text>
+          <text x="525" y="198" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">estrechas rotas, apoptosis</text>
+        </g>
+        <g>
+          <circle cx="675" cy="128" r="17" fill="#701d14"/>
+          <text x="675" y="132" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">5</text>
+          <text x="675" y="170" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Malabsorción</text>
+          <text x="675" y="185" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Bajan fosfatasa alcalina y</text>
+          <text x="675" y="198" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">trehalasa; no se absorbe grasa</text>
+        </g>
+        <g>
+          <circle cx="825" cy="128" r="17" fill="#5C7A57"/>
+          <text x="825" y="132" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">6</text>
+          <text x="825" y="170" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Excreción</text>
+          <text x="825" y="185" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Más de 10⁸ copias</text>
+          <text x="825" y="198" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">por gramo de heces</text>
+        </g>
+
+        <rect x="40" y="222" width="400" height="46" rx="5" fill="rgba(69,90,140,.10)" stroke="#455A8C" stroke-width="1"/>
+        <text x="52" y="240" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">No secretor (FUT2 nulo, ~20 % de la población)</text>
+        <text x="52" y="256" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Resistente a GI.1 y GII.4 · sigue siendo susceptible a GI.3 y GII.2</text>
+
+        <rect x="460" y="222" width="402" height="46" rx="5" fill="rgba(112,29,20,.08)" stroke="#701d14" stroke-width="1"/>
+        <text x="472" y="240" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">La adenilato ciclasa yeyunal NO se eleva</text>
+        <text x="472" y="256" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">No es diarrea secretora tipo cólera: es malabsorción y dismotilidad</text>
+
+        <text x="40" y="292" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El vómito no viene del intestino: viene del retraso del vaciamiento gástrico y de la dismotilidad — el sello del norovirus.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Ruta patogénica. Retén tres cosas: la <b>mucosa queda íntegra</b> (por eso no hay sangre ni leucocitos fecales), el daño es <b>funcional y transitorio</b>, y la susceptibilidad está escrita en el genotipo <b>FUT2</b> del huésped.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Lo que se ve en la biopsia</span>
+        <ul>
+          <li>Mucosa <b>íntegra</b> con <b>vellosidades aplanadas</b>, microvellosidades acortadas y distorsionadas, edema intercelular e infiltrado de la lámina propia.</li>
+          <li><b>Disfunción de la barrera epitelial</b>: menos proteínas de unión estrecha y más apoptosis.</li>
+          <li>Antígeno viral en <b>enterocitos de duodeno y yeyuno</b> y en <b>células enteroendocrinas</b>; nunca en estómago ni en colon.</li>
+          <li>Se induce <b>α-sinucleína</b>, lo que sugiere participación del <b>sistema nervioso entérico</b> en los síntomas.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Inmunidad: corta, estrecha y confusa</span>
+        <ul>
+          <li><b>IgG e IgA</b> desde la primera semana; <b>IgM</b> a las dos semanas, incluso en quien ya se infectó con la misma cepa; desaparece en meses.</li>
+          <li>Protección homotípica de <b>4–6 meses</b>, perdida a los <b>2–3 años</b>. <b>Nula frente a cepas heterólogas</b> → reinfección de por vida.</li>
+          <li>El mejor correlato disponible: anticuerpos que <b>bloquean la unión del virus a los HBGA</b>, más IgA sérica y salival y linfocitos B de memoria.</li>
+          <li>Hay IgA específica en <b>leche materna</b>; los menores de 6 meses enferman menos, probablemente por anticuerpo materno.</li>
+          <li>En el trasplantado de células hematopoyéticas, la resolución de la infección crónica coincide con la <b>recuperación de los linfocitos T CD3+</b>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">Excreción viral — el dato que gobierna el control de brotes</span>
+      <p>Comienza <b>unas 24 h antes de los síntomas</b>, alcanza <b>más de 10⁸ copias/g de heces</b> y persiste <b>2–3 semanas</b> en el sano ya asintomático. Las infecciones <b>asintomáticas también excretan a título alto</b>. En el inmunocomprometido se prolonga meses o años, con mayor diversidad genética y mayor tasa de evolución del virus.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Vómito explosivo, 12 a 60 horas</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Secuencia típica</h4>
+    <ol class="steps">
+      <li><b>Incubación 12–48 h</b> Mediana de 24–48 h en brote; en infección experimental los síntomas aparecieron entre las 10 y las 51 h.</li>
+      <li><b>Inicio</b> Puede ser gradual o brusco. <b>Náusea y vómito súbito y repetido</b> — el sello —, con diarrea acuosa moderada (<b>4–8 evacuaciones en 24 h</b>), cólico, malestar, cefalea, mialgias y fiebre baja o ausente. Vómito y diarrea pueden presentarse juntos o por separado.</li>
+      <li><b>Resolución</b> <b>1–3 días</b> en el adulto sano; <b>4–6 días</b> en el niño pequeño y en el anciano hospitalizado. El sapovirus dura una <b>mediana de 6 días</b> en niños y adultos.</li>
+      <li><b>Convalecencia</b> Asintomático pero <b>contagioso</b> por 2–3 semanas más.</li>
+    </ol>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th></th><th><i>Norovirus</i></th><th><i>Sapovirus</i></th></tr></thead>
+      <tbody>
+        <tr><td><b>Peso epidemiológico</b></td><td class="num">18 % de toda la diarrea mundial · ≈685 millones de casos/año</td><td class="num">1–17 % de los cuadros diarreicos; 10 % de los niños atendidos por diarrea en EE. UU.</td></tr>
+        <tr><td><b>Edad</b></td><td>Todas; muertes sobre todo en <b>≥65 años</b> y en menores de 5 en países de baja renta</td><td>Predominio <b>pediátrico</b>; segunda causa atribuible entre los 12 y 24 meses en la cohorte MAL-ED</td></tr>
+        <tr><td><b>Duración</b></td><td class="num">1–3 días (12–60 h)</td><td class="num">Mediana de 6 días</td></tr>
+        <tr><td><b>Gravedad</b></td><td><b>GII.4 produce cuadros más graves</b> que otros genotipos, aunque no se distingue clínicamente</td><td>Se describía como más leve; varios estudios encuentran <b>gravedad similar</b></td></tr>
+        <tr><td><b>HBGA / FUT2</b></td><td>Determinante de susceptibilidad</td><td><b>No participa</b></td></tr>
+        <tr><td><b>Brotes alimentarios</b></td><td><b>Primera causa mundial</b> de gastroenteritis transmitida por alimentos</td><td>Causa mucho menos frecuente</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Complicaciones</span>
+        <ul>
+          <li><b>Deshidratación</b> con alteraciones electrolíticas (hipopotasemia) e <b>insuficiencia renal</b>: la complicación habitual, sobre todo en lactantes y ancianos.</li>
+          <li>Raras: <b>choque</b> y <b>coagulación intravascular diseminada</b>.</li>
+          <li>La muerte es infrecuente y afecta principalmente al anciano.</li>
+          <li>En niños se han descrito <b>convulsiones febriles</b>.</li>
+        </ul>
+      </div>
+      <div class="box clin"><span class="lbl">Huésped inmunocomprometido</span>
+        <p>Neoplasias hematológicas, trasplante de células hematopoyéticas o de órgano sólido, inmunodeficiencias primarias y VIH avanzado desarrollan <b>diarrea crónica sintomática</b> con deshidratación, <b>desnutrición, enteropatía perdedora de proteínas, falla del injerto y lesión renal</b>. Se han documentado cuadros que persisten <b>cinco años o más</b>. Sospecha norovirus o sapovirus en todo trasplantado con diarrea prolongada y panel entérico no solicitado.</p>
+      </div>
+    </div>
+
+    <div class="box trap"><span class="lbl">Diagnóstico diferencial del vómito predominante</span>
+      <ul>
+        <li><b><i>Bacillus cereus</i> emético</b>: 1–6 h tras arroz frito recalentado, toxina preformada, sin diarrea prominente.</li>
+        <li><b><i>Staphylococcus aureus</i></b>: 2–6 h tras lácteos o cárnicos manipulados; también toxina preformada. <b>Ambos son demasiado rápidos para ser norovirus</b> (que necesita 12–48 h).</li>
+        <li><b>Rotavirus</b>: menor de 5 años, cuadro más largo y con más deshidratación, <b>prevenible por vacuna</b>.</li>
+        <li><b>Adenovirus 40/41</b>: diarrea pediátrica más prolongada.</li>
+        <li><b>Bacterias invasivas</b> (<i>Salmonella</i>, <i>Shigella</i>, <i>Campylobacter</i>): fiebre alta, <b>diarrea con sangre y leucocitos fecales</b>. <b>La presencia de diarrea sanguinolenta hace muy improbable el calicivirus.</b></li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">RT-PCR en heces; el antígeno miente</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Heces</b></td><td><b>RT-PCR multiplex</b> (panel gastrointestinal)</td><td><b>Estándar de referencia.</b> Sensibilidad &gt;95 %, resultado en menos de 2 h. Los ensayos de norovirus son <b>genogrupo-específicos</b> (GI/GII/GIV); los de sapovirus, de género. El rendimiento depende de los iniciadores y sufre con la diversidad genética.</td></tr>
+        <tr><td><b>Heces</b></td><td>EIA o inmunocromatografía de antígeno</td><td>Sensibilidad <b>50–75 %</b>. <b>No confiable en el paciente individual</b>; gana valor predictivo cuando se prueban <b>varias muestras del mismo brote</b>.</td></tr>
+        <tr><td><b>Saliva o vómito</b></td><td>RT-PCR</td><td>El virus es detectable, pero <b>las heces dan el mayor rendimiento</b>.</td></tr>
+        <tr><td><b>Heces</b></td><td>Microscopía electrónica / inmunoelectrónica</td><td>La herramienta fundacional (1972). Hoy es <b>menos sensible y poco disponible</b>.</td></tr>
+        <tr><td><b>Suero pareado</b></td><td>Serología</td><td>Requiere fase aguda y convaleciente; <b>solo laboratorio de investigación</b>, útil en estudios epidemiológicos, no en la cama del paciente.</td></tr>
+        <tr><td><b>—</b></td><td>Cultivo viral</td><td>Enteroides y linfocitos B: <b>herramienta de investigación</b>, sin uso diagnóstico.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Criterios de Kaplan — sospechar norovirus en un brote sin laboratorio</span>
+        <ul>
+          <li><b>Vómito en más del 50 %</b> de los afectados.</li>
+          <li><b>Incubación media de 24–48 h.</b></li>
+          <li><b>Duración media de la enfermedad de 12–60 h.</b></li>
+          <li><b>Ningún patógeno bacteriano ni parasitario identificado.</b></li>
+        </ul>
+        <p>Los cuatro juntos bastan para activar el control del brote antes de que llegue la PCR.</p>
+      </div>
+      <div class="card"><span class="lbl">Laboratorio general — para descartar, no para confirmar</span>
+        <ul>
+          <li><b>Biometría</b>: leucocitos normales o levemente elevados, con <b>neutrofilia y linfopenia leve</b>.</li>
+          <li><b>Pruebas hepáticas normales</b>; las alteraciones de electrolitos y creatinina solo reflejan la depleción de volumen.</li>
+          <li><b>Sin leucocitos ni sangre en heces</b>: es lo que separa la gastroenteritis viral de la disentería invasiva.</li>
+          <li>Los síntomas por sí solos <b>no permiten distinguir</b> norovirus de sapovirus ni de otro virus entérico.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Rehidratar, aislar, clorar</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cronología de un brote de norovirus con las ventanas de incubación, enfermedad, excreción y control">
+        <rect width="900" height="310" fill="#FFFFFF"/>
+        <text x="20" y="28" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">CRONOLOGÍA DE UN BROTE Y VENTANAS DE CONTROL</text>
+
+        <text x="60" y="56" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Excreción fecal: más de 10⁸ copias/g, desde ~24 h antes de los síntomas</text>
+        <rect x="60" y="62" width="790" height="20" rx="4" fill="rgba(92,122,87,.30)" stroke="#5C7A57" stroke-width="1"/>
+        <polygon points="850,62 872,72 850,82" fill="rgba(92,122,87,.30)" stroke="#5C7A57" stroke-width="1"/>
+
+        <text x="183" y="102" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">Incubación 12–48 h (mediana 24–48 h)</text>
+        <rect x="183" y="108" width="247" height="20" rx="4" fill="#27334F"/>
+
+        <text x="307" y="148" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">Enfermedad 12–60 h · vómito en más del 50 % de los casos</text>
+        <rect x="307" y="154" width="271" height="20" rx="4" fill="#701d14"/>
+
+        <text x="307" y="194" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">Aislamiento entérico y de contacto · exclusión laboral</text>
+        <rect x="307" y="200" width="393" height="20" rx="4" fill="rgba(138,92,10,.35)" stroke="#8a5c0a" stroke-width="1"/>
+
+        <text x="60" y="240" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Exclusión mínima de 1 día tras ceder los síntomas · de 2 a 3 días si manipula alimentos, cuida niños o atiende pacientes</text>
+
+        <line x1="60" y1="258" x2="862" y2="258" stroke="#455A8C" stroke-width="1.2"/>
+        <g stroke="#455A8C" stroke-width="1.2">
+          <line x1="60" y1="254" x2="60" y2="262"/><line x1="183" y1="254" x2="183" y2="262"/>
+          <line x1="307" y1="254" x2="307" y2="262"/><line x1="430" y1="254" x2="430" y2="262"/>
+          <line x1="553" y1="254" x2="553" y2="262"/><line x1="632" y1="254" x2="632" y2="262"/>
+          <line x1="742" y1="254" x2="742" y2="262"/><line x1="850" y1="254" x2="850" y2="262"/>
+        </g>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.08em" fill="#6b7585" text-anchor="middle">
+          <text x="60" y="274">−24 H</text><text x="183" y="274">EXPOSICIÓN</text><text x="307" y="274">24 H</text>
+          <text x="430" y="274">48 H</text><text x="553" y="274">72 H</text><text x="632" y="274">DÍA 7</text>
+          <text x="742" y="274">DÍA 14</text><text x="850" y="274">DÍA 21</text>
+        </g>
+        <line x1="562" y1="46" x2="562" y2="252" stroke="rgba(20,24,31,.20)" stroke-width="1" stroke-dasharray="3 3"/>
+        <text x="570" y="44" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#6b7585">ESCALA COMPRIMIDA →</text>
+
+        <text x="60" y="298" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">En el inmunocomprometido la banda verde no termina en la semana 3: sigue meses o años, y con ella la transmisión.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. La ventana de control se abre <b>antes</b> del primer vómito y se cierra mucho <b>después</b> del último. Por eso «esperar a que se sienta bien» para reintegrar a un manipulador de alimentos no basta: hay que contar días desde que cedieron los síntomas.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Tratamiento del caso agudo</span>
+        <ul>
+          <li><b>Rehidratación</b>: suero oral de baja osmolaridad; cristaloides intravenosos si hay depleción moderada-grave o vómito intratable. <b>Es el pilar y casi todo el tratamiento.</b></li>
+          <li><b>Antieméticos</b>: ondansetrón facilita la rehidratación oral, sobre todo en pediatría (vigilar QT). Analgésicos para cefalea y mialgias.</li>
+          <li><b>Antimotilidad</b>: loperamida puede reducir el número de evacuaciones en el adulto sano sin fiebre alta ni sangre; no de rutina en niños.</li>
+          <li><b>Subsalicilato de bismuto</b>: en un ensayo aleatorizado con infección experimental por Norwalk redujo la <b>intensidad del cólico y la duración total de los síntomas</b>, sin modificar el volumen fecal ni la excreción viral.</li>
+          <li><b>Antibióticos: no.</b> Probióticos: evidencia inconsistente, no recomendados de rutina.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Infección crónica del inmunocomprometido</span>
+        <p>No hay antiviral licenciado y ninguna estrategia tiene evidencia sólida. Se han ensayado: <b>nitazoxanida</b> (acortó la enfermedad en un ensayo pequeño en sanos; resultados anecdóticos contradictorios en trasplantados y un ensayo detenido durante la pandemia), <b>ribavirina</b>, <b>inmunoglobulina oral o intravenosa</b> y <b>favipiravir</b> (suspendido por toxicidad en el caso publicado). La medida con mayor respaldo es la <b>reducción de la inmunosupresión</b> cuando sea posible.</p>
+      </div>
+    </div>
+
+    <h4>Prevención y control de infecciones</h4>
+    <dl class="kv">
+      <dt>Higiene de manos</dt><dd><b>Lavado vigoroso con agua y jabón</b> durante al menos 20 segundos: la fricción <b>arrastra</b> el virión. Los desinfectantes alcohólicos lo inactivan de forma incompleta.</dd>
+      <dt>Exclusión</dt><dd><b>Al menos 1 día</b> tras la resolución de los síntomas; <b>2–3 días</b> para manipuladores de alimentos, personal de guardería y personal sanitario.</dd>
+      <dt>Superficies</dt><dd><b>Hipoclorito de sodio 1 000–5 000 ppm</b> (la concentración alta para vómito o heces visibles) o peróxido de hidrógeno acelerado. <b>Fenólicos y alcoholes son menos eficaces.</b> Contaminación documentada en apagadores, llaves de baño y teléfonos celulares.</dd>
+      <dt>Hospital y asilo</dt><dd>Aislamiento <b>entérico y de contacto</b>, cohortización de pacientes y de personal, cierre temporal de áreas afectadas.</dd>
+      <dt>Alimentos</dt><dd>Cocción de bivalvos a más de 90 °C por al menos 90 s; lavado de frutas y verduras; vigilancia del agua de riego. <b>El contacto de un manipulador infectado con alimentos listos para consumo es el escenario más frecuente de brote alimentario.</b></dd>
+    </dl>
+
+    <div class="box hy"><span class="lbl">Vacunas — ninguna licenciada, varias en ensayo</span>
+      <ul>
+        <li>Todas se basan en <b>partículas tipo virus (VLP) de VP1</b>, morfológica y antigénicamente indistinguibles del virión.</li>
+        <li>Una VLP <b>monovalente intranasal</b> dio <b>47 % de protección contra enfermedad</b> por GI.1 y <b>27 % contra la infección</b>.</li>
+        <li>Una VLP <b>bivalente GI.1 + GII.4 intramuscular</b> alcanzó cifras similares en infección experimental por GII.4, y en un ensayo de campo protegió contra enfermedad por <b>GII.2</b>: hay <b>protección heteróloga</b> posible.</li>
+        <li>Candidatos actuales: <b>HIL-214</b> (bivalente VLP, fase 3), <b>HIL-216</b> trivalente y <b>mRNA-1403</b>. También se estudia un vector adenoviral oral.</li>
+        <li>Los dos obstáculos: la <b>diversidad antigénica</b> y la <b>duración corta de la protección</b> (los anticuerpos siguen por encima del basal al año). Aun así, dada la carga económica, <b>una vacuna moderadamente eficaz ya sería costo-efectiva</b>.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>Norovirus = causa número 1 mundial</b> de gastroenteritis aguda en todas las edades y de brotes en cruceros, asilos y hospitales.</li>
+          <li><b>Sin envoltura → el alcohol-gel no basta.</b> Agua y jabón + hipoclorito 1 000–5 000 ppm.</li>
+          <li><b>Dosis infectante de 10–100 viriones</b> + excreción de 10⁸ copias/g + supervivencia de semanas en superficies = brote explosivo.</li>
+          <li><b>GII.4</b> con variantes pandémicas cada 2–5 años por deriva del <b>dominio P2 de VP1</b>; el paralelo conceptual es la deriva antigénica de influenza.</li>
+          <li><b>No secretores (FUT2 nulo, ~20 %)</b> resisten GI.1 y GII.4, pero <b>no</b> GI.3 ni GII.2.</li>
+          <li><b>RT-PCR multiplex en heces</b> es el estándar; el antígeno fecal tiene 50–75 % de sensibilidad.</li>
+          <li><b>Sin antiviral y sin vacuna licenciada</b>: rehidratación.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«12-24-48-60»</b> — incubación de 12 a 48 h, mediana de 24–48, enfermedad de 12 a 60 h. Son los números de Kaplan.</p>
+        <p><b>«Calicivirus se lava, no se gelea»</b> — cápside desnuda: fricción mecánica y cloro, no alcohol.</p>
+        <p><b>«El cáliz sin capa»</b> — <i>calyx</i> (depresión en copa al microscopio electrónico) y sin envoltura: las dos claves para reconocer la familia en una viñeta.</p>
+        <p><b>«Uno, dos, tres»</b> — sapovirus tiene <b>2</b> ORF, norovirus <b>3</b>; y el genotipo estrella de cada uno es <b>GI.1</b> y <b>GII.4</b>.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas y escenario mexicano</span>
+      <ul>
+        <li><b>La trampa clásica</b>: el hospital cambia todos los dispensadores de alcohol-gel y el brote continúa. La respuesta correcta no es «más gel», es <b>lavado con agua y jabón, cloro y cohortización</b>.</li>
+        <li><b>La segunda trampa</b>: EIA de antígeno negativo en un paciente individual con cuadro compatible. <b>No descarta</b>: pide RT-PCR.</li>
+        <li><b>La tercera</b>: vómito a las 3 h de una comida. Demasiado rápido para norovirus (12–48 h) — piensa en <b>toxina preformada</b> de <i>B. cereus</i> o <i>S. aureus</i>.</li>
+        <li><b>Escenario mexicano</b>: banquete o boda con <b>ceviche o aguachile de bivalvos crudos</b> —el molusco filtrador concentra el virus del drenaje— y brote a las 24–48 h con vómito en más de la mitad de los invitados; crucero que sale o llega a puerto nacional; y asilo o unidad de trasplante donde un residente con diarrea prolongada mantiene la cadena. En los tres, el laboratorio confirma, pero la <b>decisión de control se toma con los criterios de Kaplan</b>.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/Norovirus.md</code> · Mandell PPID 10e (2025), cap. 182 «Noroviruses and Sapoviruses (Caliciviruses)», Ramani y Atmar · CDC, <i>Norovirus: clinical overview &amp; outbreak management</i> (2025) · Atmar RL, Ramani S, Estes MK. <i>Curr Opin Infect Dis</i> 2018;31(5):422-432 · Robilotti E, Deresinski S, Pinsky BA. <i>Clin Microbiol Rev</i> 2015;28(1):134-164 · First Aid for the USMLE Step 1 2025, p. 163-165.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="picornaviridae.html"><span class="k">← Anterior</span><span class="v">Picornaviridae</span></a>
+        <a class="next" href="hepeviridae.html"><span class="k">Siguiente →</span><span class="v">Hepeviridae</span></a></div>
+      <footer class="pf">
+        <span>Caliciviridae · 2 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

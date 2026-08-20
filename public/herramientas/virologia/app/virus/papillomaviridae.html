@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Papillomaviridae — Virus DNA</title>
+<meta name="description" content="Papillomaviridae. VPH de alto y bajo riesgo">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-dna.html">Virus DNA</a><span class="sep">/</span>
+    <b>Papillomaviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-dna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus DNA · Familia 4 de 10 · Virología médica</p>
+    <h1>Papillomaviridae</h1>
+    <p class="sub">VPH de alto y bajo riesgo</p>
+    <div class="chips"><span class="chip g">dsDNA circular ~7 900 pb · 8–10 ORF</span>
+  <span class="chip">Sin envoltura · icosaédrico 72 capsómeros · 55 nm</span>
+  <span class="chip">Replicación nuclear acoplada a la diferenciación epitelial</span>
+  <span class="chip r">VPH en 99.7 % de los cánceres de cuello uterino</span>
+  <span class="chip gold">Vacuna nonavalente de VLP-L1</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Papillomaviridae · Virus DNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros humanos</dt><dd><i>Alphapapillomavirus</i> (mucoso y genital) · <i>Beta</i>, <i>Gamma</i>, <i>Mu</i> y <i>Nu</i> (cutáneos)</dd></div>
+  <div class="cell"><dt>Alto riesgo</dt><dd><b>16 y 18 ≈ 70 % del cáncer cervical</b>; además 31, 33, 45, 52, 58 (y 35, 39, 51, 56, 59, 66 por IARC)</dd></div>
+  <div class="cell"><dt>Bajo riesgo</dt><dd><b>6 y 11 ≈ 90 % de los condilomas</b> y de la papilomatosis respiratoria recurrente</dd></div>
+  <div class="cell"><dt>Cutáneos</dt><dd>1, 2, 4 y 27 (verrugas vulgares y plantares) · 5 y 8 en epidermodisplasia verruciforme</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Sexual y contacto piel-piel genital (ITS más prevalente) · perinatal · fómites, discutible</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd><b>3–4 meses</b> típico para verrugas (rango 6 semanas a 2 años); el cáncer tarda <b>décadas</b></dd></div>
+  <div class="cell"><dt>Historia natural</dt><dd><b>~90 % aclara en 2 años</b> (media 13.5 meses en alto riesgo vs 4.8 en bajo riesgo); la <b>persistencia</b> es el motor del cáncer</dd></div>
+  <div class="cell"><dt>Oncogénesis</dt><dd><b>E6 degrada p53</b> · <b>E7 inactiva pRb</b> · la integración rompe <i>E2</i> y libera a ambos</dd></div>
+  <div class="cell"><dt>Prevención</dt><dd>Gardasil 9: <b>2 dosis si se inicia a los 9–14 años</b>, 3 si ≥15 años o inmunocompromiso · tamizaje con VPH-AR</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">De las monjas de Rigoni-Stern al Nobel de zur Hausen</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1842</b> — <b>Rigoni-Stern</b>: el cáncer cervical es raro en monjas y frecuente en trabajadoras sexuales. Primera pista de un agente de transmisión sexual.</li>
+      <li><b>1907</b> — <b>Ciuffo</b> transmite verrugas con <b>filtrados libres de células</b>: el agente es un virus.</li>
+      <li><b>Década de 1930</b> — el papilomavirus del conejo <i>cottontail</i> (Shope) y el bovino prueban que un papilomavirus causa cáncer en su huésped natural.</li>
+      <li><b>1983–1984</b> — <b>Harald zur Hausen</b> clona <b>VPH-16 y VPH-18</b> a partir de biopsias de cáncer cervical. <b>Premio Nobel de Medicina 2008.</b></li>
+      <li><b>2006 → 2016</b> — se licencia la tetravalente y luego la <b>nonavalente (Gardasil 9)</b>, que la sustituye. En <b>diciembre de 2022</b> la OMS acepta el <b>esquema de dosis única</b>.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué este virus cambió la oncología</span>
+      <p>El VPH es el modelo de <b>causa necesaria</b> de un cáncer humano: hay DNA viral en el <b>99.7 %</b> de los carcinomas cervicales, con razones de momios de 50 a 900 para los tipos de alto riesgo. Es además el primer cáncer prevenible con una vacuna profiláctica.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Se clasifica por secuencia de L1, no por serología</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd>Papillomaviridae — del latín <i>papilla</i> + <i>-oma</i>. Subfamilias <i>Firstpapillomaviridae</i> (todos los VPH) y <i>Secondpapillomaviridae</i></dd>
+      <dt>Géneros</dt><dd>De 59 géneros, los VPH ocupan cinco: <i>Alpha</i> (65+ tipos), <i>Beta</i> (49+), <i>Gamma</i> (69+), <i>Mu</i> y <i>Nu</i></dd>
+      <dt>Criterio</dt><dd>Homología del ORF <b>L1</b>: <b>género &gt;60 %</b> · especie &gt;70 % · <b>tipo &gt;90 %</b> · subtipo 90–95 % · variante 95–98 %</dd>
+      <dt>Números</dt><dd><b>≥225 tipos</b> caracterizados y más de 450 reconocidos; solo una docena carga el peso oncológico</dd>
+      <dt>Especificidad</dt><dd>Estricta por especie: no hay infección cruzada con papilomavirus animales</dd>
+    </dl>
+
+    <div class="g3">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Alto riesgo</span><span class="vg">Alphapapillomavirus</span></div>
+        <div class="vbd">
+          <p><b>16, 18, 31, 33, 45, 52, 58</b> (los siete de la vacuna) más 35, 39, 51, 56, 59 y 66. <b>VPH-16</b> encabeza la especie 9; <b>VPH-18</b>, la especie 7 (39, 45, 59, 68, 70).</p>
+          <p>Cáncer de <b>cérvix, ano, vulva, vagina, pene y orofaringe</b>. VPH-16 domina el carcinoma escamoso; VPH-18, el adenocarcinoma cervical.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Bajo riesgo</span><span class="vg">Alphapapillomavirus</span></div>
+        <div class="vbd">
+          <p><b>VPH 6 y 11</b> — condiloma acuminado y <b>papilomatosis respiratoria recurrente</b>. También 40, 42, 43, 44, 54, 61, 72 y 81.</p>
+          <p>Proliferación exofítica sin integración; potencial maligno despreciable, salvo el tumor de Buschke-Löwenstein.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Cutáneos</span><span class="vg">Mu / Beta / Gamma</span></div>
+        <div class="vbd">
+          <p><b>VPH 1</b> (plantar profunda), <b>2, 4 y 27</b> (vulgar), <b>3 y 10</b> (plana). Verrugas del carnicero y del pescadero: <b>2 y 7</b>.</p>
+          <p><b>Betapapillomavirus 5, 8, 9, 14, 17</b> en la <b>epidermodisplasia verruciforme</b> y en carcinomas queratinocíticos del inmunosuprimido.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«6 y 11 verrugan, 16 y 18 matan»</b> · <b>«1 pisa, 2 y 4 tocan»</b> para los cutáneos.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Ocho genes tempranos, dos tardíos, una sola hebra</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Virión del papilomavirus humano y mapa circular de su genoma con la función de cada gen">
+        <rect width="900" height="330" fill="#FFFFFF"/>
+        <text x="40" y="28" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">VIRIÓN Y MAPA GENÓMICO DEL VPH</text>
+
+        <circle cx="150" cy="180" r="82" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.6"/>
+        <g fill="none" stroke="#36476E" stroke-width="1.1" opacity=".55">
+          <circle cx="150" cy="138" r="12"/><circle cx="186" cy="159" r="12"/><circle cx="186" cy="201" r="12"/>
+          <circle cx="150" cy="222" r="12"/><circle cx="114" cy="201" r="12"/><circle cx="114" cy="159" r="12"/>
+          <circle cx="150" cy="110" r="12"/><circle cx="185" cy="119" r="12"/><circle cx="211" cy="145" r="12"/>
+          <circle cx="220" cy="180" r="12"/><circle cx="211" cy="215" r="12"/><circle cx="185" cy="241" r="12"/>
+          <circle cx="150" cy="250" r="12"/><circle cx="115" cy="241" r="12"/><circle cx="89" cy="215" r="12"/>
+          <circle cx="80" cy="180" r="12"/><circle cx="89" cy="145" r="12"/><circle cx="115" cy="119" r="12"/>
+        </g>
+        <circle cx="150" cy="180" r="21" fill="none" stroke="#5C7A57" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="150" y="184" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#1a6b42">DNA</text>
+        <text x="36" y="284" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">L1 cápside mayor (360 copias, 80 % del peso)</text>
+        <text x="36" y="297" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">L2 cápside menor (12–72 copias)</text>
+        <text x="36" y="316" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#6b7585">55 NM · 72 CAPSÓMEROS · SIN ENVOLTURA · TERMORRESISTENTE</text>
+
+        <path d="M470 90 A85 85 0 0 1 524.6 109.9" fill="none" stroke="#8a5c0a" stroke-width="12"/>
+        <path d="M524.6 109.9 A85 85 0 0 1 552.1 153" fill="none" stroke="#701d14" stroke-width="12"/>
+        <path d="M552.1 153 A85 85 0 0 1 552.1 197" fill="none" stroke="#90303a" stroke-width="12"/>
+        <path d="M552.1 197 A85 85 0 0 1 499.1 254.9" fill="none" stroke="#27334F" stroke-width="12"/>
+        <path d="M499.1 254.9 A85 85 0 0 1 440.9 254.9" fill="none" stroke="#36476E" stroke-width="12"/>
+        <path d="M440.9 254.9 A85 85 0 0 1 404.9 229.7" fill="none" stroke="#90303a" stroke-width="12"/>
+        <path d="M404.9 229.7 A85 85 0 0 1 385.3 167.6" fill="none" stroke="#5C7A57" stroke-width="12"/>
+        <path d="M385.3 167.6 A85 85 0 0 1 470 90" fill="none" stroke="#1a6b42" stroke-width="12"/>
+        <g font-family="'IBM Plex Mono', monospace" letter-spacing="0.06em" fill="#14181f" text-anchor="middle" font-size="8.5">
+          <text x="491" y="117" font-size="8.5">LCR</text>
+          <text x="522" y="142" font-size="8.5">E6</text>
+          <text x="532" y="178" font-size="8.5">E7</text>
+          <text x="516" y="220" font-size="8.5">E1</text>
+          <text x="470" y="240" font-size="8.5">E2</text>
+          <text x="434" y="229" font-size="8.5">E4·E5</text>
+          <text x="411" y="197" font-size="8.5">L2</text>
+          <text x="428" y="132" font-size="8.5">L1</text>
+        </g>
+        <text x="470" y="172" text-anchor="middle" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#27334F">7 900 pb</text>
+        <text x="470" y="188" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#6b7585">CIRCULAR</text>
+
+        <g font-family="'Inter', sans-serif" fill="#14181f">
+          <circle cx="600" cy="66" r="4" fill="#8a5c0a"/><text x="614" y="70" font-size="10">LCR: origen de replicación y promotores</text>
+          <circle cx="600" cy="88" r="4" fill="#27334F"/><text x="614" y="92" font-size="10">E1 helicasa · E2 regula y reprime E6/E7</text>
+          <circle cx="600" cy="110" r="4" fill="#90303a"/><text x="614" y="114" font-size="10">E4 desarma la citoqueratina → coilocito</text>
+          <circle cx="600" cy="132" r="4" fill="#90303a"/><text x="614" y="136" font-size="10">E5 no deja acidificar el endosoma</text>
+          <circle cx="600" cy="154" r="4" fill="#701d14"/><text x="614" y="158" font-size="10" font-weight="600">E6 degrada p53 y activa hTERT</text>
+          <circle cx="600" cy="176" r="4" fill="#701d14"/><text x="614" y="180" font-size="10" font-weight="600">E7 inactiva pRb y libera a E2F</text>
+          <circle cx="600" cy="198" r="4" fill="#1a6b42"/><text x="614" y="202" font-size="10">L1 cápside mayor — antígeno vacunal</text>
+          <circle cx="600" cy="220" r="4" fill="#5C7A57"/><text x="614" y="224" font-size="10">L2 cápside menor — entrada al núcleo</text>
+        </g>
+        <text x="600" y="252" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">TODOS LOS ORF EN UNA SOLA HEBRA</text>
+        <text x="600" y="276" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">No crece en monocapa: se tipifica por secuencia</text>
+        <text x="600" y="292" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">de L1, nunca por serología.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. Virión y genoma. Retener el reparto de funciones: <b>E1–E2 replican y regulan</b>, <b>E6–E7 transforman</b>, <b>L1–L2 empaquetan</b>. Cuando el genoma se integra se pierde <i>E2</i> y desaparece el freno sobre E6/E7.</figcaption>
+    </figure>
+
+    <h4>Biología esencial</h4>
+    <div class="g2">
+      <div class="card"><span class="lbl">Partícula y genoma</span>
+        <ul>
+          <li><b>Cápside icosaédrica de 72 capsómeros</b>, sin envoltura, 55 nm. L1 (pentámeros) es el 80 % del peso; L2 es minoritaria pero indispensable para llevar el genoma al núcleo.</li>
+          <li>DNA <b>circular de ~7 900 pb asociado a histonas</b>: un minicromosoma. Todos los marcos de lectura van <b>en una sola hebra</b>.</li>
+          <li>Tres regiones: <b>LCR/URR</b> no codificante, <b>tempranos E1–E8</b> y <b>tardíos L1–L2</b>. <b>E8^E2</b> reprime y <b>E1^E4</b> desarma la citoqueratina.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Entrada, cultivo y estabilidad</span>
+        <ul>
+          <li>Exige una <b>solución de continuidad del epitelio</b>: L1 se une al <b>heparán sulfato</b> de la membrana basal, la cápside cambia de conformación y entra por endocitosis.</li>
+          <li><b>No es cultivable</b> en monocapa: exige cultivo organotípico 3D o injerto de piel humana en ratón atímico.</li>
+          <li>Sin envoltura, <b>resiste calor y desecación</b>: autoclave obligatorio y el <b>humo del láser lleva virus infeccioso</b>.</li>
+          <li>Las <b>VLP</b> de L1 recombinante se autoensamblan en cápsides vacías no infecciosas: son la base de todas las vacunas.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">El virus sube con la célula que se diferencia</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ciclo productivo del papilomavirus en el epitelio escamoso e historia natural de la infección por tipos de alto riesgo">
+        <rect width="900" height="360" fill="#FFFFFF"/>
+        <text x="40" y="28" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">CICLO PRODUCTIVO EN EL EPITELIO ESCAMOSO</text>
+        <text x="470" y="28" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">HISTORIA NATURAL DEL VPH DE ALTO RIESGO</text>
+        <line x1="452" y1="40" x2="452" y2="340" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+
+        <rect x="40" y="52" width="190" height="30" fill="rgba(144,48,58,.20)"/>
+        <rect x="40" y="82" width="190" height="34" fill="rgba(138,92,10,.18)"/>
+        <rect x="40" y="116" width="190" height="58" fill="rgba(69,90,140,.18)"/>
+        <rect x="40" y="174" width="190" height="28" fill="rgba(39,51,79,.26)"/>
+        <rect x="40" y="202" width="190" height="6" fill="#36476E"/>
+        <rect x="40" y="208" width="190" height="22" fill="rgba(110,110,118,.12)"/>
+        <g font-family="'IBM Plex Mono', monospace" letter-spacing="0.1em" fill="#14181f">
+          <text x="50" y="71" font-size="8">CÓRNEO</text>
+          <text x="50" y="103" font-size="8">GRANULOSO</text>
+          <text x="50" y="149" font-size="8">ESPINOSO</text>
+          <text x="50" y="192" font-size="8">BASAL</text>
+          <text x="50" y="224" font-size="8">DERMIS</text>
+        </g>
+        <line x1="238" y1="196" x2="238" y2="62" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="238,54 233,64 243,64" fill="#455A8C"/>
+
+        <g font-family="'Inter', sans-serif" fill="#14181f">
+          <text x="252" y="66" font-size="9.5">Salida con el corneocito descamado:</text>
+          <text x="252" y="78" font-size="9.5">sin lisis ni viremia</text>
+          <text x="252" y="100" font-size="9.5" font-weight="600">L1/L2 y ensamblaje nuclear</text>
+          <text x="252" y="112" font-size="9.5">coilocitos: núcleo en una vacuola</text>
+          <text x="252" y="136" font-size="9.5" font-weight="600">E6/E7 reactivan el ciclo celular</text>
+          <text x="252" y="148" font-size="9.5">y amplifican el genoma</text>
+          <text x="252" y="172" font-size="9.5">E1/E2 mantienen 50–100 copias</text>
+          <text x="252" y="184" font-size="9.5">episomales, expresión mínima</text>
+          <text x="252" y="206" font-size="9.5" font-weight="600">Microabrasión: L1 se une al</text>
+          <text x="252" y="218" font-size="9.5">heparán sulfato de la membrana basal</text>
+        </g>
+
+        <text x="40" y="262" font-family="'Source Serif 4', serif" font-style="italic" font-size="12.5" fill="#6b7585">Sin viremia, sin muerte celular y sin inflamación: el</text>
+        <text x="40" y="280" font-family="'Source Serif 4', serif" font-style="italic" font-size="12.5" fill="#6b7585">sistema inmune tarda meses en enterarse.</text>
+        <text x="40" y="308" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">HISTOLOGÍA: ACANTOSIS · PARAQUERATOSIS ·</text>
+        <text x="40" y="322" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">HIPERQUERATOSIS · PAPILOMATOSIS · COILOCITOS</text>
+
+        <rect x="470" y="46" width="414" height="38" rx="6" fill="#27334F"/>
+        <text x="677" y="64" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#f7f8fa">Infección de la zona de transformación</text>
+        <text x="677" y="77" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="rgba(247,248,250,.74)">UNIÓN ESCAMOCOLUMNAR DEL CUELLO UTERINO</text>
+        <line x1="677" y1="84" x2="677" y2="98" stroke="#455A8C" stroke-width="1.2"/>
+
+        <rect x="470" y="98" width="196" height="48" rx="6" fill="rgba(92,122,87,.15)" stroke="#5C7A57" stroke-width="1.1"/>
+        <text x="568" y="118" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Aclaramiento: ~90 % en 2 años</text>
+        <text x="568" y="133" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">media 13.5 meses (AR) vs 4.8 (BR)</text>
+        <rect x="688" y="98" width="196" height="48" rx="6" fill="rgba(112,29,20,.10)" stroke="#701d14" stroke-width="1.4"/>
+        <text x="786" y="118" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">Persistencia del VPH-AR</text>
+        <text x="786" y="133" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">el único predictor sólido de progresión</text>
+        <line x1="786" y1="146" x2="786" y2="160" stroke="#455A8C" stroke-width="1.2"/>
+
+        <rect x="608" y="160" width="276" height="34" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="746" y="181" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">LSIL / CIN 1 — regresa en 60 %</text>
+        <line x1="746" y1="194" x2="746" y2="208" stroke="#455A8C" stroke-width="1.2"/>
+        <rect x="608" y="208" width="276" height="34" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="746" y="229" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">HSIL / CIN 2–3 — 15–30 % a 4 años</text>
+        <line x1="746" y1="242" x2="746" y2="256" stroke="#455A8C" stroke-width="1.2"/>
+        <rect x="608" y="256" width="276" height="34" rx="6" fill="rgba(138,92,10,.14)" stroke="#8a5c0a" stroke-width="1.1"/>
+        <text x="746" y="277" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">Integración: se rompe E2</text>
+        <line x1="746" y1="290" x2="746" y2="304" stroke="#455A8C" stroke-width="1.2"/>
+        <rect x="608" y="304" width="276" height="36" rx="6" fill="#701d14"/>
+        <text x="746" y="320" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#f7f8fa">Carcinoma invasor</text>
+        <text x="746" y="334" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="rgba(247,248,250,.74)">UNA A DOS DÉCADAS DESPUÉS</text>
+
+        <g font-family="'IBM Plex Mono', monospace" letter-spacing="0.08em" fill="#6b7585">
+          <text x="470" y="180" font-size="8.5">CIN 3: SOLO 1/3</text>
+          <text x="470" y="194" font-size="8.5">REGRESA Y 12 %</text>
+          <text x="470" y="208" font-size="8.5">LLEGA A CÁNCER</text>
+          <text x="470" y="272" font-size="8.5" fill="#701d14">E6 DEGRADA p53</text>
+          <text x="470" y="286" font-size="8.5" fill="#701d14">E7 INACTIVA pRb</text>
+          <text x="470" y="316" font-size="8.5">INESTABILIDAD,</text>
+          <text x="470" y="330" font-size="8.5">METILACIÓN Y</text>
+          <text x="470" y="344" font-size="8.5">TELOMERASA</text>
+        </g>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Izquierda: el ciclo viral solo se completa si la célula infectada se diferencia y asciende, lo que explica la ausencia de viremia y la lentitud de la respuesta inmune. Derecha: la mayoría aclara; el cáncer exige <b>persistencia + integración</b>.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">De la lesión benigna al cáncer</span>
+        <ul>
+          <li>En verrugas y condilomas el genoma es <b>episomal</b>; en HSIL y carcinoma suele estar <b>integrado</b>, con <b>disrupción del ORF <i>E2</i></b> y sobreexpresión de E6 y E7.</li>
+          <li>La integración no es obligatoria. Se suman <b>inestabilidad cromosómica</b>, hipermetilación, telomerasa, angiogénesis y regulación por <b>miRNA y lncRNA</b>.</li>
+          <li>El blanco es la <b>zona de transformación</b>: metaplasia escamosa de la unión escamocolumnar creada por el cambio hormonal puberal. El epitelio glandular vecino origina el <b>adenocarcinoma</b>.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Evasión inmune y huésped</span>
+        <ul>
+          <li>Infección <b>estrictamente intraepitelial</b>: sin viremia ni citólisis. E5, E6 y E7 <b>bloquean TLR9, la vía del interferón y la carga peptídica del MHC-I</b>.</li>
+          <li>La respuesta humoral natural es débil: seroconvierte del 50 al 90 % y los títulos no evitan la reinfección — por eso <b>la vacuna genera títulos muy superiores a la infección natural</b>.</li>
+          <li><b>Inmunodeficiencias que se delatan con verrugas</b>: epidermodisplasia verruciforme (<i>TMC6</i>/<i>TMC8</i> → EVER1/2), síndrome <b>WHIM</b> (<i>CXCR4</i>), déficits de <i>DOCK8</i>, <i>GATA2</i>, <i>CD28</i>.</li>
+          <li><b>VIH</b> multiplica por 4 a 40 la incidencia de condilomas y NIC; el cáncer anal se eleva ~<b>55 veces en HSH</b> con VIH y 12–22 veces en mujeres.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="box clin"><span class="lbl">Cofactores</span>
+      <p>Tabaquismo, alta paridad, anticonceptivos prolongados y coinfecciones son <b>accesorios</b>: ninguno se acerca a la asociación del VPH. En el microbioma cervicovaginal, <i>Lactobacillus iners</i> acompaña al aclaramiento y <i>Gardnerella</i> a la progresión.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Verrugas, condilomas, neoplasias y papilomatosis</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Síndrome</th><th>Tipos</th><th>Clínica y curso</th></tr></thead>
+      <tbody>
+        <tr><td><b>Verruga plantar profunda</b> (myrmecia)</td><td class="num">1</td><td>Adolescente y adulto joven; queratosis dolorosa de 2 mm a 1 cm. Al rasurarla aparecen <b>capilares puntiformes trombosados</b>; la callosidad no sangra. Agrupadas = mosaico.</td></tr>
+        <tr><td><b>Verruga vulgar</b></td><td class="num">2, 4, 27</td><td><b>71 % de las verrugas cutáneas</b>; escolares (prevalencia 4–20 %). Dorso de manos, periungueales. En carniceros y pescaderos, tipos 2 y 7.</td></tr>
+        <tr><td><b>Verruga plana</b></td><td class="num">3, 10</td><td>Niños; pápulas lisas y apenas elevadas en cara, cuello y manos.</td></tr>
+        <tr><td><b>Epidermodisplasia verruciforme</b></td><td class="num">5, 8, 14, 17</td><td>Genodermatosis autosómica recesiva; lesiones tipo pitiriasis versicolor desde la primera década. <b>Un tercio hace carcinoma escamoso</b> en zonas fotoexpuestas.</td></tr>
+        <tr><td><b>Condiloma acuminado</b></td><td class="num">6, 11</td><td>Prevalencia 0.2–5 %; lo desarrollan <b>~2/3 de los contactos sexuales</b>. <b>Tres cuartas partes son asintomáticos.</b> <b>Remisión espontánea del 10–20 % en 3–4 meses.</b></td></tr>
+        <tr><td><b>Neoplasia intraepitelial</b> (CIN, VIN, VaIN, AIN, PIN)</td><td class="num">16, 18</td><td>Plana y acetoblanca, no exofítica. <b>Papulosis bowenoide</b> y <b>enfermedad de Bowen</b>; en el glande, <b>eritroplasia de Queyrat</b>.</td></tr>
+        <tr><td><b>Papilomatosis respiratoria recurrente</b></td><td class="num">6, 11</td><td>Juvenil <b>4.3/100 000/año</b> (inicio mediano a los 3 años); adulta 1.8/100 000 (picos a los 35 y 64). <b>Disfonía o llanto alterado</b>, estridor, obstrucción. El <b>tipo 11</b> predice peor curso.</td></tr>
+        <tr><td><b>Cáncer</b></td><td class="num">16 &gt; 18</td><td>Fracción atribuible: <b>cérvix 99.7 %, ano 91 %, vagina 75 %, orofaringe 72 %, vulva 69 %, pene 63 %</b>. El <b>orofaríngeo</b> (base de lengua y amígdala) ya supera en varones al cáncer cervical en EE. UU.; VPH-16 causa el 90 %.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h4>Curso por escenario</h4>
+    <ul>
+      <li><b>Niño sano</b> — las verrugas ceden solas en <b>50 % al año y 90 % a los 5 años</b>. El condiloma anogenital obliga a considerar <b>abuso sexual</b>, aunque antes de los 2 años predomina la vía perinatal o la autoinoculación.</li>
+      <li><b>Embarazo</b> — más excreción viral y condilomas que pueden obstruir el canal de parto. <b>No son indicación de cesárea</b>.</li>
+      <li><b>Inmunodeprimido</b> — lesiones extensas y refractarias; en trasplante renal la carga de verrugas y carcinomas queratinocíticos es alta.</li>
+      <li><b>HSH y personas con VIH</b> — dos tercios de quienes tienen verrugas perianales tienen lesiones intraanales: tacto rectal y anoscopia obligados. El antecedente de verrugas anales multiplica por 10 el riesgo de cáncer anal.</li>
+    </ul>
+
+    <div class="box trap"><span class="lbl">Diagnóstico diferencial que se pregunta</span>
+      <ul>
+        <li><b>Molusco contagioso</b>: cúpulas lisas, sésiles, umbilicadas, de predominio púbico — el condiloma es pediculado y rugoso.</li>
+        <li><b>Condiloma <i>lata</i> de la sífilis secundaria</b>: placas planas, húmedas y <b>llenas de treponemas</b>; pedir serología.</li>
+        <li><b>Pápulas perladas del pene</b> y <b>papilomatosis vestibular</b>: variantes normales, simétricas y de base independiente.</li>
+        <li><b>Manchas de Fordyce</b>, queratosis seborreica, acrocordón, liquen plano, siringomas.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Clínico para la verruga; molecular para el cáncer</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra / escenario</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Verruga cutánea o condiloma visible</b></td><td>Inspección ± lupa o dermatoscopio</td><td><b>Diagnóstico clínico.</b> Biopsia <b>solo</b> si la lesión es pigmentada, en placa, sangra, es atípica, no responde al tratamiento o el paciente está inmunocomprometido.</td></tr>
+        <tr><td><b>Cuello uterino, vulva, ano</b></td><td>Ácido acético 3–5 % + colposcopio</td><td>Revela lesiones planas acetoblancas con bordes geográficos y asas capilares, pero el <b>acetoblanqueo es poco específico</b>.</td></tr>
+        <tr><td><b>Citología cervical</b></td><td>Papanicolaou convencional o de base líquida</td><td>Sensibilidad <b>30–90 %</b>; el <b>coilocito</b> es el sello. La base líquida permite <b>prueba refleja de VPH</b>. Informe en <b>sistema Bethesda</b>: ASC-US, ASC-H, LSIL, HSIL, carcinoma.</td></tr>
+        <tr><td><b>DNA / mRNA de VPH de alto riesgo</b></td><td>Captura híbrida II · COBAS (PCR de L1) · Aptima (mRNA E6/E7) · Onclarity</td><td><b>Más sensible que la citología.</b> Detecta 12–14 tipos oncogénicos y varias plataformas <b>genotipan 16 y 18</b>; todas son clínicamente equivalentes. La <b>autotoma vaginal en el consultorio</b> está aprobada desde 2024; las pruebas caseras no.</td></tr>
+        <tr><td><b>Biopsia</b></td><td>Histopatología ± p16<sup>INK4A</sup>/Ki-67</td><td><b>Estándar de oro</b>, con reproducibilidad limitada entre grados. La tinción dual <b>p16/Ki-67</b> delata la desregulación por E7 y separa el alto grado de la metaplasia.</td></tr>
+        <tr><td><b>Ano (VIH, HSH, mujeres con NIC)</b></td><td>Tacto rectal + citología anal + <b>anoscopia de alta resolución</b></td><td>La citología anal tiene <b>mala especificidad</b> aquí: obliga a biopsia dirigida. Casi todas las lesiones están bajo la línea pectínea; la sigmoidoscopia no aporta.</td></tr>
+        <tr><td><b>Suero</b></td><td>Serología anti-L1</td><td><b>Inútil en la clínica</b>: sin ensayo comercial validado, solo sirve para seroepidemiología y respuesta vacunal. Tampoco hay cultivo.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Tamizaje cervical — resumen de guías</span>
+        <ul>
+          <li><b>Inicio</b>: 21 años (USPSTF, ACOG) o <b>25</b> (ACS).</li>
+          <li><b>21–29 años</b>: citología sola <b>cada 3 años</b>, sin prueba de VPH.</li>
+          <li><b>30–65 años</b>: <b>VPH-AR sola o co-test cada 5 años</b>; ACS prefiere VPH sola desde los 25.</li>
+          <li><b>Alta a los 65 años</b> con historial adecuado: tres citologías o dos co-test negativos en 10 años, el último dentro de 5.</li>
+          <li>Tras <b>histerectomía total por causa benigna</b> no se tamiza; sí se vigila si hubo CIN de alto grado o cáncer.</li>
+          <li><b>Con VIH</b>: iniciar al diagnóstico; citología anual y, tras <b>tres normales</b>, cada 3 años. Con genotipificación, 16 o 18 llevan a colposcopia.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Errores frecuentes</span>
+        <ul>
+          <li><b>Pedir prueba de VPH ante un condiloma visible</b>: el diagnóstico es clínico y el genotipo no cambia el tratamiento.</li>
+          <li><b>Tipificar VPH antes de los 30 años</b>: prevalencia transitoria altísima y colposcopias innecesarias.</li>
+          <li><b>Pedir serología de VPH</b>: no existe prueba clínica útil.</li>
+          <li>Tomar el acetoblanqueo por enfermedad: falsos positivos frecuentes en genitales externos.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Se tratan lesiones; se previene con vacuna</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="box trap"><span class="lbl">Premisa</span>
+      <p><b>Ningún tratamiento erradica el VPH.</b> El objetivo es la lesión visible y sus síntomas: no está demostrado que tratar prevenga la transmisión ni el cáncer. La <b>recurrencia ronda el 30 %</b> y refleja virus persistente en epitelio de aspecto normal, <b>no resistencia farmacológica</b>: no hay antiviral específico.</p>
+    </div>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Modalidad</th><th>Esquema</th><th>Respuesta completa y notas</th></tr></thead>
+      <tbody>
+        <tr><td colspan="3"><b>Condiloma anogenital — aplicado por el paciente (preferente por comodidad)</b></td></tr>
+        <tr><td><b>Podofilotoxina 0.5 %</b> solución o gel</td><td>Dos veces al día, 3 días por semana, hasta 4 semanas</td><td class="num">45–58 %; recurrencia 33–91 %. <b>Contraindicada en embarazo.</b></td></tr>
+        <tr><td><b>Imiquimod 5 %</b> crema (agonista de TLR7)</td><td>3 noches por semana, hasta 16 semanas</td><td class="num">~50 % (72 % en mujeres vs 33 % en hombres); al 3.75 % diario, 43 %. <b>Evitar en embarazo.</b></td></tr>
+        <tr><td><b>Sinecatequinas 15 %</b> (polifenón E)</td><td>Tres veces al día, máximo 16 semanas</td><td class="num">56 % vs 37 % con placebo. Eritema y ulceración locales. <b>Contraindicada en embarazo.</b></td></tr>
+        <tr><td colspan="3"><b>Condiloma anogenital — aplicado por el médico</b></td></tr>
+        <tr><td><b>Crioterapia</b> con nitrógeno líquido</td><td>Cada 1–2 semanas</td><td class="num">50–100 %. <b>Segura en el embarazo.</b></td></tr>
+        <tr><td><b>Ácido tricloroacético 80–90 %</b></td><td>Semanal; neutralizar el exceso con talco o bicarbonato</td><td class="num">~81 % con 36 % de recurrencia. <b>Seguro en el embarazo</b>; duele y ulcera.</td></tr>
+        <tr><td><b>Resina de podofilina 10–25 %</b></td><td>Semanal; lavar a las 12 h; no tratar áreas &gt;10 cm²</td><td class="num">20–40 %. Quemadura en un tercio y toxicidad sistémica. <b>Contraindicada en embarazo.</b></td></tr>
+        <tr><td><b>Escisión, electrocirugía, láser de CO₂</b></td><td>Sesión única; lidocaína-prilocaína tópica 1 h antes</td><td class="num">80–90 % inmediata, solo 19–39 % a largo plazo con láser. Cicatriz y costo.</td></tr>
+        <tr><td colspan="3"><b>Verruga cutánea</b></td></tr>
+        <tr><td><b>Ácido salicílico</b> tópico</td><td>Diario hasta 12 semanas, previa hidratación y limado</td><td class="num">71 % vs 47 % con placebo. Primera línea autoaplicada.</td></tr>
+        <tr><td><b>Crioterapia</b></td><td>Congelación sostenida de 10 s cada 2 semanas</td><td class="num">Equivalente al salicílico. Más de 3 meses o 4 sesiones no añade beneficio.</td></tr>
+        <tr><td><b>Inmunoterapia intralesional</b> con antígeno de <i>Candida</i></td><td>Verrugas múltiples y rebeldes</td><td class="num">82 % vs 56 % con PPD y 5 % con solución salina.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Situaciones especiales</span>
+        <ul>
+          <li><b>Embarazo</b>: aceptables <b>TCA, crioterapia, láser y escisión</b>. Prohibidos podofilina/podofilotoxina, imiquimod, sinecatequinas y 5-fluorouracilo. Los condilomas <b>no indican cesárea</b>.</li>
+          <li><b>VIH e inmunosupresión</b>: lesiones refractarias; la monoterapia tópica falla y se prefiere <b>terapia combinada</b>. El ensayo <b>ANCHOR</b> mostró que tratar la <b>HSIL anal</b> reduce <b>57 %</b> el riesgo de carcinoma anal frente a vigilancia en ≥35 años con VIH.</li>
+          <li><b>Papilomatosis respiratoria recurrente</b>: desbastar con láser de CO₂ o microdebridador; <b>evitar traqueostomía</b> y <b>radioterapia contraindicada</b>. Adyuvantes: interferón α (~1/4 de respuestas completas), cidofovir intralesional y bevacizumab.</li>
+          <li><b>Epidermodisplasia verruciforme</b>: fotoprotección y escisión de todo cambio maligno.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Prevención no vacunal</span>
+        <ul>
+          <li><b>Condón</b>: protege de forma imperfecta —no cubre toda la piel expuesta— pero el uso consistente <b>reduce a la mitad</b> la adquisición en varones y <b>acelera la regresión</b> de la NIC.</li>
+          <li>La <b>circuncisión</b> se asocia a menor transmisión, pero la evidencia no basta para recomendarla con ese fin.</li>
+          <li><b>No hay tamizaje validado</b> para el cáncer orofaríngeo por VPH.</li>
+          <li><b>Control de infecciones</b>: autoclave; aspiración de humo y mascarilla en láser o electrocauterio.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Vacunación — la única intervención que previene el cáncer</h4>
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Línea de vida con los esquemas de vacunación contra el virus del papiloma humano y las ventanas de tamizaje cervical">
+        <rect width="900" height="300" fill="#FFFFFF"/>
+        <text x="40" y="26" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">VACUNA NONAVALENTE DE VLP-L1 · RUTINA A LOS 11–12 AÑOS, DESDE LOS 9</text>
+
+        <rect x="80" y="70" width="140" height="32" rx="5" fill="rgba(138,92,10,.16)" stroke="#8a5c0a" stroke-width="1.2"/>
+        <text x="150" y="61" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#8a5c0a">9–14 AÑOS</text>
+        <text x="150" y="90" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#14181f">2 dosis · 0 y 6–12 meses</text>
+        <rect x="220" y="70" width="220" height="32" rx="5" fill="rgba(112,29,20,.10)" stroke="#701d14" stroke-width="1.2"/>
+        <text x="330" y="61" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#701d14">15–26 AÑOS · RESCATE</text>
+        <text x="330" y="90" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#14181f">3 dosis · 0, 1–2 y 6 meses</text>
+        <rect x="440" y="70" width="220" height="32" rx="5" fill="rgba(69,90,140,.16)" stroke="#455A8C" stroke-width="1.2"/>
+        <text x="550" y="61" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#27334F">27–45 AÑOS</text>
+        <text x="550" y="90" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">Decisión clínica compartida</text>
+
+        <line x1="60" y1="150" x2="866" y2="150" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="872,150 862,145 862,155" fill="#455A8C"/>
+        <g stroke="#455A8C" stroke-width="1.2">
+          <line x1="80" y1="144" x2="80" y2="156"/><line x1="130" y1="144" x2="130" y2="156"/>
+          <line x1="220" y1="144" x2="220" y2="156"/><line x1="330" y1="144" x2="330" y2="156"/>
+          <line x1="440" y1="144" x2="440" y2="156"/><line x1="510" y1="144" x2="510" y2="156"/>
+          <line x1="660" y1="144" x2="660" y2="156"/><line x1="840" y1="144" x2="840" y2="156"/>
+        </g>
+        <g font-family="'IBM Plex Mono', monospace" fill="#6b7585" text-anchor="middle">
+          <text x="80" y="170" font-size="9">9</text><text x="130" y="170" font-size="9">11</text><text x="220" y="170" font-size="9">15</text>
+          <text x="330" y="170" font-size="9">21</text><text x="440" y="170" font-size="9">26</text><text x="510" y="170" font-size="9">30</text>
+          <text x="660" y="170" font-size="9">45</text><text x="840" y="170" font-size="9">65</text>
+        </g>
+        <text x="150" y="128" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#8a5c0a">antes del inicio sexual = máxima eficacia</text>
+
+        <rect x="330" y="196" width="176" height="38" rx="5" fill="rgba(92,122,87,.15)" stroke="#5C7A57" stroke-width="1.1"/>
+        <text x="418" y="213" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Citología cada 3 años</text>
+        <text x="418" y="227" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">sin prueba de VPH antes de los 30</text>
+        <rect x="510" y="196" width="330" height="38" rx="5" fill="rgba(39,51,79,.14)" stroke="#27334F" stroke-width="1.1"/>
+        <text x="675" y="213" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">VPH-AR sola o co-test cada 5 años</text>
+        <text x="675" y="227" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">ACS: prueba de VPH sola desde los 25 años</text>
+        <g font-family="'IBM Plex Mono', monospace" letter-spacing="0.1em" fill="#6b7585">
+          <text x="60" y="204" font-size="8.5">TAMIZAJE CERVICAL</text>
+          <text x="60" y="220" font-size="8.5">INICIO: 21 AÑOS (USPSTF/ACOG)</text>
+          <text x="60" y="236" font-size="8.5">O 25 AÑOS (ACS)</text>
+        </g>
+        <text x="840" y="252" text-anchor="end" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">ALTA A LOS 65 CON HISTORIAL ADECUADO</text>
+        <text x="60" y="282" font-family="'Source Serif 4', serif" font-style="italic" font-size="12.5" fill="#6b7585">La vacuna es profiláctica: no trata la infección establecida, no cura lesiones y no modifica el tamizaje.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Línea de vida de la prevención. El corte de las dos dosis es la <b>edad al recibir la primera</b>, no la edad actual; el intervalo mínimo entre dosis 1 y 2 es de <b>5 meses</b>. La OMS acepta además el esquema de <b>dosis única</b> desde diciembre de 2022.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">La vacuna en detalle</span>
+        <ul>
+          <li><b>Gardasil 9</b> (VLP de L1 en levadura, adyuvante de aluminio) cubre <b>6, 11, 16, 18, 31, 33, 45, 52 y 58</b>; 0.5 mL IM en deltoides. Cervarix, bivalente con AS04, sigue disponible en parte de Asia.</li>
+          <li><b>Eficacia por protocolo</b>: 98.2 % contra CIN 2+ (tetravalente), <b>96.3 %</b> por los cinco tipos añadidos y <b>99 % contra verrugas genitales</b>. Protección demostrada al menos 6–11 años.</li>
+          <li><b>Indicaciones</b>: rutina a los <b>11–12 años</b> (desde los 9), rescate hasta los <b>26</b> y de <b>27 a 45 por decisión compartida</b>. Tres dosis si la primera fue a los ≥15 años <b>o si hay inmunocompromiso</b>.</li>
+          <li><b>Seguridad</b>: dolor local en ~90 %; cefalea, fatiga y artralgia en menos de la mitad. Sin señal de autoinmunidad, Guillain-Barré ni insuficiencia ovárica. <b>Observar 15 minutos por síncope</b>.</li>
+          <li><b>Embarazo</b>: se difiere, pero <b>no se pide prueba de embarazo</b> antes y la lactancia no contraindica.</li>
+        </ul>
+      </div>
+      <div class="box hy"><span class="lbl">Impacto poblacional</span>
+        <ul>
+          <li>Suecia: incidencia de cáncer cervical <b>0.12 veces</b> la esperada en vacunadas antes de los 17 años y 0.47 entre los 17 y 30.</li>
+          <li>Reino Unido: reducción del riesgo de <b>87 % a los 12–13 años, 62 % a los 14–16 y 34 % a los 16–18</b>.</li>
+          <li>Con cobertura &gt;50 %, las verrugas genitales cayeron más del <b>90 %</b> en mujeres de 15–19 años, con <b>inmunidad de rebaño</b> en varones.</li>
+          <li>Vacunar a quien ya está infectado <b>no cura</b>: en adultos con VIH y 60 % de prevalencia anal basal no hubo beneficio clínico.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>E6 → degrada p53</b>; <b>E7 → inactiva pRb</b>. La integración interrumpe <b>E2</b>, que era el represor de ambos.</li>
+          <li><b>6 y 11</b>: condilomas y papilomatosis respiratoria. <b>16 y 18</b>: ~70 % del cáncer cervical. <b>16</b> es el tipo más oncogénico y causa el 90 % de los cánceres orofaríngeos.</li>
+          <li><b>DNA bicatenario circular, sin envoltura, icosaédrico, replicación nuclear</b> — como todo virus DNA salvo poxvirus.</li>
+          <li>El <b>coilocito</b> (núcleo picnótico dentro de una vacuola) es el sello morfológico.</li>
+          <li>Lo que produce cáncer es la <b>persistencia</b>, no la infección: ~90 % aclara en 2 años.</li>
+          <li>El cáncer orofaríngeo <b>VPH-positivo tiene mejor pronóstico</b> que el ligado a tabaco y alcohol.</li>
+          <li>La vacuna es de <b>VLP de L1</b>: sin DNA viral, <b>no puede infectar</b>.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«6 y 11 verrugan, 16 y 18 matan»</b> — separa el genotipo de bajo y alto riesgo en un segundo.</p>
+        <p><b>«E6 = p<u>6</u>3 menos uno»</b> — E6 va contra <b>p53</b>; por descarte, <b>E7 va contra Rb</b>.</p>
+        <p><b>«Menor de 15, dos; de 15 en adelante, tres»</b> — el número de dosis lo decide la <b>edad de la primera aplicación</b>.</p>
+        <p><b>«21 cito, 30 VPH, 65 alta»</b> — las tres edades del tamizaje cervical.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas y escenario mexicano</span>
+      <ul>
+        <li><b>La trampa clásica</b>: la paciente vacunada que pregunta si ya no necesita Papanicolaou. <b>Sí lo necesita</b>: la nonavalente no cubre todos los tipos oncogénicos.</li>
+        <li><b>Segunda trampa</b>: indicar cesárea por condilomas. Solo si obstruyen el canal de parto, nunca para prevenir la papilomatosis laríngea.</li>
+        <li><b>México</b>: la vacuna está en el esquema nacional de la infancia y el cáncer cervicouterino sigue entre las principales causas de muerte por cáncer en mujeres, concentrado donde el tamizaje no llega. La palanca es <b>vacunación temprana + prueba de VPH</b>, no repetir citologías en quien ya acude.</li>
+        <li>Verrugas extensas o explosivas en un adulto: <b>buscar inmunodeficiencia</b> (VIH, trasplante, defectos de células T).</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/HPV.md</code> · Mandell PPID 10e, cap. 150 (Papillomaviruses), tablas 150.1–150.3 · Workowski KA et al., <i>Sexually Transmitted Infections Treatment Guidelines, 2021</i>, MMWR Recomm Rep 2021;70(4) · Recomendaciones ACIP/CDC de vacunación contra VPH · Guías de tamizaje USPSTF, ACS y ACOG · OMS, esquema de dosis única (WER, diciembre de 2022) · Ensayo ANCHOR · First Aid for the USMLE Step 1 2025, p. 159-163.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="adenoviridae.html"><span class="k">← Anterior</span><span class="v">Adenoviridae</span></a>
+        <a class="next" href="polyomaviridae.html"><span class="k">Siguiente →</span><span class="v">Polyomaviridae</span></a></div>
+      <footer class="pf">
+        <span>Papillomaviridae · 4 de 10 · árbol DNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

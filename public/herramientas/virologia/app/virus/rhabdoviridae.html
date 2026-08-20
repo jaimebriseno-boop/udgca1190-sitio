@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rhabdoviridae — Virus RNA</title>
+<meta name="description" content="Rhabdoviridae. Virus de la rabia · virus de la estomatitis vesicular">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Rhabdoviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 17 de 18 · Virología médica</p>
+    <h1>Rhabdoviridae</h1>
+    <p class="sub">Virus de la rabia · virus de la estomatitis vesicular</p>
+    <div class="chips"><span class="chip g">−ssRNA no segmentado · 12 kb</span>
+  <span class="chip">Envuelto · forma de bala 180×75 nm</span>
+  <span class="chip">Replicación citoplásmica</span>
+  <span class="chip r">Letalidad ~100 % con síntomas</span>
+  <span class="chip gold">Vacuna + inmunoglobulina</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Rhabdoviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Género clave</dt><dd><i>Lyssavirus</i> (rabia) · <i>Vesiculovirus</i> (estomatitis vesicular)</dd></div>
+  <div class="cell"><dt>Reservorio</dt><dd>Perro (Asia, África) · <b>murciélago</b> (Américas) · zorro, mapache, zorrillo, mangosta</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Mordedura/arañazo con saliva · mucosa o piel no intacta · trasplante de órgano o córnea</dd></div>
+  <div class="cell"><dt>Puerta de entrada</dt><dd>Músculo → unión neuromuscular (<b>nAChR</b>, NCAM, p75<sup>NTR</sup>)</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd>20–90 días típico (rango: días a años); <b>75 % enferma &lt;90 días</b></dd></div>
+  <div class="cell"><dt>Síndrome</dt><dd>Encefalitis furiosa (80 %) con hidrofobia/aerofobia · paralítica tipo Guillain-Barré (20 %)</dd></div>
+  <div class="cell"><dt>Diagnóstico</dt><dd>Ante-mortem: RT-PCR de saliva seriada + biopsia de nuca + LCR · Post-mortem: <b>DFA en cerebro</b></dd></div>
+  <div class="cell"><dt>Prevención</dt><dd><b>PEP ≈ 100 % eficaz</b>: lavado 15 min + vacuna d0-3-7-14 + HRIG 20 UI/kg infiltrada</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">De Pasteur al niño mordido de 1885</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>~2300 a.C.</b> — el Código de Eshnunna en Mesopotamia ya multa al dueño del perro que muerde y mata: es la primera regulación sanitaria escrita sobre una zoonosis.</li>
+      <li><b>1804</b> — Zinke demuestra que la <b>saliva</b> del animal rabioso transmite la enfermedad: la prueba de que el agente viaja en secreciones.</li>
+      <li><b>6 de julio de 1885</b> — <b>Louis Pasteur</b> aplica a Joseph Meister, de 9 años, 13 inoculaciones de médula de conejo desecada. El niño sobrevive. Nace la <b>profilaxis post-exposición</b> y, con ella, el concepto de vacunar <i>después</i> del contagio aprovechando la larga incubación.</li>
+      <li><b>1903</b> — <b>Adelchi Negri</b> describe las inclusiones citoplásmicas que llevan su nombre; las creyó protozoarios.</li>
+      <li><b>1980–2019</b> — la vacunación canina masiva elimina la rabia canina urbana de gran parte de América. <b>México recibe en 2019 la certificación de la OPS</b> como primer país del mundo libre de rabia humana transmitida por perro.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué importa la fecha de 1885</span>
+      <p>La rabia es la única infección donde <b>vacunar después de la exposición salva la vida</b>. Funciona porque el virus permanece días o semanas en el músculo antes de entrar al nervio: la PEP compite contra el reloj del transporte axonal, no contra una viremia.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Mononegavirales → Rhabdoviridae</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Orden</dt><dd>Mononegavirales (−ssRNA no segmentado, como Paramyxo-, Pneumo- y Filoviridae)</dd>
+      <dt>Familia</dt><dd>Rhabdoviridae — del griego <i>rhabdos</i>, «bastón», por la forma de bala</dd>
+      <dt>Géneros humanos</dt><dd><i>Lyssavirus</i> · <i>Vesiculovirus</i></dd>
+      <dt>Especie tipo</dt><dd><i>Rabies lyssavirus</i></dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Lyssavirus</span><span class="vg">≥14 especies</span></div>
+        <div class="vbd">
+          <p><b>Filogrupo 1</b> — rabia clásica, Duvenhage, EBLV-1/2 (murciélago europeo), ABLV (murciélago australiano), Irkut. <b>Las vacunas actuales protegen.</b></p>
+          <p><b>Filogrupos 2 y 3</b> — Mokola, Lagos bat, Shimoni, West Caucasian, Ikoma, Lleida. <b>Protección cruzada escasa o nula</b>: la PEP estándar puede fallar.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Vesiculovirus</span><span class="vg">VSV y afines</span></div>
+        <div class="vbd">
+          <p>Virus de la estomatitis vesicular: zoonosis ocupacional leve del ganadero y del veterinario — fiebre, mialgias y vesículas orales autolimitadas en 3–5 días.</p>
+          <p>Su relevancia moderna es como <b>plataforma vectorial</b>: el esqueleto de VSV recombinante porta la glicoproteína de Ébola en la vacuna <b>rVSV-ZEBOV (Ervebo)</b>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p>Los cinco Mononegavirales de importancia médica: <b>«RA-PA-PNE-FI-BO»</b> → <b>Ra</b>bdo · <b>Pa</b>ramyxo · <b>Pne</b>umo · <b>Fi</b>lo · <b>Bo</b>rna. Todos −ssRNA no segmentado, todos citoplásmicos, todos llevan su propia RNA-polimerasa dentro del virión.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Cinco proteínas, una bala</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión de la rabia con sus cinco proteínas">
+        <rect width="900" height="330" fill="#FFFFFF"/>
+        <!-- bala -->
+        <path d="M120 70 h180 a95 95 0 0 1 0 190 h-180 z" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.6"/>
+        <!-- espigas G -->
+        <g stroke="#701d14" stroke-width="2.2" stroke-linecap="round">
+          <line x1="150" y1="70" x2="150" y2="50"/><line x1="185" y1="70" x2="185" y2="50"/>
+          <line x1="220" y1="70" x2="220" y2="50"/><line x1="255" y1="70" x2="255" y2="50"/>
+          <line x1="290" y1="70" x2="290" y2="50"/>
+          <line x1="150" y1="260" x2="150" y2="280"/><line x1="185" y1="260" x2="185" y2="280"/>
+          <line x1="220" y1="260" x2="220" y2="280"/><line x1="255" y1="260" x2="255" y2="280"/>
+          <line x1="290" y1="260" x2="290" y2="280"/>
+          <line x1="330" y1="95" x2="345" y2="82"/><line x1="360" y1="130" x2="379" y2="123"/>
+          <line x1="366" y1="165" x2="386" y2="165"/><line x1="360" y1="200" x2="379" y2="207"/>
+          <line x1="330" y1="235" x2="345" y2="248"/>
+        </g>
+        <g fill="#701d14">
+          <circle cx="150" cy="48" r="3.4"/><circle cx="185" cy="48" r="3.4"/><circle cx="220" cy="48" r="3.4"/>
+          <circle cx="255" cy="48" r="3.4"/><circle cx="290" cy="48" r="3.4"/>
+          <circle cx="150" cy="282" r="3.4"/><circle cx="185" cy="282" r="3.4"/><circle cx="220" cy="282" r="3.4"/>
+          <circle cx="255" cy="282" r="3.4"/><circle cx="290" cy="282" r="3.4"/>
+          <circle cx="347" cy="80" r="3.4"/><circle cx="381" cy="122" r="3.4"/><circle cx="388" cy="165" r="3.4"/>
+          <circle cx="381" cy="208" r="3.4"/><circle cx="347" cy="250" r="3.4"/>
+        </g>
+        <!-- matriz -->
+        <path d="M132 84 h168 a81 81 0 0 1 0 162 h-168 z" fill="none" stroke="#90303a" stroke-width="5" opacity=".5"/>
+        <!-- nucleocápside helicoidal -->
+        <path d="M155 110 q22 -14 44 0 t44 0 t44 0 M155 138 q22 -14 44 0 t44 0 t44 0 M155 166 q22 -14 44 0 t44 0 t44 0 M155 194 q22 -14 44 0 t44 0 t44 0 M155 222 q22 -14 44 0 t44 0 t44 0"
+              fill="none" stroke="#5C7A57" stroke-width="2.4"/>
+        <!-- etiquetas -->
+        <g font-family="'Inter', sans-serif" font-size="11.5" fill="#14181f">
+          <line x1="292" y1="46" x2="470" y2="38" stroke="#455A8C" stroke-width="1"/>
+          <text x="478" y="40" font-weight="600" fill="#701d14">G — glicoproteína</text>
+          <text x="478" y="56" font-size="10.5" fill="#6b7585">Se une a nAChR, NCAM y p75NTR. Único antígeno que</text>
+          <text x="478" y="70" font-size="10.5" fill="#6b7585">induce anticuerpos neutralizantes: base de la vacuna</text>
+          <line x1="304" y1="100" x2="470" y2="93" stroke="#455A8C" stroke-width="1"/>
+          <text x="478" y="95" font-weight="600" fill="#90303a">M — matriz</text>
+          <text x="478" y="111" font-size="10.5" fill="#6b7585">Condensa la nucleocápside y da la forma de bala;</text>
+          <text x="478" y="125" font-size="10.5" fill="#6b7585">dirige la gemación por la membrana</text>
+          <line x1="300" y1="152" x2="470" y2="148" stroke="#455A8C" stroke-width="1"/>
+          <text x="478" y="150" font-weight="600" fill="#5C7A57">N — nucleoproteína</text>
+          <text x="478" y="166" font-size="10.5" fill="#6b7585">Encapsida el RNA (nunca queda desnudo). Antígeno de</text>
+          <text x="478" y="180" font-size="10.5" fill="#6b7585">tipificación con monoclonales y blanco del DFA</text>
+          <line x1="300" y1="196" x2="470" y2="203" stroke="#455A8C" stroke-width="1"/>
+          <text x="478" y="205" font-weight="600" fill="#27334F">P — fosfoproteína</text>
+          <text x="478" y="221" font-size="10.5" fill="#6b7585">Cofactor de L. Bloquea la señalización de interferón</text>
+          <text x="478" y="235" font-size="10.5" fill="#6b7585">(STAT1) y ataca el complejo I mitocondrial</text>
+          <line x1="300" y1="232" x2="470" y2="256" stroke="#455A8C" stroke-width="1"/>
+          <text x="478" y="258" font-weight="600" fill="#27334F">L — polimerasa</text>
+          <text x="478" y="274" font-size="10.5" fill="#6b7585">RNA-polimerasa RNA-dependiente empaquetada en el</text>
+          <text x="478" y="288" font-size="10.5" fill="#6b7585">virión: el genoma (−) no se traduce sin ella</text>
+        </g>
+        <text x="120" y="308" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">180 × 75 NM · UN EXTREMO PLANO</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión de la rabia. Regla nemotécnica del genoma: los genes se transcriben en gradiente <b>3′–N–P–M–G–L–5′</b>, de modo que N es la proteína más abundante y L la más escasa.</figcaption>
+    </figure>
+
+    <h4>Biología esencial</h4>
+    <ul>
+      <li><b>Genoma</b>: RNA monocatenario de polaridad <b>negativa</b>, no segmentado, ~12 kb. Al ser (−) no puede traducirse directamente: por eso el virión <b>trae su propia polimerasa (L + P)</b>. Sin ella, el RNA desnudo no es infeccioso.</li>
+      <li><b>Ciclo</b> íntegramente <b>citoplásmico</b>: adsorción por G → endocitosis en vesícula de clatrina → fusión dependiente de pH ácido → transcripción primaria en gradiente → replicación → ensamblaje con M → gemación por membrana plasmática (neurona) o del retículo.</li>
+      <li><b>Neurotropismo casi exclusivo</b>: replica en el cuerpo neuronal, no en la glía. Esta es la razón por la que la rabia no produce viremia detectable ni fiebre alta hasta fases tardías, y por la que <b>la serología es inútil como tamizaje temprano</b>.</li>
+      <li><b>Estabilidad</b>: virus frágil. Se inactiva con jabón (lavado al 20 %), etanol 70 %, povidona yodada, formalina, β-propiolactona, luz UV, desecación y pH &lt;3 o &gt;11. De ahí que el <b>lavado de la herida</b> sea, por sí solo, la medida que más reduce el riesgo.</li>
+    </ul>
+    <div class="box clin"><span class="lbl">Traducción clínica</span>
+      <p>Que el virus sea termolábil y que la G sea el único antígeno neutralizante explica los dos pilares de la PEP: <b>destruirlo en la herida</b> (jabón + yodo) y <b>neutralizarlo antes de que entre al axón</b> (HRIG infiltrada localmente + vacuna que induce anti-G).</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Carrera contra el transporte axonal</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruta del virus de la rabia desde la mordedura hasta el sistema nervioso central y su diseminación centrífuga">
+        <rect width="900" height="300" fill="#FFFFFF"/>
+        <!-- fases -->
+        <rect x="20" y="34" width="230" height="22" rx="4" fill="rgba(69,90,140,.18)"/>
+        <text x="30" y="49" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#27334F">FASE 1 · ECLIPSE MUSCULAR — DÍAS A SEMANAS</text>
+        <rect x="262" y="34" width="300" height="22" rx="4" fill="rgba(92,122,87,.16)"/>
+        <text x="272" y="49" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#1a6b42">FASE 2 · ASCENSO RETRÓGRADO — 12–24 MM/DÍA</text>
+        <rect x="574" y="34" width="306" height="22" rx="4" fill="rgba(112,29,20,.10)"/>
+        <text x="584" y="49" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#701d14">FASE 3 · SNC Y SALIDA CENTRÍFUGA — 7–14 DÍAS</text>
+
+        <!-- eje -->
+        <line x1="40" y1="150" x2="860" y2="150" stroke="#455A8C" stroke-width="1.4"/>
+        <g fill="#455A8C"><polygon points="860,150 850,145 850,155"/></g>
+
+        <!-- nodos -->
+        <g>
+          <circle cx="90" cy="150" r="17" fill="#27334F"/>
+          <text x="90" y="154" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">1</text>
+          <text x="90" y="192" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Mordedura</text>
+          <text x="90" y="207" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Saliva en músculo</text>
+          <text x="90" y="220" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">y tejido subcutáneo</text>
+        </g>
+        <g>
+          <circle cx="215" cy="150" r="17" fill="#27334F"/>
+          <text x="215" y="154" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">2</text>
+          <text x="215" y="192" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Unión neuromuscular</text>
+          <text x="215" y="207" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">G se une a <tspan font-weight="600">nAChR</tspan>,</text>
+          <text x="215" y="220" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">NCAM y p75NTR</text>
+        </g>
+        <g>
+          <circle cx="400" cy="150" r="17" fill="#5C7A57"/>
+          <text x="400" y="154" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">3</text>
+          <text x="400" y="192" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Axón periférico</text>
+          <text x="400" y="207" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Dineína sobre microtúbulos;</text>
+          <text x="400" y="220" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">invisible al sistema inmune</text>
+        </g>
+        <g>
+          <circle cx="540" cy="150" r="17" fill="#5C7A57"/>
+          <text x="540" y="154" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">4</text>
+          <text x="540" y="192" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Ganglio raquídeo</text>
+          <text x="540" y="207" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Primera replicación masiva →</text>
+          <text x="540" y="220" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585"><tspan font-weight="600">parestesia en la cicatriz</tspan></text>
+        </g>
+        <g>
+          <circle cx="680" cy="150" r="17" fill="#701d14"/>
+          <text x="680" y="154" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">5</text>
+          <text x="680" y="192" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">SNC</text>
+          <text x="680" y="207" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Hipocampo, tronco, rafe,</text>
+          <text x="680" y="220" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">núcleo rojo · cuerpos de Negri</text>
+        </g>
+        <g>
+          <circle cx="820" cy="150" r="17" fill="#701d14"/>
+          <text x="820" y="154" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">6</text>
+          <text x="820" y="192" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Centrífuga</text>
+          <text x="820" y="207" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Glándula salival, córnea,</text>
+          <text x="820" y="220" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">folículo piloso, miocardio</text>
+        </g>
+
+        <!-- ventana de PEP -->
+        <rect x="40" y="88" width="240" height="26" rx="4" fill="rgba(138,92,10,.14)" stroke="#8a5c0a" stroke-width="1"/>
+        <text x="52" y="105" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">✔ Aquí la PEP todavía funciona</text>
+        <rect x="420" y="88" width="440" height="26" rx="4" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="432" y="105" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">✘ Una vez dentro del axón, ningún anticuerpo lo alcanza</text>
+
+        <text x="40" y="266" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La incubación larga no es latencia: es la lentitud del transporte axonal. Mordedura en cara o mano = trayecto corto = incubación corta.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Las tres fases de la rabia y la ventana terapéutica. El único intervalo en que la inmunidad humoral puede actuar es el eclipse muscular, antes de que el virión cruce la unión neuromuscular.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card">
+        <span class="lbl">Por qué el sistema inmune no lo ve</span>
+        <ul>
+          <li>Viaja <b>intraaxonalmente</b>, un compartimento inmunológicamente privilegiado.</li>
+          <li>Se propaga de neurona a neurona por la sinapsis, sin fase extracelular significativa.</li>
+          <li>La proteína <b>P bloquea la vía del interferón tipo I</b> (secuestra STAT1).</li>
+          <li>Induce apoptosis de los linfocitos T que llegan a responder.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="lbl">Por qué el cerebro se ve casi normal</span>
+        <ul>
+          <li>Encefalitis con <b>mínima necrosis</b> e inflamación discreta: la letalidad no viene de la destrucción tisular.</li>
+          <li>Disfunción neuronal por <b>excitotoxicidad</b> (quinolinato, agonista NMDA), estrés oxidativo mitocondrial y falla de neurotransmisión.</li>
+          <li><b>Cuerpos de Negri</b>: inclusiones eosinófilas citoplásmicas de 1–7 µm en pirámides del hipocampo y células de Purkinje; patognomónicos pero solo en ~75 % de los casos.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">Correlato anatómico de los signos</span>
+      <p>La hidrofobia es un <b>reflejo inspiratorio irritativo exagerado</b> del núcleo ambiguo del tronco; la disautonomía refleja infección hipotalámica y del rafe; la agresividad, del hipocampo y el núcleo rojo. La forma <b>paralítica</b> aparece cuando la respuesta inmune del huésped modula el curso, con mielitis y desmielinización segmentaria que imitan Guillain-Barré.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Furiosa 80 % · paralítica 20 %</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Secuencia temporal</h4>
+    <ol class="steps">
+      <li><b>Incubación (20–90 días típico)</b> Asintomática. Más corta si la mordedura fue en cabeza, cara, cuello o mano, si la inoculación fue profunda o múltiple, y en inmunosuprimidos (los casos por trasplante enfermaron en &lt;45 días).</li>
+      <li><b>Pródromo (2–10 días)</b> Fiebre, cefalea, malestar, náusea. El signo cardinal —y el que hace el diagnóstico a pie de cama— es la <b>parestesia, prurito o dolor neuropático en la cicatriz de la mordedura</b>. Puede haber mioedema (abultamiento muscular al percutir).</li>
+      <li><b>Fase neurológica aguda (2–7 días)</b> Se bifurca en furiosa o paralítica.</li>
+      <li><b>Coma y muerte (7–14 días desde el inicio)</b> Por edema cerebral, disautonomía o falla cardiaca. Con soporte intensivo puede prolongarse semanas, sin cambiar el desenlace.</li>
+    </ol>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th></th><th>Rabia furiosa (encefalítica) · ~80 %</th><th>Rabia paralítica («muda») · ~20 %</th></tr></thead>
+      <tbody>
+        <tr><td><b>Signo guía</b></td><td><b>Hidrofobia</b> — espasmo faríngeo y respiratorio al beber, al ver o al oír el agua. <b>Aerofobia</b> con corrientes de aire.</td><td>Cuadriparesia <b>flácida ascendente</b>, más marcada en el miembro mordido; hipofonía.</td></tr>
+        <tr><td><b>Estado mental</b></td><td>Agitación episódica con <b>intervalos lúcidos</b>, alucinaciones, conducta bizarra.</td><td>Sensorio preservado al inicio; confusión tardía. Puede haber signos meníngeos.</td></tr>
+        <tr><td><b>Autonómico</b></td><td>Prominente: hipersalivación viscosa, midriasis/anisocoria, sudoración, piloerección, arritmias, SIADH o diabetes insípida, priapismo.</td><td>Menos marcado.</td></tr>
+        <tr><td><b>Contexto típico</b></td><td>Mordedura canina; variantes terrestres.</td><td>Exposición a <b>murciélago</b>; algunas variantes.</td></tr>
+        <tr><td><b>Confusión frecuente</b></td><td>Tétanos, encefalitis por HSV, delirium tremens, intoxicación anticolinérgica.</td><td><b>Guillain-Barré</b>, mielitis transversa, poliomielitis.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Trampas de examen</span>
+      <ul>
+        <li><b>Rabia histérica</b>: el paciente ansioso con antecedente de mordedura rechaza beber, pero al intentarlo <b>deglute sin espasmo verdadero</b>. La hidrofobia real es un reflejo, no una elección.</li>
+        <li><b>Tétanos</b>: trismus y rigidez sostenida, <b>sin</b> hidrofobia, con LCR normal y sensorio conservado.</li>
+        <li>Más del 10 % de los casos modernos son <b>atípicos</b>: déficits focales, mioclonías o parálisis de pares craneales sin hidrofobia. La ausencia del signo clásico no descarta.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Ninguna prueba aislada descarta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Saliva</b></td><td>RT-PCR seriada</td><td>La excreción es intermitente: se requieren <b>≥3 muestras en días distintos</b>. Positiva = diagnóstico.</td></tr>
+        <tr><td><b>Piel de nuca</b></td><td>RT-PCR + DFA</td><td>Biopsia de 5–6 mm con <b>≥10 folículos pilosos</b>. RT-PCR ~98 % sensible, 100 % específica; el DFA detecta antígeno en los nervios cutáneos peribulbares.</td></tr>
+        <tr><td><b>LCR</b></td><td>RT-PCR · serología</td><td>Menor sensibilidad que saliva. <b>Cualquier anticuerpo anti-rabia en LCR es diagnóstico</b>, incluso si el paciente recibió PEP (la vacuna no genera anticuerpos intratecales).</td></tr>
+        <tr><td><b>Suero</b></td><td>RFFIT · IFA</td><td>Anticuerpos hacia el día 8 en ~50 %, casi 100 % al día 15 <b>en no vacunados</b>. Inútil como tamizaje temprano.</td></tr>
+        <tr><td><b>Cerebro del animal</b></td><td><b>DFA</b> (post-mortem)</td><td><b>Estándar de oro.</b> Sobre tejido fresco; se confirma con RT-PCR y se tipifica la variante con monoclonales anti-N.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Estudios de apoyo</span>
+        <ul>
+          <li><b>LCR citoquímico</b>: pleocitosis linfocítica leve, proteínas discretamente altas — <b>inespecífico y puede ser normal</b>. Su valor real es excluir encefalitis tratables (HSV, VZV).</li>
+          <li><b>RM</b>: hiperintensidad T2 en hipocampo, hipotálamo, tronco y sustancia blanca; realce tardío con gadolinio. Sugestiva, nunca patognomónica; ayuda a separar de ADEM.</li>
+          <li><b>Histopatología</b>: encefalitis con cuerpos de Negri, congestión vascular y escasa necrosis.</li>
+        </ul>
+      </div>
+      <div class="box clin"><span class="lbl">Regla de decisión clínica</span>
+        <p>Encefalopatía aguda progresiva <b>+</b> exposición animal en zona enzoótica <b>+</b> parestesia o dolor en el sitio de una mordedura antigua <b>+</b> hidrofobia o aerofobia <b>= rabia</b>, aunque el laboratorio aún no confirme. Se aísla al paciente, se notifica a la autoridad sanitaria y se envían muestras múltiples. En una serie clásica, solo 3 de 21 casos se sospecharon en el primer contacto médico.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Todo se juega antes del primer síntoma</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="box trap"><span class="lbl">Enfermedad establecida</span>
+      <p><b>No existe tratamiento curativo.</b> El soporte en UCI (sedación profunda, control de disautonomía, ventilación) prolonga la vida sin cambiar el desenlace. El <b>protocolo de Milwaukee</b> (coma inducido + ribavirina + amantadina) tiene solo ~3 supervivencias bien documentadas entre cientos de intentos y <b>no se recomienda como estándar</b>; varios de los &lt;30 sobrevivientes mundiales nunca lo recibieron. Favipiravir, interferón y anticuerpos monoclonales siguen siendo experimentales.</p>
+    </div>
+
+    <h4>Profilaxis post-exposición (PEP) — eficacia cercana al 100 %</h4>
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Algoritmo de decisión de profilaxis post-exposición contra la rabia">
+        <rect width="900" height="300" fill="#FFFFFF"/>
+        <rect x="20" y="16" width="220" height="46" rx="6" fill="#27334F"/>
+        <text x="130" y="38" text-anchor="middle" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#f7f8fa">Exposición a mamífero</text>
+        <text x="130" y="53" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="rgba(247,248,250,.74)">MORDEDURA · ARAÑAZO · SALIVA EN MUCOSA</text>
+
+        <line x1="130" y1="62" x2="130" y2="86" stroke="#455A8C" stroke-width="1.2"/>
+        <rect x="20" y="86" width="220" height="42" rx="6" fill="rgba(138,92,10,.14)" stroke="#8a5c0a" stroke-width="1.2"/>
+        <text x="130" y="104" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">Paso 0 — siempre</text>
+        <text x="130" y="119" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Lavar 15 min con agua y jabón + povidona</text>
+
+        <line x1="130" y1="128" x2="130" y2="150" stroke="#455A8C" stroke-width="1.2"/>
+        <text x="130" y="166" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.1em" fill="#6b7585">¿QUÉ ANIMAL?</text>
+        <line x1="130" y1="174" x2="130" y2="188" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="70" y1="188" x2="440" y2="188" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="70" y1="188" x2="70" y2="204" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="255" y1="188" x2="255" y2="204" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="440" y1="188" x2="440" y2="204" stroke="#455A8C" stroke-width="1.2"/>
+
+        <rect x="10" y="204" width="120" height="76" rx="6" fill="rgba(92,122,87,.13)" stroke="#5C7A57" stroke-width="1.1"/>
+        <text x="70" y="222" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Perro, gato o hurón</text>
+        <text x="70" y="236" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">sano y observable</text>
+        <text x="70" y="254" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#1a6b42">Observar 10 días</text>
+        <text x="70" y="268" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Diferir PEP; iniciar si enferma</text>
+
+        <rect x="180" y="204" width="150" height="76" rx="6" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1.4"/>
+        <text x="255" y="222" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">Murciélago, mapache,</text>
+        <text x="255" y="236" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">zorrillo, zorro, mangosta</text>
+        <text x="255" y="254" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#701d14">PEP INMEDIATA</text>
+        <text x="255" y="268" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Suspender solo si el DFA sale negativo</text>
+
+        <rect x="380" y="204" width="120" height="76" rx="6" fill="rgba(69,90,140,.14)" stroke="#455A8C" stroke-width="1.1"/>
+        <text x="440" y="226" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">Roedor pequeño,</text>
+        <text x="440" y="240" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">conejo, liebre</text>
+        <text x="440" y="258" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">PEP casi nunca indicada</text>
+
+        <!-- columna derecha: esquema -->
+        <line x1="520" y1="30" x2="520" y2="284" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+        <text x="546" y="34" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">SI SE INDICA PEP</text>
+
+        <rect x="546" y="48" width="330" height="72" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="546" y="48" width="4" height="72" rx="2" fill="#701d14"/>
+        <text x="562" y="68" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">Nunca vacunado</text>
+        <text x="562" y="85" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Vacuna IM en deltoides: <tspan font-weight="600">días 0, 3, 7 y 14</tspan></text>
+        <text x="562" y="100" font-family="'Inter', sans-serif" font-size="10" fill="#14181f"><tspan font-weight="600">+ HRIG 20 UI/kg</tspan> el día 0, infiltrada en la herida</text>
+        <text x="562" y="114" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Inmunosuprimido: 5 dosis (0-3-7-14-28) + titular</text>
+
+        <rect x="546" y="132" width="330" height="58" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="546" y="132" width="4" height="58" rx="2" fill="#5C7A57"/>
+        <text x="562" y="152" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">Ya vacunado (PrEP o PEP previa)</text>
+        <text x="562" y="169" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Vacuna IM: <tspan font-weight="600">días 0 y 3</tspan></text>
+        <text x="562" y="184" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#701d14">SIN inmunoglobulina</text>
+
+        <rect x="546" y="202" width="330" height="78" rx="6" fill="rgba(138,92,10,.09)" stroke="#8a5c0a" stroke-width="1.1"/>
+        <text x="562" y="222" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">Errores que hacen fallar la PEP</text>
+        <text x="562" y="239" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">1. No infiltrar la HRIG <tspan font-weight="600">dentro y alrededor</tspan> de la herida</text>
+        <text x="562" y="254" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">2. Aplicar la vacuna en <tspan font-weight="600">glúteo</tspan> (títulos menores)</text>
+        <text x="562" y="269" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">3. Retrasar el inicio o suturar antes de infiltrar</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Algoritmo de PEP. Las fallas globales son rarísimas (122 casos entre 1980 y 2022) y casi siempre se explican por omitir la infiltración local de la inmunoglobulina.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Detalles operativos</span>
+        <ul>
+          <li><b>Lavado</b>: agua y jabón 15 minutos; reduce el riesgo ~90 % por sí solo. Irrigar con povidona yodada o alcohol al 70 %.</li>
+          <li><b>No suturar</b>, o demorar el cierre; si es imprescindible cerrar, <b>infiltrar HRIG primero</b>.</li>
+          <li><b>HRIG</b> 20 UI/kg (ERIG equina 40 UI/kg donde no haya humana); el remanente IM en un sitio <b>distal y con jeringa distinta</b> a la de la vacuna. Se puede dar hasta el día 7 tras la primera dosis; después no aporta.</li>
+          <li><b>Nunca en glúteo</b>; en lactantes, vasto lateral del muslo.</li>
+          <li><b>Embarazo</b>: la PEP es segura y no se omite jamás.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Pre-exposición (PrEP) — ACIP 2022</span>
+        <ul>
+          <li><b>2 dosis IM o ID en días 0 y 7</b> (sustituye al esquema clásico de 3 dosis).</li>
+          <li>Indicada en veterinarios, biólogos de fauna, espeleólogos, personal de laboratorio, viajeros prolongados a zonas enzoóticas y niños en zonas con murciélago hematófago.</li>
+          <li>Titulación o refuerzo si el riesgo persiste; meta <b>≥0.5 UI/mL</b> por RFFIT.</li>
+          <li>La PrEP no elimina la necesidad de PEP: la simplifica a 2 dosis sin inmunoglobulina.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box clin"><span class="lbl">Control poblacional</span>
+      <p>La <b>vacunación canina masiva</b> es el eje de la eliminación urbana — el camino que llevó a México a la certificación de la OPS en 2019. La <b>vacunación oral de fauna silvestre</b> con cebos erradicó la rabia del zorro en Europa occidental y del coyote en la frontera norte de México. Meta OMS/OIE/FAO: <b>cero muertes humanas por rabia canina en 2030</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li>Receptor: <b>nAChR</b> (más NCAM y p75NTR). Transporte <b>retrógrado por dineína</b>.</li>
+          <li><b>Cuerpos de Negri</b>: citoplásmicos, en Purkinje del cerebelo y pirámides del hipocampo.</li>
+          <li>Virión en <b>forma de bala</b>, −ssRNA, polimerasa dentro del virión.</li>
+          <li>PEP = <b>inmunidad pasiva-activa</b> simultánea (HRIG + vacuna): el ejemplo canónico del concepto.</li>
+          <li>En EE. UU. y México el caso típico hoy es por <b>murciélago</b>, no por perro.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«0-3-7-14»</b> — los cuatro días de vacuna en el no vacunado; el ya vacunado se queda con <b>«0-3»</b> y sin globulina.</p>
+        <p><b>«El agua no se bebe, se teme»</b> — hidrofobia = espasmo reflejo, no rechazo voluntario: separa rabia verdadera de rabia histérica.</p>
+        <p><b>«Perro se observa, silvestre se trata»</b> — perro/gato/hurón sano = 10 días de observación; murciélago y silvestres = PEP inmediata.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Escenario mexicano</span>
+      <p>Rabia canina autóctona prácticamente inexistente desde 2019. Los dos escenarios reales: <b>contacto con murciélago hematófago (<i>Desmodus rotundus</i>) en zona rural del sur-sureste</b>, y <b>viajero que regresa de Asia con mordedura canina no tratada</b>. Un murciélago hallado en la habitación de alguien dormido, un lactante o una persona con discapacidad cognitiva justifica PEP aunque no se vea mordedura.</p>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/Rabies_virus.md</code> · Mandell PPID 10e, cap. 170 (rabia) y cap. 169 (vesiculovirus) · WHO Expert Consultation on Rabies, 3rd report (TRS 1012) · Rao et al., <i>MMWR</i> 2022;71(18):619-627 (PrEP ACIP 2022) · Manning et al., <i>MMWR Recomm Rep</i> 2008;57(RR-3) · First Aid for the USMLE Step 1 2025, p. 169.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="pneumoviridae.html"><span class="k">← Anterior</span><span class="v">Pneumoviridae</span></a>
+        <a class="next" href="filoviridae.html"><span class="k">Siguiente →</span><span class="v">Filoviridae</span></a></div>
+      <footer class="pf">
+        <span>Rhabdoviridae · 17 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

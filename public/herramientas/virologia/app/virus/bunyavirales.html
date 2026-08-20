@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bunyavirales — Virus RNA</title>
+<meta name="description" content="Bunyavirales. Hantavirus · CCHF · Oropouche · Toscana · Valle del Rift">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Bunyavirales</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 13 de 18 · Virología médica</p>
+    <h1>Bunyavirales</h1>
+    <p class="sub">Hantavirus · CCHF · Oropouche · Toscana · Valle del Rift</p>
+    <div class="chips"><span class="chip g">−ssRNA · 3 segmentos L, M, S</span>
+  <span class="chip">Envuelto · esférico 80–120 nm</span>
+  <span class="chip">Citoplasma · gemación al Golgi</span>
+  <span class="chip r">CCHF ~30 % de letalidad · SPH 30–40 %</span>
+  <span class="chip gold">Ninguna vacuna humana de uso amplio</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Bunyavirales · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Categoría</dt><dd>Clase <i>Bunyaviricetes</i> (2024): 2 órdenes, 15 familias, 69 géneros, <b>592 especies</b></dd></div>
+  <div class="cell"><dt>Géneros humanos</dt><dd><i>Orthobunyavirus</i> · <i>Orthohantavirus</i> · <i>Orthonairovirus</i> · <i>Phlebovirus</i> · <i>Bandavirus</i></dd></div>
+  <div class="cell"><dt>Regla del vector</dt><dd>Todos son <b>arbovirus… menos los hantavirus</b>, que se adquieren por aerosol de excretas de roedor</dd></div>
+  <div class="cell"><dt>Genoma</dt><dd><b>L</b> → polimerasa · <b>M</b> → Gn y Gc · <b>S</b> → nucleoproteína. Segmentado ⇒ <b>reordenamiento</b></dd></div>
+  <div class="cell"><dt>Célula blanco</dt><dd><b>Endotelio</b>, vía <b>integrinas β3</b> → fuga capilar aguda; kininas y complemento amplifican</dd></div>
+  <div class="cell"><dt>Síndromes</dt><dd>Meningoencefalitis · FHSR (riñón) · SPH (pulmón) · fiebre hemorrágica · fiebre + retinitis</dd></div>
+  <div class="cell"><dt>Diagnóstico</dt><dd><b>Serología IgM/IgG</b> en la mayoría; <b>RT-PCR</b> en sangre para CCHF, Valle del Rift, SFTS y Heartland</dd></div>
+  <div class="cell"><dt>Tratamiento</dt><dd>Soporte. Ribavirina con evidencia en <b>FHSR</b>, no en SPH. <b>ECMO</b> en el síndrome pulmonar</dd></div>
+  <div class="cell"><dt>Bioseguridad</dt><dd>CCHFV en <b>BSL-4</b> en países no endémicos; brotes nosocomiales letales en personal de salud</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">De Crimea a Oropouche</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1944</b> — brote de fiebre hemorrágica en soldados soviéticos en <b>Crimea</b>. En <b>1956</b> se aísla un virus idéntico de un niño enfermo en el <b>Congo</b>; al demostrarse que son el mismo agente se rebautiza <b>virus de la fiebre hemorrágica de Crimea-Congo</b>.</li>
+      <li><b>1976</b> — se identifica el virus <b>Hantaan</b> en el ratón de campo rayado <i>Apodemus agrarius</i>: el agente de la fiebre hemorrágica coreana que había golpeado a las tropas de la ONU en 1950–1953. El nombre viene del río Hantan.</li>
+      <li><b>1977</b> — el virus de la <b>fiebre del Valle del Rift</b> se introduce en Egipto y produce una epidemia masiva en humanos y ganado; reaparece en los noventa y salta a la península arábiga en 2000–2001 (245 muertes en Arabia Saudita y Yemen).</li>
+      <li><b>1993</b> — el evento <b>El Niño</b> de 1992–1993 multiplica la población de <i>Peromyscus maniculatus</i> en Four Corners y desencadena el primer brote descrito del <b>virus Sin Nombre</b>: nace el síndrome pulmonar por hantavirus.</li>
+      <li><b>2017 → 2024</b> — el ICTV desmonta la vieja familia «Bunyaviridae»: primero la asciende a <b>orden</b> con 10 familias y en 2024 a <b>clase</b> <i>Bunyaviricetes</i> con dos órdenes (Elliovirales y Hareavirales) y 15 familias.</li>
+      <li><b>2023–2024</b> — expansión explosiva del <b>virus Oropouche</b>: al 16 de julio de 2024 se contaban <b>7 688 casos confirmados</b> en Bolivia, Brasil, Colombia, Cuba y Perú, con las <b>primeras muertes</b> atribuidas al virus y la <b>primera transmisión vertical</b> confirmada.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué el nombre cambió</span>
+      <p>Lo que se estudiaba como «familia Bunyaviridae» es hoy una clase entera. Para el examen basta con retener que los cuatro géneros de importancia médica —<i>Orthobunyavirus</i>, <i>Orthohantavirus</i>, <i>Orthonairovirus</i> y <i>Phlebovirus</i>— <b>no cambiaron</b>; lo único que se movió fue la categoría por encima de ellos y la creación del género <i>Bandavirus</i> para SFTSV y Heartland.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Cuatro géneros, cuatro ecologías</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Clase</dt><dd><i>Bunyaviricetes</i> — órdenes Elliovirales y Hareavirales; 15 familias, 69 géneros, 592 especies</dd>
+      <dt>Familias médicas</dt><dd>Peribunyaviridae · Hantaviridae · Nairoviridae · Phenuiviridae (Arenaviridae pertenece a la misma clase pero se estudia aparte)</dd>
+      <dt>Etimología</dt><dd><i>Bunyamwera</i>, localidad de Uganda · <i>Nairovirus</i>, por la enfermedad ovina de Nairobi · <i>Phlebovirus</i>, por <i>Phlebotomus</i> · <i>Hantavirus</i>, por el río Hantan</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Orthobunyavirus</span><span class="vg">Peribunyaviridae</span></div>
+        <div class="vbd">
+          <p><b>Serogrupo California</b>: virus <b>La Crosse</b> (el de mayor peso clínico, ~80 casos/año en EE. UU., rango 35–130), <b>Jamestown Canyon</b>, encefalitis de California, liebre americana, Trivittatus y Keystone. Todos con transmisión transovárica en el mosquito.</p>
+          <p><b>Oropouche</b> — jején <i>Culicoides paraensis</i>, trópico americano. <b>Cache Valley</b> — mosquitos, seis casos humanos publicados. <b>Ngari</b> — reordenante natural, fiebre hemorrágica en África.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Orthohantavirus</span><span class="vg">Hantaviridae</span></div>
+        <div class="vbd">
+          <p><b>Viejo Mundo → FHSR</b>: <b>Hantaan</b> (<i>Apodemus agrarius</i>), <b>Dobrava-Belgrado</b> (cuatro genotipos: Dobrava y Sochi graves, Kurkino leve), <b>Seúl</b> (<i>Rattus norvegicus</i> y <i>R. rattus</i>, distribución mundial), <b>Puumala</b> (topillo rojo <i>Clethrionomys glareolus</i>).</p>
+          <p><b>Nuevo Mundo → SPH</b>: <b>Sin Nombre</b> (ratón ciervo <i>Peromyscus maniculatus</i>), Nueva York (<i>P. leucopus</i>), Bayou y Black Creek Canal (con componente renal), <b>Andes</b> (Argentina y Chile).</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Orthonairovirus</span><span class="vg">Nairoviridae</span></div>
+        <div class="vbd">
+          <p>Un solo protagonista: el <b>virus de la fiebre hemorrágica de Crimea-Congo</b>. Vector: garrapatas del género <b><i>Hyalomma</i></b>; los estadios inmaduros se alimentan de liebres, erizos y aves de suelo, los adultos de ganado.</p>
+          <p>Distribución muy amplia: Rusia suroccidental, Balcanes, Medio Oriente, Asia central, China occidental y buena parte de África subsahariana. En 2016 se documentaron los <b>primeros casos autóctonos de Europa occidental (España)</b>.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Phlebovirus y Bandavirus</span><span class="vg">Phenuiviridae</span></div>
+        <div class="vbd">
+          <p><i>Phlebovirus</i>: <b>fiebre del Valle del Rift</b> (mosquitos <i>Aedes mcintoshi</i> con transmisión transovárica), <b>virus Toscana</b> (<i>Phlebotomus perniciosus</i>) y las fiebres clásicas por flebótomo de Sicilia y Nápoles.</p>
+          <p><i>Bandavirus</i>: género nuevo que recibió a varios antiguos flebovirus — <b>Dabie bandavirus (SFTSV)</b>, garrapatas <i>Haemaphysalis longicornis</i> en Asia oriental, y <b>virus Heartland</b>, garrapata estrella solitaria <i>Amblyomma americanum</i> en EE. UU.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«BUNYA se monta en todo lo que pica; el HANTA se monta en el ratón»</b>. Orthobunyavirus = mosquito y jején · Orthonairovirus = garrapata · Phlebovirus = flebótomo y mosquito · Bandavirus = garrapata · <b>Orthohantavirus = roedor, sin artrópodo</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Tres segmentos, tres funciones</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión bunyaviral y función de los tres segmentos genómicos">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+
+        <circle cx="165" cy="170" r="82" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.6"/>
+        <circle cx="165" cy="170" r="72" fill="none" stroke="#36476E" stroke-width="0.9" stroke-dasharray="3 3" opacity=".6"/>
+        <g stroke="#701d14" stroke-width="2.1" stroke-linecap="round">
+          <line x1="247" y1="170" x2="259" y2="170"/>
+          <line x1="236" y1="211" x2="246" y2="217"/>
+          <line x1="206" y1="241" x2="212" y2="251"/>
+          <line x1="165" y1="252" x2="165" y2="264"/>
+          <line x1="124" y1="241" x2="118" y2="251"/>
+          <line x1="94" y1="211" x2="84" y2="217"/>
+          <line x1="83" y1="170" x2="71" y2="170"/>
+          <line x1="94" y1="129" x2="84" y2="123"/>
+          <line x1="124" y1="99" x2="118" y2="89"/>
+          <line x1="165" y1="88" x2="165" y2="76"/>
+          <line x1="206" y1="99" x2="212" y2="89"/>
+          <line x1="236" y1="129" x2="246" y2="123"/>
+        </g>
+        <g fill="#701d14">
+          <circle cx="263" cy="170" r="3.2"/><circle cx="250" cy="219" r="3.2"/><circle cx="214" cy="255" r="3.2"/>
+          <circle cx="165" cy="268" r="3.2"/><circle cx="116" cy="255" r="3.2"/><circle cx="80" cy="219" r="3.2"/>
+          <circle cx="67" cy="170" r="3.2"/><circle cx="80" cy="121" r="3.2"/><circle cx="116" cy="85" r="3.2"/>
+          <circle cx="165" cy="72" r="3.2"/><circle cx="214" cy="85" r="3.2"/><circle cx="250" cy="121" r="3.2"/>
+        </g>
+        <path d="M108 132 q12 -10 24 0 t24 0 t24 0 t24 0" fill="none" stroke="#27334F" stroke-width="2.3"/>
+        <path d="M110 172 q12 -10 24 0 t24 0 t24 0 t24 0" fill="none" stroke="#90303a" stroke-width="2.3"/>
+        <path d="M120 208 q12 -10 24 0 t24 0 t24 0" fill="none" stroke="#5C7A57" stroke-width="2.3"/>
+        <g font-family="'Inter', sans-serif" font-size="11" font-weight="600">
+          <text x="212" y="136" fill="#27334F">L</text>
+          <text x="214" y="176" fill="#90303a">M</text>
+          <text x="200" y="212" fill="#5C7A57">S</text>
+        </g>
+        <text x="165" y="292" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">80-120 NM · ESPICULAS GN/GC DE 5-10 NM</text>
+        <text x="165" y="308" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">GEMACION AL GOLGI · CICLO CITOPLASMICO</text>
+
+        <g font-family="'Inter', sans-serif">
+          <text x="316" y="96" font-size="14" font-weight="600" fill="#27334F">L</text>
+          <rect x="344" y="78" width="290" height="24" rx="4" fill="#27334F"/>
+          <text x="489" y="94" text-anchor="middle" font-size="10.5" fill="#f7f8fa">RNA-polimerasa RNA-dependiente</text>
+          <line x1="636" y1="90" x2="658" y2="90" stroke="#455A8C" stroke-width="1.2"/>
+          <text x="666" y="86" font-size="10" fill="#6b7585">Viaja dentro del virión: el genoma (−) no</text>
+          <text x="666" y="100" font-size="10" fill="#6b7585">se traduce sin ella. Diana de los antivirales</text>
+
+          <text x="316" y="156" font-size="14" font-weight="600" fill="#90303a">M</text>
+          <rect x="344" y="138" width="290" height="24" rx="4" fill="#90303a"/>
+          <text x="489" y="154" text-anchor="middle" font-size="10.5" fill="#f7f8fa">Poliproteína → Gn + Gc</text>
+          <line x1="636" y1="150" x2="658" y2="150" stroke="#455A8C" stroke-width="1.2"/>
+          <text x="666" y="146" font-size="10" fill="#6b7585">Unión a integrina β3 y fusión endosomal</text>
+          <text x="666" y="160" font-size="10" fill="#6b7585">Blanco de los anticuerpos neutralizantes</text>
+
+          <text x="316" y="216" font-size="14" font-weight="600" fill="#5C7A57">S</text>
+          <rect x="344" y="198" width="290" height="24" rx="4" fill="#5C7A57"/>
+          <text x="489" y="214" text-anchor="middle" font-size="10.5" fill="#f7f8fa">Nucleoproteína N</text>
+          <line x1="636" y1="210" x2="658" y2="210" stroke="#455A8C" stroke-width="1.2"/>
+          <text x="666" y="206" font-size="10" fill="#6b7585">Encapsida los tres segmentos en RNP</text>
+          <text x="666" y="220" font-size="10" fill="#6b7585">Antígeno del ELISA IgM/IgG y de la IHQ</text>
+        </g>
+
+        <rect x="344" y="248" width="530" height="58" rx="6" fill="rgba(138,92,10,.10)" stroke="#8a5c0a" stroke-width="1.1"/>
+        <g font-family="'Inter', sans-serif">
+          <text x="358" y="266" font-size="11" font-weight="600" fill="#8a5c0a">Reordenamiento: el «shift» de los bunyavirus</text>
+          <text x="358" y="282" font-size="10" fill="#14181f">Dos virus en la misma célula intercambian segmentos enteros.</text>
+          <text x="358" y="296" font-size="10" fill="#14181f">El virus Ngari lleva S y L de Bunyamwera y M de Batai.</text>
+        </g>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión y el reparto de tareas entre los tres segmentos. Nemotecnia: <b>L</b> = polimerasa (Large), <b>M</b> = membrana (Gn/Gc), <b>S</b> = nucleocápside (Small).</figcaption>
+    </figure>
+
+    <h4>Biología esencial</h4>
+    <ul>
+      <li><b>Virión</b> esférico y envuelto, <b>80–120 nm</b>, con espículas de glicoproteína de 5–10 nm. Dentro, los tres segmentos encapsidados por la nucleoproteína forman <b>ribonucleoproteínas</b> que se empaquetan junto con la polimerasa L.</li>
+      <li><b>Polaridad negativa o ambisentido</b> según el género; el genoma codifica seis proteínas o menos. La mayoría tiene <b>tres segmentos</b>, aunque en la clase hay virus con dos a seis.</li>
+      <li><b>M</b> codifica un precursor que la <b>proteasa del huésped</b> corta en Gn y Gc: son las que reconocen el receptor, median la fusión de endomembranas y concentran los <b>anticuerpos neutralizantes</b>. <b>N</b>, en cambio, es el antígeno que explica las <b>reacciones cruzadas</b> dentro y entre géneros — y por eso la serología del serogrupo California necesita neutralización para discriminar.</li>
+      <li><b>Ciclo íntegramente citoplásmico</b>; el virión madura por <b>gemación hacia el complejo de Golgi y el retículo</b>, dentro de vesículas. Dos excepciones de examen: el virus del <b>Valle del Rift</b> gema por la membrana externa del hepatocito y el virus <b>Sin Nombre</b> madura en la membrana citoplásmica.</li>
+      <li><b>Genoma segmentado ⇒ reordenamiento.</b> El virus <b>Ngari</b> es un reordenante natural entre dos ortobunyavirus (S y L de Bunyamwera, M de Batai) que causó fiebre hemorrágica en África oriental durante el brote de Valle del Rift de 1997–1998: la advertencia de que un patógeno nuevo puede aparecer sin mutación, solo barajando segmentos.</li>
+      <li><b>Persistencia ecológica</b>: la <b>transmisión transovárica</b> permite al virus sobrevivir en el huevo del mosquito. El de La Crosse pasa el invierno así; los huevos infectados de <i>Aedes mcintoshi</i> con virus del Valle del Rift permanecen <b>viables años en el suelo</b> esperando lluvias intensas. Eso convierte a las lluvias excepcionales en el mejor predictor de epidemia.</li>
+      <li><b>Contención</b>: el cultivo convencional no es una opción clínica. CCHFV se maneja en <b>BSL-4</b> en los países no endémicos; en los endémicos se trabaja con BSL-2 o 3 por necesidad, con seguridad demostrada.</li>
+    </ul>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Una sola lesión: el endotelio</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruta patogénica común de los bunyavirus desde la puerta de entrada hasta el daño de órgano">
+        <rect width="900" height="330" fill="#FFFFFF"/>
+
+        <rect x="20" y="62" width="180" height="56" rx="6" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1.2"/>
+        <text x="110" y="82" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">Aerosol de excretas</text>
+        <text x="110" y="96" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">de roedor</text>
+        <text x="110" y="111" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Hantavirus · la única excepción</text>
+
+        <rect x="20" y="152" width="180" height="56" rx="6" fill="rgba(69,90,140,.16)" stroke="#36476E" stroke-width="1.2"/>
+        <text x="110" y="172" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">Picadura de garrapata,</text>
+        <text x="110" y="186" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">mosquito o jején</text>
+        <text x="110" y="201" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">o sangre y carcasas frescas</text>
+
+        <line x1="200" y1="90" x2="248" y2="118" stroke="#455A8C" stroke-width="1.3"/>
+        <line x1="200" y1="180" x2="248" y2="168" stroke="#455A8C" stroke-width="1.3"/>
+
+        <rect x="250" y="86" width="200" height="114" rx="6" fill="#27334F"/>
+        <text x="350" y="112" text-anchor="middle" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#f7f8fa">Célula endotelial</text>
+        <text x="350" y="132" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(247,248,250,.85)">Entrada por integrinas β3</text>
+        <text x="350" y="148" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(247,248,250,.85)">Se pierde la adhesión célula-célula</text>
+        <text x="350" y="164" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="rgba(247,248,250,.85)">Bradicinina · complemento C3 y C5</text>
+        <text x="350" y="186" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#E8C36A">FUGA CAPILAR AGUDA</text>
+
+        <line x1="450" y1="143" x2="492" y2="66" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="450" y1="143" x2="492" y2="132" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="450" y1="143" x2="492" y2="198" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="450" y1="143" x2="492" y2="264" stroke="#455A8C" stroke-width="1.2"/>
+
+        <rect x="500" y="38" width="380" height="56" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="500" y="38" width="4" height="56" rx="2" fill="#36476E"/>
+        <text x="516" y="57" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Pulmón — síndrome pulmonar por hantavirus</text>
+        <text x="516" y="73" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Edema alveolar e infiltrado de linfocitos T, sin necrosis</text>
+        <text x="516" y="87" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Gasto cardiaco bajo con resistencias vasculares altas</text>
+
+        <rect x="500" y="104" width="380" height="56" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="500" y="104" width="4" height="56" rx="2" fill="#5C7A57"/>
+        <text x="516" y="123" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Riñón y retroperitoneo — FHSR</text>
+        <text x="516" y="139" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Nefritis intersticial aguda de los túbulos medulares</text>
+        <text x="516" y="153" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Choque al final de la fase febril y luego oliguria</text>
+
+        <rect x="500" y="170" width="380" height="56" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="500" y="170" width="4" height="56" rx="2" fill="#701d14"/>
+        <text x="516" y="189" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Hígado — Crimea-Congo y Valle del Rift</text>
+        <text x="516" y="205" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Necrosis hepática, ictericia, diátesis hemorrágica</text>
+        <text x="516" y="219" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Los casos letales no alcanzan a producir anticuerpos</text>
+
+        <rect x="500" y="236" width="380" height="56" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="500" y="236" width="4" height="56" rx="2" fill="#90303a"/>
+        <text x="516" y="255" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#90303a">SNC — La Crosse, Jamestown Canyon, Toscana</text>
+        <text x="516" y="271" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Meningoencefalitis, convulsiones, edema cerebral</text>
+        <text x="516" y="285" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">PLEDs temporales que imitan encefalitis herpética</text>
+
+        <text x="20" y="316" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La lesión es funcional, no destructiva: poca histología y mucha fisiología rota.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Un mismo mecanismo —infección del endotelio por integrinas β3 y fuga capilar— produce cuatro cuadros distintos según el lecho vascular que se rompe primero.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">El eje endotelial</span>
+        <ul>
+          <li>El virus entra a la célula endotelial por <b>integrinas β3</b>, desorganiza la adhesión intercelular y altera la permeabilidad: <b>síndrome de fuga capilar agudo</b>.</li>
+          <li>Amplificadores: <b>bradicinina</b>, activación del complemento por vía clásica <i>y</i> alterna, con <b>C3 y C5</b> ligados a los trastornos de la coagulación y la fibrinólisis.</li>
+          <li>En la FHSR la lesión renal asienta sobre todo en los <b>túbulos medulares</b> y responde tanto a factores hemodinámicos sistémicos e intrarrenales como a kininas y citocinas.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Por qué la histología decepciona</span>
+        <ul>
+          <li>En el SPH el pulmón muestra <b>infiltrado intersticial de linfocitos T y edema alveolar sin necrosis marcada ni polimorfonucleares</b>: el daño es de permeabilidad, no de destrucción.</li>
+          <li>Si se corrige la hipoxia y el choque no mata, <b>la fuga se revierte en pocos días</b> y la recuperación es prácticamente completa.</li>
+          <li>Consecuencia terapéutica directa: el perfil hemodinámico es de <b>gasto cardiaco bajo con resistencias altas</b> — un choque «frío» que empeora con volumen y mejora con inotrópicos.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">Dos pistas pronósticas</span>
+      <p>En <b>CCHF</b> los casos letales <b>no desarrollan respuesta de anticuerpos</b>: una serología negativa en un paciente grave no tranquiliza, alarma. La hemorragia cerebral y la necrosis hepática masiva marcan el mal pronóstico. En <b>SPH</b>, la hemoconcentración (hematocrito alto) mide directamente cuánto plasma se ha ido al alveolo.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Riñón viejo, pulmón nuevo</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Virus</th><th>Incubación</th><th>Cuadro que hay que reconocer</th><th class="num">Letalidad</th></tr></thead>
+      <tbody>
+        <tr><td><b>La Crosse</b></td><td>5–15 d</td><td>Meningoencefalitis del <b>niño</b> (~90 % en &lt;15 años): fiebre, cefalea, vómito, convulsiones. LCR &lt;100 cel/mm³, leucocitosis &gt;15 000.</td><td class="num">&lt;1 %</td></tr>
+        <tr><td><b>Jamestown Canyon</b></td><td>días</td><td>Meningoencefalitis del <b>adulto</b> (65 % de 238 casos en EE. UU. 2011–2020, solo 6 % niños). Convulsiones raras, neuroimagen normal.</td><td class="num">2 %</td></tr>
+        <tr><td><b>Oropouche</b></td><td>3–12 d</td><td>Inicio abrupto: fiebre, escalofrío, cefalea, mialgia, vómito y artralgia 2–7 días. Meningitis aséptica ocasional y <b>recurrencia a los 10 días</b>.</td><td class="num">rara</td></tr>
+        <tr><td><b>Toscana</b></td><td>días</td><td>Mayoría asintomática. Cuando enferma: <b>meningitis aséptica del verano mediterráneo</b> o encefalitis leve, también en el viajero que regresa.</td><td class="num">baja</td></tr>
+        <tr><td><b>Valle del Rift</b></td><td>2–6 d</td><td>Fiebre indiferenciada con cefalea y fotofobia. <b>10 % retinitis macular</b> con pérdida visual permanente; 1 % forma hemorrágica con ictericia; &lt;1 % encefalitis.</td><td class="num">alta si es fulminante</td></tr>
+        <tr><td><b>Crimea-Congo</b></td><td>1–5 d (garrapata)<br>5–6 d (sangre)</td><td>Cuatro periodos. <b>Hiperemia</b> de cara, cuello y tórax → petequias, equimosis, hematemesis, melena. Hepatoesplenomegalia en 40 %.</td><td class="num">~30 %</td></tr>
+        <tr><td><b>FHSR</b> (Hantaan, Dobrava)</td><td>5–42 d (≈2 sem)</td><td>Cinco fases: febril, hipotensiva, oligúrica, poliúrica, convalecencia. Trombocitopenia y nefritis intersticial aguda.</td><td class="num">~5 %</td></tr>
+        <tr><td><b>SPH</b> (Sin Nombre, Andes)</td><td>1–5 sem</td><td>Pródromo febril con mialgias intensas y dolor abdominal; a los 4–5 días, tos y disnea que evolucionan a edema pulmonar y choque.</td><td class="num">30–40 %</td></tr>
+        <tr><td><b>SFTS</b> (Dabie)</td><td>7–14 d</td><td>Fiebre, <b>trombocitopenia y leucopenia</b>, transaminasas altas; en la 2.ª semana LRA, distrés, arritmias, miocarditis, HLH.</td><td class="num">6–33 %</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cronología comparada de la fiebre hemorrágica con síndrome renal y del síndrome pulmonar por hantavirus">
+        <rect width="900" height="300" fill="#FFFFFF"/>
+        <text x="20" y="30" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">INCUBACION FHSR: 5-42 DIAS, MEDIA 2 SEMANAS</text>
+
+        <line x1="110" y1="64" x2="860" y2="64" stroke="#455A8C" stroke-width="1.2"/>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585" text-anchor="middle">
+          <text x="110" y="56">0</text>
+          <text x="288" y="56">5</text>
+          <text x="360" y="56">7</text>
+          <text x="610" y="56">14</text>
+          <text x="850" y="56">21</text>
+        </g>
+
+        <text x="20" y="102" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#5C7A57">FHSR</text>
+        <text x="20" y="116" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Viejo Mundo</text>
+        <rect x="110" y="86" width="176" height="30" rx="4" fill="rgba(92,122,87,.30)"/>
+        <text x="198" y="105" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Febril / tóxica</text>
+        <rect x="288" y="86" width="70" height="30" rx="4" fill="rgba(112,29,20,.22)"/>
+        <text x="323" y="105" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#701d14">Hipotens.</text>
+        <rect x="360" y="86" width="248" height="30" rx="4" fill="rgba(92,122,87,.22)"/>
+        <text x="484" y="105" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Oligúrica</text>
+        <rect x="610" y="86" width="176" height="30" rx="4" fill="rgba(92,122,87,.14)"/>
+        <text x="698" y="105" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Poliúrica</text>
+        <rect x="788" y="86" width="72" height="30" rx="4" fill="rgba(69,90,140,.14)"/>
+        <text x="824" y="105" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#14181f">Conval.</text>
+
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">
+          <text x="110" y="136">Rubor que blanquea en cara y tronco, petequias en paladar,</text>
+          <text x="110" y="150">leucocitos que superan 20 000 con desviación izquierda.</text>
+          <text x="110" y="164">Un tercio de las muertes en el choque, dos tercios en la fase renal.</text>
+        </g>
+
+        <text x="20" y="206" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">SPH</text>
+        <text x="20" y="220" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Nuevo Mundo</text>
+        <rect x="110" y="190" width="176" height="30" rx="4" fill="rgba(112,29,20,.12)"/>
+        <text x="198" y="209" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Pródromo febril</text>
+        <rect x="288" y="190" width="142" height="30" rx="4" fill="rgba(112,29,20,.30)"/>
+        <text x="359" y="209" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#701d14">Cardiopulmonar</text>
+        <rect x="432" y="190" width="106" height="30" rx="4" fill="rgba(69,90,140,.20)"/>
+        <text x="485" y="209" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Diurética</text>
+        <rect x="540" y="190" width="320" height="30" rx="4" fill="rgba(69,90,140,.12)"/>
+        <text x="700" y="209" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Convalecencia</text>
+
+        <line x1="288" y1="176" x2="288" y2="190" stroke="#701d14" stroke-width="1.2" stroke-dasharray="3 2"/>
+        <text x="298" y="182" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#701d14">Se deteriora en horas: derivar a un centro con ECMO antes de aquí</text>
+
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">
+          <text x="110" y="240">Tamiz de 5 puntos: trombocitopenia, hematocrito elevado,</text>
+          <text x="110" y="254">desviación izquierda granulocítica, inmunoblastos abundantes</text>
+          <text x="110" y="268">y neutrófilos sin cambios tóxicos. S 89 %, E 93 % en zona endémica.</text>
+        </g>
+        <text x="20" y="292" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El reloj de la FHSR se mide en días; el del síndrome pulmonar, en horas.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Las dos cronologías del hantavirus. La ventana para trasladar al paciente con SPH se cierra al empezar la fase cardiopulmonar: después llega el choque.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">FHSR — matices por virus</span>
+        <ul>
+          <li><b>Hantaan y Dobrava</b>: forma completa con las cinco fases; letalidad ~5 %, un tercio por el choque al final de la fase febril y dos tercios por eventos cerebrovasculares y edema pulmonar durante la fase renal. Convalecencia con astenia de semanas o meses.</li>
+          <li><b>Puumala</b> = <b><i>nephropathia epidemica</i></b>: hasta el <b>90 % de las infecciones son asintomáticas</b>, rara vez hemorrágica, letalidad &lt;1 %, casi nunca requiere diálisis. Dolor abdominal, proteinuria y creatinina elevada.</li>
+          <li><b>Seúl</b>: cuadro leve a moderado; cuando produce FHSR completa destaca por el <b>componente hepático</b>. Distribución mundial porque su reservorio es la rata.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">SPH — lo que decide el desenlace</span>
+        <ul>
+          <li>El pródromo <b>no tiene tos</b>: fiebre súbita, mialgias generalizadas, dolor abdominal y molestias digestivas. La tos y la disnea llegan <b>4–5 días después</b> (rango 1–10).</li>
+          <li>Laboratorio temprano: hematocrito <b>elevado</b>, leucocitosis con desviación izquierda, linfocitos atípicos e inmunoblastos, trombocitopenia leve. La creatinina sube poco: <b>el riñón no es el órgano de esta enfermedad</b>.</li>
+          <li><b>Andes es el único hantavirus con transmisión persona a persona.</b> El brote argentino de 2020 dejó 34 infecciones confirmadas y 11 muertes, impulsado por tres «superdiseminadores» con cargas virales altas.</li>
+          <li>Existe el SPH «sin componente pulmonar», raro pero descrito.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box trap"><span class="lbl">Trampas y diagnóstico diferencial</span>
+      <ul>
+        <li><b>La Crosse vs. herpes</b>: el EEG es anormal en dos tercios y muestra <b>PLEDs temporales</b>; junto con la RM focal, hace pensar en encefalitis herpética. Los niños convulsionan más (50 % vs. 20 %) y vomitan más (70 % vs. 30 %) que los adultos; los adultos hacen más <b>hiponatremia</b> (80 % vs. 20 %).</li>
+        <li><b>Oropouche vs. dengue</b>: clínicamente indistinguibles en el trópico americano. La pista es la <b>recurrencia</b> tras la mejoría y el antecedente de jején, no de <i>Aedes</i>.</li>
+        <li><b>Toscana no siempre es benigno</b>: una serie de ocho casos neuroinvasivos graves en Rumania (2017–2018) tuvo <b>63 % de letalidad</b>. Se ha documentado persistencia en semen 59 días tras el inicio.</li>
+        <li><b>Heartland</b>: varón mayor (mediana 71 años) del medio oeste estadounidense con fiebre, leucopenia, trombocitopenia y transaminasas que pican en la segunda semana; ferritina muy alta y, en algunos, criterios de <b>linfohistiocitosis hemofagocítica</b>. 4 de 26 casos publicados murieron.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Serología casi siempre, PCR cuando sangra</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Suero agudo y convaleciente</b></td><td>ELISA IgM / IgG · IFA</td><td>El método más usado. La <b>IgM sola es menos específica</b> que un ascenso de títulos en sueros pareados; casi todos los pacientes ya tienen serología positiva cuando consultan.</td></tr>
+        <tr><td><b>Suero (hantavirus)</b></td><td>ELISA IgM + IgG</td><td><b>Prácticamente todos los pacientes tienen IgM e IgG al ingreso hospitalario.</b> Ojo con los <b>falsos positivos de IgM con IgG negativa</b>, descritos en el brote de Yosemite (2012).</td></tr>
+        <tr><td><b>Sangre (fase aguda)</b></td><td>RT-PCR</td><td>Vía de elección para <b>CCHFV, Valle del Rift, SFTSV y Heartland</b>. En SFTS el RNA se detecta en la primera semana; en los que mueren, hasta el final.</td></tr>
+        <tr><td><b>LCR</b></td><td>IgM por ELISA · PRNT</td><td>En el serogrupo California la <b>IgM en LCR o un ascenso ≥4× en neutralizantes</b> confirma infección actual. La <b>neutralización por reducción de placas</b> es lo único que separa a La Crosse de sus primos con reacción cruzada.</td></tr>
+        <tr><td><b>Tejido</b></td><td>IHQ · RT-PCR</td><td>Inmunohistoquímica sobre tejido fijado en formol para CCHFV y hantavirus; útil en casos fatales y en médula ósea para Heartland.</td></tr>
+        <tr><td><b>Cultivo</b></td><td>Vero, contención</td><td>Los hantavirus <b>se recuperan con gran dificultad</b>. El cultivo es una herramienta de referencia, no clínica: se restringe a laboratorios de contención máxima.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="box clin"><span class="lbl">Tamiz de 5 puntos para el SPH</span>
+        <p>En un paciente previamente sano con edema pulmonar o SDRA sin causa conocida en zona endémica, buscar simultáneamente: <b>trombocitopenia</b> · <b>hemoglobina o hematocrito elevados</b> · <b>desviación izquierda granulocítica</b> · <b>proporción alta de inmunoblastos</b> (linfocitos atípicos) · <b>ausencia de cambios tóxicos en los neutrófilos</b>. Sensibilidad 89 % y especificidad 93 % en entorno endémico; permitió identificar cuatro casos en la Nación Navajo antes de que llegara la serología.</p>
+      </div>
+      <div class="box trap"><span class="lbl">Errores frecuentes</span>
+        <ul>
+          <li>Confiar en la serología del <b>CCHF grave</b>: los casos letales <b>no seroconvierten</b>. Ahí manda la RT-PCR.</li>
+          <li>Enviar muestras de CCHF sin avisar al laboratorio: en países no endémicos se procesan bajo <b>BSL-4</b> y el personal debe saberlo antes de abrir el tubo.</li>
+          <li>Interpretar una IgG positiva aislada frente a virus del serogrupo California como enfermedad actual: puede ser exposición previa o reacción cruzada.</li>
+          <li>No consultar a la autoridad sanitaria: la mayoría de estas pruebas solo existen en laboratorios de referencia y su disponibilidad varía por región.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Soporte fino, no antivirales</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="box hy"><span class="lbl">Regla de oro hemodinámica</span>
+      <p>En el paciente con hantavirus, <b>choque hipotensivo con hemoconcentración</b>, hay que <b>evitar la administración excesiva de líquidos</b>: la fuga vascular manda el volumen al retroperitoneo (FHSR) o al alveolo (SPH). El perfil es de <b>gasto cardiaco bajo con resistencias vasculares sistémicas altas</b>, así que los <b>fármacos cardiotónicos se usan temprano</b>, no como rescate.</p>
+    </div>
+
+    <h4>Soporte por síndrome</h4>
+    <ul>
+      <li><b>SPH</b> — la <b>ECMO</b> mejoró la supervivencia en una serie de 51 pacientes con SPH refractario, aunque nunca se ha probado en un ensayo controlado. Identificar temprano al paciente, incluso si aún no está grave, y <b>derivarlo a un hospital con ECMO</b>: el deterioro en la fase cardiopulmonar es cuestión de horas.</li>
+      <li><b>FHSR grave</b> — hemodiálisis o diálisis peritoneal durante la fase oligúrica. La monitorización intensiva y la diálisis frecuente, <b>incluso sin ribavirina</b>, dan mortalidades muy bajas. <b>La heparina no se recomienda</b> para la CID presunta o incipiente. La FHSR por Puumala rara vez necesita diálisis.</li>
+      <li><b>Encefalitis del serogrupo California</b> — manejo del coma, el edema cerebral y las convulsiones. <b>Cuidado con el uso demasiado enérgico de fenobarbital</b> en niños con estado epiléptico.</li>
+      <li><b>CCHF y SFTS</b> — soporte general y control de la diátesis hemorrágica.</li>
+    </ul>
+
+    <h4>Antivirales: dónde hay evidencia y dónde no</h4>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario</th><th>Intervención</th><th>Evidencia</th></tr></thead>
+      <tbody>
+        <tr><td><b>FHSR</b></td><td>Ribavirina IV</td><td><b>Eficaz</b> en un estudio doble ciego controlado con placebo en China, usando el régimen intravenoso establecido para la fiebre de Lassa.</td></tr>
+        <tr><td><b>SPH</b></td><td>Ribavirina</td><td><b>Sin eficacia</b> en un ensayo abierto —la muerte suele ocurrir en las primeras 24–48 h de hospitalización— y ensayo doble ciego de 36 pacientes sin poder estadístico.</td></tr>
+        <tr><td><b>SPH por Andes</b></td><td>Metilprednisolona IV</td><td><b>Sin beneficio</b> en ensayo aleatorizado doble ciego contra placebo.</td></tr>
+        <tr><td><b>SPH</b></td><td>Plasma de convaleciente</td><td>Chile 2008–2012: letalidad <b>4/29 (14 %) con plasma vs. 18/66 (27 %) sin plasma</b>, <i>P</i> = .15. Sugerente, no concluyente.</td></tr>
+        <tr><td><b>CCHF</b></td><td>Ribavirina</td><td>Actividad in vitro y en animales, y experiencia observacional favorable; la revisión Cochrane de 2018 concluyó <b>«evidencia insuficiente»</b>.</td></tr>
+        <tr><td><b>La Crosse</b></td><td>Ribavirina IV</td><td>En un estudio de escalada de dosis en niños con encefalitis, <b>no alcanzó niveles eficaces en LCR antes de aparecer los efectos adversos</b>.</td></tr>
+        <tr><td><b>SFTS</b></td><td>Ribavirina, corticoides</td><td>Éxito limitado. <b>Favipiravir</b> es eficaz in vitro y en modelo murino.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Ribavirina — lo que hay que saber al indicarla</span>
+        <ul>
+          <li>Régimen intravenoso clásico de McCormick para Lassa, que es el que se ha trasladado a FHSR y CCHF: <b>carga de 30 mg/kg IV</b>, luego <b>16 mg/kg c/6 h × 4 días</b> y después <b>8 mg/kg c/8 h × 6 días</b>. Para hantavirus y CCHF <b>no hay dosis estándar consolidada</b>.</li>
+          <li><b>Anemia hemolítica dosis-dependiente</b>: por encima de 800 mg/día la hemoglobina cae 2–4 g/dL en la mayoría. Vigilar Hb basal y en las semanas 2 y 4.</li>
+          <li><b>Eliminación renal</b>: ajuste obligatorio con depuración &lt;50 mL/min y uso muy cauteloso por debajo de 30 — precisamente el escenario de la FHSR oligúrica.</li>
+          <li><b>Categoría X</b>: anticoncepción obligatoria en la paciente y en la pareja durante el tratamiento y hasta <b>6 meses (mujer) / 7 meses (varón)</b>.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Prevención y control de infecciones</span>
+        <ul>
+          <li><b>No hay vacuna humana de uso amplio.</b> En Asia se han desarrollado vacunas inactivadas contra Seúl y Hantaan; contra CCHFV existe una inactivada derivada de cerebro de ratón lactante usada a pequeña escala en Europa del Este, y se estudian vacunas de glicoproteína; contra el Valle del Rift se vacuna al <b>ganado</b> con inactivadas y atenuadas, con un vector adenoviral en estudio en humanos. Las vacunas de DNA contra hantavirus siguen en investigación.</li>
+          <li><b>Exclusión de roedores</b>: sellar accesos, no almacenar grano al alcance, ventilar cabañas y graneros antes de entrar y humedecer las superficies con desinfectante — <b>nunca barrer ni aspirar en seco</b>.</li>
+          <li><b>Repelentes</b>, ropa cubriente, revisión de garrapatas y <b>pabellones impregnados de insecticida</b> en zona endémica. No aplastar garrapatas con los dedos: el contacto cutáneo directo transmite CCHFV.</li>
+          <li><b>Aislamiento</b>: CCHF exige precauciones estrictas de contacto y gotas, con atención a los procedimientos generadores de aerosoles; los brotes nosocomiales con muertes en personal ocurrieron cuando <b>no se sospechó el caso índice</b>. El virus Andes obliga a aislar también al paciente con SPH. SFTSV se ha transmitido por contacto con sangre y por punción con aguja.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li>Receptor de entrada: <b>integrinas β3</b> del endotelio → <b>fuga capilar</b>.</li>
+          <li><b>Hantavirus = el único bunyavirus no transmitido por artrópodo</b> (aerosol de excretas de roedor).</li>
+          <li><b>Andes = el único hantavirus con transmisión persona a persona.</b></li>
+          <li>Ribavirina: <b>sirve en FHSR, no en SPH</b>. Metilprednisolona en Andes: no sirve.</li>
+          <li>En el choque por hantavirus, <b>líquidos no; inotrópicos sí</b>. Y ECMO en el SPH refractario.</li>
+          <li>CCHF: garrapata <b><i>Hyalomma</i></b>, letalidad ~30 %, <b>transmisión nosocomial</b>, los que mueren no seroconvierten.</li>
+          <li>Valle del Rift: <b>retinitis macular en el 10 %</b> y contacto con ganado o carcasas frescas.</li>
+          <li>La Crosse: encefalitis del <b>niño</b> con PLEDs temporales que imitan herpes; Jamestown Canyon, del <b>adulto</b>.</li>
+          <li>Genoma segmentado ⇒ <b>reordenamiento</b>: el virus Ngari es el ejemplo canónico.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«L-M-S»</b> → <b>L</b>arge = po<b>L</b>imerasa · <b>M</b>edium = <b>M</b>embrana (Gn/Gc) · <b>S</b>mall = nucleocáp<b>S</b>ide. Tres segmentos, tres funciones, en orden de tamaño.</p>
+        <p><b>«El Viejo Mundo orina, el Nuevo Mundo respira»</b> → hantavirus del Viejo Mundo = <b>riñón</b> (FHSR); del Nuevo Mundo = <b>pulmón</b> (SPH).</p>
+        <p><b>«Todos vuelan menos el hanta, que corre»</b> → mosquito, jején, flebótomo y garrapata para el resto del orden; roedor para el hantavirus.</p>
+        <p><b>«HRRC»</b> para el flujo de la FHSR: fase febril → <b>H</b>ipotensión → <b>R</b>etención (oliguria) → <b>R</b>iada (poliuria) → <b>C</b>onvalecencia.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Escenario mexicano y trampas clásicas</span>
+      <ul>
+        <li>En México no hay transmisión de Crimea-Congo ni de fiebre del Valle del Rift. Los dos escenarios reales son <b>Oropouche importado</b> del Caribe o de Sudamérica —donde el brote de 2023–2024 ya alcanzó Cuba— y la <b>exposición a excretas de roedor</b> al abrir cabañas, bodegas o graneros cerrados en zona rural.</li>
+        <li>Ante <b>fiebre con trombocitopenia y transaminasas altas</b> en el trópico mexicano, la lista corta sigue siendo dengue, leptospirosis y rickettsiosis; Oropouche entra en ella y solo lo separa la RT-PCR.</li>
+        <li><b>Trampa del hematocrito</b>: en dengue grave y en SPH el hematocrito sube por fuga capilar, pero la conducta se invierte —el dengue en fuga necesita cristaloides medidos y el SPH en choque los rechaza—. La diferencia la marca el <b>antecedente de roedor</b> y el edema pulmonar sin hepatomegalia.</li>
+        <li><b>Trampa de la serología</b>: en hantavirus la IgM ya es positiva al ingreso (es útil), pero en el CCHF grave la serología es negativa justamente en quien va a morir. Nunca se usa la misma lógica para las dos.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/Hantavirus.md</code> y <code>10_WIKI_INFECTOLOGIA/farmacos/Ribavirina.md</code> · Mandell PPID 10e (2025), cap. 173 «Bunyavirus Infections: Hantavirus Syndromes, La Crosse Encephalitis, Rift Valley Fever, Crimean-Congo Hemorrhagic Fever, and Others», pp. 2152-2160, incluida la Tabla 173.1 · McCormick JB et al., <i>N Engl J Med</i> 1986;314(1):20-26 (régimen IV de ribavirina) · Revisión Cochrane 2018 sobre ribavirina en fiebre hemorrágica de Crimea-Congo, citada en Mandell cap. 173 · Clasificación ICTV vigente al cierre del capítulo (clase <i>Bunyaviricetes</i>, 2024).</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="orthomyxoviridae.html"><span class="k">← Anterior</span><span class="v">Orthomyxoviridae</span></a>
+        <a class="next" href="arenaviridae.html"><span class="k">Siguiente →</span><span class="v">Arenaviridae</span></a></div>
+      <footer class="pf">
+        <span>Bunyavirales · 13 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herpesviridae — γ — Virus DNA</title>
+<meta name="description" content="Herpesviridae — γ. VEB · HHV-8/KSHV · latencia en linfocitos · oncogénicos">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-dna.html">Virus DNA</a><span class="sep">/</span>
+    <b>Herpesviridae — γ</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-dna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus DNA · Familia 8 de 10 · Virología médica</p>
+    <h1>Herpesviridae — γ</h1>
+    <p class="sub">VEB · HHV-8/KSHV · latencia en linfocitos · oncogénicos</p>
+    <div class="chips"><span class="chip g">dsDNA lineal · VEB 172 kb · KSHV 165 kb</span>
+  <span class="chip">Envuelto · icosaédrico + tegumento · 200 nm</span>
+  <span class="chip">Replicación nuclear · episoma en latencia</span>
+  <span class="chip r">Los dos únicos herpesvirus oncogénicos</span>
+  <span class="chip gold">Sin vacuna · rituximab y terapia celular</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Herpesviridae — γ · Virus DNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros humanos</dt><dd><i>Lymphocryptovirus</i> (gamma-1): <b>VEB / HHV-4</b> · <i>Rhadinovirus</i> (gamma-2): <b>HHV-8 / KSHV</b></dd></div>
+  <div class="cell"><dt>Receptores</dt><dd>VEB: <b>gp350 → CD21 (CR2)</b> + gp42/gH/gL → HLA-II en linfocito B; gH/gL → <b>EphA2</b> en epitelio. KSHV: heparán sulfato, integrina α3β1, xCT → <b>EphA2</b></dd></div>
+  <div class="cell"><dt>Sitio de latencia</dt><dd><b>Linfocito B de memoria</b> en ambos; replicación lítica en epitelio orofaríngeo</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd><b>Saliva</b> («enfermedad del beso»). KSHV además: sexual entre HSH, trasplante de donante seropositivo, transfusión, vertical (rara)</dd></div>
+  <div class="cell"><dt>Seroprevalencia</dt><dd>VEB <b>90–95 % universal</b>. KSHV <b>varía por región</b>: ~50 % África subsahariana · ~10 % Mediterráneo (30 % en zonas de Italia) · ~5 % EUA y norte de Europa · 0.2 % Japón · 40–50 % en HSH con VIH</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd>VEB: <b>30–50 días</b>. KSHV: primoinfección casi siempre inaparente, sin síndrome definido</dd></div>
+  <div class="cell"><dt>Tumores VEB</dt><dd>Burkitt · Hodgkin (30–50 %) · carcinoma nasofaríngeo (&gt;95 % del no queratinizante) · gástrico (~10 %) · PTLD · linfoma primario de SNC en sida</dd></div>
+  <div class="cell"><dt>Tumores KSHV</dt><dd>Sarcoma de Kaposi · linfoma primario de cavidades (PEL) · enfermedad de Castleman multicéntrica · síndrome inflamatorio por citocinas (KICS)</dd></div>
+  <div class="cell"><dt>Regla terapéutica</dt><dd><b>Ningún antiviral sirve contra los tumores</b>: aciclovir y ganciclovir atacan el ciclo lítico y las células tumorales están en <b>latencia</b>. Se trata restaurando la inmunidad</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">Del sarcoma de Kaposi de 1872 al primer virus del cáncer</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1872</b> — <b>Moritz Kaposi</b> describe el «sarcoma múltiple pigmentado idiopático de la piel» en cinco varones: <b>tres murieron en 16 meses</b> con enfermedad diseminada. Paradójicamente, el KS pasó después a considerarse enfermedad indolente de ancianos mediterráneos.</li>
+      <li><b>1920–1932</b> — Sprunt y Evans acuñan <b>mononucleosis infecciosa</b>; Downey describe el <b>linfocito atípico</b>; Paul y Bunnell tropiezan con los <b>anticuerpos heterófilos</b> que aglutinan eritrocitos de carnero.</li>
+      <li><b>1958–1964</b> — <b>Denis Burkitt</b> describe el linfoma africano de mandíbula y órbita; su distribución geográfica calcaba la de las arbovirosis, así que se buscó un arbovirus. En 1964 <b>Epstein, Achong y Barr</b> ven partículas herpéticas en esas biopsias: <b>el primer virus oncogénico humano</b>. Los Henle desarrollan la inmunofluorescencia y cierran el círculo cuando una técnica de su laboratorio enferma de mononucleosis.</li>
+      <li><b>1981</b> — <b>Friedman-Kien y Saltzman</b> reportan 50 varones jóvenes homosexuales con KS cutáneo, ganglionar, mucoso y visceral. Ese reporte <b>anuncia la epidemia de sida</b>.</li>
+      <li><b>1994</b> — <b>Chang y Moore</b> identifican el KSHV por <i>análisis de diferencias representacionales</i>: DNA presente en el tejido enfermo y ausente en el sano. El punto de partida fue epidemiológico: el KS era <b>20 veces más frecuente</b> en HSH con sida que en quienes lo adquirieron por vía hemática.</li>
+      <li><b>2022</b> — Bjornevik, en una cohorte militar estadounidense, muestra que la <b>seroconversión a VEB precede y multiplica el riesgo de esclerosis múltiple</b>.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué esta subfamilia se estudia aparte</span>
+      <p>α y β producen enfermedad por <b>citólisis</b>; γ la produce por <b>proliferación</b>: no matan la célula que colonizan, la inmortalizan. De ahí que su latencia ocurra en <b>linfocitos</b> —una célula que ya sabe dividirse— y que la enfermedad aparezca cuando falla el T citotóxico que los vigila.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Gamma-1 y gamma-2, un género cada uno</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Orden</dt><dd>Herpesvirales → familia <b>Herpesviridae</b> → subfamilia <b>Gammaherpesvirinae</b></dd>
+      <dt>Géneros humanos</dt><dd><i>Lymphocryptovirus</i> (gamma-1) · <i>Rhadinovirus</i> (gamma-2)</dd>
+      <dt>Etimología</dt><dd><i>Lymphocryptovirus</i>: «escondido en el linfocito» — la latencia en B de memoria. <i>Rhadinovirus</i>: del griego <i>rhadinos</i>, «frágil», por la facilidad con que se fragmenta su DNA</dd></dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Virus de Epstein-Barr (VEB, HHV-4)</span><span class="vg">Lymphocryptovirus · gamma-1</span></div>
+        <div class="vbd">
+          <p>Genoma de <b>~172 kb</b>, cerca de <b>90 proteínas y 25 microRNA</b>. La cepa B95-8 fue el primer genoma de herpesvirus secuenciado.</p>
+          <p><b>Dos tipos genéticos:</b> <b>EBV-1</b> predomina en Occidente y en México; <b>EBV-2</b> en África ecuatorial. Difieren en los genes <i>EBNA-2</i> y <i>EBNA-LP</i>, y EBV-1 transforma linfocitos B con mayor eficiencia in vitro.</p>
+          <p>Síndromes: mononucleosis infecciosa, linfoma de Burkitt, Hodgkin, carcinoma nasofaríngeo, carcinoma gástrico, PTLD, linfoma primario de SNC en sida, leucoplasia vellosa oral.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">HHV-8 / KSHV</span><span class="vg">Rhadinovirus · gamma-2</span></div>
+        <div class="vbd">
+          <p><b>Único rhadinovirus humano</b> y el octavo y último herpesvirus humano descubierto. Sus parientes son virus de primates y roedores: herpesvirus <i>saimiri</i>, los RFHV de monos del Viejo Mundo y el gammaherpesvirus murino 68.</p>
+          <p><b>~140 kb de secuencia única</b> (165 kb en total con los repetidos) con unos 100 marcos de lectura, flanqueada por ~40 copias de repetidos terminales de 0.8 kb ricos en G+C — el <b>20 % del genoma</b>, rasgo típico de los gamma-2. Los ORF se nombran según el herpesvirus <i>saimiri</i>; los exclusivos llevan prefijo <b>K</b>.</p>
+          <p>Síndromes: sarcoma de Kaposi, linfoma primario de cavidades, Castleman multicéntrica, KICS.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«El VEB es el pariente humano más cercano del KSHV»</b>: gamma-1 y gamma-2 son las únicas ramas gamma con representante humano, y comparten receptor epitelial: <b>EphA2</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Un episoma que se ancla al cromosoma</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión gammaherpesvirus y receptores de entrada del virus de Epstein-Barr y del KSHV">
+        <rect width="900" height="360" fill="#FFFFFF"/>
+        <circle cx="160" cy="140" r="95" fill="rgba(69,90,140,.13)" stroke="#36476E" stroke-width="1.6"/>
+        <circle cx="160" cy="140" r="72" fill="none" stroke="#90303a" stroke-width="5" opacity=".45" stroke-dasharray="5 4"/>
+        <polygon points="160,92 118.4,116 118.4,164 160,188 201.6,164 201.6,116" fill="rgba(92,122,87,.16)" stroke="#5C7A57" stroke-width="1.8"/>
+        <path d="M132 140 q9 -13 18 0 t18 0 t18 0 M132 126 q9 -13 18 0 t18 0 t18 0 M132 154 q9 -13 18 0 t18 0 t18 0" fill="none" stroke="#27334F" stroke-width="1.5"/>
+        <g stroke="#701d14" stroke-width="2.1" stroke-linecap="round">
+          <line x1="255" y1="140" x2="268" y2="140"/><line x1="242.3" y1="92.5" x2="253.5" y2="86"/>
+          <line x1="207.5" y1="57.7" x2="214" y2="46.5"/><line x1="160" y1="45" x2="160" y2="32"/>
+          <line x1="112.5" y1="57.7" x2="106" y2="46.5"/><line x1="77.7" y1="92.5" x2="66.5" y2="86"/>
+          <line x1="65" y1="140" x2="52" y2="140"/><line x1="77.7" y1="187.5" x2="66.5" y2="194"/>
+          <line x1="112.5" y1="222.3" x2="106" y2="233.5"/><line x1="160" y1="235" x2="160" y2="248"/>
+          <line x1="207.5" y1="222.3" x2="214" y2="233.5"/><line x1="242.3" y1="187.5" x2="253.5" y2="194"/>
+        </g>
+        <g fill="#701d14">
+          <circle cx="269" cy="140" r="3.2"/><circle cx="254.5" cy="85" r="3.2"/><circle cx="215" cy="45" r="3.2"/>
+          <circle cx="160" cy="30" r="3.2"/><circle cx="105" cy="45" r="3.2"/><circle cx="65.5" cy="85" r="3.2"/>
+          <circle cx="51" cy="140" r="3.2"/><circle cx="65.5" cy="195" r="3.2"/><circle cx="105" cy="235" r="3.2"/>
+          <circle cx="160" cy="250" r="3.2"/><circle cx="215" cy="235" r="3.2"/><circle cx="254.5" cy="85" r="3.2"/>
+          <circle cx="254.5" cy="195" r="3.2"/>
+        </g>
+        <g font-family="'Inter', sans-serif" font-size="11.5" fill="#14181f">
+          <line x1="215" y1="45" x2="352" y2="42" stroke="#455A8C" stroke-width="1"/>
+          <text x="360" y="39" font-weight="600" fill="#701d14">Envoltura y espículas</text>
+          <text x="360" y="55" font-size="10" fill="#6b7585">gB y gH/gL en los dos virus · gp350 y gp42 en el VEB</text>
+          <text x="360" y="69" font-size="10" fill="#6b7585">gpK8.1 en el KSHV · blanco de los anticuerpos</text>
+          <line x1="232" y1="105" x2="352" y2="96" stroke="#455A8C" stroke-width="1"/>
+          <text x="360" y="93" font-weight="600" fill="#90303a">Tegumento</text>
+          <text x="360" y="109" font-size="10" fill="#6b7585">Capa amorfa entre cápside y envoltura: arranca la</text>
+          <text x="360" y="123" font-size="10" fill="#6b7585">transcripción y bloquea la respuesta de interferón</text>
+          <line x1="202" y1="140" x2="352" y2="150" stroke="#455A8C" stroke-width="1"/>
+          <text x="360" y="147" font-weight="600" fill="#5C7A57">Cápside icosaédrica</text>
+          <text x="360" y="163" font-size="10" fill="#6b7585">162 capsómeros · indistinguible por microscopía</text>
+          <text x="360" y="177" font-size="10" fill="#6b7585">electrónica de la de cualquier otro herpesvirus</text>
+          <line x1="176" y1="126" x2="352" y2="204" stroke="#455A8C" stroke-width="1"/>
+          <text x="360" y="201" font-weight="600" fill="#27334F">dsDNA lineal en el virión</text>
+          <text x="360" y="217" font-size="10" fill="#6b7585">VEB 172 kb (90 proteínas, 25 miRNA) · KSHV 165 kb</text>
+          <text x="360" y="231" font-size="10" fill="#6b7585">Se <tspan font-weight="600">circulariza</tspan> por los repetidos terminales al entrar</text>
+          <text x="360" y="245" font-size="10" fill="#6b7585">al núcleo y persiste como episoma multicopia</text>
+        </g>
+        <rect x="24" y="270" width="418" height="76" rx="6" fill="rgba(69,90,140,.12)" stroke="#36476E" stroke-width="1.1"/>
+        <text x="38" y="288" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#27334F">ENTRADA DEL VEB</text>
+        <text x="38" y="305" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">Linfocito B: <tspan font-weight="600">gp350 → CD21 (CR2)</tspan> + gp42/gH/gL → HLA-II</text>
+        <text x="38" y="320" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">Epitelio: gH/gL → <tspan font-weight="600">EphA2</tspan> · BMRF2 → integrinas</text>
+        <text x="38" y="336" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Los viriones nacidos en B llevan poco gp42 y prefieren el epitelio: así lanza el vaivén B ↔ orofaringe</text>
+        <rect x="458" y="270" width="418" height="76" rx="6" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1.1"/>
+        <text x="472" y="288" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#701d14">ENTRADA DEL KSHV</text>
+        <text x="472" y="305" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">Adhesión: heparán sulfato → integrina α3β1 y transportador xCT</text>
+        <text x="472" y="320" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">Balsas lipídicas → <tspan font-weight="600">EphA2</tspan> → endocitosis o macropinocitosis</text>
+        <text x="472" y="336" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">La cápside viaja al poro nuclear y descarga el DNA dentro del núcleo</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión gammaherpesvirus y sus puertas de entrada. Dato de examen: <b>CD21 es el receptor del VEB en el linfocito B</b> y <b>EphA2 es el receptor compartido</b> por VEB (en epitelio) y KSHV.</figcaption>
+    </figure>
+
+    <h4>Latencia frente a ciclo lítico</h4>
+    <ul>
+      <li><b>El genoma se circulariza</b> al llegar al núcleo, fusionando sus repetidos terminales, y persiste como <b>episoma extracromosómico</b> (10–50 copias por célula en el KSHV) replicado por la maquinaria del huésped en cada mitosis.</li>
+      <li><b>Casi todos los genes son líticos</b>: de los ~100 marcos de lectura del KSHV, solo <b>cinco</b> se expresan en latencia; en el VEB, hasta once (6 EBNA + LMP1/2 + EBER + miRNA). Los genes latentes no replican virus: <b>mantienen viva a la célula</b>, y ahí está el puente con la oncogénesis.</li>
+      <li><b>El ancla del episoma</b> es <b>EBNA-1</b> en el VEB y <b>LANA (ORF73)</b> en el KSHV: se pegan a una secuencia de los repetidos terminales y a la cromatina del huésped, garantizando que el episoma se reparta a las células hijas.</li>
+      <li><b>Genes «pirateados»</b> a la célula humana: el KSHV codifica <b>ciclina D viral</b> (ORF72), <b>IL-6 viral</b>, un <b>receptor acoplado a proteína G</b> (vGPCR, ORF74), quimiocinas y factores reguladores de interferón. Un catálogo de oncogenes prestados.</li>
+      <li><b>No crecen en cultivo viral de rutina.</b> El diagnóstico es serológico, molecular o histopatológico — nunca por aislamiento.</li>
+    </ul>
+    <div class="box clin"><span class="lbl">Traducción clínica</span>
+      <p>Aciclovir, ganciclovir, foscarnet y cidofovir inhiben la <b>DNA polimerasa viral</b>, que solo trabaja en el ciclo lítico. Como el 99 % de las células de un KS, un PEL o un Burkitt están en <b>latencia</b>, ningún antiviral tiene actividad antitumoral. Es la explicación mecanística de una de las reglas más preguntadas del tema.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">El programa de latencia decide el tumor</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Programas de latencia del virus de Epstein-Barr y genes latentes del KSHV con los tumores que producen">
+        <rect width="900" height="400" fill="#FFFFFF"/>
+        <text x="24" y="22" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#27334F">VEB — CUATRO PROGRAMAS DE LATENCIA, CUATRO ESCENARIOS CLÍNICOS</text>
+        <text x="40" y="40" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">PROGRAMA</text>
+        <text x="212" y="40" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">GENES EXPRESADOS</text>
+        <text x="500" y="40" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">CÉLULA O TUMOR</text>
+
+        <rect x="24" y="48" width="852" height="40" rx="5" fill="rgba(69,90,140,.10)"/>
+        <rect x="24" y="48" width="4" height="40" rx="2" fill="#455A8C"/>
+        <text x="40" y="66" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">Latencia 0</text>
+        <text x="40" y="80" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">silencio casi total</text>
+        <text x="212" y="72" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">EBER y microRNA (EBNA-1 solo al dividirse)</text>
+        <text x="500" y="72" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f"><tspan font-weight="600">Linfocito B de memoria sano</tspan> — 1 a 50 por millón: el reservorio de por vida</text>
+
+        <rect x="24" y="94" width="852" height="40" rx="5" fill="rgba(92,122,87,.11)"/>
+        <rect x="24" y="94" width="4" height="40" rx="2" fill="#5C7A57"/>
+        <text x="40" y="112" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">Latencia I</text>
+        <text x="40" y="126" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">mínima exposición</text>
+        <text x="212" y="118" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">EBNA-1 · EBER · miRNA</text>
+        <text x="500" y="118" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f"><tspan font-weight="600">Linfoma de Burkitt</tspan> — depende de la t(8;14) MYC-IGH del huésped</text>
+
+        <rect x="24" y="140" width="852" height="40" rx="5" fill="rgba(138,92,10,.11)"/>
+        <rect x="24" y="140" width="4" height="40" rx="2" fill="#8a5c0a"/>
+        <text x="40" y="158" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">Latencia II</text>
+        <text x="40" y="172" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">intermedia</text>
+        <text x="212" y="164" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">EBNA-1 + <tspan font-weight="600">LMP1</tspan> + LMP2 + EBER</text>
+        <text x="500" y="164" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f"><tspan font-weight="600">Hodgkin</tspan> · carcinoma nasofaríngeo · linfoma T/NK nasal · carcinoma gástrico</text>
+
+        <rect x="24" y="186" width="852" height="40" rx="5" fill="rgba(112,29,20,.10)"/>
+        <rect x="24" y="186" width="4" height="40" rx="2" fill="#701d14"/>
+        <text x="40" y="204" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">Latencia III</text>
+        <text x="40" y="218" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">programa completo</text>
+        <text x="212" y="212" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">6 EBNA + LMP1 + LMP2 = inmortalización de B</text>
+        <text x="500" y="212" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f"><tspan font-weight="600">PTLD</tspan> · linfoma primario de SNC en sida · mononucleosis aguda</text>
+
+        <text x="24" y="252" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#701d14">KSHV — CINCO GENES LATENTES BASTAN PARA TRANSFORMAR</text>
+
+        <rect x="24" y="262" width="852" height="40" rx="5" fill="rgba(69,90,140,.10)"/>
+        <rect x="24" y="262" width="4" height="40" rx="2" fill="#27334F"/>
+        <text x="40" y="286" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">LANA (ORF73)</text>
+        <text x="240" y="279" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">Replica el episoma y lo <tspan font-weight="600">amarra al cromosoma</tspan> en la mitosis; además regula</text>
+        <text x="240" y="293" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">transcripción y crecimiento celular. Es el antígeno que se tiñe por inmunohistoquímica.</text>
+
+        <rect x="24" y="308" width="852" height="40" rx="5" fill="rgba(92,122,87,.11)"/>
+        <rect x="24" y="308" width="4" height="40" rx="2" fill="#5C7A57"/>
+        <text x="40" y="326" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">vciclina D (ORF72)</text>
+        <text x="40" y="340" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">+ vFLIP (K13)</text>
+        <text x="240" y="325" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">La ciclina viral fuerza el paso <tspan font-weight="600">G1 → S</tspan> y es resistente a los inhibidores que frenan</text>
+        <text x="240" y="339" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">a la ciclina celular. vFLIP activa <tspan font-weight="600">NF-κB</tspan> e impide la apoptosis. Kaposina aporta miRNA.</text>
+
+        <rect x="24" y="354" width="852" height="40" rx="5" fill="rgba(138,92,10,.12)"/>
+        <rect x="24" y="354" width="4" height="40" rx="2" fill="#8a5c0a"/>
+        <text x="40" y="371" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">~1 % en ciclo lítico</text>
+        <text x="40" y="385" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">vGPCR y vIL-6</text>
+        <text x="240" y="371" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">El vGPCR (ORF74) es constitutivamente activo y actúa por <tspan font-weight="600">vía paracrina</tspan>: el ratón</text>
+        <text x="240" y="385" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">transgénico desarrolla lesiones tipo KS. vIL-6 e IL-6 mueven Castleman y KICS.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. El programa de latencia predice el tumor. Cuanto <b>más restringido</b> el programa (latencia I), <b>más mutaciones propias</b> necesita el huésped —de ahí la t(8;14) del Burkitt—; cuanto más completo (latencia III), más basta con que caiga la vigilancia T.</figcaption>
+    </figure>
+
+    <h4>Del beso a la mononucleosis</h4>
+    <ol class="steps">
+      <li><b>Replicación lítica en epitelio orofaríngeo</b> El virus llega en saliva y monta su fábrica en la orofaringe; durante los 30–50 días de incubación ya hay DNA viral a bajo nivel en sangre.</li>
+      <li><b>Infección de linfocitos B del anillo de Waldeyer</b> gp350 se une a CD21, gp42 usa el HLA-II como correceptor. El B infectado entra en ciclo y se <b>inmortaliza</b>: proliferación policlonal.</li>
+      <li><b>Tormenta de linfocitos T citotóxicos</b> El huésped responde con una expansión CD8 masiva. <b>Los linfocitos atípicos de Downey no son los B infectados, son los T reactivos.</b> Los síntomas coinciden con el pico de carga viral y son <b>inmunopatología</b>, no citólisis.</li>
+      <li><b>Persistencia</b> Sobreviven <b>1 a 50 B de memoria por millón</b> en latencia 0. La reactivación con excreción en saliva es <b>completamente asintomática</b>, a diferencia de los alfaherpesvirus.</li>
+    </ol>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Los oncogenes del VEB</span>
+        <ul>
+          <li><b>LMP1</b> — el oncogén principal: mimetiza señalización de <b>CD40 constitutiva</b> sin necesidad de ligando → NF-κB, supervivencia del B.</li>
+          <li><b>LMP2</b> — mimetiza el <b>receptor de células B</b>, mantiene viva a la célula sin antígeno.</li>
+          <li><b>EBNA-2</b> — interruptor maestro; se acopla a <b>RBPJ</b> (vía Notch) y enciende <b>c-MYC</b>.</li>
+          <li><b>EBNA-3</b> — silencia <b>p16INK4A y p14ARF</b>.</li>
+          <li><b>EBNA-1</b> — mantiene y reparte el episoma.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Cofactores que completan el tumor</span>
+        <ul>
+          <li><b>Malaria por <i>P. falciparum</i></b> en el Burkitt endémico: deteriora el control T e induce AID, la enzima que favorece la translocación MYC.</li>
+          <li><b>Inmunosupresión farmacológica</b> (calcineurínicos, depleción T, esteroides altos) → latencia III sin vigilancia = <b>PTLD</b>.</li>
+          <li><b>VIH</b> → linfoma primario de SNC (VEB+ &gt;95 %) y Burkitt esporádico.</li>
+          <li>En el KSHV la <b>inflamación</b> también empuja: el KS aparece en sitios de trauma (<b>fenómeno de Koebner</b>) y puede desencadenarse o agravarse por <b>IRIS</b> al iniciar TARV.</li>
+          <li>El KS <b>no es monoclonal</b>: distintos nódulos pueden tener orígenes independientes. Es tanto una proliferación reactiva como un sarcoma.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">La paradoja del KSHV</span>
+      <p>La enfermedad aparece con <b>inmunosupresión</b>, pero el tumor está lleno de <b>infiltrado inflamatorio</b> y de citocinas (IL-6, COX-2, quimiocinas). Por eso los <b>corticoides empeoran o desencadenan el KS</b> y retirarlos puede hacerlo regresar. La otra cara: no todo lo explica el virus. Antes del sida el KS era frecuente en Uganda y Camerún pero raro en Botsuana y Gambia con seroprevalencia parecida, y sigue siendo mucho más frecuente en hombres pese a igual prevalencia de infección.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Mononucleosis, linfomas y las cuatro caras del Kaposi</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Mononucleosis infecciosa</h4>
+    <p>En países de bajos ingresos la primoinfección ocurre entre 1 y 5 años y es casi siempre asintomática; cuando se retrasa a la adolescencia, <b>hasta el 75 % se manifiesta como mononucleosis</b>. México tiene un patrón intermedio, con alta seroprevalencia desde la infancia temprana.</p>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Hallazgo</th><th class="num">Frecuencia</th><th>Matiz que se pregunta</th></tr></thead>
+      <tbody>
+        <tr><td>Adenopatía</td><td class="num">94 %</td><td><b>Cervical posterior simétrica</b>, ganglios móviles, poco dolorosos</td></tr>
+        <tr><td>Faringitis</td><td class="num">84 %</td><td>Exudativa en un tercio; <b>la peor odinofagia de su vida</b> (82 % refiere dolor de garganta)</td></tr>
+        <tr><td>Fiebre</td><td class="num">76 %</td><td>Vespertina, 38–39 °C, resuelve en <b>10–14 días</b></td></tr>
+        <tr><td>Esplenomegalia</td><td class="num">~50 %</td><td>Máxima al inicio de la <b>segunda semana</b>; regresa en 7–10 días</td></tr>
+        <tr><td>Edema palpebral bilateral</td><td class="num">hasta 50 %</td><td><b>Signo de Hoagland</b>: solo en los primeros días</td></tr>
+        <tr><td>Exantema</td><td class="num">20 %</td><td>Espontáneo. Con <b>ampicilina o amoxicilina llega a 90–100 %</b>: morbiliforme, pruriginoso, tono violáceo</td></tr>
+        <tr><td>Hepatomegalia · ictericia</td><td class="num">12 % · ~5–9 %</td><td>Transaminasas &gt;2× el límite superior en más del 80 %</td></tr>
+        <tr><td>Enantema palatino</td><td class="num">11 %</td><td>Petequias de 1–2 mm en la unión de paladar duro y blando; <b>no son específicas</b></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="box trap"><span class="lbl">Complicaciones que hay que temer</span>
+        <ul>
+          <li><b>Ruptura esplénica</b> — semanas 2 y 3. <b>El dolor abdominal es raro en la mononucleosis</b>: si aparece, pensar en ruptura. Hipocondrio izquierdo irradiado a escápula, hematocrito en descenso y a veces neutrofilia que invierte el diferencial esperado; la mitad tiene trauma trivial previo. No esperar confirmación: <b>esplenectomía urgente</b>.</li>
+          <li><b>Obstrucción de vía aérea</b> por hipertrofia amigdalina hasta la línea media.</li>
+          <li><b>Anemia hemolítica autoinmune</b> en 0.5–3 %: crioaglutininas IgM en <b>70–80 %</b> (especificidad <b>anti-i</b> en 20–70 %); aparece en la 2.ª–3.ª semana y cede en 1–2 meses.</li>
+          <li><b>Neurológicas</b>: encefalitis, meningitis, cerebelitis aguda pediátrica, Guillain-Barré, parálisis de pares. Junto con la ruptura esplénica y la obstrucción de vía aérea son las <b>tres causas de muerte</b> —rara— en el previamente sano.</li>
+          <li><b>Úlceras de Lipschütz</b>: úlceras dolorosas de labios menores en hasta 30 % de niñas y adolescentes, con borde violáceo y base necrótica. <b>No son de transmisión sexual</b>, remiten en 6 semanas y se confunden con herpes o Behçet.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Cuando el huésped es el problema</span>
+        <ul>
+          <li><b>XLP-1 (Purtilo o Duncan)</b> — mutación de <b>SH2D1A/SAP</b>: primoinfección fulminante con hepatitis y hemofagocitosis; quien sobrevive desarrolla <b>agammaglobulinemia progresiva</b> o linfoma. El defecto: el CD8 no reconoce antígeno presentado por el linfocito B.</li>
+          <li><b>XLP-2</b> (<i>XIAP</i>): mucha hemofagocitosis, poco linfoma. <b>XMEN</b> (<i>MAGT1</i>): linfoma B.</li>
+          <li><b>HLH asociada a VEB</b> — menores de 3 años: fiebre alta, pancitopenia, disfunción hepática y coagulopatía, por proliferación monoclonal de T CD8 infectados.</li>
+          <li><b>VEB crónico activo (CAEBV)</b> — enfermedad grave &gt;3–6 meses tras la primoinfección, DNA viral &gt;300 copias/µg y afección orgánica documentada. Rarísimo en Occidente, <b>frecuente en Asia y Sudamérica</b> y, a diferencia del resto, con infección de células <b>T o NK</b>.</li>
+          <li><b>Trasplantado</b> — PTLD, sobre todo <b>D+/R−</b> y en el primer año. <b>VIH</b> — leucoplasia vellosa oral, linfoma primario de SNC.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Sarcoma de Kaposi — cuatro formas epidemiológicas</h4>
+    <p>Evoluciona de <b>mácula a placa y a nódulo</b>: violácea al inicio, parda después por depósito de hemosiderina. Histología: <b>células fusiformes</b> con espacios vasculares mal formados y eritrocitos extravasados; en fase nodular casi todas las fusiformes son KSHV+.</p>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Forma</th><th>Huésped</th><th>Distribución y curso</th></tr></thead>
+      <tbody>
+        <tr><td><b>Clásico</b></td><td>Varón anciano de origen mediterráneo o de Europa del Este</td><td><b>Piel de miembros inferiores</b>, indolente</td></tr>
+        <tr><td><b>Endémico</b></td><td>África subsahariana, antes del VIH</td><td>Adultos: cutáneo, razón hombre:mujer <b>20:1</b>. Menores de 10 años: forma <b>linfadenopática multifocal agresiva</b>, a menudo sin lesiones cutáneas, con frecuencia mortal</td></tr>
+        <tr><td><b>Epidémico</b></td><td>Personas con VIH</td><td>Agresivo. Piel, <b>tubo digestivo y vía respiratoria</b>; en pulmón, lesiones en mucosa bronquial con nódulos, adenopatía o derrame. A diferencia del clásico, afecta <b>cara (nariz), genitales y cavidad oral</b> (paladar, encía)</td></tr>
+        <tr><td><b>Iatrogénico</b></td><td>Trasplantado o inmunosuprimido</td><td>Agresivo; el riesgo sube con la intensidad de la inmunosupresión (mayor en trasplante pulmonar)</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>En África el VIH cambió el rostro del KS: la razón hombre:mujer bajó diez veces hasta <b>~2:1</b>, y en Zambia los casos pediátricos pasaron de 0–2 % de las neoplasias infantiles a inicios de los ochenta a <b>~25 % en 1992</b>. En 2020 el KS fue el cáncer de mayor incidencia en varones en Malaui, Mozambique y Uganda.</p>
+
+    <div class="g3">
+      <div class="card"><span class="lbl">Linfoma primario de cavidades (PEL)</span>
+        <p>Crece <b>en suspensión</b> en pleura, pericardio o peritoneo, sin masa sólida contigua. Origen B por reordenamiento clonal de inmunoglobulinas, pese a no expresar la mayoría de los antígenos B. <b>Coinfección frecuente por VEB.</b> Solo <b>3 % de los linfomas del sida</b>. Pronóstico malo: muerte en meses.</p>
+      </div>
+      <div class="card"><span class="lbl">Castleman multicéntrica</span>
+        <p>Variante de <b>células plasmáticas</b> (la localizada hialino-vascular <b>no</b> se asocia a KSHV). Fiebre, hepatoesplenomegalia y adenopatía generalizada en brotes. <b>Casi el 100 %</b> de los casos con VIH y ~50 % de los casos sin VIH son KSHV+; IL-6 y vIL-6 explican la plasmocitosis. Complicaciones: infección —causa frecuente de muerte—, linfoma plasmablástico y KS.</p>
+      </div>
+      <div class="card"><span class="lbl">KICS</span>
+        <p>Inflamación sistémica <b>sin</b> los hallazgos ganglionares de Castleman. Casi siempre hay KS concomitante y puede haber PEL. Cargas virales más altas, síntomas más graves y <b>mayor mortalidad</b>. La linfocitopenia CD4 grave es frecuente: quizá con CD4 muy bajos ya no se monta la histología de Castleman.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Leer el panel serológico de una sola mirada</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cronología de los marcadores serológicos de la infección por virus de Epstein-Barr">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <rect x="250" y="60" width="220" height="192" fill="rgba(138,92,10,.10)"/>
+        <text x="260" y="76" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#8a5c0a">VENTANA DIAGNÓSTICA: VCA-IGM + Y EBNA-1 −</text>
+        <line x1="90" y1="252" x2="866" y2="252" stroke="#455A8C" stroke-width="1.4"/>
+        <line x1="90" y1="60" x2="90" y2="252" stroke="#455A8C" stroke-width="1.4"/>
+        <g stroke="#455A8C" stroke-width="1">
+          <line x1="250" y1="252" x2="250" y2="258"/><line x1="350" y1="252" x2="350" y2="258"/>
+          <line x1="470" y1="252" x2="470" y2="258"/><line x1="570" y1="252" x2="570" y2="258"/>
+          <line x1="670" y1="252" x2="670" y2="258"/><line x1="820" y1="252" x2="820" y2="258"/>
+        </g>
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585" text-anchor="middle">
+          <text x="96" y="272">contacto</text>
+          <text x="250" y="272">inicio de síntomas</text>
+          <text x="250" y="285">día 30–50</text>
+          <text x="350" y="272">semana 2</text>
+          <text x="470" y="272">semana 6</text>
+          <text x="570" y="272">mes 3</text>
+          <text x="670" y="272">mes 6</text>
+          <text x="820" y="272">años</text>
+        </g>
+        <text x="60" y="66" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">TÍTULO</text>
+        <path d="M240 250 C 290 245 315 108 365 94 C 430 78 500 110 600 120 L 866 122" fill="none" stroke="#27334F" stroke-width="2.4"/>
+        <path d="M240 250 C 290 250 310 118 355 108 C 410 98 470 172 560 240 L 620 250" fill="none" stroke="#701d14" stroke-width="2.2"/>
+        <path d="M250 250 C 300 250 320 152 360 142 C 420 132 480 194 570 236 L 640 249" fill="none" stroke="#90303a" stroke-width="2.2" stroke-dasharray="6 3"/>
+        <path d="M252 250 C 312 248 350 184 400 170 C 460 154 520 212 610 243 L 680 250" fill="none" stroke="#8a5c0a" stroke-width="2.2"/>
+        <path d="M470 250 C 520 248 560 216 620 196 C 690 176 760 170 866 168" fill="none" stroke="#5C7A57" stroke-width="2.4"/>
+        <g font-family="'Inter', sans-serif" font-size="10.5" font-weight="600">
+          <text x="700" y="112" fill="#27334F">VCA-IgG — de por vida</text>
+          <text x="700" y="158" fill="#5C7A57">EBNA-1 IgG — de por vida</text>
+          <text x="470" y="100" fill="#701d14">VCA-IgM</text>
+          <text x="372" y="136" fill="#90303a">Heterófilos</text>
+          <text x="410" y="163" fill="#8a5c0a">EA-D</text>
+        </g>
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">
+          <text x="470" y="113">desaparece hacia el mes 3</text>
+          <text x="372" y="149">Monospot · negativos en la 1.ª semana</text>
+          <text x="372" y="162">y en menores de 4 años</text>
+          <text x="410" y="176">reaparece en reactivación y en nasofaríngeo</text>
+        </g>
+        <text x="90" y="308" font-family="'Source Serif 4', serif" font-style="italic" font-size="12.5" fill="#6b7585">EBNA-1 tarda 6 a 12 semanas en aparecer: su ausencia,</text>
+        <text x="90" y="326" font-family="'Source Serif 4', serif" font-style="italic" font-size="12.5" fill="#6b7585">con VCA-IgG positivo, significa infección aguda.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Cronología serológica del VEB. La pregunta de examen casi siempre se resuelve con <b>una sola casilla: EBNA-1</b>.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Patrón</th><th>VCA-IgM</th><th>VCA-IgG</th><th>EA-D</th><th>EBNA-1 IgG</th><th>Lectura</th></tr></thead>
+      <tbody>
+        <tr><td><b>Susceptible</b></td><td>−</td><td>−</td><td>−</td><td>−</td><td>Nunca expuesto</td></tr>
+        <tr><td><b>Aguda</b></td><td><b>+</b></td><td>+</td><td>±</td><td><b>−</b></td><td>Mononucleosis activa</td></tr>
+        <tr><td><b>Convaleciente</b></td><td>±</td><td>+</td><td>+</td><td>±</td><td>Últimos meses</td></tr>
+        <tr><td><b>Pasada</b></td><td>−</td><td>+</td><td>−</td><td><b>+</b></td><td>Infección antigua, inmunidad</td></tr>
+        <tr><td><b>Reactivación</b></td><td>−</td><td>+ alto</td><td><b>+</b></td><td>+</td><td>Buscar inmunosupresión o carcinoma nasofaríngeo</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Pruebas de primera línea en la mononucleosis</span>
+        <ul>
+          <li><b>Biometría con frotis</b>: linfocitosis absoluta con <b>&gt;10 % de linfocitos atípicos</b> (Downey). Sensible pero <b>inespecífica</b>: también en CMV, toxoplasmosis, VIH agudo y reacciones a fármacos.</li>
+          <li><b>Heterófilos (Monospot, Paul-Bunnell)</b>: IgM que aglutina eritrocitos de carnero o caballo. <b>Sensibilidad 70–90 %</b> en adolescentes y adultos, <b>baja en menores de 4 años y en la primera semana</b>. Especificidad alta. Si es negativo y la sospecha persiste, <b>repetir en 1–2 semanas</b>.</li>
+          <li><b>Serología específica</b> si el caso es atípico, el paciente es niño o los heterófilos son negativos.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Pruebas moleculares y de tejido</span>
+        <ul>
+          <li><b>PCR cuantitativa de VEB en plasma</b>: monitoreo de PTLD tras trasplante (mensual el primer año en <b>D+/R−</b> pediátrico), biomarcador de carga tumoral en <b>carcinoma nasofaríngeo</b> y, en LCR, apoyo diagnóstico del <b>linfoma primario de SNC</b>.</li>
+          <li><b>EBER por hibridación in situ</b>: <b>estándar de oro</b> para asignar una neoplasia al VEB. Los EBER se expresan en todos los programas de latencia.</li>
+          <li><b>KS</b>: se reconoce clínicamente y se confirma por <b>biopsia</b>, con <b>inmunohistoquímica para LANA</b> en los núcleos de las células fusiformes. PEL y Castleman también se diagnostican por biopsia.</li>
+          <li><b>Serología de KSHV</b>: no estandarizada; se basa en LANA (latente) y K8.1 (lítico) y <b>no existe una prueba aprobada por la FDA</b>. La PCR en sangre es <b>menos sensible</b> que la serología.</li>
+          <li><b>Carga viral de KSHV</b>: poco útil en KS por su baja viremia, pero <b>alta y útil en Castleman multicéntrica</b> (hasta 10⁴–10⁵ copias), donde sirve para seguir la actividad de la enfermedad.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li><b>VIH agudo</b> es el diagnóstico diferencial que no se puede fallar: da un síndrome mononucleósido y se han descrito heterófilos positivos en ese contexto. <b>Ante toda mononucleosis, pedir prueba de VIH.</b></li>
+        <li><b>Bacilosis angiomatosa</b> por <i>Bartonella</i> produce lesiones cutáneas muy vasculares que <b>imitan al KS</b> — y sí responde a antibiótico. Biopsia antes de asumir.</li>
+        <li>Un <b>EBNA-1 positivo excluye</b> primoinfección aguda por más que el VCA-IgM parezca positivo: los IgM tienen falsos positivos por reacción cruzada.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Se trata la inmunidad, no el virus</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="box hy"><span class="lbl">Principio rector</span>
+      <p>Ganciclovir, foscarnet, cidofovir y adefovir inhiben la replicación <b>lítica</b> del KSHV; <b>el aciclovir no</b>. Ninguno tiene papel probado en las neoplasias, porque la inmensa mayoría de las células tumorales están en <b>latencia</b>. En el VEB ocurre lo mismo: aciclovir y valaciclovir reducen la excreción orofaríngea <b>sin modificar el curso clínico</b> de la mononucleosis. Un fármaco que atacara la latencia sería el gran avance pendiente.</p>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Mononucleosis infecciosa</span>
+        <ul>
+          <li><b>Soporte</b>: hidratación, paracetamol o AINE. <b>Sin antivirales de rutina.</b></li>
+          <li><b>Evitar amoxicilina y ampicilina.</b> El exantema no es alergia verdadera y <b>no contraindica betalactámicos a futuro</b>. Con <i>S. pyogenes</i> documentado: penicilina V o cefalosporina de 1.ª.</li>
+          <li><b>Corticoides: no de rutina.</b> Indicaciones acotadas: obstrucción de vía aérea por hipertrofia amigdalina, anemia hemolítica o trombocitopenia graves, miocarditis o compromiso neurológico grave.</li>
+          <li><b>Reposo deportivo</b>: sin deportes de contacto ni esfuerzo intenso <b>3–4 semanas</b>, idealmente hasta que resuelva la esplenomegalia. Cuidar el estreñimiento y no palpar el bazo con energía el primer mes.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Síndromes linfoproliferativos por VEB</span>
+        <ul>
+          <li><b>PTLD</b>: <b>reducir la inmunosupresión</b> + <b>rituximab 375 mg/m² semanal</b>, con quimioterapia (R-CHOP o R-EPOCH) en los monomórficos. En refractarios, <b>linfocitos T específicos de VEB (tabelecleucel, Ebvallo)</b>, aprobados por la FDA en 2022.</li>
+          <li><b>Linfoma primario de SNC en VIH</b>: TARV potente + metotrexato a dosis altas ± rituximab; la PCR de VEB en LCR sirve de seguimiento.</li>
+          <li><b>HLH por VEB</b>: protocolo <b>HLH-94/2004</b> (etopósido + dexametasona ± ciclosporina), con supervivencia cercana al <b>75 %</b>.</li>
+          <li><b>CAEBV</b>: no responde a antivirales, inmunoglobulina, interferón ni quimioterapia convencional. <b>Solo el trasplante de progenitores hematopoyéticos es curativo.</b></li>
+          <li><b>Burkitt, Hodgkin, nasofaríngeo y gástrico</b>: oncología estándar, sin antiviral.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Enfermedades por KSHV</h4>
+    <div class="g2">
+      <div class="card"><span class="lbl">Sarcoma de Kaposi</span>
+        <ul>
+          <li><b>Restaurar la inmunidad es el tratamiento</b>: <b>TARV</b> en toda persona con VIH y KS —muchas lesiones regresan al reconstituirse la inmunidad—; en el iatrogénico, reducir la inmunosupresión.</li>
+          <li>En trasplante renal, <b>cambiar ciclosporina por sirolimus</b> indujo remisiones: considérese en todo receptor con KS.</li>
+          <li><b>Retirar o reducir corticoides</b>: se asocian a aparición y empeoramiento del KS y su suspensión puede hacerlo regresar.</li>
+          <li><b>Local</b> (enfermedad limitada): observación, tópicos, quimioterapia intralesional, láser, crioterapia, radioterapia.</li>
+          <li><b>Sistémico</b> (enfermedad extensa): antraciclinas liposomales, <b>paclitaxel</b> —superior a etopósido oral y a bleomicina + vincristina en un ensayo aleatorizado de tres brazos—, vinorelbina.</li>
+          <li><b>Pomalidomida</b>: inmunomodulador oral con <b>aprobación acelerada de la FDA</b> para KS con o sin VIH; en el estudio fase 1/2 del NIH respondió el <b>73 %</b>, con respuesta mediana a las <b>4 semanas</b> y SLP de <b>16.6 meses</b>.</li>
+          <li><b>IRIS asociado a KS</b>: empeora un KS conocido o «desenmascara» uno oculto. <b>No se suspende el TARV</b>; puede requerirse quimioterapia para controlarlo.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">PEL, Castleman y KICS</span>
+        <ul>
+          <li><b>PEL</b>: TARV + esquema basado en <b>CHOP</b>. Añadir metotrexato a dosis altas mejora poco la supervivencia y añade toxicidad. Radioterapia si la quimioterapia falla o no es posible.</li>
+          <li><b>Castleman multicéntrica</b>: <b>rituximab</b>, bloqueo de IL-6 con <b>tocilizumab</b> o <b>siltuximab</b>, ganciclovir y quimioterapia. Rituximab + doxorrubicina liposomal es muy eficaz cuando además hay KS.</li>
+          <li><b>KICS</b>: por su fisiopatología compartida con Castleman se han usado tocilizumab y ganciclovir.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="box clin"><span class="lbl">Prevención</span>
+        <ul>
+          <li><b>No hay vacuna</b> contra ninguno. El candidato de subunidad <b>gp350</b> protegió de los <b>síntomas</b> de mononucleosis en fases I–II pero <b>no evitó la infección</b>; <b>mRNA-1189 (Moderna)</b> está en fase 1/2. Como el VEB se asocia a neoplasias, una vacuna viva atenuada es inaceptable.</li>
+          <li><b>Tamizaje pretrasplante</b>: serología VEB de donante y receptor obligatoria. <b>D+/R−</b> pediátrico es el de mayor riesgo de PTLD y obliga a PCR seriada para reducir la inmunosupresión de forma preventiva.</li>
+          <li><b>KSHV</b>: el donante seropositivo transmite el virus al receptor seronegativo, pero <b>no hay prueba aprobada por la FDA</b> y el tamizaje de hemoderivados sigue siendo controvertido. El valganciclovir reduce la excreción orofaríngea, pero su toxicidad impide usarlo como prevención poblacional.</li>
+          <li><b>Aislamiento</b>: precauciones <b>estándar</b>. Ni gota ni contacto. No existe profilaxis postexposición.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Magnitud del problema</span>
+        <ul>
+          <li>Unos <b>125 000 casos de mononucleosis al año</b> en Estados Unidos y <b>200 000 neoplasias nuevas asociadas a VEB</b> al año en el mundo. La seroprevalencia en universitarios estadounidenses <b>viene bajando</b>: más adultos susceptibles y más mononucleosis sintomática.</li>
+          <li>La mononucleosis sintomática multiplica por <b>3.4</b> el riesgo de Hodgkin VEB+: una vacuna que solo evitara los síntomas ya tendría beneficio oncológico.</li>
+          <li>Con TARV la incidencia de KS cayó, pero <b>sigue muy por encima</b> de la de otros cánceres en personas con VIH, con señales de repunte en varones jóvenes afroamericanos del sur de Estados Unidos.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>CD21 (CR2)</b> es el receptor del VEB en el linfocito B; <b>EphA2</b> es el receptor compartido con el KSHV.</li>
+          <li>Los <b>linfocitos atípicos</b> no son B infectados: son <b>T CD8 citotóxicos reactivos</b>.</li>
+          <li><b>Latencia I = Burkitt · II = Hodgkin y nasofaríngeo · III = PTLD y linfoma de SNC.</b> <b>LMP1 mimetiza CD40</b>, <b>LMP2 el BCR</b>, <b>EBNA-2 enciende c-MYC</b> vía RBPJ.</li>
+          <li><b>Burkitt = t(8;14) MYC-IGH</b>: el endémico es mandibular u orbitario, pediátrico, VEB+ &gt;95 %, con <b>malaria</b> de cofactor; el esporádico es ileocecal y VEB+ solo ~30 %.</li>
+          <li><b>EBNA-1 tarda 6–12 semanas</b>: VCA-IgG+ con EBNA-1− = infección aguda.</li>
+          <li>KSHV: <b>LANA (ORF73)</b> ancla el episoma al cromosoma y es el antígeno que se tiñe en la biopsia de KS.</li>
+          <li>El KSHV es el <b>único herpesvirus humano no ubicuo</b>: su seroprevalencia varía por región.</li>
+          <li>La <b>Castleman localizada hialino-vascular NO es por KSHV</b>; la <b>multicéntrica de células plasmáticas SÍ</b>.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«Hay que tener 21 para beber cerveza en un Barr»</b> — <b>CD21</b> es la puerta del VEB al linfocito <b>B</b>.</p>
+        <p><b>«0-I-II-III: sano, Burkitt, Hodgkin/Naso, Post-trasplante»</b> — los cuatro programas de latencia en orden creciente de genes expresados.</p>
+        <p><b>«Kaposi son 4 K»</b> — <b>K</b>lásico (anciano mediterráneo), <b>K</b>ontinente africano (endémico), sida (epidémico) y trasplante (iatrogénico). Los cuatro, un solo virus.</p>
+        <p><b>«El bazo se rompe en la semana 2, no en la 1»</b> — y si hay dolor abdominal en una mononucleosis, se rompió.</p>
+        <p><b>«Aciclovir NO toca al KSHV»</b> — ganciclovir, foscarnet y cidofovir sí, pero solo el ciclo lítico: tampoco sirven contra el tumor.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas y escenario mexicano</span>
+      <ul>
+        <li><b>La trampa clásica</b>: adolescente con faringitis exudativa que recibe amoxicilina y a los días se cubre de exantema morbiliforme. <b>No es alergia a penicilinas</b> y no debe etiquetarse como tal de por vida: es mononucleosis.</li>
+        <li><b>La trampa que mata</b>: todo síndrome mononucleósido obliga a <b>descartar infección aguda por VIH</b>, que además puede dar heterófilos positivos.</li>
+        <li><b>Escenario mexicano</b>: seroprevalencia de VEB alta desde la infancia temprana, así que la mononucleosis clásica del adolescente se ve menos que en Estados Unidos, mientras el <b>Hodgkin pediátrico VEB+</b> es relativamente frecuente y el Burkitt esporádico raro. El KS que se ve aquí es casi siempre <b>epidémico</b> —VIH con CD4 bajos, lesiones en paladar, encía o nariz—, no la forma clásica del anciano mediterráneo.</li>
+        <li><b>La trampa terapéutica</b>: dar corticoides «para desinflamar» a un paciente con VIH y lesiones violáceas. En KS los esteroides lo <b>agravan</b>.</li>
+        <li><b>La trampa de laboratorio</b>: pedir PCR de KSHV en sangre para descartar KS. Es <b>menos sensible que la serología</b> y la viremia es baja; el diagnóstico se hace con <b>biopsia</b>.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/EBV.md</code> y <code>patogenos/HHV8_Kaposi.md</code> · Mandell PPID 10e, cap. 145 (virus de Epstein-Barr, pp. 1844-1861) y cap. 147 (KSHV/HHV-8, pp. 1868-1874) · Bjornevik et al., <i>Science</i> 2022;375(6578):296-301 · Dunmire, Verghese y Balfour, <i>J Clin Virol</i> 2018;102:84-92 · Allen y Preiksaitis, guía AST de PTLD, <i>Clin Transplant</i> 2019;33(9):e13652 · Balfour et al., <i>J Infect Dis</i> 2013;207:80-88 · First Aid for the USMLE Step 1 2025, pp. 159-163 y 172-173.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="herpesviridae-beta.html"><span class="k">← Anterior</span><span class="v">Herpesviridae — β</span></a>
+        <a class="next" href="poxviridae.html"><span class="k">Siguiente →</span><span class="v">Poxviridae</span></a></div>
+      <footer class="pf">
+        <span>Herpesviridae — γ · 8 de 10 · árbol DNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

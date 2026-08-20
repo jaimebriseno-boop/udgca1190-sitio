@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arenaviridae — Virus RNA</title>
+<meta name="description" content="Arenaviridae. Lassa · LCMV · Junín · Machupo">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Arenaviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 14 de 18 · Virología médica</p>
+    <h1>Arenaviridae</h1>
+    <p class="sub">Lassa · LCMV · Junín · Machupo</p>
+    <div class="chips"><span class="chip g">−ssRNA ambisentido · 2 segmentos (S y L)</span>
+  <span class="chip">Envuelto · pleomórfico 50–300 nm · ribosomas dentro del virión</span>
+  <span class="chip">Replicación citoplásmica</span>
+  <span class="chip r">Lassa: 100 000–900 000 casos/año en África occidental</span>
+  <span class="chip gold">Candid #1 (Junín) · plasma antes del día 8</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Arenaviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros</dt><dd><i>Mammarenavirus</i> (<b>el único patógeno humano</b>) · <i>Reptarenavirus</i> y <i>Hartmanivirus</i> (serpientes) · <i>Antennavirus</i> (peces, 3 segmentos)</dd></div>
+  <div class="cell"><dt>Dos complejos</dt><dd><b>Viejo Mundo</b> (Lassa-LCM): Lassa, Lujo, LCMV, Wēnzhōu · <b>Nuevo Mundo</b> (Tacaribe, clados A–D): Junín, Machupo, Guanarito, Sabiá, Chapare, Whitewater Arroyo</dd></div>
+  <div class="cell"><dt>Reservorio</dt><dd><b>Roedor con infección persistente</b> que excreta virus de por vida: <i>Mastomys natalensis</i> (Lassa) · <i>Mus musculus</i> (LCMV) · <i>Calomys musculinus</i> (Junín) · <i>C. callosus</i> (Machupo)</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Inhalación o ingestión de <b>excretas de roedor</b> · persona a persona nosocomial · <b>trasplante de órgano</b> (LCMV) · transplacentaria · laboratorio</dd></div>
+  <div class="cell"><dt>Receptor</dt><dd><b>α-distroglicano</b> (Viejo Mundo) vs <b>receptor de transferrina 1 (TfR-1)</b> (Nuevo Mundo, clado B) — el TfR-1 es ubicuo y explica el daño multiorgánico</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd>Lassa 2–21 d (media 7–10) · LCMV 1–2 semanas · fiebres sudamericanas 2–21 d · Lujo 7–13 d</dd></div>
+  <div class="cell"><dt>Letalidad</dt><dd>Lassa <b>~30 %</b> entre quienes buscan atención · Junín 15–30 % sin tratar · Machupo 25–30 % · Guanarito 33 % · Chapare ~50 % · Sabiá 66.7 % · <b>Lujo 80 %</b></dd></div>
+  <div class="cell"><dt>Secuela típica</dt><dd><b>Sordera neurosensorial</b> tras fiebre de Lassa · <b>síndrome neurológico tardío</b> tras plasma de convaleciente en la fiebre hemorrágica argentina</dd></div>
+  <div class="cell"><dt>Bioseguridad</dt><dd><b>BSL-4 y agente selecto</b>: Chapare, Guanarito, Junín, Lassa, Lujo, Machupo, Sabiá · <b>BSL-3</b>: LCMV, Wēnzhōu, Whitewater Arroyo</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">De un ratón de laboratorio a siete fiebres hemorrágicas</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1933</b> — se aísla el <b>virus de la coriomeningitis linfocítica (LCMV)</b> durante la investigación de una epidemia de encefalitis. Fue el primer agente identificado como causa de <b>meningitis aséptica</b> humana y, décadas después, el modelo con el que se describió la <b>restricción por MHC</b> de los linfocitos T citotóxicos (Nobel 1996) y el fenómeno de agotamiento de células T.</li>
+      <li><b>1958</b> — se aísla el <b>virus Junín</b> en Argentina. Los brotes se reportaban desde 1943 entre cosechadores de maíz; la enfermedad se reconoció como entidad propia en 1955.</li>
+      <li><b>1963</b> — <b>Machupo</b> se aísla en San Joaquín (Beni, Bolivia) de un paciente fallecido; el mismo año se identifica a <i>Calomys callosus</i> como reservorio, y el control de roedores hace desaparecer los casos entre 1976 y 1993.</li>
+      <li><b>1969</b> — <b>virus Lassa</b>, identificado en Nigeria durante un brote entre <b>trabajadores de la salud</b>: desde el principio quedó claro que se transmite de persona a persona en el hospital.</li>
+      <li><b>1970</b> — Rowe y colaboradores proponen el nombre <b>«arenavirus»</b> (latín <i>arenosus</i>, arenoso) por los gránulos electrodensos que se ven dentro del virión al microscopio electrónico: son <b>ribosomas del huésped</b> capturados durante la gemación.</li>
+      <li><b>1989–2008</b> — la lista se alarga: <b>Guanarito</b> (Venezuela, 1989–1991), <b>Sabiá</b> (Brasil, 1990), <b>Chapare</b> (Bolivia, 2003) y <b>Lujo</b> (2008, cinco casos en Johannesburgo, cuatro de ellos <b>nosocomiales</b> en personal que atendió o desinfectó el cuarto del caso índice).</li>
+      <li><b>1991</b> — se introduce <b>Candid #1</b> en Argentina. Los brotes que sumaron 21 000 casos entre 1955 y 1987 cayeron a unos cientos de casos entre 1993 y 2005.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué esta familia se estudia dos veces</span>
+      <p>Los arenavirus tienen doble vida académica: son <b>agentes de fiebre hemorrágica y de bioterrorismo (agentes selectos, BSL-4)</b> y, al mismo tiempo, el <b>modelo inmunológico fundacional</b> del siglo XX. Casi todo lo que se sabe sobre inmunidad celular antiviral, tolerancia y persistencia viral se descubrió con LCMV en el ratón.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Viejo Mundo vs Nuevo Mundo</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd>Arenaviridae — genoma −ssRNA <b>segmentado y ambisentido</b>; por eso el árbol la coloca junto a los Bunyavirales y no con los Mononegavirales</dd>
+      <dt>Géneros</dt><dd><i>Mammarenavirus</i> (mamíferos) · <i>Reptarenavirus</i> y <i>Hartmanivirus</i> (serpientes) · <i>Antennavirus</i> (peces, único con <b>3</b> segmentos)</dd>
+      <dt>Cifra actual</dt><dd>48 mammarenavirus nombrados en 42 especies reconocidas por el ICTV (2022); <b>13 con potencial de causar enfermedad humana</b></dd>
+      <dt>División antigénica</dt><dd>Complejo <b>Lassa-LCM</b> (Viejo Mundo) y complejo <b>Tacaribe</b> (Nuevo Mundo, subdividido en clados A, B, C y D)</dd>
+      <dt>Etimología</dt><dd><i>Arenosus</i> = arenoso, por los ribosomas del huésped visibles dentro del virión</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Complejo Lassa-LCM</span><span class="vg">Viejo Mundo · África y todo el mundo</span></div>
+        <div class="vbd">
+          <p><b>Virus Lassa</b> — África occidental (Nigeria, Sierra Leona, Liberia, Guinea; también Benín, Costa de Marfil, Ghana, Malí, Togo). <b>Siete linajes</b>, lo que complica el diseño de <i>primers</i> de RT-PCR. Estación seca (diciembre–abril).</p>
+          <p><b>LCMV</b> — <b>todos los continentes salvo la Antártida</b>, porque su reservorio es el ratón doméstico. Es el único arenavirus que el médico general puede encontrar fuera de zonas endémicas.</p>
+          <p><b>Virus Lujo</b> — un solo brote conocido (Zambia–Sudáfrica, 2008), reservorio desconocido, letalidad 80 %.</p>
+          <p><b>Wēnzhōu, variante Cardamones</b> — Camboya; seis casos sospechosos con fiebre, tos y cefalea, en ratas <i>Rattus</i>.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Complejo Tacaribe</span><span class="vg">Nuevo Mundo · clados A–D</span></div>
+        <div class="vbd">
+          <p><b>Clado B — las fiebres hemorrágicas sudamericanas</b>: <b>Junín</b> (fiebre hemorrágica argentina), <b>Machupo</b> (boliviana), <b>Guanarito</b> (venezolana), <b>Sabiá</b> (brasileña) y <b>Chapare</b> (Bolivia). Todos usan <b>TfR-1</b>.</p>
+          <p><b>Clado D — Whitewater Arroyo</b>: ratas de campo <i>Neotoma</i> en el suroeste de Estados Unidos (California, Colorado, Nuevo México, Oklahoma, Texas, Utah); tres casos fatales en California, 1999–2000, con SDRA.</p>
+          <p><b>Clado A — Flexal y Pichindé</b>: solo infecciones febriles <b>de laboratorio</b>, sin enfermedad zoonótica descrita. Tacaribe (clado B) también ha causado exposiciones ocupacionales.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Nemotecnias</span>
+      <p><b>El mapa por país</b>: <b>Ju</b>nín <i>juega</i> en Argentina · <b>Ma</b>chupo y <b>Cha</b>pare, en Bolivia · <b>Gua</b>narito, en Venezuela · <b>Sabiá</b> <i>sabe</i> a Brasil (el sabiá es el ave nacional brasileña).</p>
+      <p><b>«Dos segmentos, cuatro proteínas»</b>: el <b>S</b> lleva <b>NP + GPC</b>; el <b>L</b> lleva <b>L + Z</b>. No hay más.</p>
+      <p><b>«El Viejo Mundo se pega al músculo, el Nuevo al hierro»</b>: α-<b>distroglicano</b> (proteína de la matriz extracelular ligada al músculo) para Lassa y LCMV; receptor de <b>transferrina</b> para las fiebres sudamericanas.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Ambisentido: cada segmento se lee en dos direcciones</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión de los arenavirus y organización ambisentido de sus dos segmentos genómicos">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <text x="24" y="32" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">A · VIRIÓN PLEOMÓRFICO 50–300 NM</text>
+
+        <circle cx="170" cy="140" r="78" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.6"/>
+        <circle cx="170" cy="140" r="62" fill="none" stroke="#90303a" stroke-width="1.1" stroke-dasharray="3 3"/>
+        <g stroke="#701d14" stroke-width="2" stroke-linecap="round">
+          <line x1="248" y1="140" x2="262" y2="140"/>
+          <line x1="237" y1="179" x2="249" y2="186"/>
+          <line x1="209" y1="208" x2="216" y2="220"/>
+          <line x1="170" y1="218" x2="170" y2="232"/>
+          <line x1="131" y1="208" x2="124" y2="220"/>
+          <line x1="103" y1="179" x2="91" y2="186"/>
+          <line x1="92" y1="140" x2="78" y2="140"/>
+          <line x1="103" y1="101" x2="91" y2="94"/>
+          <line x1="131" y1="72" x2="124" y2="60"/>
+          <line x1="170" y1="62" x2="170" y2="48"/>
+          <line x1="209" y1="72" x2="216" y2="60"/>
+          <line x1="237" y1="101" x2="249" y2="94"/>
+        </g>
+        <g fill="#701d14">
+          <circle cx="264" cy="140" r="3.2"/><circle cx="251" cy="187" r="3.2"/><circle cx="217" cy="222" r="3.2"/>
+          <circle cx="170" cy="234" r="3.2"/><circle cx="123" cy="222" r="3.2"/><circle cx="89" cy="187" r="3.2"/>
+          <circle cx="76" cy="140" r="3.2"/><circle cx="89" cy="93" r="3.2"/><circle cx="123" cy="58" r="3.2"/>
+          <circle cx="170" cy="46" r="3.2"/><circle cx="217" cy="58" r="3.2"/><circle cx="251" cy="93" r="3.2"/>
+        </g>
+        <g fill="#14181f" opacity=".55">
+          <circle cx="140" cy="112" r="4.2"/><circle cx="196" cy="106" r="4.2"/><circle cx="208" cy="152" r="4.2"/>
+          <circle cx="152" cy="176" r="4.2"/><circle cx="186" cy="184" r="4.2"/><circle cx="124" cy="150" r="4.2"/>
+          <circle cx="170" cy="136" r="4.2"/><circle cx="214" cy="126" r="4.2"/><circle cx="132" cy="188" r="4.2"/>
+        </g>
+        <path d="M112 130 q20 -14 40 0 t40 0 t40 0 M112 162 q20 -14 40 0 t40 0 t40 0" fill="none" stroke="#5C7A57" stroke-width="2"/>
+
+        <g font-family="'Inter', sans-serif" fill="#14181f">
+          <text x="24" y="252" font-size="9.5" fill="#701d14">Espículas: trímeros de GP1 (receptor) + GP2 (fusión) + SSP</text>
+          <text x="24" y="270" font-size="9.5" fill="#14181f">Gránulos electrodensos = ribosomas del huésped: el aspecto</text>
+          <text x="24" y="284" font-size="9.5" fill="#14181f">«arenoso» que le da nombre a la familia</text>
+          <text x="24" y="302" font-size="9.5" fill="#1a6b42">Nucleocápside helicoidal NP–RNA, dos segmentos por virión</text>
+          <text x="24" y="320" font-size="9.5" fill="#6b7585">Envuelto y frágil: hipoclorito, detergentes y jabón lo inactivan</text>
+        </g>
+
+        <line x1="336" y1="24" x2="336" y2="320" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+        <text x="352" y="32" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">B · GENOMA AMBISENTIDO — DOS SEGMENTOS</text>
+
+        <text x="352" y="56" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#27334F">SEGMENTO S</text>
+        <rect x="352" y="62" width="500" height="30" rx="4" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="356" y="66" width="230" height="22" rx="3" fill="rgba(39,51,79,.14)" stroke="#27334F" stroke-width="1"/>
+        <text x="471" y="81" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">NP</text>
+        <path d="M596 88 q5 -20 10 0" fill="none" stroke="#90303a" stroke-width="1.6"/>
+        <rect x="614" y="66" width="234" height="22" rx="3" fill="rgba(112,29,20,.10)" stroke="#701d14" stroke-width="1"/>
+        <text x="731" y="81" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">GPC → GP1 + GP2 + SSP</text>
+
+        <text x="352" y="112" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#27334F">SEGMENTO L</text>
+        <rect x="352" y="118" width="500" height="30" rx="4" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="356" y="122" width="290" height="22" rx="3" fill="rgba(39,51,79,.14)" stroke="#27334F" stroke-width="1"/>
+        <text x="501" y="137" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">L — polimerasa</text>
+        <path d="M656 144 q5 -20 10 0" fill="none" stroke="#90303a" stroke-width="1.6"/>
+        <rect x="674" y="122" width="174" height="22" rx="3" fill="rgba(112,29,20,.10)" stroke="#701d14" stroke-width="1"/>
+        <text x="761" y="137" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">Z — matriz</text>
+
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">
+          <text x="352" y="172" font-size="9.5">Cada segmento lleva dos genes en orientaciones opuestas,</text>
+          <text x="352" y="186" font-size="9.5">separados por una horquilla intergénica que corta la</text>
+          <text x="352" y="200" font-size="9.5">transcripción. NP y L se leen directo del genoma (temprano);</text>
+          <text x="352" y="214" font-size="9.5">GPC y Z exigen copiar antes el antigenoma (tardío).</text>
+        </g>
+
+        <rect x="352" y="236" width="500" height="86" rx="6" fill="rgba(138,92,10,.10)" stroke="#8a5c0a" stroke-width="1.1"/>
+        <text x="366" y="258" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">Consecuencias de examen</text>
+        <text x="366" y="276" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">El RNA desnudo no es infeccioso: la polimerasa L viaja</text>
+        <text x="366" y="290" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">dentro del virión, como en todo virus de sentido negativo.</text>
+        <text x="366" y="308" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Dos segmentos = posibilidad de reordenamiento genético.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. Virión y genoma. Retén dos ideas: los «granos de arena» son <b>ribosomas del huésped</b> sin función conocida, y el <b>ambisentido</b> es un reloj de expresión — primero NP y L, después GPC y Z.</figcaption>
+    </figure>
+
+    <h4>Las cuatro proteínas</h4>
+    <dl class="kv">
+      <dt>NP (nucleoproteína)</dt><dd>La más abundante. Encapsida el RNA, regula transcripción y replicación y funciona como <b>exonucleasa</b> que degrada el RNA de doble cadena: así <b>antagoniza al interferón tipo I</b> borrando la señal que activaría a RIG-I.</dd>
+      <dt>GPC (glicoproteína)</dt><dd>Se procesa por la proteasa celular <b>SKI-1/S1P</b> en el complejo heterotrimérico <b>GP1</b> (unión al receptor), <b>GP2</b> (fusión) y el <b>péptido señal estable (SSP)</b>, que permanece asociado al complejo — una rareza casi exclusiva de esta familia. <b>GP1 es el blanco de los anticuerpos neutralizantes</b> y el antígeno de todas las vacunas en desarrollo.</dd>
+      <dt>L (polimerasa)</dt><dd>RNA-polimerasa RNA-dependiente; transcribe y replica el genoma. Blanco teórico de favipiravir.</dd>
+      <dt>Z (matriz)</dt><dd>Dedo de zinc tipo RING. Dirige el <b>ensamblaje y la gemación</b>, <b>inhibe a RIG-I</b> y regula a la baja la actividad de L: es el freno que mantiene la replicación en un nivel compatible con la persistencia crónica en el roedor.</dd>
+    </dl>
+
+    <h4>Entrada y ciclo</h4>
+    <ol class="steps">
+      <li><b>Adsorción</b> GP1 se une a <b>α-distroglicano</b> (Lassa, LCMV) o a <b>TfR-1</b> (clado B del Nuevo Mundo). Se han descrito receptores secundarios y, para Lassa, un cambio a <b>LAMP1</b> ya dentro del endosoma tardío.</li>
+      <li><b>Endocitosis y fusión</b> El pH ácido del endosoma tardío dispara la fusión mediada por GP2.</li>
+      <li><b>Transcripción y replicación</b> Íntegramente <b>citoplásmicas</b>. Transcripción primaria de NP y L desde el genoma; síntesis del antigenoma; transcripción tardía de GPC y Z.</li>
+      <li><b>Gemación</b> Z arrastra la nucleocápside a la membrana plasmática. En el camino se atrapan ribosomas del huésped — los granos de arena.</li>
+    </ol>
+
+    <div class="box clin"><span class="lbl">Traducción clínica</span>
+      <p>Ser un virus <b>envuelto y frágil</b> significa que el hipoclorito, el jabón y los detergentes lo inactivan sin problema; el riesgo real no es la superficie sino el <b>aerosol de excretas desecadas de roedor</b> y los <b>fluidos del paciente</b>. Por eso el control se juega en la vivienda (roedores) y en el hospital (EPP y cuarto de presión negativa), no en la desinfección heroica.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Tres mecanismos de daño distintos en una sola familia</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruta patogénica de los arenavirus desde la exposición a excretas de roedor hasta los tres mecanismos de daño">
+        <rect width="900" height="350" fill="#FFFFFF"/>
+
+        <rect x="20" y="44" width="250" height="64" rx="6" fill="rgba(69,90,140,.14)" stroke="#455A8C" stroke-width="1.1"/>
+        <text x="34" y="68" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">1 · Puerta de entrada</text>
+        <text x="34" y="86" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Aerosol de orina y heces desecadas,</text>
+        <text x="34" y="100" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">ingestión, piel erosionada, mucosas</text>
+
+        <line x1="272" y1="76" x2="296" y2="76" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="300,76 290,71 290,81" fill="#455A8C"/>
+
+        <rect x="302" y="44" width="266" height="64" rx="6" fill="rgba(69,90,140,.14)" stroke="#455A8C" stroke-width="1.1"/>
+        <text x="316" y="68" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">2 · Amplificación local</text>
+        <text x="316" y="86" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Macrófagos y células dendríticas del</text>
+        <text x="316" y="100" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">sitio de entrada y del ganglio regional</text>
+
+        <line x1="570" y1="76" x2="594" y2="76" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="598,76 588,71 588,81" fill="#455A8C"/>
+
+        <rect x="600" y="44" width="280" height="64" rx="6" fill="rgba(69,90,140,.14)" stroke="#455A8C" stroke-width="1.1"/>
+        <text x="614" y="68" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">3 · Viremia y siembra</text>
+        <text x="614" y="86" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Endotelio, hígado, bazo, suprarrenal,</text>
+        <text x="614" y="100" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">médula ósea, riñón y SNC</text>
+
+        <line x1="450" y1="112" x2="450" y2="132" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="155" y1="132" x2="740" y2="132" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="155" y1="132" x2="155" y2="150" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="445" y1="132" x2="445" y2="150" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="740" y1="132" x2="740" y2="150" stroke="#455A8C" stroke-width="1.2"/>
+
+        <rect x="20" y="152" width="270" height="162" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="20" y="152" width="4" height="162" rx="2" fill="#701d14"/>
+        <text x="34" y="174" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Lassa y Lujo · α-distroglicano</text>
+        <text x="34" y="194" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Infectan macrófago y célula dendrítica</text>
+        <text x="34" y="208" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">sin activarlos: respuesta inmune tardía</text>
+        <text x="34" y="226" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Disfunción endotelial y plaquetaria con</text>
+        <text x="34" y="240" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">TP y TTP normales: sangrado mucoso</text>
+        <text x="34" y="254" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">sin coagulación intravascular masiva</text>
+        <text x="34" y="272" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Fuga capilar: edema facial y cervical</text>
+        <text x="34" y="290" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Carga viral y AST altas predicen muerte</text>
+
+        <rect x="310" y="152" width="270" height="162" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="310" y="152" width="4" height="162" rx="2" fill="#90303a"/>
+        <text x="324" y="174" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#90303a">Junín, Machupo, Guanarito · TfR-1</text>
+        <text x="324" y="194" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">El TfR-1 está en casi toda célula: daño</text>
+        <text x="324" y="208" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">directo en suprarrenal, médula ósea,</text>
+        <text x="324" y="222" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">hígado, riñón, intestino, páncreas,</text>
+        <text x="324" y="236" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">glándula salival, esófago, piel y SNC</text>
+        <text x="324" y="254" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Respuesta hiperinflamatoria añadida:</text>
+        <text x="324" y="268" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">TNF-α, IL-6, IL-8, IL-10 y G-CSF altos</text>
+        <text x="324" y="290" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Leucopenia y trombocitopenia marcadas</text>
+
+        <rect x="600" y="152" width="280" height="162" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="600" y="152" width="4" height="162" rx="2" fill="#5C7A57"/>
+        <text x="614" y="174" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">LCMV · daño inmunopatológico</text>
+        <text x="614" y="194" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">El virus es poco citopático por sí mismo:</text>
+        <text x="614" y="208" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">la meningitis la producen los linfocitos</text>
+        <text x="614" y="222" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">T CD8 que atacan células infectadas</text>
+        <text x="614" y="240" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Infección in utero o neonatal: tolerancia</text>
+        <text x="614" y="254" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">inmune y portación crónica del virus</text>
+        <text x="614" y="272" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Congénito: coriorretinitis, hidrocefalia y</text>
+        <text x="614" y="286" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">calcificaciones periventriculares, pero</text>
+        <text x="614" y="300" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">casi nunca hallazgos extracerebrales</text>
+
+        <text x="20" y="338" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El sangrado del arenavirus no es una coagulopatía masiva: es endotelio y plaqueta que dejan de funcionar.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Tronco común y tres desenlaces. La misma puerta de entrada produce fiebre hemorrágica por daño endotelial (Lassa), por daño celular multiorgánico vía TfR-1 (Nuevo Mundo) o meningitis por respuesta T (LCMV).</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Ecología del reservorio</span>
+        <ul>
+          <li>El roedor se infecta al nacer o <i>in utero</i> y desarrolla <b>tolerancia inmune</b>: queda <b>crónicamente virémico y excretando virus de por vida</b>, sano. Este es el mismo fenómeno que se descubrió con LCMV en el ratón.</li>
+          <li>La estacionalidad humana copia la del roedor: <b>estación seca</b> en Lassa (diciembre–abril) y <b>cosecha de maíz</b> en Junín (abril–noviembre), cuando el contacto hombre-roedor se maximiza.</li>
+          <li>El <b>trabajo agrícola</b> explica que las fiebres sudamericanas predominen en hombres; en Lassa, en cambio, la exposición es doméstica y afecta por igual a ambos sexos.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Persistencia y transmisión secundaria</span>
+        <ul>
+          <li>El RNA persiste tiempo prolongado en <b>semen</b> — hasta <b>170 días</b> con Chapare —, lo que abre la posibilidad de <b>transmisión sexual</b> (descrita para Junín y Chapare) y obliga a asesorar al convaleciente.</li>
+          <li>La transmisión <b>nosocomial</b> es la firma de Lassa, Lujo, Machupo y Chapare: en el brote de Lujo, <b>cuatro de cinco casos fueron trabajadores de salud</b>.</li>
+          <li><b>LCMV se transmite por trasplante de órgano</b>: 6 conglomerados descritos, 21 receptores infectados, <b>letalidad 71 %</b>. En uno de ellos el donante había adoptado un hámster tres semanas antes de morir.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">Por qué la sordera de Lassa es distinta</span>
+      <p>La <b>hipoacusia neurosensorial</b> aparece en la <b>convalecencia</b>, cuando el virus ya se está eliminando, y no se correlaciona con la gravedad del cuadro agudo: puede seguir a una infección leve. El mecanismo se considera <b>inmunomediado</b>, y por eso la ribavirina no la previene. Se describe entre las secuelas de la convalecencia junto con alopecia, alteraciones del equilibrio y cambios visuales. También se reporta pérdida auditiva tras fiebre hemorrágica venezolana (Guanarito).</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Todo empieza como dengue, malaria o tifoidea</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Virus</th><th>Incubación e inicio</th><th>Cuadro</th><th>Letalidad y sello</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>LCMV</b></td>
+          <td class="num">1–2 semanas · gradual</td>
+          <td>Frecuentemente <b>asintomático</b> o leve. Clásicamente <b>bifásico</b>: fase 1 febril con anorexia, mialgia, <b>cefalea retroorbitaria</b> y debilidad, con transaminasas altas, leucopenia y trombocitopenia; fase 2 con <b>meningitis aséptica febril</b>. También encefalitis, meningoencefalitis, Guillain-Barré, mielitis transversa, miocarditis, artritis, parotiditis, orquitis y neumonitis.</td>
+          <td>Baja en inmunocompetentes, sin secuelas. <b>LCR linfocitario con proteínas altas y, a veces, glucosa baja</b> — la hipoglucorraquia es la pista que despista hacia tuberculosis u hongos.</td>
+        </tr>
+        <tr>
+          <td><b>LCMV de donante de órgano</b></td>
+          <td class="num">días a 4 semanas</td>
+          <td>Alteración del estado mental, fiebre, diarrea, <b>eritema y dolor periincisional</b>, síntomas respiratorios; disfunción hepática, renal o pulmonar. Menos frecuentes: visión borrosa, fotofobia, rigidez de nuca y crisis.</td>
+          <td><b>71 %</b> de mortalidad en los casos reportados. Sospechar en todo receptor febril con encefalopatía en el primer mes.</td>
+        </tr>
+        <tr>
+          <td><b>LCMV congénito</b></td>
+          <td class="num">—</td>
+          <td>Muerte <i>in utero</i> o malformaciones <b>indistinguibles de CMV o toxoplasma</b>: coriorretinitis, hidrocefalia, macro o microcefalia, <b>calcificaciones periventriculares</b>, ventriculomegalia. A diferencia de las otras TORCH, <b>ascitis, derrames y hepatoesplenomegalia son raros</b>.</td>
+          <td><b>35 %</b> de mortalidad en lactantes afectados; secuelas neurológicas frecuentes en los sobrevivientes.</td>
+        </tr>
+        <tr>
+          <td><b>Lassa</b></td>
+          <td class="num">2–21 d (media 7–10) · <b>insidioso</b></td>
+          <td>Fiebre, faringitis, tos, dolor retroesternal, abdominal o lumbar, náusea, vómito, diarrea, mialgia, artralgia, mareo y <b>acúfenos</b>. Al final de la primera semana: <b>hemorragia mucosa, fuga vascular, edema, hipotensión, distrés respiratorio, oliguria, encefalopatía y falla orgánica</b>. Laboratorio: creatinina y transaminasas altas, linfopenia con monocitosis, trombocitopenia y disfunción plaquetaria con <b>TP y TTP normales</b>, proteinuria.</td>
+          <td><b>~30 %</b> entre quienes buscan atención. Predicen muerte: falla renal aguda, <b>AST alta</b>, carga viral alta y edad ≥45 años; en niños, antigenemia, sangrado y confusión.</td>
+        </tr>
+        <tr>
+          <td><b>Lujo</b></td>
+          <td class="num">7–13 d · <b>abrupto</b></td>
+          <td>Fiebre, cefalea, mialgia y odinofagia en el 100 %; diarrea y vómito en el 80 %. Al final de la primera semana, <b>exantema maculopapular</b> del tronco a extremidades <b>respetando palmas y plantas</b> (80 %), con vasculitis en la biopsia de piel; <b>sangrado en todos los casos</b>, edema facial y cervical, temblor, crisis y edema cerebral.</td>
+          <td><b>80 %</b> — la letalidad más alta de la familia. Solo cinco casos conocidos, cuatro de ellos nosocomiales.</td>
+        </tr>
+        <tr>
+          <td><b>Fiebres sudamericanas</b><br>(Junín, Machupo, Guanarito, Sabiá, Chapare)</td>
+          <td class="num">2–21 d · pródromo 1–5 d</td>
+          <td>Pródromo con fiebre, cefalea, mialgia, anorexia y malestar; luego mareo, dolor retroorbitario, fotofobia y síntomas gastrointestinales. Exploración: <b>enantema del paladar blando con petequias y vesículas</b>, petequias axilares y en tórax superior, adenopatía cervical, <b>candidiasis oral</b>, temblor distal fino, hiperestesia cutánea, hipotonía, hiporreflexia y ataxia cerebelosa.</td>
+          <td>Junín 15–30 % sin tratamiento · Machupo 25–30 % · Guanarito 33 % · Chapare ~50 % · Sabiá 66.7 %. En el <b>tercer trimestre del embarazo, Junín mata a cerca del 50 %</b>.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h4>La bifurcación de la segunda semana</h4>
+    <p>En las fiebres hemorrágicas sudamericanas <b>alrededor del 80 % de los pacientes empieza a mejorar en la segunda semana</b>; el <b>20 % restante entra entre los días 8 y 12 en la fase hemorrágico-neurológica</b>: equimosis, epistaxis, gingivorragia, hematemesis, hematuria, melena, metrorragia, hipotensión y choque, con encefalopatía progresiva de la confusión al coma, temblor y ataxia. Machupo y Chapare añaden edema pulmonar; Guanarito es el único que da <b>síntomas respiratorios altos</b> (tos, odinofagia, exudado amigdalino), y en él las <b>crisis convulsivas anticipan 72 % de mortalidad</b>.</p>
+
+    <div class="g2">
+      <div class="box clin"><span class="lbl">Poblaciones especiales</span>
+        <ul>
+          <li><b>Embarazo</b>: en Lassa las probabilidades de morir son <b>2.86 veces mayores</b>, con el máximo en el tercer trimestre, y la pérdida gestacional es habitual. En Junín, la letalidad del tercer trimestre ronda el 50 %.</li>
+          <li><b>Neonato y lactante</b>: <b>síndrome del bebé hinchado</b> (<i>swollen baby syndrome</i>) por Lassa — distensión abdominal, sangrado anormal y edema difuso, con letalidad del <b>83 %</b>.</li>
+          <li><b>Niños</b>: en la fiebre hemorrágica argentina el cuadro tiende a ser <b>más leve</b> que en el adulto.</li>
+          <li><b>Inmunosuprimido</b>: LCMV, banal en el sano, se vuelve grave y de amplio espectro.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Trampas y diferencial</span>
+        <ul>
+          <li>La primera semana es <b>indistinguible</b> de dengue, malaria, fiebre tifoidea, leptospirosis, rickettsiosis, mononucleosis y fiebre amarilla. <b>Dos de los cuatro casos zoonóticos de Sabiá se diagnosticaron primero como fiebre amarilla.</b></li>
+          <li>Un <b>LCR con hipoglucorraquia y linfocitos</b> hace pensar en tuberculosis; el LCMV lo imita.</li>
+          <li>El <b>síndrome neurológico tardío</b> tras plasma de convaleciente (fiebre, parálisis del <b>VI par</b> hasta en 60 %, nistagmo y ataxia en 50 %, diplopía en 40 %) no es recaída: es autolimitado, con LCR linfocitario de glucosa y proteínas normales y <b>títulos anti-Junín mayores en LCR que en suero</b>.</li>
+          <li>Sin <b>historia epidemiológica dirigida</b> —ocupación, viaje, tipo de vivienda, contacto con enfermos— el diagnóstico simplemente no se hace.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Combinar pruebas y avisar al laboratorio</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Sangre</b></td><td>RT-PCR</td><td>La prueba de uso más frecuente. <b>Falsos negativos si los <i>primers</i> no coinciden con el linaje infectante</b>, problema real en Lassa por sus siete linajes.</td></tr>
+        <tr><td><b>Sangre</b></td><td>ELISA de antígeno</td><td>Rendimiento <b>máximo temprano</b>, cuando la antigenemia es alta; puede ser indetectable en fases tardías. Se combina con serología.</td></tr>
+        <tr><td><b>Suero</b></td><td>IgM y seroconversión de IgG</td><td>Útiles, pero <b>la seroconversión puede ser tardía o no ocurrir nunca</b>, sobre todo en los casos fatales. Una serología negativa temprana no descarta.</td></tr>
+        <tr><td><b>LCR</b></td><td>RT-PCR + serología</td><td>Clave en LCMV, aunque el virus <b>solo es detectable en LCR poco tiempo</b>. Citoquímico: pleocitosis linfocítica, proteínas altas, glucosa a veces baja.</td></tr>
+        <tr><td><b>Tejido</b></td><td>Inmunohistoquímica</td><td>Detecta antígeno viral; útil en necropsia y en biopsia de piel (Lujo) o de órgano trasplantado.</td></tr>
+        <tr><td><b>Cualquiera</b></td><td>Aislamiento viral</td><td>Solo en laboratorios de <b>alta bioseguridad</b>. Nunca es la ruta diagnóstica de primera línea.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Escenarios concretos</span>
+        <ul>
+          <li><b>Receptor de trasplante con encefalopatía febril</b>: la recomendación de la <i>American Society of Transplantation</i> es hacer <b>el panel completo</b> — IgM e IgG en suero <b>y</b> en LCR, RT-PCR en sangre <b>y</b> en LCR, e inmunohistoquímica en tejido.</li>
+          <li><b>LCMV congénito</b>: se diagnostica por <b>serología</b>, porque el virus puede haber desaparecido al nacer.</li>
+          <li><b>Sospecha de fiebre hemorrágica</b>: fuera de LCMV, las pruebas <b>no están disponibles localmente</b>. Se contacta a la autoridad sanitaria, que canaliza la muestra a un laboratorio de referencia, con empaque y envío conforme a las normas de transporte de sustancias infecciosas.</li>
+          <li><b>Definición de caso</b>: fiebre + al menos un hallazgo clínico adicional + criterio de laboratorio (antígeno, RNA o aislamiento) + <b>exposición compatible en las 3 semanas previas</b>.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Bioseguridad — dato de examen</span>
+        <p><b>BSL-4 y agentes selectos</b>: Chapare, Guanarito, Junín, Lassa, Lujo, Machupo y Sabiá. <b>BSL-3</b>: LCMV, Wēnzhōu y Whitewater Arroyo.</p>
+        <p>El error clásico es enviar la muestra al laboratorio general <b>sin avisar</b>: es así como se producen las infecciones ocupacionales (dos de los seis casos conocidos de Sabiá fueron adquiridos en laboratorio, y ambos sobrevivieron).</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">El soporte manda; la ventana se cierra el día 8</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Línea de tiempo del día de enfermedad con las fases clínicas y las ventanas terapéuticas de los arenavirus">
+        <rect width="900" height="300" fill="#FFFFFF"/>
+        <text x="60" y="38" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">DÍA DE ENFERMEDAD · VENTANAS TERAPÉUTICAS</text>
+        <text x="60" y="62" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Incubación 2–21 días (media 7–10). El inicio de Lassa es insidioso; el de Lujo y</text>
+        <text x="60" y="76" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">el de las fiebres hemorrágicas sudamericanas, abrupto.</text>
+
+        <rect x="60" y="94" width="260" height="32" rx="4" fill="rgba(69,90,140,.18)"/>
+        <text x="190" y="114" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#27334F">Fase febril inespecífica</text>
+        <rect x="320" y="94" width="260" height="32" rx="4" fill="rgba(112,29,20,.12)"/>
+        <text x="450" y="114" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#701d14">Hemorrágico-neurológica</text>
+        <rect x="580" y="94" width="260" height="32" rx="4" fill="rgba(92,122,87,.16)"/>
+        <text x="710" y="114" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#1a6b42">Convalecencia y secuelas</text>
+
+        <g font-family="'IBM Plex Mono', monospace" font-size="9" fill="#6b7585">
+          <text x="60" y="143" text-anchor="middle" font-size="9">0</text>
+          <text x="171" y="143" text-anchor="middle" font-size="9">3</text>
+          <text x="320" y="143" text-anchor="middle" font-size="9">7</text>
+          <text x="431" y="143" text-anchor="middle" font-size="9">10</text>
+          <text x="580" y="143" text-anchor="middle" font-size="9">14</text>
+          <text x="840" y="143" text-anchor="middle" font-size="9">21</text>
+        </g>
+        <line x1="60" y1="150" x2="860" y2="150" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="864,150 854,145 854,155" fill="#455A8C"/>
+        <g stroke="#455A8C" stroke-width="1.2">
+          <line x1="60" y1="146" x2="60" y2="156"/>
+          <line x1="171" y1="146" x2="171" y2="156"/>
+          <line x1="320" y1="146" x2="320" y2="156"/>
+          <line x1="431" y1="146" x2="431" y2="156"/>
+          <line x1="580" y1="146" x2="580" y2="156"/>
+          <line x1="840" y1="146" x2="840" y2="156"/>
+        </g>
+
+        <rect x="60" y="170" width="297" height="22" rx="4" fill="rgba(138,92,10,.16)" stroke="#8a5c0a" stroke-width="1.1"/>
+        <text x="208" y="185" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#8a5c0a">Plasma de convaleciente · Junín</text>
+        <rect x="60" y="198" width="223" height="22" rx="4" fill="rgba(112,29,20,.10)" stroke="#701d14" stroke-width="1.1"/>
+        <text x="171" y="213" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#701d14">Ribavirina IV · Lassa</text>
+
+        <text x="380" y="186" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Antes del día 8 el plasma baja la letalidad de la fiebre</text>
+        <text x="380" y="200" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">hemorrágica argentina de 16.5 % a 1.1 % en ensayo</text>
+        <text x="380" y="214" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">controlado. Después aporta poco y aumenta el riesgo</text>
+        <text x="380" y="228" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">de síndrome neurológico tardío.</text>
+        <text x="380" y="250" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">La ribavirina IV tiene beneficio discutido: parece útil con</text>
+        <text x="380" y="264" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">AST ≥150 UI/L y viremia alta, y se asoció a peor</text>
+        <text x="380" y="278" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">desenlace en los casos con AST &lt;150 UI/L.</text>
+
+        <text x="60" y="250" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">El 80 % mejora en la</text>
+        <text x="60" y="264" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">segunda semana; el 20 %</text>
+        <text x="60" y="278" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">entra en la fase grave.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. La ventana terapéutica es la primera semana, cuando el cuadro todavía parece un síndrome febril banal. Es exactamente el momento en que nadie sospecha el diagnóstico.</figcaption>
+    </figure>
+
+    <div class="box hy"><span class="lbl">El pilar es el soporte</span>
+      <p>Para <b>todas</b> las infecciones por arenavirus, el tratamiento de sostén es la base: reposición cuidadosa de volumen, corrección de electrolitos, hemoderivados cuando hay sangrado, manejo del choque y de la falla orgánica. No existe ningún antiviral aprobado para esta familia.</p>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Antivirales</span>
+        <ul>
+          <li><b>Ribavirina</b> — el más usado. Régimen clásico de McCormick para fiebre de Lassa: <b>carga de 30 mg/kg IV</b>, luego <b>16 mg/kg IV c/6 h × 4 días</b> y después <b>8 mg/kg IV c/8 h × 6 días</b>. Se ha empleado también en Junín, Machupo, Lujo, Sabiá y LCMV del inmunocomprometido.</li>
+          <li><b>Advertencia sobre la evidencia</b>: los estudios de ribavirina en Lassa tienen alto riesgo de sesgo. El beneficio parecería limitarse a los pacientes con <b>AST ≥150 UI/L</b> y viremia alta al ingreso; en los que ingresaron con AST &lt;150 UI/L, su uso se asoció a <b>mayor</b> mortalidad. En un ensayo doble ciego en fiebre hemorrágica argentina tratada tardíamente redujo la mortalidad del 40 % al 12.5 %.</li>
+          <li><b>Toxicidad de la ribavirina</b>: anemia hemolítica dosis-dependiente y <b>teratogenicidad categoría X</b> — anticoncepción obligatoria durante el tratamiento y hasta 6 meses después en la mujer, 7 meses en el varón.</li>
+          <li><b>Favipiravir</b> — inhibidor selectivo de la polimerasa viral, activo en animales frente a Guanarito, Junín, LCMV, Lassa y Machupo. No está licenciado en Estados Unidos y también es teratógeno. La combinación con ribavirina se usó en un caso de fiebre argentina y dos de Lassa, todos supervivientes.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Inmunoterapia pasiva</span>
+        <ul>
+          <li><b>Plasma de convaleciente en fiebre hemorrágica argentina</b>: administrado en los <b>primeros 8 días</b>, redujo la mortalidad de 16.5 % a 1.1 % en un ensayo doble ciego controlado con placebo, y de 42.85 % a 3.29 % en la práctica real. <b>Es la única inmunoterapia con eficacia demostrada en esta familia.</b></li>
+          <li><b>Costo</b>: <b>síndrome neurológico tardío</b>, más frecuente cuando el plasma se da a partir del día 8. Es transitorio (días a menos de 4 meses).</li>
+          <li>En modelos animales de Machupo el plasma también mejora la supervivencia, con el mismo síndrome tardío en el grupo de mayor dosis.</li>
+          <li><b>En Lassa el plasma NO ha mostrado beneficio consistente</b>: probable cuestión de dosis y de anticuerpos neutralizantes que no coinciden con el linaje infectante. No lo extrapoles de Junín a Lassa.</li>
+          <li><b>Monoclonales</b> contra Junín, Lassa y Machupo: preclínicos, prometedores en animales, aún no disponibles.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Prevención</h4>
+    <div class="g3">
+      <div class="box clin"><span class="lbl">Vacuna</span>
+        <p><b>Candid #1</b> — virus Junín <b>vivo atenuado</b>, <b>licenciada solo en Argentina</b> y única vacuna existente contra un arenavirus. Una dosis es <b>95–98.1 % eficaz</b> contra la fiebre hemorrágica argentina y <b>84 %</b> contra cualquier infección sintomática por Junín. Tiene potencial de reversión a virulencia; hay una segunda generación en desarrollo preclínico. Para Lassa hay candidatas en fase I: sarampión recombinante con antígenos de Lassa, vacuna de DNA y <b>rVSV que expresa la GP de Lassa</b>.</p>
+      </div>
+      <div class="card"><span class="lbl">Control de roedores</span>
+        <p>Reducir la población del reservorio funciona <b>de manera variable</b> según su ecología, y los programas son difíciles de sostener. Medidas complementarias: <b>mejorar la vivienda</b> para hacerla resistente al roedor, <b>almacenar los alimentos</b> fuera de su alcance y educar sobre el riesgo de <b>cazar roedores para consumo</b>. El papel del gato y el perro como depredadores no está claro.</p>
+      </div>
+      <div class="card"><span class="lbl">Control de infecciones y profilaxis</span>
+        <p>Manejo ideal en <b>unidad de biocontención</b>; si no la hay, cuarto individual con <b>presión negativa</b> y acceso restringido, porque la transmisión aérea se ha observado en animalarios. EPP para <b>contacto, gota y aire</b>; minimizar procedimientos que generen aerosol y el uso de punzocortantes. <b>Profilaxis post-exposición</b> tras contacto de alto riesgo: se ha propuesto ribavirina oral <b>500 mg cuatro veces al día × 7 días</b> (guías Bichat), fuera de indicación y con eficacia desconocida. <b>Notificación obligatoria</b> a la autoridad sanitaria.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li>«Arena» = <b>ribosomas del huésped</b> dentro del virión. Es un artefacto del ensamblaje, sin función conocida, pero da el nombre y la imagen de examen.</li>
+          <li><b>Ambisentido</b>: dos segmentos, cuatro proteínas. <b>S = NP + GPC</b>; <b>L = polimerasa L + Z</b>.</li>
+          <li><b>Receptores</b>: α-distroglicano en el Viejo Mundo (Lassa, LCMV) · <b>TfR-1</b> en el clado B del Nuevo Mundo — ubicuo, por eso el daño es multiorgánico.</li>
+          <li><b>Lassa = oído</b>: sordera neurosensorial en la convalecencia, independiente de la gravedad y no prevenible con ribavirina.</li>
+          <li><b>Junín = plasma antes del día 8</b> (16.5 % → 1.1 %) y <b>Candid #1</b> como única vacuna licenciada de la familia.</li>
+          <li><b>LCMV congénito</b> imita a CMV y toxoplasma en el cerebro (coriorretinitis, hidrocefalia, calcificaciones periventriculares), pero <b>sin hallazgos extracerebrales</b>.</li>
+          <li><b>LCMV por trasplante de órgano</b>: letalidad 71 %; la fuente rastreada fue un <b>hámster de mascota</b>.</li>
+          <li>El sangrado cursa con <b>TP y TTP normales</b>: es disfunción endotelial y plaquetaria, no coagulación intravascular diseminada masiva.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«ARENA-osa por dentro»</b> — los granos son ribosomas robados al huésped.</p>
+        <p><b>«Viejo Mundo, viejo músculo; Nuevo Mundo, hierro nuevo»</b> — α-distroglicano vs receptor de transferrina.</p>
+        <p><b>«Ju-Ma-Cha-Gua-Sa»</b> — <b>Ju</b>nín (Argentina), <b>Ma</b>chupo y <b>Cha</b>pare (Bolivia), <b>Gua</b>narito (Venezuela), <b>Sa</b>biá (Brasil).</p>
+        <p><b>«8 y 8»</b> — el plasma sirve <b>antes del día 8</b>; la fase hemorrágico-neurológica arranca <b>hacia el día 8</b>.</p>
+        <p><b>«Lujo cobra caro»</b> — el arenavirus más letal (80 %), con un exantema que <b>respeta palmas y plantas</b> y contagio nosocomial en 4 de 5 casos.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Escenario mexicano y trampas finales</span>
+      <ul>
+        <li><b>El arenavirus que sí se ve en México es el LCMV</b>, porque su reservorio es el ratón doméstico y circula en todos los continentes salvo la Antártida. Piénsalo ante <b>meningitis aséptica con hipoglucorraquia en otoño-invierno</b>, ante un <b>receptor de trasplante con encefalopatía febril</b> y ante un recién nacido con <b>coriorretinitis y calcificaciones periventriculares con TORCH negativa</b>. Pregunta siempre por <b>hámsteres y roedores de mascota</b>, sobre todo en la embarazada.</li>
+        <li>Las fiebres hemorrágicas llegarán como <b>viajero o migrante febril</b> procedente de África occidental o del cono sur, no como caso autóctono. Al norte, <b>Whitewater Arroyo</b> vive en ratas <i>Neotoma</i> del suroeste de Estados Unidos.</li>
+        <li><b>Trampa terapéutica</b>: dar ribavirina de rutina al caso leve de Lassa con AST baja se asoció a peor desenlace, y el plasma que salva vidas en Junín no ha funcionado en Lassa.</li>
+        <li><b>Trampa de laboratorio</b>: pedir estudios sin advertir al laboratorio. Estos virus son <b>agentes selectos BSL-4</b> (salvo LCMV, Wēnzhōu y Whitewater Arroyo, que son BSL-3) y ya han causado infecciones ocupacionales.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Mandell PPID 10e, cap. 174 «Lymphocytic Choriomeningitis Virus, Lassa Virus, Lujo Virus, and the South American Hemorrhagic Fever Viruses», pp. 2161-2168 (sin nota de vault para esta familia) · Vault Jaibri <code>10_WIKI_INFECTOLOGIA/farmacos/Ribavirina.md</code> (régimen McCormick IV y toxicidad) · tarjeta de <i>Arenaviridae</i> en <code>virus-rna.html</code> · Maiztegui et al., <i>Lancet</i> 1979 y <i>J Infect Dis</i> 1998 (plasma y Candid #1) · Enria et al., <i>Antiviral Res</i> 2008 · de Manzione et al., <i>Clin Infect Dis</i> 1998 (Guanarito) · Paweska et al., <i>Emerg Infect Dis</i> 2009 y Sewlall et al., <i>PLoS Negl Trop Dis</i> 2014 (Lujo) · Loayza Mafayle et al., <i>N Engl J Med</i> 2022 (Chapare) · Bossi et al., guías Bichat, <i>Euro Surveill</i> 2004 · CDC, definición de caso de fiebre hemorrágica viral 2022.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="bunyavirales.html"><span class="k">← Anterior</span><span class="v">Bunyavirales</span></a>
+        <a class="next" href="paramyxoviridae.html"><span class="k">Siguiente →</span><span class="v">Paramyxoviridae</span></a></div>
+      <footer class="pf">
+        <span>Arenaviridae · 14 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

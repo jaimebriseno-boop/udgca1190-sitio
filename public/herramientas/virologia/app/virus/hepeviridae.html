@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hepeviridae — Virus RNA</title>
+<meta name="description" content="Hepeviridae. Virus de la hepatitis E">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Hepeviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 3 de 18 · Virología médica</p>
+    <h1>Hepeviridae</h1>
+    <p class="sub">Virus de la hepatitis E</p>
+    <div class="chips"><span class="chip g">+ssRNA 7,2 kb · tres ORF</span>
+  <span class="chip">Sin envoltura · icosaédrico 32 nm</span>
+  <span class="chip">Replicación citoplásmica en hepatocito</span>
+  <span class="chip r">20–25 % de letalidad en el 3.er trimestre</span>
+  <span class="chip gold">Hecolin (HEV-239) — licenciada solo en China</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Hepeviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Género</dt><dd><i>Paslahepevirus</i> (antes <i>Orthohepevirus A</i>) · especie <i>Paslahepevirus balayani</i></dd></div>
+  <div class="cell"><dt>Genotipos humanos</dt><dd><b>1 y 2</b>: exclusivos del humano, hídricos, epidémicos · <b>3 y 4</b>: zoonóticos, alimentarios, esporádicos</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Fecal-oral por agua (gt 1-2) · carne de cerdo, jabalí, ciervo y mariscos mal cocidos (gt 3-4) · transfusional · vertical</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd><b>15–70 días</b> (media 28–40 días)</dd></div>
+  <div class="cell"><dt>Cuadro habitual</dt><dd>Hepatitis aguda ictérica autolimitada en 4–6 semanas · letalidad &lt;1 % · <b>sin estado de portador</b></dd></div>
+  <div class="cell"><dt>El que mata</dt><dd><b>Gestante del tercer trimestre con HEV-1</b>: falla hepática fulminante, mortalidad materna 20–25 %</dd></div>
+  <div class="cell"><dt>El que cronifica</dt><dd><b>HEV-3 en inmunodeprimido</b> (trasplante, VIH avanzado, hemopatía): viremia &gt;3–6 meses → cirrosis en 2–5 años</dd></div>
+  <div class="cell"><dt>Diagnóstico</dt><dd>Anti-HEV IgM (ELISA) + <b>HEV RNA por RT-PCR</b>; en el inmunodeprimido, <b>solo RNA</b></dd></div>
+  <div class="cell"><dt>Tratamiento</dt><dd>Soporte. Crónica: reducir inmunosupresión → <b>ribavirina 600–1000 mg/día × 3 meses</b>. Ribavirina contraindicada en embarazo</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">El virólogo que se bebió el inóculo</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1955</b> — epidemia hídrica en <b>Nueva Delhi</b> por contaminación fecal del agua. Décadas después, los sueros guardados salieron negativos para hepatitis A y B: nacía la <b>«hepatitis no-A no-B de transmisión entérica»</b>.</li>
+      <li><b>1978</b> — epidemia de <b>Cachemira</b> con el mismo patrón: brote hídrico, adultos jóvenes y una letalidad en gestantes que ninguna otra hepatitis explicaba.</li>
+      <li><b>Década de 1980</b> — durante la ocupación soviética de Afganistán estalla un brote inexplicado en un campamento militar. <b>Mikhail Balayan</b> ingiere un extracto fecal de los soldados enfermos, desarrolla la hepatitis y <b>visualiza el virus en sus propias heces</b> por microscopía electrónica. La especie lleva hoy su nombre.</li>
+      <li><b>1986–1987</b> — brote mexicano de hepatitis entérica: de él procede el <b>genotipo 2</b>, hasta hoy el único linaje del que México es epónimo epidemiológico.</li>
+      <li><b>2010–2012</b> — ensayo fase 3 en el sur de China con <b>&gt;110 000 sujetos</b>: la vacuna recombinante <b>HEV-239</b> alcanza 100 % de protección a 13 meses. Se licencia en China en 2012 y ahí sigue: <b>ninguna otra agencia la ha aprobado</b>.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué la historia explica la clínica</span>
+      <p>Los tres brotes fundacionales fueron <b>hídricos, en Asia, en adultos jóvenes y con gestantes muriendo</b>: ese es el retrato del HEV-1. Cuarenta años después, el HEV que ve un médico en Europa o Estados Unidos es otro animal: <b>esporádico, zoonótico, transmitido por cerdo, en varones mayores de 40 años, y capaz de cronificar</b>. Una misma familia viral con dos epidemiologías opuestas — y el examen pregunta las dos.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Un género, cuatro genotipos, dos mundos</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd><i>Hepeviridae</i> — el nombre es puramente descriptivo: <b>hepa</b>titis <b>E</b> + <i>viridae</i>. Sin orden asignado.</dd>
+      <dt>Género humano</dt><dd><i>Paslahepevirus</i>, renombrado desde <i>Orthohepevirus A</i>. Muchos textos y reactivos aún usan la nomenclatura antigua.</dd>
+      <dt>Especie</dt><dd><i>Paslahepevirus balayani</i> — dedicada a <b>Balayan</b>, el virólogo del autoexperimento.</dd>
+      <dt>Genotipos</dt><dd><b>Cuatro infectan al humano</b> (1–4); el HEV-7 del camello se ha descrito en receptores de trasplante consumidores de leche de camella.</dd>
+      <dt>Serotipo</dt><dd><b>Uno solo</b>, pese a los cuatro genotipos. De ahí que una vacuna construida sobre la cápside de HEV-1 proteja de forma cruzada.</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">HEV-1 y HEV-2</span><span class="vg">antroponóticos</span></div>
+        <div class="vbd">
+          <p><b>Reservorio exclusivamente humano</b> y transmisión <b>fecal-oral hídrica</b>: los brotes siguen la estación monzónica, la densidad poblacional y el mal manejo del agua.</p>
+          <p>Escenarios de alto riesgo: <b>campos de refugiados y desplazados</b> (Darfur), zonas de guerra, hospitales con agua contaminada.</p>
+          <p><b>Nunca cronifican.</b> Son los responsables de la hepatitis fulminante del embarazo.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">HEV-3 y HEV-4</span><span class="vg">zoonóticos</span></div>
+        <div class="vbd">
+          <p><b>Reservorio porcino</b> (&gt;50 % de seroprevalencia en hatos), más jabalí, ciervo y conejo. Transmisión <b>alimentaria</b>: vísceras y carne subcocida, embutidos de hígado crudo (el <i>figatelli</i> corso es el ejemplo clásico), mariscos bivalvos. También <b>por transfusión</b>.</p>
+          <p>El HEV-3 es <b>la primera causa de hepatitis aguda autóctona en Europa</b> y afecta sobre todo a <b>varones mayores de 40 años</b> e inmunodeprimidos.</p>
+          <p><b>Solo el HEV-3 cronifica</b> (excepcionalmente el HEV-4).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th></th><th>HEV-1</th><th>HEV-2</th><th>HEV-3</th><th>HEV-4</th></tr></thead>
+      <tbody>
+        <tr><td><b>Geografía</b></td><td>Asia, África</td><td><b>México</b>, África occidental</td><td>Países de alta renta</td><td>China, Taiwán, Japón</td></tr>
+        <tr><td><b>Vía</b></td><td>Agua · persona a persona</td><td>Agua</td><td>Alimentaria · transfusional</td><td>Alimentaria</td></tr>
+        <tr><td><b>Zoonosis</b></td><td>No</td><td>No</td><td><b>Sí</b> (cerdo)</td><td><b>Sí</b> (cerdo)</td></tr>
+        <tr><td><b>Grupo de riesgo</b></td><td>Adulto joven · <b>gestante</b></td><td>Adulto joven</td><td>Varón &gt;40 a · <b>inmunodeprimido</b></td><td>Adulto joven</td></tr>
+        <tr><td><b>Cronifica</b></td><td>No</td><td>No</td><td><b>Sí</b></td><td>Excepcional</td></tr>
+        <tr><td><b>Brotes</b></td><td>Frecuentes y grandes</td><td>Pequeños</td><td>Raros</td><td>Raros</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«1 y 2 = agua y embarazo · 3 y 4 = cerdo y crónico».</b> Los impares y pares no importan: importa el par bajo (hídrico, humano, mata gestantes) contra el par alto (zoonótico, porcino, cronifica en el trasplantado).</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Un virus con dos disfraces</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Virión desnudo y cuasi-envuelto del virus de la hepatitis E y organización de su genoma en tres marcos de lectura">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <text x="30" y="40" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">DOS FORMAS CIRCULANTES DEL MISMO VIRUS</text>
+        <text x="470" y="40" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">GENOMA +ssRNA 7,2 KB · TRES MARCOS DE LECTURA</text>
+        <line x1="440" y1="56" x2="440" y2="320" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+
+        <polygon points="140,80 89.8,109 89.8,167 140,196 190.2,167 190.2,109" fill="rgba(69,90,140,.16)" stroke="#36476E" stroke-width="1.8"/>
+        <polygon points="140,100 106.7,119 106.7,157 140,176 173.3,157 173.3,119" fill="none" stroke="#701d14" stroke-width="1.4"/>
+        <path d="M118 130 q11 -9 22 0 t22 0" fill="none" stroke="#5C7A57" stroke-width="2"/>
+        <path d="M118 148 q11 -9 22 0 t22 0" fill="none" stroke="#5C7A57" stroke-width="2"/>
+        <text x="140" y="222" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#27334F">VIRIÓN DESNUDO</text>
+        <text x="140" y="240" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">En heces y bilis · 32 nm</text>
+        <text x="140" y="254" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Resiste ácido gástrico y bilis</text>
+        <text x="140" y="268" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="#1a6b42">Neutralizable por anti-cápside</text>
+        <text x="140" y="282" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">Es el que contamina el agua</text>
+
+        <circle cx="320" cy="138" r="68" fill="rgba(144,48,58,.10)" stroke="#90303a" stroke-width="1.6" stroke-dasharray="5 4"/>
+        <polygon points="320,96 285.4,116 285.4,156 320,176 354.6,156 354.6,116" fill="rgba(69,90,140,.16)" stroke="#36476E" stroke-width="1.6"/>
+        <path d="M303 130 q8.5 -7 17 0 t17 0" fill="none" stroke="#5C7A57" stroke-width="1.8"/>
+        <g fill="#8a5c0a"><circle cx="285" cy="88" r="3.2"/><circle cx="355" cy="88" r="3.2"/><circle cx="378" cy="150" r="3.2"/><circle cx="262" cy="150" r="3.2"/></g>
+        <text x="320" y="222" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#90303a">CUASI-ENVUELTO</text>
+        <text x="320" y="240" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">En sangre y en cultivo celular</text>
+        <text x="320" y="254" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Membrana robada al huésped</text>
+        <text x="320" y="268" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="#701d14">Escapa a los anticuerpos</text>
+        <text x="320" y="282" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">Es el que viaja en la transfusión</text>
+
+        <text x="30" y="314" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La bilis desnuda al virus antes de expulsarlo: por eso el de las heces sí se neutraliza.</text>
+
+        <rect x="470" y="98" width="370" height="20" rx="3" fill="rgba(69,90,140,.14)" stroke="#455A8C" stroke-width="1"/>
+        <rect x="471" y="98" width="261" height="20" rx="3" fill="rgba(39,51,79,.80)"/>
+        <rect x="735" y="98" width="101" height="20" rx="3" fill="rgba(112,29,20,.80)"/>
+        <rect x="732" y="124" width="30" height="14" rx="3" fill="rgba(138,92,10,.85)"/>
+        <text x="600" y="112" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.1em" fill="#f7f8fa">ORF1</text>
+        <text x="786" y="112" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.1em" fill="#f7f8fa">ORF2</text>
+        <text x="747" y="135" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#FFFFFF">ORF3</text>
+        <text x="470" y="92" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">5′ cap</text>
+        <text x="840" y="92" text-anchor="end" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">poli(A) 3′</text>
+
+        <text x="470" y="168" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">ORF1 — poliproteína no estructural</text>
+        <text x="470" y="184" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">Metiltransferasa · región hipervariable ·</text>
+        <text x="470" y="197" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">helicasa · RdRp. Aquí surge la mutación</text>
+        <text x="470" y="210" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">G1634R de resistencia a ribavirina.</text>
+
+        <text x="470" y="234" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">ORF2 — cápside</text>
+        <text x="470" y="250" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">Antígeno inmunodominante: es lo que</text>
+        <text x="470" y="263" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">detecta el anti-HEV IgM/IgG y lo que</text>
+        <text x="470" y="276" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">contiene la vacuna recombinante HEV-239.</text>
+
+        <text x="470" y="300" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">ORF3 — fosfoproteína pequeña</text>
+        <text x="470" y="316" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">Solapa a ORF2 en otro marco. Saca al virión</text>
+        <text x="470" y="329" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">por cuerpos multivesiculares: crea el disfraz.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión y sus tres marcos de lectura. La consecuencia práctica de ORF3 es enorme: el virus que circula en sangre va envuelto en membrana del huésped y <b>no es neutralizado por los anticuerpos anti-cápside</b>, lo que explica la transmisión transfusional y la persistencia en el inmunodeprimido.</figcaption>
+    </figure>
+
+    <h4>Biología esencial</h4>
+    <ul>
+      <li><b>Virión</b>: icosaédrico, <b>sin envoltura</b>, 27–34 nm (32 nm de referencia). Al carecer de envoltura resiste el ácido gástrico y las sales biliares — la condición indispensable para transmitirse por vía fecal-oral. Es la razón del mnemotécnico de las <b>«vocales»</b>: hepatitis <b>A</b> y <b>E</b>, ambas desnudas, ambas entéricas.</li>
+      <li><b>Genoma</b>: RNA monocatenario de <b>polaridad positiva</b>, ~7,2 kb, no segmentado, con cap 5′ y cola poli(A). Al ser (+) funciona directamente como mRNA: <b>no necesita polimerasa dentro del virión</b> y el RNA desnudo es infeccioso por sí solo.</li>
+      <li><b>Tres ORF</b>: ORF1 (replicasa: metiltransferasa, helicasa, RdRp), ORF2 (cápside, antígeno serológico y vacunal) y ORF3 (fosfoproteína pequeña, imprescindible para la liberación del virión).</li>
+      <li><b>Dos formas circulantes</b>: el virión <b>desnudo</b> de heces y bilis, y el <b>cuasi-envuelto</b> de la sangre, rodeado por membrana celular con ORF3. La bilis despoja de esa membrana al virus antes de excretarlo.</li>
+      <li><b>Replicación</b> citoplásmica en el hepatocito, dirigida por la RdRp de ORF1; salida no lítica por cuerpos multivesiculares dependiente de ORF3.</li>
+      <li><b>No cultivable de rutina</b>: todo el diagnóstico es serológico y molecular. Se inactiva con cocción a <b>≥71 °C durante 20 minutos al centro de la pieza</b> y con hervido o cloración del agua; la carne apenas sellada por fuera no basta.</li>
+    </ul>
+    <div class="box clin"><span class="lbl">Traducción clínica</span>
+      <p>Un <b>solo serotipo</b> para los cuatro genotipos significa que la respuesta anti-ORF2 es cruzada: quien se infectó de HEV-3 queda protegido frente a HEV-1, y una vacuna diseñada con cápside de HEV-1 sirve en todas partes. El obstáculo para eliminar el HEV no es antigénico — es regulatorio y logístico.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">El daño lo hace el huésped, no el virus</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruta del virus de la hepatitis E desde la ingestión hasta los tres desenlaces posibles según el huésped">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <text x="30" y="34" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">RUTA ÚNICA · TRES DESENLACES SEGÚN EL HUÉSPED</text>
+
+        <rect x="30" y="52" width="140" height="48" rx="6" fill="#27334F"/>
+        <text x="100" y="72" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#f7f8fa">Ingestión</text>
+        <text x="100" y="88" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="rgba(247,248,250,.80)">Agua · cerdo mal cocido</text>
+
+        <rect x="205" y="52" width="140" height="48" rx="6" fill="rgba(69,90,140,.16)" stroke="#36476E" stroke-width="1.2"/>
+        <text x="275" y="72" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">Intestino</text>
+        <text x="275" y="88" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Replicación inicial</text>
+
+        <rect x="380" y="52" width="140" height="48" rx="6" fill="rgba(144,48,58,.14)" stroke="#90303a" stroke-width="1.2"/>
+        <text x="450" y="72" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#90303a">Viremia portal</text>
+        <text x="450" y="88" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Forma cuasi-envuelta</text>
+
+        <rect x="555" y="52" width="140" height="48" rx="6" fill="rgba(92,122,87,.16)" stroke="#5C7A57" stroke-width="1.2"/>
+        <text x="625" y="72" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">Hepatocito</text>
+        <text x="625" y="88" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Replicación citoplásmica</text>
+
+        <rect x="730" y="52" width="140" height="48" rx="6" fill="rgba(138,92,10,.14)" stroke="#8a5c0a" stroke-width="1.2"/>
+        <text x="800" y="72" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">Bilis → heces</text>
+        <text x="800" y="88" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Virión desnudo, infeccioso</text>
+
+        <g stroke="#455A8C" stroke-width="1.4" fill="#455A8C">
+          <line x1="170" y1="76" x2="198" y2="76"/><polygon points="205,76 197,72 197,80"/>
+          <line x1="345" y1="76" x2="373" y2="76"/><polygon points="380,76 372,72 372,80"/>
+          <line x1="520" y1="76" x2="548" y2="76"/><polygon points="555,76 547,72 547,80"/>
+          <line x1="695" y1="76" x2="723" y2="76"/><polygon points="730,76 722,72 722,80"/>
+        </g>
+
+        <rect x="30" y="126" width="840" height="34" rx="6" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1.1"/>
+        <text x="450" y="142" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">El daño hepático es inmunomediado: linfocitos T CD8 contra el hepatocito infectado</text>
+        <text x="450" y="155" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">La citopatía viral directa es mínima — la ALT sube cuando el huésped responde, no cuando el virus replica</text>
+        <line x1="625" y1="100" x2="625" y2="120" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="625,126 621,118 629,118" fill="#455A8C"/>
+
+        <line x1="450" y1="160" x2="450" y2="176" stroke="#455A8C" stroke-width="1.4"/>
+        <line x1="150" y1="176" x2="750" y2="176" stroke="#455A8C" stroke-width="1.4"/>
+        <line x1="150" y1="176" x2="150" y2="192" stroke="#455A8C" stroke-width="1.4"/>
+        <line x1="450" y1="176" x2="450" y2="192" stroke="#455A8C" stroke-width="1.4"/>
+        <line x1="750" y1="176" x2="750" y2="192" stroke="#455A8C" stroke-width="1.4"/>
+
+        <rect x="30" y="192" width="240" height="112" rx="6" fill="rgba(92,122,87,.12)" stroke="#5C7A57" stroke-width="1.2"/>
+        <text x="150" y="212" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Inmunocompetente</text>
+        <text x="150" y="230" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Respuesta T eficaz → aclaramiento</text>
+        <text x="150" y="244" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Ictericia y resolución en 4–6 sem</text>
+        <text x="150" y="262" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.1em" fill="#1a6b42">LETALIDAD &lt;1 %</text>
+        <text x="150" y="284" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">La histología tarda hasta 6 meses</text>
+        <text x="150" y="297" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">en normalizarse tras la ALT</text>
+
+        <rect x="330" y="192" width="240" height="112" rx="6" fill="rgba(112,29,20,.10)" stroke="#701d14" stroke-width="1.6"/>
+        <text x="450" y="212" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Gestante 3.er trimestre · HEV-1</text>
+        <text x="450" y="230" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Viraje Th2 fisiológico + estrógenos,</text>
+        <text x="450" y="244" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">progesterona y hCG altos → más réplica</text>
+        <text x="450" y="262" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.1em" fill="#701d14">NECROSIS MASIVA · MORTALIDAD 20–25 %</text>
+        <text x="450" y="284" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Encefalopatía, coagulopatía,</text>
+        <text x="450" y="297" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">aborto y óbito fetal frecuentes</text>
+
+        <rect x="630" y="192" width="240" height="112" rx="6" fill="rgba(39,51,79,.10)" stroke="#27334F" stroke-width="1.6"/>
+        <text x="750" y="212" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Inmunodeprimido · HEV-3</text>
+        <text x="750" y="230" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">T CD4/CD8 insuficientes → no aclara</text>
+        <text x="750" y="244" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Trasplante, VIH avanzado, hemopatía</text>
+        <text x="750" y="262" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.1em" fill="#27334F">VIREMIA &gt;6 MESES = CRÓNICA</text>
+        <text x="750" y="284" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Fibrosis acelerada y cirrosis</text>
+        <text x="750" y="297" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">en 2–5 años si no se trata</text>
+
+        <text x="30" y="330" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El mismo inóculo: uno se cura, otra muere de necrosis, el tercero nunca lo elimina. La diferencia es el linfocito T.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Una sola ruta, tres desenlaces. Que el daño sea inmunomediado explica la paradoja terapéutica del trasplantado: <b>bajar la inmunosupresión —dejar que el sistema inmune ataque— es el primer paso del tratamiento</b>, aunque eso mismo empeore transitoriamente las transaminasas.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="box trap"><span class="lbl">Por qué muere la gestante</span>
+        <ul>
+          <li><b>Inmunomodulación Th2 fisiológica</b> del embarazo, que deja mal armado el brazo Th1/CD8.</li>
+          <li>Niveles altos de <b>estrógenos, progesterona y hCG</b>, que aumentan la replicación viral.</li>
+          <li>Menor expresión de <b>receptores de progesterona</b> en células mononucleares.</li>
+          <li>Deficiencia relativa de <b>selenio y vitamina D</b>.</li>
+          <li>Resultado: <b>necrosis hepática masiva</b> y falla hepática fulminante, con mortalidad materna del <b>20–25 %</b> y pérdida fetal frecuente. Es una asociación de HEV-1, no de HEV-3.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Manifestaciones extrahepáticas</span>
+        <ul>
+          <li>Mecanismos: <b>replicación extrahepática</b> (tejido neural, riñón), <b>inmunocomplejos</b> y autoinmunidad.</li>
+          <li>Neurológicas, las dos que se preguntan: <b>Guillain-Barré</b> y <b>neuralgia amiotrófica (Parsonage-Turner)</b>, ambas ligadas a HEV-3.</li>
+          <li>Renales: <b>glomerulonefritis membranoproliferativa</b> y membranosa, con crioglobulinemia mixta.</li>
+          <li>Hematológicas: anemia hemolítica autoinmune, trombocitopenia, aplasia pura de serie roja, síndrome hemofagocítico.</li>
+          <li>Otras: pancreatitis, artritis, miocarditis.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Igual que la hepatitis A… salvo en dos huéspedes</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Secuencia de la hepatitis aguda</h4>
+    <ol class="steps">
+      <li><b>Incubación (15–70 días; media 28–40)</b> Asintomática. La excreción fecal empieza <b>unos días antes</b> del primer síntoma.</li>
+      <li><b>Pródromo (1–7 días)</b> Fiebre, anorexia, náusea, vómito, dolor abdominal, artralgias y, con relativa frecuencia, <b>exantema</b>.</li>
+      <li><b>Fase ictérica (semanas)</b> <b>Prurito</b> e ictericia, coluria y acolia. A la exploración: hepatomegalia, dolor en hipocondrio derecho, excoriaciones por rascado. <b>ALT &gt;1000 U/L</b>, AST, GGT y fosfatasa alcalina elevadas, hiperbilirrubinemia directa. Leucopenia leve con linfocitosis relativa.</li>
+      <li><b>Resolución (4–6 semanas)</b> Normalización de ALT y bilirrubina. La <b>resolución histológica va rezagada y puede tardar hasta 6 meses</b>. Más del 95 % resuelve solo.</li>
+    </ol>
+    <p>La infección sintomática predomina en <b>adultos jóvenes de 15 a 40 años</b> en zonas endémicas; en niños suele ser anictérica y pasa desapercibida. <b>La cifra de ALT no predice la gravedad.</b></p>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Síndrome</th><th>Genotipo</th><th>Huésped</th><th>Clínica</th><th>Mortalidad</th></tr></thead>
+      <tbody>
+        <tr><td><b>Hepatitis aguda ictérica</b></td><td>1, 2, 3, 4</td><td>Inmunocompetente</td><td>Ictericia, anorexia, hepatomegalia, ALT &gt;1000 U/L; resolución en 4–6 semanas</td><td class="num">&lt;1 %</td></tr>
+        <tr><td><b>Hepatitis fulminante del embarazo</b></td><td><b>1</b> (&gt;&gt;2)</td><td>Gestante del 3.er trimestre</td><td>Encefalopatía, coagulopatía, falla hepática aguda; aborto y óbito fetal frecuentes</td><td class="num"><b>20–25 %</b> materna</td></tr>
+        <tr><td><b>Aguda sobre crónica (ACLF)</b></td><td>1, 3</td><td>Hepatópata crónico</td><td>Descompensación, ascitis, encefalopatía</td><td class="num">30–70 % a 90 días</td></tr>
+        <tr><td><b>Hepatitis E crónica</b></td><td><b>3</b> (exclusivo)</td><td>Trasplante de órgano o TPH, VIH avanzado, hemopatía en quimioterapia</td><td>Viremia &gt;6 meses, ALT persistentemente alta, fibrosis acelerada → cirrosis en 2–5 años</td><td class="num">Según fibrosis</td></tr>
+        <tr><td><b>Guillain-Barré</b></td><td>3 (&gt;1)</td><td>Adulto inmunocompetente</td><td>Parálisis flácida ascendente tras el cuadro hepático</td><td class="num">Baja</td></tr>
+        <tr><td><b>Neuralgia amiotrófica</b></td><td>3</td><td>Adulto</td><td>Dolor agudo en cintura escapular con paresia braquial (Parsonage-Turner)</td><td class="num">Baja</td></tr>
+        <tr><td><b>Glomerulonefritis</b></td><td>3</td><td>Trasplante renal, crónicos</td><td>Proteinuria y deterioro de la función del injerto</td><td class="num">Variable</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Trampas de examen</span>
+      <ul>
+        <li><b>HEV vs HAV</b>: en el inmunocompetente son <b>clínicamente indistinguibles</b>. Lo que separa al HEV es que hace <b>fulminante en el embarazo</b> y <b>crónica en el inmunodeprimido</b>; el HAV no hace ninguna de las dos. Además el HEV tiene <b>reservorio zoonótico</b> (gt 3-4); el HAV es exclusivamente humano.</li>
+        <li><b>No existe estado de portador</b> en el inmunocompetente, y el HEV <b>no produce hepatocarcinoma</b>. La biopsia muestra necrosis parcheada y hepatitis lobulillar/portal con colestasis.</li>
+        <li><b>La cronicidad es de HEV-3</b>. Un caso de «hepatitis E crónica» tras un viaje a la India con HEV-1 es una respuesta distractora.</li>
+        <li>Ante un <b>Guillain-Barré con transaminasas altas inexplicadas</b>, hay que pedir HEV. Es la asociación neurológica que más se pasa por alto.</li>
+        <li>En el hepatópata crónico, el HEV no es una hepatitis «leve»: precipita <b>ACLF</b> con mortalidad a 90 días del 30–70 %.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Serología en el sano, RNA en el inmunodeprimido</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cronología de los marcadores virológicos y serológicos de la hepatitis E aguda">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <text x="20" y="26" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">MARCADORES DE HEPATITIS E AGUDA · SEMANAS DESDE LA EXPOSICIÓN</text>
+
+        <line x1="160" y1="64" x2="870" y2="64" stroke="#455A8C" stroke-width="1.2"/>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#6b7585" text-anchor="middle">
+          <text x="160" y="56">0</text><text x="214" y="56">2</text><text x="268" y="56">4</text>
+          <text x="321" y="56">6</text><text x="375" y="56">8</text><text x="429" y="56">10</text>
+          <text x="483" y="56">12</text><text x="590" y="56">16</text><text x="698" y="56">20</text>
+          <text x="806" y="56">24</text>
+        </g>
+        <g stroke="#455A8C" stroke-width="1">
+          <line x1="160" y1="60" x2="160" y2="68"/><line x1="214" y1="60" x2="214" y2="68"/>
+          <line x1="268" y1="60" x2="268" y2="68"/><line x1="321" y1="60" x2="321" y2="68"/>
+          <line x1="375" y1="60" x2="375" y2="68"/><line x1="429" y1="60" x2="429" y2="68"/>
+          <line x1="483" y1="60" x2="483" y2="68"/><line x1="590" y1="60" x2="590" y2="68"/>
+          <line x1="698" y1="60" x2="698" y2="68"/><line x1="806" y1="60" x2="806" y2="68"/>
+        </g>
+
+        <line x1="295" y1="68" x2="295" y2="272" stroke="#701d14" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <polygon points="295,36 289,26 301,26" fill="#701d14"/>
+        <text x="295" y="20" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#701d14">INICIO DE SÍNTOMAS</text>
+
+        <g font-family="'Inter', sans-serif" font-size="10" fill="#14181f">
+          <text x="20" y="94">Incubación</text>
+          <text x="20" y="124">HEV RNA en heces</text>
+          <text x="20" y="154">HEV RNA en suero</text>
+          <text x="20" y="196">ALT e ictericia</text>
+          <text x="20" y="236">Anti-HEV IgM</text>
+          <text x="20" y="266">Anti-HEV IgG</text>
+        </g>
+
+        <rect x="160" y="82" width="135" height="16" rx="3" fill="rgba(69,90,140,.20)" stroke="#36476E" stroke-width="1"/>
+        <text x="303" y="94" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">15–70 días (media 28–40)</text>
+
+        <rect x="268" y="112" width="148" height="16" rx="3" fill="rgba(138,92,10,.30)" stroke="#8a5c0a" stroke-width="1"/>
+        <text x="424" y="124" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">De unos días antes a 4 semanas después</text>
+
+        <rect x="254" y="142" width="135" height="16" rx="3" fill="rgba(112,29,20,.28)" stroke="#701d14" stroke-width="1"/>
+        <text x="397" y="154" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">1–2 semanas antes hasta 3–4 después · patrón oro del cuadro agudo</text>
+
+        <path d="M160 212 L262 212 C288 212 296 176 322 176 C356 176 392 204 440 210 L560 212" fill="none" stroke="#90303a" stroke-width="2.2"/>
+        <line x1="160" y1="212" x2="860" y2="212" stroke="rgba(20,24,31,.12)" stroke-width="1"/>
+        <text x="330" y="170" font-family="'Inter', sans-serif" font-size="9.5" fill="#90303a">Pico &gt;1000 U/L a los 42–46 días</text>
+        <text x="470" y="200" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Normaliza en ~6 semanas; la histología tarda hasta 6 meses</text>
+
+        <rect x="295" y="224" width="440" height="16" rx="3" fill="rgba(39,51,79,.28)" stroke="#27334F" stroke-width="1"/>
+        <text x="860" y="220" text-anchor="end" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Positiva en 90–95 % al inicio · dura 4–6 meses</text>
+
+        <rect x="309" y="254" width="536" height="16" rx="3" fill="rgba(92,122,87,.28)" stroke="#5C7A57" stroke-width="1"/>
+        <polygon points="862,262 846,254 846,270" fill="#5C7A57"/>
+        <text x="560" y="266" font-family="'Inter', sans-serif" font-size="9.5" fill="#1a6b42">Persiste años o décadas — marca exposición, no infección activa</text>
+
+        <text x="20" y="300" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">En el inmunodeprimido esta figura no aplica: la serología puede ser plana y falsamente negativa. Ahí el único marcador fiable es el HEV RNA.</text>
+        <text x="20" y="326" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Si el paciente llega tarde, el RNA ya se fue y solo queda la IgM; si llega temprano, la IgM aún no está y solo hay RNA.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Ventanas de los marcadores. La consecuencia operativa es pedir <b>IgM y RNA a la vez</b> en el cuadro agudo: sus ventanas se solapan solo parcialmente y ninguna de las dos, por sí sola, cubre todo el episodio.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra / prueba</th><th>Indicación</th><th>Interpretación y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Anti-HEV IgM</b> (ELISA)</td><td>Sospecha de cuadro agudo en zona endémica</td><td>Positiva en <b>90–95 %</b> al inicio de síntomas; persiste <b>4–6 meses</b>. Sujeta a <b>reactividad cruzada</b> con CMV, EBV y autoanticuerpos: confirmar con RT-PCR ante la duda.</td></tr>
+        <tr><td><b>Anti-HEV IgG</b> (ELISA)</td><td>Exposición previa, seroprevalencia</td><td>La seroconversión confirma exposición y persiste años o décadas. <b>Un tercio de la población mundial es IgG positiva</b>: por sí sola no diagnostica nada agudo.</td></tr>
+        <tr><td><b>HEV RNA en suero</b> (RT-PCR)</td><td><b>Patrón oro del cuadro agudo</b>; imprescindible en el inmunodeprimido y en zonas no endémicas</td><td>Detectable de 1–2 semanas antes de los síntomas hasta 3–4 semanas después. <b>Único marcador útil para diagnosticar y seguir la infección crónica.</b> Más sensible y específica que la serología, pero requiere laboratorio especializado.</td></tr>
+        <tr><td><b>HEV RNA en heces</b></td><td>Confirmación y estudio de brote</td><td>Excreción desde unos días antes hasta 4 semanas después del inicio.</td></tr>
+        <tr><td><b>Genotipificación</b></td><td>Epidemiología y pronóstico</td><td>Separa HEV-1 (epidémico, embarazo) de HEV-3 (zoonótico, cronificante). Define la conducta.</td></tr>
+        <tr><td><b>Biopsia hepática</b></td><td>Crónica: estadificar fibrosis</td><td>Hepatitis lobulillar y portal con colestasis; <b>necrosis parcheada</b>. Innecesaria en el cuadro agudo típico.</td></tr>
+        <tr><td><b>Ecografía</b></td><td>Excluir obstrucción biliar</td><td>Hígado grande y ecogénico, pared vesicular edematosa. <b>No discrimina la etiología.</b></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="box clin"><span class="lbl">¿Cuándo sospechar?</span>
+        <ul>
+          <li>Hepatitis aguda con serología <b>negativa para HAV, HBV, HCV, CMV y EBV</b> — en Europa y Estados Unidos, ese hueco lo llena el HEV-3 autóctono.</li>
+          <li><b>Toda gestante con hepatitis aguda</b>, con mayor razón si viajó a zona endémica.</li>
+          <li>Trasplantado o inmunodeprimido con <b>elevación inexplicada de transaminasas</b>.</li>
+          <li><b>Guillain-Barré o neuralgia amiotrófica</b> con hipertransaminasemia reciente.</li>
+          <li>Hepatópata crónico que se descompensa sin causa clara.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Los dos errores clásicos</span>
+        <p><b>1. Confiar en la serología del inmunodeprimido.</b> El trasplantado con hepatitis E crónica puede tener IgM e IgG negativas. Ante cualquier sospecha en ese huésped, <b>se pide HEV RNA, no serología</b>.</p>
+        <p><b>2. Diagnosticar «hepatitis E» con una IgG positiva.</b> La IgG marca exposición pasada en una población donde uno de cada tres la tiene. El diagnóstico agudo es IgM + RNA.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Soporte, ribavirina y un vaso de agua limpia</span><span class="caret"></span></summary>
+  <div class="body">
+    <p><b>No existe antiviral aprobado por FDA, EMA ni COFEPRIS para el HEV.</b> Todo lo que se usa es fuera de indicación y sale de series de casos y cohortes de trasplante.</p>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario</th><th>Manejo</th><th>Notas</th></tr></thead>
+      <tbody>
+        <tr><td><b>Aguda en inmunocompetente</b></td><td>Soporte, hidratación, retirar hepatotóxicos, vigilar INR y encefalopatía</td><td>Autolimitada en 4–6 semanas; <b>&gt;95 % resuelve sin tratamiento</b>.</td></tr>
+        <tr><td><b>Fulminante (gestante o no)</b></td><td>UCI, soporte multiorgánico, evaluación urgente para <b>trasplante hepático</b></td><td>Ningún antiviral ha probado eficacia en la fulminante. <b>La ribavirina está contraindicada en el embarazo</b> (teratógena, categoría X).</td></tr>
+        <tr><td><b>Crónica HEV-3 — paso 1</b></td><td><b>Reducir la inmunosupresión</b>, de preferencia el inhibidor de calcineurina (tacrolimus, ciclosporina)</td><td>Aclara la viremia en <b>~30 %</b> solo con esta medida. Es siempre lo primero.</td></tr>
+        <tr><td><b>Crónica HEV-3 — paso 2</b><br>(viremia ≥3 meses)</td><td><b>Ribavirina en monoterapia, 600–1000 mg/día (≈15 mg/kg) × 3 meses</b>; extender a 6–12 meses si persiste la viremia o recae</td><td>Respuesta virológica sostenida cercana al <b>80 %</b> (hasta 95 % de aclaramiento con 600 mg/día × 3 meses en series de órgano sólido). Ajustar por función renal; <b>la anemia es el efecto adverso limitante</b>.</td></tr>
+        <tr><td><b>Crónica HEV-3 — paso 3</b><br>(fallo a ribavirina)</td><td><b>Peg-IFN-α 135–180 µg/semana × 3 meses</b></td><td><b>Solo en trasplante hepático y de progenitores hematopoyéticos.</b> <b>Contraindicado en trasplante renal, cardiaco y pulmonar</b> por riesgo de rechazo agudo mediado por estimulación inmune.</td></tr>
+        <tr><td><b>Crónica en VIH</b></td><td>Optimizar el TAR (CD4 &gt;200 facilita el aclaramiento); ribavirina si persiste</td><td>Pocos datos; se extrapola del trasplantado.</td></tr>
+        <tr><td><b>GBS y neuralgia amiotrófica</b></td><td>Manejo neurológico estándar (IVIG, plasmaféresis)</td><td>Papel del antiviral debatido.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h4>Resistencia</h4>
+    <ul>
+      <li><b>G1634R</b> en la RdRp (ORF1): la sustitución emblemática de fallo y recaída a ribavirina en trasplantados con tratamiento prolongado.</li>
+      <li><b>Inserciones en la región hipervariable de ORF1</b>: mayor <i>fitness</i> viral y replicación persistente en el inmunodeprimido.</li>
+      <li>Sin pruebas comerciales estandarizadas — <b>secuenciación dirigida</b> en centros de referencia. No hay resistencia intrínseca: emerge bajo presión selectiva.</li>
+    </ul>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Prevención no farmacológica</span>
+        <ul>
+          <li><b>Agua segura</b> (hervir, clorar, filtrar), higiene de manos y manejo sanitario de excretas: la piedra angular contra HEV-1 y HEV-2, y lo único que corta un brote.</li>
+          <li><b>Cocción a ≥71 °C durante 20 minutos al centro</b> de cerdo, jabalí, ciervo y mariscos bivalvos: inactiva HEV-3 y HEV-4.</li>
+          <li>Evitar carne subcocida y embutidos de hígado crudo en <b>gestantes, inmunodeprimidos y receptores de trasplante</b>.</li>
+          <li><b>Tamizaje NAT de hemoderivados</b> en Reino Unido, Irlanda, Países Bajos y Suiza; no rutinario en Estados Unidos ni México. <b>HEV RNA en donantes de órganos</b> en zonas de endemia zoonótica.</li>
+          <li><b>La inmunoglobulina no sirve</b>: pre o postexposición no modifica la incidencia.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Vacunación</span>
+        <ul>
+          <li><b>Hecolin (HEV-239)</b>: proteína truncada de 239 aminoácidos de la <b>cápside ORF2</b>, expresada en <i>E. coli</i>. Esquema <b>0-1-6 meses</b>, intramuscular.</li>
+          <li>Ensayo poblacional en el sur de China con <b>&gt;110 000 sujetos</b>: <b>100 % de protección</b> a 13 meses tras tres dosis; &gt;95 % de eficacia a 4,5 años en el seguimiento.</li>
+          <li><b>Licenciada únicamente en China desde 2012.</b> No aprobada por FDA, EMA ni COFEPRIS.</li>
+          <li>Un candidato previo de partícula tipo virus mostró <b>95,5 %</b> de protección en Nepal, pero cayó al 56 % a los dos años y no prosperó.</li>
+          <li>Posición de la OMS: uso <b>caso por caso en brotes y poblaciones de alto riesgo</b> (campos de refugiados, gestantes en zona endémica); sin recomendación universal. Sigue sin resolverse la duración de la protección y la necesidad de refuerzos.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>HEV-1 + tercer trimestre = fulminante con 20–25 % de mortalidad materna.</b> Es la asociación más distintiva de todo el capítulo.</li>
+          <li><b>Cronifica solo el HEV-3</b> (excepcionalmente el 4), y solo en inmunodeprimidos. HEV-1, 2 y 4 <b>no</b> cronifican. Definición: viremia &gt;3–6 meses.</li>
+          <li>En el inmunodeprimido, <b>siempre HEV RNA</b>: la serología puede ser falsamente negativa.</li>
+          <li>Crónica postrasplante: <b>1) reducir inmunosupresión → 2) ribavirina 600–1000 mg/día × 3–12 meses (~80 % de RVS) → 3) Peg-IFN-α</b>, y este último <b>nunca</b> en trasplante renal, cardiaco ni pulmonar.</li>
+          <li>El HEV-3 es la <b>primera causa de hepatitis aguda autóctona en Europa</b>; reservorio porcino, transmisión por carne mal cocida y por transfusión.</li>
+          <li>Carga global: <b>~20 millones de infecciones/año, 3,3 millones sintomáticas, ~44 000 muertes</b>; un tercio de la humanidad es IgG positiva.</li>
+          <li><b>Sin portador crónico en el sano y sin hepatocarcinoma.</b> Biopsia: necrosis parcheada.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«Las vocales pegan en las tripas»</b> — hepatitis <b>A</b> y <b>E</b> son las desnudas (sin envoltura), las que sobreviven al intestino y se transmiten por vía fecal-oral.</p>
+        <p><b>«E de Entérica, Epidémica, Embarazada»</b> — las tres palabras que definen al HEV-1 clásico. Añádele <b>«E de Excepción»</b> para la crónica del HEV-3.</p>
+        <p><b>«1 y 2 = agua y embarazo · 3 y 4 = cerdo y crónico».</b></p>
+        <p><b>«3 ORF, 4 genotipos, 0-1-6 la vacuna».</b></p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampa clásica y escenario mexicano</span>
+      <p><b>La trampa:</b> el caso de una gestante ictérica que regresa de la India se responde con soporte y valoración de trasplante — <b>jamás con ribavirina</b>, que es teratógena de categoría X. Y el trasplantado renal con hepatitis E crónica refractaria a ribavirina <b>no</b> recibe Peg-IFN: el interferón le provoca rechazo del injerto.</p>
+      <p><b>México:</b> el brote de 1986–1987 dio origen al <b>genotipo 2</b> y el país figura en la literatura clásica como zona de riesgo entérico para el viajero. Hoy conviven los dos escenarios: el hídrico rural y el zoonótico, con industria porcina extensa y consumo habitual de vísceras y carne de cerdo poco cocida — el terreno del HEV-3. Ante una hepatitis aguda con panel viral negativo, el HEV es el diagnóstico que nadie pidió.</p>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/Hepatitis_E.md</code> · Mandell PPID 10e, cap. 184 «Hepatitis E Virus», pp. 2250-2256 · Kamar N et al., <i>Nat Rev Dis Primers</i> 2017;3:17086 · Kamar N et al., <i>N Engl J Med</i> 2014;370:1111-1120 (ribavirina en trasplantados) · Patra S et al., <i>Ann Intern Med</i> 2007;147:28-33 (embarazo) · Zhu FC et al., <i>Lancet</i> 2010;376:895-902 (HEV-239) · OMS, «Hepatitis E vaccine: WHO position paper», <i>Wkly Epidemiol Rec</i> 2015;90(18):185-200 · Dalton HR et al., <i>Nat Rev Neurol</i> 2016;12:77-85 · First Aid for the USMLE Step 1 2025, pp. 170-171 · Pocket Medicine 9e, 2025.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="caliciviridae.html"><span class="k">← Anterior</span><span class="v">Caliciviridae</span></a>
+        <a class="next" href="astroviridae.html"><span class="k">Siguiente →</span><span class="v">Astroviridae</span></a></div>
+      <footer class="pf">
+        <span>Hepeviridae · 3 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

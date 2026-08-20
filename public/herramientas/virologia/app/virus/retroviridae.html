@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retroviridae — Virus RNA</title>
+<meta name="description" content="Retroviridae. VIH-1 · VIH-2 · HTLV-1/2">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Retroviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 9 de 18 · Virología médica</p>
+    <h1>Retroviridae</h1>
+    <p class="sub">VIH-1 · VIH-2 · HTLV-1/2</p>
+    <div class="chips"><span class="chip g">2 × +ssRNA de 9 kb · genoma diploide</span>
+  <span class="chip">Envuelto · 100–120 nm · cápside cónica</span>
+  <span class="chip">RT → provirus integrado en el núcleo</span>
+  <span class="chip r">~39 millones de personas con VIH</span>
+  <span class="chip gold">TAR universal · U=U · PrEP</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Retroviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros humanos</dt><dd><i>Lentivirus</i> (VIH-1, VIH-2) · <i>Deltaretrovirus</i> (HTLV-1, HTLV-2)</dd></div>
+  <div class="cell"><dt>Receptor</dt><dd>VIH: <b>CD4</b> + correceptor <b>CCR5</b> (R5, temprano) o <b>CXCR4</b> (X4, tardío) · HTLV-1: <b>GLUT-1</b></dd></div>
+  <div class="cell"><dt>Enzimas del virión</dt><dd><b>Transcriptasa reversa · integrasa · proteasa</b> (todas codificadas en <i>pol</i>)</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Sexual · sangre y jeringas · vertical (<b>15–40 % sin TAR</b>) · HTLV además por <b>lactancia</b></dd></div>
+  <div class="cell"><dt>Incubación</dt><dd>Síndrome retroviral agudo <b>2–4 semanas</b> · SIDA a los <b>8–10 años</b> sin tratamiento</dd></div>
+  <div class="cell"><dt>Definición de SIDA</dt><dd><b>CD4 &lt;200/µL</b> (o &lt;14 %) o una condición definitoria, con independencia del conteo</dd></div>
+  <div class="cell"><dt>Diagnóstico</dt><dd>Algoritmo <b>CDC 2014</b>: Ag/Ac de 4.ª generación → diferenciación VIH-1/VIH-2 → NAT si discordan</dd></div>
+  <div class="cell"><dt>Tratamiento</dt><dd><b>2 NRTI + 1 INSTI</b> el mismo día del diagnóstico · BIC/TAF/FTC como régimen inicial más usado</dd></div>
+  <div class="cell"><dt>Reservorio</dt><dd>CD4 de memoria en reposo; vida media de <b>44 meses (3.7 años)</b> → la TAR sola nunca cura</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">Del primer retrovirus humano al primer paciente curado</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1979–1980</b> — <b>Poiesz</b> aísla partículas retrovirales de un hombre con linfoma cutáneo de células T: el <b>primer retrovirus humano</b>. Yoshida y Watanabe lo vinculan enseguida a la leucemia T del adulto del suroeste de Japón. Se le llama <b>HTLV-1</b>: el <b>primer virus reconocido como causa de cáncer humano</b>.</li>
+      <li><b>5 de junio de 1981</b> — el <i>MMWR</i> publica cinco casos de neumonía por <i>Pneumocystis</i> en hombres jóvenes previamente sanos de Los Ángeles. Semanas después, el sarcoma de Kaposi en Nueva York. Nace la epidemia.</li>
+      <li><b>1983–1984</b> — <b>Barré-Sinoussi y Montagnier</b> aíslan el LAV; el grupo de Gallo lo llama HTLV-III. En 1986 se impone el nombre <b>VIH</b>. Nobel 2008. En 1986 se identifica el <b>VIH-2</b> en África occidental.</li>
+      <li><b>1987 → 1996</b> — la zidovudina abre la era antirretroviral, pero la monoterapia fracasa por resistencia. En 1996 la <b>terapia combinada</b> vuelve crónica la enfermedad: el «efecto Lázaro».</li>
+      <li><b>2007</b> — el <b>paciente de Berlín</b> recibe un trasplante alogénico de un donante <b>CCR5-Δ32 homocigoto</b> y se cura. Londres y Düsseldorf reprodujeron el resultado con la misma estrategia, irreplicable a escala poblacional.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué esta familia cambió la biología</span>
+      <p>El descubrimiento de la transcriptasa reversa invirtió el dogma central: <b>el RNA puede escribirse en DNA</b>. Cada infección por retrovirus termina en una <b>modificación permanente del genoma de la célula</b>. Esa es la razón única y suficiente por la que ni el VIH ni el HTLV se curan con antivirales, por potentes que sean.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Retroviridae → Lentivirus y Deltaretrovirus</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd><i>Retroviridae</i> — del latín <i>retro</i>, «hacia atrás»: transcriben RNA en DNA. <b>Grupo VI de Baltimore</b> (ssRNA con transcripción reversa)</dd>
+      <dt>Subfamilia</dt><dd><i>Orthoretrovirinae</i> (los patógenos humanos) · <i>Spumaretrovirinae</i> (virus espumosos, sin enfermedad establecida)</dd>
+      <dt>Géneros humanos</dt><dd><i>Lentivirus</i> (<i>lentus</i>, lento: incubación de años) · <i>Deltaretrovirus</i> (antes «oncovirus»)</dd>
+      <dt>Contraste clave</dt><dd>El lentivirus <b>mata</b> al linfocito CD4; el deltaretrovirus lo <b>inmortaliza</b>. Misma familia, dos desenlaces opuestos.</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">VIH-1 y VIH-2</span><span class="vg">Lentivirus</span></div>
+        <div class="vbd">
+          <p><b>VIH-1</b> — origen zoonótico en <i>SIVcpz</i> del chimpancé y <i>SIVgor</i> del gorila, con cuatro saltos independientes a la especie humana: <b>grupos M, N, O y P</b>. Solo el <b>grupo M</b> generó la pandemia; subtipos <b>A–K</b> más decenas de <b>formas recombinantes circulantes (CRF)</b>. <b>Subtipo B</b> en México, Estados Unidos y Europa occidental; subtipo C en África subsahariana e India.</p>
+          <p><b>VIH-2</b> — deriva del <i>SIV</i> del mangabey gris; casi confinado a África occidental. <b>Menos transmisible</b> por vía sexual y vertical, cargas virales bajas, progresión lenta. Carece de <i>vpu</i> y posee <b><i>vpx</i></b>. <b>Resistencia intrínseca a todos los NNRTI</b> y a la enfuvirtida; sensible a NRTI, IP e INSTI.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">HTLV-1 y HTLV-2</span><span class="vg">Deltaretrovirus</span></div>
+        <div class="vbd">
+          <p><b>HTLV-1</b> — siete subtipos: <b>cosmopolita (a)</b>, <b>australo-melanesio (c)</b> y cinco africanos (b, d, e, f, g). A diferencia del VIH, su genoma es <b>notablemente conservado</b>: los aislados de Japón, el Caribe, América y África comparten <b>≥97 % de homología</b>. Endémico en el suroeste de Japón, la cuenca del Caribe, Sudamérica, África central y occidental, Melanesia, Australia central e Irán nororiental.</p>
+          <p><b>HTLV-2</b> — cuatro subtipos (a–d). Alta prevalencia en <b>pueblos originarios de América</b> y en <b>personas que se inyectan drogas</b>. Causa HAM de forma excepcional y <b>no produce leucemia</b>.</p>
+          <p><b>HTLV-3 y HTLV-4</b> — descritos en 2005 en África central; sin enfermedad atribuida.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box trap"><span class="lbl">Confusión histórica que sigue apareciendo en exámenes</span>
+      <p>El nombre «HTLV-III» que Gallo dio en 1984 al agente del SIDA <b>no tiene nada que ver</b> con el HTLV-3 descrito en África en 2005. El HTLV-III de 1984 es el VIH-1.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Tres genes estructurales y una enzima que reescribe el genoma</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión del VIH-1 con sus proteínas rotuladas">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <circle cx="190" cy="175" r="118" fill="rgba(69,90,140,.13)" stroke="#36476E" stroke-width="1.6"/>
+        <circle cx="190" cy="175" r="101" fill="none" stroke="#90303a" stroke-width="4.5" opacity=".45"/>
+        <g stroke="#701d14" stroke-width="2.2" stroke-linecap="round">
+          <line x1="308" y1="175" x2="320" y2="175"/>
+          <line x1="285" y1="106" x2="297" y2="97"/>
+          <line x1="226" y1="63" x2="231" y2="50"/>
+          <line x1="154" y1="63" x2="149" y2="50"/>
+          <line x1="95" y1="106" x2="83" y2="97"/>
+          <line x1="72" y1="175" x2="60" y2="175"/>
+          <line x1="95" y1="244" x2="83" y2="253"/>
+          <line x1="154" y1="287" x2="149" y2="300"/>
+          <line x1="226" y1="287" x2="231" y2="300"/>
+          <line x1="285" y1="244" x2="297" y2="253"/>
+        </g>
+        <g fill="#701d14">
+          <circle cx="324" cy="175" r="4.2"/><circle cx="300" cy="94" r="4.2"/>
+          <circle cx="232" cy="46" r="4.2"/><circle cx="148" cy="46" r="4.2"/>
+          <circle cx="80" cy="94" r="4.2"/><circle cx="56" cy="175" r="4.2"/>
+          <circle cx="80" cy="256" r="4.2"/><circle cx="148" cy="304" r="4.2"/>
+          <circle cx="232" cy="304" r="4.2"/><circle cx="300" cy="256" r="4.2"/>
+        </g>
+        <polygon points="162,102 234,120 250,242 130,242" fill="rgba(92,122,87,.16)" stroke="#5C7A57" stroke-width="1.8"/>
+        <path d="M176 130 q16 -12 32 0 t32 0 M172 165 q18 -12 36 0 t36 0 M166 200 q19 -12 38 0 t38 0" fill="none" stroke="#1a6b42" stroke-width="2"/>
+        <g fill="#27334F">
+          <circle cx="186" cy="222" r="4.5"/><circle cx="208" cy="228" r="4.5"/><circle cx="228" cy="220" r="4.5"/>
+        </g>
+        <g font-family="'Inter', sans-serif" font-size="11.5" fill="#14181f">
+          <line x1="302" y1="94" x2="440" y2="62" stroke="#455A8C" stroke-width="1"/>
+          <text x="448" y="59" font-weight="600" fill="#701d14">gp120 (SU) — unión</text>
+          <text x="448" y="75" font-size="10.5" fill="#6b7585">Se ancla a CD4 y luego al correceptor. Sus asas</text>
+          <text x="448" y="89" font-size="10.5" fill="#6b7585">V1–V5 hipervariables y su escudo de glicanos</text>
+          <text x="448" y="103" font-size="10.5" fill="#6b7585">impiden una vacuna basada en neutralización</text>
+          <line x1="310" y1="150" x2="440" y2="126" stroke="#455A8C" stroke-width="1"/>
+          <text x="448" y="123" font-weight="600" fill="#701d14">gp41 (TM) — fusión</text>
+          <text x="448" y="139" font-size="10.5" fill="#6b7585">Ambas nacen del corte de gp160 por una furina</text>
+          <text x="448" y="153" font-size="10.5" fill="#6b7585">celular; forman un trímero de heterodímeros</text>
+          <line x1="292" y1="196" x2="440" y2="180" stroke="#455A8C" stroke-width="1"/>
+          <text x="448" y="177" font-weight="600" fill="#90303a">p17 (MA) — matriz</text>
+          <text x="448" y="193" font-size="10.5" fill="#6b7585">Miristilada, tapiza la cara interna de la envoltura</text>
+          <line x1="252" y1="180" x2="440" y2="217" stroke="#455A8C" stroke-width="1"/>
+          <text x="448" y="214" font-weight="600" fill="#5C7A57">p24 (CA) — cápside cónica</text>
+          <text x="448" y="230" font-size="10.5" fill="#6b7585">El antígeno que detectan los inmunoensayos de</text>
+          <text x="448" y="244" font-size="10.5" fill="#6b7585">cuarta generación, positivo antes que la serología</text>
+          <line x1="240" y1="228" x2="440" y2="268" stroke="#455A8C" stroke-width="1"/>
+          <text x="448" y="265" font-weight="600" fill="#27334F">p7 (NC) + 2 × RNA + enzimas</text>
+          <text x="448" y="281" font-size="10.5" fill="#6b7585">Dos copias idénticas del genoma, dos moléculas de</text>
+          <text x="448" y="295" font-size="10.5" fill="#6b7585">transcriptasa reversa, integrasa y proteasa dentro</text>
+          <text x="448" y="309" font-size="10.5" fill="#6b7585">de la cápside: el virión ya viaja listo para copiar</text>
+        </g>
+        <text x="60" y="330" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">100–120 NM · CORE CÓNICO, SELLO DEL LENTIVIRUS</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión del VIH-1. Retén la cadena de mando: <b>gp160 se corta en gp120 (pega) y gp41 (fusiona)</b>; <b>Gag</b> da p17, p24 y p7; <b>Pol</b> da proteasa, transcriptasa reversa e integrasa.</figcaption>
+    </figure>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mapa genómico comparado del VIH-1 y del HTLV-1">
+        <rect width="900" height="290" fill="#FFFFFF"/>
+        <text x="90" y="40" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#27334F">VIH-1 · LENTIVIRUS · 9.7 KB · 9 GENES EN 3 MARCOS DE LECTURA</text>
+        <rect x="90" y="56" width="52" height="30" rx="3" fill="rgba(69,90,140,.30)" stroke="#36476E" stroke-width="1"/>
+        <text x="116" y="76" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#27334F">5′LTR</text>
+        <rect x="142" y="56" width="130" height="30" rx="3" fill="rgba(92,122,87,.20)" stroke="#5C7A57" stroke-width="1.2"/>
+        <text x="207" y="70" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">gag</text>
+        <text x="207" y="82" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#6b7585">p17 · p24 · p7</text>
+        <rect x="272" y="56" width="198" height="30" rx="3" fill="rgba(39,51,79,.18)" stroke="#27334F" stroke-width="1.2"/>
+        <text x="371" y="70" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">pol</text>
+        <text x="371" y="82" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#6b7585">proteasa · transcriptasa reversa · integrasa</text>
+        <rect x="470" y="56" width="38" height="30" rx="3" fill="rgba(144,48,58,.20)" stroke="#90303a" stroke-width="1"/>
+        <rect x="508" y="56" width="32" height="30" rx="3" fill="rgba(144,48,58,.20)" stroke="#90303a" stroke-width="1"/>
+        <rect x="540" y="56" width="32" height="30" rx="3" fill="rgba(144,48,58,.20)" stroke="#90303a" stroke-width="1"/>
+        <rect x="572" y="56" width="128" height="30" rx="3" fill="rgba(112,29,20,.16)" stroke="#701d14" stroke-width="1.2"/>
+        <text x="636" y="70" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">env</text>
+        <text x="636" y="82" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#6b7585">gp160 → gp120 + gp41</text>
+        <rect x="700" y="56" width="48" height="30" rx="3" fill="rgba(138,92,10,.20)" stroke="#8a5c0a" stroke-width="1"/>
+        <rect x="748" y="56" width="52" height="30" rx="3" fill="rgba(144,48,58,.20)" stroke="#90303a" stroke-width="1"/>
+        <text x="774" y="76" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#90303a">nef</text>
+        <rect x="800" y="56" width="52" height="30" rx="3" fill="rgba(69,90,140,.30)" stroke="#36476E" stroke-width="1"/>
+        <text x="826" y="76" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#27334F">3′LTR</text>
+        <g stroke="#6b7585" stroke-width="0.9">
+          <line x1="489" y1="86" x2="489" y2="98"/>
+          <line x1="524" y1="86" x2="524" y2="112"/>
+          <line x1="556" y1="86" x2="556" y2="98"/>
+          <line x1="724" y1="86" x2="724" y2="98"/>
+        </g>
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f" text-anchor="middle">
+          <text x="484" y="108">vif</text>
+          <text x="524" y="122">vpr</text>
+          <text x="560" y="108">vpu</text>
+          <text x="724" y="108">tat · rev</text>
+        </g>
+        <text x="90" y="145" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">Accesorios: <tspan font-weight="600" fill="#14181f">vif</tspan> degrada APOBEC3G · <tspan font-weight="600" fill="#14181f">vpu</tspan> antagoniza la tetherina y libera viriones · <tspan font-weight="600" fill="#14181f">vpr</tspan> detiene el ciclo en G2 · <tspan font-weight="600" fill="#14181f">nef</tspan> baja CD4 y MHC-I</text>
+        <text x="90" y="162" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">Reguladores: <tspan font-weight="600" fill="#14181f">tat</tspan> transactiva el LTR y multiplica la transcripción · <tspan font-weight="600" fill="#14181f">rev</tspan> exporta al citoplasma los mRNA sin procesar</text>
+        <line x1="60" y1="180" x2="860" y2="180" stroke="rgba(20,24,31,.12)" stroke-width="1"/>
+        <text x="90" y="205" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#701d14">HTLV-1 · DELTARETROVIRUS · 9.0 KB · REGIÓN pX EXCLUSIVA</text>
+        <rect x="90" y="218" width="52" height="30" rx="3" fill="rgba(69,90,140,.30)" stroke="#36476E" stroke-width="1"/>
+        <text x="116" y="238" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#27334F">5′LTR</text>
+        <rect x="142" y="218" width="120" height="30" rx="3" fill="rgba(92,122,87,.20)" stroke="#5C7A57" stroke-width="1.2"/>
+        <text x="202" y="238" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">gag</text>
+        <rect x="262" y="218" width="40" height="30" rx="3" fill="rgba(144,48,58,.20)" stroke="#90303a" stroke-width="1"/>
+        <text x="282" y="238" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#90303a">pro</text>
+        <rect x="302" y="218" width="198" height="30" rx="3" fill="rgba(39,51,79,.18)" stroke="#27334F" stroke-width="1.2"/>
+        <text x="401" y="238" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">pol</text>
+        <rect x="500" y="218" width="128" height="30" rx="3" fill="rgba(112,29,20,.16)" stroke="#701d14" stroke-width="1.2"/>
+        <text x="564" y="238" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">env</text>
+        <rect x="628" y="218" width="172" height="30" rx="3" fill="rgba(138,92,10,.22)" stroke="#8a5c0a" stroke-width="1.4"/>
+        <text x="714" y="232" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">pX</text>
+        <text x="714" y="244" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#6b7585">tax · rex · p12 · p30</text>
+        <rect x="800" y="218" width="52" height="30" rx="3" fill="rgba(69,90,140,.30)" stroke="#36476E" stroke-width="1"/>
+        <text x="826" y="238" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#27334F">3′LTR</text>
+        <line x1="845" y1="262" x2="648" y2="262" stroke="#8a5c0a" stroke-width="1.6"/>
+        <polygon points="640,262 652,257 652,267" fill="#8a5c0a"/>
+        <text x="632" y="266" text-anchor="end" font-family="'Inter', sans-serif" font-size="9.5" fill="#8a5c0a">HBZ — se transcribe de la hebra antisentido (−)</text>
+        <text x="90" y="283" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Todo retrovirus lleva gag-pol-env; lo que define a cada género es lo que le sobra: accesorios en el VIH, región pX en el HTLV.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Mapas genómicos comparados. En el HTLV-1 los dos genes que hay que memorizar son <b>tax</b> (transactivador, el motor de la transformación) y <b>HBZ</b>, el único que se transcribe desde la hebra negativa y el único que se expresa en <b>todos</b> los casos de leucemia.</figcaption>
+    </figure>
+
+    <h4>Biología esencial</h4>
+    <ul>
+      <li><b>Genoma diploide</b>: dos copias idénticas de +ssRNA de ~9.7 kb, con capucha y poliadenilación como un mRNA celular, flanqueadas por <b>LTR</b> (U3-R-U5) que hacen de promotor y terminador del provirus. La diploidía permite la <b>recombinación</b> en células coinfectadas: de ahí las formas recombinantes circulantes.</li>
+      <li><b>Transcriptasa reversa sin corrección de pruebas</b>: 10<sup>−4</sup>–10<sup>−5</sup> errores por base, cerca de <b>una mutación por genoma y por ciclo</b>. El resultado es una nube de <b>cuasiespecies</b> que garantiza el escape inmune y la resistencia ante cualquier régimen de barrera genética baja.</li>
+      <li><b>El lentivirus infecta células que no se dividen</b>: la cápside atraviesa el poro nuclear. Los deltaretrovirus, como los oncorretrovirus clásicos, dependen de la mitosis. Por eso el VIH infecta macrófagos y microglía —y por tanto el sistema nervioso central— desde etapas tempranas.</li>
+      <li><b>Maduración postgemación</b>: el virión sale inmaduro y solo se vuelve infeccioso cuando la <b>proteasa viral</b> corta Gag y Gag-Pol y se ensambla el core cónico. Único paso del ciclo que ocurre <b>fuera</b> de la célula.</li>
+      <li><b>Estabilidad</b>: virus lábil, inactivado por hipoclorito, alcohol y calor. <b>No se transmite por fómites, saliva, insectos ni convivencia</b>.</li>
+    </ul>
+
+    <div class="box clin"><span class="lbl">HTLV: otra estrategia de persistencia</span>
+      <p>El HTLV-1 usa <b>GLUT-1</b> y casi no produce viriones libres: se propaga por la <b>sinapsis virológica</b>, de célula a célula, y expande su carga por <b>proliferación clonal mitótica del linfocito infectado</b>. De ahí que sea <b>mucho menos transmisible que el VIH</b>, que el plasma libre de células no contagie, que la leucorreducción reduzca el riesgo transfusional y que <b>el marcador de laboratorio sea la carga proviral en células, no una carga viral en plasma</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Del intestino al reservorio, y del reservorio a la eternidad</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Historia natural de la infección por VIH sin tratamiento: curvas de CD4 y de carga viral con los umbrales de infección oportunista">
+        <rect width="900" height="360" fill="#FFFFFF"/>
+        <rect x="90" y="34" width="115" height="20" rx="3" fill="rgba(112,29,20,.12)"/>
+        <text x="147" y="48" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#701d14">AGUDA · 2–4 SEM</text>
+        <rect x="207" y="34" width="351" height="20" rx="3" fill="rgba(69,90,140,.16)"/>
+        <text x="382" y="48" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#27334F">LATENCIA CLÍNICA · MEDIANA 8–10 AÑOS</text>
+        <rect x="560" y="34" width="140" height="20" rx="3" fill="rgba(138,92,10,.18)"/>
+        <text x="630" y="48" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#8a5c0a">SIDA</text>
+        <line x1="90" y1="290" x2="700" y2="290" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="90" y1="60" x2="90" y2="290" stroke="#455A8C" stroke-width="1.2"/>
+        <g stroke="rgba(20,24,31,.12)" stroke-width="1" stroke-dasharray="3 3">
+          <line x1="90" y1="175" x2="700" y2="175"/>
+          <line x1="90" y1="244" x2="700" y2="244"/>
+          <line x1="90" y1="267" x2="700" y2="267"/>
+          <line x1="90" y1="279" x2="700" y2="279"/>
+        </g>
+        <path d="M90,106 C112,104 126,170 143,179 C168,192 188,144 208,141 C330,158 440,205 560,244 C620,266 668,278 700,285" fill="none" stroke="#27334F" stroke-width="2.6"/>
+        <path d="M92,288 C110,240 122,110 138,84 C152,62 168,150 186,196 C196,214 200,216 208,218 C330,214 440,200 560,178 C610,168 660,128 700,92" fill="none" stroke="#701d14" stroke-width="2.6" stroke-dasharray="6 3"/>
+        <text x="96" y="98" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#27334F">CD4+ /µL</text>
+        <text x="150" y="76" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#701d14">RNA VIH en plasma (log)</text>
+        <g font-family="'Inter', sans-serif" font-size="9" fill="#6b7585" text-anchor="middle">
+          <text x="90" y="305">0</text>
+          <text x="145" y="305">4 sem</text>
+          <text x="208" y="305">12 sem</text>
+          <text x="330" y="305">1 año</text>
+          <text x="445" y="305">4 años</text>
+          <text x="560" y="305">8 años</text>
+          <text x="672" y="305">10–12 años</text>
+        </g>
+        <g stroke="#8a5c0a" stroke-width="0.9">
+          <line x1="700" y1="175" x2="710" y2="136"/>
+          <line x1="700" y1="244" x2="710" y2="184"/>
+          <line x1="700" y1="267" x2="710" y2="232"/>
+          <line x1="700" y1="279" x2="710" y2="280"/>
+        </g>
+        <g font-family="'Inter', sans-serif" fill="#6b7585">
+          <text x="712" y="140" font-size="10.5" font-weight="600" fill="#27334F">CD4 &lt;500</text>
+          <text x="712" y="153" font-size="9.5">Candidiasis oral, leucoplasia</text>
+          <text x="712" y="165" font-size="9.5">vellosa, zóster, TB pulmonar</text>
+          <text x="712" y="188" font-size="10.5" font-weight="600" fill="#701d14">CD4 &lt;200 = SIDA</text>
+          <text x="712" y="201" font-size="9.5">Pneumocystis, esofagitis por</text>
+          <text x="712" y="213" font-size="9.5">Candida, criptococosis</text>
+          <text x="712" y="236" font-size="10.5" font-weight="600" fill="#701d14">CD4 &lt;100</text>
+          <text x="712" y="249" font-size="9.5">Toxoplasmosis del SNC,</text>
+          <text x="712" y="261" font-size="9.5">criptosporidiosis</text>
+          <text x="712" y="284" font-size="10.5" font-weight="600" fill="#701d14">CD4 &lt;50</text>
+          <text x="712" y="297" font-size="9.5">Retinitis por CMV, MAC,</text>
+          <text x="712" y="309" font-size="9.5">LMP, linfoma primario de SNC</text>
+        </g>
+        <text x="90" y="332" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La «latencia clínica» no es latencia virológica: se destruyen y reponen miles de millones de linfocitos al día. El equilibrio</text>
+        <text x="90" y="348" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">se rompe cuando la reserva tímica se agota. El punto de equilibrio virológico a los 6 meses predice la velocidad de esa caída.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Historia natural sin tratamiento (escala temporal comprimida). Memoriza los cuatro escalones de CD4 y su infección centinela: <b>500 mucocutáneo · 200 <i>Pneumocystis</i> · 100 toxoplasma · 50 CMV y MAC</b>.</figcaption>
+    </figure>
+
+    <ol class="steps">
+      <li><b>Entrada mucosa y fase eclipse (días 0–10)</b> El virus cruza la mucosa genital o rectal, es capturado por células dendríticas y llevado al tejido linfoide regional. Durante ~1 semana <b>ninguna prueba es positiva</b>. En 70–80 % de las transmisiones sexuales se establece <b>una sola variante fundadora</b> R5: el cuello de botella más estrecho del ciclo vital del virus.</li>
+      <li><b>Devastación del GALT (semanas 2–6)</b> La lámina propia intestinal concentra CD4 efectoras de memoria CCR5+, el blanco perfecto. Se pierden de forma <b>masiva e irreversible</b> antes de que el conteo en sangre se altere.</li>
+      <li><b>Translocación bacteriana y activación inmune crónica</b> La barrera intestinal rota deja pasar productos microbianos (LPS, sCD14 altos) y el sistema inmune queda encendido de forma permanente → <b>inflamación crónica, senescencia inmune y comorbilidades no clasificatorias de SIDA</b>. Persiste, atenuado, incluso con carga viral indetectable.</li>
+      <li><b>Punto de equilibrio virológico (mes 6)</b> Tras el pico de viremia, la respuesta CD8 establece un <i>set point</i>. Cuanto más alto, más rápida la progresión.</li>
+      <li><b>Depleción progresiva de CD4</b> No es solo efecto citopático: buena parte muere por <b>piroptosis</b> tras infección abortiva —muerte inflamatoria que recluta más linfocitos al foco—, por lisis mediada por CD8 y por agotamiento tímico.</li>
+      <li><b>Cambio de tropismo (fase tardía)</b> En ~50 % emergen variantes <b>X4</b> que usan CXCR4 y atacan también a las CD4 naïve: marca la aceleración del deterioro.</li>
+    </ol>
+
+    <div class="g2">
+      <div class="box hy"><span class="lbl">El reservorio, en tres cifras</span>
+        <p>La caída de la viremia bajo TAR es <b>trifásica</b>: una primera fase con vida media de ~2 semanas (células productivas), una segunda de <b>19 meses</b>, y a partir del segundo año una tercera fase estable con vida media de <b>44 meses (3.7 años)</b>. Con ese decaimiento harían falta <b>más de 60 años</b> de supresión perfecta para vaciar el reservorio, y además las células infectadas se expanden clonalmente. <b>Esa cifra es la razón por la que la TAR es de por vida.</b></p>
+      </div>
+      <div class="card"><span class="lbl">Evasión inmune y variantes del huésped</span>
+        <ul>
+          <li><b>Nef</b> internaliza CD4 y MHC-I: la célula infectada se vuelve invisible al CTL.</li>
+          <li><b>Vif</b> degrada APOBEC3G, la desaminasa que hipermuta el genoma viral.</li>
+          <li>El <b>escudo de glicanos</b> de gp120 y sus asas hipervariables frustran la neutralización amplia: razón central del fracaso vacunal.</li>
+          <li><b>CCR5-Δ32 homocigoto</b> da resistencia casi total a cepas R5; el heterocigoto progresa más lento.</li>
+          <li><b>Controladores de élite</b> (&lt;1 %) mantienen viremia indetectable sin fármacos, con alelos HLA-B protectores.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Oncogénesis del HTLV-1 en dos actos</span>
+      <p><b>Acto 1 — Tax inicia.</b> Transactiva el LTR, activa constitutivamente <b>NF-κB</b>, induce el asa autocrina IL-2/IL-2R (CD25), inhibe a p53 y bloquea la reparación del DNA: proliferación policlonal con inestabilidad genómica.</p>
+      <p><b>Acto 2 — HBZ mantiene.</b> En ~60 % de las leucemias establecidas <b>Tax ya no se expresa</b> (mutación, metilación o deleción del LTR 5′), lo que permite escapar de los CTL anti-Tax; <b>HBZ se expresa en todos los casos</b> y sostiene la proliferación. El resultado es un clon <b>monoclonal</b> con un sitio único de integración. Entre el contagio —típicamente por lactancia— y la leucemia median <b>40 a 60 años</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Un virus que destruye, otro que transforma</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Síndrome retroviral agudo</h4>
+    <p>Aparece <b>2–4 semanas</b> tras la exposición en más de la mitad de los infectados y dura de una a tres semanas. Cuadro <b>mononucleósico</b>: fiebre, faringitis <b>sin exudado</b>, adenopatías generalizadas, exantema maculopapular en tronco y cara, mialgias, cefalea, diarrea. Lo que más orienta son las <b>úlceras orales y genitales dolorosas</b> junto al exantema. Puede complicarse con meningitis aséptica, parálisis facial o Guillain-Barré. Hay linfopenia con <b>caída transitoria de CD4</b>, capaz de precipitar candidiasis oral. Es el <b>periodo de máxima transmisibilidad</b>: la viremia supera el millón de copias/mL.</p>
+    <div class="box trap"><span class="lbl">La trampa diagnóstica más costosa</span>
+      <p>En el síndrome retroviral agudo <b>la serología todavía es negativa</b>. Si sospechas infección aguda, la prueba que se pide es la <b>carga viral (NAT)</b> o al menos un ensayo de cuarta generación con Ag p24 — nunca una prueba de anticuerpos sola. Diferencial obligado en México: <b>dengue</b>, sífilis secundaria, mononucleosis por EBV o CMV, influenza, rickettsiosis y toxoplasmosis aguda.</p>
+    </div>
+
+    <h4>Fase crónica y enfermedad avanzada</h4>
+    <p>Sigue una fase asintomática de <b>mediana 8–10 años</b>, con linfadenopatía generalizada persistente en muchos pacientes, y los síndromes clasificatorios aparecen por umbral de CD4 (Figura 3). Además de las oportunistas, hay daño de órgano atribuible al propio virus:</p>
+    <div class="g2">
+      <div class="card"><span class="lbl">Daño por el propio virus</span>
+        <ul>
+          <li><b>HAND</b> — del deterioro cognitivo asintomático a la demencia, con atrofia cerebral.</li>
+          <li><b>Mielopatía vacuolar</b> y <b>neuropatía distal sensitiva</b> simétrica y dolorosa.</li>
+          <li><b>HIVAN</b> — glomeruloesclerosis focal colapsante con proteinuria masiva, ligada a ascendencia africana.</li>
+          <li><b>Síndrome de desgaste</b>, miocardiopatía dilatada, aterosclerosis acelerada, osteopenia.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Neoplasias</span>
+        <ul>
+          <li><b>Sarcoma de Kaposi</b> (HHV-8) — definitorio; puede aparecer con CD4 conservados.</li>
+          <li><b>Linfoma no Hodgkin</b>, incluidos el <b>primario del SNC</b> (EBV, lesión realzante habitualmente única) y el de Burkitt.</li>
+          <li><b>Cáncer cervicouterino invasor</b> y cáncer anal por VPH.</li>
+          <li>Linfoma de Hodgkin: aumentado, pero <b>no</b> definitorio de SIDA.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box clin"><span class="lbl">IRIS · embarazo · pediatría</span>
+      <p><b>IRIS</b>: empeoramiento paradójico de una oportunista al iniciar la TAR, sobre todo con CD4 muy bajos y patógeno viable (TB, criptococo, MAC, CMV, VZV). Se <b>continúa la TAR</b>, se trata la infección de base y se valoran esteroides en casos graves. <b>Transmisión vertical</b>: 15–40 % sin intervención; con TAR y carga viral suprimida, &lt;1–2 %. En el <b>lactante &lt;18 meses</b> los anticuerpos maternos hacen inútil la serología.</p>
+    </div>
+
+    <h4>Enfermedad por HTLV-1 y HTLV-2</h4>
+    <p>Más del <b>95 % de los portadores permanece asintomático de por vida</b>; solo hasta un 5 % desarrolla enfermedad. Aun así, el HTLV-1 se asocia a un <b>exceso de mortalidad por todas las causas cercano al 50 %</b> que no se explica por sus complicaciones conocidas.</p>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th></th><th>Leucemia/linfoma T del adulto (ATL) · 2–4 %</th><th>Mielopatía asociada a HTLV (HAM/TSP) · 1–4 %</th></tr></thead>
+      <tbody>
+        <tr><td><b>Vía de contagio</b></td><td>Sobre todo <b>vertical por lactancia</b>, con 40–60 años de latencia</td><td><b>Cualquier vía</b>; inicio típico después de los 40 años, más frecuente en mujeres</td></tr>
+        <tr><td><b>Cuadro</b></td><td>Cuatro formas: <b>aguda (57 %)</b>, linfomatosa (19 %), crónica (19 %) e indolente o <i>smoldering</i> (5 %). Adenopatías, hepatoesplenomegalia, placas o nódulos cutáneos, infiltración visceral</td><td><b>Paraparesia espástica</b> lentamente progresiva, vejiga neurogénica, estreñimiento, disfunción eréctil, dolor lumbar y en piernas, hiperreflexia</td></tr>
+        <tr><td><b>Laboratorio</b></td><td><b>Células en flor</b> (núcleo multilobulado) · fenotipo <b>CD4+ CD25+</b> · <b>hipercalcemia</b> con lesiones líticas por PTHrP y activación osteoclástica · LDH alta</td><td>Serología positiva en suero y LCR, <b>carga proviral alta</b>, pleocitosis linfocítica leve, bandas oligoclonales, neopterina y CXCL10 en LCR</td></tr>
+        <tr><td><b>Pronóstico</b></td><td>Aguda y linfomatosa: mediana de <b>6–8 meses sin tratamiento</b>. Muerte por tumor, hipercalcemia, sepsis e infecciones oportunistas por inmunodeficiencia T</td><td><b>50 % dependen de silla de ruedas en dos décadas</b>. Se clasifica en progresión rápida, lenta o muy lenta</td></tr>
+        <tr><td><b>Diferencial</b></td><td>Micosis fungoide, síndrome de Sézary, otros linfomas T periféricos</td><td><b>Esclerosis múltiple</b>, mielitis transversa, mielopatía por deficiencia de B12, compresión medular</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p><b>Otras manifestaciones del HTLV-1</b>: <b>dermatitis infectiva</b> de la infancia (eccema refractario sobreinfectado por <i>Staphylococcus</i> y <i>Streptococcus</i>, exclusiva de niños infectados por vía materna), <b>uveítis</b>, polimiositis, artropatía de grandes articulaciones, neumonitis infiltrativa y bronquiectasias, y muy característicamente <b>estrongiloidiasis diseminada o sarna costrosa refractarias</b>. El <b>HTLV-2</b> causa HAM de forma esporádica y <b>no produce leucemia</b>.</p>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Algoritmo CDC 2014 · el Western blot ya no se usa</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Tamizaje (paso 1)</b></td><td>Inmunoensayo combinado <b>Ag/Ac VIH-1/2 de 4.ª generación</b></td><td>Detecta <b>Ag p24 + anticuerpos</b>; ventana de ~2–3 semanas. Si es no reactivo y la sospecha es baja, se detiene ahí.</td></tr>
+        <tr><td><b>Confirmación (paso 2)</b></td><td>Inmunoensayo de <b>diferenciación VIH-1/VIH-2</b></td><td>Sustituyó al Western blot. Resuelve además qué virus es, dato que cambia por completo el régimen.</td></tr>
+        <tr><td><b>Discordancia (paso 3)</b></td><td><b>NAT</b> — carga viral de RNA</td><td>Tamizaje reactivo con diferenciación negativa o indeterminada = <b>infección aguda o falso positivo</b>. La NAT lo resuelve.</td></tr>
+        <tr><td><b>Sospecha de infección aguda</b></td><td><b>Carga viral</b> directa</td><td>Positiva desde el día ~10. Cifras muy altas (&gt;10<sup>5</sup>). Un valor bajo aislado (&lt;10 000) obliga a repetir: puede ser falso positivo.</td></tr>
+        <tr><td><b>Lactante &lt;18 meses</b></td><td><b>NAT</b> (RNA o DNA proviral) seriada</td><td>La serología solo refleja anticuerpos maternos. Al nacer si hubo alto riesgo, y a las 2–3 semanas, 1–2 meses y 4–6 meses; <b>dos NAT positivas confirman</b>.</td></tr>
+        <tr><td><b>Seguimiento</b></td><td>Carga viral · CD4 por citometría</td><td>Basal, a las 4–8 semanas de iniciar TAR y cada 3–4 meses hasta la supresión; luego cada 6 meses. CD4 anual si está &gt;300 con supresión sostenida.</td></tr>
+        <tr><td><b>Antes de tratar</b></td><td><b>Genotipo</b> · <b>HLA-B*5701</b> · tropismo</td><td>Genotipo basal en todo paciente nuevo (resistencia transmitida del 5–15 %) y ante falla virológica (&gt;200 copias confirmadas). HLA-B*5701 antes de abacavir; tropismo antes de maraviroc.</td></tr>
+        <tr><td><b>HTLV-1/2</b></td><td>EIA → inmunoblot → <b>PCR de DNA proviral</b></td><td>El tamizaje serológico se confirma y se tipifica por inmunoblot; si el resultado es indeterminado, la <b>PCR proviral en células mononucleares</b> resuelve. La <b>carga proviral</b> es marcador pronóstico de riesgo inflamatorio y tumoral.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Estudio basal del paciente nuevo</span>
+        <ul>
+          <li>Carga viral, CD4 y genotipo; biometría, química, perfil lipídico, función renal con proteinuria y pruebas hepáticas.</li>
+          <li><b>Hepatitis A, B y C</b> (define si el esquema debe cubrir VHB), <b>sífilis</b>, <b>gonorrea y clamidia en los tres sitios expuestos</b>.</li>
+          <li><b>IGRA o PPD</b>; citología cervical y anal.</li>
+          <li>Si hay SIDA avanzado: IgG de <b>toxoplasma</b>, IgG de CMV y G6PD.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Errores frecuentes</span>
+        <ul>
+          <li><b>Pedir Western blot</b>: descontinuado como confirmatorio desde 2014.</li>
+          <li>Descartar VIH con una prueba de anticuerpos en un paciente con cuadro agudo.</li>
+          <li>Usar el <b>conteo de CD4 como prueba diagnóstica</b>: no lo es.</li>
+          <li>No repetir el tamizaje en el <b>tercer trimestre</b> del embarazo en zonas o poblaciones de riesgo.</li>
+          <li>Interpretar una carga viral de HTLV en plasma: no existe: se mide <b>carga proviral en células</b>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Un paso del ciclo por cada clase de fármaco</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ciclo de replicación del VIH con la clase de antirretroviral que bloquea cada paso">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <text x="40" y="30" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">CICLO REPLICATIVO Y BLANCO FARMACOLÓGICO DE CADA CLASE</text>
+        <rect x="40" y="70" width="190" height="76" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="40" y="70" width="4" height="76" rx="2" fill="#701d14"/>
+        <text x="56" y="90" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">1 · Unión y fusión</text>
+        <text x="56" y="107" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">gp120 → CD4 → CCR5 o CXCR4</text>
+        <text x="56" y="121" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">gp41 inserta el péptido de fusión</text>
+        <text x="56" y="138" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#8a5c0a">MARAVIROC · IBALIZUMAB · ENFUVIRTIDA</text>
+        <rect x="250" y="70" width="190" height="76" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="250" y="70" width="4" height="76" rx="2" fill="#27334F"/>
+        <text x="266" y="90" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">2 · Transcripción reversa</text>
+        <text x="266" y="107" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">RNA → DNA dentro de la cápside</text>
+        <text x="266" y="121" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">~1 error por genoma y por ciclo</text>
+        <text x="266" y="138" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#8a5c0a">NRTI (TDF, TAF, FTC, 3TC, ABC) · NNRTI</text>
+        <rect x="460" y="70" width="190" height="76" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="460" y="70" width="4" height="76" rx="2" fill="#27334F"/>
+        <text x="476" y="90" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">3 · Entrada al núcleo</text>
+        <text x="476" y="107" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">La cápside cruza el poro nuclear:</text>
+        <text x="476" y="121" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">infecta células que no se dividen</text>
+        <text x="476" y="138" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#8a5c0a">INHIBIDORES DE CÁPSIDE (CLASE NUEVA)</text>
+        <rect x="670" y="70" width="190" height="76" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="670" y="70" width="4" height="76" rx="2" fill="#5C7A57"/>
+        <text x="686" y="90" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">4 · Integración</text>
+        <text x="686" y="107" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">La integrasa inserta el provirus</text>
+        <text x="686" y="121" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">en cromatina activa: es irreversible</text>
+        <text x="686" y="138" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#8a5c0a">INSTI: DOLUTEGRAVIR, BICTEGRAVIR, RAL</text>
+        <g stroke="#455A8C" stroke-width="1.2" fill="#455A8C">
+          <line x1="230" y1="108" x2="243" y2="108"/><polygon points="250,108 240,103 240,113"/>
+          <line x1="440" y1="108" x2="453" y2="108"/><polygon points="460,108 450,103 450,113"/>
+          <line x1="650" y1="108" x2="663" y2="108"/><polygon points="670,108 660,103 660,113"/>
+          <line x1="765" y1="146" x2="765" y2="213"/><polygon points="765,220 760,210 770,210"/>
+        </g>
+        <rect x="670" y="220" width="190" height="76" rx="6" fill="rgba(112,29,20,.08)" stroke="#701d14" stroke-width="1.3"/>
+        <text x="686" y="240" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">5 · Transcripción o latencia</text>
+        <text x="686" y="257" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">RNA pol II del huésped, amplificada</text>
+        <text x="686" y="271" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">por Tat. Si el LTR calla → reservorio</text>
+        <text x="686" y="288" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#701d14">AQUÍ NINGÚN ANTIRRETROVIRAL ALCANZA</text>
+        <rect x="460" y="220" width="190" height="76" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="460" y="220" width="4" height="76" rx="2" fill="#90303a"/>
+        <text x="476" y="240" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#90303a">6 · Traducción y exporte</text>
+        <text x="476" y="257" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Rev saca los mRNA sin procesar</text>
+        <text x="476" y="271" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">gp160 se corta en el Golgi</text>
+        <text x="476" y="288" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#6b7585">SIN FÁRMACO EN USO CLÍNICO</text>
+        <rect x="250" y="220" width="190" height="76" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="250" y="220" width="4" height="76" rx="2" fill="#90303a"/>
+        <text x="266" y="240" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#90303a">7 · Ensamblaje y gemación</text>
+        <text x="266" y="257" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Gag recluta 2 copias del genoma</text>
+        <text x="266" y="271" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Vpu neutraliza la tetherina</text>
+        <text x="266" y="288" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#6b7585">SIN FÁRMACO EN USO CLÍNICO</text>
+        <rect x="40" y="220" width="190" height="76" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="40" y="220" width="4" height="76" rx="2" fill="#701d14"/>
+        <text x="56" y="240" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">8 · Maduración</text>
+        <text x="56" y="257" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">La proteasa corta Gag y Gag-Pol</text>
+        <text x="56" y="271" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Core cónico = virión infeccioso</text>
+        <text x="56" y="288" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#8a5c0a">IP POTENCIADOS: DARUNAVIR/r, ATAZANAVIR/r</text>
+        <g stroke="#455A8C" stroke-width="1.2" fill="#455A8C">
+          <line x1="670" y1="258" x2="657" y2="258"/><polygon points="650,258 660,253 660,263"/>
+          <line x1="460" y1="258" x2="447" y2="258"/><polygon points="440,258 450,253 450,263"/>
+          <line x1="250" y1="258" x2="237" y2="258"/><polygon points="230,258 240,253 240,263"/>
+        </g>
+        <text x="40" y="322" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Cada clase corta un paso distinto; ninguna toca el provirus ya integrado y silente. Por eso la TAR controla, pero no cura.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 4. El ciclo del VIH leído como mapa farmacológico. El paso 5 es el corazón del problema: el <b>provirus latente</b> no transcribe, no expone antígeno y no ofrece blanco alguno.</figcaption>
+    </figure>
+
+    <h4>Terapia antirretroviral inicial — DHHS/IAS-USA 2024</h4>
+    <p>Régimen estándar = <b>2 NRTI + 1 anclaje</b>, preferentemente un inhibidor de integrasa, <b>en todo diagnosticado y sea cual sea el CD4</b>, idealmente el mismo día.</p>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Régimen</th><th>Componentes</th><th>Comentario</th></tr></thead>
+      <tbody>
+        <tr><td><b>BIC/TAF/FTC</b></td><td>Bictegravir + tenofovir alafenamida + emtricitabina</td><td>Una toma diaria; <b>alta barrera genética</b>; no requiere HLA-B*5701. El inicio más usado.</td></tr>
+        <tr><td><b>DTG + 3TC</b></td><td>Dolutegravir + lamivudina</td><td>Dos fármacos. <b>No usar</b> si la carga viral es &gt;500 000, si hay VHB o si falta el genotipo basal.</td></tr>
+        <tr><td><b>DTG/ABC/3TC</b></td><td>Dolutegravir + abacavir + lamivudina</td><td>Exige <b>HLA-B*5701 negativo</b>.</td></tr>
+        <tr><td><b>TDF/FTC + DTG</b></td><td>Tenofovir disoproxil + emtricitabina + dolutegravir</td><td>Útil en <b>embarazo</b> y en coinfección por VHB; vigilar riñón y hueso.</td></tr>
+        <tr><td><b>CAB + RPV inyectables</b></td><td>Cabotegravir + rilpivirina intramusculares</td><td>Cada 1–2 meses tras supresión oral; opción de adherencia sin resistencia previa a INSTI o NNRTI.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>Si se requiere barrera genética muy alta: <b>darunavir/r</b> o atazanavir/r. El <b>efavirenz dejó de ser preferido</b> por toxicidad neuropsiquiátrica y barrera baja. <b>Excepción al inicio rápido</b>: en meningitis criptocócica y tuberculosa la TAR se difiere <b>4–6 semanas</b> por riesgo de IRIS mortal; en el resto de las oportunistas se inicia hacia las 2 semanas.</p>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Profilaxis de infecciones oportunistas</span>
+        <ul>
+          <li><b>CD4 &lt;200</b> o candidiasis oral → <b>trimetoprim-sulfametoxazol</b>.</li>
+          <li><b>CD4 &lt;100</b> con IgG de toxoplasma positiva → el mismo TMP-SMX cubre ambas.</li>
+          <li><b>CD4 &lt;100</b> → tamizaje con <b>antígeno criptocócico sérico</b>; si es positivo, fluconazol tras descartar enfermedad activa.</li>
+          <li><b>CD4 &lt;50</b> → la profilaxis rutinaria contra MAC <b>se eliminó</b> si se inicia TAR eficaz de forma precoz.</li>
+          <li><b>IGRA o PPD positivos</b> sin TB activa → isoniazida 9 meses, 3HP o rifampicina 4 meses.</li>
+          <li><b>Suspensión</b>: TMP-SMX cuando CD4 &gt;200 sostenidos ≥3 meses con supresión virológica.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Mutaciones de resistencia clave</span>
+        <ul>
+          <li><b>M184V</b> — 3TC/FTC: resistencia alta, pero <b>reduce el fitness viral</b> e hipersensibiliza a AZT y tenofovir.</li>
+          <li><b>K65R</b> — tenofovir, abacavir, FTC; antagoniza con AZT.</li>
+          <li><b>TAM</b> (M41L, D67N, K70R, L210W, T215Y/F, K219Q/E) — se acumulan con análogos de timidina.</li>
+          <li><b>K103N</b> — resistencia de clase a efavirenz y nevirapina, con <b>barrera bajísima</b>.</li>
+          <li><b>Q148H/R/K, N155H, R263K</b> — INSTI; dolutegravir y bictegravir resisten salvo Q148 con mutaciones secundarias.</li>
+          <li>Los <b>IP requieren varias mutaciones</b>: de ahí su barrera genética alta.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Prevención</h4>
+    <ul>
+      <li><b>U = U</b>. Carga viral suprimida sostenida (&lt;200 copias/mL) <b>elimina la transmisión sexual</b>. Evidencia de HPTN 052, PARTNER, PARTNER2 y Opposites Attract: cero transmisiones en miles de actos sin condón.</li>
+      <li><b>PrEP</b>: TDF/FTC oral diario como primera línea; TAF/FTC como alternativa; <b>cabotegravir intramuscular cada 2 meses</b>. Descartar VIH antes de iniciar y vigilar cada 3 meses. La <b>doxiciclina posexposición reduce ITS bacterianas pero no previene el VIH</b>.</li>
+      <li><b>PEP</b>: tres fármacos durante <b>28 días</b> (TDF/FTC + dolutegravir o raltegravir), <b>antes de 72 horas</b> y de preferencia en las primeras 2. Repetir tamizaje a las 4–6 semanas y a los 3 meses.</li>
+      <li><b>Transmisión vertical</b>: TAR materna desde el primer trimestre, con meta de carga viral indetectable al parto; <b>cesárea electiva si es &gt;1 000 copias</b> al término; zidovudina neonatal 4–6 semanas; <b>evitar la lactancia</b> donde haya alternativas seguras.</li>
+      <li><b>Vacunas</b>: neumococo, influenza anual, hepatitis A y B con esquema reforzado si CD4 &lt;200, VPH, meningococo, zóster recombinante y COVID-19. <b>Prohibidas las vivas atenuadas con CD4 &lt;200</b> (varicela, SRP, fiebre amarilla, BCG).</li>
+      <li><b>Tamizaje universal</b> al menos una vez entre los 13 y los 64 años, anual en poblaciones de riesgo y en <b>toda embarazada</b>. El VIH <b>no requiere aislamiento</b>: precauciones estándar.</li>
+    </ul>
+
+    <div class="box clin"><span class="lbl">HTLV: qué se puede y qué no se puede hacer</span>
+      <p><b>No hay cura ni tratamiento para el portador asintomático</b>, solo seguimiento periódico. En la <b>ATL</b>, las formas indolente y crónica se vigilan o reciben zidovudina más interferón α; las formas aguda y linfomatosa requieren quimioterapia, y el <b>trasplante alogénico es la única opción potencialmente curativa</b>. El anti-CCR4 <b>mogamulizumab</b> se aprobó en Japón para enfermedad recaída o refractaria. En la <b>HAM</b> el pilar son los corticoides (metilprednisolona intravenosa en el progresor rápido, prednisolona oral en el lento); antes de inmunosuprimir hay que <b>descartar ATL y tratar estrongiloidiasis, tuberculosis, sífilis, hepatitis y VIH</b>. Prevención: <b>tamizaje de donantes, leucorreducción, condón y evitar o limitar la lactancia a menos de 3 meses</b>. <b>No existe vacuna.</b></p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li>Receptores: <b>CD4 + CCR5</b> (temprano, macrófagos) o <b>CXCR4</b> (tardío, linfocitos T). <b>CCR5-Δ32 homocigoto = inmunidad</b>.</li>
+          <li><b>p24</b> es el antígeno de cápside que detecta el ensayo de cuarta generación; positivo antes que los anticuerpos.</li>
+          <li>Definición de SIDA: <b>CD4 &lt;200/µL</b> o condición definitoria. Normal: 500–1 500/µL.</li>
+          <li>Genoma <b>diploide</b>: dos copias de RNA. La transcriptasa reversa viene <b>dentro del virión</b>.</li>
+          <li>El HTLV-1 fue el <b>primer retrovirus humano</b> y el <b>primer virus oncogénico humano</b>.</li>
+          <li>Reservorio con vida media de <b>3.7 años</b>: la razón cuantitativa de que la TAR sea de por vida.</li>
+          <li>El linfoma primario de SNC (EBV) suele ser una <b>lesión única</b> realzante; la toxoplasmosis, <b>múltiples</b> lesiones en anillo.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«RIP Pol»</b> — el gen <i>pol</i> codifica <b>R</b>etrotranscriptasa, <b>I</b>ntegrasa y <b>P</b>roteasa.</p>
+        <p><b>«gp120 se pega, gp41 fusiona»</b> — <i>forty-one = fusion</i>. Ambas salen de gp160.</p>
+        <p><b>«5 antes que 4»</b> — <b>CCR5</b> al principio, <b>CXCR4</b> al final.</p>
+        <p><b>«200-100-50»</b> — <i>Pneumocystis</i> a 200, toxoplasma a 100, CMV y MAC a 50.</p>
+        <p><b>«Tax transforma, HBZ mantiene»</b> — los dos oncogenes del HTLV-1.</p>
+        <p><b>«Flor y calcio»</b> — <b>células en flor</b> + <b>hipercalcemia</b> con lesiones líticas = leucemia/linfoma T del adulto.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas y escenario mexicano</span>
+      <ul>
+        <li>México tiene una <b>epidemia concentrada</b> —hombres que tienen sexo con hombres, mujeres trans, personas trabajadoras sexuales y usuarios de drogas inyectables—, con predominio del <b>subtipo B</b> y transmisión sexual en más del 90 %. El problema central sigue siendo el <b>diagnóstico tardío</b>.</li>
+        <li>El paciente joven con fiebre, exantema y mialgias que vuelve de la costa <b>no siempre tiene dengue</b>: si hubo exposición sexual de riesgo, pide carga viral, no serología.</li>
+        <li><b>El VIH-2 es resistente a todos los NNRTI</b>: un régimen con efavirenz o rilpivirina fracasa desde el primer día.</li>
+        <li>El <b>Western blot</b> no confirma VIH desde 2014.</li>
+        <li>Hipercalcemia con lesiones líticas y linfocitosis atípica en paciente caribeño, sudamericano o japonés: <b>piensa en HTLV-1</b>, no en mieloma.</li>
+        <li>Una <b>estrongiloidiasis diseminada</b> o una <b>sarna costrosa</b> refractarias obligan a pedir serología de HTLV-1.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/HIV.md</code> · Mandell PPID 10e, cap. 121 (perspectivas globales del VIH), cap. 124 (inmunología, persistencia viral y perspectivas de cura) y cap. 175 (virus linfotrópico T humano) · DHHS Panel on Antiretroviral Guidelines for Adults and Adolescents 2024 · Saag et al., recomendaciones IAS-USA 2024 · Branson et al., CDC 2014 (algoritmo de laboratorio) · UNAIDS <i>Global AIDS Update</i> · CENSIDA, vigilancia epidemiológica del VIH en México · First Aid for the USMLE Step 1 2025, p. 172-173 · Pocket Medicine 9e (2025), HIV/AIDS.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="flaviviridae.html"><span class="k">← Anterior</span><span class="v">Flaviviridae</span></a>
+        <a class="next" href="kolmioviridae.html"><span class="k">Siguiente →</span><span class="v">Kolmioviridae</span></a></div>
+      <footer class="pf">
+        <span>Retroviridae · 9 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

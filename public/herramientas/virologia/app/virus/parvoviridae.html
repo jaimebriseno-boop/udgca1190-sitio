@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parvoviridae — Virus DNA</title>
+<meta name="description" content="Parvoviridae. Parvovirus B19 · Bocavirus · AAV">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-dna.html">Virus DNA</a><span class="sep">/</span>
+    <b>Parvoviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-dna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus DNA · Familia 1 de 10 · Virología médica</p>
+    <h1>Parvoviridae</h1>
+    <p class="sub">Parvovirus B19 · Bocavirus · AAV</p>
+    <div class="chips"><span class="chip g">ssDNA lineal · ~5 600 nt</span>
+  <span class="chip">Sin envoltura · icosaédrico 18–26 nm</span>
+  <span class="chip">Replicación nuclear · exige célula en fase S</span>
+  <span class="chip r">10–15 % de la hidropesía fetal no inmunitaria</span>
+  <span class="chip gold">Sin antiviral · IgIV en aplasia pura de serie roja</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Parvoviridae · Virus DNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros humanos</dt><dd><i>Erythroparvovirus</i> (B19) · <i>Bocaparvovirus</i> (HBoV1–4) · <i>Dependoparvovirus</i> (AAV) · <i>Tetraparvovirus</i> (Parv4) · <i>Protoparvovirus</i> (bufavirus, cutavirus)</dd></div>
+  <div class="cell"><dt>Receptor</dt><dd><b>Globósido = antígeno P</b> del eritroblasto (paso post-entrada en el endosoma ácido) + receptor de VP1u + correceptor <b>AXL</b></dd></div>
+  <div class="cell"><dt>Célula blanco</dt><dd>Progenitor eritroide <b>CD36+</b> y eritroblasto de médula ósea; también miocito fetal y endotelio (portadores de antígeno P)</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Respiratoria por gotas (secundaria intradomiciliaria ~50 %) · <b>hemoderivados</b> · vertical transplacentaria</dd></div>
+  <div class="cell"><dt>Cronología</dt><dd>Viremia días <b>5–9</b> · reticulocitopenia días 7–11 · exantema y artralgia días <b>17–18</b></dd></div>
+  <div class="cell"><dt>Contagiosidad</dt><dd><b>Máxima antes del exantema.</b> El niño con la mejilla abofeteada ya no contagia; sí lo hace el de la crisis aplásica o la aplasia crónica</dd></div>
+  <div class="cell"><dt>Seroprevalencia</dt><dd>~<b>50 % a los 15 años</b>, &gt;80 % en adultos mayores; seroconversión anual ~1 % en mujeres en edad fértil</dd></div>
+  <div class="cell"><dt>Diagnóstico</dt><dd><b>IgM</b> (&gt;90 % al 3.er día del cuadro) · PCR cuantitativa con <b>umbral de 10<sup>4</sup> UI/mL</b> para infección aguda</dd></div>
+  <div class="cell"><dt>Tratamiento</dt><dd>Sintomático · transfusión en la crisis aplásica · <b>IgIV 0.4 g/kg × 5 días</b> en aplasia pura crónica · transfusión intrauterina en hidropesía</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">La quinta enfermedad y el tubo número 19</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1799–1905</b> — <b>Willan</b> describe el exantema; <b>Sticker</b> lo bautiza <i>erythema infectiosum</i> (1899) y <b>Cheinisse</b> lo numera como el <b>quinto</b> de los seis exantemas clásicos de la infancia.</li>
+      <li><b>1975</b> — <b>Yvonne Cossart</b>, buscando antígeno de superficie de hepatitis B en sueros de donadores, halla partículas tipo parvovirus en la muestra rotulada <b>B-19</b>. El nombre del virus es la coordenada de un tubo.</li>
+      <li><b>1981</b> — <b>Pattison</b> lo asocia a la <b>crisis aplásica de la drepanocitosis</b>: la primera enfermedad atribuida a B19, seis años después de verlo al microscopio.</li>
+      <li><b>1983–1985</b> — <b>Anderson</b> encuentra IgM específica en los <b>31</b> niños de un brote en Londres y cierra el caso del eritema infeccioso; su <b>inoculación intranasal de voluntarios</b> dibuja el curso bifásico: viremia primero, exantema después, y en medio un paro de la eritropoyesis de 4 a 8 días.</li>
+      <li><b>2005</b> — <b>Allander</b> descubre el <b>bocavirus humano</b> en aspirados nasofaríngeos. <b>2022</b>: el <b>AAV2</b> se asocia a la hepatitis pediátrica no A-E pospandemia, con papel causal aún no establecido.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué importa el experimento de 1985</span>
+      <p><b>La viremia y el exantema no coinciden.</b> El daño hematológico ocurre en la primera fase, cuando el paciente parece tener un catarro; el exantema y la artritis son <b>inmunocomplejos</b> sobre alguien que ya eliminó el virus. De esa disociación deriva toda la lógica del aislamiento, del diagnóstico y del riesgo fetal.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Cinco géneros humanos, un solo patógeno mayor</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd>Parvoviridae — del latín <i>parvus</i>, «pequeño»: <b>los virus DNA más pequeños que infectan al humano</b></dd>
+      <dt>Subfamilias</dt><dd><b>Parvovirinae</b> (vertebrados) · Densovirinae (invertebrados) · Hamaparvovirinae (ambos)</dd>
+      <dt>Géneros que infectan al humano</dt><dd>Al menos cinco: <i>Erythroparvovirus</i>, <i>Bocaparvovirus</i>, <i>Dependoparvovirus</i>, <i>Tetraparvovirus</i>, <i>Protoparvovirus</i></dd>
+      <dt>Especie tipo</dt><dd><i>Parvovirus B19</i> (B19V), único con enfermedad humana bien establecida</dd>
+    </dl>
+
+    <div class="g3">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Parvovirus B19</span><span class="vg">Erythroparvovirus</span></div>
+        <div class="vbd">
+          <p>Tres genotipos antigénicamente cruzados: el <b>1</b> circula hoy en todo el mundo; el <b>3</b> predomina en Brasil, Ghana e India; el <b>2</b> casi solo se recupera de tejidos de personas nacidas <b>antes de 1970</b>, un fósil viral que ya no circula.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Bocavirus humano 1–4</span><span class="vg">Bocaparvovirus</span></div>
+        <div class="vbd">
+          <p>El nombre es un acrónimo: <b>BO</b>vino + <b>CA</b>nino. <b>HBoV1</b> es respiratorio; <b>HBoV2–4</b> son entéricos, de transmisión fecal-oral.</p>
+          <p>Ubicuos: a los 6 años tienen anticuerpos &gt;80 % de los niños frente a HBoV1, 50 % frente a HBoV2, 10 % frente a HBoV3 y casi ninguno frente a HBoV4.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Virus adenoasociados</span><span class="vg">Dependoparvovirus</span></div>
+        <div class="vbd">
+          <p><b>Defectuosos</b>: necesitan un virus ayudador —adenovirus o herpesvirus— para replicar. Serotipos humanos 1, 2, 3, 5, 6, 8, 9 y 13; seroprevalencia del 20 al 60 %.</p>
+          <p>Considerados no patógenos, son el <b>vector predilecto de terapia génica</b>: infectan células en división y en reposo y expresan el transgén a largo plazo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card"><span class="lbl">Los huérfanos de la familia</span>
+      <p><b>Parv4</b> (<i>Tetraparvovirus</i>, 2005): DNA frecuente en plasma industrial y en médula de personas que se inyectan drogas y de hemofílicos; transmisión y enfermedad inciertas. <b>Bufavirus</b> (2012): en heces con diarrea, seroprevalencia del 2–4 % en Finlandia y Estados Unidos frente al <b>85 % en Medio Oriente</b>. <b>Cutavirus</b> (2016): en piel de linfoma cutáneo de células T y parapsoriasis en placas más que en controles; asociación provisional, no causalidad.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Tres proteínas y una dependencia absoluta de la fase S</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión de parvovirus B19, sus proteínas y el mapa de su genoma de DNA de cadena sencilla">
+        <rect width="900" height="380" fill="#FFFFFF"/>
+
+        <polygon points="150,60 80.7,100 80.7,180 150,220 219.3,180 219.3,100" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.8"/>
+        <g stroke="#36476E" stroke-width="0.9" opacity=".75">
+          <line x1="150" y1="140" x2="150" y2="60"/>
+          <line x1="150" y1="140" x2="80.7" y2="100"/>
+          <line x1="150" y1="140" x2="80.7" y2="180"/>
+          <line x1="150" y1="140" x2="150" y2="220"/>
+          <line x1="150" y1="140" x2="219.3" y2="180"/>
+          <line x1="150" y1="140" x2="219.3" y2="100"/>
+        </g>
+        <polygon points="190,140 170,105.4 130,105.4 110,140 130,174.6 170,174.6" fill="none" stroke="#455A8C" stroke-width="1.1"/>
+        <g stroke="#701d14" stroke-width="2.4" stroke-linecap="round">
+          <line x1="150" y1="60" x2="150" y2="40"/>
+          <line x1="219.3" y1="100" x2="236" y2="90"/>
+          <line x1="80.7" y1="180" x2="64" y2="190"/>
+        </g>
+        <g fill="#701d14">
+          <circle cx="150" cy="37" r="3.6"/><circle cx="238" cy="89" r="3.6"/><circle cx="62" cy="191" r="3.6"/>
+        </g>
+        <text x="150" y="243" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">60 CAPSÓMEROS · T = 1 · 22–23 NM</text>
+
+        <g font-family="'Inter', sans-serif" font-size="11.5" fill="#14181f">
+          <line x1="222" y1="112" x2="292" y2="72" stroke="#455A8C" stroke-width="1"/>
+          <text x="300" y="69" font-weight="600" fill="#36476E">VP2 — 58 kDa · ~95 % de la cápside</text>
+          <text x="300" y="85" font-size="10.5" fill="#6b7585">Se autoensambla sin DNA en partículas tipo virus (VLP):</text>
+          <text x="300" y="99" font-size="10.5" fill="#6b7585">son el antígeno de los inmunoensayos y la base de las vacunas</text>
+
+          <line x1="238" y1="89" x2="292" y2="126" stroke="#455A8C" stroke-width="1"/>
+          <text x="300" y="130" font-weight="600" fill="#701d14">VP1 — 84 kDa · ~5 % · extremo único VP1u</text>
+          <text x="300" y="146" font-size="10.5" fill="#6b7585">VP1u porta actividad fosfolipasa A2, se une a su propio receptor</text>
+          <text x="300" y="160" font-size="10.5" fill="#6b7585">y concentra los epítopos neutralizantes. Los conejos inmunizados</text>
+          <text x="300" y="174" font-size="10.5" fill="#6b7585">solo con VP2 hacen anticuerpos que no neutralizan.</text>
+
+          <line x1="190" y1="145" x2="292" y2="200" stroke="#455A8C" stroke-width="1"/>
+          <text x="300" y="204" font-weight="600" fill="#5C7A57">NS1 — proteína no estructural</text>
+          <text x="300" y="220" font-size="10.5" fill="#6b7585">Indispensable para replicar y <tspan font-weight="600">directamente citotóxica</tspan>: detiene el</text>
+          <text x="300" y="234" font-size="10.5" fill="#6b7585">ciclo celular y empuja al eritroblasto a la apoptosis</text>
+        </g>
+
+        <line x1="60" y1="262" x2="840" y2="262" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+        <text x="60" y="283" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">GENOMA · DNA MONOCATENARIO LINEAL</text>
+
+        <text x="62" y="312" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#6b7585">3′</text>
+        <rect x="80" y="296" width="70" height="26" rx="3" fill="rgba(144,48,58,.30)" stroke="#90303a" stroke-width="1"/>
+        <rect x="150" y="296" width="300" height="26" rx="3" fill="#27334F"/>
+        <rect x="450" y="296" width="300" height="26" rx="3" fill="#5C7A57"/>
+        <rect x="750" y="296" width="70" height="26" rx="3" fill="rgba(144,48,58,.30)" stroke="#90303a" stroke-width="1"/>
+        <text x="828" y="312" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#6b7585">5′</text>
+        <text x="300" y="313" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#f7f8fa">NS1</text>
+        <text x="600" y="313" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#f7f8fa">VP1 / VP2 (solapados)</text>
+        <text x="115" y="340" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#90303a">ITR 365 nt</text>
+        <text x="785" y="340" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#90303a">ITR 365 nt</text>
+        <text x="450" y="340" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">Las repeticiones terminales invertidas forman horquillas que sirven de cebador: sin ellas no hay replicación</text>
+        <text x="60" y="366" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Un genoma de una sola cadena no puede copiarse solo: necesita la polimerasa del huésped y, por tanto, una célula que ya esté en fase S.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión y el genoma de B19. Retén dos cosas: <b>VP1u es el antígeno neutralizante</b> (y el problema de las vacunas de VP2 solo) y <b>NS1 es la que mata al eritroblasto</b>.</figcaption>
+    </figure>
+
+    <h4>Entrada y tropismo</h4>
+    <ul>
+      <li><b>Globósido (antígeno P)</b> fue durante años «el receptor». Hoy se sabe que <b>es imprescindible pero no para entrar</b>: actúa en el endosoma ácido, después de la entrada, y media la transcitosis por el epitelio respiratorio. El raro fenotipo <b>P-nulo confiere resistencia</b>.</li>
+      <li>En el <b>pH neutro de la médula</b> hace falta el <b>receptor de VP1u</b>, restringido al linaje eritroide, con la tirosina-cinasa <b>AXL</b> de correceptor.</li>
+      <li>El antígeno P está también en <b>megacariocitos, miocitos fetales y endotelio</b>, células no permisivas: explican tropismo, no replicación. A linfocitos B, monocitos y endotelio B19 entra por <b>facilitación dependiente de anticuerpo (ADE)</b>, mecanismo que también usa HBoV1.</li>
+    </ul>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Por qué no se cultiva</span>
+        <ul>
+          <li><b>Depende de células en mitosis</b>: no lleva enzimas para forzar la fase S.</li>
+          <li>Solo replica bien en <b>progenitores eritroides humanos primarios</b>: no hay línea celular práctica ni aislamiento clínico útil. <b>El diagnóstico es serológico y molecular, nunca por cultivo.</b></li>
+        </ul>
+      </div>
+      <div class="box hy"><span class="lbl">Estabilidad: la pesadilla del banco de sangre</span>
+        <ul>
+          <li>Sin envoltura y con cápside robusta: <b>resiste éter y cloroformo</b>, sobrevive al <b>tratamiento con solvente-detergente</b> —que solo inactiva virus envueltos— y a los calentamientos habituales de los hemoderivados. Se inactiva con <b>formalina, β-propiolactona, oxidantes y radiación gamma</b>.</li>
+          <li>Por eso la FDA y el Consejo de Europa fijan un <b>límite de 10<sup>4</sup> UI/mL</b> por PCR en los pools de plasma. En temporada epidémica, <b>1 de cada 20 000 a 40 000 unidades</b> lleva viremia de alta carga.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Una enfermedad, dos fases que no se tocan</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Curso bifásico de la infección aguda por parvovirus B19: viremia, reticulocitos, IgM e IgG a lo largo de treinta días">
+        <rect width="900" height="350" fill="#FFFFFF"/>
+
+        <rect x="90" y="22" width="345" height="22" rx="4" fill="rgba(112,29,20,.10)"/>
+        <text x="100" y="37" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#701d14">FASE 1 · VIREMIA — CATARRO INESPECÍFICO Y CONTAGIO</text>
+        <rect x="437" y="22" width="393" height="22" rx="4" fill="rgba(92,122,87,.14)"/>
+        <text x="447" y="37" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#1a6b42">FASE 2 · INMUNOCOMPLEJOS — EXANTEMA Y ARTRALGIA, SIN CONTAGIO</text>
+
+        <line x1="90" y1="270" x2="840" y2="270" stroke="#455A8C" stroke-width="1.3"/>
+        <line x1="90" y1="60" x2="90" y2="270" stroke="rgba(20,24,31,.18)" stroke-width="1"/>
+        <g stroke="rgba(20,24,31,.16)" stroke-width="1">
+          <line x1="213" y1="266" x2="213" y2="274"/><line x1="337" y1="266" x2="337" y2="274"/>
+          <line x1="460" y1="266" x2="460" y2="274"/><line x1="583" y1="266" x2="583" y2="274"/>
+          <line x1="707" y1="266" x2="707" y2="274"/><line x1="830" y1="266" x2="830" y2="274"/>
+        </g>
+        <g font-family="'IBM Plex Mono', monospace" font-size="9" fill="#6b7585" text-anchor="middle">
+          <text x="90" y="288">0</text><text x="213" y="288">5</text><text x="337" y="288">10</text>
+          <text x="460" y="288">15</text><text x="583" y="288">20</text><text x="707" y="288">25</text><text x="830" y="288">30</text>
+        </g>
+        <text x="864" y="288" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">DÍAS</text>
+
+        <path d="M189 268 C 225 268 252 88 287 78 C 322 68 362 175 435 246 C 500 260 700 263 830 264" fill="none" stroke="#701d14" stroke-width="2.6"/>
+        <path d="M361 268 C 400 266 470 175 583 145 C 660 134 750 143 830 155" fill="none" stroke="#27334F" stroke-width="2.4"/>
+        <path d="M435 268 C 470 266 520 150 583 128 C 660 110 750 104 830 100" fill="none" stroke="#5C7A57" stroke-width="2.4"/>
+        <path d="M90 232 L246 232 C 268 232 276 266 292 266 L358 266 C 392 266 420 206 462 202 C 528 196 620 226 700 231 L830 232" fill="none" stroke="#90303a" stroke-width="1.8" stroke-dasharray="5 3"/>
+
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">
+          <line x1="100" y1="74" x2="122" y2="74" stroke="#701d14" stroke-width="2.6"/>
+          <text x="128" y="77">DNA en suero (PCR): hasta 10<tspan font-size="7" dy="-3">12</tspan><tspan dy="3">–</tspan>10<tspan font-size="7" dy="-3">14</tspan><tspan dy="3"> UI/mL</tspan></text>
+          <line x1="100" y1="92" x2="122" y2="92" stroke="#27334F" stroke-width="2.4"/>
+          <text x="128" y="95">IgM — aparece el día 10–12, dura 2–3 meses</text>
+          <line x1="100" y1="110" x2="122" y2="110" stroke="#5C7A57" stroke-width="2.4"/>
+          <text x="128" y="113">IgG — desde el día 14, de por vida</text>
+          <line x1="100" y1="128" x2="122" y2="128" stroke="#90303a" stroke-width="1.8" stroke-dasharray="5 3"/>
+          <text x="128" y="131">Reticulocitos — caen a cero los días 7–11</text>
+        </g>
+
+        <line x1="287" y1="86" x2="287" y2="266" stroke="rgba(112,29,20,.28)" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="509" y1="136" x2="509" y2="266" stroke="rgba(92,122,87,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+
+        <text x="287" y="308" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">Aquí ocurre la crisis aplásica</text>
+        <text x="287" y="322" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">nadir de hemoglobina hacia el día 10</text>
+        <text x="600" y="308" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Mejilla abofeteada y artralgia</text>
+        <text x="600" y="322" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">coinciden con la respuesta inmune: ya no hay viremia alta</text>
+        <text x="90" y="342" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El paciente contagia cuando nadie sospecha nada y deja de contagiar justo cuando aparece el signo que lo delata.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Curso de la infección aguda en el hospedero inmunocompetente. La <b>fase 1 es virológica</b> (viremia, cese de la eritropoyesis, contagio); la <b>fase 2 es inmunológica</b> (exantema y artritis por inmunocomplejos, sin contagio).</figcaption>
+    </figure>
+
+    <h4>De la biología al daño</h4>
+    <ol class="steps">
+      <li><b>Entrada respiratoria</b> Transcitosis por el epitelio de la vía aérea, con VP2 unido al globósido en pH ácido.</li>
+      <li><b>Viremia de magnitud extrema</b> Días 5 a 9, hasta <b>10<sup>12</sup>–10<sup>14</sup> UI/mL</b>: de ahí la eficiencia de la transmisión por hemoderivados.</li>
+      <li><b>Lisis del eritroblasto</b> Infecta al progenitor eritroide CD36+; la <b>célula madre pluripotente se salva</b>. NS1 detiene el ciclo y dispara apoptosis. Sello morfológico: <b>pronormoblasto gigante de 25–32 µm con inclusión nuclear eosinófila</b>.</li>
+      <li><b>Paro de la eritropoyesis de 4 a 8 días</b> En un adulto sano cuesta ~1 g/dL y pasa inadvertido. Si la vida media eritrocitaria está acortada —hemólisis, hemorragia, ferropenia, postrasplante— el mismo paro produce <b>caída brusca y sintomática</b>.</li>
+      <li><b>Rescate inmune e inmunocomplejos</b> Los anticuerpos neutralizantes cortan la viremia y reinician la eritropoyesis con reticulocitosis de rebote; la inmunidad es <b>de por vida</b>. Hacia los días 17–18 aparecen exantema y artropatía: <b>depósito de complejos, no daño citopático</b>.</li>
+    </ol>
+
+    <div class="g2">
+      <div class="box clin"><span class="lbl">Por qué el feto es distinto</span>
+        <ul>
+          <li>Vida media eritrocitaria corta + <b>expansión masiva del compartimento eritroide</b> en el segundo trimestre = demanda que no tolera pausas; y un sistema inmune inmaduro que prolonga la viremia.</li>
+          <li>El <b>antígeno P está en el miocito cardiaco fetal</b>: añade un componente de miocarditis a la anemia.</li>
+          <li>Resultado: anemia grave → insuficiencia cardiaca de alto gasto → <b>hidropesía no inmunitaria</b>. El exceso de pérdidas se concentra <b>antes de la semana 20</b>.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Persistencia tisular: el «bioportfolio»</span>
+        <p>Tras la primoinfección, el DNA de B19 <b>persiste de por vida en casi todos los tejidos</b> —sinovial, miocardio, hígado, médula, piel, encéfalo y amígdala, ahí en <b>linfocitos B</b> del centro germinal—. En un estudio controlado había DNA en la sinovial del <b>28 % de los pacientes con artritis crónica… y del 48 % de los controles sin artropatía</b>.</p>
+        <p><b>Una PCR positiva en tejido no prueba nada</b>: es el error que infló la literatura sobre B19 y artritis reumatoide, miocardiopatía dilatada, hepatitis fulminante y vasculitis.</p>
+      </div>
+    </div>
+
+    <div class="card"><span class="lbl">El inmunodeprimido</span>
+      <p>Sin respuesta humoral eficaz la infección se cronifica: <b>anemia persistente sin exantema y sin artritis</b>, porque nunca llega la fase de inmunocomplejos. Algunos tienen anticuerpos contra VP2 pero no contra VP1: <b>seropositivos e incapaces de neutralizar</b>.</p>
+
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">El síndrome depende del hospedero, no del virus</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Hospedero</th><th>Síndrome</th><th>Rasgos que hay que reconocer</th></tr></thead>
+      <tbody>
+        <tr><td><b>Niño sano</b></td><td>Eritema infeccioso (5.ª enfermedad)</td><td>Pródromo leve 2–5 días → <b>«mejilla abofeteada»</b> con <b>palidez peribucal</b> → exantema maculopapular en tronco y extremidades que al desvanecerse deja el patrón <b>reticulado o en encaje</b> y <b>recurre semanas con calor, sol o ejercicio</b>.</td></tr>
+        <tr><td><b>Adulto, sobre todo mujer</b></td><td>Artropatía</td><td>Artralgia o artritis <b>simétrica de pequeñas articulaciones de manos y pies</b>, 1–3 semanas; puede persistir meses o años. <b>Factor reumatoide transitorio positivo.</b> En una clínica de sinovitis temprana, el <b>12 %</b> tenía infección reciente por B19.</td></tr>
+        <tr><td><b>Recambio eritroide alto</b></td><td>Crisis aplásica transitoria</td><td>Esferocitosis hereditaria, talasemia, drepanocitosis, deficiencia de piruvato-cinasa, anemia hemolítica autoinmune; también hemorragia, ferropenia y postrasplante. <b>Reticulocitopenia</b> con desplome de la hemoglobina; puede ser la <b>primera manifestación de una hemólisis compensada</b>.</td></tr>
+        <tr><td><b>Inmunodeprimido</b></td><td>Aplasia pura de serie roja crónica</td><td>VIH avanzado, trasplante, leucemia, inmunodeficiencias congénitas. <b>Anemia persistente sin exantema y sin artritis</b>, con DNA detectable y anticuerpos ausentes o bajos; médula con pronormoblastos gigantes dispersos.</td></tr>
+        <tr><td><b>Feto</b></td><td>Hidropesía no inmunitaria · anemia congénita</td><td><b>10–15 % de toda la hidropesía fetal no inmunitaria</b>. OR de pérdida fetal 2.68; de aborto 2.42; de óbito 3.53. Entre embarazadas infectadas, pérdida 7.6 % e hidropesía 9.3 %. <b>No es teratógeno.</b></td></tr>
+        <tr><td><b>Cualquiera</b></td><td>Síndrome hemofagocítico asociado a virus</td><td>Hiperplasia histiocítica, hemofagocitosis y citopenias; <b>benigno y autolimitado</b>, a diferencia de la histiocitosis maligna.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Variantes cutáneas que hay que conocer</span>
+        <ul>
+          <li><b>Síndrome papular-purpúrico en guantes y calcetines</b>: eritema y púrpura de manos y pies con límite neto en muñecas y tobillos, sobre todo en adolescentes y adultos jóvenes.</li>
+          <li>Erupción vesiculopustular, exantemas purpúricos, eritema multiforme; el <b>prurito plantar</b> puede dominar.</li>
+          <li>La mejilla abofeteada es <b>mucho más frecuente en niños</b>: el adulto consulta por articulaciones, no por piel.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Asociaciones no probadas</span>
+        <ul>
+          <li><b>Miocarditis</b> — plausible (antígeno P en miocito fetal), pero casi todos los reportes se apoyan solo en PCR tisular.</li>
+          <li><b>Encefalitis y meningitis</b> con DNA en LCR: evolución en general favorable.</li>
+          <li><b>Glomerulonefritis, hepatitis, vasculitis, poliarteritis nodosa y Kawasaki</b>: no confirmadas.</li>
+          <li>B19 <b>no causa</b> anemia aplásica verdadera ni eritroblastopenia transitoria de la infancia.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box clin"><span class="lbl">Bocavirus humano en la práctica pediátrica</span>
+      <p><b>HBoV1</b> produce infección respiratoria alta y baja del lactante, sobre todo <b>bronquiolitis y sibilancias</b>, a veces graves. Su DNA está en el <b>2–20 %</b> de las muestras respiratorias de niños con cuadro agudo, pero también semanas o meses después: <b>hallarlo no prueba causalidad</b>; se exige mRNA empalmado, IgM, IgG de baja avidez o DNA en suero. Sin tratamiento ni vacuna.</p>
+    </div>
+
+    <div class="box trap"><span class="lbl">Diagnóstico diferencial del exantema</span>
+      <p>Rubéola (adenopatía retroauricular), sarampión (Koplik, paciente tóxico), escarlatina (lengua aframbuesada, textura de lija, palidez peribucal <b>también</b> presente), enterovirus, dengue; en el adulto, <b>lupus y artritis reumatoide de inicio</b>. Clave temporal: en la quinta enfermedad el niño <b>ya está afebril y se siente bien</b> cuando aparece el exantema.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Serología en el sano, carga viral en el inmunodeprimido</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Suero</b></td><td><b>IgM</b> por EIA</td><td><b>Prueba de elección en el inmunocompetente.</b> Positiva en &gt;90 % al tercer día de la crisis aplásica o al aparecer el exantema. Dura <b>2–3 meses</b> o más: no fecha con precisión.</td></tr>
+        <tr><td><b>Suero</b></td><td>IgG por EIA</td><td>Aparece el <b>día 7</b> y persiste de por vida. Como &gt;50 % de la población es IgG positiva, <b>por sí sola no diagnostica infección aguda</b>: define susceptibilidad. Seroconversión o aumento &gt;4 veces en sueros pareados a 2 semanas sí es diagnóstico.</td></tr>
+        <tr><td><b>Suero</b></td><td>Avidez de IgG · especificidad de tipo de epítopo (ETS)</td><td>Serodiagnóstico combinatorio: la <b>IgG de baja avidez</b> y el reconocimiento del heptapéptido <b>KYVTGIN</b> de VP2 separan infección aguda de inmunidad pasada. Gana especificidad, sobre todo en el embarazo.</td></tr>
+        <tr><td><b>Suero o plasma</b></td><td><b>PCR cuantitativa</b></td><td>Carga &gt;10<sup>9</sup> UI/mL durante 2–4 días; en la crisis aplásica y la aplasia pura llega a 10<sup>14</sup>. <b>Umbral de 10<sup>4</sup> UI/mL para infección aguda</b>: por debajo puede ser DNA residual, incluso <b>no encapsidado</b>, liberado por tejido dañado.</td></tr>
+        <tr><td><b>Médula ósea</b></td><td>Morfología</td><td><b>Pronormoblastos gigantes</b> con inclusión nuclear eosinófila y ausencia del resto de precursores eritroides.</td></tr>
+        <tr><td><b>Líquido amniótico · sangre fetal</b></td><td>PCR</td><td>Confirma la infección fetal; debe acompañarse de <b>serología y PCR maternas</b>.</td></tr>
+        <tr><td><b>Feto</b></td><td>Doppler de arteria cerebral media</td><td>Detecta la <b>anemia fetal antes de la hidropesía</b> y sin invadir: es la herramienta de vigilancia tras infección materna documentada.</td></tr>
+        <tr><td><b>Tejido</b></td><td>PCR</td><td><b>No usar para diagnosticar</b>: el DNA persiste décadas en casi todos los tejidos. Para demostrar infección <b>activa</b> se busca <b>mRNA viral empalmado</b> o proteína viral.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Qué pedir según el escenario</span>
+        <ul>
+          <li><b>Niño con exantema típico en brote</b>: nada. El laboratorio se reserva para los casos fuera de brote.</li>
+          <li><b>Adulto con poliartritis aguda</b>: IgM e IgG junto con el estudio reumatológico.</li>
+          <li><b>Crisis aplásica</b>: PCR cuantitativa y reticulocitos —la carga es enorme y la IgM puede tardar—.</li>
+          <li><b>Inmunodeprimido con anemia arregenerativa</b>: <b>PCR cuantitativa</b>; la serología falla porque no produce anticuerpos.</li>
+          <li><b>Embarazada expuesta</b>: IgG e IgM ± avidez; si hay infección, vigilancia fetal.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Errores frecuentes</span>
+        <ul>
+          <li>Pedir <b>solo IgG</b> y llamar «infección aguda» a la memoria inmunológica de la infancia.</li>
+          <li>Leer un <b>PCR de baja carga</b> —o una <b>biopsia endomiocárdica positiva</b>— como enfermedad activa.</li>
+          <li>Confiar en la serología del <b>inmunodeprimido</b>, o intentar el <b>cultivo</b>: no existe.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">No hay antiviral: hay transfusión, inmunoglobulina y sentido común</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="card"><span class="lbl">Por síndrome</span>
+        <ul>
+          <li><b>Eritema infeccioso y artropatía</b>: sintomáticos; la artralgia responde a <b>AINE</b> y puede durar meses.</li>
+          <li><b>Crisis aplásica transitoria</b>: <b>transfusión</b> y soporte. En una serie de drepanocitosis, <b>87 % requirió transfusión y 61 % hospitalización</b>; se describen insuficiencia cardiaca, necrosis medular, complicaciones cerebrovasculares y muerte. Después, inmunidad definitiva.</li>
+          <li><b>Aplasia pura crónica</b>: primero <b>reducir o suspender la inmunosupresión</b> —a veces basta para que el paciente monte su respuesta—. Si no, <b>IgIV 0.4 g/kg/día × 5 días</b>: caída de la viremia, reticulocitosis y resolución de la anemia en 1–2 semanas. Si recae en &lt;6 meses, sobre todo en VIH, mantenimiento con <b>0.4 g/kg cada 4 semanas</b> y <b>terapia antirretroviral</b>.</li>
+          <li><b>Hidropesía fetal</b>: <b>transfusión intrauterina</b> en centro con experiencia; no es inocua y parte de los casos <b>se resuelve solo</b>.</li>
+          <li><b>Miocardiopatía con DNA de B19 en biopsia</b>: la IgIV <b>no mejoró la función cardiaca</b> en el ensayo aleatorizado. <b>Experimental</b>: cidofovir, brincidofovir e hidroxiurea, activos solo <i>in vitro</i>.</li>
+        </ul>
+      </div>
+      <div class="box hy"><span class="lbl">Control de infecciones</span>
+        <ul>
+          <li><b>Al niño con eritema infeccioso no hay que aislarlo ni excluirlo de la escuela</b>: cuando aparece el exantema ya dejó de contagiar.</li>
+          <li><b>Crisis aplásica</b>: precauciones de gotas <b>7 días</b>. <b>Infección crónica del inmunodeprimido</b>: aislamiento <b>toda la hospitalización</b>.</li>
+          <li>Separarlos de los contactos de alto riesgo: hematológicos, inmunodeprimidos y <b>personal de salud embarazado seronegativo</b>. El máximo riesgo ocupacional lo tienen <b>educadoras y personal escolar</b>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Algoritmo de manejo de la embarazada expuesta a parvovirus B19 según su serología">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+
+        <rect x="300" y="16" width="300" height="40" rx="6" fill="#27334F"/>
+        <text x="450" y="34" text-anchor="middle" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#f7f8fa">Embarazada expuesta</text>
+        <text x="450" y="49" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="rgba(247,248,250,.74)">BROTE ESCOLAR · CONTACTO DOMICILIARIO · CASO ÍNDICE</text>
+
+        <line x1="450" y1="56" x2="450" y2="76" stroke="#455A8C" stroke-width="1.2"/>
+        <rect x="300" y="76" width="300" height="36" rx="6" fill="rgba(138,92,10,.14)" stroke="#8a5c0a" stroke-width="1.2"/>
+        <text x="450" y="93" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">IgG e IgM maternas</text>
+        <text x="450" y="107" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">± avidez de IgG · ± PCR cuantitativa</text>
+
+        <line x1="450" y1="112" x2="450" y2="130" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="150" y1="130" x2="750" y2="130" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="150" y1="130" x2="150" y2="148" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="450" y1="130" x2="450" y2="148" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="750" y1="130" x2="750" y2="148" stroke="#455A8C" stroke-width="1.2"/>
+
+        <rect x="30" y="148" width="240" height="86" rx="6" fill="rgba(92,122,87,.13)" stroke="#5C7A57" stroke-width="1.1"/>
+        <text x="150" y="168" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.1em" fill="#1a6b42">IGG + · IGM −</text>
+        <text x="150" y="188" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Inmune</text>
+        <text x="150" y="205" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Sin riesgo fetal. Tranquilizar,</text>
+        <text x="150" y="219" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">no retirarla del trabajo.</text>
+
+        <rect x="330" y="148" width="240" height="86" rx="6" fill="rgba(69,90,140,.14)" stroke="#455A8C" stroke-width="1.1"/>
+        <text x="450" y="168" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.1em" fill="#27334F">IGG − · IGM −</text>
+        <text x="450" y="188" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Susceptible</text>
+        <text x="450" y="205" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Repetir serología si el contacto</text>
+        <text x="450" y="219" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">persiste o aparecen síntomas.</text>
+
+        <rect x="630" y="148" width="240" height="86" rx="6" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1.4"/>
+        <text x="750" y="168" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.1em" fill="#701d14">IGM + O SEROCONVERSIÓN</text>
+        <text x="750" y="188" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Infección materna reciente</text>
+        <text x="750" y="205" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Riesgo máximo de pérdida fetal</text>
+        <text x="750" y="219" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">antes de la semana 20.</text>
+
+        <line x1="750" y1="234" x2="750" y2="252" stroke="#701d14" stroke-width="1.2"/>
+        <line x1="450" y1="252" x2="750" y2="252" stroke="#701d14" stroke-width="1.2"/>
+        <line x1="450" y1="252" x2="450" y2="262" stroke="#701d14" stroke-width="1.2"/>
+        <polygon points="450,270 445,260 455,260" fill="#701d14"/>
+
+        <rect x="120" y="270" width="660" height="54" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="120" y="270" width="4" height="54" rx="2" fill="#701d14"/>
+        <text x="140" y="290" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Vigilancia fetal seriada con ecografía y Doppler de arteria cerebral media</text>
+        <text x="140" y="306" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Si hay signos de anemia fetal o hidropesía: PCR en líquido amniótico o sangre fetal y transfusión intrauterina.</text>
+        <text x="140" y="319" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">B19 no es teratógeno: los recién nacidos que sobreviven a la infección intrauterina no muestran malformaciones ni secuelas a largo plazo.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. La embarazada expuesta. La primera decisión es serológica y separa a la mayoría —ya inmune— del pequeño grupo que necesita vigilancia fetal. El desenlace adverso <b>no es lo típico</b> tras una infección materna.</figcaption>
+    </figure>
+
+    <div class="box mnem"><span class="lbl">Vacunas y hemoderivados</span>
+      <p><b>No hay vacuna disponible.</b> Las candidatas son <b>cápsides vacías</b> donde <b>VP1 es crítica</b> para inducir anticuerpos neutralizantes, y las de contenido supranormal de VP1 son aún más inmunógenas. Una vacuna de baculovirus enriquecida en VP1 pasó una fase I prometedora, pero el estudio posterior se <b>detuvo por reacciones cutáneas inexplicadas en 3 de 43 participantes</b>. Se desarrollan VLP de VP1+VP2 <b>sin actividad fosfolipasa A2</b>. Queda sin resolver a quién vacunar: ¿solo a los de alto riesgo o a toda la población?</p>
+      <p>En hemoderivados la inactivación clásica no sirve: se controla con <b>PCR cuantitativa y retiro de las donaciones &gt;10<sup>4</sup> UI/mL</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>Único virus DNA monocatenario</b> de la clasificación clásica y <b>el más pequeño</b>: <i>parvus</i> = pequeño.</li>
+          <li>Receptor: <b>antígeno P (globósido)</b>; fenotipo P-nulo = resistencia genética.</li>
+          <li><b>Replicación nuclear ⇒ necesita fase S</b>: el blanco es un progenitor en proliferación. <b>Pronormoblasto gigante</b> con inclusión nuclear eosinófila = sello en médula.</li>
+          <li><b>Crisis aplásica</b> = reticulocitopenia sobre hemólisis crónica. <b>Aplasia pura de serie roja</b> = inmunodeprimido anémico sin exantema.</li>
+          <li>Causa el <b>10–15 % de la hidropesía fetal no inmunitaria</b> y <b>no es teratógeno</b>.</li>
+          <li>Sobrevive al <b>solvente-detergente</b>: riesgo residual en hemoderivados. Tratamiento del inmunodeprimido: <b>IgIV 0.4 g/kg × 5 días</b>; no hay antiviral aprobado.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«Cinco, cinco y cinco»</b> — <b>quinta</b> enfermedad, genoma de <b>~5</b> kb, <b>cinco</b> géneros de parvovirus que infectan al humano.</p>
+        <p><b>«P-A-R-V-O»</b> — antígeno <b>P</b> · crisis <b>A</b>plásica · <b>R</b>ash en mejilla abofeteada · <b>V</b>ertical con hidropesía · artropatía <b>O</b>steoarticular del adulto.</p>
+        <p><b>«El del exantema ya no contagia; el de la crisis aplásica sí»</b> — la disociación entre viremia e inmunocomplejos, convertida en regla de aislamiento.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas clásicas y escenario mexicano</span>
+      <ul>
+        <li><b>Aislar al niño con la mejilla abofeteada</b>: cuando el exantema aparece, la viremia ya terminó.</li>
+        <li><b>Confundir la artropatía del adulto con artritis reumatoide de inicio</b> — misma distribución simétrica de pequeñas articulaciones y <b>factor reumatoide transitorio positivo</b>; sin antecedente de exantema, el error es fácil.</li>
+        <li><b>Diagnosticar por PCR de tejido</b>: el «bioportfolio» hace del hallazgo la regla, no la excepción.</li>
+        <li>La crisis aplásica puede ser el <b>debut de una esferocitosis hereditaria compensada</b>: ante un niño con anemia brusca y reticulocitos bajos, buscar la hemólisis de fondo, no solo el virus.</li>
+        <li><b>Escenario mexicano habitual</b>: <b>educadora embarazada</b> tras un brote de eritema infeccioso en el preescolar. La conducta no es retirarla del trabajo, sino <b>medir IgG e IgM</b>: si ya es inmune —como más de la mitad de las adultas—, se tranquiliza y termina la consulta.</li>
+        <li>Y el otro: <b>trasplantado renal con anemia arregenerativa</b> pese a eritropoyetina y con serología negativa. La prueba correcta es la <b>PCR cuantitativa en suero</b>.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>patogenos/Parvovirus_B19.md</code> (nota semilla, First Aid Step 1 2025, p. 159-163) y <code>sindromes/Fiebre_y_exantema.md</code> · Mandell PPID 10e, cap. 154, p. 1943-1950 · Qiu J, Söderlund-Venermo M, Young NS. <i>Clin Microbiol Rev</i> 2017;30:43-113 · Anderson MJ et al. <i>J Infect Dis</i> 1985;152:257-265 · Miller E et al. <i>Br J Obstet Gynaecol</i> 1998;105:174-178 · Xiong YQ et al. <i>J Clin Virol</i> 2019;114:12-20 · Ho A et al. <i>Nature</i> 2023;617:555-563 · árbol <code>virus-dna.html</code>.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="../index.html"><span class="k">← Índice</span><span class="v">Virología</span></a>
+        <a class="next" href="anelloviridae.html"><span class="k">Siguiente →</span><span class="v">Anelloviridae</span></a></div>
+      <footer class="pf">
+        <span>Parvoviridae · 1 de 10 · árbol DNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

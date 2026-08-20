@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hepadnaviridae — Virus DNA</title>
+<meta name="description" content="Hepadnaviridae. Virus de la hepatitis B">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-dna.html">Virus DNA</a><span class="sep">/</span>
+    <b>Hepadnaviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-dna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus DNA · Familia 10 de 10 · Virología médica</p>
+    <h1>Hepadnaviridae</h1>
+    <p class="sub">Virus de la hepatitis B</p>
+    <div class="chips"><span class="chip g">dsDNA parcial circular · 3,2 kb · replica por transcriptasa reversa</span>
+  <span class="chip">Envuelto · 42 nm (partícula de Dane)</span>
+  <span class="chip">Núcleo (cccDNA) + cápside citoplásmica</span>
+  <span class="chip r">Primera causa mundial de hepatocarcinoma</span>
+  <span class="chip gold">Vacuna recombinante HBsAg — vacuna contra el cáncer</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Hepadnaviridae · Virus DNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Género y especie</dt><dd><i>Orthohepadnavirus</i> · virus de la hepatitis B, <b>genotipos A–J</b> (F y H predominan en México)</dd></div>
+  <div class="cell"><dt>Receptor</dt><dd><b>NTCP</b> (cotransportador Na⁺-taurocolato) unido por el dominio <b>preS1</b> de la L-HBsAg + heparán sulfato → hepatotropismo estricto</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd><b>Perinatal</b> (dominante en alta endemicidad) · sexual · percutánea. Sobrevive <b>7 días</b> en superficies; <b>100 veces más eficiente que el VIH</b> tras un pinchazo</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd>28–180 días (media 12–14 semanas)</dd></div>
+  <div class="cell"><dt>Cronificación por edad</dt><dd>Perinatal <b>&gt;90 %</b> · niño 1–5 años ~30 % · adulto inmunocompetente <b>&lt;5 %</b></dd></div>
+  <div class="cell"><dt>Daño hepático</dt><dd><b>No es citopático</b>: lo produce el linfocito <b>T CD8</b> contra el hepatocito infectado. ALT alta = inmunidad activa</dd></div>
+  <div class="cell"><dt>Marcador rector</dt><dd><b>HBsAg &gt;6 meses = crónica</b> · anti-HBc IgM es el único marcador en la ventana serológica</dd></div>
+  <div class="cell"><dt>Tratamiento</dt><dd>Entecavir · tenofovir (TDF/TAF) · PEG-IFN-α. Suprimen, <b>no curan</b>: el cccDNA queda</dd></div>
+  <div class="cell"><dt>Prevención</dt><dd>Vacuna al <b>nacer (&lt;24 h)</b> + esquema; recién nacido de madre HBsAg+: <b>vacuna + HBIG &lt;12 h</b></dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">Del antígeno Australia a la primera vacuna anticáncer</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1885</b> — Lurman describe ictericia en el <b>15 % de 1 289 trabajadores</b> de un astillero de Bremen vacunados contra viruela con linfa humana: la primera epidemia documentada de «hepatitis sérica» y la primera pista de un agente transmitido por sangre.</li>
+      <li><b>1965</b> — <b>Baruch Blumberg</b> halla un antígeno en el suero de aborígenes australianos, el <i>antígeno Australia</i>, que resultó ser el <b>HBsAg</b>. <b>Premio Nobel en 1976.</b></li>
+      <li><b>1971</b> — <b>Dane</b> visualiza al microscopio electrónico la partícula completa de <b>42 nm</b> junto a las partículas subvirales de 22 nm. Desde entonces el virión lleva su nombre.</li>
+      <li><b>1979–1982</b> — se clona y secuencia el genoma; <b>Summers y Mason</b> demuestran, trabajando con el virus de la hepatitis del pato, que un virus DNA replica <b>por transcripción reversa</b> de un RNA pregenómico. La biología de HBV se vuelve, de golpe, la de un retrovirus.</li>
+      <li><b>1981 → 1986</b> — vacuna derivada de plasma y luego la <b>recombinante</b>: la primera vacuna humana producida por DNA recombinante y <b>la primera vacuna que previene un cáncer</b> (hepatocarcinoma). Taiwán demuestra después la caída del HCC infantil tras la vacunación universal.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Un virus DNA con alma de retrovirus</span>
+      <p>Que el ciclo pase por una <b>polimerasa con actividad de transcriptasa reversa</b> explica tres cosas de examen: (1) los <b>análogos nucleós(t)idos del VIH</b> —tenofovir, lamivudina, emtricitabina— son activos contra HBV; (2) la RT carece de corrección de pruebas, de ahí <b>10 genotipos, mutantes precore y mutantes de escape</b>; (3) el genoma acaba archivado como <b>cccDNA</b> nuclear, un depósito que ningún fármaco actual erradica.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Grupo VII de Baltimore, un solo género humano</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd>Hepadnaviridae — de <i>hepar</i> (hígado) + <i>DNA</i>: el nombre ya dice tropismo y genoma</dd>
+      <dt>Género humano</dt><dd><i>Orthohepadnavirus</i> (mamíferos). El género hermano <i>Avihepadnavirus</i> infecta aves y no al humano: el virus de la hepatitis del pato fue el modelo donde se descubrió la transcripción reversa</dd>
+      <dt>Especie</dt><dd>Virus de la hepatitis B — <b>genotipos A–J</b></dd>
+      <dt>Clase de Baltimore</dt><dd><b>Grupo VII: dsDNA con transcripción reversa</b>. En medicina humana, HBV es el único ejemplo</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Virus de la hepatitis B</span><span class="vg">Orthohepadnavirus</span></div>
+        <div class="vbd">
+          <p>Genoma de <b>3,2 kb</b>: el más compacto de los virus DNA humanos, con <b>cuatro marcos de lectura solapados</b> (S, C, P, X). Tres antígenos de examen: <b>HBsAg</b> (envoltura, circula en exceso), <b>HBcAg</b> (cápside, <b>no se detecta libre en suero</b>) y <b>HBeAg</b> (secretado, marcador de replicación e infectividad, ausente del virión maduro).</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Genotipos A–J</span><span class="vg">geografía y pronóstico</span></div>
+        <div class="vbd">
+          <p><b>A y D</b> Europa y América · <b>B y C</b> Asia · <b>E</b> África · <b>F y H</b> <b>México y Latinoamérica</b>.</p>
+          <p>Importan clínicamente: <b>A y B responden mejor al PEG-IFN</b> que C y D; el <b>genotipo C</b> seroconvierte a anti-HBe más tarde y se asocia a más hepatocarcinoma.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card"><span class="lbl">El satélite que no es hepadnavirus</span>
+      <p>El <b>virus delta (HDV)</b> pertenece a otra familia (<i>Kolmioviridae</i>), pero es un <b>virus defectuoso</b> que necesita el <b>HBsAg</b> de HBV para envolverse. Sin hepatitis B no hay hepatitis D: por eso la vacuna anti-HBV también previene la delta, y por eso <b>a todo HBsAg positivo se le debe tamizar anti-HDV</b>.</p>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«S de superficie, C de core, P de polimerasa, X de eXtra»</b>: cuatro genes en un genoma que no desperdicia un nucleótido. Y para Baltimore: <b>HBV es el DNA que se comporta como RNA</b>; el VIH, el RNA que se comporta como DNA. A ambos los trata el tenofovir.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">42 nm, cuatro genes solapados y un minicromosoma</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión de hepatitis B, partículas subvirales de HBsAg y mapa de los cuatro marcos de lectura solapados">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <circle cx="130" cy="140" r="86" fill="rgba(69,90,140,.12)" stroke="#36476E" stroke-width="1.6"/>
+        <g fill="#701d14">
+          <circle cx="222" cy="140" r="4"/><circle cx="210" cy="186" r="4"/><circle cx="176" cy="220" r="4"/>
+          <circle cx="130" cy="232" r="4"/><circle cx="84" cy="220" r="4"/><circle cx="50" cy="186" r="4"/>
+          <circle cx="38" cy="140" r="4"/><circle cx="50" cy="94" r="4"/><circle cx="84" cy="60" r="4"/>
+          <circle cx="130" cy="48" r="4"/><circle cx="176" cy="60" r="4"/><circle cx="210" cy="94" r="4"/>
+        </g>
+        <polygon points="176,140 153,180 107,180 84,140 107,100 153,100" fill="rgba(92,122,87,.18)" stroke="#5C7A57" stroke-width="1.8"/>
+        <circle cx="130" cy="140" r="24" fill="none" stroke="#27334F" stroke-width="2.2"/>
+        <path d="M130 157 A 17 17 0 1 0 143 128" fill="none" stroke="#8a5c0a" stroke-width="2.6"/>
+        <circle cx="130" cy="116" r="4.5" fill="#90303a"/>
+        <text x="130" y="252" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">PARTÍCULA DE DANE · 42 NM</text>
+
+        <g font-family="'Inter', sans-serif" font-size="11" fill="#14181f">
+          <line x1="180" y1="58" x2="268" y2="52" stroke="#455A8C" stroke-width="1"/>
+          <text x="276" y="50" font-weight="600" fill="#701d14">HBsAg (L, M y S)</text>
+          <text x="276" y="65" font-size="10" fill="#6b7585">El dominio preS1 de la L se une a NTCP;</text>
+          <text x="276" y="78" font-size="10" fill="#6b7585">es el blanco de la vacuna y del anti-HBs</text>
+          <line x1="170" y1="106" x2="268" y2="102" stroke="#455A8C" stroke-width="1"/>
+          <text x="276" y="100" font-weight="600" fill="#1a6b42">HBcAg — cápside icosaédrica</text>
+          <text x="276" y="115" font-size="10" fill="#6b7585">Nunca circula libre; el anti-HBc IgM es el</text>
+          <text x="276" y="128" font-size="10" fill="#6b7585">primer anticuerpo y el único de la ventana</text>
+          <line x1="154" y1="140" x2="268" y2="152" stroke="#455A8C" stroke-width="1"/>
+          <text x="276" y="150" font-weight="600" fill="#27334F">DNA parcialmente bicatenario</text>
+          <text x="276" y="165" font-size="10" fill="#6b7585">Cadena (−) completa con proteína terminal</text>
+          <text x="276" y="178" font-size="10" fill="#6b7585">unida al 5′; cadena (+) incompleta (oro)</text>
+          <line x1="146" y1="118" x2="268" y2="200" stroke="#455A8C" stroke-width="1"/>
+          <text x="276" y="200" font-weight="600" fill="#90303a">Polimerasa P — 832 aminoácidos</text>
+          <text x="276" y="215" font-size="10" fill="#6b7585">Dominios: terminal · espaciador · <tspan font-weight="600">RT</tspan> · RNasa H</text>
+        </g>
+
+        <g>
+          <circle cx="620" cy="62" r="13" fill="rgba(112,29,20,.16)" stroke="#701d14" stroke-width="1.4"/>
+          <circle cx="654" cy="62" r="13" fill="rgba(112,29,20,.16)" stroke="#701d14" stroke-width="1.4"/>
+          <circle cx="688" cy="62" r="13" fill="rgba(112,29,20,.16)" stroke="#701d14" stroke-width="1.4"/>
+          <rect x="716" y="50" width="130" height="24" rx="12" fill="rgba(112,29,20,.16)" stroke="#701d14" stroke-width="1.4"/>
+          <text x="620" y="100" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Partículas subvirales de HBsAg · 22 nm</text>
+          <text x="620" y="115" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">Esferas y filamentos sin DNA, no infecciosos</text>
+          <text x="620" y="128" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">Hasta 10¹³/mL: señuelo que satura al anticuerpo</text>
+          <text x="620" y="141" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">y hacen fácil el ELISA de HBsAg en suero</text>
+        </g>
+
+        <line x1="90" y1="238" x2="840" y2="238" stroke="rgba(20,24,31,.16)" stroke-width="1"/>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" fill="#6b7585" letter-spacing="0.08em">
+          <text x="90" y="232">0</text><text x="315" y="232">1 KB</text><text x="550" y="232">2 KB</text><text x="785" y="232">3,2 KB</text>
+        </g>
+        <rect x="90" y="244" width="562" height="11" rx="3" fill="#27334F"/>
+        <text x="660" y="253" font-family="'Inter', sans-serif" font-size="10" fill="#14181f"><tspan font-weight="600">P</tspan> · polimerasa con RT</text>
+        <rect x="149" y="262" width="176" height="11" rx="3" fill="#701d14"/>
+        <text x="333" y="271" font-family="'Inter', sans-serif" font-size="10" fill="#14181f"><tspan font-weight="600">S</tspan> · preS1 · preS2 · S (HBsAg) — entero dentro de P</text>
+        <rect x="412" y="280" width="109" height="11" rx="3" fill="#8a5c0a"/>
+        <text x="529" y="289" font-family="'Inter', sans-serif" font-size="10" fill="#14181f"><tspan font-weight="600">X</tspan> · HBx, transactivador</text>
+        <rect x="515" y="298" width="150" height="11" rx="3" fill="#5C7A57"/>
+        <text x="673" y="307" font-family="'Inter', sans-serif" font-size="10" fill="#14181f"><tspan font-weight="600">C</tspan> · preC (HBeAg) y core (HBcAg)</text>
+        <text x="90" y="330" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Esquema linealizado de un genoma circular: cuatro ORF solapados, cuatro promotores y dos potenciadores en 3,2 kb.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión, las partículas subvirales y el mapa génico. Retén dos ideas: el suero contiene <b>mil veces más HBsAg vacío que virus</b>, y el gen S vive completo dentro del gen P — por eso una mutación de resistencia en la polimerasa puede cambiar de paso el antígeno de superficie.</figcaption>
+    </figure>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ciclo de replicación del virus de la hepatitis B con formación de cccDNA nuclear y transcripción reversa citoplásmica">
+        <rect width="900" height="360" fill="#FFFFFF"/>
+        <rect x="90" y="56" width="780" height="266" rx="18" fill="rgba(69,90,140,.06)" stroke="rgba(20,24,31,.16)" stroke-width="1.2"/>
+        <text x="104" y="46" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">HEPATOCITO</text>
+        <circle cx="46" cy="120" r="15" fill="rgba(69,90,140,.16)" stroke="#36476E" stroke-width="1.4"/>
+        <line x1="64" y1="120" x2="118" y2="120" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="124,120 114,115 114,125" fill="#455A8C"/>
+
+        <ellipse cx="266" cy="204" rx="118" ry="80" fill="rgba(39,51,79,.09)" stroke="#27334F" stroke-width="1.5"/>
+        <text x="266" y="140" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#27334F">NÚCLEO</text>
+        <circle cx="176" cy="182" r="13" fill="#27334F"/>
+        <text x="176" y="186" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">2</text>
+        <text x="278" y="184" text-anchor="middle" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#27334F">rcDNA → cccDNA</text>
+        <text x="278" y="201" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Minicromosoma episomal con histonas</text>
+        <text x="278" y="215" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Molde de todos los RNA virales</text>
+        <text x="278" y="232" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#701d14">Ningún fármaco actual lo elimina</text>
+
+        <circle cx="150" cy="104" r="13" fill="#27334F"/>
+        <text x="150" y="108" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">1</text>
+        <text x="172" y="98" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">Entrada por NTCP y heparán sulfato</text>
+        <text x="172" y="113" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Endocitosis por clatrina · la cápside viaja al poro nuclear</text>
+        <line x1="150" y1="118" x2="150" y2="168" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="150,174 145,164 155,164" fill="#455A8C"/>
+
+        <line x1="384" y1="196" x2="424" y2="120" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="428,112 419,120 429,124" fill="#455A8C"/>
+        <line x1="436" y1="118" x2="436" y2="284" stroke="rgba(20,24,31,.16)" stroke-width="1"/>
+
+        <circle cx="436" cy="104" r="12" fill="#5C7A57"/>
+        <text x="436" y="108" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#f7f8fa">3</text>
+        <text x="456" y="100" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">La RNA-polimerasa II del huésped transcribe</text>
+        <text x="456" y="114" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">el pgRNA de 3,5 kb y los mRNA subgenómicos</text>
+
+        <circle cx="436" cy="148" r="12" fill="#5C7A57"/>
+        <text x="436" y="152" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#f7f8fa">4</text>
+        <text x="456" y="144" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Traducción</text>
+        <text x="456" y="158" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">HBsAg al retículo · core · polimerasa · HBx · HBeAg secretado</text>
+
+        <circle cx="436" cy="192" r="12" fill="#5C7A57"/>
+        <text x="436" y="196" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#f7f8fa">5</text>
+        <text x="456" y="188" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Encapsidación del pgRNA con la polimerasa</text>
+        <text x="456" y="202" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">La P reconoce la horquilla ε en el propio transcrito</text>
+
+        <rect x="452" y="222" width="404" height="46" rx="6" fill="rgba(112,29,20,.08)" stroke="#701d14" stroke-width="1.1"/>
+        <circle cx="436" cy="240" r="12" fill="#701d14"/>
+        <text x="436" y="244" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#f7f8fa">6</text>
+        <text x="464" y="240" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">Transcripción reversa dentro de la cápside → rcDNA</text>
+        <text x="464" y="256" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Único paso que bloquean entecavir, tenofovir y lamivudina</text>
+
+        <circle cx="436" cy="292" r="12" fill="#27334F"/>
+        <text x="436" y="296" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#f7f8fa">7</text>
+        <text x="456" y="288" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">Gemación por el retículo → virión de 42 nm</text>
+        <text x="456" y="302" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">o reciclaje de la cápside al núcleo, que amplifica el cccDNA</text>
+        <path d="M424 300 C 360 322 300 302 286 290" fill="none" stroke="#455A8C" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <polygon points="280,286 290,285 286,294" fill="#455A8C"/>
+
+        <line x1="196" y1="270" x2="164" y2="296" stroke="#90303a" stroke-width="1.2"/>
+        <polygon points="158,300 166,292 170,300" fill="#90303a"/>
+        <text x="106" y="312" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#90303a">DNA lineal (~10 %) → integración al genoma</text>
+        <text x="106" y="325" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Solo produce HBsAg y HBx: sostiene el antígeno y el riesgo de HCC</text>
+        <text x="90" y="350" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Los antivirales cortan el paso 6 y vacían la sangre, pero el paso 2 sigue intacto: por eso es supresión y no curación.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Ciclo replicativo. El cccDNA es el archivo maestro; el pgRNA, la copia de trabajo. Suspender un análogo nucleós(t)ido devuelve el archivo a la imprenta: de ahí el <b>flare</b> hepático tras la interrupción abrupta.</figcaption>
+    </figure>
+
+    <h4>Lo que hay que retener de la biología</h4>
+    <ul>
+      <li><b>HBeAg</b> se traduce del mismo marco C que el core, pero se secreta y <b>no forma parte del virión</b>. Funciona como <b>señuelo tolerogénico</b>: cruza la placenta e induce tolerancia de las células T fetales, la razón de que la infección perinatal cronifique en más del 90 %.</li>
+      <li><b>HBx</b> promueve la degradación del factor de restricción <b>Smc5/6</b>, transactiva NF-κB, ATF-2/CREB y la vía Ras-Raf-MAPK, y genera estrés oxidativo mitocondrial. No es un oncogén clásico, pero es el principal cooperador viral en la hepatocarcinogénesis.</li>
+      <li><b>Estabilidad</b>: la sangre alcanza <b>10⁸–10¹⁰ viriones/mL</b> y el virus sobrevive <b>hasta 7 días</b> en superficies secas. Está en semen, saliva, secreción cervical y lágrimas, pero <b>no en orina, sudor ni heces</b> salvo contaminación con sangre.</li>
+      <li><b>Variabilidad antigénica de examen</b>: <b>mutante precore G1896A</b> → deja de fabricar HBeAg pese a replicar con fuerza (hepatitis crónica HBeAg-negativa); <b>mutante de escape G145R</b> en el determinante «a» → HBsAg que no liga anti-HBs (fallas de vacuna y de HBIG); <b>rtM204V/I</b> → resistencia a lamivudina.</li>
+    </ul>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">El daño lo hace el linfocito, no el virus</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fases de la infección crónica por hepatitis B con la evolución del DNA viral, la ALT y el riesgo de cirrosis">
+        <rect width="900" height="330" fill="#FFFFFF"/>
+        <g font-family="'Inter', sans-serif" text-anchor="middle">
+          <text x="158" y="30" font-size="10.5" font-weight="600" fill="#27334F">HBeAg + infección</text>
+          <text x="158" y="44" font-size="9.5" fill="#6b7585">tolerancia inmune</text>
+          <text x="314" y="30" font-size="10.5" font-weight="600" fill="#701d14">HBeAg + hepatitis</text>
+          <text x="314" y="44" font-size="9.5" fill="#6b7585">fase inmunoactiva</text>
+          <text x="470" y="30" font-size="10.5" font-weight="600" fill="#1a6b42">HBeAg − infección</text>
+          <text x="470" y="44" font-size="9.5" fill="#6b7585">portador inactivo</text>
+          <text x="626" y="30" font-size="10.5" font-weight="600" fill="#701d14">HBeAg − hepatitis</text>
+          <text x="626" y="44" font-size="9.5" fill="#6b7585">mutante precore</text>
+          <text x="782" y="30" font-size="10.5" font-weight="600" fill="#27334F">Resuelta</text>
+          <text x="782" y="44" font-size="9.5" fill="#6b7585">HBsAg −, anti-HBs +</text>
+        </g>
+        <g stroke="rgba(20,24,31,.12)" stroke-width="1">
+          <line x1="236" y1="56" x2="236" y2="200"/><line x1="392" y1="56" x2="392" y2="200"/>
+          <line x1="548" y1="56" x2="548" y2="200"/><line x1="704" y1="56" x2="704" y2="200"/>
+        </g>
+        <line x1="80" y1="200" x2="860" y2="200" stroke="#455A8C" stroke-width="1.3"/>
+        <polyline points="80,88 158,86 236,92 314,116 392,140 470,168 548,152 626,132 704,152 782,184 860,192" fill="none" stroke="#8a5c0a" stroke-width="2.6"/>
+        <polyline points="80,186 158,184 236,170 314,102 392,150 470,182 548,174 626,118 704,160 782,188 860,190" fill="none" stroke="#701d14" stroke-width="2.6"/>
+        <g font-family="'Inter', sans-serif" font-size="9.5">
+          <line x1="744" y1="76" x2="768" y2="76" stroke="#8a5c0a" stroke-width="2.6"/>
+          <text x="774" y="80" fill="#6b7585">HBV DNA</text>
+          <line x1="744" y1="94" x2="768" y2="94" stroke="#701d14" stroke-width="2.6"/>
+          <text x="774" y="98" fill="#6b7585">ALT</text>
+        </g>
+        <text x="8" y="224" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.06em" fill="#6b7585">CIRROSIS/AÑO</text>
+        <g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#14181f" text-anchor="middle">
+          <text x="158" y="224">&lt;0,5 %</text><text x="314" y="224">2–5,5 %</text><text x="470" y="224">0,05 %</text><text x="626" y="224">8–10 %</text><text x="782" y="224">—</text>
+        </g>
+        <text x="8" y="248" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.06em" fill="#6b7585">DNA UI/mL</text>
+        <g font-family="'IBM Plex Mono', monospace" font-size="9.5" fill="#14181f" text-anchor="middle">
+          <text x="158" y="248">≥10⁶</text><text x="314" y="248">≥20 000</text><text x="470" y="248">≤2 000</text><text x="626" y="248">≥2 000</text><text x="782" y="248">indetectable</text>
+        </g>
+        <text x="8" y="272" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.06em" fill="#6b7585">HISTOLOGÍA</text>
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585" text-anchor="middle">
+          <text x="158" y="272">mínima</text><text x="314" y="272">moderada a grave</text><text x="470" y="272">fibrosis variable</text><text x="626" y="272">moderada a grave</text><text x="782" y="272">sin inflamación</text>
+        </g>
+        <rect x="80" y="286" width="780" height="30" rx="6" fill="rgba(112,29,20,.07)" stroke="#701d14" stroke-width="1"/>
+        <text x="470" y="305" text-anchor="middle" font-family="'Source Serif 4', serif" font-style="italic" font-size="12.5" fill="#701d14">El cccDNA sobrevive a las cinco fases: incluso en la resuelta, la inmunosupresión puede reactivar la infección.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Fases de la infección crónica (AASLD 2018). La ALT sube cuando el sistema inmune ataca, no cuando el virus se multiplica más: en la fase de tolerancia hay <b>10⁶ UI/mL con ALT normal y biopsia casi limpia</b>, y por eso no se trata de rutina.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Mecanismo del daño</span>
+        <ul>
+          <li>HBV <b>no es citopático</b>. Los linfocitos <b>T CD8 restringidos por HLA-I</b> lisan al hepatocito que expone péptidos virales; la necroinflamación es colateral.</li>
+          <li>Quien <b>resuelve</b> monta una respuesta CD4 y CD8 <b>vigorosa y policlonal</b>; quien cronifica, una respuesta <b>débil y estrecha</b>, con agotamiento marcado por <b>PD-1 y CTLA-4</b> en el microambiente hepático.</li>
+          <li>La <b>hepatitis fulminante</b> es la paradoja del sistema: aclaramiento inmunológico masivo. El HBsAg puede ya ser negativo y quedar <b>solo el anti-HBc IgM</b>.</li>
+          <li><b>Hepatocito en vidrio esmerilado</b>: citoplasma eosinófilo granular por acumulación de HBsAg en el retículo endoplásmico. Marcador histológico de infección crónica.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Persistencia y oncogénesis</span>
+        <ul>
+          <li><b>cccDNA</b>: minicromosoma nuclear estable. La «curación» clínica es <b>funcional</b>, no virológica; el DNA sigue detectándose en hígado años después.</li>
+          <li><b>Integración</b> del DNA lineal en el genoma del hepatocito → inestabilidad cromosómica y expresión persistente de HBsAg y HBx.</li>
+          <li><b>HBx</b> inactiva p53, inhibe la apoptosis, eleva las especies reactivas de oxígeno y activa vías proliferativas.</li>
+          <li>Por integración directa, el <b>hepatocarcinoma puede aparecer sin cirrosis</b> — rasgo que distingue a HBV de HCV y del alcohol.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">Por qué reactiva con rituximab</span>
+      <p>El control del cccDNA es <b>inmunológico, no farmacológico</b>. Al depletar linfocitos B y T (rituximab, anti-TNF, esteroides &gt;20 mg/día por más de un mes, quimioterapia, trasplante), el cccDNA reanuda la transcripción, reaparece el HBsAg y, al recuperarse la inmunidad, sobreviene una <b>hepatitis grave por reconstitución</b>. Se han descrito reactivaciones <b>hasta 17 meses después</b> de la última dosis.</p>
+    </div>
+
+    <div class="box clin"><span class="lbl">Extrahepáticas: enfermedad por complejos inmunes</span>
+      <p>El exceso de HBsAg circulante forma inmunocomplejos: <b>poliarteritis nodosa</b> (asociación clásica, &lt;1 %), <b>glomerulonefritis membranosa</b> (más que la membranoproliferativa), crioglobulinemia, y el pródromo <b>tipo enfermedad del suero</b> con fiebre, artralgias y urticaria. En niños, <b>acrodermatitis papular de Gianotti-Crosti</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">La edad al contagio decide el destino</span><span class="caret"></span></summary>
+  <div class="body">
+    <ol class="steps">
+      <li><b>Incubación (28–180 días; media 12–14 semanas)</b> Asintomática. Larga: distingue a HBV de la hepatitis A.</li>
+      <li><b>Pródromo</b> Cuadro seudogripal con anorexia, náusea y dolor en hipocondrio derecho; en 10–20 % un síndrome <b>tipo enfermedad del suero</b> (fiebre, artralgias, exantema urticariforme) que precede a la ictericia.</li>
+      <li><b>Fase ictérica</b> Ictericia y hepatomegalia dolorosa. <b>ALT y AST de 1 000 a 2 000 U/L, con ALT &gt; AST.</b> El <b>tiempo de protrombina es el mejor indicador pronóstico</b>. Solo un tercio de los adultos se pone ictérico; dos tercios cursan subclínicos.</li>
+      <li><b>Convalecencia</b> Los síntomas ceden en un mes y las transaminasas se normalizan en 1–4 meses. <b>ALT persistentemente alta &gt;6 meses = cronicidad.</b></li>
+    </ol>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Huésped</th><th>Presentación aguda</th><th>Riesgo de cronificar</th><th>Consecuencia</th></tr></thead>
+      <tbody>
+        <tr><td><b>Recién nacido (perinatal)</b></td><td>Casi siempre asintomática; hepatitis sintomática excepcional antes del año</td><td class="num"><b>&gt;90 %</b></td><td>Décadas de tolerancia inmune y máximo riesgo acumulado de cirrosis y HCC</td></tr>
+        <tr><td><b>Niño de 1 a 5 años</b></td><td>Ictericia en ~10 %</td><td class="num">~30 %</td><td>Transmisión horizontal intrafamiliar en zonas de alta prevalencia</td></tr>
+        <tr><td><b>Adulto inmunocompetente</b></td><td>Ictericia en 30–80 %; anictérica en el resto</td><td class="num"><b>&lt;5 %</b></td><td>Resolución con anti-HBs, pero el cccDNA persiste</td></tr>
+        <tr><td><b>Inmunodeprimido (VIH, diálisis, diabetes)</b></td><td>Con frecuencia <b>anictérica</b> — y la anictérica cronifica más</td><td class="num">Alto</td><td>Progresión hepática acelerada; obligado cubrir HBV en el TAR</td></tr>
+        <tr><td><b>Embarazada</b></td><td>Sin mayor gravedad materna atribuible</td><td class="num">—</td><td>Riesgo vertical: <b>70–90 % si HBeAg+</b>, 12–25 % si HBeAg−, sin profilaxis</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Complicaciones</span>
+        <ul>
+          <li><b>Hepatitis fulminante &lt;1 %</b>: encefalopatía + INR &gt;1,5. Mortalidad muy alta sin trasplante.</li>
+          <li><b>Cirrosis</b>: hasta 40 % de los crónicos, más con coinfección HCV, HDV o VIH y con alcohol.</li>
+          <li><b>Hepatocarcinoma</b>: HBV es la <b>primera causa mundial</b> y la única hepatitis que lo produce <b>sin cirrosis</b>. Vigilancia con <b>ultrasonido ± AFP cada 6 meses</b> en cirróticos, africanos &gt;20 años, hombres asiáticos &gt;40 y mujeres asiáticas &gt;50, y con antecedente familiar de HCC.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Coinfección y superinfección por delta</span>
+        <ul>
+          <li><b>Coinfección</b> simultánea HBV + HDV: hepatitis aguda más grave, a veces <b>bifásica</b>, pero cronifica poco porque la hepatitis B aguda del adulto se resuelve.</li>
+          <li><b>Superinfección</b> de un portador crónico de HBsAg: <b>cronifica casi siempre</b>, acelera la cirrosis y es causa clásica de <b>fulminante</b>.</li>
+          <li>Sospecha obligada ante <b>deterioro brusco de un HBsAg positivo estable</b>. Los otros dos diferenciales de ese escenario: <b>reactivación</b> por inmunosupresión y resistencia antiviral.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Cinco marcadores, un algoritmo</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cinética de los marcadores serológicos de hepatitis B en la infección aguda resuelta y en la progresión a infección crónica">
+        <rect width="900" height="400" fill="#FFFFFF"/>
+        <text x="70" y="28" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#27334F">A · INFECCIÓN AGUDA QUE SE RESUELVE</text>
+        <line x1="70" y1="180" x2="860" y2="180" stroke="#455A8C" stroke-width="1.3"/>
+        <rect x="560" y="66" width="80" height="114" fill="rgba(138,92,10,.14)" stroke="#8a5c0a" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="600" y="60" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#8a5c0a">VENTANA</text>
+        <polyline points="100,180 140,160 180,112 250,86 340,82 430,98 500,142 560,180" fill="none" stroke="#27334F" stroke-width="2.6"/>
+        <polyline points="150,180 200,142 260,128 330,134 400,158 452,180" fill="none" stroke="#90303a" stroke-width="2.2" stroke-dasharray="5 3"/>
+        <polyline points="280,180 340,132 400,104 470,102 560,122 650,152 720,172 780,180" fill="none" stroke="#5C7A57" stroke-width="2.4"/>
+        <polyline points="330,180 420,142 520,124 650,116 860,114" fill="none" stroke="#455A8C" stroke-width="2.4"/>
+        <polyline points="640,180 700,132 780,102 860,96" fill="none" stroke="#8a5c0a" stroke-width="2.6"/>
+        <polyline points="250,180 300,146 345,124 400,146 460,168 510,178" fill="none" stroke="#6b7585" stroke-width="1.2" stroke-dasharray="2 3"/>
+        <g font-family="'Inter', sans-serif" font-size="10">
+          <text x="228" y="76" font-weight="600" fill="#27334F">HBsAg</text>
+          <text x="248" y="122" font-weight="600" fill="#90303a">HBeAg</text>
+          <text x="392" y="94" font-weight="600" fill="#1a6b42">anti-HBc IgM</text>
+          <text x="656" y="132" font-weight="600" fill="#36476E">anti-HBc IgG (total)</text>
+          <text x="782" y="90" font-weight="600" fill="#8a5c0a">anti-HBs</text>
+          <text x="330" y="116" font-size="9" fill="#6b7585">ALT</text>
+        </g>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" fill="#6b7585" text-anchor="middle">
+          <text x="70" y="196">0</text><text x="250" y="196">8</text><text x="430" y="196">16</text><text x="610" y="196">24 SEM</text><text x="850" y="196">1 AÑO</text>
+        </g>
+
+        <text x="70" y="238" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#701d14">B · PROGRESIÓN A INFECCIÓN CRÓNICA</text>
+        <line x1="70" y1="356" x2="860" y2="356" stroke="#455A8C" stroke-width="1.3"/>
+        <line x1="380" y1="256" x2="380" y2="356" stroke="#701d14" stroke-width="1.1" stroke-dasharray="4 3"/>
+        <text x="386" y="264" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#701d14">6 MESES = CRÓNICA</text>
+        <polyline points="100,356 150,326 200,282 300,270 500,268 700,270 860,272" fill="none" stroke="#27334F" stroke-width="2.6"/>
+        <polyline points="160,356 220,306 300,296 450,302 560,332 604,356" fill="none" stroke="#90303a" stroke-width="2.2" stroke-dasharray="5 3"/>
+        <polyline points="624,356 700,326 780,316 860,312" fill="none" stroke="#8a5c0a" stroke-width="2.4"/>
+        <polyline points="280,356 360,316 500,300 860,296" fill="none" stroke="#455A8C" stroke-width="2.4"/>
+        <g font-family="'Inter', sans-serif" font-size="10">
+          <text x="300" y="262" font-weight="600" fill="#27334F">HBsAg persistente</text>
+          <text x="238" y="292" font-weight="600" fill="#90303a">HBeAg</text>
+          <text x="700" y="312" font-weight="600" fill="#8a5c0a">anti-HBe</text>
+          <text x="540" y="292" font-weight="600" fill="#36476E">anti-HBc IgG</text>
+          <text x="640" y="346" font-weight="600" fill="#701d14">anti-HBs: nunca aparece</text>
+        </g>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" fill="#6b7585" text-anchor="middle">
+          <text x="70" y="372">0</text><text x="500" y="372">1 AÑO</text><text x="680" y="372">5 AÑOS</text><text x="850" y="372">10 AÑOS</text>
+        </g>
+        <text x="70" y="394" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La seroconversión HBeAg → anti-HBe baja la infectividad, pero no equivale a curación: el mutante precore replica sin HBeAg.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 4. Cinética serológica. La <b>ventana</b> es el intervalo en que el HBsAg ya desapareció y el anti-HBs aún no aparece: el único marcador positivo es el <b>anti-HBc IgM</b>. Es la pregunta clásica del examen.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Patrón</th><th>HBsAg</th><th>anti-HBs</th><th>anti-HBc</th><th>Interpretación</th></tr></thead>
+      <tbody>
+        <tr><td><b>Aguda</b></td><td class="num">+</td><td class="num">−</td><td class="num">IgM</td><td>HBeAg + y DNA alto; suele resolverse en el adulto</td></tr>
+        <tr><td><b>Ventana</b></td><td class="num">−</td><td class="num">−</td><td class="num"><b>IgM</b></td><td>Infección aguda con HBsAg ya negativo: no descartar por HBsAg negativo</td></tr>
+        <tr><td><b>Crónica</b></td><td class="num"><b>+ &gt;6 m</b></td><td class="num">−</td><td class="num">IgG</td><td>Fase según HBeAg, DNA y ALT (ver figura 3)</td></tr>
+        <tr><td><b>Resuelta</b></td><td class="num">−</td><td class="num">+</td><td class="num">IgG</td><td>Inmunidad natural. El cccDNA persiste: riesgo de reactivación</td></tr>
+        <tr><td><b>Vacunado</b></td><td class="num">−</td><td class="num"><b>+</b></td><td class="num"><b>−</b></td><td>El anti-HBc negativo es lo que separa vacuna de infección pasada</td></tr>
+        <tr><td><b>anti-HBc aislado</b></td><td class="num">−</td><td class="num">−</td><td class="num">+</td><td>Infección antigua con anti-HBs perdido · falso positivo · <b>infección oculta</b> · ventana</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Pruebas virológicas</span>
+        <ul>
+          <li><b>HBV DNA cuantitativo (UI/mL)</b>: define la fase, indica el tratamiento y monitoriza la respuesta. Umbrales operativos: <b>2 000</b> (portador inactivo frente a hepatitis HBeAg−), <b>20 000</b> (hepatitis HBeAg+) y <b>200 000</b> (indicación de tenofovir en el tercer trimestre).</li>
+          <li><b>HBeAg / anti-HBe</b>: replicación e infectividad frente a seroconversión. Cuidado con el mutante precore, <b>HBeAg− con DNA alto</b>.</li>
+          <li><b>HBsAg cuantitativo</b> y <b>HBcrAg</b>: marcadores emergentes de actividad del cccDNA.</li>
+          <li><b>Genotipo</b>: útil solo si se plantea PEG-IFN (mejor respuesta con A y B).</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Errores frecuentes</span>
+        <ul>
+          <li>Pedir <b>anti-HBc total</b> y llamarlo «aguda»: solo la <b>IgM</b> distingue lo agudo o reciente.</li>
+          <li>Solicitar <b>HBcAg en suero</b>: no existe como prueba, el core no circula libre.</li>
+          <li>Etiquetar de portador inactivo a un HBeAg negativo <b>sin medir el DNA</b>.</li>
+          <li>Iniciar rituximab, anti-TNF o quimioterapia <b>sin tamizar HBsAg y anti-HBc</b>.</li>
+          <li>No solicitar <b>anti-HDV</b>, VIH y HCV en todo HBsAg positivo.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box clin"><span class="lbl">A quién tamizar</span>
+      <p>Todas las <b>embarazadas</b> en la primera consulta (repetir a las 28 semanas si hay riesgo); donantes de sangre y órganos; nacidos en zonas con prevalencia &gt;2 % —<b>México figura en esa lista de Mandell</b>— y personas no vacunadas al nacer cuyos padres nacieron en zonas con prevalencia &gt;8 %; usuarios de drogas inyectables y sus contactos; HSH e ITS; diálisis; personal de salud; VIH; hepatopatía o ALT alta sin causa; y <b>antes de cualquier inmunosupresión</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Suprimir de por vida o prevenir al nacer</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Hepatitis aguda</h4>
+    <p>Soporte. Se hospitaliza ante <b>alteración del estado mental o INR en ascenso</b> y se contacta a un centro de trasplante. Se considera antiviral solo en el curso grave o prolongado y en la falla hepática aguda.</p>
+
+    <h4>Hepatitis crónica</h4>
+    <div class="g2">
+      <div class="card"><span class="lbl">A quién tratar</span>
+        <ul>
+          <li>Fase <b>inmunoactiva</b>: HBeAg+ o HBeAg− con <b>DNA elevado y ALT ≥2× el límite superior</b>.</li>
+          <li><b>Cirrosis con DNA detectable</b>, a cualquier nivel; con mayor razón si está descompensada.</li>
+          <li>Falla hepática aguda por HBV y hepatocarcinoma con HBV.</li>
+          <li><b>Profilaxis</b> ante inmunosupresión y en el trasplante hepático.</li>
+          <li><b>Embarazada con DNA ≥200 000 UI/mL</b> en el tercer trimestre.</li>
+          <li>No se trata de rutina la <b>fase de tolerancia inmune</b> (DNA altísimo, ALT normal): se vigila.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Con qué</span>
+        <ul>
+          <li><b>Entecavir</b> 0,5 mg/día vía oral (1 mg si hubo resistencia a lamivudina o hay descompensación).</li>
+          <li><b>Tenofovir disoproxilo (TDF)</b> 300 mg/día — ajustar en insuficiencia renal — o <b>tenofovir alafenamida (TAF)</b> 25 mg/día, con mejor perfil renal y óseo.</li>
+          <li><b>PEG-IFN-α</b> 180 µg subcutáneos por semana durante <b>48 semanas</b>: curso finito, para el paciente joven con DNA bajo, ALT alta y genotipo A o B. <b>Contraindicado en cirrosis descompensada.</b></li>
+          <li><b>Ya no se recomiendan</b> lamivudina, telbivudina ni adefovir por resistencia. Con lamivudina, rtM204I/V aparece en más del 70 % a cinco años; <b>tenofovir no tiene resistencia clínica descrita</b>.</li>
+          <li>Duración: indefinida en cirrosis y en la hepatitis HBeAg−; en HBeAg+ sin cirrosis puede suspenderse tras la seroconversión a anti-HBe consolidada.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box trap"><span class="lbl">Tres reglas que no se rompen</span>
+      <ul>
+        <li><b>Nunca suspender bruscamente</b> un análogo: el rebote da <b>flare</b> hepático y hasta descompensación.</li>
+        <li>En <b>coinfección VIH-HBV</b>, el TAR debe incluir <b>dos fármacos activos contra HBV</b>: TDF o TAF + emtricitabina o lamivudina. <b>Jamás</b> lamivudina, emtricitabina o entecavir como único agente anti-HBV con VIH no suprimido: se seleccionan resistencias del VIH.</li>
+        <li>Antes de rituximab, anti-TNF o quimioterapia: tamizar y dar <b>profilaxis con entecavir o tenofovir</b>, incluso con <b>anti-HBc aislado</b>, manteniéndola de <b>12 a 18 meses después</b> de la última dosis y vigilando ALT, HBsAg y DNA otros 6–12 meses.</li>
+      </ul>
+    </div>
+
+    <h4>Prevención</h4>
+    <div class="g2">
+      <div class="card"><span class="lbl">Vacuna</span>
+        <ul>
+          <li><b>Recombinante de HBsAg</b>, eficacia &gt;90–95 %. Meta serológica: <b>anti-HBs ≥10 mUI/mL</b>.</li>
+          <li><b>Cartilla mexicana</b>: dosis monovalente al <b>nacer, en las primeras 24 horas</b>, y hexavalente a los 2, 4 y 6 meses. La dosis de nacimiento es la intervención más costo-efectiva y la que la OMS recomienda universalmente.</li>
+          <li>Adultos: vacunación universal &lt;60 años y a cualquier edad con factores de riesgo. Existe presentación con adyuvante CpG de <b>dos dosis</b>.</li>
+          <li>La titulación posvacunal se reserva a personal de salud, inmunodeprimidos, diálisis y contactos de HBsAg positivos.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Inmunoglobulina y profilaxis</span>
+        <ul>
+          <li><b>Recién nacido de madre HBsAg+</b>: <b>HBIG 0,5 mL IM + vacuna dentro de las 12 horas</b>, y completar el esquema. Baja la transmisión del 90 % a menos del 5 %.</li>
+          <li><b>Post-exposición</b> percutánea, sexual o de mucosas en no inmune: <b>HBIG 0,06 mL/kg</b> cuanto antes, más la serie de vacuna.</li>
+          <li><b>Embarazo</b>: TDF desde las 28–32 semanas hasta el puerperio si el DNA es alto; la vacuna y la HBIG del neonato no se omiten nunca.</li>
+          <li>La lactancia <b>no está contraindicada</b> si el recién nacido recibió su profilaxis.</li>
+          <li>Control de infecciones: precauciones estándar, tamizaje de donantes y desinfección de superficies —el virus aguanta <b>7 días</b> secándose.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li>Único virus DNA humano que usa <b>transcriptasa reversa</b>; su polimerasa tiene actividad DNA- y RNA-dependiente.</li>
+          <li>Receptor <b>NTCP</b>; el genoma llega al núcleo como rcDNA y se convierte en <b>cccDNA</b>: base de la cronicidad, de la reactivación y de que no exista cura.</li>
+          <li><b>HBeAg</b> = replicación e infectividad; no forma parte del virión; su paso transplacentario explica la tolerancia neonatal.</li>
+          <li><b>Anti-HBc IgM</b> es el único marcador de la ventana; <b>anti-HBc negativo con anti-HBs positivo</b> = vacunado.</li>
+          <li>Daño <b>inmunomediado por CD8</b>; biopsia con hepatocitos en <b>vidrio esmerilado</b>.</li>
+          <li>Primera causa mundial de <b>hepatocarcinoma</b>, y la única que lo produce <b>sin cirrosis</b>.</li>
+          <li>Extrahepáticas: <b>poliarteritis nodosa</b> y <b>glomerulonefritis membranosa</b>.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«Las tres B»</b> del contagio: <b>B</b>lood (sangre), <b>B</b>edroom (sexual), <b>B</b>irthing (perinatal).</p>
+        <p><b>«s de sano, c de contagiado»</b> — anti-HB<b>s</b> solo = vacunado sano; si además hay anti-HB<b>c</b>, hubo contacto real con el virus.</p>
+        <p><b>«e de esparcir»</b> — HBeAg = el que esparce: alta carga, alta transmisión, peor pronóstico.</p>
+        <p><b>«90-30-5»</b> — cronificación por edad: <b>90 %</b> recién nacido, <b>30 %</b> preescolar, <b>&lt;5 %</b> adulto. La misma serie, invertida, sirve para la transmisión vertical con y sin profilaxis: <b>90 % → &lt;5 %</b>.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas y escenario mexicano</span>
+      <ul>
+        <li><b>HBsAg negativo no descarta</b> hepatitis B aguda: puede estar en ventana o ser una fulminante que ya lo aclaró. Pide anti-HBc IgM.</li>
+        <li><b>HBeAg negativo no significa inactivo</b>: el mutante precore replica a lo grande sin fabricar HBeAg. Mide el DNA.</li>
+        <li><b>«Resuelta» no es «erradicada»</b>: el anti-HBc positivo con inmunosupresión obliga a profilaxis antiviral.</li>
+        <li>México tiene prevalencia general baja (<b>~0,2–0,4 %</b>), pero con <b>focos en poblaciones indígenas de hasta 5–10 %</b> y predominio de los <b>genotipos F y H</b>. El caso de examen no es el turista: es la embarazada sin tamizaje cuyo recién nacido pierde la ventana de las 12 horas.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/Hepatitis_B.md</code> · Mandell PPID 2025, cap. 152 (virus de la hepatitis B), cap. 119 (hepatitis viral) y cap. 50 (antivirales frente a virus de hepatitis) · Terrault et al., AASLD 2018 <i>Hepatology</i> 2018;67(4):1560-1599 · EASL <i>J Hepatol</i> 2017;67(2):370-398 · OMS, guías de hepatitis B crónica 2024 · DHHS, TAR en adultos con VIH 2024 (coinfección HBV) · First Aid for the USMLE Step 1 2025, pp. 170-171 · Pocket Medicine 9e, 2025.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="poxviridae.html"><span class="k">← Anterior</span><span class="v">Poxviridae</span></a>
+        <a class="next" href="../virus-rna.html"><span class="k">Siguiente →</span><span class="v">Virus RNA</span></a></div>
+      <footer class="pf">
+        <span>Hepadnaviridae · 10 de 10 · árbol DNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

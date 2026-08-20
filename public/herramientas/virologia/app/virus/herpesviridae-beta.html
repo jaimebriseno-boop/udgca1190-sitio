@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herpesviridae — β — Virus DNA</title>
+<meta name="description" content="Herpesviridae — β. CMV · HHV-6A/6B · HHV-7 · latencia en monocitos">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-dna.html">Virus DNA</a><span class="sep">/</span>
+    <b>Herpesviridae — β</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-dna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus DNA · Familia 7 de 10 · Virología médica</p>
+    <h1>Herpesviridae — β</h1>
+    <p class="sub">CMV · HHV-6A/6B · HHV-7 · latencia en monocitos</p>
+    <div class="chips"><span class="chip g">dsDNA lineal 145–229 kb · CMV el mayor</span>
+  <span class="chip">Envuelto · cápside + tegumento · 200 nm</span>
+  <span class="chip">Replicación nuclear · ciclo lento</span>
+  <span class="chip r">CMV congénito: causa #1 de sordera no genética</span>
+  <span class="chip gold">Letermovir · valganciclovir · sin vacuna</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Herpesviridae — β · Virus DNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros</dt><dd><i>Cytomegalovirus</i> (CMV / HHV-5) · <i>Roseolovirus</i> (HHV-6A, HHV-6B, HHV-7)</dd></div>
+  <div class="cell"><dt>Latencia</dt><dd><b>Monocito CD14+ y progenitor CD34+</b> (CMV, HHV-6) · linfocito T CD4+ (HHV-7) · persistencia en glándula salival</dd></div>
+  <div class="cell"><dt>Receptor / tropismo</dt><dd>CMV: integrinas y heparán sulfato, entrada epitelial por el <b>pentámero</b> · HHV-6A: <b>CD46</b> · HHV-6B: <b>CD134 (OX40)</b> · HHV-7: linfocito T CD4+</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Saliva, orina, contacto sexual, leche materna, sangre y órganos, <b>vía vertical</b></dd></div>
+  <div class="cell"><dt>Seroprevalencia</dt><dd>CMV 50–90 % global, <b>México ~80 %</b> · HHV-6 &gt;95 % de adultos · HHV-7 en 53 % a los 2 años</dd></div>
+  <div class="cell"><dt>Sellos histológicos</dt><dd>CMV: célula gigante con inclusión intranuclear en <b>«ojo de búho»</b> · HHV-6: linfocito balonizado con inclusión intranuclear</dd></div>
+  <div class="cell"><dt>Síndrome pediátrico</dt><dd><b>Exantema súbito</b> (HHV-6B &gt; HHV-7) y <b>un tercio de las crisis febriles</b> hasta los 2 años</dd></div>
+  <div class="cell"><dt>Diagnóstico eje</dt><dd><b>PCR cuantitativa de DNA en plasma</b> calibrada al estándar OMS (UI/mL); histología + inmunohistoquímica para enfermedad tisular</dd></div>
+  <div class="cell"><dt>Antivirales</dt><dd>Ganciclovir · valganciclovir · foscarnet · cidofovir · <b>letermovir</b> (profilaxis) · <b>maribavir</b> (refractario). <b>Aciclovir no sirve</b></dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">De la enfermedad de inclusiones citomegálicas al trasplante</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>Década de 1950</b> — <b>Thomas Weller, Margaret Smith y Wallace Rowe</b> aíslan el virus de forma independiente; Weller lo bautiza <b>citomegalovirus</b> tras recuperarlo de un lactante con <b>enfermedad de inclusiones citomegálicas</b> (hepatoesplenomegalia, petequias, calcificaciones intracraneales, microcefalia y células grandes con inclusión en los tejidos).</li>
+      <li><b>Años 1960–90</b> — para el adulto el CMV era solo la <b>mononucleosis con heterófilos negativos</b>, hasta que se le vincula con neumonitis mortal en el trasplante hematopoyético, con enfermedad de órgano en el trasplante sólido y, después, con el sida: la <b>retinitis</b> era la primera causa de ceguera irreversible antes del TAR.</li>
+      <li><b>1986</b> — <b>Salahuddin</b> descubre el HHV-6 en pacientes con trastornos linfoproliferativos y VIH; poco después se demuestra que la variante <b>HHV-6B</b> es el agente del exantema súbito, mientras que HHV-6A casi nunca se asocia a enfermedad.</li>
+      <li><b>1990</b> — <b>Frenkel</b> aísla el HHV-7 de una persona sana; después se comprueba que también produce exantema súbito.</li>
+      <li><b>2017 y 2021</b> — <b>letermovir</b> (inhibidor de terminasa) se aprueba para profilaxis tras trasplante hematopoyético —y en 2023 en trasplante renal— y <b>maribavir</b> para la infección refractaria o resistente en el trasplantado.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué esta subfamilia es la del inmunodeprimido</span>
+      <p>Los tres son ubicuos, se adquieren en la infancia por saliva y quedan latentes en el <b>linaje mieloide</b>; en el inmunocompetente su historia clínica termina ahí. Su medicina real ocurre en dos escenarios: el <b>feto</b> (CMV) y el paciente con <b>inmunidad T abolida</b> (trasplante, sida avanzado).</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Betaherpesvirinae: los HHV 5, 6 y 7</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd>Herpesviridae — del griego <i>herpein</i>, «reptar»</dd>
+      <dt>Subfamilia</dt><dd>Betaherpesvirinae — ciclo lento, espectro celular estrecho <i>in vitro</i>, <b>citomegalia</b> (la célula infectada se agranda)</dd>
+      <dt>Géneros humanos</dt><dd><i>Cytomegalovirus</i> · <i>Roseolovirus</i></dd>
+      <dt>Especies</dt><dd><i>Human betaherpesvirus 5</i> (CMV) · <i>Human betaherpesvirus 6A</i> · <i>6B</i> · <i>Human betaherpesvirus 7</i></dd>
+      <dt>Etimología útil</dt><dd><i>Cyto-megalo</i> = célula grande; <i>Roseolo-</i> = roséola, el exantema rosado que sigue a la fiebre</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Citomegalovirus humano</span><span class="vg">CMV · HHV-5</span></div>
+        <div class="vbd">
+          <p>Genoma de <b>229–236 kb según la cepa de referencia — el mayor de los herpesvirus humanos</b> (229 kbp en la tabla 141.1 de Mandell), con más de 165 marcos de lectura, buena parte dedicados a manipular la respuesta del huésped.</p>
+          <p><b>Tropismo amplísimo</b>: epitelio glandular y ductal, endotelio vascular, fibroblastos y células mieloides. Sin serotipos clínicos; la variación de gB, gN y gH solo se usa en epidemiología molecular.</p>
+          <p>Clínica eje: <b>congénito</b>, retinitis y colitis en VIH, <b>enfermedad del injerto</b>.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Roseolovirus</span><span class="vg">HHV-6A · HHV-6B · HHV-7</span></div>
+        <div class="vbd">
+          <p><b>HHV-6A y HHV-6B</b> comparten 90 % de identidad nucleotídica, pero difieren lo bastante en secuencia, receptor y tropismo para considerarse especies distintas: <b>6B produce prácticamente toda la enfermedad</b> (&gt;95 % de las reactivaciones postrasplante) y <b>6A casi nunca</b>. Genoma ~165 kb.</p>
+          <p><b>HHV-7</b>: genoma ~145 kb y 20–75 % de identidad aminoacídica con HHV-6. Tropismo más estrecho (T CD4+, glándula salival, pulmón y piel); se excreta en saliva a títulos altos <b>toda la vida</b>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«5-6-7 son los β»</b> — CMV (HHV-5), HHV-6 y HHV-7: los tres se contagian por <b>saliva</b>, los tres quedan latentes fuera del ganglio sensitivo y los tres reactivan en el trasplantado.</p>
+      <p>Latencia por subfamilia: <b>α = ganglio sensitivo · β = monocito y glándula · γ = linfocito</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Cuatro capas, un tegumento enorme</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura en cuatro capas del virión de citomegalovirus con sus complejos de entrada">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <circle cx="195" cy="180" r="118" fill="rgba(69,90,140,.13)" stroke="#36476E" stroke-width="1.6"/>
+        <g stroke="#701d14" stroke-width="2.2" stroke-linecap="round">
+          <line x1="313" y1="180" x2="328" y2="180"/>
+          <line x1="297" y1="239" x2="310" y2="247"/>
+          <line x1="254" y1="282" x2="262" y2="295"/>
+          <line x1="195" y1="298" x2="195" y2="313"/>
+          <line x1="136" y1="282" x2="128" y2="295"/>
+          <line x1="93" y1="239" x2="80" y2="247"/>
+          <line x1="77" y1="180" x2="62" y2="180"/>
+          <line x1="93" y1="121" x2="80" y2="113"/>
+          <line x1="136" y1="78" x2="128" y2="65"/>
+          <line x1="195" y1="62" x2="195" y2="47"/>
+          <line x1="254" y1="78" x2="262" y2="65"/>
+          <line x1="297" y1="121" x2="310" y2="113"/>
+        </g>
+        <g fill="#701d14">
+          <circle cx="330" cy="180" r="3.2"/><circle cx="312" cy="248" r="3.2"/><circle cx="263" cy="297" r="3.2"/>
+          <circle cx="195" cy="315" r="3.2"/><circle cx="127" cy="297" r="3.2"/><circle cx="78" cy="248" r="3.2"/>
+          <circle cx="60" cy="180" r="3.2"/><circle cx="78" cy="112" r="3.2"/><circle cx="127" cy="63" r="3.2"/>
+          <circle cx="195" cy="45" r="3.2"/><circle cx="263" cy="63" r="3.2"/><circle cx="312" cy="112" r="3.2"/>
+        </g>
+        <circle cx="195" cy="180" r="88" fill="rgba(144,48,58,.16)" stroke="#90303a" stroke-width="4" stroke-dasharray="3 4"/>
+        <polygon points="253,180 224,130 166,130 137,180 166,230 224,230" fill="rgba(92,122,87,.16)" stroke="#5C7A57" stroke-width="2"/>
+        <path d="M167 164 q14 -12 28 0 t28 0 M162 180 q16 -12 33 0 t33 0 M167 197 q14 -12 28 0 t28 0" fill="none" stroke="#27334F" stroke-width="2"/>
+        <g font-family="'Inter', sans-serif" font-size="10.5" fill="#6b7585">
+          <line x1="331" y1="112" x2="466" y2="70" stroke="#455A8C" stroke-width="1"/>
+          <text x="474" y="66" font-size="11.5" font-weight="600" fill="#701d14">Envoltura y glicoproteínas</text>
+          <text x="474" y="83">gB (fusión) · trímero gH/gL/gO → fibroblasto</text>
+          <text x="474" y="98">pentámero gH/gL/UL128-UL130-UL131A → epitelio</text>
+          <text x="474" y="113">y endotelio; blanco principal de los neutralizantes</text>
+          <text x="474" y="128">Receptores: integrinas y heparán sulfato</text>
+          <line x1="283" y1="180" x2="466" y2="158" stroke="#455A8C" stroke-width="1"/>
+          <text x="474" y="154" font-size="11.5" font-weight="600" fill="#90303a">Tegumento — la capa más gruesa</text>
+          <text x="474" y="171">pp65 (UL83): antígeno de la antigenemia clásica</text>
+          <text x="474" y="186">Entrega proteínas listas para encender el programa</text>
+          <text x="474" y="201">inmediato-temprano sin esperar traducción</text>
+          <line x1="253" y1="205" x2="466" y2="226" stroke="#455A8C" stroke-width="1"/>
+          <text x="474" y="222" font-size="11.5" font-weight="600" fill="#5C7A57">Cápside icosaédrica</text>
+          <text x="474" y="239">162 capsómeros; se ensambla dentro del núcleo</text>
+          <line x1="215" y1="215" x2="466" y2="264" stroke="#455A8C" stroke-width="1"/>
+          <text x="474" y="260" font-size="11.5" font-weight="600" fill="#27334F">Genoma dsDNA lineal</text>
+          <text x="474" y="277">CMV 229–236 kb y &gt;165 ORFs — el mayor</text>
+          <text x="474" y="292">humanos · HHV-6 ≈165 kb · HHV-7 ≈145 kb</text>
+        </g>
+        <text x="60" y="326" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">200 NM · CUATRO CAPAS · PROGENIE INFECCIOSA A LAS 48 H</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión de CMV. Perder cualquiera de las glicoproteínas de entrada anula la infectividad; el pentámero decide si el virus entra a epitelio y endotelio, y por eso las vacunas candidatas lo llevan como antígeno.</figcaption>
+    </figure>
+
+    <h4>Biología esencial</h4>
+    <ul>
+      <li><b>Ciclo nuclear en cascada</b>: genes inmediatos-tempranos → tempranos → tardíos, con replicación del DNA por la polimerasa <b>UL54</b>, fosforilación por la cinasa <b>UL97</b> y empaquetamiento del genoma por el complejo <b>terminasa (UL56, UL51, UL89)</b>. Estos tres nombres son, literalmente, los blancos de todos los antivirales.</li>
+      <li><b>Ciclo lento</b>: la progenie infecciosa aparece hacia las 48 horas y el efecto citopático en cultivo de fibroblastos tarda de <b>1 a 6 semanas</b>. El <i>shell vial</i> con tinción de antígeno temprano lo acortaba a 24–72 h; hoy la PCR desplazó a ambos.</li>
+      <li><b>Receptores de los roseolovirus</b>: HHV-6A entra por <b>CD46</b> y HHV-6B por <b>CD134 (OX40)</b>, ambos a través del complejo gH/gL/gQ1/gQ2. Es la diferencia molecular que explica que 6B sea el patógeno del lactante y 6A un huésped casi mudo.</li>
+      <li><b>Espectro celular</b>: HHV-6 infecta T CD4+ (blanco primario), otros T y B, células NK, monocitos, macrófagos, epitelio y células neurales; <b>6A tiene mayor predilección neural</b> y 6B predomina en sangre periférica.</li>
+      <li><b>Estabilidad</b>: virus envuelto y lábil, sin fómite eficiente. Se transmite por secreciones frescas: de ahí que el <b>lavado de manos tras cambiar pañales o limpiar saliva</b> sea la principal medida preventiva de la embarazada seronegativa.</li>
+    </ul>
+    <div class="box clin"><span class="lbl">Traducción clínica</span>
+      <p>Aciclovir <b>no funciona</b> contra CMV ni contra HHV-6 porque estos virus no tienen timidina cinasa que lo active. Ganciclovir sí actúa porque <b>UL97 (y su homólogo U69 en HHV-6) lo fosforila</b>. Toda la resistencia clínica sale de esa dependencia.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Latencia mieloide y aritmética de linfocitos T</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruta del citomegalovirus desde la mucosa hasta la latencia mieloide y la reactivación">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <rect x="20" y="30" width="280" height="22" rx="4" fill="rgba(69,90,140,.18)"/>
+        <text x="30" y="45" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#27334F">FASE 1 · PRIMOINFECCIÓN — SEMANAS</text>
+        <rect x="312" y="30" width="288" height="22" rx="4" fill="rgba(92,122,87,.16)"/>
+        <text x="322" y="45" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#1a6b42">FASE 2 · LATENCIA MIELOIDE DE POR VIDA</text>
+        <rect x="612" y="30" width="268" height="22" rx="4" fill="rgba(112,29,20,.10)"/>
+        <text x="622" y="45" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#701d14">FASE 3 · REACTIVACIÓN Y ENFERMEDAD</text>
+
+        <line x1="45" y1="140" x2="865" y2="140" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="865,140 855,135 855,145" fill="#455A8C"/>
+
+        <g>
+          <circle cx="85" cy="140" r="17" fill="#27334F"/>
+          <text x="85" y="144" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">1</text>
+          <text x="85" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Entrada</text>
+          <text x="85" y="195" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Saliva, orina, sexo, leche,</text>
+          <text x="85" y="208" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">sangre, injerto, vía vertical</text>
+        </g>
+        <g>
+          <circle cx="230" cy="140" r="17" fill="#27334F"/>
+          <text x="230" y="144" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">2</text>
+          <text x="230" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Epitelio mucoso</text>
+          <text x="230" y="195" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Replicación en orofaringe</text>
+          <text x="230" y="208" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">y epitelio genital</text>
+        </g>
+        <g>
+          <circle cx="375" cy="140" r="17" fill="#36476E"/>
+          <text x="375" y="144" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">3</text>
+          <text x="375" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Viremia</text>
+          <text x="375" y="195" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Asociada a células</text>
+          <text x="375" y="208" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">mononucleares · siembra</text>
+        </g>
+        <g>
+          <circle cx="520" cy="140" r="17" fill="#5C7A57"/>
+          <text x="520" y="144" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">4</text>
+          <text x="520" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Órganos y glándulas</text>
+          <text x="520" y="195" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Epitelio ductal, endotelio,</text>
+          <text x="520" y="208" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">fibroblasto, mieloides</text>
+        </g>
+        <g>
+          <circle cx="665" cy="140" r="17" fill="#5C7A57"/>
+          <text x="665" y="144" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">5</text>
+          <text x="665" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Latencia</text>
+          <text x="665" y="195" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Monocito CD14+ y</text>
+          <text x="665" y="208" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">progenitor CD34+</text>
+        </g>
+        <g>
+          <circle cx="820" cy="140" r="17" fill="#701d14"/>
+          <text x="820" y="144" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">6</text>
+          <text x="820" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Reactivación</text>
+          <text x="820" y="195" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">TNF-α, catecolaminas,</text>
+          <text x="820" y="208" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">sepsis, caída de T CD4/CD8</text>
+        </g>
+
+        <rect x="40" y="238" width="390" height="72" rx="6" fill="rgba(69,90,140,.10)" stroke="#455A8C" stroke-width="1.1"/>
+        <text x="56" y="258" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">Evasión inmune del CMV</text>
+        <text x="56" y="275" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">US2 · US3 · US6 · US10 · US11 degradan o retienen el MHC-I</text>
+        <text x="56" y="290" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">UL18 (homólogo de MHC-I) y UL40 desactivan a la célula NK</text>
+        <text x="56" y="305" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">UL111A codifica una interleucina-10 viral inmunosupresora</text>
+
+        <rect x="460" y="238" width="400" height="72" rx="6" fill="rgba(112,29,20,.08)" stroke="#701d14" stroke-width="1.1"/>
+        <text x="476" y="258" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">Cómo produce daño</text>
+        <text x="476" y="275" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Efecto citopático directo + inflamación del huésped, sobre todo</text>
+        <text x="476" y="290" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">en alvéolo y mucosa gastrointestinal · la endotelitis explica la</text>
+        <text x="476" y="305" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">vasculopatía del injerto y la aterogénesis acelerada</text>
+
+        <text x="40" y="330" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La primoinfección se resuelve; el genoma no. Toda la clínica del β es la aritmética entre carga latente e inmunidad T específica.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Historia natural del CMV. El nodo 5 es el que hay que memorizar: la latencia mieloide es la razón por la que un hemoderivado o un injerto transmiten el virus y por la que la sepsis y los esteroides lo despiertan.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">CMV en el embarazo</span>
+        <ul>
+          <li>La transmisión intrauterina ocurre en <b>~30 % de las primoinfecciones maternas</b> y solo en <b>1–4 %</b> de las infecciones no primarias (reactivación o reinfección).</li>
+          <li>La infección de <b>fin del primer trimestre o inicio del segundo</b> produce el daño estructural del SNC más grave, igual que ocurre con Zika y rubéola.</li>
+          <li>La inmunidad preconcepcional protege parcialmente, pero <b>no impide</b> congénitos sintomáticos: «madre seropositiva, feto a salvo» es un paradigma en revisión.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">HHV-6 y su rareza: la integración cromosómica</span>
+        <ul>
+          <li>En <b>0.7–1.5 % de las personas</b> el genoma de HHV-6 está <b>integrado en el cromosoma</b> (ciHHV-6) y se hereda por línea germinal: cada célula lleva una copia.</li>
+          <li>Consecuencia práctica: una <b>PCR con carga altísima y estable</b> (&gt;320 000 copias/mL en sangre total o ≥1 copia por leucocito) no es enfermedad, es integración.</li>
+          <li>El <b>86 % de las infecciones «congénitas» por HHV-6</b> —1 % de los nacimientos— son en realidad ciHHV-6 y son asintomáticas.</li>
+          <li>El virus parece entrar al SNC por la <b>vía olfatoria</b>: el DNA se concentra en bulbo y tracto olfatorio y en moco nasal.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">Quién reactiva HHV-6 y HHV-7</span>
+      <p>El <b>50 % de los receptores de trasplante hematopoyético</b> y el <b>20–33 % de los de órgano sólido</b> tienen DNA de HHV-6 o HHV-7 en sangre, casi siempre en el <b>primer mes</b> y sin enfermedad. También reactiva el <b>54 % de los críticos no inmunodeprimidos</b> y es frecuente en el <b>DRESS</b>: una PCR positiva, sola, no diagnostica nada.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Un virus distinto según el huésped</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>CMV según el huésped</h4>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Huésped</th><th>Síndrome</th><th>Claves</th></tr></thead>
+      <tbody>
+        <tr><td><b>Inmunocompetente</b></td><td>Mononucleosis por CMV</td><td>Fiebre prolongada, fatiga, transaminasas elevadas, linfocitosis atípica, esplenomegalia variable. <b>Monotest heterófilo negativo</b> y <b>sin amigdalitis exudativa marcada</b>: ahí se separa del VEB.</td></tr>
+        <tr><td><b>Feto y recién nacido</b></td><td>CMV congénito</td><td><b>0.5–1 % de los nacidos vivos.</b> <b>Tríada de Sabin</b>: microcefalia + calcificaciones periventriculares + coriorretinitis. Hepatoesplenomegalia, petequias «<i>blueberry muffin</i>», trombocitopenia.</td></tr>
+        <tr><td><b>Trasplante de órgano sólido</b></td><td>Enfermedad por CMV = síntomas + viremia</td><td>Síndrome viral (fiebre + leucopenia o trombocitopenia), <b>neumonitis</b> (sobre todo en pulmón), esofagitis, gastritis, <b>colitis con úlceras profundas</b>, hepatitis del injerto, encefalitis. <b>Riesgo máximo: D+/R−.</b></td></tr>
+        <tr><td><b>Trasplante hematopoyético</b></td><td>Reactivación temprana</td><td>Casi siempre en los primeros <b>100 días</b>; la <b>neumonía por CMV</b> fue históricamente de altísima mortalidad. Vigilancia con PCR semanal tras el injerto.</td></tr>
+        <tr><td><b>VIH con CD4 &lt;50</b></td><td>Retinitis y enfermedad de órgano</td><td><b>Retinitis</b> con hemorragias y exudados algodonosos («<i>sightomegalovirus</i>»): &gt;25 % en la era pre-TAR, &lt;5 % después. Colitis, esofagitis, encefalitis o ventriculitis y <b>polirradiculopatía lumbosacra</b>.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Sordera: la cifra que se pregunta</span>
+      <p>El CMV congénito es la <b>primera causa no genética de hipoacusia neurosensorial</b> y explica <b>~25 % de todas las hipoacusias infantiles</b>. Dos trampas: la hipoacusia aparece también en el <b>8–12 % de los congénitos asintomáticos</b>, y <b>solo la mitad</b> de los niños que la desarrollarán la tienen al nacer, de modo que <b>el tamiz auditivo neonatal normal no descarta nada</b>: la pérdida puede aparecer y progresar durante la infancia.</p>
+    </div>
+
+    <h4>Roseolovirus: la fiebre del lactante</h4>
+    <ol class="steps">
+      <li><b>Incubación 1–2 semanas</b> Más del 90 % de los lactantes infectados por HHV-6 tienen síntomas: irritabilidad, rinorrea y fiebre en más de la mitad; tos, diarrea y exantema en un tercio.</li>
+      <li><b>Fiebre alta sin foco</b> Edad media de la primoinfección <b>9.4 meses</b>; temperatura media <b>39.6 °C</b> y más del 50 % con ≥40 °C; duración mediana de 6 días. El HHV-6 causa <b>5–25 % de las consultas a urgencias por fiebre del lactante</b>, y hasta el <b>20 % de las de 6 a 12 meses</b>.</li>
+      <li><b>Crisis febriles</b> HHV-6 explica <b>un tercio de las crisis febriles hasta los 2 años</b>; el 13 % de los infectados convulsiona (mediana 14 meses) y en el <b>32 % del estatus epiléptico febril</b> hay viremia por HHV-6. Sus crisis son más largas, más graves y más recurrentes.</li>
+      <li><b>Exantema súbito (roséola, sexta enfermedad)</b> Fiebre alta de 3–4 días y, <b>al desaparecer la fiebre</b>, exantema macular o maculopapular que empieza en cuello o tronco, se extiende a extremidades y dura de horas a 2 días. Solo el <b>25 % de las primoinfecciones en EE. UU.</b> debuta así, frente a <b>~75 % en Japón</b>.</li>
+      <li><b>Acompañantes</b> Adenopatía cervical y occipital, eritema timpánico, conjuntivitis, edema palpebral, fontanela abombada, diarrea y <b>manchas de Nagayama</b> (pápulas rojas en paladar blando y base de la úvula). Leucocitosis el primer día seguida de <b>leucopenia con linfocitosis relativa</b>.</li>
+    </ol>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">HHV-6 fuera del lactante</span>
+        <ul>
+          <li><b>Mononucleosis del adulto</b> con fiebre, adenopatías, exantema y linfocitos atípicos; el ganglio muestra inclusiones intranucleares y citoplásmicas.</li>
+          <li><b>Encefalitis del niño sano</b>, con o sin exantema: panencefalitis que puede dejar secuelas. El 8 % de los niños hospitalizados por encefalitis o fiebre con crisis tenía HHV-6 agudo.</li>
+          <li>Casos aislados de hepatitis fulminante, miocarditis, púrpura trombocitopénica y síndrome hemofagocítico. Su papel en <b>esclerosis múltiple y Alzheimer es controvertido</b>, y <b>no</b> causa síndrome de fatiga crónica.</li>
+        </ul>
+      </div>
+      <div class="box clin"><span class="lbl">PALE — encefalitis límbica postrasplante</span>
+        <ul>
+          <li>La manifestación mejor documentada de HHV-6 en el inmunodeprimido. Aparece <b>2 a 6 semanas tras el trasplante hematopoyético</b>.</li>
+          <li>Prevalencia del <b>8.3 % con sangre de cordón</b> frente a <b>0.5 %</b> con otras fuentes de progenitores; también con donante haploidéntico y EICH aguda.</li>
+          <li>Cefalea y confusión con exploración no focal que progresa a crisis, psicosis y pares craneales. <b>Amnesia anterógrada, insomnio y SIADH</b> son el sello.</li>
+          <li>RM inicialmente normal; con el tiempo, <b>alteración del lóbulo temporal medial en el 75 %</b>. LCR con proteínas altas en dos tercios y pleocitosis linfocítica leve en la minoría.</li>
+          <li><b>Mitad de los receptores de cordón con PALE fallecieron</b>; los supervivientes quedan con atrofia hipocampal y déficit de memoria que impide volver al trabajo o a la escuela.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box trap"><span class="lbl">Diferencial y trampas</span>
+      <ul>
+        <li><b>Roséola vs sarampión</b>: en la roséola el niño <b>mejora cuando aparece el exantema</b>; en sarampión el exantema llega con el pico de fiebre y el niño está peor.</li>
+        <li><b>Exantema tras un antibiótico</b> en el lactante febril: antes de etiquetar alergia a la penicilina, piense en exantema súbito.</li>
+        <li><b>HHV-7</b> produce fiebre alta (media 40.1 °C) y <b>crisis febriles a mayor edad que HHV-6</b> (12–63 meses), con leucopenia frecuente; también causa exantema súbito, pero es la minoría de los casos.</li>
+        <li>En el trasplantado, la asociación de HHV-6 con neumonitis, hepatitis, colitis o rechazo renal es <b>débil</b>: reactiva tanto que la presencia del DNA no prueba causalidad.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">La PCR positiva no siempre es enfermedad</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Plasma</b></td><td>PCR cuantitativa de DNA-CMV</td><td><b>Estándar de oro</b> para vigilancia y diagnóstico en trasplante y VIH. Calibrada al estándar OMS en <b>UI/mL</b>; aun así, siga la tendencia <b>en el mismo laboratorio</b>.</td></tr>
+        <tr><td><b>Tejido</b> (colon, esófago, hígado, médula)</td><td>Histología + inmunohistoquímica</td><td>Inclusión intranuclear en <b>«ojo de búho»</b> con inclusiones citoplásmicas. La IHQ aumenta la sensibilidad: es el <b>estándar de enfermedad tisular cuando la viremia es baja o nula</b>.</td></tr>
+        <tr><td><b>LCR</b></td><td>PCR de CMV</td><td>En encefalitis, ventriculitis y polirradiculitis. La <b>pleocitosis de predominio polimorfonuclear</b> en una polirradiculopatía de paciente con sida es muy sugestiva.</td></tr>
+        <tr><td><b>Suero</b></td><td>IgG, IgM y <b>avidez de IgG</b></td><td>Tamizaje <b>donante/receptor</b> antes del trasplante para estratificar riesgo. En embarazo, <b>avidez baja = primoinfección de menos de 3 meses</b>.</td></tr>
+        <tr><td><b>Orina o saliva del RN</b></td><td>PCR en las primeras <b>3 semanas</b></td><td>Alta sensibilidad; la saliva requiere confirmación. Después de los 21 días ya <b>no se puede distinguir</b> congénito de perinatal. La <b>sangre seca de talón</b> permite el diagnóstico retrospectivo.</td></tr>
+        <tr><td><b>Leucocitos</b></td><td>Antigenemia pp65</td><td>Semicuantitativa y técnico-dependiente: <b>en desuso</b>, desplazada por la PCR.</td></tr>
+        <tr><td><b>Plasma / LCR</b></td><td>PCR de HHV-6 o HHV-7</td><td>En el lactante sano el diagnóstico es <b>clínico</b> o por seroconversión en sueros pareados. En el inmunodeprimido solo orienta una carga <b>alta o en ascenso</b>; detectar RNA o proteínas en tejido es mucho más específico.</td></tr>
+        <tr><td><b>Plasma</b></td><td>Secuenciación UL97 / UL54 (y UL56)</td><td>Se pide cuando la viremia <b>no responde tras 2 semanas</b> de tratamiento correcto y bien dosificado.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="box trap"><span class="lbl">Errores frecuentes</span>
+        <ul>
+          <li><b>Colitis o esofagitis por CMV con PCR plasmática negativa</b>: la enfermedad tisular puede cursar sin viremia. Si hay sospecha, se toma biopsia.</li>
+          <li><b>Confundir infección con enfermedad</b>: en trasplante, la mitad reactiva HHV-6 y una gran proporción reactiva CMV sin enfermar. Enfermedad = síntomas + virus + <b>exclusión de otras causas</b>.</li>
+          <li><b>ciHHV-6</b>: carga enorme y constante. Se confirma con <b>PCR digital</b> (relación virus/célula = 1) o buscando DNA en <b>uñas y folículo piloso</b>, donde solo aparece en los integrados.</li>
+          <li>Un <b>ascenso de título de anticuerpos anti-HHV-6</b> no basta: las reactivaciones asintomáticas también lo producen.</li>
+        </ul>
+      </div>
+      <div class="box clin"><span class="lbl">Qué pedir en cada escenario</span>
+        <ul>
+          <li><b>Fiebre + leucopenia postrasplante</b> → PCR de CMV en plasma.</li>
+          <li><b>Diarrea con úlceras profundas en colonoscopia</b> → biopsia con IHQ, no solo PCR en sangre.</li>
+          <li><b>CD4 &lt;50 con moscas volantes o escotoma</b> → <b>fondo de ojo con oftalmólogo hoy</b>; la retinitis se diagnostica mirando, no con PCR.</li>
+          <li><b>RN con microcefalia o hipoacusia</b> → PCR en orina antes de las 3 semanas.</li>
+          <li><b>Amnesia, crisis y SIADH 2–6 semanas tras un trasplante de cordón</b> → PCR de HHV-6 en LCR y RM de lóbulos temporales.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Cinco fármacos, tres blancos, sin vacuna</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Blancos moleculares de los antivirales contra citomegalovirus y mutaciones de resistencia">
+        <rect width="900" height="310" fill="#FFFFFF"/>
+        <text x="20" y="24" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">TRES BLANCOS EN EL CICLO VIRAL</text>
+        <rect x="20" y="34" width="250" height="42" rx="6" fill="rgba(69,90,140,.16)" stroke="#455A8C" stroke-width="1.1"/>
+        <text x="145" y="52" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">UL97 · fosfotransferasa</text>
+        <text x="145" y="67" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">activa el profármaco por fosforilación</text>
+        <line x1="270" y1="55" x2="308" y2="55" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="314,55 304,50 304,60" fill="#455A8C"/>
+        <rect x="316" y="34" width="250" height="42" rx="6" fill="rgba(92,122,87,.14)" stroke="#5C7A57" stroke-width="1.1"/>
+        <text x="441" y="52" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">UL54 · DNA polimerasa</text>
+        <text x="441" y="67" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">copia el genoma en el núcleo</text>
+        <line x1="566" y1="55" x2="604" y2="55" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="610,55 600,50 600,60" fill="#455A8C"/>
+        <rect x="612" y="34" width="268" height="42" rx="6" fill="rgba(112,29,20,.10)" stroke="#701d14" stroke-width="1.1"/>
+        <text x="746" y="52" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">Terminasa · UL56-UL51-UL89</text>
+        <text x="746" y="67" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">corta y empaqueta el DNA en la cápside</text>
+
+        <rect x="20" y="100" width="164" height="88" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="20" y="100" width="4" height="88" rx="2" fill="#27334F"/>
+        <text x="34" y="120" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">Ganciclovir y</text>
+        <text x="34" y="134" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">valganciclovir</text>
+        <text x="34" y="151" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">UL97 lo fosforila y</text>
+        <text x="34" y="164" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">luego frena a UL54</text>
+        <text x="34" y="181" font-family="'Inter', sans-serif" font-size="9.5" fill="#701d14">Tox: mielosupresión</text>
+
+        <rect x="196" y="100" width="164" height="88" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="196" y="100" width="4" height="88" rx="2" fill="#5C7A57"/>
+        <text x="210" y="120" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Foscarnet</text>
+        <text x="210" y="137" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Análogo de pirofosfato:</text>
+        <text x="210" y="150" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">bloquea UL54 sin</text>
+        <text x="210" y="163" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">necesitar fosforilación</text>
+        <text x="210" y="181" font-family="'Inter', sans-serif" font-size="9.5" fill="#701d14">Tox: riñón y electrolitos</text>
+
+        <rect x="372" y="100" width="164" height="88" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="372" y="100" width="4" height="88" rx="2" fill="#5C7A57"/>
+        <text x="386" y="120" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Cidofovir</text>
+        <text x="386" y="137" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Lo activan cinasas</text>
+        <text x="386" y="150" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">celulares; también</text>
+        <text x="386" y="163" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">inhibe a UL54</text>
+        <text x="386" y="181" font-family="'Inter', sans-serif" font-size="9.5" fill="#701d14">Tox: nefrotoxicidad grave</text>
+
+        <rect x="548" y="100" width="164" height="88" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="548" y="100" width="4" height="88" rx="2" fill="#701d14"/>
+        <text x="562" y="120" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">Letermovir</text>
+        <text x="562" y="137" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Inhibe la terminasa</text>
+        <text x="562" y="150" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">(UL56): profilaxis, no</text>
+        <text x="562" y="163" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">tratamiento establecido</text>
+        <text x="562" y="181" font-family="'Inter', sans-serif" font-size="9.5" fill="#1a6b42">No es mielotóxico</text>
+
+        <rect x="724" y="100" width="156" height="88" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <rect x="724" y="100" width="4" height="88" rx="2" fill="#27334F"/>
+        <text x="738" y="120" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">Maribavir</text>
+        <text x="738" y="137" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Inhibe directamente a</text>
+        <text x="738" y="150" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">UL97 · vía oral, para</text>
+        <text x="738" y="163" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">refractario o resistente</text>
+        <text x="738" y="181" font-family="'Inter', sans-serif" font-size="9.5" fill="#701d14">Tox: disgeusia, náusea</text>
+
+        <rect x="20" y="206" width="860" height="66" rx="6" fill="rgba(138,92,10,.09)" stroke="#8a5c0a" stroke-width="1.1"/>
+        <text x="36" y="226" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">Resistencia — dónde muta y qué sobrevive</text>
+        <text x="36" y="245" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">UL97 (C592G, M460V/I, H520Q, A594V, L595S, C603W): la más frecuente. Pierde ganciclovir y valganciclovir;</text>
+        <text x="36" y="260" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">conservan foscarnet y cidofovir · UL54: resistencia cruzada entre los tres · UL56/UL51/UL89: letermovir · T409M y H411Y: maribavir</text>
+
+        <text x="20" y="296" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Antes de cambiar de fármaco a ciegas, verifique dosis, función renal y adherencia: la mayoría de las «resistencias» son subdosificación.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Los tres blancos moleculares del CMV y sus fármacos. El mapa explica por qué el foscarnet rescata la resistencia por UL97 (no necesita ser fosforilado) y por qué las mutaciones de UL54 arruinan las tres opciones clásicas a la vez.</figcaption>
+    </figure>
+
+    <h4>Esquemas de referencia</h4>
+    <ul>
+      <li><b>Ganciclovir IV 5 mg/kg cada 12 h por 14–21 días</b> como inducción, seguido de mantenimiento. Es el fármaco de la enfermedad grave, del ojo, del SNC y de la neumonitis.</li>
+      <li><b>Valganciclovir VO 900 mg cada 12 h</b> en inducción y <b>900 mg cada 24 h</b> en mantenimiento; biodisponibilidad ~60 %.</li>
+      <li><b>Ajuste renal obligatorio</b> para ganciclovir, valganciclovir, foscarnet y cidofovir.</li>
+      <li><b>Órgano sólido con enfermedad por CMV</b>: valganciclovir oral si es leve o moderada y el tubo digestivo funciona; ganciclovir IV si es grave, si hay neumonitis o SNC, o si no tolera la vía oral. <b>Reducir la inmunosupresión</b>, sobre todo el micofenolato.</li>
+      <li><b>Neumonía por CMV tras trasplante hematopoyético</b>: ganciclovir IV + CMV-IVIG (estándar histórico, evidencia moderna mixta).</li>
+      <li><b>Retinitis en VIH</b>: valganciclovir oral sistémico ± inyecciones intravítreas de ganciclovir o foscarnet en lesiones de zona 1; iniciar TAR vigilando el <b>IRIS uveítico</b>.</li>
+      <li><b>CMV congénito sintomático con afectación del SNC</b>: <b>valganciclovir oral durante 6 meses</b>, con beneficio modesto sobre audición y neurodesarrollo. Hasta el <b>20 % desarrolla neutropenia</b> y requiere ajuste de dosis; en los asintomáticos no se recomienda de rutina.</li>
+      <li><b>Refractario o resistente</b>: maribavir oral (indicación en trasplante) o foscarnet y cidofovir según la mutación identificada.</li>
+    </ul>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Prevención en trasplante</span>
+        <ul>
+          <li><b>Tamizaje serológico donante/receptor</b> antes del trasplante para estratificar el riesgo.</li>
+          <li><b>Profilaxis universal</b> en D+/R−: valganciclovir <b>900 mg/día por 3–6 meses</b> (riñón, hígado) y <b>hasta 12 meses</b> en pulmón; letermovir como alternativa moderna.</li>
+          <li><b>Terapia anticipada</b> (<i>preemptive</i>): PCR semanal en plasma y tratamiento al cruzar el umbral del centro, típicamente <b>1 000–10 000 UI/mL</b>.</li>
+          <li><b>Hematopoyético R+</b>: <b>letermovir del día 0 al día +100</b> es el estándar actual; la alternativa es vigilancia con PCR semanal.</li>
+          <li><b>Banco de sangre</b>: hemoderivados leucorreducidos o de donante seronegativo para prematuros, embarazadas seronegativas y candidatos D−/R−.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Embarazo, VIH y control de infecciones</span>
+        <ul>
+          <li><b>Embarazo</b>: la medida con más respaldo es la <b>higiene de manos tras contacto con saliva y orina de niños pequeños</b>, principal factor de riesgo de seroconversión materna. Valaciclovir en dosis altas y la hiperinmunoglobulina anti-CMV <b>siguen siendo controvertidos</b>.</li>
+          <li><b>VIH</b>: el TAR eficaz que mantiene CD4 &gt;100 es la profilaxis real; <b>no se recomienda profilaxis farmacológica primaria</b>.</li>
+          <li><b>Aislamiento</b>: precauciones estándar; no requiere contacto, gota ni aérea. Higiene de manos rigurosa con neonatos e inmunocomprometidos.</li>
+          <li><b>Vacuna</b>: <b>no hay ninguna disponible</b>; varios candidatos de mRNA en fase 3.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box trap"><span class="lbl">HHV-6 y HHV-7: qué se puede y qué no</span>
+      <p><b>Ningún tratamiento ha demostrado eficacia en ensayos controlados.</b> <i>In vitro</i> ambos son sensibles a <b>ganciclovir, foscarnet y cidofovir</b> —los dos últimos, los más activos— y <b>resistentes a aciclovir</b>. Para la <b>encefalitis límbica</b> se recomienda ganciclovir, foscarnet o ambos <b>a dosis plenas</b> (foscarnet ≥180 mg/kg o ganciclovir ≥10 mg/kg): las dosis plenas respondieron mejor y la combinación redujo secuelas, no mortalidad. Además, <b>reducir la inmunosupresión</b>. La <b>profilaxis no se recomienda</b>: la toxicidad supera a la baja incidencia de enfermedad.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>Ojo de búho</b> intranuclear = CMV. Latencia en <b>monocitos y progenitores CD34+</b>.</li>
+          <li><b>D+/R−</b> = riesgo máximo en órgano sólido: el receptor sin memoria inmune recibe el virus con el injerto.</li>
+          <li><b>UL97</b> es la mutación de resistencia más frecuente: se pierde ganciclovir, <b>se conserva foscarnet</b>.</li>
+          <li><b>Letermovir</b> = terminasa, profilaxis, <b>no mielotóxico</b>; por eso desplazó al valganciclovir tras el trasplante hematopoyético.</li>
+          <li><b>Receptores</b>: HHV-6A → <b>CD46</b>; HHV-6B → <b>CD134/OX40</b>; CMV → integrinas y heparán sulfato.</li>
+          <li>CMV congénito: <b>0.5–1 % de los nacidos vivos</b>, primera causa no genética de <b>sordera neurosensorial</b>.</li>
+          <li>Aciclovir <b>no cubre</b> ningún betaherpesvirus.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«Primero la fiebre, después lo rosado»</b> — en el exantema súbito el exantema aparece <b>cuando cede</b> la fiebre y el niño ya se ve bien.</p>
+        <p><b>«Sabin: MiCaCo»</b> — <b>Mi</b>crocefalia + <b>Ca</b>lcificaciones periventriculares + <b>Co</b>riorretinitis en el CMV congénito. (En toxoplasmosis las calcificaciones son <b>difusas</b>.)</p>
+        <p><b>«97 fosforila, 54 copia, 56 empaqueta»</b> — UL97 activa el ganciclovir, UL54 es la polimerasa que atacan foscarnet y cidofovir, UL56 es la terminasa del letermovir.</p>
+        <p><b>«6 antes de 7, 6 en el cordón»</b> — HHV-6 se adquiere alrededor del año y HHV-7 entre los 2 y los 5; y es el HHV-6 el que da encefalitis límbica tras el trasplante de <b>cordón</b>.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas clásicas y escenario mexicano</span>
+      <ul>
+        <li><b>Mononucleosis con monotest negativo</b> = CMV (o toxoplasma, o VIH agudo), nunca «VEB con prueba fallida».</li>
+        <li><b>Carga altísima e invariable de HHV-6</b> en un paciente estable = <b>ciHHV-6 integrado</b>, no enfermedad: se confirma con PCR digital o buscando DNA en uñas y folículo piloso.</li>
+        <li><b>Tamiz auditivo neonatal normal</b> en un niño con CMV congénito no descarta: la mitad de las hipoacusias aparecen después y pueden progresar durante la infancia.</li>
+        <li><b>México</b>: seroprevalencia adulta de <b>~80 %</b> y <b>sin tamizaje universal de CMV congénito</b>. El diagnóstico depende de que alguien pida la PCR en orina <b>antes de los 21 días de vida</b> ante microcefalia, petequias, hipoacusia o restricción del crecimiento: es la brecha país de esta familia.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/CMV.md</code> y <code>patogenos/HHV6_HHV7.md</code> · Mandell PPID 10e, cap. 144 (citomegalovirus, pp. 1828-1843) y cap. 146 (HHV-6 y HHV-7, pp. 1862-1867) · Kotton et al., <i>Transplantation</i> 2018;102(6):900-931 (Third International Consensus, CMV en trasplante de órgano sólido) · Ljungman et al., <i>Lancet Infect Dis</i> 2019;19(8):e260-e272 (ECIL-7) · Rawlinson et al., <i>Lancet Infect Dis</i> 2017;17(6):e177-e188 (CMV congénito) · Chou, <i>Antiviral Res</i> 2020;176:104711 (resistencia) · First Aid for the USMLE Step 1 2025, pp. 159-163.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="herpesviridae-alpha.html"><span class="k">← Anterior</span><span class="v">Herpesviridae — α</span></a>
+        <a class="next" href="herpesviridae-gamma.html"><span class="k">Siguiente →</span><span class="v">Herpesviridae — γ</span></a></div>
+      <footer class="pf">
+        <span>Herpesviridae — β · 7 de 10 · árbol DNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

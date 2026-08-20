@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flaviviridae — Virus RNA</title>
+<meta name="description" content="Flaviviridae. Dengue · Zika · fiebre amarilla · WNV · JEV · VHC">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Flaviviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 8 de 18 · Virología médica</p>
+    <h1>Flaviviridae</h1>
+    <p class="sub">Dengue · Zika · fiebre amarilla · WNV · JEV · VHC</p>
+    <div class="chips"><span class="chip g">+ssRNA 11 kb · una sola poliproteína</span>
+  <span class="chip">Envuelto · icosaédrico · 50 nm</span>
+  <span class="chip">Replica en el retículo endoplásmico</span>
+  <span class="chip r">Dengue: ~400 millones de infecciones al año</span>
+  <span class="chip gold">17D · Qdenga · IXIARO · AAD curan el VHC</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Flaviviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros</dt><dd><i>Orthoflavivirus</i> (antes <i>Flavivirus</i>) · <i>Hepacivirus</i> (VHC) · <i>Pegivirus</i> (HPgV/GBV-C, sin enfermedad) · <i>Pestivirus</i> (veterinario)</dd></div>
+  <div class="cell"><dt>Vectores</dt><dd><b><i>Aedes</i></b>: dengue, fiebre amarilla, Zika · <b><i>Culex</i></b>: Nilo occidental, encefalitis japonesa, San Luis · garrapata: TBE, Powassan · <b>VHC: sangre, sin vector</b></dd></div>
+  <div class="cell"><dt>Genoma</dt><dd>RNA (+) de 11 kb (9.6 kb el VHC) traducido como <b>poliproteína única</b> → 3 estructurales (C, prM/M, E) + 7 no estructurales (NS1–NS5)</dd></div>
+  <div class="cell"><dt>Antígeno clave</dt><dd><b>Proteína E</b>: adhesión, hemaglutinación y fusión de <b>clase II</b>; único blanco neutralizante y base de todas las vacunas</dd></div>
+  <div class="cell"><dt>Dengue</dt><dd><b>4 serotipos</b>. Inmunidad homotípica de por vida, heterotípica ~2 años → la <b>segunda infección</b> por otro serotipo es la de riesgo (ADE)</dd></div>
+  <div class="cell"><dt>Fiebre amarilla</dt><dd>Tres fases (infección → remisión → <b>intoxicación</b>); letalidad <b>20–50 %</b> en la intoxicación</dd></div>
+  <div class="cell"><dt>Neuroinvasores</dt><dd>WNV: <b>80 % asintomático</b>, &lt;1 % neuroinvasivo · JEV: <b>1 caso por 250 infecciones</b>, letalidad 20–30 %, secuelas 30–50 %</dd></div>
+  <div class="cell"><dt>Zika</dt><dd>Único con <b>transmisión sexual y transplacentaria</b> relevantes; RNA en semen hasta 6 meses</dd></div>
+  <div class="cell"><dt>VHC</dt><dd>Cronifica en <b>80 %</b>; <b>no integra</b> → <b>curable</b>: SVR12 &gt;95 % con AAD pangenotípicos. Sin vacuna.</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">Del vómito negro a la primera infección crónica curable</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1648</b> — primer brote reconocido de <b>fiebre amarilla</b> en el Nuevo Mundo; el virus llegó de África occidental en barcos negreros infestados de <i>Aedes aegypti</i>. La epidemia de <b>Filadelfia de 1793</b> mató a la décima parte de la ciudad.</li>
+      <li><b>1780</b> — Benjamin Rush describe la <b>«fiebre quiebrahuesos»</b>: primera descripción del dengue en inglés. En <b>1900</b> se demuestra la transmisión por mosquito de la fiebre amarilla; en <b>1903</b>, la del dengue por <i>A. aegypti</i>.</li>
+      <li><b>Años 1930</b> — <b>Max Theiler</b> atenúa la cepa <b>17D</b> en embrión de pollo (Premio Nobel); casi un siglo después seguimos usando esa misma vacuna. En <b>1934</b> se aísla el virus de la <b>encefalitis japonesa</b>.</li>
+      <li><b>1944–1956</b> — <b>Sabin</b> demuestra que dos cepas de dengue no protegen cruzadamente: nacen los <b>serotipos</b>. En <b>1981 Cuba</b> sufre la primera gran epidemia de dengue hemorrágico del hemisferio occidental: <b>116 143 hospitalizaciones y 10 000 casos de choque</b>.</li>
+      <li><b>1989</b> — el laboratorio de <b>Houghton</b>, con Bradley (CDC), identifica el agente de la hepatitis «no-A no-B»; Rice completa los postulados de Koch. <b>Nobel 2020</b> a Alter, Houghton y Rice. Desde <b>2014</b> los antivirales de acción directa hacen del VHC la <b>primera infección viral crónica curable</b>.</li>
+      <li><b>1999 · 2015</b> — el <b>Nilo occidental</b> entra a Nueva York y coloniza el continente en cinco años; el <b>Zika</b> estalla en América y revela un flavivirus <b>teratógeno</b>.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué se estudian juntos</span>
+      <p>Seis virus con la misma arquitectura producen <b>cinco enfermedades distintas</b>: fuga plasmática (dengue), hepatitis hemorrágica (fiebre amarilla), encefalitis (WNV, JEV), embriopatía (Zika) y hepatitis crónica oncogénica (VHC). La biología es común; lo que cambia es el <b>tropismo</b> y la <b>respuesta del huésped</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Amarillovirales → Flaviviridae</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Orden</dt><dd>Amarillovirales</dd>
+      <dt>Familia</dt><dd>Flaviviridae — de <i>flavus</i>, «amarillo»: <b>toda la familia se llama así por la ictericia de la fiebre amarilla</b>, su especie prototipo</dd>
+      <dt>Géneros</dt><dd><i>Orthoflavivirus</i> · <i>Hepacivirus</i> · <i>Pegivirus</i> · <i>Pestivirus</i></dd>
+      <dt>Rasgo común</dt><dd>RNA (+) envuelto, ~50 nm, poliproteína única, replicación citoplásmica sobre membranas del retículo endoplásmico, <b>sin fase de DNA ni integración</b></dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Orthoflavivirus de <i>Aedes</i></span><span class="vg">fiebre · hemorragia</span></div>
+        <div class="vbd">
+          <p><b>Dengue 1–4</b> — cuatro serotipos que cocirculan; la reinfección heterotípica dispara el ADE.</p>
+          <p><b>Fiebre amarilla</b> — ciclo selvático (<i>Haemagogus</i>, monos) y urbano (<i>A. aegypti</i>, humano); África subsahariana y Sudamérica tropical.</p>
+          <p><b>Zika</b> — el único con transmisión sexual y vertical relevantes.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Orthoflavivirus de <i>Culex</i></span><span class="vg">complejo de la encefalitis japonesa</span></div>
+        <div class="vbd">
+          <p><b>Nilo occidental</b> — reservorio en <b>aves paseriformes</b>; humano y caballo son huéspedes terminales. Linaje 1 global, linaje 2 africano y europeo.</p>
+          <p><b>Encefalitis japonesa</b> — amplificado en <b>cerdos y garzas</b>; genotipos GI–GV; arrozales y picadura crepuscular.</p>
+          <p><b>San Luis</b> · <b>Usutu</b> · <b>Murray Valley</b> — mismo complejo antigénico, misma reactividad cruzada en serología.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Orthoflavivirus de garrapata</span><span class="vg">del viajero</span></div>
+        <div class="vbd">
+          <p><b>TBE</b> (de Europa occidental a Rusia, Japón y China) y <b>Powassan</b> (norte de EE. UU.): encefalitis; TBE tiene vacuna.</p>
+          <p><b>Kyasanur</b> (India) y <b>Alkhurma</b> (Península Arábiga): fiebres hemorrágicas de curso bifásico con manifestaciones neurológicas tardías.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Hepacivirus y Pegivirus</span><span class="vg">sin vector</span></div>
+        <div class="vbd">
+          <p><b>VHC, genotipos 1–6</b>. GT1 (1a/1b) predomina en México, EE. UU. y Europa; GT3 se asocia a esteatosis y mayor riesgo de hepatocarcinoma; GT4 en Egipto.</p>
+          <p><b>HPgV / GBV-C</b>: sin enfermedad establecida. <i>Pestivirus</i> es solo veterinario (diarrea viral bovina, peste porcina clásica).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«Culex al cerebro, Aedes a la sangre»</b> — los de <i>Culex</i> (WNV, JEV, San Luis) dan <b>encefalitis</b>; los de <i>Aedes</i> (dengue, fiebre amarilla, Zika) dan <b>fiebre, exantema y hemorragia</b>. La excepción teratógena es el Zika; la excepción sin vector, el VHC.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Una poliproteína, diez tijeras, tres fármacos</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión flavivirus y mapa de la poliproteína del ortoflavivirus y del virus de la hepatitis C con las dianas de los antivirales de acción directa">
+        <rect width="900" height="400" fill="#FFFFFF"/>
+
+        <circle cx="150" cy="158" r="86" fill="rgba(69,90,140,.10)" stroke="#36476E" stroke-width="1.6"/>
+        <circle cx="150" cy="158" r="66" fill="rgba(144,48,58,.14)" stroke="#90303a" stroke-width="1.2"/>
+        <circle cx="150" cy="158" r="42" fill="rgba(92,122,87,.16)" stroke="#5C7A57" stroke-width="1.6"/>
+        <path d="M118 140 q16 -12 32 0 t32 0 M118 158 q16 -12 32 0 t32 0 M118 176 q16 -12 32 0 t32 0" fill="none" stroke="#5C7A57" stroke-width="1.6"/>
+        <g stroke="#701d14" stroke-width="2.6" stroke-linecap="round">
+          <line x1="150" y1="72" x2="150" y2="60"/>
+          <line x1="211" y1="97" x2="219" y2="89"/>
+          <line x1="236" y1="158" x2="248" y2="158"/>
+          <line x1="211" y1="219" x2="219" y2="227"/>
+          <line x1="150" y1="244" x2="150" y2="256"/>
+          <line x1="89" y1="219" x2="81" y2="227"/>
+          <line x1="64" y1="158" x2="52" y2="158"/>
+          <line x1="89" y1="97" x2="81" y2="89"/>
+        </g>
+        <text x="150" y="30" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">VIRIÓN · 50 NM</text>
+        <text x="20" y="278" font-family="'Inter', sans-serif" font-size="10" fill="#701d14" font-weight="600">E (envoltura)</text>
+        <text x="106" y="278" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">90 dímeros planos, sin espículas salientes</text>
+        <text x="20" y="294" font-family="'Inter', sans-serif" font-size="10" fill="#90303a" font-weight="600">prM → M</text>
+        <text x="106" y="294" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">la furina del trans-Golgi la corta y madura el virión</text>
+        <text x="20" y="310" font-family="'Inter', sans-serif" font-size="10" fill="#5C7A57" font-weight="600">C + RNA</text>
+        <text x="106" y="310" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">nucleocápside; el RNA (+) es infeccioso por sí solo</text>
+        <text x="20" y="332" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Ciclo: endocitosis por clatrina → fusión en el endosoma</text>
+        <text x="20" y="347" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">ácido → replicación en el RE → gemación al lumen →</text>
+        <text x="20" y="362" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">maduración en Golgi → exocitosis. Nunca hay DNA.</text>
+
+        <line x1="290" y1="24" x2="290" y2="372" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+
+        <text x="320" y="46" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#27334F">ORTHOFLAVIVIRUS · 11 KB · CAPUCHA 5′ PUESTA POR NS5</text>
+        <rect x="330" y="58" width="24" height="26" rx="2" fill="#DCD7CE" stroke="#6b7585" stroke-width=".8"/>
+        <rect x="354" y="58" width="30" height="26" fill="rgba(144,48,58,.35)" stroke="#90303a" stroke-width=".8"/>
+        <rect x="384" y="58" width="34" height="26" fill="rgba(144,48,58,.35)" stroke="#90303a" stroke-width=".8"/>
+        <rect x="418" y="58" width="80" height="26" fill="#90303a"/>
+        <rect x="498" y="58" width="60" height="26" fill="rgba(70,97,125,.55)" stroke="#36476E" stroke-width=".8"/>
+        <rect x="558" y="58" width="28" height="26" fill="rgba(70,97,125,.28)" stroke="#36476E" stroke-width=".8"/>
+        <rect x="586" y="58" width="20" height="26" fill="rgba(70,97,125,.28)" stroke="#36476E" stroke-width=".8"/>
+        <rect x="606" y="58" width="70" height="26" fill="#36476E"/>
+        <rect x="676" y="58" width="16" height="26" fill="rgba(70,97,125,.28)" stroke="#36476E" stroke-width=".8"/>
+        <rect x="692" y="58" width="36" height="26" fill="rgba(70,97,125,.28)" stroke="#36476E" stroke-width=".8"/>
+        <rect x="728" y="58" width="120" height="26" fill="#27334F"/>
+        <rect x="848" y="58" width="22" height="26" rx="2" fill="#DCD7CE" stroke="#6b7585" stroke-width=".8"/>
+        <g font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f" text-anchor="middle">
+          <text x="369" y="97">C</text>
+          <text x="401" y="97">prM</text>
+          <text x="458" y="97" font-weight="600">E</text>
+          <text x="528" y="97" font-weight="600">NS1</text>
+          <text x="572" y="97">2A</text>
+          <text x="596" y="97">2B</text>
+          <text x="641" y="97" font-weight="600">NS3</text>
+          <text x="684" y="97">4A</text>
+          <text x="710" y="97">4B</text>
+          <text x="788" y="97" font-weight="600">NS5</text>
+        </g>
+        <text x="330" y="112" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#90303a">ESTRUCTURALES</text>
+        <text x="500" y="112" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#36476E">NO ESTRUCTURALES</text>
+
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">
+          <text x="320" y="136"><tspan font-weight="600" fill="#90303a">E</tspan> — receptor, fusión clase II, único antígeno neutralizante</text>
+          <text x="320" y="152"><tspan font-weight="600" fill="#36476E">NS1</tspan> — se secreta, daña el endotelio y es el antígeno de la prueba rápida</text>
+          <text x="320" y="168"><tspan font-weight="600" fill="#36476E">NS3</tspan> — proteasa (con NS2B) y helicasa; corta la poliproteína</text>
+          <text x="320" y="184"><tspan font-weight="600" fill="#27334F">NS5</tspan> — polimerasa y metiltransferasa, <tspan font-weight="600">sin corrección de errores</tspan></text>
+          <text x="320" y="200">NS2A, NS4A, NS4B y NS5 antagonizan el interferón tipo I</text>
+        </g>
+
+        <text x="320" y="230" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#701d14">HEPACIVIRUS (VHC) · 9.6 KB · SIN CAPUCHA: TRADUCE POR IRES</text>
+        <rect x="330" y="242" width="40" height="26" rx="2" fill="#DCD7CE" stroke="#6b7585" stroke-width=".8"/>
+        <rect x="370" y="242" width="28" height="26" fill="rgba(144,48,58,.35)" stroke="#90303a" stroke-width=".8"/>
+        <rect x="398" y="242" width="40" height="26" fill="#90303a"/>
+        <rect x="438" y="242" width="60" height="26" fill="#90303a"/>
+        <rect x="498" y="242" width="14" height="26" fill="rgba(144,48,58,.35)" stroke="#90303a" stroke-width=".8"/>
+        <rect x="512" y="242" width="36" height="26" fill="rgba(70,97,125,.28)" stroke="#36476E" stroke-width=".8"/>
+        <rect x="548" y="242" width="80" height="26" fill="#36476E"/>
+        <rect x="628" y="242" width="14" height="26" fill="rgba(70,97,125,.55)" stroke="#36476E" stroke-width=".8"/>
+        <rect x="642" y="242" width="48" height="26" fill="rgba(70,97,125,.28)" stroke="#36476E" stroke-width=".8"/>
+        <rect x="690" y="242" width="70" height="26" fill="#27334F"/>
+        <rect x="760" y="242" width="90" height="26" fill="#27334F"/>
+        <rect x="850" y="242" width="20" height="26" rx="2" fill="#DCD7CE" stroke="#6b7585" stroke-width=".8"/>
+        <g font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f" text-anchor="middle">
+          <text x="350" y="259">IRES</text>
+          <text x="384" y="281">C</text>
+          <text x="418" y="281">E1</text>
+          <text x="468" y="281" font-weight="600">E2</text>
+          <text x="530" y="281">NS2</text>
+          <text x="588" y="281" font-weight="600">NS3</text>
+          <text x="666" y="281">4B</text>
+          <text x="725" y="281" font-weight="600">NS5A</text>
+          <text x="805" y="281" font-weight="600">NS5B</text>
+        </g>
+        <path d="M548 296 v8 h94 v-8" fill="none" stroke="#8a5c0a" stroke-width="1.4"/>
+        <path d="M690 296 v8 h70 v-8" fill="none" stroke="#8a5c0a" stroke-width="1.4"/>
+        <path d="M760 296 v8 h90 v-8" fill="none" stroke="#8a5c0a" stroke-width="1.4"/>
+        <g font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.06em" fill="#8a5c0a" text-anchor="middle">
+          <text x="595" y="318">-PREVIR</text>
+          <text x="725" y="318">-ASVIR</text>
+          <text x="805" y="318">-BUVIR</text>
+        </g>
+        <g font-family="'Inter', sans-serif" font-size="9" fill="#6b7585" text-anchor="middle">
+          <text x="595" y="331">proteasa NS3/4A</text>
+          <text x="725" y="331">inhibidor de NS5A</text>
+          <text x="805" y="331">polimerasa NS5B</text>
+        </g>
+        <text x="320" y="352" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">E2 porta la región hipervariable HVR1, señuelo que frustra la vacuna;</text>
+        <text x="320" y="366" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">entra por CD81, SR-B1, claudina-1 y ocludina.</text>
+        <text x="20" y="392" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Una poliproteína cortada en piezas es un blanco ideal: por eso el VHC se cura.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. Virión y organización genómica. Retén el orden <b>C–prM–E–NS1–NS2A–NS2B–NS3–NS4A–NS4B–NS5</b>: las tres primeras arman la partícula, NS3 y NS5 son las enzimas y, en el VHC, NS3/4A, NS5A y NS5B son las tres dianas de los antivirales de acción directa.</figcaption>
+    </figure>
+
+    <h4>Biología esencial</h4>
+    <ul>
+      <li><b>Partícula</b>: icosaédrica, ~50 nm, envoltura lisa cubierta por <b>90 dímeros de E</b> en espiga de pez, sin espículas prominentes. El VHC es la excepción: 40–100 nm y asociado a lipoproteínas de baja densidad formando un <b>«lipovirión»</b> que oculta sus epítopos.</li>
+      <li><b>Genoma (+) infeccioso por sí solo</b>: el RNA desnudo introducido en una célula produce virus. No hay polimerasa dentro del virión, a diferencia de los virus de cadena negativa.</li>
+      <li><b>Ciclo</b>: unión por E → endocitosis con clatrina → el <b>pH ácido del endosoma</b> reorienta a E, proteína de fusión de <b>clase II</b> → traducción en el retículo rugoso → <b>fábricas de replicación</b> en invaginaciones del RE → gemación al lumen como partícula inmadura → la <b>furina</b> corta prM en el trans-Golgi → exocitosis.</li>
+      <li><b>Procesamiento</b>: peptidasas celulares cortan la porción estructural y la <b>proteasa viral NS2B/NS3</b> (NS3/4A en el VHC) la no estructural. Ese corte es el que bloquean los <b>«-previr»</b>.</li>
+      <li><b>Variabilidad</b>: la polimerasa <b>carece de corrección 3′–5′</b>. En el dengue eso cristalizó en <b>4 serotipos estables</b>; en el VHC produce <b>cuasiespecies</b> dentro del mismo paciente, escape continuo en HVR1 de E2 y, como consecuencia, <b>ausencia de vacuna</b>.</li>
+      <li><b>El VHC además</b>: sin capucha 5′ ni cola poli-A, traduce por <b>IRES</b> (mecanismo casi procariota) y depende del microRNA hepático <b>miR-122</b>, que explica en parte su hepatotropismo.</li>
+    </ul>
+    <div class="box clin"><span class="lbl">Traducción clínica</span>
+      <p>Todos comparten epítopos en E y NS1: por eso la <b>serología cruza</b> entre dengue, Zika, WNV, fiebre amarilla y la propia vacuna 17D, y ninguna IgM aislada confirma nada donde cocirculan varios. Desempata la <b>neutralización por reducción de placas (PRNT)</b> con títulos ≥4× sobre los flavivirus vecinos.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Un mismo virión, cinco destinos</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cinco rutas patogénicas de la familia Flaviviridae: fuga plasmática del dengue, viscerotropismo de la fiebre amarilla, embriopatía del Zika, neuroinvasión de Nilo occidental y encefalitis japonesa, y persistencia hepática del virus de la hepatitis C">
+        <rect width="900" height="400" fill="#FFFFFF"/>
+        <text x="20" y="22" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">ENTRADA COMÚN: CÉLULA DENDRÍTICA CUTÁNEA → GANGLIO REGIONAL → VIREMIA</text>
+
+        <rect x="20" y="34" width="150" height="52" rx="5" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1.2"/>
+        <text x="95" y="56" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Dengue</text>
+        <text x="95" y="72" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">2.ª infección heterotípica</text>
+        <rect x="185" y="34" width="215" height="52" rx="5" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="196" y="54" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Ac cruzado subneutralizante opsoniza</text>
+        <text x="196" y="70" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">y entra por <tspan font-weight="600">FcγR</tspan> al monocito (ADE)</text>
+        <rect x="415" y="34" width="215" height="52" rx="5" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="426" y="54" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Más células infectadas, memoria T</text>
+        <text x="426" y="70" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">cruzada y <tspan font-weight="600">NS1 secretada</tspan> → TNF, IL-1</text>
+        <rect x="645" y="34" width="235" height="52" rx="5" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1"/>
+        <text x="656" y="54" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#701d14">Fuga plasmática al defervescer</text>
+        <text x="656" y="70" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">hematocrito ↑, derrame pleural, choque</text>
+
+        <rect x="20" y="102" width="150" height="52" rx="5" fill="rgba(138,92,10,.12)" stroke="#8a5c0a" stroke-width="1.2"/>
+        <text x="95" y="124" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#8a5c0a">Fiebre amarilla</text>
+        <text x="95" y="140" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">viscerotropismo</text>
+        <rect x="185" y="102" width="215" height="52" rx="5" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="196" y="122" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Ganglio → <tspan font-weight="600">células de Kupffer</tspan> →</text>
+        <text x="196" y="138" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">hígado, riñón, suprarrenal, médula</text>
+        <rect x="415" y="102" width="215" height="52" rx="5" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="426" y="122" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Apoptosis del hepatocito de zona</text>
+        <text x="426" y="138" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">media: <tspan font-weight="600">cuerpos de Councilman</tspan></text>
+        <rect x="645" y="102" width="235" height="52" rx="5" fill="rgba(138,92,10,.12)" stroke="#8a5c0a" stroke-width="1"/>
+        <text x="656" y="122" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#8a5c0a">Ictericia, hemorragia, oliguria</text>
+        <text x="656" y="138" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">albuminuria constante · AST &gt; ALT</text>
+
+        <rect x="20" y="170" width="150" height="52" rx="5" fill="rgba(144,48,58,.16)" stroke="#90303a" stroke-width="1.2"/>
+        <text x="95" y="192" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#90303a">Zika en el embarazo</text>
+        <text x="95" y="208" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">teratogénesis</text>
+        <rect x="185" y="170" width="215" height="52" rx="5" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="196" y="190" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Viremia materna → placenta →</text>
+        <text x="196" y="206" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">unidad fetoplacentaria</text>
+        <rect x="415" y="170" width="215" height="52" rx="5" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="426" y="190" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Infecta el <tspan font-weight="600">progenitor neural</tspan></text>
+        <text x="426" y="206" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">cortical y frena la corticogénesis</text>
+        <rect x="645" y="170" width="235" height="52" rx="5" fill="rgba(144,48,58,.16)" stroke="#90303a" stroke-width="1"/>
+        <text x="656" y="190" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#90303a">Microcefalia · calcificaciones</text>
+        <text x="656" y="206" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">subcorticales · lesión retiniana</text>
+
+        <rect x="20" y="238" width="150" height="52" rx="5" fill="rgba(39,51,79,.14)" stroke="#27334F" stroke-width="1.2"/>
+        <text x="95" y="260" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">WNV y JEV</text>
+        <text x="95" y="276" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">neuroinvasión</text>
+        <rect x="185" y="238" width="215" height="52" rx="5" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="196" y="258" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Viremia breve; casi siempre se</text>
+        <text x="196" y="274" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">aclara en la periferia, sin síntomas</text>
+        <rect x="415" y="238" width="215" height="52" rx="5" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="426" y="258" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Cruza la BHE: corteza, hipocampo,</text>
+        <text x="426" y="274" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">tálamo, ganglio basal, <tspan font-weight="600">asta anterior</tspan></text>
+        <rect x="645" y="238" width="235" height="52" rx="5" fill="rgba(39,51,79,.14)" stroke="#27334F" stroke-width="1"/>
+        <text x="656" y="258" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#27334F">Encefalitis · parkinsonismo (JEV)</text>
+        <text x="656" y="274" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">parálisis flácida asimétrica (WNV)</text>
+
+        <rect x="20" y="306" width="150" height="52" rx="5" fill="rgba(92,122,87,.16)" stroke="#5C7A57" stroke-width="1.2"/>
+        <text x="95" y="328" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Hepatitis C</text>
+        <text x="95" y="344" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">persistencia</text>
+        <rect x="185" y="306" width="215" height="52" rx="5" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="196" y="326" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Sangre → hepatocito por CD81,</text>
+        <text x="196" y="342" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">SR-B1, claudina-1 y ocludina</text>
+        <rect x="415" y="306" width="215" height="52" rx="5" fill="#FFFFFF" stroke="rgba(20,24,31,.16)"/>
+        <text x="426" y="326" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f"><tspan font-weight="600">Sin efecto citopático</tspan>: daña el</text>
+        <text x="426" y="342" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">CD8; las cuasiespecies escapan</text>
+        <rect x="645" y="306" width="235" height="52" rx="5" fill="rgba(92,122,87,.16)" stroke="#5C7A57" stroke-width="1"/>
+        <text x="656" y="326" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#1a6b42">Cronicidad 80 % → fibrosis</text>
+        <text x="656" y="342" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">cirrosis 15–30 % → hepatocarcinoma</text>
+
+        <g fill="#455A8C">
+          <polygon points="182,60 172,55 172,65"/><polygon points="412,60 402,55 402,65"/><polygon points="642,60 632,55 632,65"/>
+          <polygon points="182,128 172,123 172,133"/><polygon points="412,128 402,123 402,133"/><polygon points="642,128 632,123 632,133"/>
+          <polygon points="182,196 172,191 172,201"/><polygon points="412,196 402,191 402,201"/><polygon points="642,196 632,191 632,201"/>
+          <polygon points="182,264 172,259 172,269"/><polygon points="412,264 402,259 402,269"/><polygon points="642,264 632,259 632,269"/>
+          <polygon points="182,332 172,327 172,337"/><polygon points="412,332 402,327 402,337"/><polygon points="642,332 632,327 632,337"/>
+        </g>
+
+        <text x="20" y="384" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">En el dengue el daño lo hace la respuesta inmune previa: la única infección donde haber estado inmune empeora.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Cinco rutas desde una misma arquitectura. La fuga plasmática del dengue y la persistencia del VHC son <b>inmunopatología</b>, no citólisis viral: por eso ni un antiviral tardío ni un corticoide cambian el desenlace del dengue grave.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">El ADE en cuatro pasos</span>
+        <ol class="steps">
+          <li><b>Primera infección</b> por un serotipo: inmunidad homotípica de por vida y heterotípica que se desvanece en ~2 años.</li>
+          <li><b>Anticuerpo residual a título bajo</b>: ya no neutraliza, pero sí se une a otro serotipo. El riesgo máximo de dengue hemorrágico está justo en quienes tienen títulos bajos pero detectables.</li>
+          <li><b>Entrada por FcγR</b>: el complejo virus-anticuerpo es fagocitado por monocitos y macrófagos y multiplica las células infectadas.</li>
+          <li><b>Tormenta y fuga</b>: los T de memoria cruzados responden al antígeno equivocado (<b>pecado antigénico original</b>) y liberan TNF-α, IL-1 e IL-8; con NS1 secretada abren la barrera endotelial. La fuga es <b>transitoria y reversible</b>, sin destrucción del endotelio.</li>
+        </ol>
+      </div>
+      <div class="card"><span class="lbl">Consecuencias prácticas</span>
+        <ul>
+          <li>El lactante de madre inmune puede hacer dengue grave en su <b>primera</b> infección: los anticuerpos maternos hacen de ADE.</li>
+          <li>Una infección previa por Zika puede aumentar el riesgo de dengue grave, y viceversa: la reactividad cruzada tiene consecuencias clínicas.</li>
+          <li>Por eso <b>Dengvaxia se comporta como una primera infección</b> en el seronegativo y aumenta el riesgo de hospitalización.</li>
+          <li>En fiebre amarilla y en las encefalitis por <i>Culex</i> el mecanismo es otro: <b>citólisis directa</b> del hepatocito o de la neurona. Allí la respuesta inmune protege.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">La fase crítica empieza cuando cede la fiebre</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Virus</th><th>Incubación</th><th>Cuadro habitual</th><th>Complicación temida</th></tr></thead>
+      <tbody>
+        <tr><td><b>Dengue</b></td><td class="num">4–7 d</td><td>Fiebre abrupta, cefalea <b>retroorbitaria</b>, dolor lumbar y musculoesquelético («quiebrahuesos»), exantema que respeta palmas y plantas, leucopenia; recaída febril en «lomo de camello»</td><td><b>Fuga plasmática al defervescer</b>: derrame pleural, ascitis, choque, hemorragia digestiva</td></tr>
+        <tr><td><b>Zika</b></td><td class="num">~3–7 d</td><td><b>80 % asintomático.</b> Exantema maculopapular <b>pruriginoso</b>, <b>conjuntivitis no purulenta</b>, artralgia distal, febrícula; 2–7 días</td><td><b>Zika congénito</b> y <b>Guillain-Barré</b> semanas después</td></tr>
+        <tr><td><b>Fiebre amarilla</b></td><td class="num">3–6 d</td><td>Fiebre, cefalea, mialgia, inyección conjuntival, leucopenia y <b>bradicardia relativa (signo de Faget)</b>. En ~80 % termina ahí</td><td>Tras 24–48 h de remisión, <b>fase de intoxicación</b> (~20 %): ictericia, «vómito negro», albuminuria, falla renal, choque. Letalidad 20–50 %</td></tr>
+        <tr><td><b>Nilo occidental</b></td><td class="num">2–6 d (hasta 14)</td><td><b>80 % asintomático</b>; 20 % cuadro gripal de 3–6 días con exantema y adenopatía</td><td><b>&lt;1 % neuroinvasivo</b>: meningitis, encefalitis con temblor y parkinsonismo, <b>parálisis flácida tipo polio</b> del asta anterior, sin déficit sensitivo</td></tr>
+        <tr><td><b>Encefalitis japonesa</b></td><td class="num">4–21 d</td><td>Asintomática en &gt;99 % de los adultos endémicos; fiebre inespecífica en el resto</td><td><b>1 encefalitis por cada 250 infecciones</b>: convulsiones, rigidez y distonía del ganglio basal, parálisis bulbar. Letalidad 20–30 %, secuelas 30–50 %</td></tr>
+        <tr><td><b>Hepatitis C</b></td><td class="num">1–5 meses</td><td>Aguda <b>asintomática en 70–80 %</b>; el resto con astenia e ictericia leve. Aclaramiento espontáneo 15–25 %</td><td><b>Cronicidad ~80 %</b> → cirrosis 15–30 % en 20–30 años → <b>hepatocarcinoma 3–5 % anual</b> ya con cirrosis</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h4>Dengue: las tres fases y los signos de alarma</h4>
+    <ol class="steps">
+      <li><b>Febril (días 1–3)</b> Fiebre alta, exantema, mialgia, torniquete positivo. Viremia máxima: ventana de la PCR y del NS1.</li>
+      <li><b>Crítica (días 4–7, con la defervescencia)</b> Dura 24–48 h. <b>Signos de alarma</b>: dolor abdominal intenso, vómito persistente, sangrado de mucosas, letargia, hepatomegalia &gt;2 cm, acumulación de líquido y el par decisivo, <b>hematocrito en ascenso con plaquetas en descenso</b>.</li>
+      <li><b>Recuperación (días 7–10)</b> Reabsorción del líquido extravasado —aquí mata la sobrecarga hídrica—, exantema de <b>«islas blancas en un mar rojo»</b>, prurito y <b>bradicardia</b>.</li>
+    </ol>
+    <p>La clasificación <b>OMS 2009</b> reemplazó la dicotomía clásica: <b>dengue sin signos de alarma</b>, <b>con signos de alarma</b> y <b>dengue grave</b> (fuga plasmática con choque o dificultad respiratoria, sangrado grave, o daño orgánico con AST/ALT ≥1000, alteración de la conciencia o miocarditis).</p>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Por huésped</span>
+        <ul>
+          <li><b>Embarazo</b> — Zika del primer y segundo trimestres es el de mayor riesgo fetal; el JEV puede infectar la unidad fetoplacentaria y provocar aborto. El dengue en la gestante obliga a hospitalizar ante cualquier signo de alarma.</li>
+          <li><b>Lactante</b> — dengue grave en primoinfección por anticuerpos maternos. La vacuna 17D está <b>contraindicada antes de los 4 meses</b>.</li>
+          <li><b>Anciano e inmunodeprimido</b> — la enfermedad neuroinvasiva por WNV se concentra en mayores de 60 años, trasplantados y portadores de polimorfismos de <i>CCR5</i>, <i>OAS</i> o <i>MX1</i>; el inmunosuprimido puede no seroconvertir nunca.</li>
+          <li><b>Coinfectado</b> — VHC con VIH o VHB acelera la fibrosis, igual que el alcohol, la esteatosis, el sexo masculino y el contagio después de los 40 años.</li>
+        </ul>
+      </div>
+      <div class="box clin"><span class="lbl">Manifestaciones extrahepáticas del VHC</span>
+        <ul>
+          <li><b>Crioglobulinemia mixta tipo II/III</b>: púrpura palpable, artralgias, neuropatía periférica y glomerulonefritis. Busca VHC en toda vasculitis crioglobulinémica.</li>
+          <li><b>Glomerulonefritis membranoproliferativa</b> (el VHB da membranosa).</li>
+          <li><b>Linfoma B no Hodgkin</b>, riesgo 2–3×, sobre todo MALT y de zona marginal esplénica.</li>
+          <li><b>Porfiria cutánea tarda</b>, <b>liquen plano oral</b>, tiroiditis autoinmune y <b>diabetes tipo 2</b>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box trap"><span class="lbl">Diagnóstico diferencial</span>
+      <p>Las <b>«tres aedinas»</b> se confunden: el <b>chikungunya</b> duele más en articulaciones y persiste meses; el <b>Zika</b> pica y da conjuntivitis; el <b>dengue</b> da fiebre más alta, leucopenia y trombocitopenia. En el febril tropical entran además <b>malaria</b>, <b>leptospirosis</b>, tifoidea y rickettsiosis. Ante encefalitis, el diferencial obligado es <b>VHS-1</b>: es el único tratable.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">La prueba depende del día de enfermedad</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Línea de tiempo del dengue con las tres fases clínicas, las curvas de temperatura, hematocrito y plaquetas, y las ventanas de utilidad de RT-PCR, NS1, IgM e IgG">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+
+        <rect x="80" y="30" width="228" height="20" rx="3" fill="rgba(112,29,20,.10)"/>
+        <text x="194" y="44" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#701d14">FASE FEBRIL · DÍAS 1–3</text>
+        <rect x="308" y="30" width="304" height="20" rx="3" fill="rgba(138,92,10,.16)"/>
+        <text x="460" y="44" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#8a5c0a">FASE CRÍTICA · DÍAS 4–7</text>
+        <rect x="612" y="30" width="228" height="20" rx="3" fill="rgba(92,122,87,.14)"/>
+        <text x="726" y="44" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#1a6b42">RECUPERACIÓN · DÍAS 7–10</text>
+
+        <rect x="308" y="56" width="304" height="126" fill="rgba(138,92,10,.06)"/>
+
+        <polyline points="80,96 156,90 232,92 290,98 330,150 400,156 500,154 612,152 840,152" fill="none" stroke="#701d14" stroke-width="2.2"/>
+        <polyline points="80,142 232,140 308,136 372,110 452,98 540,110 612,132 760,140 840,142" fill="none" stroke="#27334F" stroke-width="2.2"/>
+        <polyline points="80,116 232,120 308,132 400,160 480,166 560,158 660,136 760,124 840,118" fill="none" stroke="#5C7A57" stroke-width="2.2" stroke-dasharray="5 3"/>
+
+        <text x="86" y="86" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#701d14">Temperatura</text>
+        <text x="470" y="92" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#27334F">Hematocrito</text>
+        <text x="470" y="180" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#1a6b42">Plaquetas</text>
+        <text x="318" y="72" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#8a5c0a">↓ fiebre = ventana de alarma</text>
+
+        <line x1="80" y1="192" x2="850" y2="192" stroke="#455A8C" stroke-width="1.2"/>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#6b7585" text-anchor="middle">
+          <text x="80" y="206">0</text><text x="156" y="206">1</text><text x="232" y="206">2</text><text x="308" y="206">3</text>
+          <text x="384" y="206">4</text><text x="460" y="206">5</text><text x="536" y="206">6</text><text x="612" y="206">7</text>
+          <text x="688" y="206">8</text><text x="764" y="206">9</text><text x="840" y="206">10</text>
+        </g>
+        <text x="862" y="196" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#6b7585">DÍAS</text>
+
+        <text x="72" y="228" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#14181f">RT-PCR</text>
+        <rect x="80" y="218" width="380" height="13" rx="3" fill="#27334F"/>
+        <text x="470" y="228" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Confirma y serotipifica; en Zika también orina y saliva</text>
+
+        <text x="72" y="250" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#14181f">NS1</text>
+        <rect x="80" y="240" width="532" height="13" rx="3" fill="#36476E"/>
+        <text x="622" y="250" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Positiva más días que el RNA</text>
+
+        <text x="72" y="272" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#14181f">IgM</text>
+        <rect x="384" y="262" width="466" height="13" rx="3" fill="#90303a"/>
+        <text x="120" y="272" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Antes del día 4–5 la IgM negativa no descarta</text>
+
+        <text x="72" y="294" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#14181f">IgG</text>
+        <rect x="536" y="284" width="314" height="13" rx="3" fill="rgba(144,48,58,.45)"/>
+        <rect x="232" y="284" width="120" height="13" rx="3" fill="rgba(144,48,58,.45)" stroke="#90303a" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="120" y="294" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">2.ª infección:</text>
+        <text x="360" y="294" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">la IgG sube antes y muy alta, con IgM baja</text>
+
+        <text x="80" y="324" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Pedir IgM el día 2 o PCR el día 8 es el error más común de esta familia.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Ventanas diagnósticas del dengue superpuestas a las fases clínicas. El mismo principio rige para toda la familia: <b>ácidos nucleicos y antígeno durante la viremia, anticuerpos después</b>.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario</th><th>Muestra y prueba</th><th>Rendimiento y matiz</th></tr></thead>
+      <tbody>
+        <tr><td><b>Dengue días 1–5</b></td><td>Suero: <b>RT-PCR</b></td><td>Confirma y serotipifica por multiplex. Negativa después del día 5–7 no descarta.</td></tr>
+        <tr><td><b>Dengue días 1–7</b></td><td>Suero: <b>NS1</b></td><td>Barata y rápida; menos sensible que la PCR pero <b>positiva más días</b>. Descrita también para Zika, fiebre amarilla, JEV y WNV, sin validación comercial.</td></tr>
+        <tr><td><b>Dengue ≥ día 4–5</b></td><td>Suero: <b>IgM MAC-ELISA</b></td><td>En la <b>segunda infección</b> la IgG sube antes y en título alto mientras la IgM puede ser baja o ausente.</td></tr>
+        <tr><td><b>Zika agudo</b></td><td><b>RT-PCR en suero y orina</b></td><td>La <b>orina permanece positiva más tiempo</b>. RNA en semen hasta 6 meses.</td></tr>
+        <tr><td><b>Zika o dengue tardío</b></td><td>IgM + <b>PRNT</b></td><td>La reactividad cruzada obliga a confirmar con <b>neutralización, título ≥4×</b> sobre los flavivirus vecinos.</td></tr>
+        <tr><td><b>Encefalitis por WNV o JEV</b></td><td><b>IgM en LCR</b></td><td><b>Estándar clínico</b> (90–100 % en WNV; &gt;95 % desde el día 5 en JEV). La IgM persiste <b>6–12 meses en suero y 1–2 años en LCR</b>: positiva no siempre es aguda.</td></tr>
+        <tr><td><b>Encefalitis en inmunodeprimido</b></td><td>PCR en sangre y LCR</td><td>Puede no montar anticuerpos: la PCR es la única opción, aunque en LCR sea poco sensible en el inmunocompetente.</td></tr>
+        <tr><td><b>Fiebre amarilla</b></td><td>RT-PCR, IgM y bioquímica</td><td><b>Albuminuria constante</b>, el dato que la separa de otras hepatitis virales. Fosfatasa alcalina poco elevada y a menudo <b>AST &gt; ALT</b> por daño miocárdico. LCR con proteínas altas <b>sin</b> pleocitosis.</td></tr>
+        <tr><td><b>VHC: tamizaje</b></td><td><b>Anti-VHC</b> (EIA)</td><td><b>Persiste tras la cura</b> y no distingue infección activa. <b>Tamizaje universal una vez en la vida en todo adulto ≥18 años</b> (CDC/USPSTF 2020), en cada embarazo y anual en usuarios de drogas inyectables, HSH y personas con VIH.</td></tr>
+        <tr><td><b>VHC: confirmación</b></td><td><b>HCV-RNA cuantitativo</b></td><td>Positivo a las 2 semanas de la exposición. <b>SVR12</b> (indetectable 12 semanas tras terminar el tratamiento) <b>= cura</b>.</td></tr>
+        <tr><td><b>VHC: antes de tratar</b></td><td>HBsAg, anti-HBc, VIH, función renal y hepática</td><td>Riesgo de <b>reactivación del VHB</b> con los AAD (caja negra). Estadificar fibrosis con <b>FibroScan, FIB-4 o APRI</b>; la biopsia es hoy excepcional.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li>Leer una <b>IgM anti-Zika positiva</b> en alguien con dengue previo o <b>vacunado contra fiebre amarilla</b> como infección aguda. Sin PRNT no hay diagnóstico.</li>
+        <li>Dar por curado a un paciente porque el <b>anti-VHC se negativizó</b>, o por infectado porque siguió positivo: decide el <b>RNA</b>.</li>
+        <li>Exigir el <b>genotipo del VHC</b>: con los pangenotípicos modernos es opcional.</li>
+        <li>Confiar en un <b>LCR normal</b> para descartar encefalitis por flavivirus: el citoquímico sirve sobre todo para <b>excluir causas tratables</b>.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Sin antiviral salvo el VHC · cinco vacunas</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="box trap"><span class="lbl">Regla general de los arbovirus</span>
+      <p><b>No existe antiviral aprobado</b> para dengue, Zika, fiebre amarilla, WNV ni JEV. Todo es soporte. Ribavirina, interferón e inmunoglobulina IV <b>no han mostrado beneficio</b> en WNV, y los corticoides tampoco en dengue ni en JEV. Antipirético: <b>paracetamol</b>; <b>nunca AAS ni AINE</b> hasta descartar dengue, por riesgo hemorrágico y síndrome de Reye.</p>
+    </div>
+
+    <h4>Dengue: el manejo que sí salva vidas</h4>
+    <ul>
+      <li>La atención anticipatoria en la <b>defervescencia</b> ha reducido la letalidad entre <b>50 y 100 veces</b>. Lo que mata es la consulta tardía y la <b>sobrecarga de líquidos</b>.</li>
+      <li>Vigilar de forma seriada pulso, tensión, perfusión, diuresis y hematocrito: un <b>ascenso del hematocrito &gt;20 %</b> (de 35 % a 42 %) indica pérdida intravascular significativa.</li>
+      <li><b>Cristaloides isotónicos</b> (salina 0.9 %, Ringer lactato). <b>Presión de pulso &lt;20 mmHg</b> = choque; si recurre, coloide o hemoderivados.</li>
+      <li>Transfundir <b>solo ante hemorragia significativa</b>: las plaquetas profilácticas pueden dañar. En la <b>reabsorción</b>, frenar líquidos: el SDRA por sobrecarga es causa reconocida de muerte iatrogénica.</li>
+      <li>Hospitalizar ante signos de alarma o riesgo: embarazo, lactante, adulto mayor, diabetes, obesidad o cardiopatía.</li>
+    </ul>
+
+    <h4>Vacunas de la familia</h4>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Vacuna</th><th>Esquema</th><th>Puntos clave</th></tr></thead>
+      <tbody>
+        <tr><td><b>Fiebre amarilla 17D</b><br>viva atenuada</td><td><b>Dosis única</b>, 0.5 mL SC</td><td>Seroconversión &gt;95 % y protección <b>de por vida</b>: desde 2013 la OMS eliminó el refuerzo decenal en inmunocompetentes. <b>Contraindicada &lt;4 meses</b>; de 4 a 9 meses solo en alto riesgo. Anafilaxia 13 por millón de dosis. En desabasto se ha usado <b>dosis fraccionada a 1/5</b> (RD Congo 2016, Brasil 2018).</td></tr>
+        <tr><td><b>Dengue · TAK-003 (Qdenga)</b><br>esqueleto DENV-2</td><td>2 dosis, desde los 4 años</td><td><b>Sin tamizaje serológico previo.</b> Eficacia global 80.2 % a 12 meses y <b>61.2 % a 54 meses</b>; contra hospitalización 84.1 %. En seronegativos <b>sin eficacia frente a DENV-3</b>. Registrada en México en 2024.</td></tr>
+        <tr><td><b>Dengue · CYD-TDV (Dengvaxia)</b><br>quimera sobre 17D</td><td>3 dosis (0, 6, 12 meses), 9–45 años</td><td><b>Solo con infección previa documentada</b>: en seronegativos aumenta el riesgo de dengue hospitalizado. El fabricante anunció su descontinuación.</td></tr>
+        <tr><td><b>Dengue · Butantan-DV</b></td><td><b>Dosis única</b></td><td>Fase III en Brasil: eficacia global 67.3 % y 89 % contra dengue grave o con signos de alarma.</td></tr>
+        <tr><td><b>Encefalitis japonesa</b></td><td><b>IXIARO</b> inactivada: días 0 y 28, refuerzo a 12–24 meses · <b>SA14-14-2</b> viva: dosis única</td><td>Viajeros que pasarán <b>más de un mes en zonas rurales de Asia</b>, residentes de área endémica, militares y personal de laboratorio.</td></tr>
+        <tr><td><b>Nilo occidental · Zika</b></td><td>—</td><td><b>No hay vacuna humana</b>; para WNV existe vacuna equina. Candidatas de Zika en fase I.</td></tr>
+        <tr><td><b>Hepatitis C</b></td><td>—</td><td><b>Sin vacuna</b>: la hipervariabilidad de E1/E2 y el señuelo HVR1 frustran la neutralización.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Eventos adversos de la 17D</span>
+      <p><b>YEL-AVD</b> (viscerotrópica): ~120 casos, <b>siempre en primovacunados</b>, con fiebre y vómito a los 2–5 días seguidos de hepatitis fulminante, choque y falla renal indistinguibles de la enfermedad salvaje; <b>letalidad &gt;60 %</b>. La causa está en el huésped (autoanticuerpos anti-interferón tipo I), no en mutaciones del virus vacunal. <b>YEL-AND</b> (neurotrópica): 113 casos desde 1989, casi siempre meningitis aséptica, un solo fallecido. En viajeros, 2.5–4 y 2.5–8 casos por millón de dosis: <b>tasas bajas que no han cambiado la recomendación de vacunar</b>.</p>
+    </div>
+
+    <h4>Hepatitis C: la excepción curable</h4>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario</th><th>Régimen pangenotípico (AASLD/IDSA 2024)</th></tr></thead>
+      <tbody>
+        <tr><td>Sin tratamiento previo, sin cirrosis</td><td><b>Glecaprevir/pibrentasvir 8 semanas</b> o <b>sofosbuvir/velpatasvir 12 semanas</b></td></tr>
+        <tr><td>Cirrosis compensada (Child A)</td><td>Cualquiera de los dos, <b>12 semanas</b></td></tr>
+        <tr><td><b>Cirrosis descompensada</b> (Child B/C)</td><td><b>Sofosbuvir/velpatasvir + ribavirina 12 semanas.</b> <b>Nunca inhibidores de proteasa</b> («-previr») por hepatotoxicidad</td></tr>
+        <tr><td>Coinfección con VIH</td><td>Mismos regímenes y misma eficacia; revisar interacciones con el TAR</td></tr>
+        <tr><td>Coinfección con VHB</td><td>Tratar el VHB o vigilar el DNA mensual por riesgo de <b>reactivación</b></td></tr>
+        <tr><td>Falla previa a AAD</td><td><b>Sofosbuvir/velpatasvir/voxilaprevir 12 semanas</b>; valorar resistencias (NS5A <b>Y93H</b> en GT1a y GT3) y referir</td></tr>
+        <tr><td>Enfermedad renal terminal</td><td>Glecaprevir/pibrentasvir no requiere ajuste</td></tr>
+        <tr><td>Embarazo</td><td>AAD <b>no recomendados de rutina</b>; la <b>ribavirina es teratogénica</b></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <ul>
+      <li><b>SVR12 &gt;95 %.</b> En el cirrótico curado <b>persiste el riesgo de hepatocarcinoma</b>: ultrasonido cada 6 meses de por vida.</li>
+      <li><b>No hay profilaxis post-exposición</b> tras un pinchazo (riesgo ~1.8 % con aguja hueca de fuente RNA positiva): se vigila y se trata si hay seroconversión.</li>
+      <li>Vacunar contra <b>hepatitis A y B</b> a todo paciente con VHC crónico no inmune.</li>
+      <li>Reducción de daños en usuarios de drogas inyectables más <b>tamizaje universal y tratamiento</b> son la vía a la <b>eliminación OMS 2030</b>.</li>
+    </ul>
+
+    <div class="box clin"><span class="lbl">Control vectorial</span>
+      <p><i>Aedes aegypti</i> <b>pica de día</b> y cría en recipientes domésticos: por eso <b>el mosquitero de cama no sirve</b> y sí sirven eliminar criaderos, tapar depósitos, mallas en ventanas y <b>rociado residual intradomiciliario</b>; la nebulización espacial se considera poco útil. <i>Culex</i> pica al crepúsculo y de noche, así que contra WNV y JEV el mosquitero sí protege. Repelente con <b>DEET ≥20 %</b>, picaridina o IR3535. Para Zika: preservativo <b>3 meses (varón) y 2 meses (mujer)</b> tras la exposición y diferir el viaje a zonas activas durante el embarazo. Hay <b>tamizaje NAT universal para WNV</b> en bancos de sangre estadounidenses y anti-VHC obligatorio desde 1992. Todas estas arbovirosis son de <b>notificación obligatoria</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b><i>Flavus</i> = amarillo</b>: la familia entera lleva el nombre de la ictericia de la fiebre amarilla.</li>
+          <li>RNA (+), <b>poliproteína única</b>, replicación en el <b>retículo endoplásmico</b>, maduración por <b>furina</b>. Sin núcleo y sin integración.</li>
+          <li><b>Proteína E</b>: receptor, hemaglutinina y fusión de <b>clase II</b>; único antígeno neutralizante.</li>
+          <li><b>NS1</b> secretada: daña el endotelio y es el antígeno de la prueba rápida del dengue.</li>
+          <li>La <b>segunda infección heterotípica</b> es la de riesgo: ADE por FcγR.</li>
+          <li>La <b>fase crítica del dengue empieza cuando cede la fiebre</b>.</li>
+          <li><b>Cuerpos de Councilman</b> + <b>signo de Faget</b> + <b>albuminuria</b> = fiebre amarilla.</li>
+          <li><b>Parálisis flácida asimétrica sin déficit sensitivo</b> en verano = Nilo occidental; <b>parkinsonismo en un niño asiático</b> = encefalitis japonesa.</li>
+          <li>El VHC <b>no integra</b>: por eso se cura. El VIH sí integra: por eso no.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«-previr, -asvir, -buvir»</b> → <b>PRE</b>vir = <b>PR</b>otEasa NS3/4A · -a<b>SVIR</b> = NS<b>5A</b> · -bu<b>VIR</b> = polimera<b>SA</b> NS5B.</p>
+        <p><b>«Culex al cerebro, Aedes a la sangre»</b> — encefalitis frente a fiebre hemorrágica, con el Zika como teratógeno.</p>
+        <p><b>«F–C–R»</b> — fases del dengue: <b>F</b>ebril, <b>C</b>rítica, <b>R</b>ecuperación; y en la última, «<b>islas blancas en un mar rojo</b>».</p>
+        <p><b>«C–A–R»</b> del Zika — <b>C</b>onjuntivitis, <b>A</b>rtralgia distal, <b>R</b>ash pruriginoso.</p>
+        <p><b>«17D una vez, IXIARO dos»</b> — fiebre amarilla, dosis única de por vida; encefalitis japonesa inactivada, días 0 y 28.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas y escenario mexicano</span>
+      <ul>
+        <li><b>México es hiperendémico para dengue</b>, con cocirculación de los cuatro serotipos y brotes cíclicos cada 3–5 años. Qdenga está registrada desde 2024.</li>
+        <li>El <b>brote de Zika de 2015–2017</b> se concentró en Chiapas, Veracruz, Oaxaca y Yucatán, con casos congénitos confirmados; desde 2018 la circulación es esporádica.</li>
+        <li><b>Trampa clásica</b>: dar de alta al paciente «que ya no tiene fiebre» el día 4. Ese es el momento en que empieza la fuga plasmática.</li>
+        <li><b>Trampa farmacológica</b>: prescribir ketorolaco o naproxeno al febril tropical.</li>
+        <li><b>Trampa serológica</b>: IgM positiva para Zika en alguien vacunado contra fiebre amarilla o con dengue previo.</li>
+        <li><b>Trampa de laboratorio</b>: anti-VHC positivo en un paciente ya curado. En México la prevalencia de anti-VHC en adultos es de ~0.4–1.4 %, con predominio de los subtipos 1a y 1b y la mayoría sin diagnosticar.</li>
+        <li><b>Viajero</b>: fiebre amarilla para la Amazonía y África subsahariana; encefalitis japonesa si pasará más de un mes en zonas rurales de Asia; y ante fiebre al regreso, descartar <b>malaria</b> antes que arbovirus.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/</code>: <code>Dengue.md</code>, <code>Virus_Zika.md</code>, <code>Fiebre_amarilla.md</code>, <code>Virus_Nilo_occidental.md</code>, <code>Virus_encefalitis_japonesa.md</code>, <code>Hepatitis_C.md</code> · Mandell PPID 10e, cap. 160 (flavivirus) y cap. 161 (hepatitis C) · WHO, <i>Dengue: Guidelines for Diagnosis, Treatment, Prevention and Control</i>, 2009 · OPS, <i>Dengue Guidelines</i>, 2022 · WHO, recomendación de dosis única de vacuna de fiebre amarilla, 2013 · WHO, <i>Japanese encephalitis vaccines position paper</i>, <i>WER</i> 2018;93(34) · AASLD/IDSA <i>HCV Guidance</i>, 2024 · USPSTF, <i>JAMA</i> 2020;323(10):970-975 y CDC, <i>MMWR Recomm Rep</i> 2020;69(2) · CDC, guía provisional de Zika en el embarazo, 2017 · First Aid for the USMLE Step 1 2025, pp. 168 y 170-171 · Pocket Medicine 9e, 2025.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="matonaviridae.html"><span class="k">← Anterior</span><span class="v">Matonaviridae</span></a>
+        <a class="next" href="retroviridae.html"><span class="k">Siguiente →</span><span class="v">Retroviridae</span></a></div>
+      <footer class="pf">
+        <span>Flaviviridae · 8 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

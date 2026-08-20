@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Togaviridae — Virus RNA</title>
+<meta name="description" content="Togaviridae. Chikungunya · Mayaro · encefalitis equinas">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Togaviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 6 de 18 · Virología médica</p>
+    <h1>Togaviridae</h1>
+    <p class="sub">Chikungunya · Mayaro · encefalitis equinas</p>
+    <div class="chips"><span class="chip g">+ssRNA bicistrónico · 11–12 kb</span>
+  <span class="chip">Envuelto · icosaédrico · 70 nm · 80 espículas E1–E2</span>
+  <span class="chip">Replicación citoplásmica · gemación en membrana plasmática</span>
+  <span class="chip r">EEE letalidad ~30 % · CHIKV artralgia crónica 10–60 %</span>
+  <span class="chip gold">IXCHIQ (VLA1553), vacuna viva atenuada anti-CHIKV</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Togaviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Género</dt><dd><i>Alphavirus</i> — <b>31 especies en 7 serocomplejos</b>; todos los patógenos humanos son transmitidos por mosquito</dd></div>
+  <div class="cell"><dt>Los dos síndromes</dt><dd><b>Nuevo Mundo → encefalitis</b> (EEEV, WEEV, VEEV) · <b>Viejo Mundo → fiebre, poliartritis y exantema</b> (CHIKV, Mayaro, Ross River, Semliki)</dd></div>
+  <div class="cell"><dt>Vectores</dt><dd><i>Aedes</i> (CHIKV, EEEV) · <i>Culex</i> (VEEV, WEEV) · <i>Haemagogus</i> (Mayaro)</dd></div>
+  <div class="cell"><dt>Reservorio</dt><dd>Aves paseriformes (EEE, WEE) · mamíferos y équidos (VEE) · <b>primates no humanos y el propio humano virémico</b> (CHIKV, Mayaro)</dd></div>
+  <div class="cell"><dt>Receptores</dt><dd><b>MXRA8</b> (CHIKV, MAYV, RRV, ONNV, SFV) · <b>LDLRAD3</b> (VEEV) · VLDLR/ApoER2 (SFV, EEEV) · PCDH10 (WEEV)</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd>CHIKV <b>1–12 días</b> · VEEV 1–6 días · EEE: pródromo de 5–10 días antes del deterioro neurológico</dd></div>
+  <div class="cell"><dt>Viremia</dt><dd>CHIKV <b>&gt;10⁷ UFP/mL</b> en las primeras 48 h → la RT-PCR rinde; en encefalitis por EEEV/WEEV ya no hay viremia al aparecer los síntomas</dd></div>
+  <div class="cell"><dt>Diagnóstico</dt><dd>RT-PCR en la primera semana · <b>IgM por captura</b> en suero y LCR · confirmación con <b>PRNT</b> por reactividad cruzada</dd></div>
+  <div class="cell"><dt>Tratamiento</dt><dd>Sin antiviral aprobado. Sostén y AINE; esteroides o FARME en la artritis crónica; UCI en la encefalitis</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">Del caballo encefalítico a la pandemia de 2013</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1930 y 1933</b> — WEEV se recupera de cerebros de caballos en California y EEEV en Nueva Jersey; para <b>1938</b> ambos están establecidos como causa de encefalitis humana.</li>
+      <li><b>1938</b> — VEEV se aísla de caballos durante una epizootia en Venezuela. Los <b>primeros casos humanos (1943) fueron de laboratorio, por aerosol</b> de piezas de patología equina; el primer caso natural se reporta en Colombia en 1952.</li>
+      <li><b>1952–53</b> — CHIKV se aísla en una epidemia de Tanzania. En lengua makonde <i>chikungunya</i> significa <b>«caminar encorvado»</b>, por la artritis incapacitante.</li>
+      <li><b>2004–2006</b> — la epidemia arranca en Kenia y estalla en <b>La Reunión: 265 000 de 770 000 habitantes enfermaron y hubo 237 muertes</b>. Después India (≥1.4 millones de casos en 2006–07) e Italia con transmisión autóctona en 2007.</li>
+      <li><b>2013–2015</b> — el linaje asiático entra por San Martín y barre el Caribe y América. Hasta 2017 la OPS documentó transmisión local en <b>50 países o territorios y &gt;2.6 millones de casos sospechosos</b>. En <b>noviembre de 2023</b> la FDA aprueba IXCHIQ, la primera vacuna humana contra un alfavirus.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Una mutación que cambió la geografía</span>
+      <p>La sustitución <b>A226V en la glicoproteína E1</b> adaptó a CHIKV para replicar en <i>Aedes albopictus</i>; después se sumaron mutaciones en E2 que lo mejoraron aún más. Como <i>A. albopictus</i> tolera climas templados mucho mejor que <i>A. aegypti</i>, esa sola sustitución abrió a la enfermedad regiones no tropicales: es el ejemplo canónico de <b>adaptación viral al vector como motor de emergencia</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Un solo género humano, dos clados, dos enfermedades</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd>Togaviridae — del latín <i>toga</i>, «manto», por la envoltura lipídica que cubre la nucleocápside</dd>
+      <dt>Género humano</dt><dd><i>Alphavirus</i>: 31 especies agrupadas en 7 serocomplejos definidos por la antigenicidad de <b>E2</b> en la inhibición de la hemaglutinación</dd>
+      <dt>Los dos clados</dt><dd><b>Semliki Forest</b> (CHIKV, Mayaro, Ross River, ONNV) y <b>Sindbis–encefalitis equinas</b> (SINV, VEEV, WEEV, EEEV)</dd>
+      <dt>Reclasificación</dt><dd>La <b>rubéola ya no es togavirus</b>: <i>Rubivirus</i> se separó a la familia <b>Matonaviridae</b>. En las tablas antiguas (y en First Aid) todavía aparece como togavirus</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Artritogénicos</span><span class="vg">complejo Semliki Forest</span></div>
+        <div class="vbd">
+          <p><b>Chikungunya</b> — cuatro genotipos: África Oriental-Central-Sur, África Occidental, Océano Índico y <b>Asiático</b> (el que colonizó América). Vector <i>Aedes aegypti</i> y <i>A. albopictus</i>; reservorio de primates en África, pero <b>en ciudad basta el humano virémico</b>.</p>
+          <p><b>Mayaro</b> — <i>Haemagogus</i> y marmosetas en la cuenca amazónica; brotes en Brasil, Bolivia, Haití y Guayana Francesa. Puede infectar <i>A. aegypti</i> en experimento: <b>candidato a urbanizarse</b>.</p>
+          <p><b>Ross River</b> y Barmah Forest (Australia, marsupiales) · <b>virus del bosque de Semliki</b> · <b>O'nyong-nyong</b>, el único alfavirus transmitido por <i>Anopheles</i> · <b>Sindbis</b>, la enfermedad de Pogosta/Ockelbo escandinava.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Encefalíticos</span><span class="vg">complejos EEE · WEE · VEE</span></div>
+        <div class="vbd">
+          <p><b>EEEV</b> — costa este y del Golfo de EE. UU.; el linaje de Centro y Sudamérica se llama ahora <b>virus Madariaga</b>. Ciclo enzoótico ave–<i>Culiseta melanura</i>, con mosquito «puente» hacia caballo y humano.</p>
+          <p><b>WEEV</b> — al oeste del Misisipi, vector <i>Culex tarsalis</i>. Es un <b>recombinante intragénico</b>: genes no estructurales y de cápside de un ancestro tipo EEEV, con E1 y E2 tipo Sindbis. Sin casos notificados a los CDC desde 1998.</p>
+          <p><b>VEEV</b> — seis subtipos antigénicos. <b>IAB y IC son los epizoóticos</b> (épocas de miles de casos equinos y humanos); ID, IE y el subtipo II (Everglades) son enzoóticos y dan cuadro tipo dengue con encefalitis esporádica.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Anclas de memoria</span>
+      <p><b>«Toga CREW»</b> (First Aid) → <b>C</b>hikungunya · <b>R</b>ubéola (ya reclasificada) · <b>E</b>astern y <b>W</b>estern equine encephalitis.</p>
+      <p><b>«Viejo Mundo, articulaciones; Nuevo Mundo, neuronas.»</b> Los alfavirus que cruzaron el Atlántico en la historia evolutiva dan encefalitis; los que se quedaron dan poliartritis.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Dos genes en un genoma, dos glicoproteínas en una espícula</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión del alfavirus, mapa del genoma bicistrónico y receptores celulares">
+        <rect width="900" height="360" fill="#FFFFFF"/>
+
+        <circle cx="140" cy="150" r="72" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.6"/>
+        <g stroke="#701d14" stroke-width="2.2" stroke-linecap="round">
+          <line x1="140" y1="78" x2="140" y2="60"/>
+          <line x1="191" y1="99" x2="204" y2="86"/>
+          <line x1="212" y1="150" x2="230" y2="150"/>
+          <line x1="191" y1="201" x2="204" y2="214"/>
+          <line x1="140" y1="222" x2="140" y2="240"/>
+          <line x1="89" y1="201" x2="76" y2="214"/>
+          <line x1="68" y1="150" x2="50" y2="150"/>
+          <line x1="89" y1="99" x2="76" y2="86"/>
+        </g>
+        <g fill="#701d14">
+          <circle cx="140" cy="57" r="4"/><circle cx="207" cy="83" r="4"/><circle cx="233" cy="150" r="4"/>
+          <circle cx="207" cy="217" r="4"/><circle cx="140" cy="243" r="4"/><circle cx="73" cy="217" r="4"/>
+          <circle cx="47" cy="150" r="4"/><circle cx="73" cy="83" r="4"/>
+        </g>
+        <circle cx="140" cy="150" r="60" fill="none" stroke="#90303a" stroke-width="4" opacity=".55"/>
+        <polygon points="140,104 180,127 180,173 140,196 100,173 100,127" fill="rgba(92,122,87,.16)" stroke="#5C7A57" stroke-width="1.8"/>
+        <path d="M114 138 q13 -9 26 0 t26 0 M114 162 q13 -9 26 0 t26 0" fill="none" stroke="#27334F" stroke-width="2"/>
+        <text x="140" y="272" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">70 NM · SIMETRÍA ICOSAÉDRICA T=4</text>
+
+        <g font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">
+          <text x="20" y="296" font-size="10.5" font-weight="600" fill="#701d14">Espículas E1–E2</text>
+          <text x="20" y="310">80 espículas, cada una un trímero de heterodímeros</text>
+          <text x="20" y="323" font-size="10.5" font-weight="600" fill="#90303a">Envoltura</text>
+          <text x="20" y="336">Tomada de la membrana plasmática al gemar</text>
+          <text x="20" y="349" font-size="10.5" font-weight="600" fill="#1a6b42">Cápside C + RNA (+): nucleocápside icosaédrica</text>
+        </g>
+
+        <text x="330" y="58" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">5′ cap tipo 0</text>
+        <text x="860" y="58" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">poli-A 3′</text>
+        <rect x="330" y="66" width="80" height="26" fill="rgba(39,51,79,.16)" stroke="#27334F" stroke-width="1"/>
+        <rect x="410" y="66" width="82" height="26" fill="rgba(39,51,79,.16)" stroke="#27334F" stroke-width="1"/>
+        <rect x="492" y="66" width="78" height="26" fill="rgba(39,51,79,.16)" stroke="#27334F" stroke-width="1"/>
+        <rect x="570" y="66" width="80" height="26" fill="rgba(39,51,79,.28)" stroke="#27334F" stroke-width="1"/>
+        <rect x="650" y="66" width="52" height="26" fill="rgba(92,122,87,.18)" stroke="#5C7A57" stroke-width="1"/>
+        <rect x="702" y="66" width="30" height="26" fill="rgba(144,48,58,.22)" stroke="#90303a" stroke-width="1"/>
+        <rect x="732" y="66" width="64" height="26" fill="rgba(112,29,20,.16)" stroke="#701d14" stroke-width="1"/>
+        <rect x="796" y="66" width="26" height="26" fill="rgba(110,110,118,.18)" stroke="#6b7585" stroke-width="1"/>
+        <rect x="822" y="66" width="38" height="26" fill="rgba(112,29,20,.16)" stroke="#701d14" stroke-width="1"/>
+        <g font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f" text-anchor="middle">
+          <text x="370" y="84">nsP1</text><text x="451" y="84">nsP2</text><text x="531" y="84">nsP3</text><text x="610" y="84">nsP4</text>
+          <text x="676" y="84">C</text><text x="717" y="84">E3</text><text x="764" y="84">E2</text><text x="809" y="84">6K</text><text x="841" y="84">E1</text>
+        </g>
+        <line x1="330" y1="100" x2="650" y2="100" stroke="#27334F" stroke-width="1.2"/>
+        <line x1="650" y1="100" x2="860" y2="100" stroke="#701d14" stroke-width="1.2"/>
+        <text x="490" y="114" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#27334F">GENOMA 49S — POLIPROTEÍNA NO ESTRUCTURAL</text>
+        <text x="755" y="114" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#701d14">mRNA SUBGENÓMICO 26S — ESTRUCTURALES</text>
+
+        <g font-family="'Inter', sans-serif" font-size="10" fill="#14181f">
+          <text x="330" y="140"><tspan font-weight="600" fill="#27334F">nsP1</tspan> capping · <tspan font-weight="600" fill="#27334F">nsP2</tspan> proteasa y helicasa · <tspan font-weight="600" fill="#27334F">nsP3</tspan> accesoria · <tspan font-weight="600" fill="#27334F">nsP4</tspan> RNA-polimerasa</text>
+          <text x="330" y="157">P123 + nsP4 sintetiza la cadena (−); el corte de P23 conmuta a genomas (+)</text>
+          <text x="330" y="174">p62 (E3-E2) heterodimeriza con E1 en el RE; la <tspan font-weight="600">furina corta E3</tspan> al salir del Golgi</text>
+          <text x="330" y="191"><tspan font-weight="600" fill="#701d14">E2</tspan> une el receptor y concentra los anticuerpos neutralizantes; <tspan font-weight="600" fill="#701d14">E1</tspan> fusiona y hemaglutina</text>
+          <text x="330" y="208"><tspan font-weight="600">6K</tspan> forma poros y activa apoptosis; <tspan font-weight="600">TF</tspan> palmitoilada es necesaria para el ensamblaje</text>
+        </g>
+
+        <line x1="330" y1="228" x2="880" y2="228" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+        <text x="330" y="248" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">RECEPTORES DE ENTRADA — CADA CLADO EL SUYO</text>
+        <g font-family="'Inter', sans-serif" font-size="10" fill="#14181f">
+          <text x="330" y="270"><tspan font-weight="600" fill="#701d14">MXRA8</tspan> → CHIKV, Mayaro, Ross River, O'nyong-nyong, Semliki</text>
+          <text x="330" y="288"><tspan font-weight="600" fill="#27334F">LDLRAD3</tspan> → VEEV; se expresa en neuronas de encéfalo y médula</text>
+          <text x="330" y="306"><tspan font-weight="600" fill="#36476E">VLDLR y ApoER2</tspan> → Semliki, EEEV, Sindbis, WEEV (familia del receptor de LDL)</text>
+          <text x="330" y="324"><tspan font-weight="600" fill="#1a6b42">PCDH10</tspan> → WEEV · <tspan font-weight="600" fill="#1a6b42">NRAMP2</tspan> → Sindbis, en insecto y mamífero</text>
+        </g>
+        <text x="330" y="348" font-family="'Source Serif 4', serif" font-style="italic" font-size="11.5" fill="#6b7585">El receptor decide el tropismo: MXRA8 vive en el mesénquima articular; LDLRAD3, en la neurona.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. Virión, genoma bicistrónico y receptores. Retén el orden <b>3′–E1–6K–E2–E3–C … nsP4–nsP3–nsP2–nsP1–5′</b>: los dos tercios 5′ codifican la maquinaria de replicación y el tercio 3′, todo lo estructural, traducido aparte desde el mRNA 26S.</figcaption>
+    </figure>
+
+    <h4>Ciclo en cinco tiempos</h4>
+    <ol class="steps">
+      <li><b>Adsorción</b> E2 engancha el receptor y E1 contribuye al contacto; la partícula entra en vesícula recubierta de clatrina.</li>
+      <li><b>Fusión</b> La acidificación del endosoma disocia el heterodímero E1-E2 y libera el <b>bucle de fusión de E1</b>; el genoma (+) queda libre en el citoplasma.</li>
+      <li><b>Traducción y replicación</b> El RNA (+) se traduce de inmediato —no necesita polimerasa en el virión, a diferencia de los virus (−)— y genera nsP1-4 en el citoplasma.</li>
+      <li><b>Estructurales</b> El mRNA 26S produce C, p62, 6K/TF y E1; E3 impide la fusión prematura mientras el heterodímero atraviesa el pH ácido de la vía secretora.</li>
+      <li><b>Gemación</b> La nucleocápside gema en la <b>membrana plasmática</b>; el corte de p62 por furina desestabiliza el heterodímero y deja la partícula «armada» para fusionarse en la siguiente célula.</li>
+    </ol>
+
+    <div class="box clin"><span class="lbl">Traducción clínica</span>
+      <p>Que la neutralización dependa casi toda de <b>E2</b> explica dos hechos de examen: los ELISA de unión <b>cruzan entre alfavirus</b> y obligan a confirmar con PRNT, y las vacunas y los monoclonales en desarrollo apuntan al complejo E3-E2-6K-E1.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Mismo comienzo, dos destinos: neurona o sinovial</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruta patogénica común de los alfavirus y su bifurcación hacia encefalitis o artritis crónica">
+        <rect width="900" height="380" fill="#FFFFFF"/>
+
+        <text x="20" y="46" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">TRONCO COMÚN</text>
+        <rect x="20" y="60" width="160" height="62" rx="6" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.1"/>
+        <text x="100" y="80" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">1 · Piel</text>
+        <text x="100" y="96" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Queratinocitos, fibroblastos,</text>
+        <text x="100" y="110" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">endotelio y macrófagos</text>
+        <line x1="100" y1="122" x2="100" y2="140" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="100,142 95,133 105,133" fill="#455A8C"/>
+
+        <rect x="20" y="142" width="160" height="62" rx="6" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.1"/>
+        <text x="100" y="162" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">2 · Ganglio de drenaje</text>
+        <text x="100" y="178" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Macrófagos y células dendríticas;</text>
+        <text x="100" y="192" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">VEEV replica en médula ósea</text>
+        <line x1="100" y1="204" x2="100" y2="222" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="100,224 95,215 105,215" fill="#455A8C"/>
+
+        <rect x="20" y="224" width="160" height="62" rx="6" fill="rgba(39,51,79,.16)" stroke="#27334F" stroke-width="1.4"/>
+        <text x="100" y="244" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">3 · Viremia</text>
+        <text x="100" y="260" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Precede a los síntomas y</text>
+        <text x="100" y="274" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">puede durar hasta 7 días</text>
+
+        <line x1="180" y1="255" x2="196" y2="255" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="196" y1="110" x2="196" y2="305" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="196" y1="110" x2="206" y2="110" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="196" y1="305" x2="206" y2="305" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="210,110 201,105 201,115" fill="#455A8C"/>
+        <polygon points="210,305 201,300 201,310" fill="#455A8C"/>
+
+        <text x="212" y="58" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#701d14">NUEVO MUNDO · ENCEFALÍTICOS (EEEV · WEEV · VEEV)</text>
+        <rect x="212" y="68" width="206" height="86" rx="6" fill="rgba(112,29,20,.08)" stroke="#701d14" stroke-width="1.1"/>
+        <text x="315" y="88" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Evasión del interferón</text>
+        <text x="315" y="105" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">EEEV y WEEV no replican en células</text>
+        <text x="315" y="119" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">mieloides: el miR-142-3p del huésped</text>
+        <text x="315" y="133" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">ataca su 3′UTR → poco IFN tipo I</text>
+        <text x="315" y="147" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">y siembra silenciosa del SNC</text>
+        <line x1="418" y1="111" x2="436" y2="111" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="440,111 431,106 431,116" fill="#455A8C"/>
+
+        <rect x="442" y="68" width="206" height="86" rx="6" fill="rgba(112,29,20,.08)" stroke="#701d14" stroke-width="1.1"/>
+        <text x="545" y="88" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Invasión del SNC</text>
+        <text x="545" y="105" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Transcitosis del endotelio de la BHE</text>
+        <text x="545" y="119" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">o transporte axonal; tras aerosol,</text>
+        <text x="545" y="133" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">infección directa del bulbo olfatorio</text>
+        <text x="545" y="147" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Blanco: neuronas y astrocitos</text>
+        <line x1="648" y1="111" x2="666" y2="111" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="670,111 661,106 661,116" fill="#455A8C"/>
+
+        <rect x="672" y="68" width="206" height="86" rx="6" fill="rgba(112,29,20,.14)" stroke="#701d14" stroke-width="1.5"/>
+        <text x="775" y="88" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Encefalitis</text>
+        <text x="775" y="105" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Apoptosis neuronal, gliosis y</text>
+        <text x="775" y="119" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">manguitos perivasculares; EEEV</text>
+        <text x="775" y="133" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">añade vasculitis y neutrófilos</text>
+        <text x="775" y="147" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Pico viral cerebral al día 2–4</text>
+
+        <text x="212" y="258" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#1a6b42">VIEJO MUNDO · ARTRITOGÉNICOS (CHIKV · MAYARO · ROSS RIVER)</text>
+        <rect x="212" y="268" width="206" height="86" rx="6" fill="rgba(92,122,87,.12)" stroke="#5C7A57" stroke-width="1.1"/>
+        <text x="315" y="288" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Músculo y sinovial</text>
+        <text x="315" y="305" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Mioblastos, células satélite,</text>
+        <text x="315" y="319" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">osteoblastos, condrocitos y</text>
+        <text x="315" y="333" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">fibroblastos sinoviales</text>
+        <text x="315" y="347" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Bazo y músculo como reservorio</text>
+        <line x1="418" y1="311" x2="436" y2="311" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="440,311 431,306 431,316" fill="#455A8C"/>
+
+        <rect x="442" y="268" width="206" height="86" rx="6" fill="rgba(92,122,87,.12)" stroke="#5C7A57" stroke-width="1.1"/>
+        <text x="545" y="288" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Daño inmunomediado</text>
+        <text x="545" y="305" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">CCL2, CXCL10, MIF, IL-6, IL-1β e</text>
+        <text x="545" y="319" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">IL-17 reclutan monocitos y CD4+</text>
+        <text x="545" y="333" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Sube la razón RANKL/OPG →</text>
+        <text x="545" y="347" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">osteoclastos y pérdida ósea</text>
+        <line x1="648" y1="311" x2="666" y2="311" stroke="#455A8C" stroke-width="1.2"/>
+        <polygon points="670,311 661,306 661,316" fill="#455A8C"/>
+
+        <rect x="672" y="268" width="206" height="86" rx="6" fill="rgba(92,122,87,.2)" stroke="#5C7A57" stroke-width="1.5"/>
+        <text x="775" y="288" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Artritis crónica</text>
+        <text x="775" y="305" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">10–60 % de los infectados, meses</text>
+        <text x="775" y="319" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">o años. RNA viral persistente en</text>
+        <text x="775" y="333" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">sinovial, macrófagos, miofibras</text>
+        <text x="775" y="347" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">y fibroblastos que sobreviven</text>
+
+        <text x="20" y="372" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El virus infeccioso desaparece hacia el día 7–10; lo que queda enfermando al paciente es la respuesta inmune y el RNA que no se va.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. La bifurcación patogénica. La ruta hasta la viremia es idéntica; el receptor y el tropismo tisular deciden si el desenlace es una neurona muerta o una sinovial inflamada durante años.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Inmunidad innata y evasión</span>
+        <ul>
+          <li>TLR y receptores tipo RIG-I detectan el RNA y disparan <b>IFN tipo I</b>; las pDC bastan para controlar a CHIKV en el modelo murino, y sin receptor de IFN-α/β el ratón muere.</li>
+          <li>Los ISG protectores incluyen <b>PKR, OAS, ISG20, viperina, tetherina, IFITM, ZAP e ISG15</b>.</li>
+          <li>Contramedida universal del género: <b>bloqueo de la señalización JAK/STAT</b>, más inhibición de la transcripción y la traducción del huésped.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Por qué se cronifica</span>
+        <ul>
+          <li>Se detecta <b>RNA y antígeno viral en biopsias sinoviales y en macrófagos infiltrantes</b> meses después.</li>
+          <li>La <b>IgM no neutralizante</b> en la fase febril predice cronicidad; una respuesta neutralizante de IgM/IgG —y sobre todo <b>IgG3 temprana</b>— la previene.</li>
+          <li>El cuadro final imita una <b>artritis reumatoide seronegativa</b>; se ha propuesto un componente autoinmune, aún no demostrado.</li>
+          <li>Marcadores de riesgo descritos: <b>edad &gt;35 años</b>, artralgia persistente a los 4 meses y, en algunos estudios, <b>HLA-B27</b>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">Concepto de alto rendimiento</span>
+      <p>El aclaramiento depende de <b>anticuerpos anti-E2</b> en ambos grupos y, además, de <b>linfocitos T citotóxicos</b> en los encefalíticos. En el SNC los CD8+ no matan neuronas (expresan poco MHC-I): el virus se depura por <b>IFN-γ + anticuerpo</b>, una limpieza «no citolítica» que preserva la neurona.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Fiebre con artritis o fiebre con coma</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Chikungunya, el prototipo artritogénico</h4>
+    <ul>
+      <li><b>Incubación 1–12 días.</b> Fiebre de inicio abrupto <b>hasta 40 °C</b> con escalofríos; puede ceder y recrudecer en <b>curva «en silla de montar»</b>.</li>
+      <li><b>Poliartralgia simétrica</b> de predominio en articulaciones pequeñas y en <b>sitios de lesión articular previa</b>; el paciente evita moverse. Las articulaciones se hinchan <b>sin derrame significativo</b>.</li>
+      <li><b>Exantema</b> desde el primer día: rubor facial y cervical que evoluciona a maculopapular, a veces pruriginoso, en tronco, extremidades, cara, <b>palmas y plantas</b>.</li>
+      <li>Laboratorio: <b>leucopenia leve con linfocitosis relativa</b>, VSG muy elevada y PCR positiva. La trombocitopenia marcada apunta a dengue, no a chikungunya.</li>
+      <li>Formas atípicas y graves (serie de La Reunión: 610 atípicos, 222 graves, <b>65 muertes</b>): meningoencefalitis, hepatitis, dermatitis ampollosa, neumonía y diabetes de novo. En 33 pacientes que llegaron a UCI la letalidad fue del <b>48 %</b>. Letalidad global estimada <b>1 por cada 1 000 casos</b>. En el ojo: uveítis anterior, neuritis óptica y retrobulbar, lesiones corneales dendríticas.</li>
+      <li><b>Neonato</b> (transmisión intraparto, 38 casos): dolor 100 %, exantema 82 %, fiebre 79 %, edema periférico 58 %; <b>RNA en LCR en 22 de 24</b> y resonancia anormal en 14 (lesiones de sustancia blanca o hemorragia intraparenquimatosa).</li>
+      <li><b>Cronicidad</b>: en la cohorte de 180 pacientes seguida 36 meses, <b>60 % refería artralgia o artropatía con hinchazón</b>, simétrica y con recaídas, e <b>incapacitante en el 77 %</b> de ellos.</li>
+    </ul>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Virus</th><th>Cuadro y datos duros</th><th>Pronóstico</th></tr></thead>
+      <tbody>
+        <tr><td><b>EEEV</b></td><td>Pródromo de <b>5–10 días</b> (cefalea, fiebre alta, vómito) → alteración del estado mental, fotofobia, crisis tónico-clónicas, coma rápido. Rigidez de nuca, temblor, paresia espástica, parálisis de pares <b>VI, VII y XII</b>; fontanela abombada en lactantes. Leucocitosis con neutrofilia, <b>hiponatremia por SIADH</b>, LCR con hasta 2 000 células de predominio linfocítico y glucosa normal.</td><td class="num"><b>Letalidad ~30 %</b>; secuelas (discapacidad intelectual, epilepsia, parálisis) hasta en el <b>70 %</b>. Mal pronóstico: edad &gt;40 años, coma rápido, hiponatremia grave, LCR &gt;500 células.</td></tr>
+        <tr><td><b>WEEV</b></td><td>Pródromo breve; en el adulto puede ceder sin encefalitis. Menos signos focales que EEE. Encefalitis <b>más frecuente en lactantes</b> (razón caso:infección casi 1:1) y <b>más grave en el anciano</b>.</td><td class="num">Letalidad <b>3–4 %</b>; secuelas en el 30 % de los jóvenes. <b>Parkinsonismo</b> como secuela tardía ocasional.</td></tr>
+        <tr><td><b>VEEV</b></td><td>Incubación 1–6 días. Cuadro <b>bifásico</b>: 48 h de fiebre alta, mialgias y postración; al normalizarse la temperatura aparecen los signos neurológicos. <b>Linfopenia</b> (a veces neutropenia y trombocitopenia leve) con AST y DHL elevadas.</td><td class="num">Letalidad global <b>&lt;1 %</b>. Progresan a encefalitis <b>4 % de los niños</b> y &lt;1 % de los adultos; entre ellos la letalidad llega al <b>20 %</b>.</td></tr>
+        <tr><td><b>Mayaro · Ross River</b></td><td>Fiebre, exantema y poliartritis indistinguibles de chikungunya. En Ross River las artralgias pueden persistir <b>hasta 3 años</b> tras ceder fiebre y exantema.</td><td class="num">Letalidad prácticamente nula; la carga es la <b>discapacidad prolongada</b>.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">El diferencial que se pregunta</span>
+      <ul>
+        <li><b>Dengue vs. chikungunya</b>: a favor de chikungunya, <b>dolor articular, dolor muscular, óseo o lumbar, inyección conjuntival y exantema</b>. A favor de dengue, <b>trombocitopenia, hemoconcentración, linfopenia, transaminasas altas, sangrado y síntomas gastrointestinales</b>. La tos, la odinofagia y la rinorrea van <b>en contra</b> de chikungunya.</li>
+        <li><b>La coinfección existe</b>: el mismo <i>Aedes</i> puede portar dengue y CHIKV y transmitirlos a la vez. Un resultado positivo no descarta el otro.</li>
+        <li>Otros imitadores: parvovirus B19, rubéola, pródromo de hepatitis B, artritis idiopática juvenil y artritis reumatoide seronegativa.</li>
+        <li>La encefalitis por EEEV es clínicamente indistinguible de la del <b>virus del Nilo Occidental</b> y comparte estación y región.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">La fecha del inicio decide la prueba</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Línea de tiempo de la infección por chikungunya con las ventanas de la RT-PCR y de la serología">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+
+        <rect x="80" y="26" width="110" height="20" rx="4" fill="rgba(69,90,140,.18)"/>
+        <text x="135" y="40" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#27334F">INCUBACIÓN 1–12 D</text>
+        <rect x="194" y="26" width="176" height="20" rx="4" fill="rgba(112,29,20,.12)"/>
+        <text x="282" y="40" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#701d14">AGUDA · FIEBRE, EXANTEMA, ARTRALGIA</text>
+        <rect x="374" y="26" width="256" height="20" rx="4" fill="rgba(138,92,10,.14)"/>
+        <text x="502" y="40" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#8a5c0a">POST-AGUDA — HASTA LOS 3 MESES</text>
+        <rect x="634" y="26" width="246" height="20" rx="4" fill="rgba(92,122,87,.16)"/>
+        <text x="757" y="40" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#1a6b42">CRÓNICA — 10 A 60 % DE LOS INFECTADOS</text>
+
+        <line x1="80" y1="212" x2="880" y2="212" stroke="#455A8C" stroke-width="1.4"/>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#6b7585" text-anchor="middle">
+          <text x="110" y="230">PICADURA</text>
+          <text x="196" y="230">DÍA 0</text>
+          <text x="260" y="230">3</text>
+          <text x="340" y="230">7</text>
+          <text x="420" y="230">14</text>
+          <text x="520" y="230">1 MES</text>
+          <text x="650" y="230">3 MESES</text>
+          <text x="800" y="230">≥1 AÑO</text>
+        </g>
+        <g stroke="#455A8C" stroke-width="1">
+          <line x1="110" y1="207" x2="110" y2="217"/><line x1="196" y1="207" x2="196" y2="217"/>
+          <line x1="260" y1="207" x2="260" y2="217"/><line x1="340" y1="207" x2="340" y2="217"/>
+          <line x1="420" y1="207" x2="420" y2="217"/><line x1="520" y1="207" x2="520" y2="217"/>
+          <line x1="650" y1="207" x2="650" y2="217"/><line x1="800" y1="207" x2="800" y2="217"/>
+        </g>
+
+        <path d="M150 212 C176 212 186 92 210 92 C236 92 250 200 300 210 C320 212 330 212 344 212" fill="none" stroke="#701d14" stroke-width="2.4"/>
+        <text x="212" y="82" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">Viremia &gt;10⁷ UFP/mL</text>
+
+        <path d="M262 212 C300 212 320 120 380 116 C470 110 560 140 700 168 C760 180 830 190 878 194" fill="none" stroke="#27334F" stroke-width="2.4"/>
+        <text x="392" y="106" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">IgM — sube en la primera semana y persiste meses</text>
+
+        <path d="M320 212 C380 212 420 138 520 128 C640 118 760 116 878 116" fill="none" stroke="#5C7A57" stroke-width="2.4"/>
+        <text x="640" y="146" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">IgG neutralizante — anti-E2, dura años</text>
+
+        <rect x="150" y="244" width="196" height="22" rx="4" fill="rgba(112,29,20,.10)" stroke="#701d14" stroke-width="1"/>
+        <text x="162" y="259" font-family="'Inter', sans-serif" font-size="10" fill="#14181f"><tspan font-weight="600">RT-PCR o aislamiento</tspan> — rinde hasta el día 7</text>
+
+        <rect x="262" y="270" width="380" height="22" rx="4" fill="rgba(39,51,79,.10)" stroke="#27334F" stroke-width="1"/>
+        <text x="274" y="285" font-family="'Inter', sans-serif" font-size="10" fill="#14181f"><tspan font-weight="600">IgM por captura (ELISA)</tspan> en suero; en LCR si hay encefalitis</text>
+
+        <rect x="420" y="296" width="460" height="36" rx="4" fill="rgba(138,92,10,.12)" stroke="#8a5c0a" stroke-width="1"/>
+        <text x="432" y="311" font-family="'Inter', sans-serif" font-size="10" fill="#14181f"><tspan font-weight="600">Confirmación</tspan>: PRNT o sueros pareados (aumento ≥4 veces)</text>
+        <text x="432" y="325" font-family="'Inter', sans-serif" font-size="10" fill="#6b7585">obligada por la reactividad cruzada entre alfavirus</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Ventanas diagnósticas del chikungunya. La regla operativa: <b>≤7 días de síntomas, RT-PCR; &gt;7 días, IgM</b>; y siempre confirmar la serología positiva, porque los ELISA de unión cruzan con los demás alfavirus.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Sangre, días 0–7</b></td><td>RT-PCR · aislamiento</td><td>En CHIKV la viremia es tan alta que el virus se aísla con facilidad. En <b>VEEV</b> el suero de las primeras 48 h suele ser positivo, pero <b>deja de serlo al instalarse la encefalitis</b>.</td></tr>
+        <tr><td><b>Sangre en encefalitis</b></td><td>RT-PCR</td><td><b>Baja sensibilidad</b>: EEEV solo ocasionalmente se aísla en el pródromo y en WEEV la viremia habitualmente ya no es detectable. Un resultado negativo no descarta nada.</td></tr>
+        <tr><td><b>Suero pareado</b></td><td>IgM por captura + IgG (neutralización o IH)</td><td>Seroconversión o <b>aumento ≥4 veces</b> entre fase aguda y convaleciente. La IgM permanece elevada durante meses: por sí sola no fecha la infección.</td></tr>
+        <tr><td><b>LCR</b></td><td><b>IgM por captura</b></td><td><b>Criterio diagnóstico de los CDC</b> para encefalitis por arbovirus. El citoquímico muestra pleocitosis linfocítica con proteínas altas y glucosa normal.</td></tr>
+        <tr><td><b>Cualquiera</b></td><td>PRNT</td><td>Resuelve la reactividad cruzada del ELISA de unión, que reconoce epítopos compartidos entre alfavirus.</td></tr>
+        <tr><td><b>Imagen</b></td><td>RM con FLAIR y T2</td><td>En EEE grave: <b>corteza, ganglios basales, tálamo y tronco</b>; con valor diagnóstico y pronóstico. En WEE, cambios en tálamo o ganglios basales, inespecíficos.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box clin"><span class="lbl">Criterios CDC de encefalitis por arbovirus</span>
+      <p>Enfermedad febril aguda con encefalitis <b>en temporada de transmisión</b>, más <b>uno</b> de estos: (1) cambio ≥4 veces en el título de anticuerpos específicos entre sueros pareados; (2) aislamiento del virus, o demostración de antígeno o de genoma en tejido, sangre, LCR u otro líquido; (3) <b>IgM específica en LCR</b> por ELISA de captura; (4) IgM específica en suero confirmada por IgG específica en la misma muestra o en una posterior mediante otro ensayo.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Una sola vacuna humana, y es de 2023</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="box trap"><span class="lbl">Lo primero: no hay antiviral</span>
+      <p><b>Ningún producto está aprobado para tratar la infección por alfavirus.</b> El manejo es sintomático: analgésicos y AINE en el síndrome de fiebre-artralgia-exantema; hospitalización y cuidados intensivos en la encefalitis y en las formas atípicas. En zona de cocirculación con dengue conviene iniciar la analgesia con <b>paracetamol</b> y posponer AINE y salicilatos hasta descartarlo.</p>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Artritis crónica</span>
+        <ul>
+          <li>Opciones descritas: <b>esteroides o fármacos antirreumáticos modificadores de enfermedad</b> cuando el dolor articular persiste.</li>
+          <li><b>Metotrexato</b>: en el modelo murino administrado durante la fase aguda de Ross River <b>adelantó y empeoró</b> la enfermedad; podría ser útil en la fase crónica, pero faltan cohortes que lo demuestren.</li>
+          <li><b>Cautela con la inmunosupresión mientras hay virus replicando.</b> En ratón, CTLA4-Ig fue lo que más redujo la inflamación, sobre todo combinado con un monoclonal anti-CHIKV.</li>
+          <li>Vías experimentales: <b>receptores señuelo solubles</b> (MXRA8-Fc para CHIKV, LDLRAD3-D1-Fc para VEEV), inhibición de CCL2 y del inflamasoma NLRP3.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Anticuerpos monoclonales</span>
+        <ul>
+          <li>Los monoclonales anti-E2 y anti-E1 protegen en ratón y primate: bloquean adhesión, fusión endosómica, ensamblaje y salida del virión.</li>
+          <li>En fase I, un <b>mRNA en nanopartícula lipídica que codifica un anticuerpo anti-CHIKV</b> alcanzó títulos terapéuticos en 2 días, mantenidos &gt;16 semanas.</li>
+          <li>Hay anticuerpos que reconocen alfavirus del Viejo y del Nuevo Mundo: la base de una futura <b>vacuna pan-alfavirus</b>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Vacunas</h4>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Producto</th><th>Plataforma</th><th>Situación</th></tr></thead>
+      <tbody>
+        <tr><td><b>IXCHIQ</b> (VLA1553)</td><td>Viva atenuada con deleción de <b>60 aminoácidos en nsP3</b></td><td><b>Aprobada por la FDA en noviembre de 2023</b> para mayores de 18 años que viajan a regiones con transmisión reciente; después autorizada en Canadá y Europa. En fase III <b>&gt;98 % seroconvirtió con dosis única</b>; en fase I hubo viremia transitoria con fatiga y cefalea leves.</td></tr>
+        <tr><td>VLP de CHIKV</td><td>Partículas similares a virus, no replicantes</td><td>Una sola dosis dio respuesta neutralizante duradera <b>hasta 2 años</b> en fase II; en fase III.</td></tr>
+        <tr><td>BBV87</td><td>Inactivada</td><td>100 % de seroconversión en fase I, con neutralizantes a 6 meses tras refuerzo; en fase II/III.</td></tr>
+        <tr><td>MV-CHIK · ChAdOx1</td><td>Vectores de sarampión y de adenovirus de simio</td><td>Fase II: 87–100 % desarrolló neutralizantes tras esquema de primovacunación y refuerzo; la inmunidad previa al sarampión no interfiere.</td></tr>
+        <tr><td><b>Trivalente WEE/EEE/VEE</b></td><td>Mezcla de VLP</td><td>Fase I: el <b>76 % respondió a los tres componentes</b>, con neutralizantes detectables 36 semanas. El vector MVA-BN-WEV protegió en reto por aerosol en ratón.</td></tr>
+        <tr><td>Vacunas equinas</td><td>Veterinarias</td><td><b>Obligatoria la inmunización de caballos contra EEEV, WEEV y VEEV en EE. UU.</b> Para personal de laboratorio en riesgo existen vacunas humanas no licenciadas.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box clin"><span class="lbl">Prevención que sí está en tus manos</span>
+      <p>La base sigue siendo el <b>control vectorial</b> y la protección personal: repelente eficaz, pabellón, ropa de manga y pierna largas y evitar la exposición en los horarios de máxima actividad del mosquito. Nota de bioseguridad: <b>EEEV, WEEV y VEEV se transmiten por aerosol</b>, son patógenos prioritarios de categoría B de los CDC y varias cepas son agentes seleccionados con potencial de arma biológica; los primeros casos humanos de VEE fueron precisamente de laboratorio.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>+ssRNA bicistrónico</b>: los 2/3 del extremo 5′ codifican nsP1-4 y el tercio 3′, las estructurales desde el <b>mRNA subgenómico 26S</b>. Es un genoma infeccioso por sí mismo, sin polimerasa en el virión.</li>
+          <li><b>E2 se une, E1 fusiona.</b> La neutralización va contra E2; los ELISA de unión cruzan entre alfavirus y obligan a PRNT.</li>
+          <li><b>MXRA8</b> = receptor de los artritogénicos; <b>LDLRAD3</b> = receptor de VEEV en neuronas.</li>
+          <li><b>EEE</b>: la encefalitis por arbovirus más letal de Norteamérica (~30 %), con secuelas hasta en el 70 %.</li>
+          <li><b>VEE</b>: cuadro bifásico con <b>linfopenia</b>; encefalitis sobre todo en niños.</li>
+          <li><b>Chikungunya</b>: hinchazón articular con exantema y <b>sin trombocitopenia marcada</b>; la artralgia crónica es la firma de la enfermedad.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«Toga CREW»</b> → <b>C</b>hikungunya, <b>R</b>ubéola (ya en Matonaviridae), <b>E</b>ast y <b>W</b>est equine encephalitis.</p>
+        <p><b>«Chikungunya = caminar encorvado.»</b> El nombre makonde ya contiene el diagnóstico: la artritis, no la fiebre, es lo que define el caso.</p>
+        <p><b>«Siete y siete»</b> → hasta el <b>día 7</b>, RT-PCR; después del <b>día 7</b>, IgM. Y el virus infeccioso se aclara hacia el día 7–10.</p>
+        <p><b>«E-W-V, de este a oeste y al sur»</b> → EEE en la costa atlántica y del Golfo, WEE al oeste del Misisipi, VEE en América tropical.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Escenario latinoamericano y trampas</span>
+      <ul>
+        <li><b>México y Centroamérica están dentro del mapa del VEE</b>: se han documentado epizootias a intervalos de 10 años o menos desde los años treinta, y los subtipos enzoóticos <b>ID e IE</b> producen ahí encefalitis esporádica. El aumento de casos humanos sigue al brote equino con <b>1–2 semanas</b> de retraso: el caballo enfermo es el aviso epidemiológico.</li>
+        <li><b>Chikungunya circula en el mismo <i>Aedes</i> que dengue y Zika</b>, con cuadros clínicamente indistinguibles en su forma simple y coinfecciones documentadas. Pensar en «uno u otro» es el error clásico.</li>
+        <li><b>Mayaro</b> es hoy rural y amazónico, pero ya se demostró que puede infectar <i>A. aegypti</i>: el candidato natural al próximo salto urbano en la región.</li>
+        <li>La <b>rubéola no es togavirus</b> desde su traslado a Matonaviridae, aunque las tablas clásicas la sigan listando ahí.</li>
+        <li>WEEV <b>no tiene casos notificados a los CDC desde 1998</b>; los aislados modernos cambiaron de receptor y perdieron patogenicidad en modelos, así que su reemergencia se vigila por la vía del receptor que usan.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/Chikungunya.md</code> (nota semilla, <i>stub</i>) · Mandell, Douglas &amp; Bennett, <i>PPID</i> 2025, cap. 158 «Alphaviruses» (Fox, Markoff y Diamond), incluidas las secciones en línea de receptores, patogenia artritogénica y terapias experimentales · <i>First Aid for the USMLE Step 1</i> 2025, 35.ª ed., pp. 163-165 y 168 · Árbol taxonómico <code>virus-rna.html</code> de esta serie.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="reoviridae.html"><span class="k">← Anterior</span><span class="v">Reoviridae / Sedoreoviridae</span></a>
+        <a class="next" href="matonaviridae.html"><span class="k">Siguiente →</span><span class="v">Matonaviridae</span></a></div>
+      <footer class="pf">
+        <span>Togaviridae · 6 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

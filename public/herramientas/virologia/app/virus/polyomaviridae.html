@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polyomaviridae — Virus DNA</title>
+<meta name="description" content="Polyomaviridae. Virus BK · Virus JC · MCPyV">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-dna.html">Virus DNA</a><span class="sep">/</span>
+    <b>Polyomaviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-dna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus DNA · Familia 5 de 10 · Virología médica</p>
+    <h1>Polyomaviridae</h1>
+    <p class="sub">Virus BK · Virus JC · MCPyV</p>
+    <div class="chips"><span class="chip g">dsDNA circular 5 kb · codifica en las dos hebras</span>
+  <span class="chip">Sin envoltura · 72 capsómeros · 45 nm</span>
+  <span class="chip">Replicación nuclear · latencia en epitelio tubular renal</span>
+  <span class="chip r">Solo enferman al inmunodeprimido</span>
+  <span class="chip gold">Sin antiviral y sin vacuna: el tratamiento es devolver la inmunidad</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Polyomaviridae · Virus DNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros humanos</dt><dd><i>Betapolyomavirus</i> — <b>BK</b> y <b>JC</b> · <i>Alphapolyomavirus</i> — <b>MCPyV</b>, TSPyV, HPyV6/7</dd></div>
+  <div class="cell"><dt>Seroprevalencia adulta</dt><dd>BKV <b>82–90 %</b> · JCV <b>40–86 %</b> · DNA de MCPyV en piel sana de ~67 %</dd></div>
+  <div class="cell"><dt>Primoinfección</dt><dd>Infancia, <b>asintomática</b>; vía respiratoria u oral probable; transmisión vertical documentada</dd></div>
+  <div class="cell"><dt>Latencia</dt><dd>Células del <b>epitelio tubular renal</b> y uroepitelio; JCV además en médula ósea, tejido linfoide y cerebro</dd></div>
+  <div class="cell"><dt>Receptor</dt><dd>JCV: ácido siálico <b>α2,6</b> + receptor serotoninérgico <b>5-HT<sub>2A</sub></b> (clatrina) · BKV: ácido siálico <b>α2,3</b> (caveolas)</dd></div>
+  <div class="cell"><dt>Enfermedad por JCV</dt><dd><b>LMP</b> (CD4 &lt;200, natalizumab, anti-CD20), neuronopatía de células granulares, encefalopatía, meningitis</dd></div>
+  <div class="cell"><dt>Enfermedad por BKV</dt><dd>Nefropatía del injerto <b>1–10 %</b> · cistitis hemorrágica post-TCPH <b>10–25 %</b> · estenosis ureteral ~3 %</dd></div>
+  <div class="cell"><dt>Diagnóstico ancla</dt><dd>PCR de JCV en LCR + RM <b>sin realce</b> · viremia BKV <b>&gt;10⁴ copias/mL</b> + IHQ <b>SV40-T</b> en biopsia renal</dd></div>
+  <div class="cell"><dt>Tratamiento</dt><dd><b>Reconstitución inmune</b> o reducción de la inmunosupresión. No hay antiviral aprobado ni vacuna.</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">Dos virus bautizados con las iniciales de dos pacientes</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1958</b> — Åström, Mancall y Richardson describen la <b>leucoencefalopatía multifocal progresiva (LMP)</b> en leucemia linfocítica crónica y linfoma: una rareza sin agente conocido.</li>
+      <li><b>1971</b> — dos artículos consecutivos en <i>The Lancet</i> aíslan los dos virus. <b>Gardner</b> recupera un «nuevo papovavirus» de la orina de un trasplantado renal con estenosis ureteral, iniciales <b>B.K.</b>; <b>Padgett y Walker</b> cultivan del cerebro de un paciente con LMP el virus de iniciales <b>J.C.</b></li>
+      <li><b>Años ochenta</b> — la epidemia de VIH convierte la LMP en <b>infección oportunista definitoria de sida</b>: hasta 5 % de los no tratados, y 82 % de las series históricas eran VIH positivos.</li>
+      <li><b>2005</b> — primeros casos bajo <b>natalizumab</b> en esclerosis múltiple; <b>836 casos</b> documentados hasta agosto de 2020. El fármaco crea el riesgo donde no lo había.</li>
+      <li><b>2008</b> — Feng, Shuda, Chang y Moore demuestran la <b>integración clonal del MCPyV</b> en el carcinoma de células de Merkel (<i>Science</i>): el primer polyomavirus humano con papel oncogénico probado.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué se llaman así</span>
+      <p><i>Polyoma</i> significa «muchos tumores», por el virus murino que producía tumores múltiples en el ratón. En el humano el nombre casi no se cumple: solo <b>MCPyV</b> es un oncogén demostrado y, marginalmente, BKV en el <b>carcinoma urotelial</b> del trasplantado renal. Lo que en realidad hacen JCV y BKV es esperar décadas en silencio hasta que el huésped pierde su inmunidad celular.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Más de 14 polyomavirus humanos, dos que importan</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd><i>Polyomaviridae</i> — del griego <i>poly-</i> «muchos» + <i>-oma</i> «tumor»</dd>
+      <dt>Nombre histórico</dt><dd>Agrupados con los papilomavirus como «Papovaviridae» (<b>PA</b>piloma-<b>PO</b>lioma-<b>VA</b>cuolizante SV40); la clasificación se abandonó al comprobar que son familias distintas</dd>
+      <dt>Géneros del árbol</dt><dd><i>Betapolyomavirus</i> (BK, JC) · <i>Alphapolyomavirus</i> (MCPyV, TSPyV, HPyV6/7)</dd>
+      <dt>Especies humanas</dt><dd>Más de 14 descritas desde 2007; solo cuatro con enfermedad definida. Son <b>estrictamente especie-específicos</b>: SV40 en el mono, polyomavirus murino en el ratón</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Virus BK (BKPyV)</span><span class="vg">Betapolyomavirus</span></div>
+        <div class="vbd">
+          <p>Genotipos <b>I–IV</b> definidos por VP1 (el I predomina). Latente en el uroepitelio y las células tubulares renales.</p>
+          <p><b>Nefropatía del injerto renal</b>, <b>cistitis hemorrágica</b> tras trasplante de progenitores hematopoyéticos y <b>estenosis ureteral</b>. Su nefropatía en riñón nativo es excepcional.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Virus JC (JCPyV)</span><span class="vg">Betapolyomavirus</span></div>
+        <div class="vbd">
+          <p>Tipos <b>1–8</b> por VP1; comparte ~<b>70 % de homología genómica</b> con BKV. Sus regiones codificantes, extraordinariamente conservadas, se usan para trazar migraciones humanas.</p>
+          <p>Neurotropo solo tras reordenar su región reguladora: <b>LMP</b>, neuronopatía de células granulares, encefalopatía y meningitis.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">MCPyV</span><span class="vg">Alphapolyomavirus</span></div>
+        <div class="vbd">
+          <p>Detectable en hasta el <b>80 %</b> de los <b>carcinomas de células de Merkel</b>, tumor neuroectodérmico cutáneo agresivo del anciano y del inmunodeprimido.</p>
+          <p>El genoma se <b>integra antes</b> de la expansión clonal del tumor; se suma el daño actínico y la inmunosenescencia.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Los demás</span><span class="vg">comensales y rarezas</span></div>
+        <div class="vbd">
+          <p><b>TSPyV</b> → tricodisplasia espinulosa. <b>HPyV6/7</b> → placas cutáneas hiperpigmentadas pruriginosas del trasplantado.</p>
+          <p><b>KIPyV</b> y <b>WUPyV</b>: aislados de secreciones respiratorias de niños, con papel causal <b>no probado</b>; probablemente microbiota.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«JC: <i>Junky Cerebrum</i> · BK: <i>Bad Kidney</i>»</b> — reparto de órganos en cuatro palabras. Para el resto, el nombre <i>es</i> la enfermedad: <b>M</b>CPyV = <b>M</b>erkel · <b>TS</b>PyV = <b>T</b>ricodisplasia <b>S</b>pinulosa.</p>
+    </div>
+
+    <div class="box trap"><span class="lbl">Nota de nomenclatura</span>
+      <p>Mandell 10e todavía clasifica a JCV y BKV en <i>Orthopolyomavirus</i> y a KI/WU en <i>Wukipolyomavirus</i>. La taxonomía vigente los reparte en <i>Alpha-</i> y <i>Betapolyomavirus</i>: si el examen dice <i>Orthopolyomavirus</i>, habla de lo mismo.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">5 kb leídos en los dos sentidos</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Virión de los polyomavirus y mapa de su genoma circular con región temprana, región tardía y región reguladora no codificante">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+
+        <text x="30" y="34" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">VIRIÓN</text>
+        <text x="252" y="34" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">MAPA GENÓMICO</text>
+
+        <circle cx="120" cy="160" r="58" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.6"/>
+        <g fill="#36476E" opacity=".55">
+          <circle cx="120" cy="112" r="6"/><circle cx="152" cy="126" r="6"/><circle cx="88" cy="126" r="6"/>
+          <circle cx="166" cy="160" r="6"/><circle cx="74" cy="160" r="6"/>
+          <circle cx="152" cy="194" r="6"/><circle cx="88" cy="194" r="6"/><circle cx="120" cy="208" r="6"/>
+          <circle cx="120" cy="142" r="6"/><circle cx="98" cy="176" r="6"/><circle cx="142" cy="176" r="6"/>
+        </g>
+        <circle cx="120" cy="160" r="26" fill="none" stroke="#8a5c0a" stroke-width="2" stroke-dasharray="5 3"/>
+        <text x="120" y="164" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#8a5c0a">dsDNA</text>
+        <text x="120" y="248" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">45 NM · 72 CAPSÓMEROS · T=7</text>
+        <text x="120" y="268" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Sin envoltura: resiste alcohol,</text>
+        <text x="120" y="281" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">detergentes y desecación</text>
+
+        <circle cx="330" cy="172" r="78" fill="none" stroke="rgba(20,24,31,.10)" stroke-width="1"/>
+        <path d="M309.8 96.7 A78 78 0 0 0 330 250" fill="none" stroke="#701d14" stroke-width="9"/>
+        <path d="M350.2 96.7 A78 78 0 0 1 330 250" fill="none" stroke="#5C7A57" stroke-width="9"/>
+        <path d="M309.8 96.7 A78 78 0 0 1 350.2 96.7" fill="none" stroke="#8a5c0a" stroke-width="11"/>
+        <polygon points="252,178 244,166 260,166" fill="#701d14"/>
+        <polygon points="408,166 400,178 416,178" fill="#5C7A57"/>
+        <text x="330" y="150" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#8a5c0a">NCCR</text>
+        <text x="294" y="186" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#701d14">LT · st</text>
+        <text x="294" y="200" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#6b7585">TEMPRANA</text>
+        <text x="370" y="186" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#1a6b42">VP1-3 · agno</text>
+        <text x="370" y="200" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#6b7585">TARDÍA</text>
+        <text x="330" y="270" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">5 KB · CIRCULAR · AMBAS HEBRAS</text>
+
+        <g font-family="'Inter', sans-serif" fill="#14181f">
+          <text x="440" y="72" font-size="11.5" font-weight="600" fill="#8a5c0a">NCCR — región reguladora no codificante</text>
+          <text x="440" y="89" font-size="10" fill="#6b7585">Arquetipo conservado en riñón y orina; reordenada</text>
+          <text x="440" y="103" font-size="10" fill="#6b7585">(deleciones, inserciones) en cerebro y LCR de la LMP.</text>
+          <text x="440" y="117" font-size="10" fill="#6b7585">La región que no codifica nada decide el tropismo.</text>
+
+          <text x="440" y="150" font-size="11.5" font-weight="600" fill="#701d14">Región temprana — antígeno T grande y t pequeño</text>
+          <text x="440" y="167" font-size="10" fill="#6b7585">Se transcribe en sentido antihorario desde una hebra.</text>
+          <text x="440" y="181" font-size="10" fill="#6b7585">LT secuestra p53 y Rb, aporta la actividad helicasa y</text>
+          <text x="440" y="195" font-size="10" fill="#6b7585">es el antígeno que revela la IHQ anti-SV40 en la biopsia.</text>
+
+          <text x="440" y="228" font-size="11.5" font-weight="600" fill="#1a6b42">Región tardía — VP1, VP2, VP3 y agnoproteína</text>
+          <text x="440" y="245" font-size="10" fill="#6b7585">Sentido horario desde la hebra opuesta. VP1 forma los</text>
+          <text x="440" y="259" font-size="10" fill="#6b7585">72 capsómeros, define genotipos y une el receptor, y es</text>
+          <text x="440" y="273" font-size="10" fill="#6b7585">el blanco de los linfocitos T citotóxicos que protegen.</text>
+          <text x="440" y="287" font-size="10" fill="#6b7585">La agnoproteína solo existe en BKV, JCV y SV40.</text>
+        </g>
+
+        <text x="30" y="320" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Un genoma de 5 kb que se lee en los dos sentidos: lo temprano regula y transforma, lo tardío construye la cápside.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. Virión y mapa genómico. Retén la arquitectura tripartita —<b>temprana (LT/st) · tardía (VP1-3 + agno) · NCCR</b>— porque explica el diagnóstico (IHQ anti-SV40 detecta LT), la inmunidad protectora (CTL anti-VP1) y el neurotropismo (NCCR reordenada).</figcaption>
+    </figure>
+
+    <h4>Biología esencial</h4>
+    <ul>
+      <li><b>Virión</b>: 45 nm, cápside icosaédrica de <b>72 capsómeros</b> (T=7) de VP1, <b>sin envoltura</b>. Esa desnudez le da estabilidad ambiental y lo hace insensible a alcohol y detergentes.</li>
+      <li><b>Genoma</b>: DNA bicatenario <b>circular</b> de ~5 kb con <b>codificación bidireccional</b>: los genes tempranos se transcriben desde una hebra y los tardíos desde la contraria.</li>
+      <li><b>Antígeno T grande (LT)</b>: une <b>p53 y Rb</b> y empuja a la célula a fase S para que la DNA-polimerasa <b>del huésped</b> replique el genoma viral —no traen polimerasa propia—. Es el antígeno que tiñe la IHQ anti-SV40.</li>
+      <li><b>Entrada</b>: JCV usa ácido siálico <b>α2,6</b> y el receptor serotoninérgico <b>5-HT<sub>2A</sub></b> (presente en glía, astrocitos, linfocitos B, plaquetas y epitelio renal), por <b>fosas de clatrina</b>; BKV, ácido siálico <b>α2,3</b> y <b>caveolas</b>.</li>
+      <li><b>Replicación nuclear</b>, como todos los virus DNA salvo poxvirus: de ahí las <b>inclusiones intranucleares</b> del oligodendrocito en la LMP y de la célula tubular en la nefropatía.</li>
+      <li><b>Variabilidad</b> concentrada en la <b>NCCR</b> y en el extremo carboxilo de <b>VP1</b>; las mutaciones de VP1 se asocian a la neuronopatía de células granulares y escapan de los anticuerpos neutralizantes.</li>
+    </ul>
+
+    <div class="box clin"><span class="lbl">Traducción clínica</span>
+      <p>El virus arquetipo que se excreta en orina <b>no es</b> el que enferma el cerebro. La primoinfección siembra la variante arquetipo; bajo inmunosupresión sostenida surgen variantes con NCCR reordenada, más replicativas y neurotropas. Por eso <b>la viruria de JCV no predice LMP</b> y encontrarla en un paciente sano no significa nada.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">El anticuerpo no basta: falta el linfocito T</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruta de los polyomavirus desde la primoinfección de la infancia hasta la enfermedad del inmunodeprimido, con la bifurcación entre virus JC y virus BK">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <text x="24" y="30" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">DEL CONTAGIO EN LA INFANCIA A LA ENFERMEDAD DEL INMUNODEPRIMIDO</text>
+
+        <line x1="70" y1="150" x2="406" y2="150" stroke="#455A8C" stroke-width="1.4"/>
+        <line x1="516" y1="150" x2="560" y2="150" stroke="#455A8C" stroke-width="1.4"/>
+        <line x1="536" y1="110" x2="536" y2="252" stroke="#455A8C" stroke-width="1.4"/>
+        <line x1="536" y1="110" x2="560" y2="110" stroke="#455A8C" stroke-width="1.4"/>
+        <line x1="536" y1="252" x2="560" y2="252" stroke="#455A8C" stroke-width="1.4"/>
+
+        <circle cx="70" cy="150" r="17" fill="#27334F"/>
+        <text x="70" y="154" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">1</text>
+        <text x="70" y="190" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Primoinfección</text>
+        <text x="70" y="205" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Infancia, respiratoria</text>
+        <text x="70" y="218" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">u oral · asintomática</text>
+
+        <circle cx="200" cy="150" r="17" fill="#27334F"/>
+        <text x="200" y="154" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">2</text>
+        <text x="200" y="190" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Viremia transitoria</text>
+        <text x="200" y="205" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Siembra silenciosa de</text>
+        <text x="200" y="218" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">los sitios de latencia</text>
+
+        <circle cx="330" cy="150" r="17" fill="#36476E"/>
+        <text x="330" y="154" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">3</text>
+        <text x="330" y="190" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Latencia de por vida</text>
+        <text x="330" y="205" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Epitelio tubular renal y</text>
+        <text x="330" y="218" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">uroepitelio; JCV también en</text>
+        <text x="330" y="231" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">médula, linfoide y cerebro</text>
+
+        <rect x="406" y="126" width="110" height="48" rx="6" fill="rgba(138,92,10,.16)" stroke="#8a5c0a" stroke-width="1.3"/>
+        <text x="461" y="145" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">Caída de la</text>
+        <text x="461" y="160" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">inmunidad celular T</text>
+
+        <rect x="560" y="62" width="322" height="96" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="560" y="62" width="4" height="96" rx="2" fill="#701d14"/>
+        <text x="578" y="84" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#701d14">JCV · reactivación con NCCR reordenada</text>
+        <text x="578" y="101" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Infección lítica del oligodendrocito →</text>
+        <text x="578" y="115" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">desmielinización multifocal sin inflamación</text>
+        <text x="578" y="129" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Astrocitos bizarros · neurona granular cerebelosa</text>
+        <text x="578" y="148" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">LMP · GCN · ENCEFALOPATÍA · MENINGITIS</text>
+
+        <rect x="560" y="196" width="322" height="112" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="560" y="196" width="4" height="112" rx="2" fill="#27334F"/>
+        <text x="578" y="218" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">BKV · reactivación en el tracto urinario</text>
+        <text x="578" y="235" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Lisis del epitelio tubular → nefritis intersticial</text>
+        <text x="578" y="249" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">y fibrosis → disfunción del injerto</text>
+        <text x="578" y="266" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Uroepitelio + reconstitución tras el injerto de</text>
+        <text x="578" y="280" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">médula → cistitis hemorrágica</text>
+        <text x="578" y="299" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">BKVAN · CISTITIS · ESTENOSIS URETERAL</text>
+
+        <rect x="24" y="258" width="500" height="52" rx="6" fill="rgba(138,92,10,.10)" stroke="#8a5c0a" stroke-width="1"/>
+        <text x="38" y="278" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">El anticuerpo no protege</text>
+        <text x="38" y="295" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Más del 80 % de la población es seropositiva, incluidos los enfermos.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Historia natural común y bifurcación por virus. Todo el modelo cabe en una frase: <b>virus ubicuo + latencia renal + colapso de la inmunidad T = enfermedad de órgano</b>. Cambia el órgano, no el mecanismo.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Por qué la inmunidad humoral no sirve</span>
+        <ul>
+          <li>Casi todos los adultos —y todos los enfermos de LMP— son <b>seropositivos</b>: los anticuerpos no impiden la reactivación.</li>
+          <li>Protegen los <b>CTL CD8+ anti-VP1</b>: en HLA-A*0201 suben la sobrevida al año del <b>46 % al 73 %</b>.</li>
+          <li>Los supervivientes tienen <b>22 veces</b> más probabilidad de respuesta T CD4+ y CD8+ temprana que quienes progresan.</li>
+          <li>En el trasplante renal, la respuesta celular anti-BKV controla la replicación en una mediana de <b>1 mes sin otra intervención</b>.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Mecanismo del daño</span>
+        <ul>
+          <li><b>LMP</b>: lisis de oligodendrocitos y astrocitos → desmielinización con <b>gliosis y astrocitos bizarros</b>, y llamativamente <b>sin infiltrado inflamatorio</b> (por eso no realza).</li>
+          <li><b>BKVAN</b>: inclusiones intranucleares en el epitelio tubular, desprendimiento celular e inflamación intersticial; empieza en <b>médula y túbulos distales</b>.</li>
+          <li><b>Cistitis hemorrágica</b>: aparece <b>tras el injerto</b> y casi solo en alogénico con EICH; es daño inmunomediado, no solo citólisis.</li>
+          <li><b>MCPyV</b>: integración clonal previa a la expansión tumoral + daño actínico + inmunosenescencia.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">La paradoja de la reconstitución</span>
+      <p>Devolver la inmunidad es el tratamiento y, a la vez, el riesgo. En la LMP el retorno de los CD8+ produce el <b>SIRI</b>: realce con gadolinio (56–87 %), edema vasogénico (30 %) y efecto de masa (24 %), con mortalidad de hasta el <b>28 %</b>. Aun así, la aparición de realce se asocia a <b>mayor supervivencia</b>: el edema es el precio de la respuesta que salva. Lo que ensombrece el pronóstico es el efecto de masa y la desviación de la línea media.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Cerebro con JC, riñón y vejiga con BK</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Espectro neurológico del virus JC</h4>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Síndrome</th><th>Inicio</th><th>RM</th><th>Clínica</th><th>Histología</th></tr></thead>
+      <tbody>
+        <tr><td><b>LMP clásica</b></td><td>Subagudo (semanas a meses)</td><td>Lesiones asimétricas, bien delimitadas, subcorticales; T2/FLAIR hiperintensas, T1 hipointensas, <b>sin realce</b></td><td>Déficit focal según topografía: hemiparesia, hemianopsia, ataxia, afasia, deterioro cognitivo. <b>Sin fiebre ni signos meníngeos</b></td><td>Desmielinización en la unión gris-blanca; oligodendrocitos agrandados con inclusión intranuclear; astrocitos bizarros</td></tr>
+        <tr><td><b>LMP-SIRI</b></td><td>Con la recuperación inmune</td><td><b>Realce</b>, edema y posible efecto de masa</td><td>Empeoramiento paradójico</td><td>Igual, con infiltrados inflamatorios CD8+ marcados</td></tr>
+        <tr><td><b>Neuronopatía de células granulares</b></td><td>Crónico</td><td><b>Atrofia cerebelosa</b></td><td>Síndrome cerebeloso puro: ataxia de la marcha e incoordinación</td><td>Pérdida focal de la capa granular; mutaciones del extremo C de VP1</td></tr>
+        <tr><td><b>Encefalopatía por JCV</b></td><td>Subagudo, fulminante</td><td>Lesiones <b>corticales</b></td><td>Encefalopatía cognitiva y del estado de alerta, sin patrón focal</td><td>Infección productiva de neuronas piramidales corticales</td></tr>
+        <tr><td><b>Meningitis por JCV</b></td><td>Crónico</td><td>Ventrículos aumentados</td><td>Cefalea, rigidez de nuca, diplopía; JCV único patógeno en LCR</td><td>Infección de meninges y plexos coroideos</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Quién desarrolla LMP</span>
+        <ul>
+          <li><b>VIH</b> — hasta 5 % de los no tratados; hoy ~<b>50 %</b> de los casos. CD4 &lt;200, riesgo mayor con &lt;100.</li>
+          <li><b>Neoplasias hematológicas</b> 20–30 % · <b>enfermedades inflamatorias crónicas</b> ~20 % · trasplante de órgano sólido ~3 % · inmunodeficiencias primarias hasta 10 % · <b>hasta 6 % sin factor identificable</b>.</li>
+          <li><b>Fármacos</b>: <b>natalizumab</b> (hasta <b>1.3 %</b> con los tres factores de riesgo), rituximab y ocrelizumab, fingolimod, dimetilfumarato, efalizumab.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Detalles que se preguntan</span>
+        <ul>
+          <li>Nervio óptico y médula espinal <b>respetados</b>.</li>
+          <li>Aunque la lesión sea de sustancia blanca, hay <b>crisis convulsivas hasta en 44 %</b> de los supervivientes, por lesiones yuxtacorticales.</li>
+          <li>El retraso diagnóstico es la regla: mediana de <b>74 días</b> desde el primer síntoma.</li>
+          <li>La infección de neuronas granulares aparece en <b>la mitad de las autopsias</b> de LMP: se solapa con el cuadro clásico.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Enfermedad urológica del virus BK</h4>
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Nefropatía por BKV</span><span class="vg">trasplante renal</span></div>
+        <div class="vbd">
+          <p><b>1–10 %</b> de los receptores. Inicio entre 6 días y 5 años; media de <b>10–13 meses</b>, con pico de diagnóstico hacia la semana 24.</p>
+          <p><b>Silenciosa</b>: elevación lenta de creatinina sin síntomas, idéntica al rechazo. Sin intervención, <b>30–50 %</b> pierden función y <b>1–10 %</b> el injerto de forma irreversible.</p>
+          <p>Riesgo mayor con edad avanzada, sexo masculino, diabetes, títulos altos de anticuerpos en el donante y <b>catéter ureteral</b>.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Cistitis hemorrágica</span><span class="vg">TCPH alogénico</span></div>
+        <div class="vbd">
+          <p>Hasta <b>50 %</b> tienen viruria en los 2 primeros meses, pero solo <b>10–25 %</b> desarrollan cistitis, casi siempre <b>después del injerto</b>.</p>
+          <p>Hematuria macroscópica, disuria, urgencia y dolor suprapúbico; los coágulos pueden obstruir y causar falla renal.</p>
+          <p>Factores: acondicionamiento <b>mieloablativo</b>, donante no emparentado con incompatibilidad HLA y <b>EICH</b>. Rarísima en trasplante autólogo con el mismo acondicionamiento.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Estenosis ureteral y otros</span>
+        <p><b>Estenosis ureteral</b>: ~3 % de los trasplantados renales, <b>indolora</b> porque el injerto no está inervado; se presenta como obstrucción con creatinina en ascenso. Fuera del riñón se han descrito encefalitis con BKV en LCR, neumonitis tras cistitis hemorrágica y <b>carcinoma urotelial</b> con DNA viral integrado.</p>
+      </div>
+      <div class="card"><span class="lbl">Polyomavirus cutáneos</span>
+        <p><b>MCC</b> (MCPyV): nódulo firme, rojo-violáceo, de crecimiento rápido en zona fotoexpuesta del anciano o del inmunosuprimido. <b>Tricodisplasia espinulosa</b> (TSPyV): espículas foliculares en la cara, sobre todo en la nariz, con <b>pérdida de cejas y pestañas</b>.</p>
+      </div>
+    </div>
+
+    <div class="box trap"><span class="lbl">Diferencial obligado</span>
+      <ul>
+        <li><b>Lesión cerebral en VIH con CD4 &lt;200</b>: toxoplasmosis (realce <b>anular</b>, efecto de masa), linfoma primario del SNC (realce <b>homogéneo</b>, periventricular), encefalitis por CMV (ventriculitis), criptococoma — frente a <b>LMP: no realza y no comprime</b>.</li>
+        <li><b>Creatinina en ascenso postrasplante renal</b>: BKVAN frente a rechazo agudo. El manejo es <b>opuesto</b> —bajar o subir la inmunosupresión— y solo la biopsia con IHQ SV40-T los separa.</li>
+        <li><b>Hematuria post-TCPH</b>: descartar adenovirus, CMV, cistitis por ciclofosfamida o BCNU y EICH vesical antes de atribuirla a BK.</li>
+        <li>En trasplante de órgano sólido con nefropatía y PCR de BKV negativa, se han descrito casos por <b>JCV</b>: confiar solo en el ensayo de BK retrasa el diagnóstico.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Una PCR negativa no descarta la LMP</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario</th><th>Muestra y prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="3"><b>LMP</b></td><td>RM cerebral</td><td>Imagen de elección. Lesiones multifocales de sustancia blanca subcortical y pedúnculos cerebelosos que <b>no respetan territorios vasculares</b>; borde hiperintenso en difusión en el frente de avance.</td></tr>
+        <tr><td><b>PCR de JCV en LCR</b></td><td>Antes del TAR: sensibilidad <b>72–92 %</b>, especificidad 92–100 %. <b>En la era del TAR la sensibilidad cayó al 58 %</b>. A mayor carga, mayor VPP. El citoquímico es inespecífico: pleocitosis leve, proteínas algo altas, glucosa normal.</td></tr>
+        <tr><td>Biopsia cerebral</td><td><b>Estándar de oro</b>: sensibilidad <b>64–96 %</b>, especificidad 100 %. Se reserva para clínica e imagen compatibles con PCR negativa.</td></tr>
+        <tr><td rowspan="3"><b>BKVAN</b></td><td>PCR de BKV en <b>orina</b></td><td>Precede al plasma. La <b>viruria sostenida</b> (dos muestras consecutivas) es 100 % sensible y 94 % específica para viremia, pero <b>no diagnostica nefropatía</b>.</td></tr>
+        <tr><td><b>PCR de BKV en plasma</b></td><td>Descarta mejor de lo que confirma: <b>VPN 100 %, VPP 50 %</b>. Con carga <b>&gt;10⁴ copias/mL</b>, sensibilidad y especificidad del <b>93 %</b> para nefropatía histológica.</td></tr>
+        <tr><td><b>Biopsia renal + IHQ SV40-T</b></td><td>Confirma y gradúa (patrones A/B/C de Drachenberg). <b>Falsos negativos hasta 30 %</b> por la focalidad: si la sospecha persiste, se repite.</td></tr>
+        <tr><td><b>Cistitis BK</b></td><td>PCR de BKV en orina</td><td>Sensible pero <b>inespecífica</b>. Se exige carga alta <b>más hematuria y síntomas</b>. En la cistitis y en la estenosis suele <b>no haber viremia</b>.</td></tr>
+        <tr><td><b>Cualquiera</b></td><td>Citología urinaria: <b>decoy cells</b></td><td>Célula uroepitelial con núcleo agrandado y una gran inclusión basófila. Indica infección, <b>no enfermedad</b>: también aparece con CMV y adenovirus.</td></tr>
+        <tr><td><b>MCC</b></td><td>Biopsia cutánea</td><td>Tumor neuroectodérmico; DNA de MCPyV en hasta el <b>80 %</b>. La serología no tiene papel diagnóstico.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Criterios de LMP — consenso AAN 2013</span>
+        <p>Tres pilares: <b>clínica compatible</b>, <b>imagen compatible</b> y <b>PCR de JCV en LCR</b>.</p>
+        <ul>
+          <li><b>Definitiva</b> — los tres, o histopatología con JCV en tejido cerebral.</li>
+          <li><b>Probable</b> — PCR positiva y solo uno de los otros dos.</li>
+          <li><b>Posible</b> — clínica e imagen con PCR negativa, o solo PCR positiva.</li>
+          <li><b>No es LMP</b> — solo clínica, solo imagen o ninguno.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Errores frecuentes</span>
+        <ul>
+          <li>Dar por descartada la LMP con <b>una</b> PCR negativa: en LMP inflamatoria y al inicio la carga es baja. Se repite la punción.</li>
+          <li>Buscar <b>JCV en sangre</b>: la viremia no forma parte del diagnóstico de LMP y aparece en el 20–40 % de personas con VIH sin LMP.</li>
+          <li>Tratar una <b>viruria</b> de BK aislada. La conducta se decide con la <b>viremia</b>.</li>
+          <li>Interpretar la aparición de realce en la RM como fracaso: suele ser <b>SIRI</b>, y se asocia a mejor supervivencia.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Quitar el freno inmunológico, no dar antivirales</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cascada de la reactivación del virus BK tras el trasplante renal, calendario de tamizaje y umbral de acción">
+        <rect width="900" height="320" fill="#FFFFFF"/>
+        <text x="40" y="32" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">CASCADA DE LA REACTIVACIÓN BK EN EL TRASPLANTE RENAL</text>
+
+        <rect x="40" y="52" width="300" height="34" rx="4" fill="rgba(69,90,140,.30)"/>
+        <text x="54" y="74" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#27334F">Viruria · 30–40 %</text>
+        <text x="356" y="70" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">Aparece primero; sola no obliga a hacer nada</text>
+
+        <rect x="40" y="96" width="152" height="34" rx="4" fill="rgba(138,92,10,.30)"/>
+        <text x="54" y="118" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#8a5c0a">Viremia · ~50 % de ellos</text>
+        <text x="356" y="114" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">Plasma positivo = riesgo real; aquí se actúa</text>
+
+        <rect x="40" y="140" width="76" height="34" rx="4" fill="rgba(112,29,20,.32)"/>
+        <text x="54" y="162" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Nefropatía</text>
+        <text x="356" y="152" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">~50 % de los virémicos · 1–10 % de los injertos</text>
+        <text x="356" y="168" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">Sin intervenir, 30–50 % pierden función</text>
+
+        <text x="60" y="222" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585">TAMIZAJE EN PLASMA: MENSUAL 0–6 M, LUEGO CADA 3 M HASTA EL AÑO</text>
+        <line x1="60" y1="248" x2="620" y2="248" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="620,248 610,243 610,253" fill="#455A8C"/>
+        <g fill="#6b7585" font-family="'IBM Plex Mono', monospace" font-size="8.5">
+          <line x1="60" y1="242" x2="60" y2="254" stroke="#455A8C" stroke-width="1.2"/>
+          <line x1="107" y1="242" x2="107" y2="254" stroke="#455A8C" stroke-width="1.2"/>
+          <line x1="200" y1="242" x2="200" y2="254" stroke="#455A8C" stroke-width="1.2"/>
+          <line x1="340" y1="242" x2="340" y2="254" stroke="#455A8C" stroke-width="1.2"/>
+          <line x1="480" y1="242" x2="480" y2="254" stroke="#455A8C" stroke-width="1.2"/>
+          <line x1="620" y1="242" x2="620" y2="254" stroke="#455A8C" stroke-width="1.2"/>
+          <text x="60" y="268" text-anchor="middle">0</text>
+          <text x="107" y="268" text-anchor="middle">1</text>
+          <text x="200" y="268" text-anchor="middle">3</text>
+          <text x="340" y="268" text-anchor="middle">6</text>
+          <text x="480" y="268" text-anchor="middle">9</text>
+          <text x="620" y="268" text-anchor="middle">12 MESES</text>
+        </g>
+        <polygon points="316,240 322,230 310,230" fill="#701d14"/>
+        <text x="316" y="292" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#701d14">pico de nefropatía</text>
+        <text x="316" y="304" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">≈ semana 24</text>
+        <polygon points="513,240 519,230 507,230" fill="#701d14"/>
+        <text x="513" y="292" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#701d14">diagnóstico medio</text>
+        <text x="513" y="304" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">≈ semana 44</text>
+
+        <rect x="650" y="192" width="230" height="112" rx="6" fill="rgba(138,92,10,.10)" stroke="#8a5c0a" stroke-width="1.2"/>
+        <text x="666" y="214" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">Umbral de acción</text>
+        <text x="666" y="234" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#14181f">Plasma &gt;10⁴ copias/mL</text>
+        <text x="666" y="250" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">→ reducir la inmunosupresión</text>
+        <text x="666" y="265" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">de forma preventiva</text>
+        <text x="666" y="284" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.08em" fill="#6b7585">S Y E 93 % PARA NEFROPATÍA</text>
+        <text x="666" y="298" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">VPN 100 % · VPP 50 %</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. El tamizaje sistemático de BKV es la única estrategia con eficacia probada: detectar la viremia antes del daño y bajar la inmunosupresión evita la nefropatía. El aclaramiento del virus en plasma es el <b>marcador subrogado</b> de resolución histológica.</figcaption>
+    </figure>
+
+    <div class="box trap"><span class="lbl">Punto de partida</span>
+      <p><b>Ningún antiviral ha demostrado eficacia clínica contra JCV ni BKV, y no existe vacuna.</b> Todo lo que funciona consiste en restituir la inmunidad celular. Las dosis y esquemas de los fármacos «candidatos» no están validados: fuera de un protocolo, prescribirlos es tratar la ansiedad del médico.</p>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">LMP — lo que sí se hace</span>
+        <ul>
+          <li><b>VIH</b>: iniciar u optimizar el <b>TAR</b> sin demora. Sube la supervivencia al año del <b>10 % al 50 %</b>; única intervención con beneficio demostrado.</li>
+          <li><b>Natalizumab</b>: suspenderlo y acelerar su aclaramiento con <b>plasmaféresis</b> (5 sesiones); su vida media es larga y sin recambio el fármaco tarda en desaparecer. Anticipar el SIRI.</li>
+          <li><b>Otros inmunosupresores</b>: retirar o reducir el agente responsable si la enfermedad de base lo permite.</li>
+          <li><b>SIRI</b>: corticoides a dosis altas <b>solo</b> ante deterioro claro atribuible a la inflamación; debatidos por el riesgo de perder el control virológico. No hay guía formal.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">LMP — lo que no funciona</span>
+        <ul>
+          <li><b>Citarabina</b>: activa in vitro, <b>ensayo aleatorizado negativo</b> en LMP por VIH.</li>
+          <li><b>Cidofovir</b>: potente frente a SV40, con <b>escasa actividad frente a JCV</b>. <b>Brincidofovir</b>: activo in vitro pero <b>no penetra el SNC</b>.</li>
+          <li><b>Mefloquina</b>: ensayo multicéntrico <b>detenido por falta de eficacia</b>.</li>
+          <li><b>Mirtazapina</b> (bloquea 5-HT<sub>2A</sub>): sin ensayo formal; beneficio anecdótico.</li>
+          <li>En evaluación: <b>pembrolizumab</b>, IL-7, filgrastim, vacunación anti-VP1 y <b>linfocitos T específicos</b>. Ninguno probado en ensayo aleatorizado; todos pueden inducir SIRI.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Nefropatía por BKV</span>
+        <ul>
+          <li><b>Reducir la inmunosupresión</b> es el tratamiento de elección; se equilibra contra el riesgo de rechazo. Ajustar anticalcineurínicos y micofenolato.</li>
+          <li><b>Leflunomida, cidofovir a dosis bajas e IVIG</b>: éxito variable en estudios pequeños, siempre con reducción concomitante de la inmunosupresión. Un ensayo aleatorizado de IVIG fue <b>negativo</b>.</li>
+          <li><b>Fluoroquinolonas: no</b>. Inhiben la helicasa del antígeno T in vitro, pero <b>dos ensayos con levofloxacino</b> no redujeron la viruria y aumentaron la resistencia bacteriana.</li>
+          <li>En evaluación: cambio a <b>inhibidores de mTOR</b> y linfocitos T virus-específicos.</li>
+          <li>Si no mejora, <b>repetir la biopsia</b>: hay que distinguir nefropatía de rechazo agudo.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Cistitis hemorrágica y otros</span>
+        <ul>
+          <li><b>Soporte</b>: hiperhidratación, diuresis forzada, irrigación vesical continua, analgesia, transfusión para mantener <b>plaquetas &gt;50 000/mm³</b> y <b>hematocrito &gt;25 %</b>.</li>
+          <li><b>Cidofovir intravesical</b>: alivio sintomático en series de casos, <b>sin descenso consistente</b> de la carga viral urinaria. Faltan ensayos.</li>
+          <li><b>Linfocitos T multivirus específicos</b>: reducen signos y síntomas en estudios recientes.</li>
+          <li><b>Estenosis ureteral</b>: reducir inmunosupresión y resolver la obstrucción por vía quirúrgica.</li>
+          <li><b>Carcinoma de células de Merkel</b>: cirugía y radioterapia; la quimioterapia no es eficaz y los <b>inhibidores de puntos de control</b> benefician a un subgrupo.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">Prevención</span>
+      <ul>
+        <li><b>No hay vacuna</b> contra ningún polyomavirus humano, y la higiene no evita una primoinfección que ocurre en la infancia.</li>
+        <li><b>Trasplante renal</b>: tamizaje con PCR en plasma —mensual los primeros 3–6 meses, trimestral hasta el año— y <b>reducción preventiva</b> de la inmunosupresión al detectar viremia. Es la medida que ha bajado la incidencia de nefropatía.</li>
+        <li><b>Natalizumab</b>: estratificar con <b>serología anti-JCV con índice</b>, duración (&gt;2 años) y uso previo de inmunosupresores. Los tres factores juntos llevan la incidencia al <b>1.3 %</b>; ahí se considera cambiar de fármaco.</li>
+        <li><b>VIH</b>: mantener CD4 &gt;200 con TAR es la única profilaxis real de la LMP. En general, <b>limitar intensidad y duración de la inmunosupresión</b> reduce el riesgo de toda la familia.</li>
+      </ul>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>Único virus DNA circular bicatenario</b> junto a los papilomavirus; sin envoltura, icosaédrico, replicación <b>nuclear</b>.</li>
+          <li><b>LMP = lesión desmielinizante que NO realza y NO comprime</b> en un inmunodeprimido.</li>
+          <li>Célula blanco de JCV: el <b>oligodendrocito</b>; receptor accesorio <b>5-HT<sub>2A</sub></b>.</li>
+          <li>Histología de la LMP: <b>oligodendrocitos con inclusión intranuclear + astrocitos bizarros</b>.</li>
+          <li><b>Viremia BKV &gt;10⁴ copias/mL</b> → reducir inmunosupresión. IHQ <b>SV40-T</b> en la biopsia renal.</li>
+          <li><b>Decoy cells</b> = infección, no enfermedad.</li>
+          <li>Ambos virus latentes en el <b>riñón</b>; el que se excreta en orina no es el que enferma el cerebro.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«JC: <i>Junky Cerebrum</i> · BK: <i>Bad Kidney</i>»</b> — reparto de órganos en cuatro palabras.</p>
+        <p><b>«Son iniciales, no siglas»</b> — ambos virus llevan las iniciales del paciente del que se aislaron en 1971.</p>
+        <p><b>«Temprano transforma, tardío ensambla»</b> — LT/st unen p53 y Rb; VP1-3 construyen la cápside.</p>
+        <p><b>«Ni antiviral ni vacuna: se trata al sistema inmune, no al virus»</b> — la regla que separa a JCV y BKV de CMV, VHS y VVZ.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas y escenario mexicano</span>
+      <ul>
+        <li>El paciente con VIH y lesión cerebral que <b>empeora al iniciar TAR</b> con realce nuevo no fracasó el tratamiento: tiene <b>SIRI</b>. No se suspende el TAR.</li>
+        <li>La <b>PCR de JCV negativa en LCR no descarta</b> LMP: en la era del TAR su sensibilidad es del 58 %.</li>
+        <li><b>Todo el mundo es seropositivo.</b> La serología anti-JCV solo sirve para <b>estratificar riesgo antes de natalizumab</b>, nunca para diagnosticar.</li>
+        <li>En México el escenario dominante sigue siendo el <b>diagnóstico tardío de VIH</b>: la LMP como evento definitorio de sida en un paciente que llega con CD4 &lt;100. El acceso rápido a TAR es aquí, literalmente, el antiviral.</li>
+        <li>En el trasplantado renal, subir esteroides «por si es rechazo» sin biopsia puede convertir una nefropatía por BK en una pérdida del injerto.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/JCV_BKV.md</code> y <code>patogenos/JC_virus.md</code> · Mandell PPID 10e, cap. 151 «JC, BK, and Other Polyomaviruses» (Cortese y Tan), pp. 1902-1912 · Berger et al., <i>Neurology</i> 2013;80:1430-1438 (criterios AAN de LMP) · Bloomgren et al., <i>NEJM</i> 2012;366:1870-1880 · Cortese et al., <i>NEJM</i> 2019;380:1597-1605 · Hirsch et al., <i>NEJM</i> 2002;347:488-496 y <i>Transplantation</i> 2005;79:1277-1286 · AST IDCOP, <i>Clin Transplant</i> 2019;33:e13528 · DHHS/IDSA HIV-OI Guidelines 2024 · Padgett et al. y Gardner et al., <i>Lancet</i> 1971 · Feng et al., <i>Science</i> 2008;319:1096-1100 · First Aid for the USMLE Step 1 2025, pp. 159-163.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="papillomaviridae.html"><span class="k">← Anterior</span><span class="v">Papillomaviridae</span></a>
+        <a class="next" href="herpesviridae-alpha.html"><span class="k">Siguiente →</span><span class="v">Herpesviridae — α</span></a></div>
+      <footer class="pf">
+        <span>Polyomaviridae · 5 de 10 · árbol DNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

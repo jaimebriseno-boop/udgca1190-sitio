@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kolmioviridae — Virus RNA</title>
+<meta name="description" content="Kolmioviridae. Virus de la hepatitis D (agente delta)">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Kolmioviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 10 de 18 · Virología médica</p>
+    <h1>Kolmioviridae</h1>
+    <p class="sub">Virus de la hepatitis D (agente delta)</p>
+    <div class="chips"><span class="chip g">−ssRNA circular · ≈1 680 nt</span>
+  <span class="chip">Envuelto con HBsAg ajeno · 36 nm</span>
+  <span class="chip">Replicación nuclear con Pol II del huésped</span>
+  <span class="chip r">Cirrosis en 50–70 % a 5–10 años</span>
+  <span class="chip gold">La vacuna anti-VHB también previene la D</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Kolmioviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Género y especie</dt><dd><i>Deltavirus</i> · virus de la hepatitis D (HDV, «agente delta»)</dd></div>
+  <div class="cell"><dt>Naturaleza</dt><dd><b>Virus satélite defectuoso</b>: en la naturaleza solo existe en personas también infectadas por VHB</dd></div>
+  <div class="cell"><dt>Proteína propia</dt><dd><b>Una sola</b>: HDAg, en dos isoformas — S-HDAg (24 kDa) y L-HDAg (27 kDa)</dd></div>
+  <div class="cell"><dt>Receptor y tropismo</dt><dd><b>NTCP</b> (cotransportador Na⁺/taurocolato) vía L-HBsAg · <b>solo hepatocitos</b>, sin réplica extrahepática</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Percutánea (dominante) · sexual · <b>perinatal poco frecuente</b>, a diferencia del VHB</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd>3–7 semanas tras la exposición · coinfección 45–160 días · <b>sobreinfección 2–8 semanas</b></dd></div>
+  <div class="cell"><dt>Carga global</dt><dd>≈12 millones de expuestos · <b>4.5–5 % de los HBsAg+</b> · ≈7.1 millones virémicos · 8 genotipos</dd></div>
+  <div class="cell"><dt>Tratamiento</dt><dd>PEG-IFN-α semanal ≥48 semanas (único en guías) · <b>bulevirtide</b> aprobado en Europa desde 2020</dd></div>
+  <div class="cell"><dt>Prevención</dt><dd><b>Vacuna anti-VHB</b>. No existe vacuna ni profilaxis específica contra el HDV</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">Un antígeno de más en el hígado de Turín</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1977</b> — <b>Mario Rizzetto</b> identifica en hepatocitos de portadores italianos de HBsAg un antígeno nuclear que <b>no era HBsAg, ni HBcAg, ni HBeAg</b>. Lo llamó <b>antígeno delta</b> y supuso al principio que era un marcador más del propio VHB.</li>
+      <li>Poco después queda claro que se trata de un <b>virus pasajero</b> que acompaña al VHB y que <b>necesita el HBsAg para transmitirse</b>: nace el concepto de virus satélite en patología humana.</li>
+      <li>Al secuenciarse, el genoma resulta <b>circular y emparentado estructuralmente con viroides y virusoides de plantas</b>. Ningún otro virus humano se le parece.</li>
+      <li><b>Desde los años ochenta</b> la prevalencia mundial cae de forma sustancial, no por un fármaco sino por el <b>control del VHB</b>: vacunación masiva, tamizaje universal de HBsAg en bancos de sangre y mejores condiciones socioeconómicas. El HDV prácticamente desapareció entre politransfundidos y hemofílicos de países de alto ingreso.</li>
+      <li><b>2020</b> — la Comisión Europea aprueba <b>bulevirtide</b> (Hepcludex, antes Myrcludex B), primer antiviral dirigido contra el HDV; el ensayo fase 3 MYR301 se publica en 2023. No estaba aprobado en Estados Unidos al cierre de Mandell 10.ª ed.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">Por qué esta historia se pregunta</span>
+      <p>El HDV es el ejemplo canónico de <b>complementación viral</b>: un virus con proteína no funcional —aquí, sin envoltura propia— es rescatado por otro que se la presta. Y es el único virus humano cuya <b>vacuna es la de otro virus</b>: al impedir la infección por VHB, la vacuna recombinante de HBsAg vuelve imposible la infección por delta.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Una familia, un género, un virus humano</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Familia</dt><dd>Kolmioviridae — del finés <i>kolmio</i>, «triángulo», por la letra griega delta (Δ). Reclasificación reciente: durante décadas el HDV figuró como «género sin familia asignada».</dd>
+      <dt>Género</dt><dd><i>Deltavirus</i></dd>
+      <dt>Especie humana</dt><dd>Virus de la hepatitis D (HDV) — <b>el único miembro con patología humana conocida</b></dd>
+      <dt>Clasificación funcional</dt><dd>Agente subviral satélite: no es un viroide (codifica una proteína) ni un virus completo (no codifica envoltura ni polimerasa)</dd>
+    </dl>
+
+    <div class="vblock">
+      <div class="vhd"><span class="vn">Virus de la hepatitis D</span><span class="vg">Deltavirus · 8 genotipos</span></div>
+      <div class="vbd">
+        <p>La divergencia entre genotipos alcanza el <b>20–40 %</b>, mayor que la de muchos virus considerados especies distintas. <b>El genotipo predice la gravedad</b>, y la distribución geográfica es la clave para leer el caso clínico.</p>
+        <div class="scrollx">
+        <table class="tbl">
+          <thead><tr><th>Genotipo</th><th>Dónde</th><th>Comportamiento</th></tr></thead>
+          <tbody>
+            <tr><td><b>HDV-1</b></td><td>Prácticamente todos los continentes; el más frecuente del mundo. Cuatro subgenotipos.</td><td>Enfermedad grave: cirrosis, hepatitis fulminante y muerte</td></tr>
+            <tr><td><b>HDV-2 y HDV-4</b></td><td>Asia</td><td><b>Los más benignos</b></td></tr>
+            <tr><td><b>HDV-3</b></td><td>Norte de Sudamérica, sobre todo la <b>cuenca amazónica</b></td><td><b>La forma más grave descrita</b> — el genotipo con firma latinoamericana</td></tr>
+            <tr><td><b>HDV-5</b></td><td>África occidental y subsahariana</td><td>Segundo genotipo más común tras el 1</td></tr>
+            <tr><td><b>HDV-6 a HDV-8</b></td><td>África central</td><td>Predominantes solo en esa región</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p>Tres «virus prestados» que hay que distinguir: el <b>HDV</b> pide prestada la <b>envoltura</b> al VHB; los <b>virus defectivos interferentes</b> piden prestado todo al virus parental; los <b>viroides</b> de plantas no piden nada porque no codifican proteína alguna. El HDV está justo en medio: <b>una proteína propia, cero envoltura propia, cero polimerasa propia</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">1 680 nucleótidos, una proteína, ninguna polimerasa</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión del virus de la hepatitis D, con envoltura de HBsAg prestada y ribonucleoproteína interna en forma de varilla">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <circle cx="170" cy="175" r="90" fill="rgba(69,90,140,.14)" stroke="#36476E" stroke-width="1.6"/>
+        <g stroke="#701d14" stroke-width="2.2" stroke-linecap="round">
+          <line x1="260" y1="175" x2="274" y2="175"/>
+          <line x1="248" y1="220" x2="260" y2="227"/>
+          <line x1="215" y1="253" x2="222" y2="265"/>
+          <line x1="170" y1="265" x2="170" y2="279"/>
+          <line x1="125" y1="253" x2="118" y2="265"/>
+          <line x1="92" y1="220" x2="80" y2="227"/>
+          <line x1="80" y1="175" x2="66" y2="175"/>
+          <line x1="92" y1="130" x2="80" y2="123"/>
+          <line x1="125" y1="97" x2="118" y2="85"/>
+          <line x1="170" y1="85" x2="170" y2="71"/>
+          <line x1="215" y1="97" x2="222" y2="85"/>
+          <line x1="248" y1="130" x2="260" y2="123"/>
+        </g>
+        <g fill="#701d14">
+          <circle cx="274" cy="175" r="3.2"/><circle cx="260" cy="227" r="3.2"/><circle cx="222" cy="265" r="3.2"/>
+          <circle cx="170" cy="279" r="3.2"/><circle cx="118" cy="265" r="3.2"/><circle cx="80" cy="227" r="3.2"/>
+          <circle cx="66" cy="175" r="3.2"/><circle cx="80" cy="123" r="3.2"/><circle cx="118" cy="85" r="3.2"/>
+          <circle cx="170" cy="71" r="3.2"/><circle cx="222" cy="85" r="3.2"/><circle cx="260" cy="123" r="3.2"/>
+        </g>
+        <ellipse cx="170" cy="175" rx="62" ry="17" transform="rotate(-20 170 175)" fill="rgba(92,122,87,.20)" stroke="#5C7A57" stroke-width="1.4"/>
+        <path d="M120 175 q11 -8 22 0 t22 0 t22 0 t22 0 t22 0" transform="rotate(-20 170 175)" fill="none" stroke="#5C7A57" stroke-width="1.6"/>
+        <g fill="#27334F" transform="rotate(-20 170 175)">
+          <circle cx="140" cy="170" r="4.2"/><circle cx="172" cy="181" r="4.2"/><circle cx="202" cy="170" r="4.2"/>
+        </g>
+        <g font-family="'Inter', sans-serif" fill="#14181f">
+          <line x1="262" y1="124" x2="352" y2="52" stroke="#455A8C" stroke-width="1"/>
+          <text x="360" y="58" font-size="11.5" font-weight="600" fill="#701d14">Envoltura prestada — HBsAg del VHB</text>
+          <text x="360" y="74" font-size="10.5" fill="#6b7585">Las tres formas (L, M, S) más lípidos del hepatocito.</text>
+          <text x="360" y="88" font-size="10.5" fill="#6b7585">El dominio pre-S1 de L-HBsAg da la infectividad: ~90 %</text>
+          <text x="360" y="102" font-size="10.5" fill="#6b7585">de los viriones no lo llevan y son estériles.</text>
+          <line x1="228" y1="150" x2="352" y2="120" stroke="#455A8C" stroke-width="1"/>
+          <text x="360" y="126" font-size="11.5" font-weight="600" fill="#1a6b42">Ribonucleoproteína — RNA circular + HDAg</text>
+          <text x="360" y="142" font-size="10.5" fill="#6b7585">≈1 680 nucleótidos, ssRNA (−), circular y rico en G+C:</text>
+          <text x="360" y="156" font-size="10.5" fill="#6b7585">se aparea consigo mismo y adopta forma de varilla.</text>
+          <line x1="206" y1="190" x2="352" y2="174" stroke="#455A8C" stroke-width="1"/>
+          <text x="360" y="180" font-size="11.5" font-weight="600" fill="#27334F">S-HDAg · 24 kDa</text>
+          <text x="360" y="196" font-size="10.5" fill="#6b7585">Inicia la replicación del RNA; actúa como chaperona.</text>
+          <line x1="218" y1="206" x2="352" y2="214" stroke="#455A8C" stroke-width="1"/>
+          <text x="360" y="220" font-size="11.5" font-weight="600" fill="#27334F">L-HDAg · 27 kDa</text>
+          <text x="360" y="236" font-size="10.5" fill="#6b7585">19 aminoácidos extra por edición de ADAR1. Inhibe la</text>
+          <text x="360" y="250" font-size="10.5" fill="#6b7585">replicación y, una vez prenilada, se une al HBsAg para</text>
+          <text x="360" y="264" font-size="10.5" fill="#6b7585">el ensamblaje: el paso que bloquea el lonafarnib.</text>
+        </g>
+        <text x="40" y="318" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">36 NM — MAYOR QUE LA PARTÍCULA DE HBSAG (22 NM), MENOR QUE EL VIRIÓN DE HBV (42 NM)</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión del HDV. Todo lo que está por fuera es del virus B; todo lo que está por dentro es del delta. De ahí se deducen sus dos dependencias: no puede <i>entrar</i> ni <i>salir</i> sin HBsAg, aunque una vez dentro replica su RNA por su cuenta.</figcaption>
+    </figure>
+
+    <h4>Entrada y hepatotropismo</h4>
+    <p>La entrada del HDV es <b>idéntica a la del VHB</b>: el <b>L-HBsAg</b> de su envoltura se une al receptor <b>NTCP</b> del hepatocito y la partícula se internaliza por endocitosis. Ya en el citoplasma, el RNA se libera y el <b>HDAg lo transloca al núcleo</b> gracias a su señal de localización nuclear. El rango de huésped queda limitado a las especies que soportan hepadnavirus y pueden aportar HBsAg <i>en trans</i>: la marmota infectada con virus de la hepatitis de la marmota y el chimpancé son los modelos clásicos.</p>
+
+    <h4>Replicación: un RNA copiado por una polimerasa de DNA</h4>
+    <ol class="steps">
+      <li><b>El genoma no codifica proteína</b> Es el <b>RNA antigenómico</b>, complementario, el que lleva el marco de lectura del HDAg y una secuencia de ~85 nucleótidos con <b>actividad de ribozima</b>.</li>
+      <li><b>Sin polimerasa propia</b> El HDV secuestra la <b>RNA polimerasa II</b> del huésped —diseñada para leer DNA— y la obliga a usar RNA como molde para el mRNA del HDAg y para la síntesis de RNA genómico; la síntesis antigenómica probablemente use también Pol I.</li>
+      <li><b>Doble círculo rodante</b> El molde circular genera <b>transcritos lineales multiméricos</b> que la ribozima corta en monómeros; estos se ligan en círculo para formar el antigenoma, que a su vez sirve de molde para nuevos genomas.</li>
+      <li><b>Edición por ADAR1</b> Una enzima celular edita un nucleótido y prolonga el marco de lectura: aparece el <b>L-HDAg</b> con 19 aminoácidos extra. Es el interruptor que apaga la replicación y enciende el ensamblaje.</li>
+      <li><b>Morfogénesis en el retículo endoplásmico</b> El L-HDAg prenilado interactúa con el S-HBsAg, la ribonucleoproteína se envuelve y el virión maduro se libera.</li>
+    </ol>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Cifras que definen la infección</span>
+        <ul>
+          <li><b>≈300 000 copias</b> de RNA genómico por hepatocito infectado; <b>diez veces menos</b> antigenómico.</li>
+          <li><b>≈90 % de los viriones producidos son no infecciosos</b>, porque el ensamblaje puede ocurrir sin L-HBsAg y les falta el dominio pre-S1.</li>
+          <li>El HDV existe como <b>enjambre de cuasiespecies</b> en cada persona; la región C-terminal del L-HDAg es la más variable — y la causa de falsos negativos en RT-PCR.</li>
+        </ul>
+      </div>
+      <div class="box clin"><span class="lbl">El delta apaga al B</span>
+        <p>Tanto L-HDAg como S-HDAg <b>reprimen dos regiones potenciadoras del VHB</b> y activan el gen <b>MxA</b>, que frena la salida del mRNA del VHB desde el núcleo. Consecuencia clínica directa: en la hepatitis D crónica el <b>HDV es el virus dominante</b>, el HBV-DNA sérico suele ser bajo y la mayoría de los pacientes son <b>HBeAg negativos</b>.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Coinfección se resuelve, sobreinfección cronifica</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Comparación de las dos rutas patogénicas del virus de la hepatitis D: coinfección simultánea con el virus B y sobreinfección sobre un portador crónico">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <rect x="20" y="20" width="270" height="22" rx="4" fill="rgba(92,122,87,.16)"/>
+        <text x="30" y="35" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#1a6b42">COINFECCIÓN · VHB Y HDV AL MISMO TIEMPO</text>
+        <line x1="40" y1="90" x2="860" y2="90" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="860,90 850,85 850,95" fill="#455A8C"/>
+        <g>
+          <circle cx="110" cy="90" r="15" fill="#5C7A57"/>
+          <text x="110" y="94" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">1</text>
+          <text x="110" y="124" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Huésped susceptible</text>
+          <text x="110" y="138" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Sin hepatitis previa</text>
+        </g>
+        <g>
+          <circle cx="330" cy="90" r="15" fill="#5C7A57"/>
+          <text x="330" y="94" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">2</text>
+          <text x="330" y="124" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Hepatitis aguda</text>
+          <text x="330" y="138" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">ALT bifásica: primero B,</text>
+          <text x="330" y="152" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">después D</text>
+        </g>
+        <g>
+          <circle cx="550" cy="90" r="15" fill="#5C7A57"/>
+          <text x="550" y="94" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">3</text>
+          <text x="550" y="124" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1a6b42">Resolución completa</text>
+          <text x="550" y="138" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">en más del 95 %</text>
+          <text x="550" y="152" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">de los casos</text>
+        </g>
+        <g>
+          <circle cx="780" cy="90" r="15" fill="#8a5c0a"/>
+          <text x="780" y="94" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">4</text>
+          <text x="780" y="124" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#8a5c0a">Cronicidad 4–5 %</text>
+          <text x="780" y="138" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Fulminante: posible</text>
+          <text x="780" y="152" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">pero infrecuente</text>
+        </g>
+
+        <rect x="20" y="176" width="300" height="22" rx="4" fill="rgba(112,29,20,.10)"/>
+        <text x="30" y="191" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#701d14">SOBREINFECCIÓN · HDV SOBRE PORTADOR DE VHB</text>
+        <line x1="40" y1="246" x2="860" y2="246" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="860,246 850,241 850,251" fill="#455A8C"/>
+        <g>
+          <circle cx="110" cy="246" r="15" fill="#701d14"/>
+          <text x="110" y="250" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">1</text>
+          <text x="110" y="280" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Portador de HBsAg</text>
+          <text x="110" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">VHB crónico establecido</text>
+        </g>
+        <g>
+          <circle cx="330" cy="246" r="15" fill="#701d14"/>
+          <text x="330" y="250" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">2</text>
+          <text x="330" y="280" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Hepatitis aguda grave</text>
+          <text x="330" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Incubación 2–8 semanas</text>
+        </g>
+        <g>
+          <circle cx="550" cy="246" r="15" fill="#701d14"/>
+          <text x="550" y="250" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">3</text>
+          <text x="550" y="280" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Hepatitis D crónica</text>
+          <text x="550" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">en más del 90 % de los casos</text>
+        </g>
+        <g>
+          <circle cx="780" cy="246" r="15" fill="#701d14"/>
+          <text x="780" y="250" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#f7f8fa">4</text>
+          <text x="780" y="280" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Cirrosis 50–70 %</text>
+          <text x="780" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">en 5–10 años · CHC ×1.3–2.8</text>
+        </g>
+
+        <rect x="20" y="312" width="860" height="24" rx="4" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="32" y="328" font-family="'Inter', sans-serif" font-size="10.5" fill="#701d14">Hepatitis fulminante: 10 veces más frecuente en sobreinfección que en coinfección; sin trasplante, la mortalidad se acerca al 80 %.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Las dos rutas del delta. La diferencia no está en el virus sino en el terreno: cuando el VHB llega al mismo tiempo, la respuesta inmune que elimina al B elimina también al D; cuando el hígado ya es un portador crónico, el HDV encuentra HBsAg ilimitado y se queda.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Mecanismo del daño: honestamente, no está resuelto</span>
+        <ul>
+          <li>La evidencia sobre <b>citopatía directa</b> es contradictoria: la expresión de HDAg es tóxica en líneas celulares, pero <b>inocua en ratones transgénicos</b>.</li>
+          <li>En 80 personas con genotipo 1, <b>la carga de RNA HDV no se asoció con la gravedad</b> del daño hepático — argumento contra el efecto citopático directo.</li>
+          <li>La respuesta adaptativa probablemente contribuye: el grado de infiltrado en espacios porta y lobulillos <b>correlaciona con la tinción de HDAg</b> en el hígado. Pero en otro estudio las respuestas T específicas se asociaron a <b>ALT más bajas</b>.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Respuesta inmune</span>
+        <ul>
+          <li><b>Innata</b>: <b>MDA5</b> reconoce las formas complejadas del RNA (probablemente vía S-HDAg) y desencadena <b>IFN-β (tipo I) e IFN-λ (tipo III)</b>; los genes estimulados por interferón limitan la diseminación del virus por división celular.</li>
+          <li><b>Adaptativa</b>: los CD8 específicos son detectables en la infección <b>resuelta</b>, no en la crónica; la cronicidad se asocia a perfil <b>Th2 con IL-10</b>. El control parece exigir respuesta <b>Th1</b>.</li>
+          <li><b>Los anticuerpos no protegen</b>: la IgM anti-HDV alta acompaña a la viremia elevada y al daño; la IgG anti-HDV, a un curso más favorable, pero las marmotas inmunizadas con HDAg recombinante quedaron <b>solo parcialmente protegidas</b>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="box hy"><span class="lbl">Aceleración de la historia natural</span>
+      <p>Una vez establecida la hepatitis D crónica, todo va más rápido que en la monoinfección por VHB: <b>cirrosis en 50–70 % a 5–10 años (≈3 veces más)</b>, <b>doble riesgo de descompensación</b> una vez instalada la cirrosis y un riesgo de <b>hepatocarcinoma 1.28–2.77 veces mayor</b>, probablemente reflejo de la mayor tasa de cirrosis. Son típicas la <b>esplenomegalia</b>, las transaminasas altas y la viremia elevada. La triple infección <b>VIH / VHB / HDV</b> acelera aún más el daño, con más CHC y mayor mortalidad que el VIH solo.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">La hepatitis viral que más fulmina</span><span class="caret"></span></summary>
+  <div class="body">
+    <p>Tras la exposición hay un periodo de incubación de <b>3 a 7 semanas</b>. A partir de ahí, la presentación depende por completo de si el hígado ya albergaba VHB.</p>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th></th><th>Coinfección (VHB + HDV a la vez)</th><th>Sobreinfección (HDV sobre VHB crónico)</th></tr></thead>
+      <tbody>
+        <tr><td><b>Incubación</b></td><td>45–160 días, la del VHB</td><td><b>Corta: 2–8 semanas</b> — no hay incubación protectora</td></tr>
+        <tr><td><b>Presentación</b></td><td>Hepatitis aguda autolimitada, indistinguible de la B. Puede verse un <b>patrón bifásico de ALT</b>: primero el VHB, después el HDV</td><td><b>Hepatitis aguda grave</b> en un portador conocido; a menudo interpretada erróneamente como «reactivación del B»</td></tr>
+        <tr><td><b>Cronicidad</b></td><td><b>Solo 4–5 %</b>; recuperación completa en el resto</td><td><b>Más del 90 %</b></td></tr>
+        <tr><td><b>Fulminante</b></td><td>Rara, pero descrita</td><td><b>10 veces más frecuente</b> que en coinfección; necrosis hepática masiva con mortalidad cercana al <b>80 %</b> sin trasplante</td></tr>
+        <tr><td><b>Serología</b></td><td>HBsAg+, <b>IgM anti-HBc positiva</b>, anti-HDV+</td><td>HBsAg+, <b>IgM anti-HBc negativa</b>, anti-HDV+</td></tr>
+        <tr><td><b>Pronóstico</b></td><td>Bueno en la gran mayoría</td><td><b>Malo</b>: cirrosis acelerada y CHC</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Hepatitis D crónica</span>
+        <ul>
+          <li>Curso <b>acelerado</b> respecto a la monoinfección por VHB, con esplenomegalia, transaminasas persistentemente altas y viremia elevada.</li>
+          <li>La <b>carga de RNA HDV no predice la fibrosis</b>, aunque en un estudio sí aumentó el riesgo de CHC. El curso lo modulan el <b>genotipo del HDV</b> (grave el 1 y el 3, benignos el 2 y el 4) y también el genotipo del VHB.</li>
+          <li>Curiosidad con utilidad clínica: cuando el HDV se aclara tras una sobreinfección, <b>la pérdida de HBsAg es más frecuente</b> que en la monoinfección por VHB.</li>
+        </ul>
+      </div>
+      <div class="box clin"><span class="lbl">Cuándo pensar en delta a pie de cama</span>
+        <ul>
+          <li>Portador crónico de HBsAg que hace una <b>hepatitis aguda inexplicada</b>.</li>
+          <li><b>ALT/AST desproporcionadamente altas con HBV-DNA bajo o indetectable</b> — la firma de la interferencia viral.</li>
+          <li>HBsAg+ que progresa a cirrosis <b>más rápido de lo esperado</b>.</li>
+          <li>Falla hepática aguda de causa viral: el HDV es <b>la etiología viral con mayor tasa de fulminancia</b>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Poblaciones de mayor prevalencia</h4>
+    <p>Personas que se inyectan drogas, hombres que tienen sexo con hombres, personas con <b>VIH</b> (más prevalencia que en la monoinfección por VHB), trabajadoras y trabajadores sexuales, personas en hemodiálisis, anti-VHC positivos, y quienes ya tienen <b>cirrosis o hepatocarcinoma</b>. Migrantes de Oriente Medio, África, Europa del Este y Asia central concentran los casos en América y Europa; en el Mediterráneo el perfil es de pacientes mayores, y en el norte de Europa, de jóvenes que se inyectan drogas.</p>
+
+    <div class="box trap"><span class="lbl">Un dato que confunde</span>
+      <p>Hasta el <b>30 % de los coinfectados VHB-HDV tienen anticuerpos anti-VHC</b>, pero en un estudio el <b>84 % tenía RNA de VHC indetectable</b>: en la triple infección el HDV se impone y suprime a los otros. No se debe concluir hepatitis C activa a partir de una serología positiva en este contexto.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Anticuerpo para tamizar, RNA para confirmar</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Algoritmo de tamizaje y confirmación diagnóstica de hepatitis D en portadores de HBsAg">
+        <rect width="900" height="320" fill="#FFFFFF"/>
+        <rect x="40" y="14" width="380" height="40" rx="6" fill="#27334F"/>
+        <text x="230" y="34" text-anchor="middle" font-family="'Inter', sans-serif" font-size="12" font-weight="600" fill="#f7f8fa">Persona con HBsAg positivo</text>
+        <text x="230" y="48" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="rgba(247,248,250,.74)">TAMIZAJE DE HEPATITIS DELTA</text>
+        <line x1="230" y1="54" x2="230" y2="74" stroke="#455A8C" stroke-width="1.2"/>
+        <rect x="40" y="74" width="380" height="38" rx="6" fill="rgba(69,90,140,.14)" stroke="#455A8C" stroke-width="1.2"/>
+        <text x="230" y="92" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">anti-HDV total (IgG) — inmunoensayo</text>
+        <text x="230" y="106" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">Basta una vez si no hay reexposición de riesgo</text>
+        <line x1="230" y1="112" x2="230" y2="130" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="110" y1="130" x2="350" y2="130" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="110" y1="130" x2="110" y2="146" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="350" y1="130" x2="350" y2="146" stroke="#455A8C" stroke-width="1.2"/>
+        <rect x="40" y="146" width="140" height="54" rx="6" fill="rgba(92,122,87,.13)" stroke="#5C7A57" stroke-width="1.1"/>
+        <text x="110" y="164" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">Negativo</text>
+        <text x="110" y="178" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#14181f">Sin exposición a HDV</text>
+        <text x="110" y="191" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Repetir solo tras nuevo riesgo</text>
+        <rect x="280" y="146" width="140" height="54" rx="6" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1.3"/>
+        <text x="350" y="164" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">Positivo</text>
+        <text x="350" y="178" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#14181f">No prueba actividad:</text>
+        <text x="350" y="191" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#14181f">persiste años</text>
+        <line x1="350" y1="200" x2="350" y2="214" stroke="#455A8C" stroke-width="1.2"/>
+        <rect x="210" y="214" width="250" height="30" rx="6" fill="#36476E"/>
+        <text x="335" y="233" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#f7f8fa">RNA HDV por RT-PCR en tiempo real</text>
+        <line x1="335" y1="244" x2="335" y2="258" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="133" y1="258" x2="355" y2="258" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="133" y1="258" x2="133" y2="268" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="355" y1="258" x2="355" y2="268" stroke="#455A8C" stroke-width="1.2"/>
+        <rect x="30" y="268" width="205" height="48" rx="6" fill="rgba(112,29,20,.09)" stroke="#701d14" stroke-width="1.3"/>
+        <text x="133" y="286" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#701d14">Detectable</text>
+        <text x="133" y="300" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#14181f">Infección activa: estadificar</text>
+        <text x="133" y="312" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#14181f">la fibrosis e iniciar tratamiento</text>
+        <rect x="250" y="268" width="210" height="48" rx="6" fill="rgba(138,92,10,.12)" stroke="#8a5c0a" stroke-width="1.2"/>
+        <text x="355" y="286" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#8a5c0a">Indetectable</text>
+        <text x="355" y="300" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#14181f">Probable infección resuelta. Si la</text>
+        <text x="355" y="312" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#14181f">sospecha es alta: repetir + IgM anti-HDV</text>
+
+        <line x1="490" y1="20" x2="490" y2="312" stroke="rgba(20,24,31,.14)" stroke-width="1"/>
+        <text x="516" y="28" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">¿A QUIÉN SE LE PIDE?</text>
+        <rect x="516" y="40" width="368" height="82" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="516" y="40" width="4" height="82" rx="2" fill="#36476E"/>
+        <text x="536" y="60" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#27334F">AASLD — tamizaje dirigido</text>
+        <text x="536" y="78" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">VIH · drogas inyectables · HSH · trabajo sexual</text>
+        <text x="536" y="93" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">Migrantes de zonas de alta endemicidad</text>
+        <text x="536" y="108" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">ALT o AST altas con HBV-DNA bajo o indetectable</text>
+        <rect x="516" y="134" width="368" height="52" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="516" y="134" width="4" height="52" rx="2" fill="#5C7A57"/>
+        <text x="536" y="154" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#1a6b42">Guías europeas y asiáticas — universal</text>
+        <text x="536" y="172" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">anti-HDV a todo portador de HBsAg, sin excepción</text>
+        <rect x="516" y="198" width="368" height="110" rx="6" fill="rgba(138,92,10,.09)" stroke="#8a5c0a" stroke-width="1.1"/>
+        <text x="536" y="218" font-family="'Inter', sans-serif" font-size="11.5" font-weight="600" fill="#8a5c0a">Cuatro errores que cuestan un diagnóstico</text>
+        <text x="536" y="238" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">1. Leer un anti-HDV positivo como infección activa</text>
+        <text x="536" y="254" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">2. Tranquilizarse con un HBV-DNA bajo: el delta lo suprime</text>
+        <text x="536" y="270" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">3. No repetir el RNA cuando la sospecha clínica es alta</text>
+        <text x="536" y="286" font-family="'Inter', sans-serif" font-size="10" fill="#14181f">4. Esperar que entecavir o tenofovir negativicen el HDV</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. Algoritmo diagnóstico. La única puerta de entrada es acordarse de pedirlo: el anti-HDV no se solicita si nadie piensa en el delta ante un HBsAg positivo.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Suero</b></td><td><b>anti-HDV IgG</b> (inmunoensayo enzimático)</td><td>Prueba de tamizaje. Se vuelve detectable en los <b>2 primeros meses</b>, cuando desaparece la IgM. <b>Persiste años</b>: un positivo no distingue infección activa de exposición pasada.</td></tr>
+        <tr><td><b>Suero</b></td><td><b>RNA HDV por RT-PCR en tiempo real</b></td><td><b>Único modo de establecer infección crónica.</b> Ojo: la viremia <b>fluctúa</b> y la variabilidad de secuencia del enjambre de cuasiespecies genera <b>falsos negativos</b>.</td></tr>
+        <tr><td><b>Suero</b></td><td><b>IgM anti-HDV</b></td><td>Su lugar es el RNA negativo con alta sospecha de HDV crónico. Los títulos altos acompañan a la <b>viremia elevada, ALT/AST altas y mayor daño hepático</b>.</td></tr>
+        <tr><td><b>Suero</b></td><td>HBsAg cuantitativo · HBV-DNA · genotipo HDV</td><td>El <b>HBsAg &lt;1 000</b> y una caída robusta del RNA HDV en tratamiento predicen respuesta virológica al interferón. El HBV-DNA suele ser <b>bajo</b> y el paciente, <b>HBeAg negativo</b>.</td></tr>
+        <tr><td><b>Hígado</b></td><td>HDAg por inmunohistoquímica · RNA hepático</td><td>La eliminación del RNA HDV del hígado es el objetivo ideal del tratamiento, pero <b>la biopsia es difícil de obtener</b>; por eso se usa el RNA sérico como sustituto.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box hy"><span class="lbl">Regla operativa</span>
+      <p><b>Pedir anti-HDV total al menos una vez a toda persona con HBV.</b> Si el anticuerpo sale positivo, <b>confirmar con RNA HDV</b>. Las guías europeas y asiáticas ya recomiendan el tamizaje universal en HBsAg+; la AASLD lo restringe a grupos de riesgo, pero la práctica razonable es tamizar a todos, porque los estudios de prevalencia mundial subestiman la carga precisamente por <b>falta de tamizaje sistemático</b> y por la escasa disponibilidad de pruebas de RNA en los países de mayor endemicidad.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Interferón por norma, bulevirtide por diana</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Objetivo terapéutico</h4>
+    <p>El ideal es <b>eliminar el RNA HDV del hígado</b>. Como la biopsia repetida es impracticable, el criterio de valoración aceptado es el <b>RNA HDV indetectable en sangre al final del tratamiento y 24 semanas después</b>. Algunos ensayos usan la <b>normalización de ALT</b> con <b>descenso ≥2 log</b> de la carga viral.</p>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Estándar de guías: PEG-IFN-α</span>
+        <ul>
+          <li><b>PEG-IFN-α semanal, mínimo 48 semanas</b> — el <b>único régimen recomendado por las guías internacionales</b>.</li>
+          <li>Respuesta virológica sostenida <b>variable: 17–43 %</b>. La duración óptima sigue sin definirse y se han descrito <b>recaídas tardías</b>.</li>
+          <li>Aun entre quienes recaen puede haber mejoría bioquímica e histológica; con interferón a dosis alta, la mejoría histológica se mantuvo a <b>10 años</b>.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Lo que NO funciona</span>
+        <p>Los <b>análogos nucleós(t)idos con actividad anti-VHB —lamivudina, entecavir— son ineficaces contra el HDV</b>, y era previsible: el delta <b>no tiene polimerasa propia ni usa la del VHB</b>. Combinar análogos con PEG-IFN <b>no mejora</b> la respuesta virológica frente al interferón solo. El <b>tenofovir (TDF)</b> a largo plazo sí se asoció a descenso del RNA HDV en coinfectados VIH/VHB/HDV, probablemente de forma indirecta, por la caída del HBsAg tras años de tratamiento.</p>
+      </div>
+    </div>
+
+    <h4>Las tres estrategias nuevas — cada una ataca un paso distinto del ciclo</h4>
+    <div class="g3">
+      <div class="card"><span class="lbl">1 · Inhibidor de entrada</span>
+        <p><b>Bulevirtide</b> (Hepcludex, antes Myrcludex B): péptido derivado del pre-S1 que <b>bloquea el receptor NTCP</b>. Subcutáneo diario, 2 o 10 mg.</p>
+        <p>Fase 3 <b>MYR301</b>, 48 semanas: RNA indetectable en <b>66 % (2 mg) y 76 % (10 mg)</b>. En el análisis conjunto de los tres ensayos, respuesta combinada (RNA indetectable o caída ≥2 log <b>más</b> normalización de ALT): <b>53 % con 2 mg, 71 % con 10 mg, 27 % con PEG-IFN-α y 4 % en los controles</b>.</p>
+        <p><b>Aprobado por la Comisión Europea en 2020</b>; no aprobado en EE. UU. al cierre del capítulo.</p>
+      </div>
+      <div class="card"><span class="lbl">2 · Inhibidor de prenilación</span>
+        <p><b>Lonafarnib</b>, inhibidor de farnesiltransferasa: impide la prenilación de L-HDAg y con ello el <b>ensamblaje del virión</b>.</p>
+        <p>Con <b>ritonavir</b> como potenciador, con o sin PEG-IFN-α, logra supresión del RNA en <b>46–89 %</b> al final del tratamiento; la mejor tasa se obtuvo con <b>lonafarnib + PEG-IFN-α</b> (LOWR HDV-2). Fase 3 <b>D-LIVR</b> en curso.</p>
+        <p>Talón de Aquiles: <b>toxicidad gastrointestinal limitante de dosis</b>.</p>
+      </div>
+      <div class="card"><span class="lbl">3 · Polímeros de ácidos nucleicos</span>
+        <p><b>REP 2139</b> intravenoso: reduciría la <b>secreción del virus</b> desde el hepatocito.</p>
+        <p>Fase 2 <b>REP 301</b>, 12 pacientes coinfectados: al año de terminar, <b>7 con RNA HDV negativo y 8 con HBV-DNA negativo</b>; los 7 seguían negativos hasta <b>3 años</b> después.</p>
+        <p>También en estudio el <b>PEG-IFN-λ</b>: con 180 µg, <b>7 de 14 (50 %)</b> con caída ≥2 log y <b>36 %</b> con RNA negativo al final del tratamiento.</p>
+      </div>
+    </div>
+
+    <div class="box clin"><span class="lbl">Trasplante hepático</span>
+      <p>Reservado para enfermedad hepática terminal, <b>hepatocarcinoma</b> o <b>hepatitis fulminante</b> por coinfección VHB-HDV. La reinfección del injerto se previene con <b>análogos nucleós(t)idos + inmunoglobulina anti-hepatitis B</b>: al impedir la reinfección por VHB se corta la propagación del HDV, porque <b>no existe latencia del delta fuera del hígado</b>. Supervivencia a 5 años <b>≈80 %</b>.</p>
+    </div>
+
+    <h4>Prevención</h4>
+    <div class="g2">
+      <div class="card"><span class="lbl">Persona susceptible</span>
+        <ul>
+          <li><b>Vacuna anti-VHB</b>, recombinante de HBsAg, esquema <b>0-1-6 meses</b>, universal desde el nacimiento; correlato de protección <b>anti-HBs ≥10 mUI/mL</b>. Quien no puede infectarse de B no puede infectarse de D.</li>
+          <li>Respuesta atenuada en obesidad, diálisis, VIH, edad &gt;40 años y tabaquismo: considerar <b>doble dosis o vacuna adyuvada</b>.</li>
+          <li>Profilaxis post-exposición: la del VHB (HBIG + vacuna). <b>No hay profilaxis específica anti-HDV.</b></li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Portador crónico de HBsAg: el punto ciego</span>
+        <p>La vacuna <b>no protege a quien ya es HBsAg positivo</b> — y es exactamente esa persona la que puede sobreinfectarse, la ruta con &gt;90 % de cronicidad y 10 veces más hepatitis fulminante. En ella la prevención es <b>conductual y estructural</b>: reducción de daños y programas de jeringas, uso de condón, tamizaje universal de HBsAg en bancos de sangre, control de infecciones en hemodiálisis. Los programas de reducción de daños <b>redujeron de forma medible la prevalencia de HDV</b> entre usuarios de drogas inyectables HBsAg+ en varias regiones europeas.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>Virus defectuoso</b>: necesita HBsAg para <b>entrar y ensamblarse</b>, no para replicar su RNA. Ejemplo canónico de <b>complementación viral</b>.</li>
+          <li>Una sola proteína propia: <b>HDAg</b>, en dos isoformas generadas por <b>edición de ADAR1</b>. S-HDAg replica; L-HDAg ensambla.</li>
+          <li><b>No codifica polimerasa</b>: usa la <b>RNA polimerasa II</b> del huésped sobre un molde de RNA, con <b>ribozima</b> y <b>doble círculo rodante</b>, como los viroides de plantas.</li>
+          <li>Receptor <b>NTCP</b>, el mismo del VHB → diana de <b>bulevirtide</b>.</li>
+          <li><b>Coinfección</b>: cronicidad 4–5 %. <b>Sobreinfección</b>: cronicidad &gt;90 %, fulminante ×10, cirrosis 50–70 % en 5–10 años.</li>
+          <li><b>IgM anti-HBc separa las dos rutas</b>: positiva en coinfección (el B también es agudo), negativa en sobreinfección.</li>
+          <li>Genoma <b>circular</b>, ssRNA (−), ≈1 680 nt, en <b>forma de varilla</b> por su alto contenido G+C. Virión de <b>36 nm</b>.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«D de Defectuoso, Dependiente y Delta»</b> — las tres palabras que resumen la biología entera.</p>
+        <p><b>«Co- se cura, súper- se cronifica»</b> — coinfección: resolución en &gt;95 %; sobreinfección: cronicidad en &gt;90 %.</p>
+        <p><b>«El delta apaga a la B»</b> — L-HDAg reprime los potenciadores del VHB y activa MxA → <b>HBV-DNA bajo y HBeAg negativo</b>. Por eso una ALT alta con DNA bajo debe hacer pedir anti-HDV.</p>
+        <p><b>«Vacunar contra B es vacunar contra D»</b> — la única vacuna del delta es la de otro virus.</p>
+        <p><b>«Anticuerpo tamiza, RNA confirma»</b> — el anti-HDV persiste años y no prueba actividad.</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas clásicas y escenario latinoamericano</span>
+      <ul>
+        <li><b>Trampa 1</b>: dar entecavir o tenofovir a un paciente con hepatitis D esperando controlar el delta. No tiene polimerasa: los análogos no lo tocan. El estándar sigue siendo <b>PEG-IFN-α ≥48 semanas</b>.</li>
+        <li><b>Trampa 2</b>: interpretar un <b>anti-HDV positivo</b> como infección activa sin pedir RNA — y su reverso, dar por descartada la infección con <b>un solo RNA negativo</b> cuando la viremia fluctúa y las cuasiespecies producen falsos negativos.</li>
+        <li><b>Trampa 3</b>: ante una hepatitis aguda grave en un portador de HBsAg, diagnosticar «reactivación del B» sin buscar delta. Es la sobreinfección hasta que se demuestre lo contrario.</li>
+        <li><b>Escenario regional</b>: el <b>genotipo 3 de la cuenca amazónica</b> es la forma más grave descrita del virus, y en las Américas la prevalencia va del <b>3 al 20 % de los portadores de HBsAg</b> (hasta 42 % en algunas cohortes estadounidenses). En un HBsAg+ que llega de la Amazonía, del África occidental o central, de Mongolia o de Asia central, el anti-HDV no es opcional.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/Hepatitis_D.md</code> y <code>sindromes/Hepatitis_virales.md</code> · Mandell PPID 10.ª ed., cap. 153 «Hepatitis D Virus» (Thio y Hawkins, pp. 1938-1942) y cap. 152 (VHB) · guías AASLD, EASL y APASL sobre tamizaje de anti-HDV citadas en el capítulo · Stockdale et al., <i>J Hepatol</i> 2020;73:523-532 (prevalencia global) · Wedemeyer et al., <i>N Engl J Med</i> 2023;389:22-32 (MYR301, bulevirtide) · First Aid for the USMLE Step 1 2025, pp. 163-165 y 170-171 · Pocket Medicine 9.ª ed. 2025, sección Hepatitis.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="retroviridae.html"><span class="k">← Anterior</span><span class="v">Retroviridae</span></a>
+        <a class="next" href="coronaviridae.html"><span class="k">Siguiente →</span><span class="v">Coronaviridae</span></a></div>
+      <footer class="pf">
+        <span>Kolmioviridae · 10 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

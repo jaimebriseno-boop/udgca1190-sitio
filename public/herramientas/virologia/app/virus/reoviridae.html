@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reoviridae / Sedoreoviridae — Virus RNA</title>
+<meta name="description" content="Reoviridae / Sedoreoviridae. Rotavirus · Coltivirus · Orbivirus · Orthoreovirus">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="../index.html">Virología</a><span class="sep">/</span>
+    <a href="../virus-rna.html">Virus RNA</a><span class="sep">/</span>
+    <b>Reoviridae / Sedoreoviridae</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="../virus-rna.html">Volver al árbol</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virus RNA · Familia 5 de 18 · Virología médica</p>
+    <h1>Reoviridae / Sedoreoviridae</h1>
+    <p class="sub">Rotavirus · Coltivirus · Orbivirus · Orthoreovirus</p>
+    <div class="chips"><span class="chip g">dsRNA segmentado (10–12) · cápside de 2–3 capas</span>
+  <span class="chip">Sin envoltura · icosaédrico ~70–80 nm</span>
+  <span class="chip">Replicación citoplásmica en viroplasmas</span>
+  <span class="chip r">Rotavirus: 1.ª causa mundial de diarrea grave del lactante</span>
+  <span class="chip gold">Vacuna oral viva atenuada</span></div>
+  </header>
+
+  <section class="ficha">
+    <div class="hd"><span>Ficha rápida</span><span>Reoviridae / Sedoreoviridae · Virus RNA</span></div>
+    <dl class="bd">
+<div class="cell"><dt>Géneros humanos</dt><dd><i>Rotavirus</i> · <i>Coltivirus</i> · <i>Orbivirus</i> · <i>Orthoreovirus</i> (y <i>Seadornavirus</i>)</dd></div>
+  <div class="cell"><dt>Genoma</dt><dd><b>11</b> segmentos en rotavirus · <b>10</b> en orthoreo/orbivirus · <b>12</b> en colti/seadornavirus</dd></div>
+  <div class="cell"><dt>Transmisión</dt><dd>Rotavirus y orthoreovirus: <b>fecal-oral</b> (dosis infectante ~10 viriones) · Coltivirus: garrapata · Orbivirus: mosquito, jején, garrapata</dd></div>
+  <div class="cell"><dt>Célula blanco</dt><dd><b>Enterocito maduro de la punta de la vellosidad</b> (duodeno-yeyuno); CTFV infecta el precursor eritroide; orbivirus, el endotelio</dd></div>
+  <div class="cell"><dt>Incubación</dt><dd>Rotavirus <b>1–3 días</b> · fiebre por garrapata de Colorado <b>1–14 días</b> (habitual 3–4)</dd></div>
+  <div class="cell"><dt>Tipificación</dt><dd>Binaria <b>G (VP7) / P (VP4)</b>; grupos A–I por VP6. <b>G1P[8]</b> históricamente dominante</dd></div>
+  <div class="cell"><dt>Diagnóstico</dt><dd><b>EIA de antígeno VP6 en heces</b> (rotavirus) · RT-PCR en suero &lt;2 semanas (CTFV) · seroconversión ×4 (orbi/orthoreo)</dd></div>
+  <div class="cell"><dt>Prevención</dt><dd><b>1.ª dosis antes de las 15 semanas</b>, última antes de los <b>8 meses 0 días</b>; agua y jabón &gt; alcohol gel</dd></div>
+    </dl>
+  </section>
+
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Secciones</p>
+      <ol><li><a href="#historia">Historia</a></li>
+        <li><a href="#taxonomia">Taxonomía</a></li>
+        <li><a href="#microbiologia">Microbiología</a></li>
+        <li><a href="#fisiopatologia">Fisiopatología</a></li>
+        <li><a href="#clinica">Cuadro clínico</a></li>
+        <li><a href="#diagnostico">Diagnóstico</a></li>
+        <li><a href="#tratamiento">Tratamiento y prevención</a></li>
+        <li><a href="#perlas">Perlas de examen</a></li></ol>
+    </aside>
+    <main>
+<details class="sec" id="historia" open>
+  <summary><span class="num">01</span><span class="stitle">Historia</span><span class="hint">De la rueda con rayos a la vacuna retirada</span><span class="caret"></span></summary>
+  <div class="body">
+    <ul>
+      <li><b>1855–1943</b> — se describe clínicamente la <b>fiebre por garrapata de Colorado</b> y en 1943 se aísla el virus del suero de un paciente en el Hospital de la Universidad de Colorado.</li>
+      <li><b>Década de 1950</b> — se aíslan de heces de niños unos virus que no se logra ligar a ninguna enfermedad: nace el acrónimo <b>reovirus</b> = <i>respiratory enteric orphan virus</i>. «Huérfano» porque se encontró el virus antes que la enfermedad.</li>
+      <li><b>1973</b> — <b>Ruth Bishop</b> examina con microscopía electrónica biopsias duodenales de niños con gastroenteritis y ve partículas de ~70 nm con aspecto de <b>rueda con rayos</b>: <i>rota</i>, rueda. El intercambio de sueros entre un laboratorio veterinario y uno médico demostró que el agente humano y el bovino eran antigénicamente afines.</li>
+      <li><b>1998–1999</b> — <b>RotaShield</b>, primera vacuna licenciada, se retira voluntariamente al año: tras más de un millón de dosis se detectó <b>invaginación intestinal</b> 3–14 días después de la primera dosis (OR 21.7), un exceso de <b>1 caso por cada 5 000–10 000</b> niños.</li>
+      <li><b>2004–2007</b> — <b>Rotarix se licencia primero en México</b> y República Dominicana; México la incorpora al esquema universal en 2007. Con 74 % de cobertura de primera dosis, las muertes por diarrea en menores de 5 años cayeron <b>35 %</b> en 2008.</li>
+    </ul>
+    <div class="box hy"><span class="lbl">La lección de RotaShield</span>
+      <p>El análisis posterior mostró que la mayoría de las invaginaciones ocurrieron en lactantes que recibieron la primera dosis a los <b>≥90 días de edad</b>. De ahí nacen las ventanas etarias rígidas que hoy gobiernan el esquema: no son burocracia, son la traducción operativa de un desastre farmacovigilado.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="taxonomia">
+  <summary><span class="num">02</span><span class="stitle">Taxonomía</span><span class="hint">Reovirales: las lisas y las espinosas</span><span class="caret"></span></summary>
+  <div class="body">
+    <dl class="kv">
+      <dt>Orden</dt><dd>Reovirales — dsRNA segmentado, sin envoltura, replicación citoplásmica</dd>
+      <dt>Familias</dt><dd><b>Sedoreoviridae</b> («reovirus lisos»: <i>Rotavirus</i>, <i>Orbivirus</i>, <i>Seadornavirus</i>) y <b>Spinareoviridae</b> («espinosos»: <i>Orthoreovirus</i>, <i>Coltivirus</i>). El nombre clásico <i>Reoviridae</i> sigue usándose como paraguas.</dd>
+      <dt>Géneros con enfermedad humana</dt><dd>Cinco: <i>Rotavirus</i>, <i>Orthoreovirus</i>, <i>Orbivirus</i>, <i>Coltivirus</i>, <i>Seadornavirus</i></dd>
+      <dt>Etimologías útiles</dt><dd><i>Rota</i> = rueda · <i>reo</i> = <b>r</b>espiratory <b>e</b>nteric <b>o</b>rphan · <i>orbi</i> = <i>orbis</i>, por los capsómeros en forma de dona · <i>colti</i> = <b>Col</b>orado <b>ti</b>ck · <i>seadorna</i> = <b>S</b>outh<b>e</b>ast <b>A</b>sian <b>dodeca</b> RNA virus (12 segmentos)</dd>
+    </dl>
+
+    <div class="g2">
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Rotavirus</span><span class="vg">Sedoreoviridae · 11 segmentos</span></div>
+        <div class="vbd">
+          <p><b>Grupos A–I</b> definidos por VP6. <b>Grupo A</b> = gastroenteritis endémica del niño en todo el mundo. <b>Grupo B</b> incluye la cepa ADRV, causante de brotes de diarrea grave <b>en adultos en China</b>. <b>Grupo C</b>, cuadros más leves a cualquier edad. Los grupos D–I solo se han visto en animales.</p>
+          <p>Genotipificación binaria <b>G(VP7)/P(VP4)</b>: G1P[8], G2P[4], G9P[8], G12. El sistema completo del grupo de trabajo (RCWG) asigna un genotipo a cada uno de los 11 segmentos.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Coltivirus</span><span class="vg">Spinareoviridae · 12 segmentos</span></div>
+        <div class="vbd">
+          <p><b>Virus de la fiebre por garrapata de Colorado (CTFV)</b>: Norteamérica occidental por encima de los <b>1 200 m</b> (4 000 pies), transmitido por <b><i>Dermacentor andersoni</i></b>, la garrapata de madera de las Montañas Rocosas. Reservorio: puercoespines, ardillas y ratones de altura.</p>
+          <p><b>Virus Eyach</b> (Europa, <i>Ixodes</i>) se ha asociado serológicamente a polirradiculoneuritis, pero nunca se aisló del paciente: causalidad no probada. El virus Salmon River resultó ser una cepa de CTFV.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Orbivirus</span><span class="vg">Sedoreoviridae · 10 segmentos</span></div>
+        <div class="vbd">
+          <p>Más de 130 subespecies en 19 especies. La enfermedad es sobre todo <b>veterinaria</b>: <b>lengua azul</b> (ovinos, bovinos), <b>peste equina africana</b>, enfermedad hemorrágica epizoótica del venado.</p>
+          <p>Solo <b>cuatro serogrupos</b> se han ligado a enfermedad humana: complejo <b>Kemerovo</b> (Kemerovo, Lipovnik, Tribec; <i>Ixodes</i>, Rusia y Europa del Este), <b>Orungo</b> (<i>Aedes</i>, África subsahariana), <b>Lebombo</b> (<i>Aedes</i> y <i>Mansonia</i>, Sudáfrica y Nigeria) y <b>Changuinola</b> (Centroamérica, flebótomos). El humano es huésped incidental; <b>no hay transmisión persona a persona</b>.</p>
+        </div>
+      </div>
+      <div class="vblock">
+        <div class="vhd"><span class="vn">Orthoreovirus</span><span class="vg">Spinareoviridae · 10 segmentos</span></div>
+        <div class="vbd">
+          <p><b>Mammalian orthoreovirus</b> serotipos 1, 2 y 3: ubicuos en agua estancada y aguas residuales. Seroprevalencia &lt;10 % al año de edad, ~50 % a los 5 años y <b>50–75 % en adultos</b>, casi siempre sin enfermedad reconocida.</p>
+          <p><b>Ortorreovirus pteropinos</b> (Nelson Bay, Melaka, Kampar) de origen <b>murciélago</b> en el sudeste asiático, con transmisión humano-humano documentada por serología de casos secundarios.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="box mnem"><span class="lbl">Ancla de memoria</span>
+      <p><b>«RO-CO-SÉ»</b> para los cinco géneros que enferman al humano: <b>RO</b>tavirus · <b>Orthore</b>ovirus · <b>Orbi</b>virus · <b>Colti</b>virus · <b>Se</b>adornavirus. Y la regla del conteo de segmentos: <b>10 para los que vuelan o pican (orbi, orthoreo), 11 para la rueda (rota), 12 para los «dodeca» (colti, seadorna)</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="microbiologia">
+  <summary><span class="num">03</span><span class="stitle">Microbiología</span><span class="hint">Tres capas, once segmentos, cero envoltura</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estructura del virión de rotavirus con sus tres capas concéntricas y las proteínas de cada una">
+        <rect width="900" height="360" fill="#FFFFFF"/>
+        <circle cx="185" cy="180" r="105" fill="rgba(138,92,10,.16)" stroke="#8a5c0a" stroke-width="1.6"/>
+        <circle cx="185" cy="180" r="78" fill="rgba(92,122,87,.18)" stroke="#5C7A57" stroke-width="1.6"/>
+        <circle cx="185" cy="180" r="52" fill="rgba(39,51,79,.16)" stroke="#27334F" stroke-width="1.6"/>
+        <g stroke="#36476E" stroke-width="2.1" stroke-linecap="round">
+          <line x1="151" y1="155" x2="219" y2="155"/>
+          <line x1="148" y1="160" x2="222" y2="160"/>
+          <line x1="146" y1="165" x2="224" y2="165"/>
+          <line x1="144" y1="170" x2="226" y2="170"/>
+          <line x1="143" y1="175" x2="227" y2="175"/>
+          <line x1="143" y1="180" x2="227" y2="180"/>
+          <line x1="143" y1="185" x2="227" y2="185"/>
+          <line x1="144" y1="190" x2="226" y2="190"/>
+          <line x1="146" y1="195" x2="224" y2="195"/>
+          <line x1="148" y1="200" x2="222" y2="200"/>
+          <line x1="151" y1="205" x2="219" y2="205"/>
+        </g>
+        <g stroke="#701d14" stroke-width="5" stroke-linecap="round">
+          <line x1="290" y1="180" x2="309" y2="180"/>
+          <line x1="258" y1="107" x2="273" y2="92"/>
+          <line x1="185" y1="77" x2="185" y2="56"/>
+          <line x1="112" y1="107" x2="97" y2="92"/>
+          <line x1="80" y1="180" x2="61" y2="180"/>
+          <line x1="112" y1="253" x2="97" y2="268"/>
+          <line x1="185" y1="283" x2="185" y2="304"/>
+          <line x1="258" y1="253" x2="273" y2="268"/>
+        </g>
+        <g stroke="#455A8C" stroke-width="1">
+          <line x1="273" y1="92" x2="338" y2="48"/>
+          <line x1="276" y1="128" x2="338" y2="108"/>
+          <line x1="260" y1="160" x2="338" y2="168"/>
+          <line x1="234" y1="198" x2="338" y2="228"/>
+        </g>
+        <g font-family="'Inter', sans-serif" font-size="11.5" fill="#14181f">
+          <text x="345" y="52" font-weight="600" fill="#701d14">VP4 — espícula (180 copias)</text>
+          <text x="345" y="68" font-size="10" fill="#6b7585">La tripsina intestinal la corta en VP8* (lectina que</text>
+          <text x="345" y="82" font-size="10" fill="#6b7585">reconoce glicanos HBGA) y VP5* (perfora la membrana).</text>
+          <text x="345" y="96" font-size="10" fill="#6b7585">Define el tipo P · antígeno neutralizante · virulencia.</text>
+          <text x="345" y="124" font-weight="600" fill="#8a5c0a">VP7 — glicoproteína externa (780 copias)</text>
+          <text x="345" y="140" font-size="10" fill="#6b7585">Fija calcio: al perderlo se destrimeriza y se desprende.</text>
+          <text x="345" y="154" font-size="10" fill="#6b7585">Define el tipo G · segundo antígeno neutralizante.</text>
+          <text x="345" y="182" font-weight="600" fill="#5C7A57">VP6 — capa media (780 copias)</text>
+          <text x="345" y="198" font-size="10" fill="#6b7585">Antígeno de grupo (A–I) y blanco del EIA en heces.</text>
+          <text x="345" y="212" font-size="10" fill="#6b7585">Es el anticuerpo más abundante, pero NO neutraliza.</text>
+          <text x="345" y="240" font-weight="600" fill="#27334F">VP2 (120) + VP1 polimerasa + VP3 capping</text>
+          <text x="345" y="256" font-size="10" fill="#6b7585">Con el genoma forman la DLP: partícula de doble capa</text>
+          <text x="345" y="270" font-size="10" fill="#6b7585">transcripcionalmente activa que fabrica mRNA en citosol.</text>
+          <text x="345" y="298" font-weight="600" fill="#90303a">NSP1–NSP6 — no estructurales</text>
+          <text x="345" y="314" font-size="10" fill="#6b7585">NSP2+NSP5 arman los viroplasmas · NSP4 es la enterotoxina</text>
+          <text x="345" y="328" font-size="10" fill="#6b7585">NSP1 degrada IRF3, IRF5 e IRF7 y apaga el interferón.</text>
+        </g>
+        <text x="52" y="336" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">TLP ~75 NM · 100 NM CON ESPÍCULAS · 11 dsRNA</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. El virión de rotavirus. Retén la jerarquía: <b>VP7 y VP4 son los únicos antígenos neutralizantes</b> y viven en la capa que se pierde al entrar; <b>VP6</b> es el que detecta el laboratorio; <b>VP1/VP2/VP3</b> son la máquina que nunca se desnuda.</figcaption>
+    </figure>
+
+    <h4>Entrada y ciclo</h4>
+    <ol class="steps">
+      <li><b>Activación proteolítica</b> VP4 debe ser escindida por tripsina en VP8* y VP5* para que el virión sea infeccioso. Por eso el intestino delgado es el nicho perfecto y por eso el cultivo en MA104 exige añadir tripsina al medio.</li>
+      <li><b>Endocitosis sin acidificación</b> A diferencia de casi todos los virus, el disparador <b>no es el pH ácido del endosoma sino la caída del calcio</b>. Al perder Ca²⁺, VP7 se destrimeriza y suelta sus abrazaderas sobre VP6.</li>
+      <li><b>Penetración</b> VP5* se repliega sobre sí mismo como una proteína de fusión y perfora la membrana vesicular; la partícula pierde las dos proteínas externas y entra al citosol como <b>DLP</b>.</li>
+      <li><b>Transcripción y viroplasmas</b> La DLP transcribe mRNA con su propia polimerasa. NSP2 y NSP5, fosforilados por la caseína cinasa 1α, condensan <b>viroplasmas</b> asociados a gotas de lípido: ahí se selecciona un ejemplar de cada uno de los 11 segmentos y se replica el dsRNA.</li>
+      <li><b>Maduración inversa</b> La DLP gema hacia el retículo endoplásmico y adquiere una <b>envoltura transitoria</b> que VP7 después retira. El rotavirus atraviesa membranas <b>dos veces</b>: al entrar y al madurar. Sale por lisis o por vesículas apicales que <b>saltan el Golgi</b>.</li>
+    </ol>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Variabilidad</span>
+        <ul>
+          <li>La <b>segmentación permite reasortamiento</b>: dos cepas que coinfectan una célula intercambian segmentos enteros. Es el equivalente conceptual del <i>antigenic shift</i> de influenza.</li>
+          <li>Genogrupos Wa (origen porcino) y DS-1 (origen bovino); <b>no hay recombinación entre grupos distintos</b> (A con B, por ejemplo).</li>
+          <li>Tras las vacunas aumentó la proporción relativa de G2P[4], G9 y G12, <b>sin escape clínico demostrado</b>.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">Estabilidad ambiental</span>
+        <p>Sin envoltura = <b>resistente al alcohol gel</b>, a los solventes de lípidos, a la desecación y a un rango amplio de pH. Sobrevive en fómites y manos y se excreta a <b>10⁸–10¹¹ partículas por gramo de heces</b> cuando bastan ~10 para infectar. En el hospital: <b>agua y jabón, no alcohol</b>, y superficies con <b>hipoclorito 1 000 ppm</b>.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="fisiopatologia">
+  <summary><span class="num">04</span><span class="stitle">Fisiopatología</span><span class="hint">Tres mecanismos de diarrea, no uno</span><span class="caret"></span></summary>
+  <div class="body">
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Los tres mecanismos de la diarrea por rotavirus a partir del enterocito de la punta de la vellosidad">
+        <rect width="900" height="370" fill="#FFFFFF"/>
+        <text x="40" y="34" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">EPITELIO DEL INTESTINO DELGADO PROXIMAL</text>
+        <line x1="40" y1="290" x2="300" y2="290" stroke="#455A8C" stroke-width="1.4"/>
+        <path d="M75 290 L75 130 Q100 96 125 130 L125 290 Z" fill="rgba(69,90,140,.14)" stroke="#455A8C" stroke-width="1.3"/>
+        <path d="M185 290 L185 208 Q215 180 245 208 L245 290 Z" fill="rgba(112,29,20,.11)" stroke="#701d14" stroke-width="1.4"/>
+        <g fill="#701d14">
+          <circle cx="197" cy="205" r="4"/><circle cx="212" cy="196" r="4"/><circle cx="228" cy="199" r="4"/><circle cx="240" cy="210" r="4"/>
+        </g>
+        <g font-family="'Inter', sans-serif" font-size="10" fill="#6b7585" text-anchor="middle">
+          <text x="100" y="308" font-size="10.5" font-weight="600" fill="#27334F">Vellosidad sana</text>
+          <text x="100" y="322">Enterocito maduro absortivo</text>
+          <text x="215" y="308" font-size="10.5" font-weight="600" fill="#701d14">Punta infectada y roma</text>
+          <text x="215" y="322">Cripta intacta e hipertrófica</text>
+        </g>
+        <g stroke="#90303a" stroke-width="1.3" fill="none">
+          <path d="M252 200 C 290 190 300 120 324 92"/>
+          <path d="M252 205 C 292 205 300 190 324 180"/>
+          <path d="M252 212 C 292 224 300 250 324 268"/>
+        </g>
+        <g fill="#90303a">
+          <polygon points="328,90 317,91 322,100"/>
+          <polygon points="328,179 318,174 318,185"/>
+          <polygon points="328,270 318,262 316,273"/>
+        </g>
+        <rect x="330" y="48" width="548" height="76" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="330" y="48" width="4" height="76" rx="2" fill="#36476E"/>
+        <rect x="330" y="136" width="548" height="76" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="330" y="136" width="4" height="76" rx="2" fill="#701d14"/>
+        <rect x="330" y="224" width="548" height="76" rx="6" fill="#FFFFFF" stroke="rgba(20,24,31,.14)"/>
+        <rect x="330" y="224" width="4" height="76" rx="2" fill="#5C7A57"/>
+        <g font-family="'Inter', sans-serif" fill="#14181f">
+          <text x="348" y="70" font-size="11.5" font-weight="600" fill="#27334F">1 · MALABSORCIÓN — componente osmótico</text>
+          <text x="348" y="88" font-size="10">Se lisa el enterocito maduro de la punta: caen la lactasa y las</text>
+          <text x="348" y="102" font-size="10">demás disacaridasas y el cotransportador SGLT1. El soluto no</text>
+          <text x="348" y="116" font-size="10">absorbido arrastra agua a la luz intestinal.</text>
+          <text x="348" y="158" font-size="11.5" font-weight="600" fill="#701d14">2 · NSP4 — primera enterotoxina viral descrita</text>
+          <text x="348" y="176" font-size="10">Eleva el Ca²⁺ citosólico y abre el canal de cloro TMEM16A:</text>
+          <text x="348" y="190" font-size="10">secreción activa de Cl⁻ y agua. Fragmentos liberados actúan</text>
+          <text x="348" y="204" font-size="10">sobre células vecinas no infectadas vía ADP y receptor P2Y1.</text>
+          <text x="348" y="246" font-size="11.5" font-weight="600" fill="#1a6b42">3 · SISTEMA NERVIOSO ENTÉRICO</text>
+          <text x="348" y="264" font-size="10">Las células enterocromafines liberan serotonina sobre el</text>
+          <text x="348" y="278" font-size="10">receptor 5-HT₃: hipermotilidad y vómito. Explica por qué el</text>
+          <text x="348" y="292" font-size="10">ondansetrón y el racecadotril atenúan el cuadro.</text>
+        </g>
+        <rect x="330" y="310" width="548" height="30" rx="6" fill="rgba(138,92,10,.12)" stroke="#8a5c0a" stroke-width="1"/>
+        <text x="348" y="330" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#8a5c0a">La cripta no se infecta: el cotransporte Na⁺-glucosa persiste y por eso la SRO rehidrata.</text>
+        <text x="40" y="356" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La diarrea aparece antes que la atrofia vellositaria: destruir epitelio no basta para explicarla.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. Los tres mecanismos coexisten. Si te preguntan «¿osmótica o secretora?», la respuesta correcta en rotavirus es <b>ambas, más un componente neural</b>.</figcaption>
+    </figure>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Evasión inmune e inmunidad</span>
+        <ul>
+          <li><b>NSP1</b> degrada IRF3, IRF5 e IRF7; <b>NSP3</b> secuestra la maquinaria de traducción del huésped; el dsRNA queda <b>escondido dentro del viroplasma</b> lejos de los sensores citosólicos.</li>
+          <li>La <b>primera infección es la más grave</b>; cada reinfección es más leve. La inmunidad es parcialmente homotípica y parcialmente heterotípica, nunca estéril.</li>
+          <li>La <b>IgA secretora</b> es el correlato principal. La IgA anti-VP6 puede <b>neutralizar dentro de la célula</b>, mientras se transcita, bloqueando el canal de salida del mRNA de la DLP.</li>
+          <li>Los anticuerpos maternos protegen los primeros meses: por eso el pico de enfermedad es a los <b>6–24 meses</b>.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Más allá del intestino</span>
+        <ul>
+          <li>La <b>viremia (antigenemia)</b> es frecuente incluso en infección asintomática; su significado clínico en el inmunocompetente es incierto.</li>
+          <li>En inmunodeficientes se ha demostrado replicación en <b>hepatocito y túbulo renal</b> en autopsias.</li>
+          <li><b>CTFV infecta el precursor eritroide</b> y persiste dentro del eritrocito maduro durante semanas: eso explica la leucopenia con anemia rara, la RT-PCR positiva 2 semanas y el veto a donar sangre.</li>
+          <li>Muchos <b>orbivirus tienen tropismo por el endotelio vascular</b>: el cuadro y los laboratorios pueden imitar una rickettsiosis.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="clinica">
+  <summary><span class="num">05</span><span class="stitle">Cuadro clínico</span><span class="hint">Un lactante deshidratado y tres zoonosis raras</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Rotavirus: la secuencia canónica</h4>
+    <ol class="steps">
+      <li><b>Incubación 1–3 días</b> Asintomática. Excreción masiva desde antes del primer síntoma.</li>
+      <li><b>Vómito y fiebre (2–3 días)</b> El <b>vómito precede a la diarrea</b> y es más intenso y prolongado que en otras gastroenteritis pediátricas. Fiebre de 38–39 °C.</li>
+      <li><b>Diarrea acuosa profusa (4–5 días)</b> No sanguinolenta, sin leucocitos fecales: <b>no inflamatoria</b>. Laboratorio: densidad urinaria alta, <b>acidosis metabólica</b>, transaminasas y ácido úrico discretamente elevados, <b>sin leucocitosis</b>.</li>
+      <li><b>Resolución (3–8 días)</b> Excreción de antígeno 4–10 días; por RT-PCR el RNA puede detectarse hasta <b>57 días</b> en niños inmunocompetentes, sin que eso implique infectividad. Puede quedar <b>intolerancia transitoria a la lactosa</b>.</li>
+    </ol>
+
+    <div class="g2">
+      <div class="box clin"><span class="lbl">Lo que mata</span>
+        <p><b>Deshidratación isotónica</b> con alteración electrolítica y falla cardiovascular: esa es la causa proximal de muerte, no el virus. Le siguen las convulsiones y la broncoaspiración del vómito. La vacunación se acompañó de una caída del <b>18–21 % en convulsiones</b> que requirieron urgencias u hospitalización, lo que sugiere que el vínculo con crisis convulsivas es real.</p>
+      </div>
+      <div class="box trap"><span class="lbl">Poblaciones especiales</span>
+        <ul>
+          <li><b>Neonatos de cunero</b>: cepas endémicas P[6] difíciles de erradicar que suelen infectar de forma <b>asintomática</b>; aun así ocurren brotes.</li>
+          <li><b>Inmunodeficiencias</b>: SCID, agammaglobulinemia ligada al X, hipoplasia cartílago-pelo, DiGeorge, post-trasplante → <b>diarrea crónica, enteropatía pierde-proteínas</b> y excreción de meses. <b>El VIH no es factor de riesgo</b> ni contraindica la vacuna.</li>
+          <li><b>Adultos</b>: casi siempre asintomáticos (solo seroconversión), pero hay casos graves y mortales; el <b>grupo B (ADRV)</b> causa brotes en adultos en China.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Los otros géneros</h4>
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Virus</th><th>Exposición</th><th>Cuadro</th><th>Perla</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Fiebre por garrapata de Colorado</b><br><i>Coltivirus</i></td>
+          <td>Garrapata <i>D. andersoni</i> por encima de 1 200 m en el oeste de EE. UU. (Wyoming, Montana, Utah); marzo a septiembre, pico abril-julio. Excursionistas, campistas, trabajadores forestales.</td>
+          <td>Fiebre brusca, escalofríos, cefalea, mialgias y fatiga; puede haber odinofagia, dolor abdominal, rigidez de nuca y exantema maculopapular o petequial. <b>~50 % es bifásico («saddleback»)</b> con remisión de 1–3 días. Raro: meningitis, encefalitis, CID, miocarditis, hepatitis, orquiepididimitis.</td>
+          <td><b>Leucopenia &lt;4 500/mm³</b> con linfocitos atípicos y trombocitopenia; <b>anemia rara pese a infectar el eritrocito</b>. Hasta 30 % se hospitaliza; fatiga de semanas en mayores de 30 años; muerte excepcional.</td>
+        </tr>
+        <tr>
+          <td><b>Orbivirus</b><br>Kemerovo, Orungo, Lebombo, Changuinola</td>
+          <td>Garrapatas <i>Ixodes</i> (Europa del Este), mosquitos <i>Aedes</i> (África), flebótomos (Centroamérica). Huésped incidental.</td>
+          <td>Enfermedad febril aguda; <b>meningitis, encefalitis, meningoencefalitis y polirradiculitis</b>. Puede imitar rickettsiosis por el tropismo endotelial.</td>
+          <td><b>No se han reportado muertes humanas</b> y la recuperación suele ser sin secuelas. En animales sí produce hidranencefalia y artrogriposis congénitas.</td>
+        </tr>
+        <tr>
+          <td><b>Orthoreovirus</b><br>serotipos 1–3 y pteropinos</td>
+          <td>Fecal-oral y aérea, universal en la infancia; los pteropinos, por contacto con guano de murciélago o fruta contaminada en el sudeste asiático.</td>
+          <td><b>Infección respiratoria alta leve</b> (rinorrea, faringitis, febrícula, cefalea) en 35–80 %, con diarrea leve en 15–65 %; exantema maculopapular y otitis. Rarísimos: neumonía, miocarditis, meningitis y <b>encefalopatía necrosante aguda</b> con lesiones bitalámicas.</td>
+          <td>El «huérfano» del acrónimo: <b>infecta a casi todos y enferma a casi nadie</b>. Asociaciones no probadas con atresia de vías biliares, quiste de colédoco y enfermedad celiaca.</td>
+        </tr>
+        <tr>
+          <td><b>Virus Banna</b><br><i>Seadornavirus</i></td>
+          <td>Mosquitos (<i>Culex</i>, <i>Aedes</i>, <i>Anopheles</i>) en China y sudeste asiático.</td>
+          <td>Fiebre, mialgia, artralgia y <b>encefalitis</b>. Aislado del LCR en Xishuangbanna, Yunnan, en 1987.</td>
+          <td>Se confunde con encefalitis japonesa; el espectro completo de la enfermedad se desconoce.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box hy"><span class="lbl">Diagnóstico diferencial de la gastroenteritis viral pediátrica</span>
+      <p><b>Rotavirus</b> (lactante 6–24 meses, invierno en clima templado, vómito prominente) · <b>norovirus</b> (todas las edades, brotes explosivos, ahora primer lugar donde hay vacunación) · <b>adenovirus 40/41</b> (curso más largo) · <b>astrovirus</b> y <b>sapovirus</b> (más leves). Frente a diarrea con sangre, moco o leucocitos fecales, sal del terreno viral.</p>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="diagnostico">
+  <summary><span class="num">06</span><span class="stitle">Diagnóstico</span><span class="hint">Heces frescas para uno, suero temprano para otro</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Muestra</th><th>Prueba</th><th>Rendimiento y matices</th></tr></thead>
+      <tbody>
+        <tr><td><b>Heces</b> (rotavirus)</td><td><b>EIA de antígeno VP6</b></td><td><b>Estándar clínico</b>: sensibilidad &gt;85 %, especificidad &gt;95 %, resultado en 15–30 min. Detecta VP2/VP6 de la partícula de doble capa y <b>solo grupo A</b>.</td></tr>
+        <tr><td>Heces</td><td>Aglutinación de látex / inmunocromatografía</td><td>Barata y apta para entornos con recursos limitados, pero <b>menos sensible</b> (70–90 %): los indeterminados requieren confirmación.</td></tr>
+        <tr><td>Heces</td><td>RT-PCR multiplex gastrointestinal</td><td>&gt;95 % de sensibilidad; identifica coinfecciones y permite tipificar. Alto costo: reserva para hospitalizados, brotes e inmunodeprimidos.</td></tr>
+        <tr><td>Heces</td><td>PAGE del genoma · microscopía electrónica</td><td>La electroforesis muestra el <b>patrón de 11 segmentos</b> (electroferotipo) y, como la ME, <b>detecta grupos no-A</b> que los kits comerciales pierden. La ME es poco sensible pero muy específica por la imagen de rueda.</td></tr>
+        <tr><td>Heces</td><td>Cultivo en MA104</td><td>Requiere <b>añadir tripsina</b> al medio; poco sensible con cepas humanas. Investigación, no clínica.</td></tr>
+        <tr><td><b>Suero</b> (CTFV)</td><td><b>RT-PCR</b></td><td>Fiable durante las <b>primeras 2 semanas</b> desde el inicio, gracias a la persistencia del virus en el eritrocito. Es la prueba temprana de elección.</td></tr>
+        <tr><td>Suero (CTFV)</td><td>IgM por IFA + neutralización (PRNT)</td><td>Los anticuerpos <b>tardan 2–3 semanas</b>: una serología negativa en la primera semana no descarta. Solicitar apoyo del departamento de salud estatal o los CDC.</td></tr>
+        <tr><td>Suero o LCR (orbi/orthoreovirus)</td><td>Seroconversión ×4 · aislamiento · RT-PCR</td><td>Fijación de complemento, EIA o neutralización en sueros pareados; aislamiento en ratón lactante o células Vero/BHK; RT-PCR consenso dirigida a la polimerasa, disponible solo como herramienta de investigación.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="box trap"><span class="lbl">Errores frecuentes</span>
+        <ul>
+          <li><b>EIA positivo en un lactante recién vacunado</b>: la excreción de <b>cepa vacunal dura 7–15 días</b> tras la dosis. Un resultado positivo en esa ventana no prueba enfermedad.</li>
+          <li>Enviar <b>hisopo rectal</b> en lugar de heces frescas (1–5 g) en niños pequeños. La muestra es estable &gt;7 días a 2–8 °C.</li>
+          <li>Pedir serología de CTFV en la primera semana y darla por negativa.</li>
+          <li>Olvidar que en el inmunodeprimido con diarrea crónica el rotavirus <b>sigue positivo por meses</b>: la positividad no equivale a episodio agudo nuevo.</li>
+        </ul>
+      </div>
+      <div class="box clin"><span class="lbl">Cuándo vale la pena probar</span>
+        <p>La gastroenteritis comunitaria autolimitada <b>no necesita diagnóstico etiológico</b>. Se justifica en hospitalizados, brotes nosocomiales o de guardería, inmunodeprimidos y vigilancia epidemiológica. Ante fiebre tras picadura de garrapata en el oeste de Norteamérica, el diferencial obligado incluye <b>fiebre manchada de las Montañas Rocosas, fiebre recurrente por garrapata y tularemia</b> antes que CTFV.</p>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="tratamiento">
+  <summary><span class="num">07</span><span class="stitle">Tratamiento y prevención</span><span class="hint">Rehidratar, dar zinc, vacunar a tiempo</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Manejo de la gastroenteritis por rotavirus</h4>
+    <div class="g2">
+      <div class="card"><span class="lbl">Hacer</span>
+        <ul>
+          <li><b>SRO de baja osmolaridad (245 mOsm/L)</b> como primera línea en deshidratación leve o moderada, incluso con vómito moderado. Fórmula OMS: Na⁺ 75 mM, K⁺ 20, Cl⁻ 65, citrato 10, glucosa 75. En desnutrición grave, <b>ReSoMal</b>.</li>
+          <li><b>IV con Ringer lactato o solución salina</b> en deshidratación grave o choque; pasar a vía oral en cuanto beba. Alternativa válida al IV: <b>SRO por sonda nasogástrica</b>, con menos efectos adversos.</li>
+          <li><b>Zinc 20 mg/día (&gt;6 meses) o 10 mg/día (≤6 meses) por 10–14 días</b> — recomendación OMS donde la deficiencia de zinc es prevalente; acorta la diarrea ~medio día. No se ha demostrado beneficio en poblaciones bien nutridas.</li>
+          <li><b>Mantener la lactancia</b> y reanudar dieta apropiada para la edad en cuanto tolere: acorta la diarrea y protege el estado nutricional.</li>
+          <li><b>Ondansetrón en dosis única</b> en urgencias, solo para que el vómito no impida la rehidratación oral; vigilar QT.</li>
+        </ul>
+      </div>
+      <div class="box trap"><span class="lbl">No hacer</span>
+        <ul>
+          <li><b>No hay antiviral específico aprobado.</b> La nitazoxanida no se recomienda; racecadotril y esmectita quedaron fuera de las recomendaciones del grupo FISPGHAN.</li>
+          <li><b>Nada de antibióticos</b>: es una diarrea viral no inflamatoria.</li>
+          <li><b>Antimotílicos prohibidos en niños</b> (loperamida): íleo y depresión respiratoria.</li>
+          <li>Probióticos: <i>L. rhamnosus</i> GG o <i>S. boulardii</i> «pueden considerarse», pero ensayos grandes en EE. UU. y Canadá <b>no mostraron efecto</b>.</li>
+          <li>Bismuto: beneficio modesto y riesgo teórico de síndrome de Reye. Fuera del uso rutinario.</li>
+        </ul>
+      </div>
+    </div>
+    <p>En el <b>inmunodeprimido con diarrea crónica</b> se ha usado inmunoglobulina oral de forma anecdótica, con resolución de la diarrea y de la excreción en reportes de caso; nunca se ha ensayado de forma controlada. Lo definitivo es la <b>reconstitución inmune</b>. Los nanoanticuerpos de llama anti-VP6 redujeron el gasto fecal 22.5 % en un ensayo en Bangladés, pero siguen siendo experimentales.</p>
+
+    <h4>Vacunación: el pilar</h4>
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Calendario y ventanas de la vacuna oral contra rotavirus, con el riesgo de invaginación intestinal">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+        <text x="60" y="32" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">VENTANAS ETARIAS DE LA VACUNA ORAL CONTRA ROTAVIRUS</text>
+        <line x1="694" y1="88" x2="694" y2="238" stroke="#701d14" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <text x="694" y="80" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#701d14">8 m 0 d · límite de la última dosis</text>
+        <rect x="70" y="100" width="108" height="34" rx="4" fill="rgba(20,24,31,.05)"/>
+        <text x="124" y="121" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#6b7585">ANTES DE 6 SEM</text>
+        <rect x="178" y="100" width="161" height="34" rx="4" fill="rgba(92,122,87,.18)" stroke="#5C7A57" stroke-width="1.2"/>
+        <text x="258" y="116" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#1a6b42">VENTANA 1.ª DOSIS</text>
+        <text x="258" y="130" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#1a6b42">6 a 14 sem 6 d</text>
+        <rect x="339" y="100" width="355" height="34" rx="4" fill="rgba(112,29,20,.08)" stroke="#701d14" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="516" y="115" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#701d14">Iniciar aquí ya no se permite</text>
+        <text x="516" y="129" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">no existe esquema de rescate</text>
+        <line x1="60" y1="150" x2="866" y2="150" stroke="#455A8C" stroke-width="1.4"/>
+        <polygon points="866,150 856,145 856,155" fill="#455A8C"/>
+        <g stroke="#455A8C" stroke-width="1">
+          <line x1="70" y1="145" x2="70" y2="155"/>
+          <line x1="226" y1="145" x2="226" y2="155"/>
+          <line x1="382" y1="145" x2="382" y2="155"/>
+          <line x1="538" y1="145" x2="538" y2="155"/>
+          <line x1="694" y1="145" x2="694" y2="155"/>
+          <line x1="850" y1="145" x2="850" y2="155"/>
+        </g>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#6b7585" text-anchor="middle" letter-spacing="0.08em">
+          <text x="70" y="167">0</text>
+          <text x="226" y="167">2 M</text>
+          <text x="382" y="167">4 M</text>
+          <text x="538" y="167">6 M</text>
+          <text x="694" y="167">8 M</text>
+          <text x="850" y="167">10 M</text>
+        </g>
+        <text x="70" y="196" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#27334F">Rotarix — 2 dosis</text>
+        <g fill="#27334F"><circle cx="226" cy="192" r="6"/><circle cx="382" cy="192" r="6"/></g>
+        <text x="70" y="222" font-family="'Inter', sans-serif" font-size="10.5" font-weight="600" fill="#1a6b42">RotaTeq — 3 dosis</text>
+        <g fill="#5C7A57"><circle cx="226" cy="218" r="6"/><circle cx="382" cy="218" r="6"/><circle cx="538" cy="218" r="6"/></g>
+        <rect x="538" y="240" width="320" height="26" rx="4" fill="rgba(112,29,20,.10)"/>
+        <text x="698" y="257" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#701d14">Pico de enfermedad grave: 6 a 24 meses</text>
+        <rect x="60" y="278" width="798" height="48" rx="6" fill="rgba(138,92,10,.11)" stroke="#8a5c0a" stroke-width="1.1"/>
+        <text x="78" y="298" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">Invaginación intestinal: exceso de 1 a 5 casos por 100 000 lactantes, 3 a 7 días tras la primera dosis.</text>
+        <text x="78" y="314" font-family="'Inter', sans-serif" font-size="10.5" fill="#14181f">RotaShield tenía OR 21.7 y 1 caso por cada 5 000 a 10 000: de ahí nacieron estas ventanas.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. El esquema completo se administra <b>antes</b> del pico de enfermedad grave y antes de la edad en que la invaginación es frecuente. Perder la ventana significa perder la vacuna: no hay dosis de rescate.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Vacuna</th><th>Composición</th><th>Esquema</th><th>Nota</th></tr></thead>
+      <tbody>
+        <tr><td><b>Rotarix</b></td><td>Monovalente, cepa <b>humana</b> atenuada (89-12, G1P[8])</td><td class="num"><b>2 dosis VO</b> · 2 y 4 meses</td><td>Depende de protección cruzada. Eficacia 84.7 % contra gastroenteritis grave; 85.5 % incluso contra G2P[4] doblemente discordante.</td></tr>
+        <tr><td><b>RotaTeq</b></td><td><b>Pentavalente</b> reasortante bovino-humano (G1, G2, G3, G4, P[8])</td><td class="num"><b>3 dosis VO</b> · 2, 4 y 6 meses</td><td>Cubre por composición en lugar de por reactividad cruzada.</td></tr>
+        <tr><td>Rotavac · Rotasiil</td><td>Precalificadas por la OMS (India)</td><td class="num">3 dosis VO</td><td>Programas de países de ingreso bajo y medio.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Reglas del esquema</span>
+        <ul>
+          <li><b>Primera dosis entre las 6 y las 14 semanas 6 días.</b> No iniciar a partir de las 15 semanas.</li>
+          <li><b>Última dosis antes de los 8 meses 0 días.</b></li>
+          <li><b>Contraindicaciones</b>: <b>SCID</b> (vacuna viva: infección diseminada), antecedente de <b>invaginación intestinal</b>, malformación gastrointestinal no corregida que predisponga a ella, anafilaxia previa.</li>
+          <li><b>El VIH no contraindica</b> la vacunación del lactante infectado o expuesto.</li>
+          <li><b>Excreción de cepa vacunal 7–15 días</b>: higiene de manos estricta al cambiar pañales si convive con un inmunodeprimido.</li>
+        </ul>
+      </div>
+      <div class="box hy"><span class="lbl">Impacto poblacional</span>
+        <ul>
+          <li><b>85–95 % de eficacia</b> contra gastroenteritis grave por rotavirus y ~60 % de reducción de hospitalizaciones por diarrea de cualquier causa.</li>
+          <li><b>México, 2008</b>: con 74 % de cobertura de primera dosis, <b>35 % menos muertes por diarrea</b> en menores de 5 años, sostenido en 2009.</li>
+          <li>EE. UU., 2006–2017 con 71–75 % de cobertura: <b>84 % de efectividad</b> (RotaTeq) y 83 % (Rotarix) contra hospitalización y urgencias.</li>
+          <li><b>Inmunidad de rebaño</b> demostrada: cae la enfermedad también en niños fuera de la edad de vacunación.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="card"><span class="lbl">Control de infecciones</span>
+        <ul>
+          <li><b>Precauciones de contacto</b> mientras haya síntomas; cohortes en brotes de guardería u hospital.</li>
+          <li><b>Agua y jabón por encima del alcohol gel</b> (virus sin envoltura) y superficies con <b>hipoclorito 1 000 ppm</b>.</li>
+          <li>La <b>lactancia materna</b> confiere protección parcial contra enfermedad grave.</li>
+          <li>Mejorar el saneamiento apenas modifica la incidencia: por eso la vacuna, y no el agua potable, es la herramienta de control.</li>
+        </ul>
+      </div>
+      <div class="card"><span class="lbl">Los demás géneros</span>
+        <ul>
+          <li><b>CTFV</b>: soporte. <b>Evitar aspirina</b> por el riesgo hemorrágico sobre la trombocitopenia. La ribavirina solo tiene datos in vitro y en ratón. <b>No donar sangre ni médula durante al menos 6 meses</b>.</li>
+          <li><b>Orbivirus, orthoreovirus y virus Banna</b>: sin terapia específica. Prevención = evitar picaduras (repelente, ropa de manga larga, permetrina en la ropa, revisión de garrapatas al entrar).</li>
+          <li><b>Uso terapéutico</b>: el orthoreovirus serotipo 3 Dearing (<b>pelareorep</b>) se ensaya como agente <b>oncolítico</b>; seguro, pero con eficacia modesta en monoterapia.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</details>
+
+<details class="sec" id="perlas">
+  <summary><span class="num">08</span><span class="stitle">Perlas de examen</span><span class="hint">Lo que se pregunta</span><span class="caret"></span></summary>
+  <div class="body">
+    <div class="g2">
+      <div class="box hy"><span class="lbl">Alto rendimiento</span>
+        <ul>
+          <li><b>dsRNA segmentado + cápside de triple capa + sin envoltura</b>: la tríada que define a rotavirus en cualquier examen.</li>
+          <li><b>NSP4 = primera enterotoxina viral descrita.</b> Diarrea <b>mixta</b>: osmótica por atrofia vellositaria, secretora por NSP4, y neural por el sistema entérico.</li>
+          <li>La entrada <b>no depende del pH ácido sino de la caída de calcio</b>. Excepción memorable.</li>
+          <li><b>Tipificación G(VP7)/P(VP4)</b>; el <b>reasortamiento</b> de segmentos es el análogo del <i>shift</i> de influenza.</li>
+          <li><b>SRO de baja osmolaridad + zinc 20 mg/día × 10–14 días</b>; nunca antibióticos ni loperamida.</li>
+          <li><b>Reovirus = respiratory enteric orphan</b>: infecta a casi todos, enferma a casi nadie; hoy se estudia como <b>oncolítico</b>.</li>
+        </ul>
+      </div>
+      <div class="box mnem"><span class="lbl">Nemotecnias</span>
+        <p><b>«Rotavirus = right out the anus»</b> — la clásica de First Aid para la diarrea acuosa profusa del lactante.</p>
+        <p><b>«6-14-8»</b> — la primera dosis entre las <b>6</b> y las <b>14</b> semanas 6 días; la última antes de los <b>8</b> meses.</p>
+        <p><b>«Sin envoltura, sin alcohol»</b> — agua y jabón; el gel alcoholado no lo inactiva.</p>
+        <p><b>«11 para la rueda»</b> — rotavirus 11 segmentos, orbi y orthoreo 10, colti y seadorna 12 (<i>dodeca</i>).</p>
+      </div>
+    </div>
+    <div class="box trap"><span class="lbl">Trampas y escenario mexicano</span>
+      <ul>
+        <li><b>Trampa 1</b>: EIA de heces positivo en un lactante vacunado hace una semana. Puede ser <b>cepa vacunal</b> (excreción 7–15 días), no enfermedad.</li>
+        <li><b>Trampa 2</b>: pedir serología de fiebre por garrapata de Colorado en la primera semana. Los anticuerpos tardan 2–3 semanas; <b>la prueba temprana es la RT-PCR en suero</b>.</li>
+        <li><b>Trampa 3</b>: confundir el vínculo vacuna-invaginación. El exceso real hoy es de <b>1–5 por 100 000</b>; el desastre de <b>1 por 5 000–10 000</b> fue RotaShield en 1999. El beneficio supera ampliamente al riesgo, pero el antecedente de invaginación sigue siendo contraindicación absoluta.</li>
+        <li><b>Escenario mexicano</b>: <b>Rotarix se licenció por primera vez en el mundo en México</b> (2004) y entró al esquema universal en 2007 con dosis a los 2 y 4 meses. El dato que se cita en clase es la caída de <b>35 % en muertes por diarrea</b> en menores de 5 años en 2008. Al lactante que llega deshidratado sin cartilla, pregunta la edad: si ya pasó de las 15 semanas, <b>la ventana se cerró</b>.</li>
+      </ul>
+    </div>
+    <p class="src"><b>Fuentes ·</b> Vault Jaibri <code>10_WIKI_INFECTOLOGIA/patogenos/Rotavirus.md</code> · Mandell PPID 10e, cap. 157 (rotavirus), cap. 155 (orthoreovirus y orbivirus) y cap. 156 (coltivirus y seadornavirus) · OMS, <i>Rotavirus vaccines: WHO position paper</i>, WER 2021;96(28):301-320 · ACIP, <i>MMWR Recomm Rep</i> 2009;58(RR-2) · Bishop et al., <i>Lancet</i> 1973;2:1281-1283 · Ruiz-Palacios et al., <i>N Engl J Med</i> 2006;354:11-22 · Vesikari et al., <i>N Engl J Med</i> 2006;354:23-33 · Richardson et al., <i>N Engl J Med</i> 2010;362:299-305 · OMS/UNICEF, declaración conjunta sobre manejo clínico de la diarrea aguda, 2004 · First Aid for the USMLE Step 1 2025, p. 165.</p>
+  </div>
+</details>
+      <div class="pager"><a class="prev" href="astroviridae.html"><span class="k">← Anterior</span><span class="v">Astroviridae</span></a>
+        <a class="next" href="togaviridae.html"><span class="k">Siguiente →</span><span class="v">Togaviridae</span></a></div>
+      <footer class="pf">
+        <span>Reoviridae / Sedoreoviridae · 5 de 18 · árbol RNA</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

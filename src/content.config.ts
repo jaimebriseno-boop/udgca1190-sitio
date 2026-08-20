@@ -46,7 +46,7 @@ const herramientas = defineCollection({
   loader: file('data/herramientas.yml', { parser: parseYaml }),
   schema: z.object({
     nombre: z.string(),
-    tipo: z.enum(['predictiva', 'estadistica', 'pipeline']),
+    tipo: z.enum(['predictiva', 'estadistica', 'pipeline', 'docente']),
     estado: z.enum(['activa', 'beta', 'desarrollo']),
     resumen: z.string(),
     descripcion: z.string().optional(),
