@@ -156,7 +156,7 @@ const UI = {
     // Herramienta: VIROLOGÍA (aprendizaje activo)
     'viro.kicker': 'Herramienta docente · Microbiología II',
     'viro.title': 'VIROLOGÍA',
-    'viro.intro': 'Herramienta con estrategias de aprendizaje activo en Virología: el recorrido parte de dos árboles taxonómicos interactivos (virus DNA y virus RNA) y desciende a 28 fichas de familia con historia, taxonomía, microbiología, fisiopatología, cuadro clínico, diagnóstico y tratamiento, con figuras propias, nemotecnias y trampas de examen.',
+    'viro.intro': 'Herramienta con estrategias de aprendizaje activo en Virología: el recorrido parte de dos árboles taxonómicos interactivos (virus DNA y virus RNA) y desciende a 28 fichas de familia con historia, taxonomía, microbiología, fisiopatología, cuadro clínico, diagnóstico y tratamiento, con figuras propias, nemotecnias y trampas de examen. Incluye una sección de herramientas diagnósticas del laboratorio: diez técnicas, de la PCR y la carga viral al cultivo, con sus ventanas de utilidad y desempeño.',
     'viro.iframe_title': 'Herramienta interactiva de virología médica',
     'viro.fullscreen': 'Abrir en pantalla completa ↗',
     'viro.note': 'Navega del árbol a la ficha: cada tarjeta de familia abre su ficha de estudio con secciones desplegables. El buscador ignora acentos y admite familia, género, virus o síndrome («herpes», «dengue», «bronquiolitis»).',
@@ -281,7 +281,7 @@ const UI = {
     // Tool: VIROLOGY (active learning)
     'viro.kicker': 'Teaching tool · Microbiology II',
     'viro.title': 'VIROLOGY',
-    'viro.intro': 'An active-learning tool for medical virology: the journey starts at two interactive taxonomic trees (DNA and RNA viruses) and descends to 28 family study cards covering history, taxonomy, microbiology, pathophysiology, clinical picture, diagnosis and treatment, with original figures, mnemonics and exam pitfalls.',
+    'viro.intro': 'An active-learning tool for medical virology: the journey starts at two interactive taxonomic trees (DNA and RNA viruses) and descends to 28 family study cards covering history, taxonomy, microbiology, pathophysiology, clinical picture, diagnosis and treatment, with original figures, mnemonics and exam pitfalls. It includes a laboratory diagnostics section: ten techniques, from PCR and viral load to culture, with their diagnostic windows and performance.',
     'viro.iframe_title': 'Interactive medical virology tool',
     'viro.fullscreen': 'Open full screen ↗',
     'viro.note': 'Navigate from tree to card: each family card opens its study record with collapsible sections. Search ignores diacritics and accepts family, genus, virus or syndrome ("herpes", "dengue", "bronchiolitis").',

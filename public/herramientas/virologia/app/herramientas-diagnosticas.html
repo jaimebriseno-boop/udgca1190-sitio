@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herramientas diagnósticas en virología — Virología médica</title>
+<meta name="description" content="Del cultivo y la serología a la PCR multiplex y la metagenómica: fundamento, ventanas diagnósticas y desempeño de las diez herramientas del laboratorio de virología en las 28 familias virales del sitio.">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400..600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper:#f7f8fa; --ink:#14181f; --muted:#6b7585; --navy:#27334F;
+    --navy-2:#36476E; --steel:#455A8C; --green:#5C7A57; --rust:#701d14;
+    --clay:#90303a; --gold:#8a5c0a; --white:#FFFFFF;
+    --rule:rgba(20,24,31,0.14); --rule-soft:rgba(20,24,31,0.07);
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+    --serif:'Source Serif 4', Georgia, serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+    --shadow:0 1px 2px rgba(39,51,79,.05), 0 8px 24px -18px rgba(39,51,79,.35);
+  }
+  html { scroll-behavior:smooth; scroll-padding-top:74px; }
+  body { font-family:var(--sans); background:var(--paper); color:var(--ink);
+         font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+  /* ---------- barra superior ---------- */
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(247,248,250,.93);
+    backdrop-filter:saturate(140%) blur(10px); border-bottom:1px solid var(--rule); }
+  .topbar .in { max-width:1180px; margin:0 auto; padding:.6rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+  .crumb { font-family:var(--mono); font-size:.63rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--muted); display:flex; align-items:center;
+    gap:.45rem; flex-wrap:wrap; }
+  .crumb a { color:var(--navy); text-decoration:none; border-bottom:1px solid transparent; }
+  .crumb a:hover { border-bottom-color:var(--navy); }
+  .crumb .sep { opacity:.45; }
+  .crumb b { color:var(--rust); font-weight:600; }
+  .spacer { flex:1 1 auto; }
+  .btn { font-family:var(--mono); font-size:.62rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--navy); background:transparent;
+    border:1px solid var(--rule); border-radius:999px; padding:.34rem .72rem;
+    cursor:pointer; text-decoration:none; white-space:nowrap; transition:.15s; }
+  .btn:hover { background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .btn[disabled] { opacity:.32; pointer-events:none; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:2.4rem 1.5rem 4rem; }
+  .cols { display:grid; grid-template-columns:186px minmax(0,1fr); gap:2.4rem;
+          align-items:start; }
+  .rail { position:sticky; top:86px; }
+  .rail .eyebrow { margin-bottom:.6rem; }
+  .rail ol { list-style:none; counter-reset:r; }
+  .rail li { counter-increment:r; }
+  .rail a { display:flex; gap:.5rem; align-items:baseline; text-decoration:none;
+    color:var(--muted); font-size:.76rem; line-height:1.35; padding:.3rem 0 .3rem .55rem;
+    border-left:2px solid var(--rule); transition:.15s; }
+  .rail a::before { content:counter(r,decimal-leading-zero); font-family:var(--mono);
+    font-size:.58rem; opacity:.6; }
+  .rail a:hover, .rail a.on { color:var(--rust); border-left-color:var(--rust); }
+  .rail a.on { font-weight:600; }
+
+  /* ---------- portada ---------- */
+  .eyebrow { font-family:var(--mono); font-size:.63rem; font-weight:500;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--muted); }
+  h1 { font-family:var(--serif); font-weight:400; letter-spacing:-.02em; line-height:1.06;
+    color:var(--navy); font-size:clamp(2rem,4vw + .4rem,3.1rem); margin:.45rem 0 .3rem; }
+  .sub { font-family:var(--serif); font-style:italic; font-size:1.06rem;
+    color:var(--muted); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+  .chip { font-family:var(--mono); font-size:.6rem; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--navy); background:rgba(69,90,140,.16);
+    border:1px solid rgba(69,90,140,.4); border-radius:4px; padding:.26rem .55rem; }
+  .chip.g { color:#1a6b42; background:rgba(92,122,87,.14); border-color:rgba(92,122,87,.42); }
+  .chip.r { color:var(--rust); background:rgba(112,29,20,.09); border-color:rgba(112,29,20,.32); }
+  .chip.gold { color:#8a5c0a; background:rgba(138,92,10,.13); border-color:rgba(138,92,10,.4); }
+
+  /* ---------- ficha rápida ---------- */
+  .ficha { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    box-shadow:var(--shadow); margin:1.8rem 0 2.2rem; overflow:hidden; }
+  .ficha > .hd { background:var(--navy); color:var(--paper); padding:.62rem 1.1rem;
+    font-family:var(--mono); font-size:.63rem; letter-spacing:.16em; text-transform:uppercase;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .ficha > .hd span:last-child { color:rgba(247,248,250,.66); }
+  .ficha .bd { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); }
+  .ficha .cell { padding:.85rem 1.1rem; border-right:1px solid var(--rule-soft);
+    border-bottom:1px solid var(--rule-soft); }
+  .ficha .cell dt { font-family:var(--mono); font-size:.57rem; letter-spacing:.13em;
+    text-transform:uppercase; color:var(--clay); margin-bottom:.28rem; }
+  .ficha .cell dd { font-size:.83rem; line-height:1.45; }
+
+  /* ---------- secciones ---------- */
+  details.sec { background:var(--white); border:1px solid var(--rule); border-radius:8px;
+    margin-bottom:.85rem; box-shadow:var(--shadow); overflow:hidden; }
+  details.sec > summary { list-style:none; cursor:pointer; padding:.95rem 1.15rem;
+    display:flex; align-items:center; gap:.8rem; user-select:none; transition:.15s; }
+  details.sec > summary::-webkit-details-marker { display:none; }
+  details.sec > summary:hover { background:rgba(69,90,140,.06); }
+  details.sec > summary .num { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    color:var(--clay); border:1px solid rgba(144,48,58,.35); border-radius:4px;
+    padding:.2rem .4rem; flex:none; }
+  details.sec > summary .stitle { font-family:var(--sans); font-weight:600; font-size:.97rem;
+    color:var(--rust); letter-spacing:-.005em; }
+  details.sec > summary .hint { font-family:var(--serif); font-style:italic;
+    font-size:.85rem; color:var(--muted); flex:1 1 auto; }
+  details.sec > summary .caret { flex:none; width:12px; height:12px; border-right:1.6px solid var(--steel);
+    border-bottom:1.6px solid var(--steel); transform:rotate(45deg) translate(-2px,-2px);
+    transition:transform .2s; }
+  details.sec[open] > summary .caret { transform:rotate(-135deg) translate(-3px,-3px); }
+  details.sec[open] > summary { border-bottom:1px solid var(--rule); }
+  details.sec > .body { padding:1.25rem 1.35rem 1.5rem; }
+  details.sec > .body > * + * { margin-top:.85rem; }
+  @media (max-width:760px){ details.sec > summary .hint { display:none; } }
+
+  /* ---------- tipografía interna ---------- */
+  .body p { font-size:.9rem; }
+  .body h4 { font-family:var(--sans); font-size:.85rem; font-weight:600; color:var(--navy);
+    letter-spacing:-.005em; margin-top:1.35rem; padding-bottom:.3rem;
+    border-bottom:1px solid var(--rule-soft); }
+  .body h5 { font-family:var(--mono); font-size:.62rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--clay); margin-top:1.1rem; }
+  .body ul, .body ol { padding-left:1.15rem; }
+  .body li { font-size:.88rem; margin-bottom:.3rem; }
+  .body ul { list-style:none; padding-left:.95rem; }
+  .body ul > li { position:relative; padding-left:.85rem; }
+  .body ul > li::before { content:''; position:absolute; left:0; top:.62em; width:4px; height:4px;
+    border-radius:50%; background:var(--clay); opacity:.6; }
+  .body ol > li::marker { font-family:var(--mono); font-size:.78em; color:var(--clay); }
+  .body b, .body strong { font-weight:600; color:#14181f; }
+  .body i, .body em { font-style:italic; }
+  .body a { color:var(--navy); text-decoration:none; border-bottom:1px solid rgba(39,51,79,.3); }
+  .body a:hover { border-bottom-color:var(--navy); }
+  code { font-family:var(--mono); font-size:.82em; background:rgba(69,90,140,.13);
+    border-radius:3px; padding:.1em .34em; }
+
+  /* ---------- rejillas ---------- */
+  .g2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:.85rem; }
+  .g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(195px,1fr)); gap:.75rem; }
+
+  /* ---------- cajas didácticas ---------- */
+  .box { border-radius:6px; padding:.85rem 1rem; border:1px solid var(--rule);
+    border-left-width:3px; background:rgba(247,248,250,.55); }
+  .box .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:.4rem; display:block; font-weight:500; }
+  .box p, .box li { font-size:.85rem; }
+  .box ul { margin-top:.35rem; }
+  .box.hy    { border-left-color:var(--gold); background:rgba(138,92,10,.07); }
+  .box.hy .lbl    { color:#8a5c0a; }
+  .box.trap  { border-left-color:var(--rust); background:rgba(112,29,20,.06); }
+  .box.trap .lbl  { color:var(--rust); }
+  .box.mnem  { border-left-color:var(--navy); background:rgba(39,51,79,.06); }
+  .box.mnem .lbl  { color:var(--navy); }
+  .box.clin  { border-left-color:var(--green); background:rgba(92,122,87,.08); }
+  .box.clin .lbl  { color:#1a6b42; }
+  .box.mnem b { color:var(--rust); }
+  .box.mnem code { font-family:var(--mono); color:var(--rust); background:rgba(39,51,79,.09); }
+
+  /* ---------- tarjeta ---------- */
+  .card { background:rgba(247,248,250,.6); border:1px solid var(--rule);
+    border-radius:6px; padding:.85rem 1rem; }
+  .card > .lbl { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--clay); display:block; margin-bottom:.4rem; }
+  .card h6 { font-size:.83rem; font-weight:600; color:var(--rust); margin-bottom:.35rem; }
+  .card p, .card li { font-size:.83rem; }
+
+  /* ---------- tablas ---------- */
+  table.tbl { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .scrollx { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table.tbl th { font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--clay); text-align:left; font-weight:500;
+    padding:.5rem .6rem; border-bottom:1.5px solid var(--rule); white-space:nowrap; }
+  table.tbl td { padding:.5rem .6rem; border-bottom:1px solid var(--rule-soft);
+    vertical-align:top; line-height:1.45; }
+  table.tbl tr:last-child td { border-bottom:none; }
+  table.tbl tbody tr:hover { background:rgba(69,90,140,.05); }
+  table.tbl td b { color:#14181f; }
+  table.tbl .num { font-family:var(--mono); font-size:.78rem; white-space:nowrap; }
+
+  /* ---------- figuras ---------- */
+  figure.fig { background:var(--white); border:1px solid var(--rule); border-radius:6px;
+    padding:1rem 1rem .75rem; }
+  figure.fig svg { width:100%; height:auto; display:block; }
+  figure.fig figcaption { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); margin-top:.7rem; padding-top:.55rem;
+    border-top:1px solid var(--rule-soft); line-height:1.45; }
+  .fig .scrollx svg { min-width:520px; }
+
+  /* ---------- bloque por virus ---------- */
+  .vblock { border:1px solid var(--rule); border-radius:6px; overflow:hidden;
+            background:var(--white); }
+  .vblock > .vhd { background:rgba(112,29,20,.07); border-bottom:1px solid var(--rule);
+    padding:.55rem .9rem; display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; }
+  .vblock > .vhd .vn { font-weight:600; font-size:.88rem; color:var(--rust); }
+  .vblock > .vhd .vg { font-family:var(--serif); font-style:italic; font-size:.8rem;
+    color:var(--muted); }
+  .vblock > .vbd { padding:.8rem .95rem; }
+  .vblock > .vbd > * + * { margin-top:.6rem; }
+
+  /* ---------- pasos / línea de tiempo ---------- */
+  ol.steps { list-style:none; padding-left:0; counter-reset:s; }
+  ol.steps > li { counter-increment:s; position:relative; padding-left:2.1rem;
+    padding-bottom:.75rem; margin-bottom:0; }
+  ol.steps > li::before { content:counter(s); position:absolute; left:0; top:0;
+    width:1.45rem; height:1.45rem; border-radius:50%; background:var(--navy);
+    color:var(--paper); font-family:var(--mono); font-size:.65rem; display:flex;
+    align-items:center; justify-content:center; }
+  ol.steps > li::after { content:''; position:absolute; left:.71rem; top:1.55rem;
+    bottom:.1rem; width:1px; background:var(--rule); }
+  ol.steps > li:last-child { padding-bottom:0; }
+  ol.steps > li:last-child::after { display:none; }
+  ol.steps b { display:block; color:var(--navy); font-size:.85rem; }
+
+  /* ---------- pares clave/valor ---------- */
+  dl.kv { display:grid; grid-template-columns:auto 1fr; gap:.35rem .9rem; font-size:.85rem; }
+  dl.kv dt { font-family:var(--mono); font-size:.62rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--clay); padding-top:.18rem; white-space:nowrap; }
+
+  /* ---------- fuente ---------- */
+  .src { font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--muted);
+    line-height:1.6; border-top:1px solid var(--rule-soft); padding-top:.6rem; }
+  .src b { color:var(--clay); font-weight:500; }
+
+  /* ---------- navegación inferior ---------- */
+  .pager { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem;
+           flex-wrap:wrap; }
+  .pager a { flex:1 1 240px; text-decoration:none; background:var(--white);
+    border:1px solid var(--rule); border-radius:6px; padding:.8rem 1rem; transition:.15s; }
+  .pager a:hover { border-color:var(--steel); box-shadow:var(--shadow); }
+  .pager .k { font-family:var(--mono); font-size:.57rem; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--muted); display:block; margin-bottom:.2rem; }
+  .pager .v { font-family:var(--serif); font-size:1.02rem; color:var(--navy); }
+  .pager a.next { text-align:right; }
+
+  footer.pf { margin-top:2.4rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--muted); display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+
+  @media (max-width:900px){
+    .cols { grid-template-columns:minmax(0,1fr); gap:1.4rem; }
+    .rail { position:static; }
+    .rail ol { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .rail a { border:1px solid var(--rule); border-radius:999px; padding:.24rem .6rem; }
+  }
+  @media print {
+    .topbar,.rail,.pager,.btn { display:none !important; }
+    body { background:#fff; font-size:10.5pt; }
+    .cols { grid-template-columns:1fr; }
+    details.sec { break-inside:avoid; box-shadow:none; }
+    details.sec > .body { display:block !important; }
+    .wrap { padding:0; max-width:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="in">
+  <nav class="crumb">
+    <a href="index.html">Virología</a><span class="sep">/</span>
+    <b>Herramientas diagnósticas</b>
+  </nav>
+  <span class="spacer"></span>
+  <button class="btn" id="toggleAll" data-state="closed">Expandir todo</button>
+  <a class="btn" href="index.html">Volver al índice</a>
+</div></div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Virología médica · Infectología · UdeG</p>
+    <h1>Herramientas diagnósticas en virología</h1>
+    <p class="sub">Del cultivo y la serología a la PCR multiplex y la metagenómica: el fundamento de cada prueba, su ventana de utilidad y su desempeño frente a las 28 familias virales del sitio.</p>
+    <div class="chips">
+      <span class="chip g">10 métodos</span>
+      <span class="chip">28 familias</span>
+      <span class="chip gold">con figuras</span>
+      <span class="chip r">ventanas y umbrales</span>
+    </div>
+  </header>
+
+  <div class="cols">
+    <aside class="rail">
+      <p class="eyebrow">Métodos</p>
+      <ol>
+        <li><a href="#principio">El principio rector</a></li>
+        <li><a href="#naat">Ácidos nucleicos: PCR y multiplex</a></li>
+        <li><a href="#carga">Carga viral cuantitativa</a></li>
+        <li><a href="#antigeno">Detección de antígenos</a></li>
+        <li><a href="#rapidas">Pruebas rápidas</a></li>
+        <li><a href="#serologia">Serología</a></li>
+        <li><a href="#neutralizacion">Neutralización y PRNT</a></li>
+        <li><a href="#cultivo">Cultivo e inmunofluorescencia</a></li>
+        <li><a href="#citologia">Citología y microscopía</a></li>
+        <li><a href="#ngs">Secuenciación y metagenómica</a></li>
+      </ol>
+    </aside>
+    <main>
+<details class="sec" id="principio" open>
+  <summary><span class="num">01</span><span class="stitle">El principio rector</span><span class="hint">viremia primero, anticuerpos después</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Directos contra indirectos</h4>
+    <ul>
+      <li><b>Métodos directos</b> — detectan al agente o sus componentes: el genoma por <b>NAAT</b> (PCR/RT-PCR), proteínas por <b>detección de antígeno</b> (NS1, p24) y virus viable por <b>cultivo</b>. Rinden durante la <b>viremia y la replicación</b>: los primeros días de enfermedad.</li>
+      <li><b>Métodos indirectos</b> — detectan la <b>respuesta del huésped</b>: IgM, IgG, seroconversión (aumento <b>≥4×</b> del título en sueros pareados) y neutralización (<b>PRNT</b>). Llegan tarde por diseño: la IgM aparece hacia el <b>día 5–7</b> y la IgG después; son pruebas retrospectivas que confirman, no pruebas de la fase aguda.</li>
+      <li>Consecuencia operativa: la pregunta correcta no es «¿qué prueba pido?» sino <b>«¿en qué día de enfermedad estoy?»</b>. La misma prueba que confirma el día 3 (PCR de dengue) es inútil para descartar el día 10, y la IgM que confirma el día 7 es un falso negativo esperado el día 2.</li>
+    </ul>
+
+    <h4>La ventana diagnóstica del VIH: el ejemplo límite</h4>
+    <p>Tras la exposición, los marcadores aparecen en cascada y cada prueba tiene su propia ventana (CDC 2025): <b>NAT (RNA): 10–33 días</b> · <b>Ag/Ab de 4.ª generación en sangre venosa: 18–45 días</b> · <b>prueba de anticuerpos: 23–90 días</b>. La base experimental son los paneles seriados de seroconversores: el RNA precede al p24 y el p24 al anticuerpo (Fiebig, PMID:12960819; Delaney, PMID:27737954). De ahí la regla clínica: <b>una prueba de anticuerpos negativa en el síndrome retroviral agudo no descarta VIH</b> — se pide NAT o se repite el Ag/Ab a las semanas.</p>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Línea de tiempo de 0 a 21 días de enfermedad con las curvas de viremia y antígeno, IgM e IgG, y debajo las barras de utilidad de NAAT, antígeno, IgM e IgG">
+        <rect width="900" height="360" fill="#FFFFFF"/>
+
+        <rect x="100" y="28" width="357" height="20" rx="3" fill="rgba(112,29,20,.10)"/>
+        <text x="278" y="42" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#701d14">MÉTODOS DIRECTOS · DÍAS 0–10</text>
+        <rect x="386" y="28" width="464" height="20" rx="3" fill="rgba(39,51,79,.08)"/>
+        <text x="618" y="42" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#27334F">MÉTODOS INDIRECTOS · DÍAS 8–21</text>
+
+        <polyline points="136,164 171,150 243,85 314,75 386,110 493,150 600,164" fill="none" stroke="#701d14" stroke-width="2.2"/>
+        <polyline points="279,164 350,135 457,85 600,105 850,135" fill="none" stroke="#90303a" stroke-width="2.2"/>
+        <polyline points="386,164 493,130 600,90 850,78" fill="none" stroke="#27334F" stroke-width="2.2"/>
+
+        <text x="212" y="70" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#701d14">Viremia y antígeno</text>
+        <text x="520" y="82" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#90303a">IgM</text>
+        <text x="760" y="70" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#27334F">IgG</text>
+
+        <line x1="100" y1="192" x2="850" y2="192" stroke="#455A8C" stroke-width="1.2"/>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#6b7585" text-anchor="middle">
+          <text x="100" y="206">0</text><text x="207" y="206">3</text><text x="350" y="206">7</text>
+          <text x="457" y="206">10</text><text x="600" y="206">14</text><text x="850" y="206">21</text>
+        </g>
+        <text x="475" y="222" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#6b7585">DÍAS DE ENFERMEDAD</text>
+
+        <text x="92" y="248" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#14181f">NAAT</text>
+        <rect x="100" y="238" width="357" height="13" rx="3" fill="#27334F"/>
+        <text x="467" y="248" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">detecta la viremia desde el día 1–2</text>
+
+        <text x="92" y="270" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#14181f">Antígeno</text>
+        <rect x="171" y="260" width="215" height="13" rx="3" fill="#36476E"/>
+        <text x="396" y="270" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">ventana corta: NS1, p24, glicoproteínas</text>
+
+        <text x="92" y="292" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#14181f">IgM</text>
+        <rect x="279" y="282" width="571" height="13" rx="3" fill="#90303a"/>
+        <text x="100" y="292" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">positiviza hacia el día 5</text>
+
+        <text x="92" y="314" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#14181f">IgG</text>
+        <rect x="386" y="304" width="464" height="13" rx="3" fill="rgba(39,51,79,.45)"/>
+        <text x="100" y="314" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">desde el día 7–10; persiste años</text>
+
+        <text x="100" y="344" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">PCR demasiado tarde e IgM demasiado pronto: los dos errores simétricos.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 1. Cinética genérica de una infección viral aguda: la <b>viremia y el antígeno</b> dominan la primera semana; la <b>IgM</b> positiviza hacia el día 5 y la <b>IgG</b> llega después y persiste. Cada método solo es útil dentro de su ventana.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Método</th><th>Qué detecta</th><th>Cuándo rinde</th><th>Ejemplo</th></tr></thead>
+      <tbody>
+        <tr><td><b>NAAT</b> (PCR/RT-PCR)</td><td>Genoma del virus</td><td>Desde el día 1–2, mientras haya replicación</td><td>Dengue días 1–5; VHS en LCR días 3–10 (S 96–98 %)</td></tr>
+        <tr><td><b>Antígeno</b></td><td>Proteínas virales</td><td>Ventana corta al inicio, con carga alta</td><td>NS1 de dengue días 0–7; p24 del VIH (18–45 días)</td></tr>
+        <tr><td><b>Cultivo</b></td><td>Virus viable</td><td>Viremia temprana; exige laboratorio especializado</td><td>Enterovirus en LCR: S 65–75 % vs &gt;95 % de la NAAT — hoy desplazado</td></tr>
+        <tr><td><b>IgM</b></td><td>Respuesta humoral temprana</td><td>~Día 5 en adelante; persiste semanas a meses</td><td>IgM en LCR para WNV; antes del día 4–5 una IgM negativa no descarta dengue</td></tr>
+        <tr><td><b>IgG / seroconversión</b></td><td>Memoria inmune</td><td>Tardía; diagnóstico retrospectivo con pares (≥4×)</td><td>IgG sola = infección pasada, no aguda</td></tr>
+        <tr><td><b>PRNT</b></td><td>Anticuerpos neutralizantes específicos</td><td>Confirmación tardía, laboratorio de referencia</td><td>Resuelve la reactividad cruzada entre flavivirus (dengue/zika/WNV)</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li><b>Pedir IgM demasiado pronto</b>: una IgM anti-dengue del día 2 negativa no descarta nada; si la sospecha persiste, se repite después del día 4–5.</li>
+        <li><b>Pedir PCR demasiado tarde</b>: una RT-PCR de dengue del día 8 negativa tampoco descarta; la viremia ya cedió y la prueba correcta era la IgM.</li>
+        <li><b>Descartar VIH con una prueba de anticuerpos</b> en el cuadro agudo: su ventana llega hasta <b>90 días</b>; corresponde NAT o Ag/Ab seriado.</li>
+        <li>Leer una <b>IgG positiva aislada como infección aguda</b>: la IgG documenta exposición previa; lo agudo se prueba con IgM, seroconversión ≥4× o detección directa.</li>
+      </ul>
+    </div>
+    <p class="src">Fuentes: apuntes research A1 (métodos, wiki), A4 (fichas RNA), B5 (arbovirus) y B6 (retrovirus; ventanas VIH CDC 2025). PMIDs clave: PMID:12960819 · PMID:27737954.</p>
+  </div>
+</details>
+
+<details class="sec" id="naat">
+  <summary><span class="num">02</span><span class="stitle">Ácidos nucleicos: PCR, RT-PCR y multiplex</span><span class="hint">el estándar moderno</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Qué amplifica y qué significa</h4>
+    <ul>
+      <li>La PCR <b>amplifica exponencialmente una diana específica</b> del genoma viral mediante ciclos repetidos de <b>desnaturalización (~95 °C) → alineamiento de primers (50–65 °C) → extensión (72 °C)</b>; cada ciclo duplica la diana. Para los <b>virus RNA</b> se antepone una <b>transcriptasa inversa</b> (RT-PCR).</li>
+      <li>En la <b>PCR en tiempo real</b> la fluorescencia se mide en cada ciclo y el resultado se reporta como <b>Ct</b> (ciclo en que la curva cruza el umbral): <b>a menor Ct, mayor carga inicial</b>. El Ct es ordinal y plataforma-dependiente — no es una carga viral (IDSA/AMP lo desaconsejan).</li>
+      <li>La diana se elige en una <b>región conservada</b> del genoma: las mutaciones en la zona de apareamiento de los primers producen <b>falsos negativos</b> (el VIH, con su RT sin corrección de pruebas, es el modelo de variabilidad); la contaminación cruzada produce <b>falsos positivos</b>, y los inhibidores de la muestra (hemoglobina en LCR traumático, heparina) falsos negativos.</li>
+    </ul>
+
+    <h4>PCR positiva no es sinónimo de enfermedad</h4>
+    <ul>
+      <li>La NAAT detecta <b>ácidos nucleicos, no viabilidad</b>: el RNA de SARS-CoV-2 persiste una mediana de 17 días en vía alta (hasta 83) sin que ningún estudio aislara virus viable más allá del <b>día 9</b> (PMID:33521734).</li>
+      <li><b>Latencia</b>: los herpesvirus guardan su genoma en células del huésped; la sangre total (con DNA intracelular latente) sobreestima la viremia — en CMV se mide en <b>plasma</b>.</li>
+      <li><b>ciHHV-6</b>: ~1 % de la población porta el HHV-6 <b>integrado en el cromosoma de cada célula</b> → PCR siempre positiva con cargas altas y constantes que simulan encefalitis. Se confirma con <b>PCR digital: razón virus/célula = 1</b> (PMID:24594780) o buscando el DNA en uñas y folículo piloso.</li>
+      <li><b>Colonización y excreción residual</b>: los paneles de heces y vía respiratoria detectan portadores asintomáticos; el bocavirus aparece con detección múltiple en hasta 83 % de las muestras pediátricas (PMID:26441386). Positivo ≠ causal.</li>
+    </ul>
+
+    <h4>Paneles multiplex sindrómicos</h4>
+    <p>Los cartuchos FilmArray (y equivalentes) integran extracción, RT-PCR anidada y detección: <b>respiratorio</b> (~22 dianas, ~45 min), <b>gastrointestinal</b> (22 dianas, ~1 h) y <b>meningitis/encefalitis</b> (14 dianas desde 200 µL de LCR, ~1 h). Dos precisiones que se caen en examen:</p>
+    <ul>
+      <li>El «~95 %» que reportan las evaluaciones multicéntricas es <b>concordancia (PPA/NPA) frente a otro método molecular, no sensibilidad formal</b> frente a un estándar de oro (PMID:29593057; PMID:29212701; PPA viral 85.1–95.1 % en ePlex).</li>
+      <li>La <b>coinfección aparece en 10–30 %</b> de los positivos: no todo lo detectado explica el cuadro. Y un <b>panel de LCR negativo no descarta meningitis/encefalitis</b>: quedan fuera arbovirus (WNV, dengue, zika), JC virus, rabia, sarampión, MTB, <i>Treponema</i> y <i>Borrelia</i>.</li>
+    </ul>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A la izquierda el ciclo de la PCR con sus tres pasos de temperatura; a la derecha la curva de amplificación en tiempo real con línea de umbral y dos curvas que la cruzan en Ct 20 y Ct 33">
+        <defs>
+          <marker id="arrP1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#455A8C"/></marker>
+        </defs>
+        <rect width="900" height="360" fill="#FFFFFF"/>
+
+        <text x="40" y="46" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">EL CICLO DE LA PCR</text>
+
+        <rect x="110" y="60" width="210" height="44" rx="4" fill="rgba(39,51,79,.07)" stroke="#27334F" stroke-width="1"/>
+        <text x="215" y="78" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#27334F">1 · DESNATURALIZACIÓN · 95 °C</text>
+        <text x="215" y="94" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">separan las dos hebras</text>
+
+        <rect x="250" y="190" width="210" height="44" rx="4" fill="rgba(92,122,87,.10)" stroke="#5C7A57" stroke-width="1"/>
+        <text x="355" y="208" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#1a6b42">2 · ALINEAMIENTO · 50–65 °C</text>
+        <text x="355" y="224" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">los primers hibridan en la diana</text>
+
+        <rect x="10" y="190" width="210" height="44" rx="4" fill="rgba(112,29,20,.08)" stroke="#701d14" stroke-width="1"/>
+        <text x="115" y="208" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#701d14">3 · EXTENSIÓN · 72 °C</text>
+        <text x="115" y="224" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">la Taq sintetiza la hebra nueva</text>
+
+        <path d="M330,86 C400,110 420,150 385,188" fill="none" stroke="#455A8C" stroke-width="1.6" marker-end="url(#arrP1)"/>
+        <path d="M250,212 L222,212" fill="none" stroke="#455A8C" stroke-width="1.6" marker-end="url(#arrP1)"/>
+        <path d="M95,188 C55,150 70,105 138,88" fill="none" stroke="#455A8C" stroke-width="1.6" marker-end="url(#arrP1)"/>
+
+        <text x="222" y="140" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#8a5c0a">CADA CICLO</text>
+        <text x="222" y="154" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#8a5c0a">DUPLICA LA DIANA</text>
+        <text x="222" y="262" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">30 ciclos ≈ mil millones de copias</text>
+
+        <line x1="480" y1="36" x2="480" y2="320" stroke="#D8D8DC" stroke-width="1"/>
+
+        <text x="510" y="46" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#6b7585">PCR EN TIEMPO REAL: LA CURVA</text>
+        <text x="510" y="62" font-family="'Inter', sans-serif" font-size="9.5" fill="#6b7585">la fluorescencia se mide al final de cada ciclo</text>
+
+        <text x="520" y="74" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#6b7585">FLUORESCENCIA</text>
+        <line x1="520" y1="80" x2="520" y2="280" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="520" y1="280" x2="880" y2="280" stroke="#455A8C" stroke-width="1.2"/>
+
+        <line x1="520" y1="200" x2="880" y2="200" stroke="#701d14" stroke-width="1.2" stroke-dasharray="5 4"/>
+        <text x="876" y="196" text-anchor="end" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#701d14">UMBRAL</text>
+
+        <polyline points="520,272 560,270 600,264 640,246 670,216 690,200 712,176 740,132 780,102 830,92 880,90" fill="none" stroke="#27334F" stroke-width="2.2"/>
+        <polyline points="520,274 620,273 690,271 740,264 780,246 805,220 817,202 832,180 850,140 868,112 880,106" fill="none" stroke="#90303a" stroke-width="2.2"/>
+
+        <line x1="700" y1="200" x2="700" y2="280" stroke="#455A8C" stroke-width="1" stroke-dasharray="3 3"/>
+        <line x1="817" y1="202" x2="817" y2="280" stroke="#455A8C" stroke-width="1" stroke-dasharray="3 3"/>
+
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#6b7585" text-anchor="middle">
+          <text x="610" y="294">10</text><text x="700" y="294">20</text><text x="790" y="294">30</text><text x="880" y="294">40</text>
+        </g>
+        <text x="700" y="310" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#27334F">Ct 20 · carga alta</text>
+        <text x="817" y="310" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" font-weight="600" fill="#90303a">Ct 33 · carga baja</text>
+        <text x="700" y="326" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#6b7585">CICLOS</text>
+
+        <text x="40" y="348" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El Ct solo es comparable dentro de la misma plataforma; nunca entre equipos.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 2. El ciclo de la PCR (izquierda) duplica la diana en cada vuelta; en tiempo real (derecha) la curva cruza el umbral antes cuanta más carga inicial haya: <b>Ct bajo = mucha diana, Ct alto = poca</b>.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario / virus</th><th>Muestra y prueba</th><th>Rendimiento y matiz</th></tr></thead>
+      <tbody>
+        <tr><td><b>Encefalitis por VHS-1/2</b></td><td>LCR: <b>PCR dirigida</b> (gen UL30/gB)</td><td>S 96–98 %, E &gt;99 % (estándar que reemplazó a la biopsia, PMID:7706811). Pero solo <b>70–80 % en las primeras 24 h</b>: si es negativa con sospecha alta, <b>repetir a las 48–72 h</b> sin suspender aciclovir.</td></tr>
+        <tr><td><b>Meningitis por enterovirus</b></td><td>LCR: RT-PCR (o panel ME)</td><td>El resultado positivo <b>acorta estancia (mediana 42 vs 71.5 h) y antibióticos IV (2.0 vs 3.5 días)</b> en pediatría (PMID:10819951). El cultivo solo rinde 65–75 %.</td></tr>
+        <tr><td><b>Sepsis/meningitis neonatal por parechovirus</b></td><td><b>Sangre + LCR</b>: RT-PCR en ambos</td><td><b>77 % de los LCR positivos no tienen pleocitosis</b>; 24 % de los casos solo se detectan en sangre y 4 % solo en LCR → mandar los dos sitios (PMID:33045237).</td></tr>
+        <tr><td><b>Leucoencefalopatía multifocal (JCV)</b></td><td>LCR: PCR de JCV</td><td>La detección <b>cayó de 89.5 % (era pre-TAR) a 57.5 % (era TAR)</b>: la recuperación inmune baja la carga en LCR; si la clínica y la RM son típicas, la biopsia confirma (PMID:16081969).</td></tr>
+        <tr><td><b>CMV / HHV-6 con enfermedad tisular</b></td><td><b>Biopsia + inmunohistoquímica</b></td><td>La colitis o esofagitis por CMV puede cursar <b>sin viremia</b>; PCR plasmática negativa no la descarta. En HHV-6, solo la <b>carga alta o en ascenso</b> orienta (latencia y ciHHV-6 contaminan la interpretación).</td></tr>
+        <tr><td><b>Sarcoma de Kaposi / HHV-8</b></td><td><b>Biopsia de lesión: IHQ para LANA</b> (PCR en sangre solo de apoyo)</td><td>La confirmación es histológica: <b>LANA nuclear</b> en células fusiformes. La PCR en sangre es <b>poco sensible</b> por la viremia baja y la serología (LANA/K8.1) no está estandarizada ni aprobada por la FDA; la carga viral solo rinde en la <b>Castleman multicéntrica</b> (hasta 10⁴–10⁵ copias, donde sigue la actividad de la enfermedad).</td></tr>
+        <tr><td><b>Mpox</b></td><td><b>Hisopado vigoroso de lesión, exudado o costra</b>: PCR</td><td>Prueba de elección (OMS 2024). Muestrear <b>solo la lesión cutánea pierde 8 % de los casos</b> → añadir faríngeo ± anorrectal según exposición (PMID:36688279).</td></tr>
+        <tr><td><b>Rabia intra vitam</b></td><td><b>Biopsia de piel de nuca</b> (con folículos) + <b>saliva seriada</b>: RT-PCR</td><td>Nuca: <b>S ≥98 % y E 100 %</b> sin importar el día; en saliva la excreción es intermitente y exige <b>≥3 muestras sucesivas</b> para llegar a 100 % (PMID:18937576).</td></tr>
+        <tr><td><b>Ébola / Marburg</b></td><td>Sangre total con EDTA: RT-PCR (solo laboratorio de referencia)</td><td>Positiva desde ~3 días de síntomas; <b>un negativo antes de las 72 h no descarta</b> — si la sospecha persiste, se repite manteniendo el aislamiento (regla CDC).</td></tr>
+        <tr><td><b>Dengue, días 1–5</b></td><td>Suero: RT-PCR multiplex</td><td>Confirma y <b>serotipifica</b>. Después del día 5–7 una PCR negativa ya no descarta: cambiar a IgM/NS1 según el día.</td></tr>
+        <tr><td><b>Zika</b></td><td>RT-PCR en <b>suero + orina</b> (± semen)</td><td>Mediana de persistencia del RNA: <b>suero 14 días, orina 8 días, semen 34 días</b> (PMID:28195756); muestrear suero y orina juntos en los primeros 7–14 días.</td></tr>
+        <tr><td><b>SARS-CoV-2</b></td><td>Nasofaringe/narinas: RT-PCR (genes N, S, E, ORF1)</td><td>Estándar. Permanece positiva semanas <b>sin virus viable</b> (mediana 17 días de shedding; nada viable &gt;día 9, PMID:33521734). <b>El Ct no es carga viral</b> ni marcador de contagiosidad.</td></tr>
+        <tr><td><b>Influenza hospitalizada</b></td><td>Hisopado nasofaríngeo: RT-PCR o panel multiplex</td><td>La guía IDSA prefiere molecular sobre antígeno en hospitalizados (PMID:30566567). En <b>SDRA con hisopado negativo, muestrear vía baja</b> (aspirado/BAL) antes de descartar.</td></tr>
+        <tr><td><b>Norovirus y brotes de gastroenteritis</b></td><td>Heces: RT-qPCR o panel GI multiplex</td><td>La RT-qPCR detecta <b>10–100 copias de RNA</b>; el panel FilmArray GI rindió S 100 % en 12/22 dianas y ≥94.5 % en 7/22, E ≥97.1 % (PMID:25588652). La excreción postinfecciosa exige correlación clínica.</td></tr>
+        <tr><td><b>Parvovirus B19 agudo</b></td><td>Suero: PCR cuantitativa (UI/mL)</td><td>Viremia &gt;10⁹ UI/mL en la infección aguda; <b>&lt;10⁴ UI/mL probablemente no es infeccioso</b> (umbral de seguridad transfusional, PMID:12037048) y sugiere DNAemia residual.</td></tr>
+        <tr><td><b>Hepatitis E en inmunodeprimido</b></td><td>Sangre: <b>RNA-VHE</b></td><td>La serología puede ser falsamente negativa: el <b>RNA es la prueba de primera línea</b> en trasplantados (EASL 2018, PMID:29609832).</td></tr>
+        <tr><td><b>HTLV-1/2 con inmunoblot indeterminado</b></td><td><b>PCR de DNA proviral</b> en mononucleares</td><td>Resuelve los Western blot indeterminados y <b>diferencia HTLV-I de HTLV-II</b> (PMID:1917135). No existe «carga viral en plasma»: se mide carga proviral celular.</td></tr>
+        <tr><td><b>Poliovirus (vigilancia de parálisis flácida aguda)</b></td><td>2 muestras de heces (&lt;14 días): cultivo en <b>L20B</b> + RT-PCR intratípica + <b>secuenciación de VP1</b></td><td>La línea L20B (receptor CD155) tiene selectividad ~91 % (PMID:23427441); la secuencia de VP1 <b>distingue virus salvaje de derivado de vacuna (VDPV)</b> y mapea la transmisión.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li>Usar el <b>Ct como carga viral</b> o comparar Ct entre plataformas: los umbrales de fluorescencia y los ciclos de corte varían entre equipos (IDSA/AMP).</li>
+        <li>Declarar «encefalitis por HHV-6» por un panel de LCR positivo <b>sin descartar ciHHV-6</b> (~1 % de la población): confirmar con PCR cuantitativa alta y constante o PCR digital con razón virus/célula = 1.</li>
+        <li>Dar por descartada una meningitis con un <b>panel ME negativo</b>: JC virus, arbovirus, rabia, sarampión y MTB quedan fuera del cartucho.</li>
+        <li>Tomar cada diana positiva del panel como <b>causal</b>: con 10–30 % de coinfección hay que decidir clínicamente cuál explica el cuadro (colonización, excreción residual, portación).</li>
+        <li>Descartar ébola o dengue con una <b>PCR tomada fuera de ventana</b> (&lt;72 h en ébola; &gt;día 5–7 en dengue).</li>
+      </ul>
+    </div>
+    <p class="src">Fuentes: apuntes research A1 (NAAT y multiplex, wiki), A3/A4 (fichas), B2 (respiratorios), B3 (GI/LCR/polio), B4 (JCV, B19, ciHHV-6), B5 (ébola), B6 (rabia, mpox, HTLV), B7 (métodos). PMIDs clave: PMID:7706811 · PMID:10819951 · PMID:33045237 · PMID:16081969 · PMID:36688279 · PMID:18937576 · PMID:28195756 · PMID:33521734 · PMID:29593057 · PMID:25588652 · PMID:24594780 · PMID:1917135 · PMID:23427441.</p>
+  </div>
+</details>
+
+<details class="sec" id="carga">
+  <summary><span class="num">03</span><span class="stitle">Carga viral cuantitativa</span><span class="hint">cuánto hay, no solo si está</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>De la curva estándar al número</h4>
+    <ul>
+      <li>La <b>qPCR cuantitativa</b> corre en paralelo estándares de concentración conocida y convierte el Ct de la muestra en un número: <b>copias/mL</b>. El problema histórico: las copias/mL sin calibrar <b>no son comparables entre laboratorios</b>.</li>
+      <li>La solución son los <b>Estándares Internacionales de la OMS</b> (NIBSC): el reporte pasa a <b>UI/mL</b> — CMV (NIBSC 09/162, PMID:27179913) y parvovirus B19 (NIBSC 99/802, PMID:21988191) son los modelos. Aun así persiste una variabilidad interlaboratorio de <b>~0.5 log₁₀</b>: en el seguimiento <b>no se cambia de laboratorio</b>.</li>
+      <li>La matriz importa: en CMV el <b>plasma EDTA</b> es la muestra de viremia; la sangre total arrastra DNA intracelular latente y <b>sobreestima</b> la carga. Las matrices no son intercambiables en una serie de monitoreo.</li>
+    </ul>
+
+    <h4>Pensar en log₁₀</h4>
+    <ul>
+      <li>La escala es logarítmica: un cambio de <b>&lt;0.5 log₁₀ cabe en la variabilidad del ensayo</b> — es ruido, no respuesta ni progresión. Lo significativo es un cambio <b>≥1 log₁₀</b> o la tendencia seriada.</li>
+      <li>La <b>cinética vale más que el valor aislado</b>: en CMV post-trasplante, la duplicación en &lt;1 semana (+1 log₁₀ en 7 días) define replicación activa aunque el valor absoluto sea bajo.</li>
+      <li>Respuesta al tratamiento: en CMV se exige una caída <b>≥1 log₁₀ a las 2 semanas</b>; si no ocurre, genotipificar resistencias (UL97/UL54).</li>
+    </ul>
+
+    <h4>Umbrales que cambian conducta</h4>
+    <p>La carga viral justifica su costo cuando cruza un <b>umbral operativo</b> que dispara una decisión: <b>VHB 2 000 / 20 000 / 200 000 UI/mL</b> (portador inactivo, indicación de tratamiento, profilaxis con TDF en el embarazo), <b>BKV &gt;10⁴ copias/mL</b> (nefropatía probable), <b>CMV preemptive</b> (iniciar antiviral antes de la enfermedad) y la <b>meta indetectable del VIH</b> bajo TAR. Fuera de esos umbrales, un número aislado sin clínica es solo un número.</p>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gráfica de carga viral en escala logarítmica a lo largo de 12 semanas, con líneas punteadas de umbral para VIH, CMV, VHB y BKV, y una curva de paciente que sube, cruza los umbrales y cae tras el tratamiento">
+        <rect width="900" height="380" fill="#FFFFFF"/>
+
+        <text x="130" y="44" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#6b7585">log₁₀ UI o copias/mL</text>
+        <line x1="130" y1="56" x2="130" y2="300" stroke="#455A8C" stroke-width="1.2"/>
+        <line x1="130" y1="300" x2="860" y2="300" stroke="#455A8C" stroke-width="1.2"/>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#6b7585" text-anchor="end">
+          <text x="122" y="304">10¹</text><text x="122" y="256">10²</text><text x="122" y="208">10³</text>
+          <text x="122" y="160">10⁴</text><text x="122" y="112">10⁵</text><text x="122" y="64">10⁶</text>
+        </g>
+
+        <line x1="108" y1="180" x2="108" y2="228" stroke="#6b7585" stroke-width="1"/>
+        <line x1="104" y1="180" x2="112" y2="180" stroke="#6b7585" stroke-width="1"/>
+        <line x1="104" y1="228" x2="112" y2="228" stroke="#6b7585" stroke-width="1"/>
+        <text x="102" y="207" text-anchor="end" font-family="'Inter', sans-serif" font-size="8.5" fill="#6b7585">±0.5 log</text>
+
+        <line x1="130" y1="271" x2="860" y2="271" stroke="#27334F" stroke-width="1.3" stroke-dasharray="6 4"/>
+        <text x="856" y="265" text-anchor="end" font-family="'Inter', sans-serif" font-size="9" fill="#27334F">VIH · meta: indetectable (&lt;40 cop/mL)</text>
+
+        <line x1="130" y1="252" x2="860" y2="252" stroke="#5C7A57" stroke-width="1.3" stroke-dasharray="6 4"/>
+        <text x="856" y="246" text-anchor="end" font-family="'Inter', sans-serif" font-size="9" fill="#1a6b42">CMV · preemptive HSCT ~250–500 UI/mL</text>
+
+        <line x1="130" y1="190" x2="860" y2="190" stroke="#90303a" stroke-width="1.3" stroke-dasharray="6 4"/>
+        <text x="140" y="184" font-family="'Inter', sans-serif" font-size="9" fill="#90303a">VHB · tratar si HBeAg− ≥2 000 UI/mL</text>
+
+        <line x1="130" y1="156" x2="860" y2="156" stroke="#8a5c0a" stroke-width="1.3" stroke-dasharray="6 4"/>
+        <text x="140" y="150" font-family="'Inter', sans-serif" font-size="9" fill="#8a5c0a">BKV · &gt;10⁴ cop/mL: S/E 93 % para nefropatía</text>
+
+        <line x1="130" y1="142" x2="860" y2="142" stroke="#701d14" stroke-width="1.3" stroke-dasharray="6 4"/>
+        <text x="856" y="136" text-anchor="end" font-family="'Inter', sans-serif" font-size="9" fill="#701d14">VHB · tratar si HBeAg+ ≥20 000 UI/mL</text>
+
+        <line x1="130" y1="94" x2="860" y2="94" stroke="#701d14" stroke-width="1.3" stroke-dasharray="2 3"/>
+        <text x="856" y="88" text-anchor="end" font-family="'Inter', sans-serif" font-size="9" fill="#701d14">VHB · embarazo: TDF si &gt;200 000 UI/mL</text>
+
+        <polyline points="130,292 253,250 377,205 500,160 623,118 685,175 747,235 860,288" fill="none" stroke="#14181f" stroke-width="2.4"/>
+        <circle cx="623" cy="118" r="4" fill="#701d14"/>
+        <text x="635" y="112" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#701d14">cruza el umbral → actuar</text>
+        <text x="140" y="284" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">carga viral del paciente</text>
+
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#6b7585" text-anchor="middle">
+          <text x="130" y="314">0</text><text x="253" y="314">2</text><text x="377" y="314">4</text><text x="500" y="314">6</text>
+          <text x="623" y="314">8</text><text x="747" y="314">10</text><text x="860" y="314">12</text>
+        </g>
+        <text x="495" y="330" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#6b7585">SEMANAS</text>
+
+        <text x="60" y="360" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Cambios menores de 0.5 log₁₀ son ruido del ensayo; la tendencia es el dato.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 3. La carga viral se lee en <b>escala log₁₀ y en serie</b>: lo que cambia la conducta es cruzar un umbral operativo (líneas punteadas), no el valor aislado. La banda ±0.5 log₁₀ recuerda el ruido analítico incluso con estándar OMS.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario / virus</th><th>Muestra y prueba</th><th>Rendimiento y matiz</th></tr></thead>
+      <tbody>
+        <tr><td><b>VIH: infección aguda o algoritmo discordante</b></td><td>Plasma: <b>RNA cuantitativo</b></td><td>Positiva desde ~día 10; en la aguda las cifras son muy altas (&gt;10⁵ cop/mL). Un <b>valor bajo aislado (&lt;10 000) obliga a repetir</b>: sospechar falso positivo.</td></tr>
+        <tr><td><b>VIH: monitoreo del TAR</b></td><td>Plasma: basal, 4–8 sem tras iniciar, cada 3–4 meses hasta supresión, luego cada 6 meses</td><td>Meta <b>indetectable</b> (límite del ensayo ~&lt;40 cop/mL). <b>Falla virológica = &gt;200 copias confirmadas</b> → genotipo de resistencias (el Sanger solo ve variantes ≥~20 % de la cuasiespecie, PMID:23446628).</td></tr>
+        <tr><td><b>VHB: fases e indicación de tratamiento</b></td><td>Suero: HBV-DNA en <b>UI/mL</b></td><td><b>&lt;2 000</b> = portador inactivo; <b>≥2 000 (HBeAg−) o ≥20 000 (HBeAg+)</b> con ALT elevada = tratar (AASLD 2018, PMID:29405329; EASL usa los mismos cortes).</td></tr>
+        <tr><td><b>VHB: embarazo</b></td><td>Suero: HBV-DNA en el 3.er trimestre</td><td>Con <b>&gt;200 000 UI/mL</b>, TDF reduce la transmisión madre-hijo de <b>18 % a 5 %</b> pese a vacuna + inmunoglobulina (Pan, NEJM 2016, PMID:27305192).</td></tr>
+        <tr><td><b>VHC: confirmación y cura</b></td><td>Suero: HCV-RNA (reflejo automático tras anti-VHC+)</td><td>El RNA define infección activa (el anticuerpo persiste tras la cura). <b>SVR12 = cura</b>: 99.7 % de quienes la alcanzan mantienen SVR24 (PMID:25314116).</td></tr>
+        <tr><td><b>CMV post-trasplante</b></td><td><b>Plasma EDTA</b>: qPCR en UI/mL (OMS NIBSC 09/162)</td><td>HSCT: monitoreo <b>semanal semanas 1–100</b>; umbrales preemptive orientativos ~250–500 UI/mL (HSCT) y ~1 000 (SOT renal/hepático). <b>La tendencia manda</b>: duplicación &lt;1 semana = replicación activa; respuesta = caída ≥1 log₁₀ a las 2 semanas.</td></tr>
+        <tr><td><b>BKV post-trasplante renal</b></td><td>Plasma: qPCR seriada (tamizaje trimestral los 2 primeros años)</td><td><b>&gt;10⁴ copias/mL: sensibilidad y especificidad 93 %</b> para nefropatía histológica y <b>VPN 100 %</b> (PMID:21114642); la confirmación y graduación son por biopsia.</td></tr>
+        <tr><td><b>VEB post-trasplante (PTLD)</b></td><td>Plasma: PCR cuantitativa de DNA de VEB</td><td>Monitoreo <b>mensual el primer año en D+/R− pediátrico</b>; la cinética ascendente precede a la enfermedad linfoproliferativa y guía la reducción de inmunosupresión.</td></tr>
+        <tr><td><b>HHV-6: ¿reactivación o ciHHV-6?</b></td><td>Sangre/plasma + <b>PCR digital</b></td><td>Carga enorme y constante con <b>razón virus/célula = 1</b> confirma integración cromosómica (~1 % de la población), no infección activa (PMID:24594780); evita tratamientos innecesarios.</td></tr>
+        <tr><td><b>Adenovirus post-TCPH</b></td><td>Sangre periférica: qPCR seriada</td><td>El DNA en sangre <b>precede en >3 semanas (mediana) a los síntomas</b> de enfermedad diseminada y su positividad se asocia a mortalidad (PMID:12702513); no hay umbral universal — se responde a la cinética ascendente.</td></tr>
+        <tr><td><b>Parvovirus B19</b></td><td>Suero: PCR cuantitativa (UI/mL)</td><td><b>&gt;10⁹ UI/mL</b> en la infección aguda y hasta <b>10¹⁴</b> en la crisis aplásica; &lt;10⁴ UI/mL = DNAemia residual no infecciosa (umbral transfusional, PMID:12037048).</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li><b>Comparar copias/mL entre plataformas o laboratorios</b> sin calibración al estándar OMS — y aun con ella, cambiar de laboratorio a mitad del seguimiento (variabilidad ~0.5 log₁₀).</li>
+        <li><b>Viruria BK ≠ nefropatía BK</b>: la viruria es sensible pero inespecífica; quien descarta es el plasma (VPN 100 %) y quien confirma es la biopsia.</li>
+        <li>Medir CMV en <b>sangre total</b> y compararlo con series en plasma: el DNA latente intracelular infla el resultado.</li>
+        <li>Usar la carga plasmática de CMV para diagnosticar <b>retinitis o colitis</b>: la enfermedad tisular cursa con viremia mínima o nula — fondo de ojo y biopsia, respectivamente.</li>
+        <li>Seguir pidiendo <b>RNA-VHC tras SVR12</b> «para confirmar la cura», o interpretar el anti-VHC persistente como infección activa.</li>
+      </ul>
+    </div>
+    <p class="src">Fuentes: apuntes research A1 (carga viral CMV, wiki), A3/A4 (fichas), B1 (hepatitis), B2 (adenovirus), B4 (BKV, B19, estándares NIBSC), B6 (VIH). PMIDs clave: PMID:27179913 · PMID:29405329 · PMID:27305192 · PMID:25314116 · PMID:21114642 · PMID:24594780 · PMID:12702513 · PMID:12037048 · PMID:23446628.</p>
+  </div>
+</details>
+
+<details class="sec" id="antigeno">
+  <summary><span class="num">04</span><span class="stitle">Detección de antígenos</span><span class="hint">proteína viral directa, sin amplificar</span><span class="caret"></span></summary>
+  <div class="body">
+    <p>La detección de antígenos busca la <b>proteína viral misma</b>: ni el genoma ni la respuesta del huésped. El formato de laboratorio es el <b>EIA/ELISA sándwich</b> —un anticuerpo monoclonal de captura fijado al pocillo atrapa el antígeno y un segundo anticuerpo conjugado con enzima genera la señal— y su versión de gabinete es la <b>inmunocromatografía</b>. Ambos comparten la misma consecuencia: <b>al no haber amplificación, la sensibilidad depende por completo de la carga antigénica</b>. Por eso rinden donde el virus abunda: mucosa respiratoria del lactante, heces en la gastroenteritis, sangre en la antigenemia.</p>
+    <ul>
+      <li><b>Más rápido y barato que un NAAT, pero menos sensible</b>: es la contraprestación universal de esta familia de pruebas.</li>
+      <li>Funciona mejor con antígenos producidos en exceso: la <b>NS1 secretada</b> del dengue, el <b>p24</b> que aparece antes que el anticuerpo en el VIH, el <b>HBsAg</b> en partículas subvirales muy por encima de los viriones completos.</li>
+      <li>Un negativo con sospecha alta no cierra el caso: <b>escala a molecular</b>.</li>
+    </ul>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Esquema del ELISA sándwich en cuatro pasos: anticuerpo de captura fijado al pocillo, unión del antígeno de la muestra, anticuerpo de detección con enzima y desarrollo de color proporcional a la cantidad de antígeno">
+        <rect width="900" height="300" fill="#FFFFFF"/>
+
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#6b7585" text-anchor="middle">
+          <text x="140" y="40">1 · AC DE CAPTURA FIJO</text>
+          <text x="365" y="40">2 · EL ANTÍGENO SE UNE</text>
+          <text x="590" y="40">3 · AC DETECCIÓN + ENZIMA</text>
+          <text x="815" y="40">4 · SUSTRATO → COLOR</text>
+        </g>
+
+        <g stroke="#455A8C" stroke-width="1.6" fill="none">
+          <line x1="188" y1="130" x2="318" y2="130"/>
+          <path d="M310 125 L318 130 L310 135 Z" fill="#455A8C" stroke="none"/>
+          <line x1="413" y1="130" x2="543" y2="130"/>
+          <path d="M535 125 L543 130 L535 135 Z" fill="#455A8C" stroke="none"/>
+          <line x1="638" y1="130" x2="768" y2="130"/>
+          <path d="M760 125 L768 130 L760 135 Z" fill="#455A8C" stroke="none"/>
+        </g>
+
+        <!-- Pocillo 4: relleno de color detrás -->
+        <circle cx="815" cy="130" r="42" fill="rgba(138,92,10,.22)"/>
+
+        <!-- Pocillos -->
+        <g fill="#FFFFFF" stroke="#27334F" stroke-width="2">
+          <circle cx="140" cy="130" r="42"/>
+          <circle cx="365" cy="130" r="42"/>
+          <circle cx="590" cy="130" r="42"/>
+        </g>
+        <circle cx="815" cy="130" r="42" fill="none" stroke="#27334F" stroke-width="2"/>
+
+        <!-- Anticuerpos de captura (Y) en los 4 pocillos -->
+        <g stroke="#27334F" stroke-width="1.8" fill="none">
+          <g>
+            <line x1="124" y1="160" x2="124" y2="150"/><line x1="124" y1="150" x2="119" y2="143"/><line x1="124" y1="150" x2="129" y2="143"/>
+            <line x1="140" y1="160" x2="140" y2="150"/><line x1="140" y1="150" x2="135" y2="143"/><line x1="140" y1="150" x2="145" y2="143"/>
+            <line x1="156" y1="160" x2="156" y2="150"/><line x1="156" y1="150" x2="151" y2="143"/><line x1="156" y1="150" x2="161" y2="143"/>
+          </g>
+          <g>
+            <line x1="349" y1="160" x2="349" y2="150"/><line x1="349" y1="150" x2="344" y2="143"/><line x1="349" y1="150" x2="354" y2="143"/>
+            <line x1="365" y1="160" x2="365" y2="150"/><line x1="365" y1="150" x2="360" y2="143"/><line x1="365" y1="150" x2="370" y2="143"/>
+            <line x1="381" y1="160" x2="381" y2="150"/><line x1="381" y1="150" x2="376" y2="143"/><line x1="381" y1="150" x2="386" y2="143"/>
+          </g>
+          <g>
+            <line x1="574" y1="160" x2="574" y2="150"/><line x1="574" y1="150" x2="569" y2="143"/><line x1="574" y1="150" x2="579" y2="143"/>
+            <line x1="590" y1="160" x2="590" y2="150"/><line x1="590" y1="150" x2="585" y2="143"/><line x1="590" y1="150" x2="595" y2="143"/>
+            <line x1="606" y1="160" x2="606" y2="150"/><line x1="606" y1="150" x2="601" y2="143"/><line x1="606" y1="150" x2="611" y2="143"/>
+          </g>
+          <g>
+            <line x1="799" y1="160" x2="799" y2="150"/><line x1="799" y1="150" x2="794" y2="143"/><line x1="799" y1="150" x2="804" y2="143"/>
+            <line x1="815" y1="160" x2="815" y2="150"/><line x1="815" y1="150" x2="810" y2="143"/><line x1="815" y1="150" x2="820" y2="143"/>
+            <line x1="831" y1="160" x2="831" y2="150"/><line x1="831" y1="150" x2="826" y2="143"/><line x1="831" y1="150" x2="836" y2="143"/>
+          </g>
+        </g>
+
+        <!-- Antígenos atrapados (triángulos) -->
+        <g fill="#701d14">
+          <path d="M361 130 L365 138 L357 138 Z"/>
+          <path d="M373 130 L377 138 L369 138 Z"/>
+          <path d="M586 130 L590 138 L582 138 Z"/>
+          <path d="M598 130 L602 138 L594 138 Z"/>
+          <path d="M811 130 L815 138 L807 138 Z"/>
+          <path d="M823 130 L827 138 L819 138 Z"/>
+        </g>
+
+        <!-- Anticuerpo de detección + enzima -->
+        <g stroke="#5C7A57" stroke-width="1.6" fill="none">
+          <line x1="590" y1="130" x2="590" y2="120"/><line x1="590" y1="120" x2="584" y2="112"/><line x1="590" y1="120" x2="596" y2="112"/>
+          <line x1="815" y1="130" x2="815" y2="120"/><line x1="815" y1="120" x2="809" y2="112"/><line x1="815" y1="120" x2="821" y2="112"/>
+        </g>
+        <circle cx="584" cy="109" r="4" fill="#5C7A57"/>
+        <circle cx="809" cy="109" r="4" fill="#5C7A57"/>
+
+        <g font-family="'Inter', sans-serif" font-size="9" fill="#14181f" text-anchor="middle">
+          <text x="140" y="206">Ac monoclonal anclado</text>
+          <text x="140" y="219">a la fase sólida</text>
+          <text x="365" y="206">la muestra se incuba;</text>
+          <text x="365" y="219">el lavado quita el resto</text>
+          <text x="590" y="206">segundo Ac con enzima:</text>
+          <text x="590" y="219">se completa el sándwich</text>
+          <text x="815" y="206">el color es proporcional</text>
+          <text x="815" y="219">a la carga de antígeno</text>
+        </g>
+
+        <text x="450" y="268" text-anchor="middle" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">Sin amplificación, toda la señal proviene de cuánto antígeno trae la muestra.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 4. ELISA sándwich paso a paso. La regla de oro: <b>la señal es proporcional a la carga antigénica</b> — por eso estas pruebas ganan en el lactante, en heces y en la antigenemia, y pierden en el adulto o en la fase tardía.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario / virus</th><th>Muestra y prueba</th><th>Rendimiento y matiz</th></tr></thead>
+      <tbody>
+        <tr><td><b>Dengue, días 1–7</b></td><td>Suero: <b>NS1 por ELISA</b></td><td>S <b>74–82 %</b>, E <b>99–100 %</b>. Cae en <b>infección secundaria (57–66 %)</b> y con <b>DENV-4</b>; la IgG previa reduce la detección. Positiva <b>más días que el RNA</b>.</td></tr>
+        <tr><td><b>Dengue, campo o urgencias</b></td><td>NS1 en inmunocromatografía (RDT)</td><td>S <b>38–72 %</b>. La tríada rápida <b>NS1+IgM+IgG</b> alcanza sensibilidad combinada ~<b>90 %</b>.</td></tr>
+        <tr><td><b>VIH, tamizaje</b></td><td><b>Ag p24</b> dentro del ensayo Ag/Ac de 4.ª generación</td><td>Cierra la ventana a <b>18–45 días</b>. Tamizaje reactivo con diferenciación negativa = infección aguda o falso positivo: lo resuelve la NAT (algoritmo CDC).</td></tr>
+        <tr><td><b>VHB</b></td><td><b>HBsAg</b> en suero</td><td>Marcador central del tamizaje (panel triple CDC 2023). Positivo <b>&gt;6 meses = infección crónica</b>; su desaparición antes de que aparezca anti-HBs deja la «ventana».</td></tr>
+        <tr><td><b>Rotavirus</b></td><td>EIA de VP6 en heces frescas</td><td>S <b>78–84 %</b> frente a PCR (no 90 %), E 98–100 %. Positivo por <b>excreción de cepa vacunal 7–15 días</b> tras la dosis en el lactante.</td></tr>
+        <tr><td><b>Adenovirus entérico 40/41</b></td><td>EIA en heces</td><td>Prueba de elección porque <b>no crecen en cultivo</b>. Rendimiento puntual: <b>sin dato verificable</b> (uso cualitativo); la positividad puede ser excreción residual.</td></tr>
+        <tr><td><b>Norovirus</b></td><td>EIA de cápside en heces</td><td>S <b>50–75 %</b>: <b>solo orienta en brotes</b> con varias muestras; todo negativo se confirma por RT-qPCR (CDC 2024).</td></tr>
+        <tr><td><b>VSR</b></td><td>Antígeno rápido/EIA en hisopado nasofaríngeo</td><td><b>80–90 % en lactantes</b> (alta carga viral) frente a <b>29 % en adultos</b>: en el adulto el negativo no descarta — pedir PCR.</td></tr>
+        <tr><td><b>Astrovirus / sapovirus</b></td><td>EIA de cápside en heces</td><td>Menos sensible que la RT-PCR; útil en vigilancia y brotes sin biología molecular.</td></tr>
+        <tr><td><b>Lassa, fase temprana</b></td><td>ELISA de antígeno en sangre</td><td>Rendimiento máximo temprano, cuando la antigenemia es alta; indetectable en fases tardías. Se combina con serología.</td></tr>
+        <tr><td><b>Contraste fuera de la virología</b></td><td>CrAg en LCR, antígeno urinario (Legionella, histoplasma)</td><td>Mismo principio EIA/flujo lateral aplicado a hongos y bacterias; no son pruebas virales, pero el razonamiento de lectura es idéntico.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li><b>Descartar influenza o SARS-CoV-2 con un antígeno negativo</b> en el hospitalizado o en fase tardía: la guía IDSA prohíbe usarlo para descartar influenza en hospitalizados; confirmar con RT-PCR y no retrasar el antiviral.</li>
+        <li>Leer un <b>NS1 negativo como «no es dengue»</b> después del día 3, en segunda infección o con DENV-4 — justo donde la sensibilidad cae.</li>
+        <li>Olvidar la <b>excreción vacunal de rotavirus</b>: un EIA positivo en el lactante recién vacunado no es gastroenteritis por virus silvestre.</li>
+        <li>Usar el EIA de norovirus para el <b>caso esporádico</b>: está formalmente contraindicado; su lugar es el brote, con confirmación molecular.</li>
+      </ul>
+    </div>
+    <p class="src">Fuentes: A1-metodos-wiki.md §6 (antígenos: sin fuente en vault), A3-fichas-dna.md (adenovirus, hepadnavirus), A4-fichas-rna.md (reovirus, calicivirus, flavivirus, pneumovirus, arenavirus), B2-respiratorios.md (VSR: PMID:26354816; influenza: PMID:30566567), B3-gastrointestinales.md (rotavirus: PMID:30602277, PMID:31346474; norovirus CDC 2024), B5-arbovirus-fh.md (NS1: PMID:19156192, PMID:25330157, PMID:24728377, PMID:35988010), B6-retro-exantemas.md (ventanas VIH, CDC 2025).</p>
+  </div>
+</details>
+
+<details class="sec" id="rapidas">
+  <summary><span class="num">05</span><span class="stitle">Pruebas rápidas de punto de atención</span><span class="hint">respuesta en minutos, sensibilidad limitada</span><span class="caret"></span></summary>
+  <div class="body">
+    <p>La prueba rápida clásica es la <b>inmunocromatografía de flujo lateral</b>: la muestra migra por capilaridad, arrastra anticuerpos conjugados y el antígeno (o el anticuerpo del paciente) queda retenido en la línea de <b>prueba (T)</b>; la línea de <b>control (C)</b> solo valida que la corrida funcionó. Resultado en 15–30 minutos, sin equipo ni cadena de frío. Los <b>NAAT rápidos</b> —isotérmicos (ID Now) o en cartucho (Xpert Xpress)— forman una <b>categoría intermedia</b>: la velocidad de la rápida con sensibilidad cercana a la PCR (~91 % como clase en virus respiratorios).</p>
+    <ul>
+      <li><b>Especificidad alta (~98–99 %) → sirven para CONFIRMAR</b> (rule-in): un positivo en contexto compatible es casi siempre verdadero.</li>
+      <li><b>Sensibilidad modesta → sirven mal para DESCARTAR</b> (rule-out): el negativo con sospecha alta exige prueba molecular.</li>
+      <li><b>VPP y VPN no son propiedades de la prueba</b>: dependen de la prevalencia. Con prevalencia de 0.5 %, el VPP del antígeno de SARS-CoV-2 en asintomáticos cae a <b>38–52 %</b>.</li>
+    </ul>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tira de inmunocromatografía de flujo lateral con almohadilla de muestra, anticuerpos conjugados, línea de prueba T y línea de control C, y las tres lecturas posibles: positiva con C y T, negativa con solo C, e inválida sin C">
+        <rect width="900" height="300" fill="#FFFFFF"/>
+
+        <text x="360" y="64" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.12em" fill="#6b7585">FLUJO CAPILAR</text>
+        <line x1="110" y1="76" x2="614" y2="76" stroke="#455A8C" stroke-width="1.6"/>
+        <path d="M606 71 L614 76 L606 81 Z" fill="#455A8C"/>
+
+        <!-- Tira -->
+        <rect x="80" y="95" width="95" height="40" fill="rgba(144,48,58,.28)" stroke="#27334F" stroke-width="1.4"/>
+        <rect x="175" y="95" width="85" height="40" fill="rgba(138,92,10,.24)" stroke="#27334F" stroke-width="1.4"/>
+        <rect x="260" y="95" width="270" height="40" fill="#FFFFFF" stroke="#27334F" stroke-width="1.4"/>
+        <rect x="530" y="95" width="110" height="40" fill="rgba(70,97,125,.22)" stroke="#27334F" stroke-width="1.4"/>
+        <rect x="400" y="100" width="6" height="30" fill="#701d14"/>
+        <rect x="480" y="100" width="6" height="30" fill="#27334F"/>
+
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#6b7585" text-anchor="middle">
+          <text x="127" y="158">MUESTRA</text>
+          <text x="217" y="158">AC CONJUGADO</text>
+          <text x="403" y="158">T · PRUEBA</text>
+          <text x="483" y="158">C · CONTROL</text>
+          <text x="585" y="158">ABSORBENTE</text>
+        </g>
+
+        <!-- Lecturas -->
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.12em" fill="#6b7585" text-anchor="middle">
+          <text x="450" y="196">LECTURA DE RESULTADOS</text>
+        </g>
+
+        <g stroke="#27334F" stroke-width="1.2">
+          <rect x="120" y="208" width="120" height="22" fill="#FFFFFF"/>
+          <rect x="390" y="208" width="120" height="22" fill="#FFFFFF"/>
+          <rect x="660" y="208" width="120" height="22" fill="#FFFFFF"/>
+        </g>
+        <!-- Positiva: T y C -->
+        <rect x="178" y="211" width="4" height="16" fill="#701d14"/>
+        <rect x="210" y="211" width="4" height="16" fill="#27334F"/>
+        <!-- Negativa: solo C -->
+        <rect x="480" y="211" width="4" height="16" fill="#27334F"/>
+        <!-- Inválida: solo T -->
+        <rect x="718" y="211" width="4" height="16" fill="#701d14"/>
+
+        <g font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#14181f" text-anchor="middle">
+          <text x="180" y="252">POSITIVA: C + T</text>
+          <text x="450" y="252">NEGATIVA: SOLO C</text>
+          <text x="720" y="252">INVÁLIDA: SIN C</text>
+        </g>
+
+        <text x="450" y="284" text-anchor="middle" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">La línea C valida la prueba; la T solo cuenta cuando hay antígeno suficiente.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 5. Anatomía de una tira de flujo lateral y sus tres lecturas. Una tira <b>sin línea C no es negativa: es inválida</b> y se repite.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario / virus</th><th>Muestra y prueba</th><th>Rendimiento y matiz</th></tr></thead>
+      <tbody>
+        <tr><td><b>Influenza, ambulatorio</b></td><td>RIDT en hisopado nasofaríngeo</td><td>S <b>62.3 %</b>, E <b>98.2 %</b> (Chartrand 2012). Mejor en <b>niños (66.6 %) que en adultos (53.9 %)</b> y en <b>A (64.6 %) que en B (52.2 %)</b>. Muestra en las primeras 24–72 h.</td></tr>
+        <tr><td><b>Influenza, hospitalizado</b></td><td><b>NAAT rápido</b> (ID Now, Xpert)</td><td>S <b>91.6 %</b> como clase. IDSA: prueba molecular sobre RIDT; el antígeno <b>no se usa para descartar</b> en hospitalizados.</td></tr>
+        <tr><td><b>SARS-CoV-2, sintomático</b></td><td>Antígeno rápido nasal</td><td>S <b>73 %</b>; <b>semana 1: 80.9 %</b> vs semana 2: 53.8 %; con carga alta (<b>Ct ≤25</b>): <b>94.5 %</b>. E ~99 % (Cochrane 2021/2022).</td></tr>
+        <tr><td><b>SARS-CoV-2, asintomático</b></td><td>Antígeno rápido nasal</td><td>S <b>54.7 %</b>. En baja prevalencia (0.5 %) el <b>VPP cae a 38–52 %</b>: no sirve para tamizar sin exposición.</td></tr>
+        <tr><td><b>SARS-CoV-2, urgencias</b></td><td><b>ID Now vs Xpert Xpress</b></td><td>S <b>73 % vs 100 %</b> (Cochrane 2021): la plataforma importa; no generalizar «&gt;90 %» a toda la clase.</td></tr>
+        <tr><td><b>VIH, tamizaje comunitario</b></td><td>Rápida de anticuerpos (sangre/saliva)</td><td>Ventana <b>23–90 días</b>. Toda reactiva entra al <b>algoritmo CDC</b>: inmunoensayo de 4.ª gen → diferenciación VIH-1/2 → NAT.</td></tr>
+        <tr><td><b>Ébola, triaje en brote</b></td><td>OraQuick (antígeno)</td><td>S <b>57–62 %</b> en campo, E ~98 %: <b>ninguna RDT cumple el perfil TPP-OMS</b>. Estratifica riesgo mientras llega la RT-PCR; no descarta.</td></tr>
+        <tr><td><b>Encefalitis japonesa</b></td><td>RDT de IgM</td><td>S <b>2.1–51.4 %</b>: desempeño deplorable. <b>No usar</b>; el MAC-ELISA en suero/LCR sigue siendo el estándar.</td></tr>
+        <tr><td><b>Dengue</b></td><td>RDT de NS1 (± IgM/IgG)</td><td>S <b>38–72 %</b> sola; la combinación de los tres analitos llega a ~<b>90 %</b>. Especificidad NS1 76–100 %.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li><b>Dar de alta al hospitalizado</b> con RIDT de influenza o antígeno de SARS-CoV-2 negativo: con clínica compatible se trata y se confirma con molecular.</li>
+        <li><b>Tamizar asintomáticos en baja prevalencia</b>: el VPP se desploma y la mayoría de los positivos son falsos.</li>
+        <li>Pedir una rápida de VIH para «descartar» una exposición de hace 2 semanas: la ventana de las rápidas de anticuerpos llega a <b>90 días</b>.</li>
+        <li>Cerrar un caso sospechoso de <b>ébola</b> con OraQuick negativa, o de <b>JEV</b> con una RDT de IgM: ninguna de las dos fue diseñada para descartar.</li>
+      </ul>
+    </div>
+    <p class="src">Fuentes: B2-respiratorios.md (RIDT influenza: PMID:22371850; NAAT rápidos: PMID:28869986, PMID:30689772; SARS-CoV-2: PMID:33760236, PMID:35866452), B5-arbovirus-fh.md (ébola: PMID:35298901, PMID:37084479; JEV: PMID:29244182; NS1: PMID:25330157, PMID:35988010), B6-retro-exantemas.md (ventanas VIH y algoritmo CDC/APHL 2014), A4-fichas-rna.md (orthomyxo, coronavirus, flavivirus).</p>
+  </div>
+</details>
+
+<details class="sec" id="serologia">
+  <summary><span class="num">06</span><span class="stitle">Serología: IgM, IgG, seroconversión y avidez</span><span class="hint">la respuesta del huésped</span><span class="caret"></span></summary>
+  <div class="body">
+    <p>La serología mide la <b>respuesta del huésped, no al virus</b>. Los formatos dominantes son el <b>EIA/CLIA</b> de unión y el <b>MAC-ELISA</b> (captura de IgM: una anti-IgM en fase sólida retiene la IgM del paciente, lo que reduce la competencia de la IgG y la interferencia del factor reumatoide — formato estándar para dengue, zika, WNV, JEV y sarampión).</p>
+    <ul>
+      <li><b>IgM = infección reciente</b>, con tres trampas: <b>persiste</b> (dengue ~3 meses; WNV meses en suero y <b>1–2 años en LCR</b>), <b>cruza</b> (reactividad entre flavivirus y entre alfavirus; falsos positivos con parvovirus B19, HHV-6 y factor reumatoide) y <b>reaparece en reactivaciones</b>.</li>
+      <li><b>IgG pareada con aumento ≥4×</b> entre suero agudo y convaleciente (2–3 semanas) = <b>seroconversión</b>: confirmación retrospectiva. La IgG en muestra única solo documenta exposición.</li>
+      <li><b>Avidez de IgG</b>: los anticuerpos maduran con el tiempo. Avidez <b>baja = primoinfección reciente</b> (en CMV, durante <b>18–20 semanas</b>); avidez <b>alta la excluye</b>. Su mayor valor clínico es descartar infección reciente en el <b>embarazo</b> (rubéola, CMV, toxoplasma).</li>
+      <li><b>En el inmunodeprimido la serología falla</b> (VHE, flavivirus, sarampión, B19): la única vía confiable es molecular.</li>
+    </ul>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Curvas de IgM e IgG en primoinfección —IgM precoz que desaparece, IgG tardía que persiste, con zona de avidez baja las primeras 18 a 20 semanas— frente a reinfección, donde la IgG anamnéstica sube antes y más alto y la IgM es baja o ausente">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+
+        <text x="250" y="34" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#14181f">PRIMOINFECCIÓN</text>
+        <text x="680" y="34" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="0.12em" fill="#14181f">REINFECCIÓN / REACTIVACIÓN</text>
+
+        <!-- Panel A -->
+        <rect x="70" y="50" width="300" height="230" fill="rgba(138,92,10,.10)"/>
+        <text x="220" y="66" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#8a5c0a">AVIDEZ BAJA (~18–20 SEM)</text>
+        <rect x="370" y="50" width="60" height="230" fill="rgba(92,122,87,.12)"/>
+        <text x="400" y="66" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.1em" fill="#1a6b42">ALTA</text>
+
+        <line x1="70" y1="280" x2="430" y2="280" stroke="#455A8C" stroke-width="1.2"/>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" fill="#6b7585" text-anchor="middle">
+          <text x="70" y="294">0</text><text x="130" y="294">4</text><text x="190" y="294">8</text>
+          <text x="250" y="294">12</text><text x="310" y="294">16</text><text x="370" y="294">20</text><text x="430" y="294">24</text>
+        </g>
+        <text x="442" y="284" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#6b7585">SEM</text>
+
+        <polyline points="70,278 100,240 130,150 160,118 200,150 250,220 310,268 430,276" fill="none" stroke="#90303a" stroke-width="2.2"/>
+        <polyline points="70,278 110,272 160,228 220,158 300,118 430,108" fill="none" stroke="#27334F" stroke-width="2.2"/>
+        <text x="166" y="106" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#90303a">IgM</text>
+        <text x="330" y="102" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#27334F">IgG</text>
+
+        <!-- Panel B -->
+        <line x1="500" y1="280" x2="860" y2="280" stroke="#455A8C" stroke-width="1.2"/>
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" fill="#6b7585" text-anchor="middle">
+          <text x="500" y="294">0</text><text x="590" y="294">2</text><text x="680" y="294">4</text>
+          <text x="770" y="294">6</text><text x="860" y="294">8</text>
+        </g>
+        <text x="872" y="284" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#6b7585">SEM</text>
+
+        <polyline points="500,278 530,258 570,120 630,82 860,76" fill="none" stroke="#27334F" stroke-width="2.2"/>
+        <polyline points="500,278 545,252 590,258 660,272 860,276" fill="none" stroke="#90303a" stroke-width="2.2" stroke-dasharray="5 3"/>
+        <text x="640" y="72" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#27334F">IgG anamnéstica</text>
+        <text x="600" y="246" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#90303a">IgM baja o ausente</text>
+
+        <text x="450" y="326" text-anchor="middle" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">En la reinfección la IgG llega antes y mucho más alto: la IgM puede ni aparecer.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 6. Cinética de IgM e IgG en primoinfección (con la ventana de <b>avidez baja</b>) frente a reinfección o reactivación. Es el patrón que explica la <b>segunda infección por dengue</b>: IgG alta y precoz con IgM escasa.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario / virus</th><th>Muestra y prueba</th><th>Rendimiento y matiz</th></tr></thead>
+      <tbody>
+        <tr><td><b>VEB (mononucleosis)</b></td><td>Heterófilos (Monospot) + panel VCA-IgM/IgG y EBNA-1</td><td>Heterófilos S <b>70–90 %</b> en adolescentes/adultos, pero <b>negativos en &lt;4 años</b> y en la 1.ª semana. <b>EBNA-1 tarda 6–12 semanas</b>: VCA-IgG+ con EBNA− = infección aguda.</td></tr>
+        <tr><td><b>VHB</b></td><td>Panel: HBsAg, anti-HBc IgM, anti-HBs</td><td>Aguda = HBsAg+ con anti-HBc IgM+. <b>Ventana = solo anti-HBc IgM</b> (HBsAg ya negativo, anti-HBs aún ausente). Anti-HBs aislado = vacuna; con anti-HBc IgG = infección resuelta.</td></tr>
+        <tr><td><b>VHA</b></td><td>IgM anti-VHA</td><td>Presente en casi todos al inicio (dura 3–6 meses). El problema es el <b>VPP en baja prevalencia</b>: pedirla solo con clínica de hepatitis o exposición (CDC 2005).</td></tr>
+        <tr><td><b>VHC</b></td><td>Anti-VHC (EIA 3.ª gen) con reflejo a RNA</td><td>S ~<b>98 %</b>, E hasta 100 %. <b>Persiste tras la cura</b>: no distingue infección activa de resuelta — decide el RNA. Ventana serológica 8–11 semanas.</td></tr>
+        <tr><td><b>VHE</b></td><td>IgM anti-VHE + RNA-VHE simultáneos</td><td>Desempeño <b>variable por ensayo</b> (AUROC 0.943–0.994). En el <b>inmunodeprimido la serología puede ser plana: el RNA es primera línea</b>.</td></tr>
+        <tr><td><b>VHD</b></td><td>Anti-VHD total → HDV-RNA</td><td>El anticuerpo tamiza y persiste años; <b>la infección activa la define el RNA</b>. Pedirlo al menos una vez a todo HBsAg+.</td></tr>
+        <tr><td><b>Sarampión</b></td><td>IgM + RT-PCR (garganta + orina)</td><td>IgM: <b>77 % si la muestra es ≤72 h</b> del exantema y <b>100 % a los días 4–11</b>. Las ventanas se complementan: los primeros 3 días son la mejor ventana de PCR.</td></tr>
+        <tr><td><b>Rubéola</b></td><td>IgM + avidez de IgG</td><td>IgM con <b>pico ≤5 días</b> post-exantema; indetectable los días 0–4 → repetir. <b>Avidez en la embarazada</b>: baja + IgM = criterio confirmatorio CSTE 2024.</td></tr>
+        <tr><td><b>Parotiditis</b></td><td>IgM + RT-PCR de hisopo bucal</td><td>En vacunados con 2 dosis la IgM solo se detecta en <b>51 %</b> (9–24 % con ensayos comerciales): <b>IgM negativa no descarta</b>; confirma la detección viral.</td></tr>
+        <tr><td><b>Dengue / zika</b></td><td>IgM MAC-ELISA</td><td>La <b>reactividad cruzada flaviviral</b> es la regla: toda IgM positiva con dengue previo o vacuna de fiebre amarilla exige <b>PRNT</b>.</td></tr>
+        <tr><td><b>WNV / JEV (neuroinvasivo)</b></td><td><b>IgM en LCR</b> (MAC-ELISA)</td><td>Estándar clínico. Persiste meses en suero y <b>1–2 años en LCR</b>: una IgM positiva no siempre es enfermedad actual.</td></tr>
+        <tr><td><b>Hantavirus</b></td><td>ELISA IgM/IgG anti-N</td><td>Casi todos llegan ya <b>IgM e IgG positivos</b>. Cuidado con el patrón IgM+/IgG−: falsos positivos descritos.</td></tr>
+        <tr><td><b>CCHF</b></td><td>IgM + RT-PCR</td><td>IgM S <b>87.8–93.9 %</b>, pero <b>los casos fatales y los primeros días no seroconvierten</b>: ahí manda el RNA en sangre.</td></tr>
+        <tr><td><b>Lassa</b></td><td>IgM ELISA</td><td><b>Inútil como tamiz</b>: S 57 %, E 77 %. Ante sospecha, RT-PCR en centro de referencia sin importar la IgM.</td></tr>
+        <tr><td><b>Chikungunya</b></td><td>IgM por captura (tras la 1.ª semana)</td><td>CDC: <b>toda IgM positiva se confirma con neutralizantes</b>. Trampa analítica: falsos negativos por crioglobulinas; incubar el suero 2 h a 37 °C.</td></tr>
+        <tr><td><b>Fiebre amarilla</b></td><td>IgM MAC-ELISA</td><td>Desempeño puntual: <b>sin dato verificable</b> — interpretar cualitativamente y confirmar con PRNT por el cruce flaviviral.</td></tr>
+        <tr><td><b>Parvovirus B19</b></td><td>IgM + IgG (± avidez)</td><td>IgM positiva en <b>&gt;90 % al día 3</b> del exantema o de la crisis aplásica (dura 2–3 meses); IgG desde el día 7 y en <b>&gt;50 % de la población</b>: sola no diagnostica nada.</td></tr>
+        <tr><td><b>HTLV-1/2</b></td><td>EIA → Western blot / PCR</td><td>El EIA tamiza; el Western confirma y la PCR <b>distingue HTLV-1 de HTLV-2</b> y resuelve los indeterminados.</td></tr>
+        <tr><td><b>CMV / rubéola / toxoplasma en embarazo</b></td><td><b>Avidez de IgG</b></td><td>Baja = primoinfección reciente (CMV: hasta <b>18–20 semanas</b>); <b>alta excluye infección de los últimos ~3 meses</b> — el dato que cambia la conducta obstétrica.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li>Leer una <b>IgM aislada</b> como infección aguda sin preguntar por persistencia, reactividad cruzada ni reactivación: en zona endémica de flavivirus, sin PRNT no hay diagnóstico.</li>
+        <li><b>Confiar en la serología del inmunodeprimido</b> (VHE, sarampión, B19, flavivirus): puede ser plana aun con enfermedad — la vía es molecular.</li>
+        <li>Llamar «infección activa» a una <b>IgG positiva</b> (VHC curado, VHE, B19, VEB con EBNA+): la IgG documenta memoria, no actividad.</li>
+        <li>Pedir <b>IgM de rubéola en tamizaje prenatal de rutina</b>: en baja prevalencia dominan los falsos positivos; se pide con sospecha clínica y se complementa con avidez.</li>
+        <li>Usar <b>heterófilos en menores de 4 años</b>: negativos por inmadurez de la respuesta — pedir serología VCA/EBNA.</li>
+      </ul>
+    </div>
+    <p class="src">Fuentes: A3-fichas-dna.md (VEB, VHB, B19), A4-fichas-rna.md (flavivirus, exantemas, bunyavirales, arenavirus, retrovirus), B1-hepatitis.md (VHA: PMID:15889006; VHB: PMID:36893044; VHC: PMID:11264728; VHD: PMID:37364791; VHE: PMID:24210958), B4-herpes-polioma.md (avidez: PMID:9220166, PMID:2723615; heterófilos: PMID:2987785), B5-arbovirus-fh.md (CCHF: PMID:23171700; Lassa: PMID:23661877; zika: PMID:33080935; chikungunya: PMID:19190731), B6-retro-exantemas.md (sarampión: PMID:8985220; parotiditis: PMID:23324519; HTLV: PMID:30633358).</p>
+  </div>
+</details>
+
+<details class="sec" id="neutralizacion">
+  <summary><span class="num">07</span><span class="stitle">Neutralización, PRNT e inhibición de la hemaglutinación</span><span class="hint">el árbitro de la reactividad cruzada</span><span class="caret"></span></summary>
+  <div class="body">
+    <p>La <b>neutralización</b> mide anticuerpos funcionales: los que impiden que el virus infecte células. En el <b>PRNT</b> (plaque reduction neutralization test) se incuban diluciones seriadas del suero con una cantidad fija de virus y se siembran sobre monocapas celulares: donde el suero no neutraliza, cada partícula infecciosa forma una <b>placa</b>. El <b>título es la última dilución que reduce ≥50–90 % de las placas</b> (PRNT50/PRNT90) respecto al control sin suero.</p>
+    <ul>
+      <li><b>El árbitro de la reactividad cruzada</b>: un título <b>≥4× mayor</b> contra un virus que contra sus vecinos identifica al infectante entre flavivirus (dengue/zika/WNV/JEV) y entre alfavirus. Sueros de primoinfección por dengue <b>no neutralizan zika</b>; solo 23 % de infecciones repetidas muestran cruce débil.</li>
+      <li><b>Límite en zonas hiperendémicas</b>: con alta prevalencia de anticuerpos anti-dengue y anti-zika, el PRNT <b>no logra confirmar una proporción significativa</b> de las IgM positivas (CDC 2025).</li>
+      <li><b>HAI (inhibición de la hemaglutinación)</b> para influenza: el suero bloquea la aglutinación de eritrocitos por la hemaglutinina. Título <b>≥1:40 = correlato de protección</b> (estándar regulatorio vacunal); <b>seroconversión = aumento ≥4×</b> en pares, retrospectiva. Es el eje de la <b>vigilancia de deriva antigénica</b> que decide la composición anual de la vacuna.</li>
+      <li><b>Fijación de complemento</b>: caballo de batalla histórico de la serología viral, desplazada por EIA/CLIA; su nicho vigente es fúngico (FC en LCR para meningitis coccidioidal), no viral.</li>
+    </ul>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PRNT: pocillos con placas virales en diluciones decrecientes de suero; el control sin suero tiene muchas placas, las diluciones 1:10 a 1:80 reducen las placas al menos a la mitad, y el título PRNT50 es 1:80">
+        <rect width="900" height="300" fill="#FFFFFF"/>
+
+        <text x="450" y="40" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">PLACAS POR POCILLO SEGÚN LA DILUCIÓN DEL SUERO</text>
+
+        <!-- Pocillos -->
+        <g fill="#FFFFFF" stroke="#27334F" stroke-width="1.8">
+          <circle cx="95" cy="140" r="32"/>
+          <circle cx="215" cy="140" r="32"/>
+          <circle cx="335" cy="140" r="32"/>
+          <circle cx="455" cy="140" r="32"/>
+          <circle cx="575" cy="140" r="32"/>
+          <circle cx="695" cy="140" r="32"/>
+          <circle cx="815" cy="140" r="32"/>
+        </g>
+
+        <!-- Placas -->
+        <g fill="#701d14">
+          <!-- sin suero: 16 -->
+          <circle cx="77" cy="122" r="2.5"/><circle cx="89" cy="122" r="2.5"/><circle cx="101" cy="122" r="2.5"/><circle cx="113" cy="122" r="2.5"/>
+          <circle cx="77" cy="134" r="2.5"/><circle cx="89" cy="134" r="2.5"/><circle cx="101" cy="134" r="2.5"/><circle cx="113" cy="134" r="2.5"/>
+          <circle cx="77" cy="146" r="2.5"/><circle cx="89" cy="146" r="2.5"/><circle cx="101" cy="146" r="2.5"/><circle cx="113" cy="146" r="2.5"/>
+          <circle cx="77" cy="158" r="2.5"/><circle cx="89" cy="158" r="2.5"/><circle cx="101" cy="158" r="2.5"/><circle cx="113" cy="158" r="2.5"/>
+          <!-- 1:20: 1 -->
+          <circle cx="335" cy="140" r="2.5"/>
+          <!-- 1:40: 3 -->
+          <circle cx="449" cy="134" r="2.5"/><circle cx="461" cy="140" r="2.5"/><circle cx="453" cy="150" r="2.5"/>
+          <!-- 1:80: 8 -->
+          <circle cx="563" cy="126" r="2.5"/><circle cx="575" cy="126" r="2.5"/><circle cx="587" cy="126" r="2.5"/>
+          <circle cx="569" cy="140" r="2.5"/><circle cx="581" cy="140" r="2.5"/>
+          <circle cx="563" cy="154" r="2.5"/><circle cx="575" cy="154" r="2.5"/><circle cx="587" cy="154" r="2.5"/>
+          <!-- 1:160: 13 -->
+          <circle cx="677" cy="122" r="2.5"/><circle cx="689" cy="122" r="2.5"/><circle cx="701" cy="122" r="2.5"/><circle cx="713" cy="122" r="2.5"/>
+          <circle cx="677" cy="134" r="2.5"/><circle cx="689" cy="134" r="2.5"/><circle cx="701" cy="134" r="2.5"/><circle cx="713" cy="134" r="2.5"/>
+          <circle cx="677" cy="146" r="2.5"/><circle cx="689" cy="146" r="2.5"/><circle cx="701" cy="146" r="2.5"/>
+          <circle cx="689" cy="158" r="2.5"/><circle cx="701" cy="158" r="2.5"/>
+          <!-- 1:320: 15 -->
+          <circle cx="797" cy="122" r="2.5"/><circle cx="809" cy="122" r="2.5"/><circle cx="821" cy="122" r="2.5"/><circle cx="833" cy="122" r="2.5"/>
+          <circle cx="797" cy="134" r="2.5"/><circle cx="809" cy="134" r="2.5"/><circle cx="821" cy="134" r="2.5"/><circle cx="833" cy="134" r="2.5"/>
+          <circle cx="797" cy="146" r="2.5"/><circle cx="809" cy="146" r="2.5"/><circle cx="821" cy="146" r="2.5"/><circle cx="833" cy="146" r="2.5"/>
+          <circle cx="803" cy="158" r="2.5"/><circle cx="815" cy="158" r="2.5"/><circle cx="827" cy="158" r="2.5"/>
+        </g>
+
+        <!-- Marca del título -->
+        <text x="575" y="92" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.08em" fill="#701d14">TÍTULO PRNT50 = 1:80</text>
+        <line x1="575" y1="97" x2="575" y2="104" stroke="#701d14" stroke-width="1.2"/>
+
+        <g font-family="'IBM Plex Mono', monospace" font-size="8.5" fill="#14181f" text-anchor="middle">
+          <text x="95" y="192">SIN SUERO</text>
+          <text x="215" y="192">1:10</text>
+          <text x="335" y="192">1:20</text>
+          <text x="455" y="192">1:40</text>
+          <text x="575" y="192">1:80</text>
+          <text x="695" y="192">1:160</text>
+          <text x="815" y="192">1:320</text>
+        </g>
+
+        <line x1="215" y1="212" x2="575" y2="212" stroke="#8a5c0a" stroke-width="1.4"/>
+        <line x1="215" y1="207" x2="215" y2="212" stroke="#8a5c0a" stroke-width="1.4"/>
+        <line x1="575" y1="207" x2="575" y2="212" stroke="#8a5c0a" stroke-width="1.4"/>
+        <text x="395" y="228" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#8a5c0a">neutraliza: reduce ≥50 % de las placas</text>
+        <text x="755" y="228" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">ya no neutraliza</text>
+
+        <text x="450" y="254" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#36476E">TÍTULO ≥4× SOBRE EL VIRUS VECINO RESUELVE LA REACTIVIDAD CRUZADA</text>
+        <text x="450" y="282" text-anchor="middle" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El título no es «sí o no»: es la última dilución que aún neutraliza.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 7. Lectura de un PRNT50. Con 16 placas en el control, la última dilución que deja ≤8 es el título. La confirmación de infección reciente exige además un <b>cambio ≥4× entre sueros pareados</b> o un título ≥4× mayor que contra los virus vecinos.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario / virus</th><th>Muestra y prueba</th><th>Rendimiento y matiz</th></tr></thead>
+      <tbody>
+        <tr><td><b>Dengue / zika</b></td><td><b>PRNT</b> tras IgM positiva</td><td>Título <b>≥4× sobre los flavivirus vecinos</b> identifica al infectante. En zonas con alta prevalencia de neutralizantes, no confirma una proporción significativa de IgM+.</td></tr>
+        <tr><td><b>Fiebre amarilla / WNV / JEV</b></td><td>PRNT confirmatorio</td><td>WNV: confirmación con <b>cambio ≥4× en pares</b> separados 2–3 semanas; indicado con exposición a flavivirus cruzados, casos atípicos o fuera de temporada.</td></tr>
+        <tr><td><b>Chikungunya / Mayaro</b></td><td>PRNT entre alfavirus</td><td>Resuelve el cruce por epítopos compartidos del ELISA de unión; Mayaro depende del laboratorio de referencia, sin ensayos comerciales validados.</td></tr>
+        <tr><td><b>Serogrupo California (La Crosse)</b></td><td>PRNT o IgM en LCR</td><td>El PRNT es <b>lo único que separa La Crosse de sus primos</b> con reacción cruzada; alternativa: IgM por captura en LCR.</td></tr>
+        <tr><td><b>Oropouche</b></td><td>RT-PCR o pares serológicos</td><td>OPS 2024: confirmado por RNA o por <b>seroconversión/aumento ≥4×</b> en pares (convaleciente &gt;14 días). <b>No existe prueba rápida.</b></td></tr>
+        <tr><td><b>Influenza</b></td><td><b>HAI</b> en sueros pareados</td><td>Seroconversión <b>≥4×</b>, retrospectiva — <b>no sirve para la decisión aguda</b> (IDSA). Su rol real: vigilancia de deriva antigénica e inmunogenicidad vacunal (título ≥40).</td></tr>
+        <tr><td><b>Sarampión</b></td><td>PRNT</td><td>Estándar de oro de <b>protección</b> (inmunidad), técnicamente exigente; el diagnóstico agudo es IgM + RT-PCR.</td></tr>
+        <tr><td><b>Poliovirus</b></td><td>Neutralización — histórica</td><td>La tipificación por neutralización con sueros de referencia fue <b>reemplazada por la secuenciación de VP1</b>.</td></tr>
+        <tr><td><b>Adenovirus</b></td><td>Neutralización serológica — engaña</td><td>Solo mide epítopos pequeños de la cápside; desde 2011 el estándar de tipificación es <b>secuenciación genómica</b>.</td></tr>
+        <tr><td><b>Fijación de complemento</b></td><td>Sueros pareados — histórica</td><td>Desplazada por EIA/CLIA. Nicho vigente <b>solo fúngico</b>: FC en LCR para meningitis coccidioidal.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li><b>Pedir PRNT de rutina</b>: es lento, exige cultivo celular y contención, y solo se justifica con IgM positiva y necesidad real de especie (embarazo, caso atípico, vigilancia).</li>
+        <li><b>Interpretar una IgM de dengue/zika/WNV sin PRNT en zona endémica</b> — y también creer que el PRNT siempre resuelve: en zonas hiperendémicas la neutralización basal deja casos indeterminados.</li>
+        <li>Usar la <b>serología (HAI) para diagnosticar influenza aguda</b>: es retrospectiva por diseño; la decisión aguda es clínica y molecular.</li>
+        <li>Exigir <b>fijación de complemento</b> para un virus: método histórico; si el laboratorio la ofrece hoy, es para coccidioides, no para virología.</li>
+      </ul>
+    </div>
+    <p class="src">Fuentes: A3-fichas-dna.md (adenovirus), A4-fichas-rna.md (togavirus, bunyavirales, paramyxovirus, picornavirus), B5-arbovirus-fh.md (PRNT y cruce dengue-zika: PMID:28418292; WNV CDC 2025; Oropouche OPS 2024; Mayaro: PMID:10028074), B7-metodos-modernos.md (HAI: PMID:21692672, PMID:15088777; FC: PMID:29955859; IDSA influenza: PMID:30566567).</p>
+  </div>
+</details>
+
+<details class="sec" id="cultivo">
+  <summary><span class="num">08</span><span class="stitle">Cultivo viral, shell vial e inmunofluorescencia</span><span class="hint">del estándar de oro al museo</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>Cultivo celular: el virus tiene que crecer</h4>
+    <ul>
+      <li>El aislamiento en cultivo celular fue durante décadas el <b>estándar de oro</b> del diagnóstico viral (Leland &amp; Ginocchio 2007, PMID:17223623). El principio: inocular la muestra en monocapas de <b>células permissivas</b> (Vero, HEp-2, MDCK, fibroblastos humanos) y esperar el <b>efecto citopático (ECP)</b> —redondeamiento y refracción del enterovirus, <b>sincitios</b> del VSR y el VHS, «racimos de uvas» del adenovirus— que después se confirma con anticuerpos específicos.</li>
+      <li>Su ventaja irreemplazable: entrega un <b>aislamiento viable</b>. Eso permite pruebas fenotípicas de <b>susceptibilidad antiviral</b>, caracterización antigénica y molecular de cepas (vigilancia de influenza y selección de la cepa vacunal), distinción entre virus vivo y muerto, y captura de lo que la PCR dirigida no está buscando.</li>
+      <li>Preanalítica (IDSA/ASM 2018): medio de transporte viral sobre hielo húmedo; si el procesamiento se demora <b>&gt;48 h, congelar a −80 °C</b>; hisopos flocados preferidos.</li>
+    </ul>
+
+    <h4>Shell vial: centrifugar para ganar días</h4>
+    <ul>
+      <li>Inoculación por <b>centrifugación a baja velocidad</b> sobre la monocapa en viales, con detección de <b>antígenos tempranos</b> mediante anticuerpos monoclonales fluorescentes, sin esperar al ECP.</li>
+      <li>Serie clásica de CMV (Gleaves 1985, PMID:2982911): detección a las <b>16 h frente a una media de 9 días</b> del cultivo en tubo; de 770 muestras, <b>124 positivas por shell vial contra 88 por cultivo convencional</b>, prácticamente sin casos positivos en tubo y negativos en shell vial: «tan específico como, y más sensible que, el cultivo convencional».</li>
+    </ul>
+
+    <h4>Inmunofluorescencia directa (DFA): el anticuerpo fluorescente sobre la muestra</h4>
+    <ul>
+      <li>Monoclonales conjugados con fluorocromo aplicados directamente sobre células del hisopado nasofaríngeo, citocentrifugado o BAL; lectura en microscopio de fluorescencia en <b>1–4 h</b> y con la ventaja de valorar la <b>calidad celular de la muestra</b>.</li>
+      <li>Desempeño representativo en 445 hisopados (Landry 2014, PMID:24850350): DFA detectó 132/199 positivos, <b>sensibilidad 66.3 % y especificidad 99.6 %, frente a 100 % de la PCR</b> de referencia (P = 0.0001).</li>
+      <li>La guía IDSA de influenza 2019 lo zanja: en hospitalizados <b>no usar inmunofluorescencia salvo que no haya ensayo molecular disponible</b> (A-II), y confirmar los negativos con RT-PCR (PMID:30566567).</li>
+    </ul>
+
+    <h4>Los nichos donde el cultivo sigue vivo</h4>
+    <ul>
+      <li><b>Vigilancia de poliomielitis</b>: cultivo de heces en células <b>L20B</b> (ratón transgénico que expresa el receptor humano CD155), con selectividad de ~<b>91 %</b> (117/129 aislamientos fueron poliovirus; PMID:23427441), seguido de PCR intratípica y secuenciación de VP1.</li>
+      <li><b>Susceptibilidad antiviral fenotípica</b> y caracterización de cepas circulantes.</li>
+      <li><b>Rabia y virus emergentes</b> sin ensayo molecular disponible: el cultivo recupera al desconocido.</li>
+      <li><b>Fiebres hemorrágicas: solo BSL-4</b>. El cultivo de CCHF, arenavirus o filovirus es un riesgo ocupacional real: <b>2 de los 6 casos conocidos de Sabiá se adquirieron en el laboratorio</b>. Las muestras de CCHF se procesan solo en máxima contención; una vez inactivadas, pueden manipularse en bioseguridad básica (OMS).</li>
+    </ul>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Comparación del tiempo al resultado entre cultivo clásico en tubo, que tarda una media de 9 días en mostrar efecto citopático, y la técnica de shell vial, que con centrifugación e inmunofluorescencia detecta antígenos tempranos a las 16 horas; panel lateral con los patrones de efecto citopático">
+        <rect width="900" height="300" fill="#FFFFFF"/>
+
+        <text x="20" y="30" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">TIEMPO AL RESULTADO · CMV, GLEAVES 1985</text>
+
+        <text x="182" y="92" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#14181f">Cultivo clásico</text>
+        <rect x="190" y="78" width="440" height="20" rx="3" fill="rgba(112,29,20,.12)" stroke="#701d14" stroke-width="1"/>
+        <text x="624" y="92" text-anchor="end" font-family="'Inter', sans-serif" font-size="9" fill="#701d14">ECP visible · media 9 días</text>
+
+        <text x="182" y="152" text-anchor="end" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#14181f">Shell vial</text>
+        <rect x="190" y="138" width="33" height="20" rx="3" fill="#8a5c0a"/>
+        <text x="232" y="152" font-family="'Inter', sans-serif" font-size="9" fill="#14181f">centrifugación + IF monoclonal · lectura a las 16 h</text>
+
+        <line x1="223" y1="72" x2="223" y2="164" stroke="#8a5c0a" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="223" y="68" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" fill="#8a5c0a">16 h</text>
+
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" fill="#6b7585" text-anchor="middle">
+          <text x="190" y="116">0</text><text x="337" y="116">3</text><text x="483" y="116">6</text><text x="630" y="116">9</text>
+        </g>
+        <text x="644" y="116" font-family="'Inter', sans-serif" font-size="8.5" fill="#6b7585">días</text>
+
+        <rect x="660" y="40" width="220" height="130" rx="4" fill="rgba(69,90,140,.08)" stroke="#455A8C" stroke-width="1"/>
+        <text x="770" y="58" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#27334F">EFECTO CITOPÁTICO (ECP)</text>
+
+        <circle cx="694" cy="84" r="10" fill="rgba(92,122,87,.25)" stroke="#5C7A57" stroke-width="1"/>
+        <circle cx="706" cy="84" r="10" fill="rgba(92,122,87,.25)" stroke="#5C7A57" stroke-width="1"/>
+        <circle cx="700" cy="92" r="10" fill="rgba(92,122,87,.25)" stroke="#5C7A57" stroke-width="1"/>
+        <text x="722" y="90" font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f">sincitios · VSR, VHS</text>
+
+        <circle cx="694" cy="116" r="7" fill="rgba(70,97,125,.25)" stroke="#36476E" stroke-width="1"/>
+        <circle cx="708" cy="118" r="6" fill="rgba(70,97,125,.25)" stroke="#36476E" stroke-width="1"/>
+        <text x="722" y="120" font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f">redondeo · enterovirus</text>
+
+        <circle cx="694" cy="144" r="4" fill="rgba(144,48,58,.35)" stroke="#90303a" stroke-width="1"/>
+        <circle cx="702" cy="144" r="4" fill="rgba(144,48,58,.35)" stroke="#90303a" stroke-width="1"/>
+        <circle cx="698" cy="151" r="4" fill="rgba(144,48,58,.35)" stroke="#90303a" stroke-width="1"/>
+        <circle cx="706" cy="150" r="4" fill="rgba(144,48,58,.35)" stroke="#90303a" stroke-width="1"/>
+        <text x="722" y="150" font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f">racimos · adenovirus</text>
+
+        <text x="20" y="205" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">770 muestras: 124 positivas por shell vial frente a 88 por cultivo en tubo.</text>
+        <text x="20" y="225" font-family="'Inter', sans-serif" font-size="9.5" fill="#14181f">Sin prácticamente ningún caso positivo en tubo y negativo en shell vial.</text>
+
+        <text x="20" y="268" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El cultivo ya no diagnostica al paciente: vigila poblaciones y entrega el virus vivo.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 8. El salto del shell vial: la centrifugación del inóculo más la lectura de antígenos tempranos con monoclonales fluorescentes redujo el diagnóstico de CMV de una media de <b>9 días a 16 horas</b>, con mayor sensibilidad que el tubo. Ni con esa mejora el cultivo compitió con la PCR; hoy sobrevive donde se necesita el <b>virus vivo</b>.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario / virus</th><th>Muestra y prueba</th><th>Rendimiento y matiz</th></tr></thead>
+      <tbody>
+        <tr><td><b>VHS</b></td><td>Raspado de lesión: cultivo en fibroblastos</td><td>Crece con facilidad, pero la PCR es <b>4 veces más sensible</b> en lesión mucocutánea (PMID:14593592) y en LCR de encefalitis el virus se aísla en <b>&lt;5 % de los casos</b>. Se conserva para tipificar y estudiar resistencia a antivirales.</td></tr>
+        <tr><td><b>CMV</b></td><td>Shell vial (histórico)</td><td><b>16 h frente a 9 días</b>; 124 frente a 88 positivos de 770 (PMID:2982911). Hoy desplazado por la PCR cuantitativa en plasma calibrada al estándar OMS.</td></tr>
+        <tr><td><b>Enterovirus</b></td><td>LCR: cultivo frente a NAAT</td><td>Cultivo <b>sensibilidad 65–75 % contra &gt;95 % de la NAAT</b> (PMID:29955859); la PCR acorta estancia hospitalaria y días de antibiótico (PMID:10819951).</td></tr>
+        <tr><td><b>Influenza</b></td><td>Hisopado nasofaríngeo: DFA</td><td>Serie Landry: <b>sensibilidad 66.3 %, especificidad 99.6 %</b> frente a 100 % de la PCR (PMID:24850350). IDSA 2019: solo si no hay molecular disponible, confirmando los negativos. El cultivo en MDCK queda para caracterización de cepas y composición vacunal.</td></tr>
+        <tr><td><b>VSR</b></td><td>DFA / antígeno en hisopado</td><td>En lactantes el antígeno rinde por la carga alta; en adultos la DFA alcanzó <b>83 % frente a RT-PCR</b> (PMID:36661222). Cultivo en HEp-2 con ECP sincitial: histórico.</td></tr>
+        <tr><td><b>VVZ</b></td><td>Raspado de lesión: cultivo</td><td><b>Crece mal</b>: sensibilidad 44 % frente a 83 % del cultivo de VHS (PMID:1328700) y &lt;50 % en lesiones costradas. La PCR de la lesión es la prueba de elección.</td></tr>
+        <tr><td><b>Poliovirus</b></td><td>Heces ×2–3: cultivo en L20B + PCR intratípica + secuenciación de VP1</td><td>Estándar de la <b>vigilancia global de parálisis flácida aguda</b> (PMID:25905895). Selectividad de L20B ~91 %; el 9 % restante son enterovirus no polio, de ahí la confirmación molecular (PMID:23427441).</td></tr>
+        <tr><td><b>CCHF, arenavirus, filovirus, Nipah</b></td><td>Cualquier muestra: cultivo</td><td><b>Contraindicado fuera de BSL-4</b>; el diagnóstico es por RT-PCR y serología de laboratorios de referencia. 2 de los 6 casos de Sabiá fueron intralaboratorio (ficha arenaviridae).</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li>Enviar muestras con sospecha de <b>CCHF, arenavirus (Lassa, Junín, Machupo, Chapare, Guanarito, Lujo, Sabiá), Nipah/Hendra o filovirus al laboratorio general sin avisar</b>. Avisar al laboratorio <b>es un acto diagnóstico</b>: cambia la contención, el procesamiento y la ruta de referencia, y evita el contagio ocupacional clásico.</li>
+        <li>Pedir <b>cultivo de LCR para descartar encefalitis por VHS</b>: se aísla en &lt;5 % de los casos; la prueba es la PCR.</li>
+        <li>Leer el <b>ECP como identificación</b>: el patrón orienta al grupo, pero la especie la confirma el anticuerpo específico o la PCR.</li>
+      </ul>
+    </div>
+
+    <p class="src">Apuntes research B7 §c–d (cultivo, shell vial y DFA: PMID:2982911 · 24850350 · 29955859 · 17223623 · 30566567), B3 §5 (polio y L20B: PMID:23427441 · 25905895), B4 §1 (PMID:14593592), B2 §5 (PMID:36661222), A4 (fichas picornaviridae, arenaviridae, filoviridae, pneumoviridae y orthomyxoviridae).</p>
+  </div>
+</details>
+
+<details class="sec" id="citologia">
+  <summary><span class="num">09</span><span class="stitle">Citología, histopatología y microscopía electrónica</span><span class="hint">ver el daño y al virus</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>El daño tisular como firma morfológica</h4>
+    <ul>
+      <li>Muchos virus dejan una <b>firma en la célula</b>: cuerpos de inclusión intranucleares o intracitoplásmicos, células gigantes multinucleadas, núcleos en vidrio esmerilado. La cito-histopatología es rápida y barata, pero <b>inespecífica y de sensibilidad moderada</b> (60–75 % en la mejor serie); hoy es complementaria y la confirmación corresponde a la NAAT o a la detección antigénica específica (PMID:29955859).</li>
+      <li>La <b>inmunohistoquímica</b> convierte la morfología en diagnóstico: en CMV, la histología con IHQ en biopsia sigue siendo el <b>estándar de la enfermedad tisular</b>, porque la carga plasmática solo se correlaciona moderadamente con el daño del órgano blanco (consenso Kotton 2018, PMID:29596116).</li>
+      <li><b>Frotis de Tzanck</b>: raspado de la base de la vesícula con Giemsa o Wright; busca células gigantes multinucleadas, moldeo nuclear y marginación de la cromatina. Serie prospectiva de 83 casos (Nahass 1992, PMID:1328700): positivo en <b>60 % de los VHS y 75 % de los VVZ</b>; la PCR rindió 73–83 % (VHS) y 88–97 % (VVZ). <b>No distingue VHS de VVZ.</b></li>
+    </ul>
+
+    <h4>Microscopía electrónica: ver al virus</h4>
+    <ul>
+      <li>La tinción negativa de rutina exige <b>10⁶–10⁸ partículas/mL</b>: un negativo no descarta (PMID:12643823). Su ventaja única es la «vista abierta»: identificación morfológica sin hipótesis previa ni reactivos específicos, incluso en muestras «sucias» como heces o líquido vesicular.</li>
+      <li>Hitos: nació para el <b>diagnóstico rápido de la viruela</b> frente a la varicela (PMID:10405897), y en <b>1972 descubrió el virus de Norwalk</b> —hoy norovirus— por inmunomicroscopía electrónica en heces de un brote (PMID:4117963).</li>
+      <li>Papel actual: centros de referencia, brotes por agentes desconocidos y <b>bioseguridad</b> —tras 2001 se reposicionó para separar poxvirus de herpesvirus en lesiones sospechosas mientras llega el molecular (PMID:12775503)—. <b>No distingue especies de orthopoxvirus</b> (viruela, mpox, vaccinia): exige confirmación molecular (PMID:29565285).</li>
+    </ul>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Galería de inclusiones virales: cuerpos de Negri de la rabia, Cowdry tipo A del VHS, ojo de búho del CMV, célula multinucleada del Tzanck, cuerpos de Henderson-Patterson del molusco, decoy cells del virus BK y hepatocitos en vidrio esmerilado del VHB">
+        <rect width="900" height="340" fill="#FFFFFF"/>
+
+        <!-- Negri -->
+        <rect x="18" y="20" width="205" height="140" rx="4" fill="rgba(112,29,20,.06)" stroke="#701d14" stroke-width="1"/>
+        <ellipse cx="120" cy="70" rx="36" ry="26" fill="rgba(112,29,20,.08)" stroke="#701d14" stroke-width="1.2"/>
+        <circle cx="106" cy="64" r="8" fill="none" stroke="#27334F" stroke-width="1.2"/>
+        <circle cx="132" cy="74" r="6" fill="#701d14"/>
+        <circle cx="124" cy="82" r="4" fill="#701d14"/>
+        <text x="120" y="122" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.12em" fill="#701d14">CUERPOS DE NEGRI</text>
+        <text x="120" y="138" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">rabia · citoplasma neuronal</text>
+
+        <!-- Cowdry A -->
+        <rect x="238" y="20" width="205" height="140" rx="4" fill="rgba(39,51,79,.06)" stroke="#27334F" stroke-width="1"/>
+        <circle cx="340" cy="70" r="30" fill="rgba(39,51,79,.06)" stroke="#27334F" stroke-width="1.2"/>
+        <circle cx="340" cy="70" r="18" fill="none" stroke="#27334F" stroke-width="1"/>
+        <circle cx="340" cy="70" r="6" fill="#90303a"/>
+        <text x="340" y="122" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.12em" fill="#27334F">COWDRY TIPO A</text>
+        <text x="340" y="138" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">VHS/VVZ · inclusión nuclear con halo</text>
+
+        <!-- Ojo de búho -->
+        <rect x="458" y="20" width="205" height="140" rx="4" fill="rgba(70,97,125,.07)" stroke="#36476E" stroke-width="1"/>
+        <circle cx="560" cy="70" r="32" fill="rgba(70,97,125,.06)" stroke="#36476E" stroke-width="1.2"/>
+        <circle cx="560" cy="70" r="16" fill="#27334F"/>
+        <circle cx="560" cy="70" r="22" fill="none" stroke="#36476E" stroke-width="1"/>
+        <circle cx="586" cy="88" r="2.5" fill="#36476E"/>
+        <circle cx="592" cy="82" r="2" fill="#36476E"/>
+        <text x="560" y="122" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.12em" fill="#27334F">OJO DE BÚHO</text>
+        <text x="560" y="138" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">CMV · basofílica, halo y dots citoplásmicos</text>
+
+        <!-- Multinucleada -->
+        <rect x="678" y="20" width="205" height="140" rx="4" fill="rgba(92,122,87,.07)" stroke="#5C7A57" stroke-width="1"/>
+        <circle cx="780" cy="70" r="34" fill="rgba(92,122,87,.08)" stroke="#5C7A57" stroke-width="1.2"/>
+        <circle cx="768" cy="64" r="10" fill="none" stroke="#27334F" stroke-width="1.2"/>
+        <circle cx="790" cy="62" r="10" fill="none" stroke="#27334F" stroke-width="1.2"/>
+        <circle cx="778" cy="80" r="10" fill="none" stroke="#27334F" stroke-width="1.2"/>
+        <text x="780" y="122" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.12em" fill="#1a6b42">CÉLULA MULTINUCLEADA</text>
+        <text x="780" y="138" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">Tzanck: VHS o VVZ, sin distinguir</text>
+
+        <!-- Henderson-Patterson -->
+        <rect x="128" y="176" width="205" height="140" rx="4" fill="rgba(144,48,58,.07)" stroke="#90303a" stroke-width="1"/>
+        <circle cx="230" cy="226" r="32" fill="rgba(144,48,58,.08)" stroke="#90303a" stroke-width="1.2"/>
+        <circle cx="238" cy="222" r="20" fill="#90303a"/>
+        <circle cx="204" cy="238" r="6" fill="none" stroke="#27334F" stroke-width="1.2"/>
+        <text x="230" y="278" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.12em" fill="#90303a">HENDERSON-PATTERSON</text>
+        <text x="230" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">molusco contagioso · queratinocito</text>
+
+        <!-- Decoy -->
+        <rect x="348" y="176" width="205" height="140" rx="4" fill="rgba(39,51,79,.06)" stroke="#27334F" stroke-width="1"/>
+        <circle cx="450" cy="226" r="30" fill="rgba(39,51,79,.06)" stroke="#27334F" stroke-width="1.2"/>
+        <circle cx="450" cy="226" r="22" fill="#27334F"/>
+        <text x="450" y="278" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.12em" fill="#27334F">DECOY CELLS</text>
+        <text x="450" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">BK en orina · infección ≠ enfermedad</text>
+
+        <!-- Ground-glass -->
+        <rect x="568" y="176" width="205" height="140" rx="4" fill="rgba(138,92,10,.07)" stroke="#8a5c0a" stroke-width="1"/>
+        <polygon points="648,206 692,206 712,226 692,246 648,246 628,226" fill="rgba(138,92,10,.22)" stroke="#8a5c0a" stroke-width="1.2"/>
+        <circle cx="678" cy="220" r="8" fill="none" stroke="#27334F" stroke-width="1.2"/>
+        <text x="670" y="278" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="0.12em" fill="#8a5c0a">GROUND-GLASS</text>
+        <text x="670" y="294" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#6b7585">VHB · HBsAg en retículo endoplásmico</text>
+      </svg>
+      </div>
+      <figcaption>Figura 9. Galería de cuerpos de inclusión y cambios citopáticos de examen. Regla de lectura: <b>la inclusión orienta al grupo viral, pero la especie la confirma la PCR o la IHQ</b> — el Cowdry A y la multinucleada son idénticos en VHS y VVZ, y la decoy cell no distingue BK de CMV o adenovirus.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario / virus</th><th>Muestra y prueba</th><th>Rendimiento y matiz</th></tr></thead>
+      <tbody>
+        <tr><td><b>Rabia</b></td><td>Cerebro postmortem: DFA e histopatología; piel de nuca: RT-PCR + DFA</td><td><b>Cuerpos de Negri</b> en neuronas de hipocampo y Purkinje (prueba histórica). El estándar postmortem es la <b>DFA en tejido cerebral fresco</b> (OMS 2018). Antemortem, la biopsia de nuca con folículos da <b>sensibilidad ≥98 % y especificidad 100 %</b> por RT-PCR (PMID:18937576).</td></tr>
+        <tr><td><b>CMV</b></td><td>Biopsia (colon, esófago, médula): histología + IHQ</td><td><b>«Ojo de búho»</b> con inclusiones citoplásmicas. La IHQ es el estándar de <b>enfermedad tisular</b>: la colitis o esofagitis por CMV puede cursar con viremia nula.</td></tr>
+        <tr><td><b>VHS / VVZ</b></td><td>Tzanck de la base de la vesícula</td><td>Multinucleadas y Cowdry A; <b>sensibilidad 60 % (VHS) y 75 % (VVZ)</b>, sin distinguir entre ambos (PMID:1328700). Confirmar con PCR del raspado.</td></tr>
+        <tr><td><b>BK</b></td><td>Citología urinaria: decoy cells</td><td>Núcleo agrandado con gran inclusión basófila: indica <b>infección, no enfermedad</b>, y también aparece con CMV y adenovirus. La nefropatía exige carga plasmática <b>&gt;10⁴ copias/mL</b> (sensibilidad y especificidad 93 %) y biopsia con IHQ.</td></tr>
+        <tr><td><b>JC / LMP</b></td><td>Biopsia cerebral</td><td><b>Especificidad 100 %</b>, sensibilidad 64–96 %. Se reserva para clínica y RM compatibles con PCR de JCV en LCR negativa.</td></tr>
+        <tr><td><b>VPH</b></td><td>Citología cervical (Papanicolaou)</td><td>El <b>coilocito</b> es el sello. Sensibilidad clásica 30–90 %; en ATHENA, 53.3 % para CIN3+ frente a 92 % de la prueba de VPH (PMID:21865084).</td></tr>
+        <tr><td><b>Molusco contagioso</b></td><td>Raspado o biopsia de la lesión</td><td><b>Cuerpos de Henderson-Patterson</b> en la capa espinosa; diagnóstico clínico-histopatológico. El virus <b>no crece en cultivo estándar</b>.</td></tr>
+        <tr><td><b>VHB</b></td><td>Biopsia hepática</td><td><b>Hepatocitos en vidrio esmerilado</b> (ground-glass): acumulación de HBsAg en el retículo endoplásmico del portador crónico.</td></tr>
+        <tr><td><b>Parvovirus B19</b></td><td>Médula ósea</td><td><b>Pronormoblastos gigantes</b> con inclusión nuclear eosinofílica y desaparición del resto de la serie eritroide: la firma de la crisis aplásica.</td></tr>
+        <tr><td><b>Adenovirus</b></td><td>Tejido: histología + IHQ</td><td><b>«Smudge cells»</b>: inclusiones basófilas que borran la membrana nuclear; a diferencia del CMV, sin células gigantes ni inclusiones citoplásmicas.</td></tr>
+        <tr><td><b>Mpox y otros poxvirus</b></td><td>Líquido vesicular o costra: ME de tinción negativa</td><td>Separa <b>ortopoxvirus (ladrillo) de parapoxvirus (ovoide) y herpesvirus</b>; fue diagnóstica en 23 de 24 cowpox. No identifica la especie: confirmación molecular.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li>Leer un <b>Tzanck positivo como VHS</b>: también sale positivo en VVZ (y el sarampión produce sus propias células gigantes de Warthin-Finkeldey). La especie la da la PCR.</li>
+        <li>Tomar <b>decoy cells como nefropatía por BK</b>: solo dicen infección. La nefropatía se define con carga plasmática y biopsia, que además tiene hasta <b>30 % de falsos negativos</b> por focalidad.</li>
+        <li>Descartar por una <b>ME negativa</b>: por debajo de 10⁶ partículas/mL el virus es invisible al método.</li>
+      </ul>
+    </div>
+
+    <p class="src">Apuntes research B7 §e–f (microscopía electrónica y cito-histopatología: PMID:12643823 · 10405897 · 4117963 · 12775503 · 29565285 · 1328700 · 29955859 · 29596116), B6 §6 (rabia: PMID:18937576; OMS TRS 1012), B4 §5 y §7 (PMID:15912088 · 21865084), A3 (fichas polyomaviridae, papillomaviridae, poxviridae, parvoviridae, adenoviridae, herpesviridae-alfa y herpesviridae-beta), A2 (patógenos wiki).</p>
+  </div>
+</details>
+
+<details class="sec" id="ngs">
+  <summary><span class="num">10</span><span class="stitle">Secuenciación: metagenómica y resistencias</span><span class="hint">cuando el menú cerrado no basta</span><span class="caret"></span></summary>
+  <div class="body">
+    <h4>mNGS: secuenciar todo lo que haya en la muestra</h4>
+    <ul>
+      <li>Secuenciación masiva <b>no dirigida</b> de todo el DNA/RNA extraíble; los reads se alinean contra bases de datos con <b>todos los patógenos conocidos</b> en una sola prueba, sin hipótesis previa (PMID:30355154). El problema inherente: <b>el fondo humano domina</b> —la inmensa mayoría de los reads son del huésped— y hay que restarlo <i>in silico</i>.</li>
+      <li>Caso fundacional (NEJM 2014, PMID:24896819): adolescente con inmunodeficiencia combinada severa y encefalitis sin diagnóstico; el mNGS de LCR encontró <b>475 de 3 063 784 reads (0.016 %) de <i>Leptospira</i></b>, con resolución tras tratamiento dirigido.</li>
+      <li>Validación clínica UCSF (PMID:30992304): <b>sensibilidad 73 % y especificidad 99 %</b> en serie retrospectiva (92 % y 96 % en prospectiva); la hemólisis y el exceso de ácido nucleico del huésped reducen la sensibilidad.</li>
+      <li>Estudio multicéntrico NEJM 2019 en 204 pacientes graves (PMID:31189036): el mNGS aportó <b>13 de 58 diagnósticos (22 %)</b> que las pruebas del hospital no habían hecho —7 de 13 cambiaron el tratamiento—, pero <b>no detectó 26 de 58 infecciones (45 %)</b>: 11 se diagnosticaron solo por serología, 7 solo en tejidos distintos del LCR y 8 por títulos bajos. <b>Complementa, no sustituye.</b></li>
+      <li>La guía IDSA/ASM 2018 advierte que el gasto y los retos de interpretación han impedido su uso extendido; la mayoría de los ensayos son pruebas desarrolladas por el laboratorio con desempeño variable (PMID:29955859).</li>
+    </ul>
+
+    <h4>PCR digital (ddPCR): contar gotas, no curvas</h4>
+    <ul>
+      <li>La reacción se <b>particiona en miles de microgotas</b>; cada una es positiva o negativa y la estadística de Poisson da <b>cuantificación absoluta sin curva de calibración</b>, con menor susceptibilidad a inhibidores (PMID:24724628).</li>
+      <li><b>ciHHV-6</b>: ~1 % de la población porta el HHV-6 integrado en el genoma de cada célula, lo que produce cargas «enormes y constantes» que se confunden con infección activa. La ddPCR muestra una <b>razón virus/célula ≈ 1 copia</b> y confirma la integración (validado contra FISH; PMID:24594780).</li>
+      <li>Otros nichos: reservorio proviral del VIH (coeficiente de variación <b>5 veces menor</b> que qPCR; PMID:23573183) y estandarización de la carga de CMV (menor variabilidad a cargas altas, sin superar la sensibilidad de qPCR; PMID:23224089). No reemplaza a la qPCR de rutina.</li>
+    </ul>
+
+    <h4>Genotipado de resistencias: Sanger contra NGS</h4>
+    <ul>
+      <li>El genotipado convencional por <b>Sanger solo detecta variantes presentes en fracción alta de la cuasiespecie (umbral ~20 %)</b>; las variantes minoritarias —sobre todo de ITINN— aumentan el riesgo de falla terapéutica (PMID:23446628).</li>
+      <li>El <b>NGS con umbral del 5 %</b> detectó en promedio <b>0.5 mutaciones de resistencia adicionales por muestra</b> que Sanger no vio, con concordancia nucleotídica de 99.9 % (PMID:29618499).</li>
+      <li><b>VHC</b>: el genotipo fue obligatorio antes de tratar; con los antivirales <b>pangenotípicos es hoy opcional</b>.</li>
+      <li>Vigilancia genómica: secuenciación de <b>VP1 del poliovirus</b> para distinguir salvaje de derivado de vacuna (PMID:25905895 · 25316847), genotipado de <b>norovirus</b> en brotes y seguimiento de variantes de SARS-CoV-2 e influenza, que alimenta la composición anual de la vacuna.</li>
+    </ul>
+
+    <figure class="fig">
+      <div class="scrollx">
+      <svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Flujo de la secuenciación metagenómica clínica en siete pasos: muestra, extracción de ácidos nucleicos, preparación de biblioteca, secuenciación masiva, resta del fondo humano, alineamiento contra la base de datos de patógenos y reporte; debajo, una barra muestra que la inmensa mayoría de los reads son del huésped y solo una fracción mínima corresponde al patógeno">
+        <rect width="900" height="280" fill="#FFFFFF"/>
+
+        <g font-family="'IBM Plex Mono', monospace" font-size="8" fill="#6b7585" text-anchor="middle">
+          <text x="63" y="54">PASO 1</text><text x="192" y="54">PASO 2</text><text x="321" y="54">PASO 3</text>
+          <text x="450" y="54">PASO 4</text><text x="579" y="54">PASO 5</text><text x="708" y="54">PASO 6</text><text x="837" y="54">PASO 7</text>
+        </g>
+
+        <rect x="7" y="64" width="112" height="60" rx="4" fill="rgba(39,51,79,.08)" stroke="#27334F" stroke-width="1"/>
+        <text x="63" y="88" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#27334F">MUESTRA</text>
+        <text x="63" y="106" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f">LCR u otra</text>
+
+        <rect x="136" y="64" width="112" height="60" rx="4" fill="rgba(70,97,125,.08)" stroke="#36476E" stroke-width="1"/>
+        <text x="192" y="88" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#36476E">EXTRACCIÓN</text>
+        <text x="192" y="106" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f">DNA + RNA</text>
+
+        <rect x="265" y="64" width="112" height="60" rx="4" fill="rgba(69,90,140,.1)" stroke="#455A8C" stroke-width="1"/>
+        <text x="321" y="88" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#36476E">BIBLIOTECA</text>
+        <text x="321" y="106" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f">adaptadores</text>
+
+        <rect x="394" y="64" width="112" height="60" rx="4" fill="rgba(92,122,87,.09)" stroke="#5C7A57" stroke-width="1"/>
+        <text x="450" y="88" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#1a6b42">SECUENCIADOR</text>
+        <text x="450" y="106" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f">millones de reads</text>
+
+        <rect x="523" y="64" width="112" height="60" rx="4" fill="rgba(144,48,58,.09)" stroke="#90303a" stroke-width="1"/>
+        <text x="579" y="88" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#90303a">RESTA</text>
+        <text x="579" y="106" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f">fondo humano</text>
+
+        <rect x="652" y="64" width="112" height="60" rx="4" fill="rgba(138,92,10,.1)" stroke="#8a5c0a" stroke-width="1"/>
+        <text x="708" y="88" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#8a5c0a">ALINEAMIENTO</text>
+        <text x="708" y="106" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f">vs base de datos</text>
+
+        <rect x="781" y="64" width="112" height="60" rx="4" fill="rgba(112,29,20,.08)" stroke="#701d14" stroke-width="1"/>
+        <text x="837" y="88" text-anchor="middle" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.1em" fill="#701d14">REPORTE</text>
+        <text x="837" y="106" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8.5" fill="#14181f">interpretación</text>
+
+        <g stroke="#455A8C" stroke-width="1.5" fill="#455A8C">
+          <line x1="119" y1="94" x2="132" y2="94"/><polygon points="132,90 138,94 132,98"/>
+          <line x1="248" y1="94" x2="261" y2="94"/><polygon points="261,90 267,94 261,98"/>
+          <line x1="377" y1="94" x2="390" y2="94"/><polygon points="390,90 396,94 390,98"/>
+          <line x1="506" y1="94" x2="519" y2="94"/><polygon points="519,90 525,94 519,98"/>
+          <line x1="635" y1="94" x2="648" y2="94"/><polygon points="648,90 654,94 648,98"/>
+          <line x1="764" y1="94" x2="777" y2="94"/><polygon points="777,90 783,94 777,98"/>
+        </g>
+
+        <text x="60" y="146" font-family="'IBM Plex Mono', monospace" font-size="8.5" letter-spacing="0.12em" fill="#6b7585">COMPOSICIÓN DE LOS READS</text>
+        <rect x="60" y="156" width="770" height="22" rx="3" fill="rgba(69,90,140,.25)" stroke="#455A8C" stroke-width="1"/>
+        <rect x="830" y="156" width="10" height="22" rx="3" fill="#701d14"/>
+        <text x="70" y="171" font-family="'Inter', sans-serif" font-size="9.5" font-weight="600" fill="#14181f">reads del huésped — se descartan in silico</text>
+        <text x="840" y="200" text-anchor="end" font-family="'Inter', sans-serif" font-size="9" fill="#701d14">patógeno: 475 de 3 063 784 reads (0.016 %)</text>
+
+        <text x="60" y="245" font-family="'Source Serif 4', serif" font-style="italic" font-size="12" fill="#6b7585">El mNGS pregunta por todo a la vez; la interpretación sigue siendo clínica.</text>
+      </svg>
+      </div>
+      <figcaption>Figura 10. Flujo del mNGS clínico. Lo que hay que retener: la prueba es <b>agnóstica pero no mágica</b> —la señal del patógeno puede ser una fracción mínima de los reads (0.016 % en el caso fundacional)— y su resultado exige correlación clínica y, a menudo, confirmación ortogonal.</figcaption>
+    </figure>
+
+    <div class="scrollx">
+    <table class="tbl">
+      <thead><tr><th>Escenario / virus</th><th>Muestra y prueba</th><th>Rendimiento y matiz</th></tr></thead>
+      <tbody>
+        <tr><td><b>Encefalitis sin etiología</b></td><td>LCR: mNGS</td><td>Sensibilidad 73 %, especificidad 99 % (PMID:30992304); 22 % de diagnósticos adicionales pero 45 % de infecciones no detectadas (PMID:31189036). Destapó la <b>encefalitis por astrovirus</b> —ausente de los paneles de meningitis/encefalitis— y recupera enterovirus y VHS atípicos.</td></tr>
+        <tr><td><b>VIH: resistencias</b></td><td>Plasma: genotipo por Sanger o NGS</td><td>Sanger ve solo variantes &gt;~20 % de la cuasiespecie; <b>NGS con umbral del 5 %</b> añade 0.5 mutaciones resistentes por muestra (PMID:23446628 · 29618499). Basal en todo paciente nuevo y ante falla virológica.</td></tr>
+        <tr><td><b>VHC</b></td><td>Genotipo por secuenciación</td><td>Fue requisito previo al tratamiento; con los <b>pangenotípicos es opcional</b>.</td></tr>
+        <tr><td><b>Influenza y SARS-CoV-2</b></td><td>Secuenciación genómica de vigilancia</td><td>Seguimiento de la deriva y de variantes; en influenza alimenta la <b>composición anual de la vacuna</b>.</td></tr>
+        <tr><td><b>Poliovirus</b></td><td>Secuenciación de VP1</td><td>Distingue <b>virus salvaje de derivado de vacuna (VDPV)</b> por divergencia genética y mapea rutas de transmisión (PMID:25905895 · 25316847).</td></tr>
+        <tr><td><b>Norovirus en brote</b></td><td>Genotipado polimerasa + cápside</td><td>Doble tipado (p. ej. <b>GII.4 Sydney[P16]</b>); la red CaliciNet rastrea brotes con esta nomenclatura (CDC 2024).</td></tr>
+        <tr><td><b>Adenovirus</b></td><td>Genoma completo + análisis filogenómico</td><td>Desde 2011 es el estándar de tipificación; la neutralización serológica clásica <b>puede engañar</b> porque solo mide epítopos de la cápside.</td></tr>
+        <tr><td><b>Sarampión</b></td><td>RT-PCR + secuenciación</td><td>24 genotipos: separa <b>importado de endémico</b> y, con ensayos específicos, cepa vacunal de silvestre en el vacunado reciente.</td></tr>
+        <tr><td><b>HHV-6 integrado (ciHHV-6)</b></td><td>Sangre y tejidos: ddPCR</td><td><b>Razón ≈ 1 copia por célula</b> confirma la integración cromosómica y evita tratamientos innecesarios por cargas falsamente «altas» (PMID:24594780).</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="box trap"><span class="lbl">Errores frecuentes</span>
+      <ul>
+        <li>Leer <b>un hit de mNGS como patógeno</b>: la contaminación de reactivos y la flora de fondo exigen umbrales de reporte y confirmación ortogonal (PMID:30355154). Los <b>anellovirus (TTV) dominan el viroma del inmunosuprimido</b> y son detectables en &gt;90 % de personas sanas: encontrarlos es un hallazgo esperado, no un diagnóstico.</li>
+        <li>Dar por descartada la infección con un <b>mNGS negativo</b>: en la serie NEJM 2019 casi la mitad de los diagnósticos se hicieron por serología o por muestras extraneurológicas (PMID:31189036).</li>
+        <li>Tranquilizarse con un <b>genotipo de VIH por Sanger sin resistencias</b>: lo que está por debajo del ~20 % de la cuasiespecie es invisible al método.</li>
+      </ul>
+    </div>
+
+    <p class="src">Apuntes research B7 §a–b (mNGS y ddPCR: PMID:30355154 · 24896819 · 30992304 · 31189036 · 29955859 · 24724628 · 24594780 · 23573183 · 23224089), B6 §1 (resistencias VIH: PMID:23446628 · 29618499), B3 §5 (polio VP1/VDPV: PMID:25905895 · 25316847; CaliciNet, CDC 2024), A3 y A4 (fichas anelloviridae, astroviridae, adenoviridae, retroviridae, paramyxoviridae, herpesviridae-beta y flaviviridae).</p>
+  </div>
+</details>
+      <div class="pager">
+        <a class="prev" href="index.html"><span class="k">← Índice</span><span class="v">Virología</span></a>
+        <a class="next" href="virus-dna.html"><span class="k">Siguiente →</span><span class="v">Árbol virus DNA</span></a>
+      </div>
+      <footer class="pf">
+        <span>Herramientas diagnósticas · Virología médica</span>
+        <span>UDG-CA-1190 · Microbiología II · UdeG</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+(function(){
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details.sec'));
+  var btn  = document.getElementById('toggleAll');
+  function sync(){
+    var allOpen = secs.every(function(d){ return d.open; });
+    btn.textContent = allOpen ? 'Contraer todo' : 'Expandir todo';
+    btn.dataset.state = allOpen ? 'open' : 'closed';
+  }
+  btn && btn.addEventListener('click', function(){
+    var open = btn.dataset.state !== 'open';
+    secs.forEach(function(d){ d.open = open; }); sync();
+  });
+  secs.forEach(function(d){ d.addEventListener('toggle', sync); });
+  sync();
+
+  // abrir la sección apuntada por el hash y hacer scroll
+  function openHash(){
+    if(!location.hash) return;
+    var el = document.querySelector(location.hash);
+    if(!el) return;
+    var host = el.closest('details.sec');
+    if(host){ host.open = true; sync(); }
+    setTimeout(function(){ el.scrollIntoView({block:'start'}); }, 60);
+  }
+  window.addEventListener('hashchange', openHash); openHash();
+
+  // scrollspy del riel
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var a = map[e.target.id]; if(!a) return;
+      if(e.isIntersecting){ links.forEach(function(x){ x.classList.remove('on'); }); a.classList.add('on'); }
+    });
+  }, {rootMargin:'-70px 0px -72% 0px', threshold:0});
+  secs.forEach(function(d){ io.observe(d); });
+
+  // imprimir con todo abierto
+  window.addEventListener('beforeprint', function(){ secs.forEach(function(d){ d.open = true; }); });
+})();
+</script>
+</body>
+</html>

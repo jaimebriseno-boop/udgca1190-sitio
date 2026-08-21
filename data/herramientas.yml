@@ -60,8 +60,10 @@
     historia, taxonomía, microbiología, fisiopatología, cuadro clínico,
     diagnóstico y tratamiento, con figuras propias, tablas comparativas,
     nemotecnias y trampas de examen. Incluye buscador por familia, género,
-    virus o síndrome. Contenido referenciado a Mandell PPID 10.ª edición y a
-    las guías citadas al pie de cada ficha.
+    virus o síndrome, y una sección de herramientas diagnósticas del
+    laboratorio de virología (diez técnicas, de la PCR y la carga viral al
+    cultivo, con sus ventanas de utilidad y desempeño). Contenido referenciado
+    a Mandell PPID 10.ª edición y a las guías citadas al pie de cada ficha.
   tecnologias: ["HTML", "SVG", "JavaScript"]
   linea: epidemiologia-infecciosas
   enlace_app: "/herramientas/virologia"

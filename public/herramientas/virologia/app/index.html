@@ -301,6 +301,9 @@
     background:var(--white); border:1px solid var(--rule); border-top:4px solid var(--navy);
     border-radius:8px; padding:1.15rem 1.3rem; box-shadow:var(--shadow); transition:.16s; }
   a.tree-door.rna { border-top-color:var(--rust); }
+  a.tree-door.lab { border-top-color:var(--green); }
+  a.tree-door.lab .nm { color:var(--green); }
+  a.tree-door.lab .go { color:var(--green); }
   a.tree-door:hover { transform:translateY(-2px);
     box-shadow:0 2px 4px rgba(39,51,79,.08), 0 14px 34px -16px rgba(39,51,79,.4); }
   .tree-door svg { flex:none; width:74px; height:64px; }
@@ -352,6 +355,21 @@
       <span class="nm">Virus RNA</span>
       <span class="ds">18 tarjetas · polaridad, segmentación y retrovirus</span>
       <span class="go">Recorrer el árbol →</span>
+    </span>
+  </a>
+  <a class="tree-door lab" href="herramientas-diagnosticas.html">
+    <svg viewBox="0 0 74 64" fill="none" aria-hidden="true">
+      <path d="M6 54 H68 M6 54 V8" stroke="#6b7585" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M8 50 C 26 50, 30 46, 36 34 S 46 12, 66 10" stroke="#5C7A57" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M8 46 C 30 46, 36 40, 42 30 S 52 16, 66 15" stroke="#5C7A57" stroke-width="1.6" stroke-linecap="round" opacity=".45"/>
+      <line x1="30" y1="8" x2="30" y2="54" stroke="#90303a" stroke-width="1.3" stroke-dasharray="3 3"/>
+      <circle cx="36" cy="34" r="3" fill="#5C7A57"/>
+    </svg>
+    <span>
+      <span class="k">Sección · laboratorio de virología</span>
+      <span class="nm">Herramientas diagnósticas</span>
+      <span class="ds">10 técnicas: de la PCR y la carga viral al cultivo · ventanas y desempeño en las 28 familias</span>
+      <span class="go">Entrar a la sección →</span>
     </span>
   </a>
 </nav>
