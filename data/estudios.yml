@@ -1,0 +1,36 @@
+# Estudios / proyectos de investigación en curso del CA (páginas bajo /estudios/<id>).
+# Cada registro genera contenido para su página informativa; la traducción inglesa vive
+# en data/i18n/en.yml bajo `estudios.<id>`. Mientras `participacion_abierta` sea false,
+# la página NO muestra convocatoria de participación (y se publica con noindex).
+
+- id: lactancia
+  nombre_corto: "Proyecto Lactancia Jalisco"
+  titulo_completo: "Desarrollo y validación interna de un modelo pronóstico al alta hospitalaria para la primera pérdida de alimentación exclusiva con leche humana en Jalisco, México"
+  estado: en_revision
+  linea: nutricion-microbioma
+  institucion: "Sede coordinadora: Centro Universitario de Ciencias de la Salud (CUCS), Universidad de Guadalajara"
+  resumen: >-
+    Muchas familias inician la lactancia al salir del hospital, pero una parte importante
+    deja de alimentar a su bebé exclusivamente con leche humana antes de los seis meses.
+    Este proyecto busca comprender qué características presentes al momento del alta
+    hospitalaria se relacionan con que eso ocurra, para construir y validar internamente
+    un modelo pronóstico con fines de investigación.
+  descripcion: >-
+    Cuando cuente con todas las aprobaciones, el estudio invitará a madres residentes en
+    Jalisco con una hija o hijo de 6 a 24 meses que egresó del hospital alimentándose
+    exclusivamente con leche humana. Mediante un cuestionario autogestivo, en línea y
+    presencial, se reconstruirá la alimentación del bebé desde el alta hospitalaria y
+    hasta la fecha en que cumplió seis meses. El producto será un modelo pronóstico
+    candidato, exclusivamente de investigación: no es una calculadora clínica, no entrega
+    resultados individuales y no sustituye la orientación profesional en lactancia.
+  equipo: >-
+    Proyecto desarrollado por integrantes del Cuerpo Académico UDG-CA-1190 y colaboradores,
+    en el marco de un proyecto de tesis de posgrado, con sede coordinadora en el Centro
+    Universitario de Ciencias de la Salud (CUCS) de la Universidad de Guadalajara.
+  fases:
+    - "Revisión académica e institucional del protocolo"
+    - "Aprobación por los comités de ética e investigación"
+    - "Validación del instrumento: panel de expertos, entrevistas cognitivas y estudio piloto"
+    - "Reclutamiento y recolección de datos en Jalisco (en línea y presencial)"
+    - "Análisis, validación interna y difusión de resultados"
+  participacion_abierta: false

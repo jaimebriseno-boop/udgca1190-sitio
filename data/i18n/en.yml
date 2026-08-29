@@ -256,3 +256,33 @@ actividades:
   actividad-ejemplo:
     titulo: Activity title (template)
     descripcion: Brief description of the academic activity or event.
+estudios:
+  lactancia:
+    nombre_corto: Jalisco Breastfeeding Project
+    titulo_completo: >-
+      Development and internal validation of a prognostic model at hospital discharge for the first loss of
+      exclusive human-milk feeding in Jalisco, Mexico
+    institucion: >-
+      Coordinating site: University Center for Health Sciences (CUCS), University of Guadalajara
+    resumen: >-
+      Many families begin breastfeeding at hospital discharge, yet a substantial share stop feeding their baby
+      exclusively with human milk before six months of age. This project seeks to understand which
+      characteristics present at hospital discharge are associated with that outcome, in order to develop and
+      internally validate a prognostic model for research purposes.
+    descripcion: >-
+      Once all approvals are in place, the study will invite mothers residing in Jalisco whose child is 6 to 24
+      months old and left the hospital being fed exclusively with human milk. Through a self-administered
+      questionnaire, online and in person, the baby's feeding will be reconstructed from hospital discharge to
+      the date the baby turned six months old. The product will be a candidate prognostic model, strictly for
+      research: it is not a clinical calculator, it does not deliver individual results, and it does not
+      replace professional breastfeeding guidance.
+    equipo: >-
+      A project by members of the UDG-CA-1190 Research Group and collaborators, developed within a graduate
+      thesis project, with its coordinating site at the University Center for Health Sciences (CUCS) of the
+      University of Guadalajara.
+    fases:
+      - Academic and institutional review of the protocol
+      - Approval by the ethics and research committees
+      - "Instrument validation: expert panel, cognitive interviews, and pilot study"
+      - Recruitment and data collection in Jalisco (online and in person)
+      - Analysis, internal validation, and dissemination of results

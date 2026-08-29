@@ -60,6 +60,23 @@ const herramientas = defineCollection({
   }),
 });
 
+const estudios = defineCollection({
+  loader: file('data/estudios.yml', { parser: parseYaml }),
+  schema: z.object({
+    nombre_corto: z.string(),
+    titulo_completo: z.string(),
+    estado: z.enum(['en_revision', 'validacion', 'reclutamiento', 'analisis', 'difusion', 'concluido']),
+    linea: z.string(),
+    institucion: z.string(),
+    resumen: z.string(),
+    descripcion: z.string().optional(),
+    equipo: z.string().optional(),
+    fases: z.array(z.string()).default([]),
+    // Mientras sea false: sin convocatoria visible y página con noindex.
+    participacion_abierta: z.boolean().default(false),
+  }),
+});
+
 const actividades = defineCollection({
   loader: file('data/actividades.yml', { parser: parseYaml }),
   schema: z.object({
@@ -71,4 +88,4 @@ const actividades = defineCollection({
   }),
 });
 
-export const collections = { integrantes, lineas, herramientas, actividades };
+export const collections = { integrantes, lineas, herramientas, actividades, estudios };

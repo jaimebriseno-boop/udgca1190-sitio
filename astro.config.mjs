@@ -8,9 +8,10 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://udgca1190.com.mx',
   integrations: [
-    // Genera /sitemap-index.xml con alternativas hreflang (es/en); excluye /estilo.
+    // Genera /sitemap-index.xml con alternativas hreflang (es/en); excluye /estilo
+    // y /estudios (páginas de proyectos con noindex mientras no abra su participación).
     sitemap({
-      filter: (page) => !page.includes('/estilo'),
+      filter: (page) => !page.includes('/estilo') && !page.includes('/estudios/'),
       i18n: {
         defaultLocale: 'es',
         locales: { es: 'es-MX', en: 'en-US' },

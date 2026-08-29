@@ -1,0 +1,138 @@
+---
+// Página informativa del proyecto de investigación sobre lactancia (/estudios/lactancia).
+// Mientras el protocolo no tenga aprobaciones, la página se sirve con noindex y SIN
+// convocatoria de participación (ver data/estudios.yml → participacion_abierta).
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
+import { getCollection } from 'astro:content';
+import { t, localize, localePath } from '../../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+const entrada = (await getCollection('estudios')).find((e) => e.id === 'lactancia');
+if (!entrada) throw new Error('Falta el estudio "lactancia" en data/estudios.yml');
+const d = localize('estudios', 'lactancia', entrada.data, lang);
+
+// Índice de la etapa en curso según el estado declarado en data/estudios.yml.
+const ETAPA_ACTUAL: Record<string, number> = {
+  en_revision: 0, validacion: 2, reclutamiento: 3, analisis: 4, difusion: 4, concluido: -1,
+};
+const etapaActual = ETAPA_ACTUAL[entrada.data.estado] ?? 0;
+---
+<Base
+  titulo={d.nombre_corto}
+  descripcion={t(lang, 'meta.estudio_lactancia')}
+  lang={lang}
+  noindex={!d.participacion_abierta}
+>
+  <PageHeader
+    variant="navy"
+    eyebrow={t(lang, 'estudio.kicker')}
+    title={d.nombre_corto}
+    description={d.titulo_completo}
+  />
+
+  <section class="section">
+    <div class="container estudio">
+      <div class="estudio__aviso" role="note">
+        <p class="kicker">{t(lang, 'estudio.estado_actual')}</p>
+        <p>{t(lang, 'estudio.aviso_estado')}</p>
+      </div>
+
+      <h2>{t(lang, 'estudio.h_resumen')}</h2>
+      <p class="prose">{d.resumen}</p>
+      {d.descripcion && <p class="prose">{d.descripcion}</p>}
+
+      <h2>{t(lang, 'estudio.h_equipo')}</h2>
+      {d.equipo && <p class="prose">{d.equipo}</p>}
+      <p class="prose estudio__institucion">{d.institucion}</p>
+      <p class="prose">
+        <a href={localePath('/integrantes', lang)}>{t(lang, 'estudio.ver_integrantes')}</a>
+      </p>
+
+      <h2>{t(lang, 'estudio.h_etapas')}</h2>
+      <ol class="estudio__etapas">
+        {d.fases.map((f: string, i: number) => (
+          <li class:list={[{ 'estudio__etapa--actual': i === etapaActual }]}>
+            <span>{f}</span>
+            {i === etapaActual && (
+              <span class="estudio__badge">{t(lang, 'estudio.etapa_actual_badge')}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+
+      <h2>{t(lang, 'estudio.h_aviso')}</h2>
+      <p class="prose">{t(lang, 'estudio.aviso_no_clinico')}</p>
+
+      {/*
+        "Cómo participar": OCULTO intencionalmente hasta contar con aprobación ética y
+        de investigación, textos de consentimiento aprobados y plataforma autorizada.
+        Al activarse: poner participacion_abierta: true en data/estudios.yml, retirar el
+        noindex (Base) y el filtro de sitemap, y enlazar aquí la plataforma del estudio.
+      */}
+
+      <h2>{t(lang, 'estudio.h_contacto')}</h2>
+      <p class="prose">
+        {t(lang, 'estudio.contacto_texto')}
+        {' '}<a href="mailto:contacto@udgca1190.com.mx">contacto@udgca1190.com.mx</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section { padding-block: var(--sp-6); }
+  .estudio { max-width: var(--grid-prose, 70ch); display: grid; gap: var(--sp-3); }
+  .estudio h2 { font-size: var(--fs-s1); margin-top: var(--sp-3); }
+
+  .estudio__aviso {
+    background: var(--udg-gray-50, #f7f7f8);
+    border: 1px solid var(--udg-gray-200);
+    border-left: 6px solid var(--udg-navy-900);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-3) var(--sp-4);
+    display: grid;
+    gap: var(--sp-1);
+  }
+
+  .estudio__institucion { color: var(--udg-gray-700); font-size: var(--fs-sm); }
+
+  .estudio__etapas { list-style: none; counter-reset: etapa; padding: 0; display: grid; gap: var(--sp-2); }
+  .estudio__etapas li {
+    counter-increment: etapa;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: var(--sp-2);
+    align-items: baseline;
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-md);
+    padding: var(--sp-2) var(--sp-3);
+  }
+  .estudio__etapas li::before {
+    content: counter(etapa, decimal-leading-zero);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    color: var(--udg-gray-700);
+  }
+  .estudio__etapa--actual { border-color: var(--udg-navy-900); }
+  .estudio__etapa--actual::before { color: var(--udg-navy-900); }
+  .estudio__badge {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #fff;
+    background: var(--udg-navy-900);
+    border-radius: var(--radius-md);
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .estudio__etapas li { grid-template-columns: auto 1fr; }
+    .estudio__badge { grid-column: 2; justify-self: start; }
+  }
+</style>

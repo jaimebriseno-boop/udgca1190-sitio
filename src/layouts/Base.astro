@@ -11,8 +11,8 @@ import Sidebar from '../components/Sidebar.astro';
 import Footer from '../components/Footer.astro';
 import { t, altPaths } from '../i18n.mjs';
 
-interface Props { titulo?: string; descripcion?: string; lang?: 'es' | 'en' }
-const { titulo = 'UDG-CA-1190', descripcion = '', lang = 'es' } = Astro.props;
+interface Props { titulo?: string; descripcion?: string; lang?: 'es' | 'en'; noindex?: boolean }
+const { titulo = 'UDG-CA-1190', descripcion = '', lang = 'es', noindex = false } = Astro.props;
 const tituloPagina = titulo === 'UDG-CA-1190'
   ? 'UDG-CA-1190 · Cuerpo Académico'
   : `${titulo} · UDG-CA-1190`;
@@ -41,6 +41,7 @@ const jsonLd = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{tituloPagina}</title>
     {descripcion && <meta name="description" content={descripcion} />}
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#27334F" />
     <link rel="canonical" href={canonical} />
