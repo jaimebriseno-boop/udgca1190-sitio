@@ -6,7 +6,7 @@
 - id: lactancia
   nombre_corto: "Proyecto Lactancia Jalisco"
   titulo_completo: "Desarrollo y validación interna de un modelo pronóstico al alta hospitalaria para la primera pérdida de alimentación exclusiva con leche humana en Jalisco, México"
-  estado: en_revision
+  estado: validacion
   linea: nutricion-microbioma
   institucion: "Sede coordinadora: Centro Universitario de Ciencias de la Salud (CUCS), Universidad de Guadalajara"
   resumen: >-
@@ -16,9 +16,10 @@
     hospitalaria se relacionan con que eso ocurra, para construir y validar internamente
     un modelo pronóstico con fines de investigación.
   descripcion: >-
-    Cuando cuente con todas las aprobaciones, el estudio invitará a madres residentes en
-    Jalisco con una hija o hijo de 6 a 24 meses que egresó del hospital alimentándose
-    exclusivamente con leche humana. Mediante un cuestionario autogestivo, en línea y
+    El protocolo cuenta con la aprobación del comité de ética en investigación. Una vez
+    completados los requisitos institucionales restantes, el estudio invitará a madres
+    residentes en Jalisco con una hija o hijo de 6 a 24 meses que egresó del hospital
+    alimentándose exclusivamente con leche humana. Mediante un cuestionario autogestivo, en línea y
     presencial, se reconstruirá la alimentación del bebé desde el alta hospitalaria y
     hasta la fecha en que cumplió seis meses. El producto será un modelo pronóstico
     candidato, exclusivamente de investigación: no es una calculadora clínica, no entrega
@@ -30,6 +31,15 @@
     Enfermería en Salud Pública, y de Janvier Andre Martinez Godinez, licenciado en
     Enfermería y estudiante de esa Especialidad, cuyo proyecto de tesis de posgrado da
     origen al estudio. El Cuerpo Académico UDG-CA-1190 aloja esta página informativa.
+  # Aprobación obtenida el 29 de agosto de 2026. El reclutamiento sigue sin iniciar:
+  # participacion_abierta permanece en false hasta completar aviso de privacidad,
+  # validación del consentimiento electrónico y autorizaciones escritas de las sedes.
+  aprobacion_etica:
+    comite: >-
+      Comité de Ética en Investigación en Ciencias de la Salud, División de Salud,
+      Centro Universitario de Tlajomulco, Universidad de Guadalajara
+    folio: "CEICS-CUTLAJO/2026/011"
+    fecha: "2026-08-29"
   fases:
     - "Revisión académica e institucional del protocolo"
     - "Aprobación por los comités de ética e investigación"

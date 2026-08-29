@@ -72,6 +72,13 @@ const estudios = defineCollection({
     descripcion: z.string().optional(),
     equipo: z.string().optional(),
     fases: z.array(z.string()).default([]),
+    // Dictamen del comité de ética, cuando ya se obtuvo. Su presencia NO abre el
+    // reclutamiento: eso sigue dependiendo de participacion_abierta.
+    aprobacion_etica: z.object({
+      comite: z.string(),
+      folio: z.string(),
+      fecha: z.string(),
+    }).optional(),
     // Mientras sea false: sin convocatoria visible y página con noindex.
     participacion_abierta: z.boolean().default(false),
   }),

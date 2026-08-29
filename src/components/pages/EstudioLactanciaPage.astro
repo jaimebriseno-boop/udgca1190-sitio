@@ -19,6 +19,27 @@ const ETAPA_ACTUAL: Record<string, number> = {
   en_revision: 0, validacion: 2, reclutamiento: 3, analisis: 4, difusion: 4, concluido: -1,
 };
 const etapaActual = ETAPA_ACTUAL[entrada.data.estado] ?? 0;
+
+// Fecha del dictamen en formato largo, sin depender de la zona horaria del servidor.
+const MESES_ES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+  'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const MESES_EN = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+function fechaLarga(iso: string, idioma: 'es' | 'en'): string {
+  const [a, m, dia] = iso.split('-').map(Number);
+  if (!a || !m || !dia) return iso;
+  return idioma === 'en'
+    ? `${MESES_EN[m - 1]} ${dia}, ${a}`
+    : `${dia} de ${MESES_ES[m - 1]} de ${a}`;
+}
+const aprobacion = entrada.data.aprobacion_etica;
+// El nombre del comité es un nombre propio institucional: se conserva en español en ambas
+// versiones. Se arma aquí para que la puntuación no dependa del espaciado del JSX.
+const lineaAprobacion = aprobacion
+  ? `${t(lang, 'estudio.aprobacion_texto')} ${aprobacion.comite.trim()} `
+    + `(${t(lang, 'estudio.aprobacion_folio')} ${aprobacion.folio}, `
+    + `${fechaLarga(aprobacion.fecha, lang)}).`
+  : '';
 ---
 <Base
   titulo={d.nombre_corto}
@@ -50,6 +71,14 @@ const etapaActual = ETAPA_ACTUAL[entrada.data.estado] ?? 0;
       <p class="prose">
         <a href={localePath('/integrantes', lang)}>{t(lang, 'estudio.ver_integrantes')}</a>
       </p>
+
+      {aprobacion && (
+        <>
+          <h2>{t(lang, 'estudio.h_aprobacion')}</h2>
+          <p class="prose">{lineaAprobacion}</p>
+          <p class="prose">{t(lang, 'estudio.aprobacion_pendiente')}</p>
+        </>
+      )}
 
       <h2>{t(lang, 'estudio.h_etapas')}</h2>
       <ol class="estudio__etapas">
