@@ -1,0 +1,166 @@
+---
+// Aviso de privacidad del estudio de lactancia (/estudios/lactancia/aviso-de-privacidad).
+//
+// El cuestionario del estudio enlaza aquí desde su pantalla de privacidad, a través de la
+// variable AVISO_PRIVACIDAD_URL. El texto es el aviso institucional de la Universidad de
+// Guadalajara, reproducido ÍNTEGRO y sin cambios: no se resume ni se adapta, porque es un
+// documento legal. Cualquier corrección debe venir del texto institucional, no de esta página.
+//
+// Se sirve con noindex, como la página del estudio, y queda fuera del sitemap por el filtro
+// de /estudios/ en astro.config.
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
+import { localePath } from '../../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+const REQUISITOS = [
+  'De ser posible, el área responsable que trata los datos personales y ante el cual se presenta la solicitud;',
+  'Nombre del solicitante titular de la información y del representante, en su caso;',
+  'Domicilio o cualquier otro medio para recibir notificaciones;',
+  'Los documentos con los que acredite su identidad y, en su caso, la personalidad e identidad de su representante;',
+  'La descripción del derecho ARCO que se pretende ejercer, o bien, lo que solicita el titular;',
+  'Descripción clara y precisa de los datos sobre los que se busca ejercer alguno de los derechos ARCO, salvo que se trate del derecho de acceso;',
+  'La modalidad o el medio de reproducción de la información, en su caso; y',
+  'Cualquier otro elemento o documento que facilite la localización de los datos personales, en su caso.',
+];
+---
+<Base
+  titulo={lang === 'en' ? 'Privacy notice' : 'Aviso de privacidad'}
+  descripcion={lang === 'en'
+    ? 'Privacy notice of the University of Guadalajara applicable to the breastfeeding study.'
+    : 'Aviso de privacidad de la Universidad de Guadalajara aplicable al estudio sobre lactancia.'}
+  lang={lang}
+  noindex={true}
+>
+  <PageHeader
+    variant="navy"
+    eyebrow={lang === 'en' ? 'Breastfeeding study' : 'Estudio sobre lactancia'}
+    title={lang === 'en' ? 'Privacy notice' : 'Aviso de privacidad'}
+    description={lang === 'en'
+      ? 'Issued by the University of Guadalajara. Reproduced in full, in Spanish, as the institution publishes it.'
+      : 'Universidad de Guadalajara'}
+  />
+
+  <section class="section">
+    <div class="container aviso">
+      {lang === 'en' && (
+        <p class="aviso__nota" role="note">
+          This notice is a legal document issued in Spanish by the University of Guadalajara and is
+          reproduced below unchanged. <a href={localePath('/estudios/lactancia', 'en')}>Back to the study page</a>.
+        </p>
+      )}
+
+      <p>
+        La Universidad de Guadalajara (en adelante UdeG), con domicilio en Avenida Juárez 976,
+        colonia Centro, código postal 44100, en Guadalajara, Jalisco, hace de su conocimiento que se
+        considerará información confidencial aquella que se encuentre contemplada en los artículos
+        3, fracciones IX y X de la Ley de Protección de Datos Personales en Posesión de Sujetos
+        Obligados del Estado de Jalisco y sus Municipios (en adelante LPDPPSOEJM); 21 de la Ley de
+        Transparencia y Acceso a la Información Pública del Estado de Jalisco y sus Municipios (en
+        adelante LTAIPEJM); Lineamientos Cuadragésimo Octavo y Cuadragésimo Noveno de los
+        Lineamientos Generales en Materia de Clasificación emitidos por el Instituto de
+        Transparencia, Información Pública y Protección de Datos Personales del Estado de Jalisco
+        (Lineamientos de Clasificación) y Lineamiento Quincuagésimo Octavo de los Lineamientos
+        Generales en Materia de Protección de Información Confidencial y Reservada emitidos por el
+        Instituto de Transparencia, Información Pública y Protección de Datos Personales del Estado
+        de Jalisco (Lineamientos de Protección), la cual se constituye por datos personales de
+        naturaleza identificativa, laboral, sensible, académica, familiar, patrimonial, tránsito y
+        movimientos migratorios, procesos judiciales y administrativos, así como aquellos datos de
+        una persona física identificada o identificable. De igual forma, deberá entenderse por datos
+        sensibles los que afecten la intimidad y que puedan dar origen a discriminación, o que su
+        difusión o entrega a terceros conlleven un riesgo para el titular de los mismos.
+      </p>
+
+      <p>
+        Asimismo, se considera información confidencial aquella que atañe a las personas jurídicas
+        en lo concerniente a su estado económico, comercial, financiero, cuentas bancarias,
+        información fiscal y contable o cualquier otro relativo a su identidad o que les sea
+        inherente, que de revelarse menoscabe su libre desarrollo conforme a los Lineamientos Décimo
+        Sexto y Décimo Séptimo de los Lineamientos de Protección.
+      </p>
+
+      <p>
+        Dichos datos podrán ser sometidos a tratamiento y serán única y exclusivamente utilizados
+        para los fines que fueron proporcionados, de acuerdo con las finalidades y atribuciones
+        establecidas en los artículos 1, 5 y 6 de la Ley Orgánica, así como 2 y 3 del Estatuto
+        General, ambas legislaciones de la UdeG, de igual forma, para la prestación de los servicios
+        que la misma ofrece conforme a las facultades y prerrogativas de la entidad universitaria
+        correspondiente y estarán a resguardo y protección de la misma.
+      </p>
+
+      <p>
+        Por otra parte, se le hace saber que en los casos, condiciones y finalidades previstas por
+        los artículos 15, fracción X y 75 de la LPDPPSOEJM, así como 22 de la LTAIPEJM, sus datos
+        personales pueden ser transferidos o proporcionados a terceros sin autorización del titular
+        de la información confidencial, sin embargo, en armonía con los artículos 45 de la
+        LPDPPSOEJM y 23, fracción II de la LTAIPEJM, el titular de la información confidencial
+        tendrá derecho a conocer la utilización, procesos, modificaciones y transmisiones de que sea
+        objeto su información confidencial.
+      </p>
+
+      <p>
+        Asimismo, podrá solicitar el acceso, rectificación cancelación u oposición de sus datos
+        personales en posesión de la UdeG, a través del procedimiento para el ejercicio de los
+        derechos ARCO, regulado en los artículos 45 a 59 de la LPDPPSOEJM, el cual consiste en lo
+        siguiente:
+      </p>
+
+      <ol class="aviso__pasos">
+        <li>
+          El titular de los datos presenta una solicitud para el ejercicio de los derechos ARCO
+          referente a los derechos de acceso, rectificación, cancelación u oposición de datos
+          personales ante la Coordinación de Transparencia y Archivo General de la UdeG (en adelante
+          CTAG), ubicada en Pedro Moreno 834, col. Centro, C.P. 44100, Guadalajara, Jalisco, México.
+        </li>
+        <li>
+          La solicitud para el ejercicio de los derechos ARCO deberá presentarse por escrito y con
+          acuse o de manera electrónica y contener:
+          <ul>
+            {REQUISITOS.map((r) => <li>{r}</li>)}
+          </ul>
+        </li>
+        <li>
+          En caso de no cumplir con alguno de los requisitos anteriores, deberá prevenirse al titular
+          de los datos dentro de los tres días hábiles siguientes a su presentación para que el plazo
+          de cinco días hábiles subsane dicha prevención y pueda ser admitida la solicitud.
+        </li>
+        <li>
+          En caso de ser procedente, se admitirá la solicitud para el ejercicio de los derechos ARCO
+          dentro de los tres días hábiles siguientes a su presentación. El personal de la CTAG en
+          todo momento deberá apoyar al titular en el trámite de su solicitud.
+        </li>
+        <li>
+          Una vez integrado el expediente, la solicitud será resuelta por el Comité de Transparencia
+          de la UdeG dentro de los diez días hábiles siguientes a la admisión de la misma de
+          conformidad con la legislación aplicable, en caso de que se requiera, el Comité de
+          Transparencia podrá ampliar el tiempo para resolver mediante acuerdo fundado y motivado
+          hasta por cinco días más.
+        </li>
+      </ol>
+
+      {lang === 'es' && (
+        <p class="aviso__volver">
+          <a href={localePath('/estudios/lactancia', 'es')}>Volver a la página del estudio</a>
+        </p>
+      )}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .aviso { max-width: 72ch; }
+  .aviso p { margin: 0 0 1.15em; text-align: justify; }
+  .aviso__nota {
+    border-left: 3px solid var(--color-accent, #234b41);
+    padding: 0.6em 1em;
+    background: var(--color-surface, #f6f7f4);
+    font-size: 0.95em;
+  }
+  .aviso__pasos { padding-left: 1.4em; }
+  .aviso__pasos > li { margin-bottom: 1em; }
+  .aviso__pasos ul { margin: 0.6em 0 0; padding-left: 1.2em; }
+  .aviso__pasos ul li { margin-bottom: 0.35em; }
+  .aviso__volver { margin-top: 2em; }
+</style>
