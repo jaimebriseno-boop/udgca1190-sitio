@@ -183,7 +183,28 @@ function updateLegend() {
 // render(): the single entry that re-draws everything from STATE
 // ---------------------------------------------------------------------------
 
+// Collapse rapid slider events and never overlap asynchronous Plotly renders.
+let scheduled = false;
+let rendering = false;
+let dirty = false;
 export function render() {
+  dirty = true;
+  if (scheduled || rendering) return;
+  scheduled = true;
+  requestAnimationFrame(async () => {
+    scheduled = false;
+    dirty = false;
+    rendering = true;
+    try { await draw(); }
+    catch (error) { console.error('Render failed', error); }
+    finally {
+      rendering = false;
+      if (dirty) render();
+    }
+  });
+}
+
+async function draw() {
   const meta = getMeta() || {};
   const originYM = currentOriginYM();
   const forward = isForwardOrigin(originYM);
@@ -243,13 +264,13 @@ export function render() {
         panelTitle: (STATE.lang === 'en' ? (s.nombre_en || s.nombre) : (s.nombre || s.nombre_en)),
       });
     }
-    renderGrid('grid', panels);
+    await renderGrid('grid', panels);
   } else {
     if (gridDiv) gridDiv.style.display = 'none';
     if (chartDiv) chartDiv.style.display = '';
 
     const sel = STATE.selected;
-    renderMain('chart', {
+    await renderMain('chart', {
       meta,
       sel,
       originYM,

@@ -1,6 +1,8 @@
 ---
 import { t, getSitioL, localePath } from '../i18n.mjs';
 import LangSwitcher from './LangSwitcher.astro';
+import { Image } from 'astro:assets';
+import logo from '../assets/logos/UDG-CA-1190_logo_vertical_reverse.png';
 interface Props { lang?: 'es' | 'en' }
 const { lang = 'es' } = Astro.props;
 const sitio = getSitioL(lang);
@@ -27,7 +29,9 @@ const isActive = (href: string) => {
 <aside id="sidebar">
   <div class="sidebar__inner">
     <a class="sidebar__logo" href={localePath('/', lang)} aria-label={t(lang, 'aria.home')}>
-      <img src="/logos/UDG-CA-1190_logo_vertical_reverse.png" alt="Cuerpo Académico UDG-CA-1190" width="250" height="399" />
+      <Image src={logo} widths={[252, 504, 756]} sizes="252px"
+        format="webp" width={252}
+        alt="Cuerpo Académico UDG-CA-1190" loading="eager" decoding="async" />
     </a>
     <p class="sidebar__tag">{sitio.adscripcion}</p>
 

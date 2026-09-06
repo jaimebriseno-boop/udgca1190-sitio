@@ -1,0 +1,1102 @@
+{
+  "note": "Uncompressed artifact bytes and deterministic gzip estimates; not LCP/INP or production network timings.",
+  "html_pages": 59,
+  "missing_resources": [],
+  "external_resources": [],
+  "baseline_dist_bytes": 14738656,
+  "dist_bytes": 14393399,
+  "hero_deferred_images": {
+    "index.html": 3,
+    "en/index.html": 3
+  },
+  "sidebar_logo_webp_bytes": {
+    "_astro/UDG-CA-1190_logo_vertical_reverse.fOJEqu5l_15kwn4.webp": 100634,
+    "_astro/UDG-CA-1190_logo_vertical_reverse.fOJEqu5l_2oV3yt.webp": 63160,
+    "_astro/UDG-CA-1190_logo_vertical_reverse.fOJEqu5l_ZF2lnE.webp": 27268
+  },
+  "data_identical_to_baseline": {
+    "herramientas/dengue-forecast/app/data/forecasts.json": true,
+    "herramientas/dengue-forecast/app/data/cases.json": true,
+    "herramientas/dengue-forecast/app/data/meta.json": true,
+    "herramientas/propedeutica-basada-en-evidencia/app/data/signos.json": true
+  },
+  "virology_bytes_before": 2605090,
+  "virology_bytes_after": 2150699,
+  "files": {
+    "_astro/Footer.CGsUVTNy.css": {
+      "bytes": 16894,
+      "gzip_bytes": 4045,
+      "sha256": "3d7af250808c63cb8044afd5242555a480f752afa1ed7f5baf882c8be56b4eec"
+    },
+    "_astro/HomePage.BH4Ma-Fu.css": {
+      "bytes": 7110,
+      "gzip_bytes": 1992,
+      "sha256": "e192b28ff2baaaf2655df1dd35f8eb76c915a64fcbb2efd1193af9544587f54b"
+    },
+    "_astro/UDG-CA-1190_logo_horizontal_reverse.M4JHcOeG_1Tq02K.webp": {
+      "bytes": 46716,
+      "gzip_bytes": 46659,
+      "sha256": "c94f19962c0c16151418845ac4d884a03e698dc34233a49adb8d874842fdce95"
+    },
+    "_astro/UDG-CA-1190_logo_horizontal_reverse.M4JHcOeG_248Van.png": {
+      "bytes": 276563,
+      "gzip_bytes": 269579,
+      "sha256": "a39960a8a973b4a376157accd13a989ab11d51e610ec97f1ea21630d19672671"
+    },
+    "_astro/UDG-CA-1190_logo_horizontal_reverse.M4JHcOeG_2oUsix.webp": {
+      "bytes": 105548,
+      "gzip_bytes": 105091,
+      "sha256": "831191da19b3a8ecf5db633427ffd0187f12e300f2cf1bcef9ba32d44188c4f0"
+    },
+    "_astro/UDG-CA-1190_logo_horizontal_reverse.M4JHcOeG_Z1iG4hD.png": {
+      "bytes": 109550,
+      "gzip_bytes": 109116,
+      "sha256": "4fa2f259bebcfc9b1c6a27a0b413e60eed50b99c9471aa88d106efbe77cc623a"
+    },
+    "_astro/UDG-CA-1190_logo_horizontal_reverse.M4JHcOeG_ZCRYuT.png": {
+      "bytes": 287463,
+      "gzip_bytes": 284288,
+      "sha256": "857bcf20bf50360f8e3073318081aa552bbd1e57706bd47827cbce101487c168"
+    },
+    "_astro/UDG-CA-1190_logo_horizontal_reverse.M4JHcOeG_ZEd698.avif": {
+      "bytes": 30111,
+      "gzip_bytes": 30063,
+      "sha256": "cdff994dec930fffbf21e5a5f8874bf352067de06a53af9870e5b84318e8b607"
+    },
+    "_astro/UDG-CA-1190_logo_horizontal_reverse.M4JHcOeG_ZTWvrS.avif": {
+      "bytes": 57172,
+      "gzip_bytes": 57136,
+      "sha256": "d1ab45ec16472758c3c29cec500b357342e727e0de490a4f9e2e242dab2b5131"
+    },
+    "_astro/UDG-CA-1190_logo_vertical_reverse.fOJEqu5l_15kwn4.webp": {
+      "bytes": 100634,
+      "gzip_bytes": 100108,
+      "sha256": "a17fef4bb8439171f103863945b32123ad0e8ff6eab55b7f639e347ca5035d1a"
+    },
+    "_astro/UDG-CA-1190_logo_vertical_reverse.fOJEqu5l_2oV3yt.webp": {
+      "bytes": 63160,
+      "gzip_bytes": 63012,
+      "sha256": "b3a5508ad67123a5289e78c45b943490819577b288062e999e86d99f6d8c3afc"
+    },
+    "_astro/UDG-CA-1190_logo_vertical_reverse.fOJEqu5l_ZF2lnE.webp": {
+      "bytes": 27268,
+      "gzip_bytes": 27280,
+      "sha256": "a258430e65dcd704fd7c7d8567de0b88be78946fa8e4a1ceacfa7ba1a25b072d"
+    },
+    "_astro/damian-negrete.DXxFzk3z_1A5O83.jpg": {
+      "bytes": 4565,
+      "gzip_bytes": 4552,
+      "sha256": "9c31e639ac6e43fa9178f76abbb46ec8ce3497d61e1d23f2b0130dd9c5a933ce"
+    },
+    "_astro/damian-negrete.DXxFzk3z_1k8oPj.jpg": {
+      "bytes": 13120,
+      "gzip_bytes": 13118,
+      "sha256": "e6dd7e492b06bd471a01f6cf7693bc1d5c1f59fa253413fabfa0f35b80e7721f"
+    },
+    "_astro/damian-negrete.DXxFzk3z_HzkFY.jpg": {
+      "bytes": 52938,
+      "gzip_bytes": 52918,
+      "sha256": "ce9fcec84531f4e1d9686657bf99d0c3cb81fa9b6fac227e164c28018ec69db0"
+    },
+    "_astro/damian-negrete.DXxFzk3z_X2MBo.avif": {
+      "bytes": 4623,
+      "gzip_bytes": 4618,
+      "sha256": "6f1a79524f7fc5fcbdb4117c7798bfc93d471262d55ae87a05eb107690a393ec"
+    },
+    "_astro/damian-negrete.DXxFzk3z_Z13cvBj.jpg": {
+      "bytes": 7940,
+      "gzip_bytes": 7936,
+      "sha256": "d9846fc86d45ae3a39db87eec707d76e575f9268aeeaeedb8372e7594c6a996c"
+    },
+    "_astro/damian-negrete.DXxFzk3z_Z1INpJU.avif": {
+      "bytes": 6928,
+      "gzip_bytes": 6923,
+      "sha256": "237faddd4e9c135ec2f39a07f73ef2d58e03c462fff8f26bf9477e008887995f"
+    },
+    "_astro/damian-negrete.DXxFzk3z_Z1sQ0sb.avif": {
+      "bytes": 2867,
+      "gzip_bytes": 2860,
+      "sha256": "42a3a0fd5f9cc925e9a8d577c26fa910556a490a5972d0b81e164c6dd09a2196"
+    },
+    "_astro/damian-negrete.DXxFzk3z_Z2reOtl.jpg": {
+      "bytes": 21321,
+      "gzip_bytes": 21309,
+      "sha256": "f2c60c8072b453c4bd5d7aa4e7cdd72d0296ba82c082cecda188ca4914538f18"
+    },
+    "_astro/damian-negrete.DXxFzk3z_ZpYvfD.avif": {
+      "bytes": 9842,
+      "gzip_bytes": 9831,
+      "sha256": "7cda6550790c83291ba3ece5d72049b7277b3015bd1e59a9199f47fd76f4f842"
+    },
+    "_astro/de-arcos-jimenez.D4tggAe7_11w2nX.jpg": {
+      "bytes": 41878,
+      "gzip_bytes": 41879,
+      "sha256": "c902dde21e1670d2947854688d2f06333b6dbb7200b6641bd3d466ab722b8cf6"
+    },
+    "_astro/de-arcos-jimenez.D4tggAe7_1iQDgl.avif": {
+      "bytes": 3784,
+      "gzip_bytes": 3780,
+      "sha256": "2dc63ad6fb6a76024cce819b241c3d69f65f224e61da16ffd0adfd4ebd037bf6"
+    },
+    "_astro/de-arcos-jimenez.D4tggAe7_29D03R.jpg": {
+      "bytes": 9298,
+      "gzip_bytes": 9288,
+      "sha256": "77b01cb1c0bb74133a98136853f3b58ec2f860341a40357c00260350bde2ba7d"
+    },
+    "_astro/de-arcos-jimenez.D4tggAe7_M7dsE.jpg": {
+      "bytes": 15588,
+      "gzip_bytes": 15570,
+      "sha256": "fddd114ab876df24a0543c6bdf090d3bedc83b226f32f76f678b8027e1f6ef8a"
+    },
+    "_astro/de-arcos-jimenez.D4tggAe7_Z1fWHKF.jpg": {
+      "bytes": 5673,
+      "gzip_bytes": 5672,
+      "sha256": "2037e36bcf34696dfd17dceef47216c7f27971088013fd1111ffbc36f6d94944"
+    },
+    "_astro/de-arcos-jimenez.D4tggAe7_Z26J4yc.avif": {
+      "bytes": 2605,
+      "gzip_bytes": 2598,
+      "sha256": "e4e29f15f8ed93e76d8d156c070f0147d24c494505def407035eb02a14074509"
+    },
+    "_astro/de-arcos-jimenez.D4tggAe7_Z3E8jR.avif": {
+      "bytes": 5318,
+      "gzip_bytes": 5317,
+      "sha256": "b2e5474becc1fabebbd565b04fc194481b9bc41a9fa1b7c76be53c4fbbf040c3"
+    },
+    "_astro/de-arcos-jimenez.D4tggAe7_ZBAbbi.avif": {
+      "bytes": 1875,
+      "gzip_bytes": 1867,
+      "sha256": "b1be396442b6f0ed147f08b2e1a050ff07e1d7fc66e4f6e33575afe3dc5e7541"
+    },
+    "_astro/de-arcos-jimenez.D4tggAe7_ebaBe.jpg": {
+      "bytes": 3350,
+      "gzip_bytes": 3338,
+      "sha256": "db2f9b253d1682477db8f5f1c8aa070059903bf6ce8eaedadf894381e812e28d"
+    },
+    "_astro/dengue-series.CVdPikMO_28Nn3m.avif": {
+      "bytes": 145402,
+      "gzip_bytes": 145434,
+      "sha256": "6be97c4f30dcc1e0e68acfab80f43bc18896cef4ea3cdcf1461120a3958f41fc"
+    },
+    "_astro/dengue-series.CVdPikMO_CbUdw.jpg": {
+      "bytes": 273143,
+      "gzip_bytes": 242847,
+      "sha256": "b001019db16de6efff5d7ed1b05c1695b781f9562ff2eb1a9c6cbd9dc048a3bb"
+    },
+    "_astro/dengue-series.CVdPikMO_Z147Mh6.jpg": {
+      "bytes": 159472,
+      "gzip_bytes": 146612,
+      "sha256": "a5dbf308e78d6310d1c933e5bb3cf219b66c6a7c3225e3af1105143609b226c7"
+    },
+    "_astro/dengue-series.CVdPikMO_Z1FEh4a.avif": {
+      "bytes": 51063,
+      "gzip_bytes": 51060,
+      "sha256": "a0464efc1c79048d51cfcb20669ee38899eddbd5f009ba36b5a61fb41aadf738"
+    },
+    "_astro/dengue-series.CVdPikMO_Z1KVyqV.jpg": {
+      "bytes": 331723,
+      "gzip_bytes": 292394,
+      "sha256": "484de5d9f09c0e6435554ab4f15f914e5867bacd386ef4f4a815fc67e3c1490c"
+    },
+    "_astro/dengue-series.CVdPikMO_Z1rxMy3.jpg": {
+      "bytes": 70923,
+      "gzip_bytes": 66225,
+      "sha256": "617140e4008084ec323b362e09546566f405a48d596daa3c459d57e46bf3bd74"
+    },
+    "_astro/dengue-series.CVdPikMO_Zfk6B6.avif": {
+      "bytes": 166771,
+      "gzip_bytes": 166818,
+      "sha256": "ff416fd44d5823dffaf553179b98de4bd29bede2482f01235f5d9f71498184cc"
+    },
+    "_astro/dengue-series.CVdPikMO_rtExJ.avif": {
+      "bytes": 98846,
+      "gzip_bytes": 98864,
+      "sha256": "9c3533f87b883c9066f7671a6c9484e66b7a0644e253ae0de3db5b389d02ddc5"
+    },
+    "_astro/endocarditis.D-KCV2z__10VExn.avif": {
+      "bytes": 125644,
+      "gzip_bytes": 125666,
+      "sha256": "19097153db3af6acec207d1fa56ae2e7005681363e62a4d54907f7caa2ac9365"
+    },
+    "_astro/endocarditis.D-KCV2z__1XmH7J.jpg": {
+      "bytes": 54299,
+      "gzip_bytes": 50316,
+      "sha256": "1ac8c3c773bd0e8f77837625f4268957aaea6045eb1c55e5e360255df460b922"
+    },
+    "_astro/endocarditis.D-KCV2z__1jBD60.avif": {
+      "bytes": 63310,
+      "gzip_bytes": 63322,
+      "sha256": "37d3e06d0e15644b39ace953cbaa29712cb19eb25c1bd101a625169c7c84c6b8"
+    },
+    "_astro/endocarditis.D-KCV2z__Z1FtDIj.jpg": {
+      "bytes": 120008,
+      "gzip_bytes": 103578,
+      "sha256": "304d7addb6088e19e02ca6a4c8d06444fb81b48ce43e2422b3ee5709fce3d62e"
+    },
+    "_astro/endocarditis.D-KCV2z__Z1Y9CgV.jpg": {
+      "bytes": 249284,
+      "gzip_bytes": 197728,
+      "sha256": "177764168b5c1f4761524c171e38900d992a0a27b0c63ce38c45c344024af5af"
+    },
+    "_astro/endocarditis.D-KCV2z__Z1jcS1R.avif": {
+      "bytes": 34482,
+      "gzip_bytes": 34468,
+      "sha256": "9b430c7648dfc953f8a2114c90c3321cb78260e8339e740531a2d8059903e73c"
+    },
+    "_astro/endocarditis.D-KCV2z__Z1uO2WE.avif": {
+      "bytes": 109757,
+      "gzip_bytes": 109780,
+      "sha256": "34f8a3a5b608f8caf939a44e7bb8e3095911664ea2124ca9bbb399b3fb2a1c4a"
+    },
+    "_astro/endocarditis.D-KCV2z__zgN1X.jpg": {
+      "bytes": 209444,
+      "gzip_bytes": 170975,
+      "sha256": "e33b471adebd9eed5b3c4cb6ddef9efff388e89932f3adaefc2fc9148cb553a7"
+    },
+    "_astro/estilo.Bma0b5Oq.css": {
+      "bytes": 7852,
+      "gzip_bytes": 1529,
+      "sha256": "491c9c1f62677e69f2bfcac9abe6526564085882849d9326ed66410aca0b1bbe"
+    },
+    "_astro/fernandez-diaz.BoXqBcsu_1TghN9.jpg": {
+      "bytes": 12701,
+      "gzip_bytes": 12237,
+      "sha256": "2f33712b9a9b6041394c1680c0241b20485877b32990ea53d68afcaf8f674aee"
+    },
+    "_astro/fernandez-diaz.BoXqBcsu_ArniR.jpg": {
+      "bytes": 7245,
+      "gzip_bytes": 7108,
+      "sha256": "ba7ccb9f2137c4cb933e21a37e9c2dcf3163152911a1644fd0dd9f56ed4f2053"
+    },
+    "_astro/fernandez-diaz.BoXqBcsu_QoMAB.jpg": {
+      "bytes": 2690,
+      "gzip_bytes": 2652,
+      "sha256": "3e084b2969791504f96f2e532744cfe45a75f79baf4c925a52068fe101917750"
+    },
+    "_astro/fernandez-diaz.BoXqBcsu_Z16FPs.jpg": {
+      "bytes": 39216,
+      "gzip_bytes": 37658,
+      "sha256": "3803fb56340a3b143ee1faa10840e8daebc7c0465007d9aea6d4536c9c62e765"
+    },
+    "_astro/fernandez-diaz.BoXqBcsu_Z19FwM5.avif": {
+      "bytes": 4095,
+      "gzip_bytes": 4092,
+      "sha256": "6dd14121a4b60d6a39da022910bb0eba4f3426a0fa4fcfa26c082815bca0e22b"
+    },
+    "_astro/fernandez-diaz.BoXqBcsu_Z1LSx8K.jpg": {
+      "bytes": 4349,
+      "gzip_bytes": 4301,
+      "sha256": "206f2ec4f4eaeb60e927ca90ea387a03deef71c8c9efbf67925bdc1456dabdc5"
+    },
+    "_astro/fernandez-diaz.BoXqBcsu_Z2cx1YC.avif": {
+      "bytes": 1352,
+      "gzip_bytes": 1340,
+      "sha256": "7843ee077acbfc8664bd2a98473f4899173c88daf21beb599365721244851dac"
+    },
+    "_astro/fernandez-diaz.BoXqBcsu_Z2surhm.avif": {
+      "bytes": 2850,
+      "gzip_bytes": 2840,
+      "sha256": "0b6ce30eb8ab00ac730e642f7432116a9a65a3d5bf4c98a451ece6a0648d8986"
+    },
+    "_astro/fernandez-diaz.BoXqBcsu_elL4W.avif": {
+      "bytes": 1909,
+      "gzip_bytes": 1903,
+      "sha256": "50daebdd4514dac397388bb2f1d55509ba2f29ada9cad27f6b402c43e8cc5b74"
+    },
+    "_astro/genomica.w-_jJP49_1C6nqW.jpg": {
+      "bytes": 52084,
+      "gzip_bytes": 50658,
+      "sha256": "50482a907d8f488eecd50ba94e878b72af99a08c0ff915b55b08e4b48bef390d"
+    },
+    "_astro/genomica.w-_jJP49_2wOvP2.jpg": {
+      "bytes": 179629,
+      "gzip_bytes": 167515,
+      "sha256": "3e9ec128be83f6e1a5e4ad33a8eff7840700f1cd41fe9f6857cfd7558aa8e90d"
+    },
+    "_astro/genomica.w-_jJP49_Z1Fj9Ve.avif": {
+      "bytes": 43517,
+      "gzip_bytes": 43522,
+      "sha256": "6f6d364c1890ea3066fef02a0816d0fa7cbb84137b30de88f992e0187750b98e"
+    },
+    "_astro/genomica.w-_jJP49_Z2578OI.avif": {
+      "bytes": 117510,
+      "gzip_bytes": 117538,
+      "sha256": "6b07916e2bf4130dbf0f49fb735f5c75bee4042b6059a567b9c608024b0c83b2"
+    },
+    "_astro/genomica.w-_jJP49_Z25Rtrv.jpg": {
+      "bytes": 211416,
+      "gzip_bytes": 194366,
+      "sha256": "39ee3607fd5a10ba0e3ae5724e64d226384b886950ebab0f2b34c5ebdfe876f6"
+    },
+    "_astro/genomica.w-_jJP49_Z2wBhm7.avif": {
+      "bytes": 103207,
+      "gzip_bytes": 103229,
+      "sha256": "921918440908ec7be2f1a0c23a0384c406f1dd6772e756b78c64067b74edf709"
+    },
+    "_astro/genomica.w-_jJP49_Za0vMr.avif": {
+      "bytes": 75535,
+      "gzip_bytes": 75547,
+      "sha256": "fa1a5b9739345558212c9e3d29803bb7f05e0f58c1b3c098f8ded136a1d1ffc1"
+    },
+    "_astro/genomica.w-_jJP49_tYxBs.jpg": {
+      "bytes": 107916,
+      "gzip_bytes": 102512,
+      "sha256": "dc8530b766c56afa940d2d95033c8afe1b381bd1199e4fd60695a6f0fc2b87d8"
+    },
+    "_astro/jaime-briseno.ZUi768G0_1RvfiB.avif": {
+      "bytes": 4680,
+      "gzip_bytes": 4679,
+      "sha256": "f2abaa9627a15e20cbb5f3e60fbbe3369d1782f2bedea5e3a6300c8cf55d93e8"
+    },
+    "_astro/jaime-briseno.ZUi768G0_1SBQre.avif": {
+      "bytes": 3203,
+      "gzip_bytes": 3200,
+      "sha256": "8258bb2aa16aa78150d366a4128e389a5e5d589a7bf8057f8212322326d5919f"
+    },
+    "_astro/jaime-briseno.ZUi768G0_1bFHkm.jpg": {
+      "bytes": 5047,
+      "gzip_bytes": 5017,
+      "sha256": "46c77b12c1b3b44deee9f54c2ec592da555e5e66815fd20e730e6fd6c0560280"
+    },
+    "_astro/jaime-briseno.ZUi768G0_Z1mr1U8.avif": {
+      "bytes": 2116,
+      "gzip_bytes": 2110,
+      "sha256": "e9a3df08925b4b282aeaf92320f44e6d0fe8c09fc62497a2b29c0be5dbb569cd"
+    },
+    "_astro/jaime-briseno.ZUi768G0_Z268CAx.avif": {
+      "bytes": 1540,
+      "gzip_bytes": 1529,
+      "sha256": "fd358d1d90c07474ecd87a0a05a47ff45c7f9e16256c48196b97aa4821ac1db9"
+    },
+    "_astro/jaime-briseno.ZUi768G0_Z9UT7I.jpg": {
+      "bytes": 61109,
+      "gzip_bytes": 60003,
+      "sha256": "f55a045a4a97d7810b85961d0ad9631bb80c99c05fe124e8891b2abdc7494400"
+    },
+    "_astro/jaime-briseno.ZUi768G0_ZCrx7d.jpg": {
+      "bytes": 8320,
+      "gzip_bytes": 8299,
+      "sha256": "9e7d4361b8b9bb536df538ee62a1358a80d9545c068e45a6802f5e692713fafd"
+    },
+    "_astro/jaime-briseno.ZUi768G0_ZDy9fP.jpg": {
+      "bytes": 13925,
+      "gzip_bytes": 13823,
+      "sha256": "4d8c017520de4317cb8fdf35cb806888c38d3e704f57baa30aca73b60f505472"
+    },
+    "_astro/jaime-briseno.ZUi768G0_rY6DW.jpg": {
+      "bytes": 3132,
+      "gzip_bytes": 3122,
+      "sha256": "c7b26fcb87124bb7a40c83a1cd7ea6ede24e41ca6e85e9c053a16b39b6356e9e"
+    },
+    "_astro/mapas-mexico.DLTPQlkY_2uYgz9.avif": {
+      "bytes": 174282,
+      "gzip_bytes": 174325,
+      "sha256": "57d9a0620197e792775fce0f1fecd503f8afd711e80b74c0f9c00ac2ca546619"
+    },
+    "_astro/mapas-mexico.DLTPQlkY_Z12e72V.avif": {
+      "bytes": 84933,
+      "gzip_bytes": 84954,
+      "sha256": "387260e2f5ad5d7f2a292eba2701188d86688b593c87a0ac4f972fa13617038f"
+    },
+    "_astro/mapas-mexico.DLTPQlkY_Z1HEgIf.avif": {
+      "bytes": 143124,
+      "gzip_bytes": 143160,
+      "sha256": "46e0401b6ef8f0ec9db1eeb74c42165bf98e3f634d7c82e315b57e9ad31f1eed"
+    },
+    "_astro/mapas-mexico.DLTPQlkY_Z2oPtIm.jpg": {
+      "bytes": 40626,
+      "gzip_bytes": 38578,
+      "sha256": "401d6dbe028ed600fa010a594eb597d53d092860c6cbcd11e9ac590d2dfefa5b"
+    },
+    "_astro/mapas-mexico.DLTPQlkY_ZBdV42.avif": {
+      "bytes": 40250,
+      "gzip_bytes": 40249,
+      "sha256": "b2024761be00a70eb8c366c546e507f520dcea5f6f6194760ed1463499d9a116"
+    },
+    "_astro/mapas-mexico.DLTPQlkY_ZN7CwO.jpg": {
+      "bytes": 95082,
+      "gzip_bytes": 88034,
+      "sha256": "0f2e7ec93b75b8e13e231bb48b9a2e7d868e54e2a4aeb6b3b3e5b84847e8a9dd"
+    },
+    "_astro/mapas-mexico.DLTPQlkY_Zu71fa.jpg": {
+      "bytes": 222612,
+      "gzip_bytes": 202403,
+      "sha256": "f96097cd84d3a3127873fd09cfb6f3d6537a68e203e32d3a501cc40a4a05b756"
+    },
+    "_astro/mapas-mexico.DLTPQlkY_mqzgn.jpg": {
+      "bytes": 178621,
+      "gzip_bytes": 163830,
+      "sha256": "25751c11745c2a4caeedbb447dc0dbf2421a1aae1ec473be624ca92703c171c4"
+    },
+    "_astro/rodriguez-montano.DovuUTuB_1Cdtfi.jpg": {
+      "bytes": 45279,
+      "gzip_bytes": 45274,
+      "sha256": "a2af0a84b460dc1e8e98e4305a4dfc339cdef26182948427df38e883f44a196a"
+    },
+    "_astro/rodriguez-montano.DovuUTuB_1nf8kj.jpg": {
+      "bytes": 2798,
+      "gzip_bytes": 2783,
+      "sha256": "cef01fa552bbca7de01e506b66aa0b5982c5eb53cf4ca74f52e226f621d70e33"
+    },
+    "_astro/rodriguez-montano.DovuUTuB_29jBK4.avif": {
+      "bytes": 3195,
+      "gzip_bytes": 3189,
+      "sha256": "9206a1a9c17d1d9030f58f9417ac0bdd3d7ac6c4df88394eb8d3707874d78b4d"
+    },
+    "_astro/rodriguez-montano.DovuUTuB_Syxmn.jpg": {
+      "bytes": 4717,
+      "gzip_bytes": 4703,
+      "sha256": "6f159dec21f79b38574f6918fc1d08c6bae27189b61e1745de8ac507c4054a5a"
+    },
+    "_astro/rodriguez-montano.DovuUTuB_Z22Nauh.jpg": {
+      "bytes": 8113,
+      "gzip_bytes": 8083,
+      "sha256": "3bf81c2ed33851d3c2b361d147efb8b1db3c86d6f48316568bff0e3c81cf7139"
+    },
+    "_astro/rodriguez-montano.DovuUTuB_Zu0ls0.avif": {
+      "bytes": 5122,
+      "gzip_bytes": 5116,
+      "sha256": "a7162d62bc020ae5ff777e0ac54cab1b5b99e6e46142283e583da5ee79d584de"
+    },
+    "_astro/rodriguez-montano.DovuUTuB_o406A.jpg": {
+      "bytes": 14545,
+      "gzip_bytes": 14528,
+      "sha256": "581b9963bcd3af1c42a77c483cff6198f17f6511060ec57c749ef54dad0a2bad"
+    },
+    "_astro/rodriguez-montano.DovuUTuB_uaLKI.avif": {
+      "bytes": 1393,
+      "gzip_bytes": 1382,
+      "sha256": "ab4663260075378f6d216cb9f2f95a1146493ffecba4c0a36cab10275be1b917"
+    },
+    "_astro/rodriguez-montano.DovuUTuB_ubMM.avif": {
+      "bytes": 2045,
+      "gzip_bytes": 2038,
+      "sha256": "13e5f1262790ee4a0de49e46776ad1222802824b8b13cf45e24b855ed170aaba"
+    },
+    "_astro/rosales-chavez.lMmnhXhr_1UtQom.avif": {
+      "bytes": 3270,
+      "gzip_bytes": 3266,
+      "sha256": "3813e1abce6e314e9c0c57e6db319b0c96c9b659d44983f71eb98b69736a05e7"
+    },
+    "_astro/rosales-chavez.lMmnhXhr_1igQ2G.jpg": {
+      "bytes": 4083,
+      "gzip_bytes": 4077,
+      "sha256": "183b6359f5babf1f58798fc435aac9339a4ce30fb93facc49d2f5bb2b135b6c6"
+    },
+    "_astro/rosales-chavez.lMmnhXhr_BEVT5.avif": {
+      "bytes": 2317,
+      "gzip_bytes": 2311,
+      "sha256": "cbc0f43b79cdee228821d6ab43f3d7f354804998805e0a4bbcd41f9055dd74f9"
+    },
+    "_astro/rosales-chavez.lMmnhXhr_RCmbO.avif": {
+      "bytes": 1149,
+      "gzip_bytes": 1125,
+      "sha256": "6e80901ded76633524cfc3f0910c99f6ca1772f2f81fcef9eec882a27fe408b0"
+    },
+    "_astro/rosales-chavez.lMmnhXhr_Z18BW1S.jpg": {
+      "bytes": 2484,
+      "gzip_bytes": 2471,
+      "sha256": "b6e9076a24bdb9d2d62e874424739ed1a263600600621cd7397f6ec322128cda"
+    },
+    "_astro/rosales-chavez.lMmnhXhr_Z1KEXxx.avif": {
+      "bytes": 1646,
+      "gzip_bytes": 1639,
+      "sha256": "6db34a266f3e82ac3e41365c4c30b155fb05a5de4c4eec0be0e6b6e4f2e20281"
+    },
+    "_astro/rosales-chavez.lMmnhXhr_Z1ozmjC.jpg": {
+      "bytes": 6569,
+      "gzip_bytes": 6552,
+      "sha256": "1bd217d77c809562acc886c994508f7c260d6e506386c3ed23bef9af2bb8a842"
+    },
+    "_astro/rosales-chavez.lMmnhXhr_Z218qsW.jpg": {
+      "bytes": 32595,
+      "gzip_bytes": 32548,
+      "sha256": "1163ebf098307c24841ebf155f406c2c5e134e631c28b3f6cb377213a2a0aa26"
+    },
+    "_astro/rosales-chavez.lMmnhXhr_Z5KrOl.jpg": {
+      "bytes": 10948,
+      "gzip_bytes": 10935,
+      "sha256": "52eaf4e77132aec9a553a634570c7d1493536f5b63f2e584bd549384939c1f21"
+    },
+    "_astro/vega-cornejo.BWqvJcId_15drQW.jpg": {
+      "bytes": 2015,
+      "gzip_bytes": 1998,
+      "sha256": "0073d93168dd50886a5058514fddf4c342526dfb0ff96c4e59451c6b07d27b5a"
+    },
+    "_astro/vega-cornejo.BWqvJcId_1ObWEf.avif": {
+      "bytes": 2515,
+      "gzip_bytes": 2512,
+      "sha256": "489f3955f4bdef78408f8d6a76315ae0fadb35306822daa8f125f3c0111bcf63"
+    },
+    "_astro/vega-cornejo.BWqvJcId_1hcB7S.jpg": {
+      "bytes": 4943,
+      "gzip_bytes": 4883,
+      "sha256": "e343e63ffa1e455627a0f173409dcc94861300b0b75b6ee5114e3c2be226a301"
+    },
+    "_astro/vega-cornejo.BWqvJcId_2eeWHX.jpg": {
+      "bytes": 7961,
+      "gzip_bytes": 7803,
+      "sha256": "abd983f4ce2ab02965925bfdc70124aa35590b6904cb37294cb80d4a054ed6ad"
+    },
+    "_astro/vega-cornejo.BWqvJcId_2oebI5.jpg": {
+      "bytes": 21028,
+      "gzip_bytes": 20302,
+      "sha256": "ddc292082eabc97e288e0f5bc8012fd2339e237ef437cde37097441c193a45da"
+    },
+    "_astro/vega-cornejo.BWqvJcId_2uxKoo.avif": {
+      "bytes": 1381,
+      "gzip_bytes": 1373,
+      "sha256": "1c632f943875b9c3bbeee8e4e44d38dd483170d6b1ee5c8cf1a1a8ee54f66c3b"
+    },
+    "_astro/vega-cornejo.BWqvJcId_FarNe.avif": {
+      "bytes": 953,
+      "gzip_bytes": 919,
+      "sha256": "50ef082e4ee60e85ec28c04e3bbdb1455bf7d10b084e3b72ed9446a66be10c5b"
+    },
+    "_astro/vega-cornejo.BWqvJcId_R9B4a.avif": {
+      "bytes": 1862,
+      "gzip_bytes": 1857,
+      "sha256": "aeb199746950bcc2e3d77b37465edc274fd944c5515f26db75e4479e7257c6f7"
+    },
+    "_astro/vega-cornejo.BWqvJcId_Z2aAnlO.jpg": {
+      "bytes": 3256,
+      "gzip_bytes": 3234,
+      "sha256": "1d41ed0adfbdb37c346c892ed00a1fdbc3a334e9b07424a85f4719a33165c381"
+    },
+    "actividades/index.html": {
+      "bytes": 10844,
+      "gzip_bytes": 2977,
+      "sha256": "34af77214a85db811686ac27bcedf6f0c2403d404c17d3ad21ed6dd0e138e462"
+    },
+    "contacto/index.html": {
+      "bytes": 11237,
+      "gzip_bytes": 3046,
+      "sha256": "aab730fcbd167509a540e0f0ea42e022a1875ed99c894b4ef72ffd778e33af66"
+    },
+    "en/actividades/index.html": {
+      "bytes": 10827,
+      "gzip_bytes": 2998,
+      "sha256": "cad80155255dd4d28ca1c3686225862a79c2e781752fce9934014ea14c910161"
+    },
+    "en/contacto/index.html": {
+      "bytes": 11161,
+      "gzip_bytes": 3039,
+      "sha256": "b8293f7a7b3d428c48e291d1227873fbbe2d0d2be4ebc1811ec190a7dc05816b"
+    },
+    "en/estudios/lactancia/aviso-de-privacidad/index.html": {
+      "bytes": 15275,
+      "gzip_bytes": 4828,
+      "sha256": "edb79dbb8fad69abd58723b40a30eaa528fa5d774097267bfd08bfb2d0338428"
+    },
+    "en/estudios/lactancia/index.html": {
+      "bytes": 13953,
+      "gzip_bytes": 4192,
+      "sha256": "ba672a7a42ce4fab5922832247416ea52ef3b55b18c48da1faed2e6e44a0b212"
+    },
+    "en/herramientas/dengue-forecast/index.html": {
+      "bytes": 11508,
+      "gzip_bytes": 3427,
+      "sha256": "ef35e7e0f69975591e0f6c37139c007d026fb03449c83cdb29cfd4fcef2c9648"
+    },
+    "en/herramientas/index.html": {
+      "bytes": 22495,
+      "gzip_bytes": 4316,
+      "sha256": "1dc8ff2f136acdb7af1aa4f30284168d907dc7396f08692c90ea59ab07b52f89"
+    },
+    "en/herramientas/propedeutica/index.html": {
+      "bytes": 12871,
+      "gzip_bytes": 3921,
+      "sha256": "fe255f2ed6ebd89ab441d574e3cefc04284d6ec993261f39f01b54d05f04a4e7"
+    },
+    "en/herramientas/virologia/index.html": {
+      "bytes": 10323,
+      "gzip_bytes": 3195,
+      "sha256": "5868be3624becae4821ada2c082c06fa255777e4bf9e7c46f8d5c485772b70ab"
+    },
+    "en/index.html": {
+      "bytes": 25829,
+      "gzip_bytes": 5975,
+      "sha256": "6c25e298e99f7b03bc77e678b2fc5d9d3329d67e86eea274a80b6fd7f88e134d"
+    },
+    "en/integrantes/index.html": {
+      "bytes": 31079,
+      "gzip_bytes": 6253,
+      "sha256": "948fbd5be2c57f37abb58ff4a291fb70a801f883c9e3c4031d65945dd3a58243"
+    },
+    "en/lineas/index.html": {
+      "bytes": 22323,
+      "gzip_bytes": 4651,
+      "sha256": "ac8bba4a4a69a0cd0cf9f214cd051a8ed1e16ddac1e0e9d0ea0eea1fcca8ae08"
+    },
+    "en/produccion/index.html": {
+      "bytes": 93781,
+      "gzip_bytes": 11508,
+      "sha256": "6ca2e725eeb79cac5f1bac40e953b5996fa996d5f3f0cf673183a11bfc2b4532"
+    },
+    "estilo/index.html": {
+      "bytes": 43961,
+      "gzip_bytes": 7495,
+      "sha256": "4a66a5322b4dd3ae92e1529631dfad18f938f549f2ad80da1bebad5bd61e758c"
+    },
+    "estudios/lactancia/aviso-de-privacidad/index.html": {
+      "bytes": 15131,
+      "gzip_bytes": 4700,
+      "sha256": "a38ffd6b3903b76c8b85e6a12d6b035fe2f4867a9ddfbd9b344dec1fc2d6601a"
+    },
+    "estudios/lactancia/index.html": {
+      "bytes": 14217,
+      "gzip_bytes": 4198,
+      "sha256": "a9d4d11f0582eff5e56429f49d93152d12c524cd8dfd7d80b73915919c1c46aa"
+    },
+    "favicon.svg": {
+      "bytes": 400,
+      "gzip_bytes": 211,
+      "sha256": "ef6fb539ae846da85613811c1d4ccb513a2e8ee8b95f8a9256b37735d190dad3"
+    },
+    "fonts/fonts.css": {
+      "bytes": 5749,
+      "gzip_bytes": 720,
+      "sha256": "f21fabb5ea846a6a4e3ff51cd47a01496de52e3c2863be265166a54aa03ef78a"
+    },
+    "fonts/ibm-plex-mono-LICENSE.txt": {
+      "bytes": 5299,
+      "gzip_bytes": 2014,
+      "sha256": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f"
+    },
+    "fonts/ibm-plex-mono-latin-400-normal.08949f728dc5.woff2": {
+      "bytes": 14708,
+      "gzip_bytes": 14731,
+      "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+    },
+    "fonts/ibm-plex-mono-latin-500-normal.01d285447409.woff2": {
+      "bytes": 14888,
+      "gzip_bytes": 14911,
+      "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22"
+    },
+    "fonts/ibm-plex-mono-latin-600-normal.0d1f0b8d0722.woff2": {
+      "bytes": 15620,
+      "gzip_bytes": 15643,
+      "sha256": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83"
+    },
+    "fonts/ibm-plex-mono-latin-ext-400-normal.6bc0f226a5b7.woff2": {
+      "bytes": 13348,
+      "gzip_bytes": 13371,
+      "sha256": "6bc0f226a5b7884a8170e3f62c63d7675609d4631bdc5931b5cdab81821f00eb"
+    },
+    "fonts/ibm-plex-mono-latin-ext-500-normal.6bb06407c975.woff2": {
+      "bytes": 13432,
+      "gzip_bytes": 13455,
+      "sha256": "6bb06407c97584b0867a959e05e8874693bfeb8c317de190811c51598f2d99ea"
+    },
+    "fonts/ibm-plex-mono-latin-ext-600-normal.32057cf50dd1.woff2": {
+      "bytes": 14328,
+      "gzip_bytes": 14351,
+      "sha256": "32057cf50dd14bdb21a2c93766c4a2c43e4abe688ea3922df3203cac7751a98b"
+    },
+    "fonts/inter-LICENSE.txt": {
+      "bytes": 4477,
+      "gzip_bytes": 1979,
+      "sha256": "3b0a5fca3d17942cde889069889dedbbbd075e9b599968c82a95f4d944e9b345"
+    },
+    "fonts/inter-greek-ext-wght-normal.6e9e020a25f9.woff2": {
+      "bytes": 11232,
+      "gzip_bytes": 11233,
+      "sha256": "6e9e020a25f9b56d418f2c085b1d3c09725a4da23fe693a5b463064606732190"
+    },
+    "fonts/inter-greek-wght-normal.1be3448e292f.woff2": {
+      "bytes": 18996,
+      "gzip_bytes": 19024,
+      "sha256": "1be3448e292fbf05ffe176fe1e43f135013d50b1e7d324ad1a558f623d3bb6f6"
+    },
+    "fonts/inter-latin-ext-wght-normal.34b9c504cab7.woff2": {
+      "bytes": 85068,
+      "gzip_bytes": 85109,
+      "sha256": "34b9c504cab7a73e37b746343a449132e56cf7b5481af2cb81dc74dcff25c956"
+    },
+    "fonts/inter-latin-wght-normal.3100e775e861.woff2": {
+      "bytes": 48256,
+      "gzip_bytes": 48249,
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+    },
+    "fonts/source-serif-4-LICENSE.txt": {
+      "bytes": 4314,
+      "gzip_bytes": 1920,
+      "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3"
+    },
+    "fonts/source-serif-4-greek-wght-italic.86596ea15a6d.woff2": {
+      "bytes": 20536,
+      "gzip_bytes": 20564,
+      "sha256": "86596ea15a6d48ec748a31c626910622bd1524e6e18a82682a8ed9c7bb3d26d5"
+    },
+    "fonts/source-serif-4-greek-wght-normal.d84b0c5fda03.woff2": {
+      "bytes": 20228,
+      "gzip_bytes": 20256,
+      "sha256": "d84b0c5fda036126b6bb9205b144500fe08fec6d54d8bdd60645bc3e6577490b"
+    },
+    "fonts/source-serif-4-latin-ext-wght-italic.515639854d35.woff2": {
+      "bytes": 44260,
+      "gzip_bytes": 44293,
+      "sha256": "515639854d3566c43860d2005770645c590df8b43a0144c70fe2566c33015ede"
+    },
+    "fonts/source-serif-4-latin-ext-wght-normal.41529a5b3800.woff2": {
+      "bytes": 42040,
+      "gzip_bytes": 42073,
+      "sha256": "41529a5b38008d9ea01e28ec18693a714a3216669ee477d83a5b9db999369625"
+    },
+    "fonts/source-serif-4-latin-wght-italic.663e7ef3037a.woff2": {
+      "bytes": 51516,
+      "gzip_bytes": 51554,
+      "sha256": "663e7ef3037a56dce81dfc33f68c1e6445995ffd8887991b3c0b68a7689c9da5"
+    },
+    "fonts/source-serif-4-latin-wght-normal.c1df4596be50.woff2": {
+      "bytes": 50824,
+      "gzip_bytes": 50862,
+      "sha256": "c1df4596be5029233ed2afbb8b2f6ea20784b3fb1aa5d6b5c6519ccd85eb3dfb"
+    },
+    "herramientas/dengue-forecast/app/css/theme.css": {
+      "bytes": 14202,
+      "gzip_bytes": 3906,
+      "sha256": "a51b40c351e77eb507e9a2afb22d424f7b503511bb88d05a3d2ce31bc0a4ad39"
+    },
+    "herramientas/dengue-forecast/app/data/cases.json": {
+      "bytes": 44059,
+      "gzip_bytes": 14757,
+      "sha256": "70461d1cf4dd9f180f240e20de27a5864b7446ff42286b9253a2510cce6fbc87"
+    },
+    "herramientas/dengue-forecast/app/data/forecasts.json": {
+      "bytes": 1008734,
+      "gzip_bytes": 128956,
+      "sha256": "b19f10eb85321320eee8156d05e0b16289cd5a133a06700080aa411de0a8ddf4"
+    },
+    "herramientas/dengue-forecast/app/data/meta.json": {
+      "bytes": 6251,
+      "gzip_bytes": 2117,
+      "sha256": "af7d46d6fe2748d9c2608396db97670449d95fe217d8058412beac1ce0e360f4"
+    },
+    "herramientas/dengue-forecast/app/index.html": {
+      "bytes": 6741,
+      "gzip_bytes": 2117,
+      "sha256": "4df4eebc9fc6583b79e69fecd86eb2a023bf2a41a127a1750084b84759e933c5"
+    },
+    "herramientas/dengue-forecast/app/js/app.js": {
+      "bytes": 5942,
+      "gzip_bytes": 2268,
+      "sha256": "a1aa19feb0c576dfec819c0c6d1559547624964ff595e057f29d683035865431"
+    },
+    "herramientas/dengue-forecast/app/js/chart.js": {
+      "bytes": 19652,
+      "gzip_bytes": 6496,
+      "sha256": "3d46acb1eee3b30041de4c9a2bd26e38377e43ee40be69aae07f66168da7966d"
+    },
+    "herramientas/dengue-forecast/app/js/config.js": {
+      "bytes": 1259,
+      "gzip_bytes": 775,
+      "sha256": "be522d8fb22d212a18b7af7ab44026cd066aba2a399e954441a51221cedfe805"
+    },
+    "herramientas/dengue-forecast/app/js/controls.js": {
+      "bytes": 11963,
+      "gzip_bytes": 2780,
+      "sha256": "5dbf8984a40833a760654898c4e08df9fdc9fecdc1b6fd76c5baa0cabe51976c"
+    },
+    "herramientas/dengue-forecast/app/js/data.js": {
+      "bytes": 6046,
+      "gzip_bytes": 2325,
+      "sha256": "6f8c40a579508678b87f4ac1df0db35b937bd8a67652f2bc0ece1f9ceff7399b"
+    },
+    "herramientas/dengue-forecast/app/js/i18n.js": {
+      "bytes": 7203,
+      "gzip_bytes": 2315,
+      "sha256": "3e4af777445b475a8a1ce30cf5de078948deb805e7300372789f302f5aa7e8b3"
+    },
+    "herramientas/dengue-forecast/app/js/state.js": {
+      "bytes": 11967,
+      "gzip_bytes": 3548,
+      "sha256": "5e230b85a84f5c7ede3840162ab1111b5a6f16de68216c8b1aa29aaad7bea420"
+    },
+    "herramientas/dengue-forecast/app/vendor/plotly-basic.min.js": {
+      "bytes": 1071091,
+      "gzip_bytes": 354279,
+      "sha256": "138c2e81014b979dc00867a93da55b7605a17495ee78dd7afb433b7f021dfcfa"
+    },
+    "herramientas/dengue-forecast/index.html": {
+      "bytes": 11588,
+      "gzip_bytes": 3444,
+      "sha256": "686cfd1def001d2b412cb9f23d9dfdbce10ac2f2ef057eca84df5a2204ebfbce"
+    },
+    "herramientas/index.html": {
+      "bytes": 22599,
+      "gzip_bytes": 4327,
+      "sha256": "63a9a9d183f8ea7d64167e8db3f46b81604cf9a9a960f5deb2e7e719af22e63a"
+    },
+    "herramientas/propedeutica/index.html": {
+      "bytes": 13191,
+      "gzip_bytes": 4028,
+      "sha256": "7b692fb9f2a9a865093e777ff5d2bc837fa04fb5d63b8507aff869da304c8ec5"
+    },
+    "herramientas/propedeutica-basada-en-evidencia/app/css/theme.css": {
+      "bytes": 15261,
+      "gzip_bytes": 3786,
+      "sha256": "0f43cda17a9bf14113d8c092bbd902b79a112b88b8bdde594012f833ab90b420"
+    },
+    "herramientas/propedeutica-basada-en-evidencia/app/data/signos.json": {
+      "bytes": 1107945,
+      "gzip_bytes": 192766,
+      "sha256": "bcc380afb96aeb52a9fbb3da9aa95a371a2e0673597655b08a70ca15414e0cf2"
+    },
+    "herramientas/propedeutica-basada-en-evidencia/app/index.html": {
+      "bytes": 5307,
+      "gzip_bytes": 1608,
+      "sha256": "080ba60593fcec881d6d186aeccd8d845c3b194bb13bed9160730d6539ceeec6"
+    },
+    "herramientas/propedeutica-basada-en-evidencia/app/js/app.js": {
+      "bytes": 46870,
+      "gzip_bytes": 15307,
+      "sha256": "18c82b5ace9582aeeb3d4032ef22a9132d859485abefb3eceb99711f92c703a5"
+    },
+    "herramientas/virologia/app/css/guide.css": {
+      "bytes": 14411,
+      "gzip_bytes": 3541,
+      "sha256": "8a6040d727eb91d2d8e8bee6d91f1c7189b089f3d004624fe08619a7b7f89ec7"
+    },
+    "herramientas/virologia/app/herramientas-diagnosticas.html": {
+      "bytes": 120361,
+      "gzip_bytes": 33803,
+      "sha256": "7c9076b1fd428023b32598742a7192245fea1c5d99101f4b2b29d474c36ded3c"
+    },
+    "herramientas/virologia/app/index.html": {
+      "bytes": 33367,
+      "gzip_bytes": 8419,
+      "sha256": "2ba4cfe636bc67d248d73259d06161ffa114b95b82816f4a60a019ea9ca4ecc4"
+    },
+    "herramientas/virologia/app/js/guide.js": {
+      "bytes": 1685,
+      "gzip_bytes": 746,
+      "sha256": "11476bf1513548ee2dab7e0830c8e8176d628d0551a3c5e0eb47e14055c367f7"
+    },
+    "herramientas/virologia/app/virus/adenoviridae.html": {
+      "bytes": 50517,
+      "gzip_bytes": 15046,
+      "sha256": "cfd79f8d2d41847e3cd07f2744ceb613461fc7c50f47442ac93244887751261b"
+    },
+    "herramientas/virologia/app/virus/anelloviridae.html": {
+      "bytes": 32091,
+      "gzip_bytes": 9564,
+      "sha256": "bbdb45e1b762955a79e2ae3f6f5d2b34ef2b6c45f561f251aa80cff5a89aa0fa"
+    },
+    "herramientas/virologia/app/virus/arenaviridae.html": {
+      "bytes": 55309,
+      "gzip_bytes": 16929,
+      "sha256": "2b1e5b254108ad26388b86836f584843373c9ac763715d13c7ae8b7a115506c4"
+    },
+    "herramientas/virologia/app/virus/astroviridae.html": {
+      "bytes": 39450,
+      "gzip_bytes": 11608,
+      "sha256": "dcd0fd8ae16b548e99f241557c6acea5b45f1e9e676415f0d3f22d074a94f0a0"
+    },
+    "herramientas/virologia/app/virus/bunyavirales.html": {
+      "bytes": 50658,
+      "gzip_bytes": 15758,
+      "sha256": "9e01bafbbebe308888f807b0335d85b4cd7adc381079270da11d7fa25f116036"
+    },
+    "herramientas/virologia/app/virus/caliciviridae.html": {
+      "bytes": 45901,
+      "gzip_bytes": 14234,
+      "sha256": "c61f6a483182e2bf16957fde8921cc862023131bb7e3a2b3afa4849d5a46b12d"
+    },
+    "herramientas/virologia/app/virus/coronaviridae.html": {
+      "bytes": 51790,
+      "gzip_bytes": 16830,
+      "sha256": "46272d4f335b09e3b632ddc9dce1b458d90f103f451bd5c3eb9eee43e30d1d92"
+    },
+    "herramientas/virologia/app/virus/filoviridae.html": {
+      "bytes": 45983,
+      "gzip_bytes": 14485,
+      "sha256": "5dab098596f5acfaf699ad2e99e2b5a52d6b3808c333e96ff3a3a4d7a53b723a"
+    },
+    "herramientas/virologia/app/virus/flaviviridae.html": {
+      "bytes": 61042,
+      "gzip_bytes": 18039,
+      "sha256": "1b7049d9d1f69ee7751b66ef0f25d6b95482134210754f02bd5f327366f568e6"
+    },
+    "herramientas/virologia/app/virus/hepadnaviridae.html": {
+      "bytes": 51730,
+      "gzip_bytes": 15352,
+      "sha256": "f346cd56db5696cc8a182b47d38b30c30519e4f3e4b267643bae6422d4d3e06d"
+    },
+    "herramientas/virologia/app/virus/hepeviridae.html": {
+      "bytes": 50256,
+      "gzip_bytes": 15122,
+      "sha256": "a8c000066fca26da603b9ebae57ffecbb41597988b8c09c5940ea1e71d9f3f03"
+    },
+    "herramientas/virologia/app/virus/herpesviridae-alpha.html": {
+      "bytes": 59549,
+      "gzip_bytes": 16915,
+      "sha256": "c63dc29ebe044bbb662c412607b9115e49bd435213abb05abd671c01c43479f2"
+    },
+    "herramientas/virologia/app/virus/herpesviridae-beta.html": {
+      "bytes": 51832,
+      "gzip_bytes": 15576,
+      "sha256": "c5dbf63d781ff441f01464aaf5270a15af9c40a64e715559429534063d432c9b"
+    },
+    "herramientas/virologia/app/virus/herpesviridae-gamma.html": {
+      "bytes": 54881,
+      "gzip_bytes": 17626,
+      "sha256": "d3419bc61a42762271d9a2b8867057157ed51632490bdba9d16203e4a76a0032"
+    },
+    "herramientas/virologia/app/virus/kolmioviridae.html": {
+      "bytes": 49419,
+      "gzip_bytes": 14615,
+      "sha256": "d22e2d524e2fd1dc7291602e6f5b33138c466b6e3aa3bd5539f0625cf2dac77f"
+    },
+    "herramientas/virologia/app/virus/matonaviridae.html": {
+      "bytes": 51316,
+      "gzip_bytes": 15324,
+      "sha256": "b1e2d98f860836deae115281d8904143fc561eef0470f17f9827511bcdaecaa7"
+    },
+    "herramientas/virologia/app/virus/orthomyxoviridae.html": {
+      "bytes": 56082,
+      "gzip_bytes": 17502,
+      "sha256": "23462ddfa07ee0a426615ec99fce0d4c268f5e4441d9fb853004d1601423b231"
+    },
+    "herramientas/virologia/app/virus/papillomaviridae.html": {
+      "bytes": 49447,
+      "gzip_bytes": 15356,
+      "sha256": "89158956f0c20404a5718e343e99d0f8d9e2807bfa38fa46a7229bc6cae1386a"
+    },
+    "herramientas/virologia/app/virus/paramyxoviridae.html": {
+      "bytes": 63205,
+      "gzip_bytes": 19319,
+      "sha256": "38fad164a9ac78f66eeac7ce0f08188ecc1ca886476a6b8719b48d3fb61ebf98"
+    },
+    "herramientas/virologia/app/virus/parvoviridae.html": {
+      "bytes": 46255,
+      "gzip_bytes": 14543,
+      "sha256": "5836be7e8a4e9616855a0a70c7004fa9738562035150d8a621c9776713ffa0ef"
+    },
+    "herramientas/virologia/app/virus/picornaviridae.html": {
+      "bytes": 54442,
+      "gzip_bytes": 16577,
+      "sha256": "0550ae5ab6eb3ab836a7878e105bdfdf99e0bce767f21897a48a91de4ae1b7a7"
+    },
+    "herramientas/virologia/app/virus/pneumoviridae.html": {
+      "bytes": 51985,
+      "gzip_bytes": 15674,
+      "sha256": "e11fc16d720d56d2a739ad71b74b235f91400b67837f7cd8f32c5617569c4d76"
+    },
+    "herramientas/virologia/app/virus/polyomaviridae.html": {
+      "bytes": 50749,
+      "gzip_bytes": 15376,
+      "sha256": "1323351a60c1f294ca3aace813e6d5a1202c578b020d7de14bcc32f9a46bee63"
+    },
+    "herramientas/virologia/app/virus/poxviridae.html": {
+      "bytes": 52894,
+      "gzip_bytes": 15763,
+      "sha256": "f29164abf5f67c5040a89492cbff8a15b9d9c3a5ac8d8f4d661e6489ebddd5f0"
+    },
+    "herramientas/virologia/app/virus/reoviridae.html": {
+      "bytes": 49216,
+      "gzip_bytes": 16385,
+      "sha256": "ea92ae8646f86aafb2b1c5972f07803b2b6110b253fa35a7a7677288ad800069"
+    },
+    "herramientas/virologia/app/virus/retroviridae.html": {
+      "bytes": 60804,
+      "gzip_bytes": 18767,
+      "sha256": "6fd22585369a287c347dc32755a6542d223fc0f51cb1f3445ac737ad2825f9bd"
+    },
+    "herramientas/virologia/app/virus/rhabdoviridae.html": {
+      "bytes": 40828,
+      "gzip_bytes": 12421,
+      "sha256": "eadfc23e01ab4407a5c8bfcd3c59ddad5ed7a2a613623cebeac22b811c32f4fb"
+    },
+    "herramientas/virologia/app/virus/togaviridae.html": {
+      "bytes": 51230,
+      "gzip_bytes": 15931,
+      "sha256": "d6874ecbf7931dd1d07346e86e8e3707c1c32f302c92f9fb286deb39be45f5e6"
+    },
+    "herramientas/virologia/app/virus-dna.html": {
+      "bytes": 205341,
+      "gzip_bytes": 127361,
+      "sha256": "f568b6837fb276c4ae1bea883c4c4dc957158df72d17d21c8add5a7b53fb22b7"
+    },
+    "herramientas/virologia/app/virus-rna.html": {
+      "bytes": 346673,
+      "gzip_bytes": 200885,
+      "sha256": "a8637d7f98f4c03bef5fc3fde28abd6bd8fff5082a990f631bd2fde5136fc8b8"
+    },
+    "herramientas/virologia/index.html": {
+      "bytes": 10390,
+      "gzip_bytes": 3222,
+      "sha256": "641931c2625f6a69c377c45b089d4d4d67e296a2603eb9d9fb8333a22f403674"
+    },
+    "index.html": {
+      "bytes": 26023,
+      "gzip_bytes": 5960,
+      "sha256": "4a323b2812b276e0b6a383a044d8f31639b4a02168ffae09e4a3bd097b8e2010"
+    },
+    "integrantes/index.html": {
+      "bytes": 30792,
+      "gzip_bytes": 6178,
+      "sha256": "6bd39fbb0041a9da8bb04f00f7e736618fa2461f8bb90dff6e0d867028a706f5"
+    },
+    "integrantes/placeholder.svg": {
+      "bytes": 283,
+      "gzip_bytes": 212,
+      "sha256": "592432ff87d42817f9e77be9e20efcaf571a64f18627ded6721b036e71bdb612"
+    },
+    "lineas/index.html": {
+      "bytes": 22451,
+      "gzip_bytes": 4489,
+      "sha256": "56654101d1a205fe5158b43469c6224f6ad64c8dfd4bc4531782c4716a247313"
+    },
+    "logos/UDG-CA-1190_logo_horizontal.png": {
+      "bytes": 311632,
+      "gzip_bytes": 306720,
+      "sha256": "599de2de81afb643db4b88058b3a5b6a86a641ae68ec22d8a96decc727e9a517"
+    },
+    "logos/UDG-CA-1190_logo_horizontal_blanco.png": {
+      "bytes": 299591,
+      "gzip_bytes": 293963,
+      "sha256": "f0a906f4ce96f2c1acd36636e80d7b7278c57b1547925ee8e42713e6d54c4997"
+    },
+    "logos/UDG-CA-1190_logo_vertical.png": {
+      "bytes": 386472,
+      "gzip_bytes": 379954,
+      "sha256": "ae21545978fc83d80418070ca6eeee3eef8c0f175a5956629b0ba57d674eaa97"
+    },
+    "logos/UDG-CA-1190_logo_vertical_blanco.png": {
+      "bytes": 368743,
+      "gzip_bytes": 360786,
+      "sha256": "44079ac47dd9d18c59e4b020229bcfc8b298840952fb41c7d817e8babc298dda"
+    },
+    "logos/UDG-CA-1190_logo_vertical_reverse.png": {
+      "bytes": 381856,
+      "gzip_bytes": 375581,
+      "sha256": "a0d7d3332b68a644c0c7cce3e6310c7dc38a579f4679662be7db7ba89eb4de98"
+    },
+    "og/og-default.jpg": {
+      "bytes": 129815,
+      "gzip_bytes": 123959,
+      "sha256": "f9cd793d2e6611372e837c9e731a2b9ae92e94df7e64c013552c5c085dd17749"
+    },
+    "produccion/index.html": {
+      "bytes": 93660,
+      "gzip_bytes": 11700,
+      "sha256": "0121640f202044320a19da7e4bf798a36b4fe24c4fa8c4f7b7152936ce435567"
+    },
+    "robots.txt": {
+      "bytes": 94,
+      "gzip_bytes": 104,
+      "sha256": "8637f95a66b10d66f1e2ed99b064a0c0356f725ea05c6da442a4c3fc50155370"
+    },
+    "sitemap-0.xml": {
+      "bytes": 5376,
+      "gzip_bytes": 471,
+      "sha256": "894ab33b1ea97f94749c51866b425199edc382268d08670a689fa486ca8a487f"
+    },
+    "sitemap-index.xml": {
+      "bytes": 187,
+      "gzip_bytes": 150,
+      "sha256": "c24f2d322f87a1e8ecfe930b8a499a9f671ec26b287789ce0e2494e1c5eb2496"
+    }
+  }
+}

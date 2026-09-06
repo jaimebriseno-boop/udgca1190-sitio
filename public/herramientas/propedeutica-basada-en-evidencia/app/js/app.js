@@ -130,13 +130,14 @@
   }
   if (EMBED) {
     document.documentElement.style.overflow = 'hidden';
-    if (window.ResizeObserver) new ResizeObserver(reportarAltura).observe(document.documentElement);
+    if (window.ResizeObserver) new ResizeObserver(reportarAltura).observe(document.body);
+    else addEventListener('resize', reportarAltura);
     addEventListener('load', reportarAltura);
-    setInterval(reportarAltura, 900);
   }
 
   /* ══════════ Estado ══════════ */
   var BD = null, R = [], DOM = {}, META = {};
+  var porId = new Map();
   var est = { q: '', dom: '', cond: '', v: {}, g: {}, sel: null, tope: 80 };
 
   /* ══════════ Arranque ══════════ */
@@ -145,9 +146,12 @@
     .then(function (d) {
       BD = d; R = d.r; META = d.meta; DOM = d.meta.dom;
       R.forEach(function (r) {
+        porId.set(String(r.i), r);
         r._b = norm([r.s, r.se, r.c, r.ce, r.ep, r.mn, r.loc,
           (DOM[r.d] || [])[0], (DOM[r.d] || [])[1]].filter(Boolean).join(' '));
       });
+      // Sort once: filtering preserves this order, including when showing more rows.
+      R.sort(ordenar);
       iniciar();
     })
     .catch(function (e) {
@@ -173,7 +177,7 @@
     pintar();
     var s0 = P.get('signo');
     if (s0 != null) {
-      var r0 = R.filter(function (r) { return String(r.i) === String(s0); })[0];
+      var r0 = porId.get(String(s0));
       if (r0) { est.sel = r0.i; pintar(); ficha(r0); }
     } else ficha(null);
     reportarAltura();
@@ -206,6 +210,13 @@
 
   /* ══════════ Filtro y lista ══════════ */
   var ORDEN = { confirma: 0, descarta: 1, ajusta: 2, debil: 3, nulo: 4 };
+  var comparador = new Intl.Collator(LOC);
+  function ordenar(a, b) {
+    var d = (ORDEN[a.v] == null ? 9 : ORDEN[a.v]) - (ORDEN[b.v] == null ? 9 : ORDEN[b.v]);
+    if (d) return d;
+    if (a.f !== b.f) return a.f === 'full' ? -1 : 1;
+    return comparador.compare(nombreSigno(a), nombreSigno(b));
+  }
   function filtrar() {
     var toks = est.q ? norm(est.q).split(' ').filter(Boolean) : [];
     var vAct = Object.keys(est.v).filter(function (k) { return est.v[k]; });
@@ -221,11 +232,6 @@
       }
       for (var j = 0; j < toks.length; j++) if (r._b.indexOf(toks[j]) < 0) return false;
       return true;
-    }).sort(function (a, b) {
-      var d = (ORDEN[a.v] == null ? 9 : ORDEN[a.v]) - (ORDEN[b.v] == null ? 9 : ORDEN[b.v]);
-      if (d) return d;
-      if (a.f !== b.f) return a.f === 'full' ? -1 : 1;
-      return nombreSigno(a).localeCompare(nombreSigno(b), LOC);
     });
   }
   function pillV(v) {
@@ -371,6 +377,7 @@
     $('.filtros').addEventListener('click', function (e) {
       var c = e.target.closest('.chip'); if (!c) return;
       if (c.id === 'limpiar') {
+        clearTimeout(timer);
         est = { q: '', dom: '', cond: '', v: {}, g: {}, sel: est.sel, tope: 80 };
         $('#q').value = ''; $('#fDom').value = ''; $('#fCond').value = '';
         $$('.filtros .chip').forEach(function (x) { x.classList.remove('is-on'); });
@@ -387,8 +394,10 @@
       if (e.target.id === 'mas') { est.tope += 200; pintar(); return; }
       var f = e.target.closest('.fila'); if (!f) return;
       est.sel = +f.getAttribute('data-i');
-      pintar();
-      ficha(R.filter(function (r) { return r.i === est.sel; })[0]);
+      var anterior = $('#filas .is-sel');
+      if (anterior) anterior.classList.remove('is-sel');
+      f.classList.add('is-sel');
+      ficha(porId.get(String(est.sel)));
       if (innerWidth <= 1000) $('#ficha').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 

@@ -1,0 +1,45 @@
+{
+  "date": "2026-09-06",
+  "server": "Astro preview on 127.0.0.1:4321",
+  "browser": "Chrome via browser plugin",
+  "desktop_dimensions": [
+    1698,
+    1355
+  ],
+  "mobile_dimensions": [
+    390,
+    844
+  ],
+  "checks": {
+    "home_initial_one_image_three_templates": true,
+    "home_slides_advance": true,
+    "home_pause_button": true,
+    "mobile_navigation": true,
+    "mobile_horizontal_overflow": false,
+    "publication_filter_visible_rows": 6,
+    "publication_filter_count": 6,
+    "propedeutica_murphy_results": 3,
+    "propedeutica_selected_detail": true,
+    "propedeutica_calculator": true,
+    "dengue_grid_panels": 33,
+    "dengue_order_cases": [
+      "Nacional",
+      "Veracruz",
+      "Jalisco",
+      "Guerrero",
+      "Oaxaca"
+    ],
+    "dengue_region_jalisco": true,
+    "dengue_latest_origin": "2026-05",
+    "virology_expand_all_sections": 8,
+    "virology_text_preserved_pages": 32,
+    "propedeutica_english_iframe": true,
+    "dengue_english_iframe": true,
+    "dengue_iframe_height_px": 924
+  },
+  "limits": [
+    "No throttled Lighthouse or production CWV measurements",
+    "Reduced motion reviewed in code; system preference not emulated",
+    "Browser recorded AbortError: Transition was skipped around navigation; no application Render failed or Plotly failure was observed"
+  ]
+}

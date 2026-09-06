@@ -5,6 +5,12 @@
   "private": true,
   "description": "Sitio web del Cuerpo Académico UDG-CA-1190 «Investigación Integrativa de Factores Biológicos del Proceso Salud-Enfermedad» (UdeG · CUTlajomulco)",
   "scripts": {
+    "fonts": "node scripts/prepare-fonts.mjs",
+    "predev": "npm run fonts",
+    "prebuild": "npm run fonts",
+    "precheck": "npm run fonts",
+    "test:performance": "node --test scripts/performance.test.mjs",
+    "audit:performance": "python3 scripts/audit-performance.py",
     "dev": "astro dev",
     "build": "npm run tokens && astro build",
     "preview": "astro preview",

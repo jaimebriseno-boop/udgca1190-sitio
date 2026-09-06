@@ -5,6 +5,8 @@ dist/
 .env
 *.log
 .vercel/
+/public/fonts/
+/src/styles/fonts.css
 
 # Material privado (no publicar): CVs y roster con datos personales
 data/CVs de integrantes/

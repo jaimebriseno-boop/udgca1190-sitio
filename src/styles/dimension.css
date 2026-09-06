@@ -19,7 +19,6 @@ body.home { margin: 0; }
 .dim__slide {
   position: absolute; inset: 0;
   opacity: 0; transition: opacity 1.6s ease-in-out;
-  will-change: opacity, transform;
 }
 .dim__slide picture { position: absolute; inset: 0; display: block; }
 .dim__slide img {
@@ -27,6 +26,7 @@ body.home { margin: 0; }
   object-fit: cover; object-position: center;
 }
 .dim__slide.is-active { opacity: 1; animation: dimPan 8.5s ease-out both; }
+#dimension.is-paused .dim__slide { animation-play-state: paused; }
 @keyframes dimPan {
   from { transform: scale(1.04) translateX(-1.6%); }
   to   { transform: scale(1.11) translateX(1.6%); }

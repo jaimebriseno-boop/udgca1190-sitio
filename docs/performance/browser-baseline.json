@@ -1,0 +1,66 @@
+{
+  "images": [
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/genomica.w-_jJP49_Z2wBhm7.avif",
+      "width": 1698
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/mapas-mexico.DLTPQlkY_Z1HEgIf.avif",
+      "width": 1698
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/dengue-series.CVdPikMO_28Nn3m.avif",
+      "width": 1845.0179443359375
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/endocarditis.D-KCV2z__Z1uO2WE.avif",
+      "width": 1698
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/UDG-CA-1190_logo_horizontal_reverse.M4JHcOeG_ZEd698.avif",
+      "width": 688.4375
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/jaime-briseno.ZUi768G0_Z268CAx.avif",
+      "width": 64
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/damian-negrete.DXxFzk3z_Z1sQ0sb.avif",
+      "width": 64
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/de-arcos-jimenez.D4tggAe7_ZBAbbi.avif",
+      "width": 64
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/fernandez-diaz.BoXqBcsu_Z2cx1YC.avif",
+      "width": 64
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/rodriguez-montano.DovuUTuB_uaLKI.avif",
+      "width": 64
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/rosales-chavez.lMmnhXhr_RCmbO.avif",
+      "width": 64
+    },
+    {
+      "complete": true,
+      "src": "http://127.0.0.1:4321/_astro/vega-cornejo.BWqvJcId_FarNe.avif",
+      "width": 64
+    }
+  ],
+  "slides": 4,
+  "title": "UDG-CA-1190 · Cuerpo Académico"
+}

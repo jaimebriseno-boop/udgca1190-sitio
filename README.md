@@ -6,12 +6,12 @@ CUTlajomulco). Líder: Dr. Jaime Briseño Ramírez.
 
 Construido con **Astro** (sitio estático, *data-driven*). Diseño: concepto
 **"Swiss Data Grid"** con la paleta editorial **Lancet**. Estado actual:
-**scaffold + design system** (estructura, tokens, componentes base y guía de
-estilo). Las páginas de contenido se construyen en el siguiente paso.
+**sitio bilingüe con páginas institucionales y herramientas interactivas** de
+dengue, propedéutica y virología.
 
 ## Requisitos
 
-- Node ≥ 18 (probado con Node 22; versión fijada en `.nvmrc`).
+- Node ≥ 22.12 y npm ≥ 9.6.5 (requisitos de Astro 6; rama Node 22 en `.nvmrc`).
 
 ## Comandos
 
@@ -21,8 +21,21 @@ npm run dev        # servidor local con recarga → http://localhost:4321
 npm run build      # genera tokens + compila el sitio a dist/
 npm run preview    # sirve dist/ (idéntico a producción)
 npm run tokens     # regenera src/styles/tokens.css desde design/tokens/*.json
+npm run check      # valida Astro/TypeScript
+npm run test:performance   # regresiones de reutilización y actualización de gráficas
+npm run audit:performance  # audita recursos de dist/; ejecutar después del build
 node scripts/check-bib.mjs   # lint del .bib (avisa de campos/DOI faltantes)
 ```
+
+Los comandos `dev`, `build` y `check` preparan automáticamente las fuentes locales
+desde Fontsource. `public/fonts/` y `src/styles/fonts.css` son generados: no se
+editan. Virología comparte `/fonts/fonts.css`, `app/css/guide.css` y
+`app/js/guide.js`; al trasladarla a otro servidor deben incluirse esos recursos.
+La caché anual se aplica únicamente a archivos con hash en el nombre; los datos
+y recursos sin versión conservan la revalidación.
+
+Auditoría transversal, mediciones y siguientes prioridades:
+[`docs/performance/REVIEW.md`](docs/performance/REVIEW.md).
 
 ## Cómo editar contenido (sin tocar código)
 

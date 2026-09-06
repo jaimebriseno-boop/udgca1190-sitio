@@ -473,7 +473,7 @@ export function buildTraces(opts) {
   const config = {
     displayModeBar: !compact,
     displaylogo: false,
-    responsive: true,
+    responsive: false, // app.js owns resizing; avoid one window listener per plot.
     staticPlot: compact,
     modeBarButtonsToRemove: ['select2d', 'lasso2d', 'autoScale2d', 'toggleSpikelines'],
     toImageButtonOptions: { format: 'png', scale: 2 },
@@ -497,7 +497,8 @@ export function renderMain(divId, opts) {
     return;
   }
   try {
-    window.Plotly.react(div, built.data, built.layout, built.config);
+    return window.Plotly.react(div, built.data, built.layout, built.config)
+      .catch((e) => console.error('Plotly.react failed', e));
   } catch (e) {
     console.error('Plotly.react failed', e);
   }
@@ -509,32 +510,29 @@ export function renderMain(divId, opts) {
 //   `panelTitle` string. National first, then states (caller controls order).
 // ---------------------------------------------------------------------------
 
-export function renderGrid(gridId, panelsOpts) {
+export async function renderGrid(gridId, panelsOpts) {
   const grid = document.getElementById(gridId);
   if (!grid) return;
-  // clear existing panels (Plotly.purge each child first to free listeners)
-  while (grid.firstChild) {
-    const child = grid.firstChild;
-    if (child && window.Plotly && child._fullLayout) {
-      try { window.Plotly.purge(child); } catch (e) { /* noop */ }
-    }
-    grid.removeChild(child);
-  }
   if (!Array.isArray(panelsOpts) || typeof window.Plotly === 'undefined') return;
-
-  panelsOpts.forEach((opts, i) => {
-    const cell = document.createElement('div');
+  const existing = new Map(Array.from(grid.children, (cell) => [cell.dataset.region, cell]));
+  const pending = panelsOpts.map((opts, i) => {
+    const key = String(opts.sel);
+    let cell = existing.get(key);
+    existing.delete(key);
+    if (!cell) {
+      cell = document.createElement('div');
+      cell.dataset.region = key;
+      const title = document.createElement('div');
+      title.className = 'grid-cell__title';
+      const plot = document.createElement('div');
+      plot.className = 'grid-cell__plot';
+      cell.append(title, plot);
+    }
     cell.className = 'grid-cell' + (i === 0 ? ' grid-cell--wide' : '');
-
-    const title = document.createElement('div');
-    title.className = 'grid-cell__title';
-    title.textContent = opts && opts.panelTitle ? opts.panelTitle : '';
-    cell.appendChild(title);
-
-    const plotDiv = document.createElement('div');
-    plotDiv.className = 'grid-cell__plot';
-    cell.appendChild(plotDiv);
-    grid.appendChild(cell);
+    cell.querySelector('.grid-cell__title').textContent = opts.panelTitle || '';
+    // Move existing panels only when the selected ordering changes.
+    if (grid.children[i] !== cell) grid.insertBefore(cell, grid.children[i] || null);
+    const plotDiv = cell.querySelector('.grid-cell__plot');
 
     let built;
     try {
@@ -544,13 +542,19 @@ export function renderGrid(gridId, panelsOpts) {
       return;
     }
     try {
-      window.Plotly.newPlot(plotDiv, built.data, built.layout, {
+      return window.Plotly.react(plotDiv, built.data, built.layout, {
         staticPlot: true,
         displayModeBar: false,
-        responsive: true,
-      });
+        responsive: false,
+      }).catch((e) => console.error('grid Plotly.react failed', e));
     } catch (e) {
-      console.error('grid newPlot failed', e);
+      console.error('grid Plotly.react failed', e);
     }
   });
+  for (const cell of existing.values()) {
+    // Plotly is mounted on the inner div, not on the cell wrapper.
+    window.Plotly.purge(cell.querySelector('.grid-cell__plot'));
+    cell.remove();
+  }
+  await Promise.all(pending);
 }

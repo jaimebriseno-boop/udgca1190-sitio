@@ -51,7 +51,7 @@ const fotoAlt = lang === 'es' ? `Fotografía de ${d.nombre}` : `Photograph of ${
         class="card-int__avatar"
         src={fotoAsset}
         widths={[112, 160, 224, 320]}
-        sizes="(min-width: 700px) 112px, 80px"
+        sizes={d.rol === 'lider' ? '112px' : '80px'}
         formats={['avif']}
         fallbackFormat="jpg"
         alt={fotoAlt}

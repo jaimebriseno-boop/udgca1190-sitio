@@ -15,7 +15,7 @@ const { lang = 'es' } = Astro.props;
 
 const sitio = getSitioL(lang);
 
-// ---- Fondo del hero (slideshow AVIF; SIN cambios) ----
+// ---- Fondo del hero: solo el primer slide participa en la carga inicial. ----
 const bgPaths: string[] = (Array.isArray(sitio.home_bgs) && sitio.home_bgs.length)
   ? sitio.home_bgs
   : (sitio.home_bg ? [sitio.home_bg] : []);
@@ -97,22 +97,29 @@ const pubsRecientes = produccion
   <section id="dimension">
     <div class="dim__slides" aria-hidden="true">
       {bgs.length > 0 ? (
-        bgs.map((img, i) => (
-          <div class:list={['dim__slide', { 'is-active': i === 0 }]}>
-            <Picture
-              src={img}
-              widths={SLIDE_WIDTHS}
-              sizes={SLIDE_SIZES}
-              formats={['avif']}
-              fallbackFormat="jpg"
-              quality={SLIDE_QUALITY}
-              alt=""
-              loading={i === 0 ? 'eager' : 'lazy'}
-              fetchpriority={i === 0 ? 'high' : 'low'}
-              decoding="async"
-            />
-          </div>
-        ))
+        bgs.map((img, i) => {
+          // Un template es inerte: el navegador no descarga sus imágenes.
+          // loading="lazy" solo no sirve en slides superpuestos en el viewport.
+          const Container = i === 0 ? 'div' : 'template';
+          return (
+            <div class:list={['dim__slide', { 'is-active': i === 0 }]}>
+              <Container>
+                <Picture
+                  src={img}
+                  widths={SLIDE_WIDTHS}
+                  sizes={SLIDE_SIZES}
+                  formats={['avif']}
+                  fallbackFormat="jpg"
+                  quality={SLIDE_QUALITY}
+                  alt=""
+                  loading="eager"
+                  fetchpriority={i === 0 ? 'high' : 'low'}
+                  decoding="async"
+                />
+              </Container>
+            </div>
+          );
+        })
       ) : (
         <div class="dim__deco">
           <svg viewBox="0 0 1200 600" preserveAspectRatio="none">
@@ -337,44 +344,68 @@ const pubsRecientes = produccion
   // Slideshow de la portada: crossfade entre figuras, con pausa accesible.
   const slides = Array.from(document.querySelectorAll<HTMLElement>('.dim__slide'));
   const boton = document.querySelector<HTMLButtonElement>('.dim__playpause');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const hero = document.getElementById('dimension');
 
-  if (slides.length > 1 && !reduce) {
+  if (slides.length > 1 && hero) {
     let i = 0;
-    let timer: ReturnType<typeof setInterval> | null = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
     let pausaManual = false;
+    let visible = true;
+    let preparando = false;
+    const puedeAvanzar = () => !pausaManual && !document.hidden && visible && !reduce.matches;
 
     const avanzar = async () => {
+      timer = null;
+      if (!puedeAvanzar() || preparando) return;
+      preparando = true;
       const siguiente = (i + 1) % slides.length;
+      const template = slides[siguiente].querySelector('template');
+      if (template) template.replaceWith(template.content.cloneNode(true));
       const img = slides[siguiente].querySelector('img');
-      if (img) {
-        try { await img.decode(); } catch { /* se muestra aunque falle el decode */ }
+      try {
+        if (img) await img.decode();
+        if (img?.naturalWidth && puedeAvanzar()) {
+          slides[i].classList.remove('is-active');
+          i = siguiente;
+          slides[i].classList.add('is-active');
+        }
+      } catch { /* conservar el fondo visible si falla la siguiente imagen */ }
+      finally {
+        preparando = false;
+        iniciar();
       }
-      slides[i].classList.remove('is-active');
-      i = siguiente;
-      slides[i].classList.add('is-active');
     };
-    const iniciar = () => { if (timer === null) timer = setInterval(avanzar, 6500); };
-    const detener = () => { if (timer !== null) { clearInterval(timer); timer = null; } };
-
-    iniciar();
+    const iniciar = () => {
+      if (puedeAvanzar() && timer === null && !preparando) timer = setTimeout(avanzar, 6500);
+    };
+    const detener = () => { if (timer !== null) { clearTimeout(timer); timer = null; } };
+    const sincronizar = () => {
+      hero.classList.toggle('is-paused', !puedeAvanzar());
+      if (boton) boton.hidden = reduce.matches;
+      if (puedeAvanzar()) iniciar();
+      else detener();
+    };
 
     if (boton) {
-      boton.hidden = false;
       boton.addEventListener('click', () => {
         pausaManual = !pausaManual;
         boton.setAttribute('aria-pressed', String(pausaManual));
         const label = pausaManual ? boton.dataset.labelPlay : boton.dataset.labelPause;
         if (label) boton.setAttribute('aria-label', label);
-        if (pausaManual) detener();
-        else iniciar();
+        sincronizar();
       });
     }
 
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) detener();
-      else if (!pausaManual) iniciar();
-    });
+    document.addEventListener('visibilitychange', sincronizar);
+    reduce.addEventListener('change', sincronizar);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        sincronizar();
+      }).observe(hero);
+    }
+    sincronizar();
   }
 </script>
 

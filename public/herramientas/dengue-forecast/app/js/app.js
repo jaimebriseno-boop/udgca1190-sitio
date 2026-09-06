@@ -64,9 +64,13 @@ function applyQuery() {
 // iframe height auto-size + responsive resize
 // ---------------------------------------------------------------------------
 
+let lastHeight = 0;
 function postHeight() {
+  if (window.parent === window) return;
   try {
-    const h = document.body.scrollHeight;
+    const h = Math.ceil(document.body.scrollHeight);
+    if (h === lastHeight) return;
+    lastHeight = h;
     window.parent.postMessage({ type: 'dengue-height', height: h }, '*');
   } catch (e) { /* not embedded / cross-origin restricted */ }
 }
@@ -88,9 +92,12 @@ function safeResize(div) {
 function wireResize() {
   const chart = document.getElementById('chart');
   if (chart && typeof ResizeObserver !== 'undefined' && window.Plotly) {
-    const ro = new ResizeObserver(() => {
-      safeResize(chart);
-      postHeight();
+    let lastWidth = 0;
+    const ro = new ResizeObserver(([entry]) => {
+      const width = Math.round(entry.contentRect.width);
+      if (!width || width === lastWidth) return;
+      lastWidth = width;
+      requestAnimationFrame(() => { safeResize(chart); postHeight(); });
     });
     ro.observe(chart);
   }
