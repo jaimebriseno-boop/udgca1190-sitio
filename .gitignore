@@ -18,3 +18,6 @@ data/CVs de integrantes/
 
 # PDFs de artículos originales (no se publican; solo fuente de extracción)
 herramientas/Exploracion_fisica_EBM/
+
+# Estado local de oh-my-claudecode (cualquier nivel)
+.omc/
