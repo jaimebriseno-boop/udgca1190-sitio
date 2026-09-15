@@ -1,7 +1,9 @@
 # Herramientas estadístico-epidemiológicas, predictivas y docentes del CA.
-# tipo:   predictiva | estadistica | pipeline | docente
+# tipo:   predictiva | estadistica | pipeline | docente | consulta
 # estado: activa | beta | desarrollo
 # linea:  id de una LGAC (data/lineas.yml)
+# seccion: (opcional) laboratorio → se agrupa en la sección «Laboratorio» de la
+#          página de Herramientas; `orden` (1, 2, 3…) fija su posición ahí.
 
 - id: propedeutica-basada-en-evidencia
   nombre: "Propedéutica médica basada en evidencia"
@@ -144,3 +146,80 @@
   doi: ""
   captura: "/herramientas/placeholder.svg"
   destacado: false
+
+# ── Sección «Laboratorio» · serie «Del tubo al diagnóstico» ─────────────────
+# Mini-sitio en public/herramientas/laboratorio/app/ (índice + tres herramientas
+# enlazadas entre sí), generado con scripts/laboratorio_retematizar.py.
+# Autoría: De Arcos-Jiménez JC, Briseño-Ramírez J · Versión 2.0 · septiembre 2026.
+
+- id: lab-biomarcadores
+  orden: 1
+  nombre: "Del tubo al diagnóstico: consulta de 60 biomarcadores"
+  tipo: consulta
+  estado: activa
+  seccion: laboratorio
+  resumen: "Qué es cada marcador, en qué tubo se toma, cómo se conserva y se mide, por qué sube o baja y cómo se interpreta."
+  descripcion: |
+    Consulta de sesenta biomarcadores explicados de principio a fin, siguiendo el
+    ciclo de la muestra: preanalítica (muestra, tubo, ayuno, toma, procesamiento,
+    estabilidad y criterios de rechazo), analítica (método, unidades, conversión,
+    estandarización y control de calidad), interpretación (por qué sube o baja,
+    modificadores e interferencias) y postanalítica (valores críticos, variación
+    biológica, delta check, reporte y seguimiento). Buscador por nombre o sigla.
+    Basada en Tietz, Henry's, CLSI GP41/GP44/EP07, la base EFLM de variación
+    biológica, guías clínicas e insertos vigentes. Sin intervalos de referencia:
+    los pone cada laboratorio. Funciona sin internet.
+  tecnologias: ["HTML", "JavaScript", "CLSI", "EFLM"]
+  linea: clinica-epidemiologica-traslacional
+  enlace_app: "/herramientas/laboratorio/biomarcadores"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: true
+
+- id: lab-intervalos-referencia
+  orden: 2
+  nombre: "Intervalos de referencia: verificar, establecer y transferir"
+  tipo: estadistica
+  estado: activa
+  seccion: laboratorio
+  resumen: "¿El intervalo del inserto sirve para mi población y mi método? ¿Cómo construyo el mío?"
+  descripcion: |
+    Guía práctica con tres calculadoras: verificar un intervalo publicado con 20
+    individuos de referencia (CLSI EP28), establecer un intervalo propio con 120 o
+    más resultados por grupo (método directo, percentiles no paramétricos con
+    detección de valores aberrantes) y estimarlo con los resultados que el
+    laboratorio ya tiene (método indirecto: Hoffmann, refineR/reflimR). Incluye
+    ruta de decisión (adoptar, verificar o establecer), transferencia entre
+    métodos, partición por sexo y edad (Harris y Boyd), cuestionario de selección
+    y registro de documentación. Los datos se procesan en el navegador.
+  tecnologias: ["JavaScript", "CLSI EP28", "Harris–Boyd", "refineR"]
+  linea: ciencia-datos-poblacionales
+  enlace_app: "/herramientas/laboratorio/intervalos-de-referencia"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: true
+
+- id: lab-delta-check
+  orden: 3
+  nombre: "Delta check: comparar al paciente consigo mismo"
+  tipo: estadistica
+  estado: activa
+  seccion: laboratorio
+  resumen: "¿Este cambio entre dos resultados del mismo paciente es real, es error o es ruido? Qué límite y qué ventana usar."
+  descripcion: |
+    Qué es el delta check y por qué importa; tipos y fórmulas (absoluto,
+    porcentual, por tiempo y por variación biológica con el valor de cambio de
+    referencia, RCV); calculadora con semáforo y gráfica; herramienta para fijar
+    el umbral y la ventana con los pares históricos del propio laboratorio según
+    CLSI EP33; orientación por analito; secuencia de respuesta ante la alerta y
+    guía de implementación. Basada en CLSI EP33 (2023), EFLM, Randell y Yenice
+    2019, KDIGO y ESC. Los datos se procesan en el navegador.
+  tecnologias: ["JavaScript", "CLSI EP33", "EFLM", "RCV"]
+  linea: clinica-epidemiologica-traslacional
+  enlace_app: "/herramientas/laboratorio/delta-check"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: true

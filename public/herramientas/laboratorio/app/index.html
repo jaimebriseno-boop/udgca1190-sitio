@@ -1,0 +1,270 @@
+<!doctype html>
+<!-- Generado por scripts/laboratorio_retematizar.py a partir de «Herramientas - Índice de la sección.html» (serie «Del tubo al diagnóstico», v2.0, septiembre de 2026). No editar a mano: regenerar. -->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio · Herramientas · Cuerpo Académico UDG-CA-1190</title>
+<meta name="description" content="Herramientas de laboratorio clínico del Cuerpo Académico UDG-CA-1190: consulta de 60 biomarcadores, intervalos de referencia y delta check. Funcionan en el navegador; los datos no salen de tu equipo.">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --f-serif:"Source Serif 4",Georgia,serif; --f-sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --papel:#f7f8fa; --tinta:#14181f; --suave:#4b5462; --tenue:#6b7585; --linea:#dde1e8;
+  --plum:#27334f; --navy:#455a8c; --accion:#90303a;
+  --lab:#455a8c; --lab-suave:#edf1f8; --epi:#455a8c; --epi-suave:#edf1f8; --esc:#27334f; --esc-suave:#edf1f8;
+  --ok:#1a6b42; --prueba:#8a5c0a; --doc:#6b7585;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; overflow-x:hidden}
+body{margin:0; background:var(--papel); color:var(--tinta); font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:15.5px; line-height:1.6; -webkit-font-smoothing:antialiased}
+a{color:var(--navy)}
+b,strong{font-weight:600}
+.w{max-width:64rem; margin:0 auto; padding:1.6rem 2rem 5rem}
+.top{position:sticky; top:0; z-index:20; background:rgba(247,248,250,.96); backdrop-filter:blur(6px); border-bottom:1px solid var(--linea)}
+.top .in{max-width:64rem; margin:0 auto; padding:.55rem 2rem; display:flex; gap:.4rem; align-items:center; flex-wrap:wrap}
+.top .marca{font-family:"Source Serif 4",Georgia,serif; font-weight:700; color:var(--plum); font-size:1.05rem; margin-right:auto; text-decoration:none; white-space:nowrap}
+.top a.n{font-size:.76rem; font-weight:600; color:var(--suave); text-decoration:none; padding:.3rem .6rem; border-radius:20px; border:1px solid transparent; white-space:nowrap}
+.top a.n:hover{background:#eef0f4; border-color:var(--linea)}
+.hero{background:linear-gradient(120deg,#1d2533 0%,#27334f 55%,#455a8c 100%); color:#fff; border-radius:6px; padding:2rem 2.2rem 1.7rem; margin:.6rem 0 1.4rem; display:grid; grid-template-columns:1.3fr 1fr; gap:1.5rem; align-items:center; box-shadow:0 14px 34px rgba(39,51,79,.25)}
+.hero .lema{font-family:"Source Serif 4",Georgia,serif; font-style:italic; font-size:1.1rem; color:#b0bcd8; margin:0 0 .6rem}
+.hero h1{font-family:"Source Serif 4",Georgia,serif; font-size:2.5rem; color:#fff; font-weight:700; margin:0 0 .6rem; line-height:1.08; text-wrap:balance}
+.hero p.baj{font-size:1rem; color:#e3e8f2; margin:0; max-width:36rem; line-height:1.55}
+.hero p.baj b{color:#fff}
+.hero .arte{display:flex; justify-content:center}
+.hero svg{width:100%; max-width:20rem; height:auto; filter:drop-shadow(0 12px 18px rgba(0,0,0,.35))}
+
+/* buscador y filtros */
+.busca{background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1rem 1.2rem; margin:0 0 1.4rem; display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:.7rem}
+.busca label{display:block; font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#4b5462; margin-bottom:.25rem}
+.busca input,.busca select{width:100%; font:inherit; color:var(--tinta); background:#fff; border:1.5px solid var(--linea); border-radius:4px; padding:.55rem .7rem}
+.busca input:focus,.busca select:focus{outline:2px solid var(--plum); outline-offset:-1px; border-color:transparent}
+.conteo{font-size:.86rem; color:var(--tenue); margin:-.6rem 0 1.2rem}
+
+/* categorías */
+section.cat{margin-top:2.4rem; scroll-margin-top:3.6rem}
+section.cat h2{font-family:"Source Serif 4",Georgia,serif; font-size:1.7rem; font-weight:600; margin:0 0 .25rem; line-height:1.2}
+section.cat h2 small{display:block; font-family:"Inter",sans-serif; font-size:.66rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.2rem; color:var(--tenue)}
+section.cat .lin{height:3px; border-radius:2px; margin:.45rem 0 .6rem; width:4rem}
+section.cat p.desc{font-size:.92rem; color:var(--suave); margin:0 0 1rem; max-width:48rem}
+section.lab h2{color:var(--lab)} section.lab .lin{background:var(--lab)}
+section.epi h2{color:var(--epi)} section.epi .lin{background:var(--epi)}
+section.esc h2{color:var(--esc)} section.esc .lin{background:var(--esc)}
+
+/* tarjetas */
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(19rem,1fr)); gap:.9rem}
+.tj{background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1.05rem 1.15rem 1rem; display:flex; flex-direction:column; gap:.45rem; border-top:5px solid var(--plum); position:relative}
+.tj[data-cat="lab"]{border-top-color:var(--lab)} .tj[data-cat="epi"]{border-top-color:var(--epi)} .tj[data-cat="esc"]{border-top-color:var(--esc)}
+.tj .cat{font-size:.66rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase}
+.tj[data-cat="lab"] .cat{color:var(--lab)} .tj[data-cat="epi"] .cat{color:var(--epi)} .tj[data-cat="esc"] .cat{color:var(--esc)}
+.tj h3{font-family:"Source Serif 4",Georgia,serif; font-size:1.2rem; font-weight:600; margin:0; line-height:1.25; color:var(--tinta)}
+.tj p.q{margin:0; font-size:.95rem; color:var(--tinta); font-style:italic}
+.tj dl{margin:.2rem 0 0; font-size:.84rem; color:#2f3641; display:grid; grid-template-columns:auto 1fr; gap:.15rem .5rem}
+.tj dt{font-weight:700; color:#4b5462; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; padding-top:.15rem}
+.tj dd{margin:0}
+.tj .meta{font-size:.78rem; color:var(--tenue); margin-top:.2rem; line-height:1.45}
+.tj .estado{display:inline-block; font-size:.66rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:.15rem .5rem; border-radius:20px; margin-right:.3rem; vertical-align:1px}
+.e-lista{background:#e7f2ec; color:var(--ok)} .e-prueba{background:#fbf3dd; color:var(--prueba)} .e-doc{background:#eef0f4; color:var(--doc)} .e-pronto{background:#edf1f8; color:var(--esc)}
+.tj .acc{display:flex; gap:.5rem; flex-wrap:wrap; margin-top:auto; padding-top:.5rem}
+.btn{font:inherit; font-size:.86rem; font-weight:600; padding:.5rem .95rem; border-radius:4px; border:1px solid var(--plum); background:var(--plum); color:#fff; cursor:pointer; text-decoration:none; display:inline-block}
+.btn.sec{background:#fff; color:var(--plum)}
+.btn:hover{filter:brightness(1.08)}
+.btn[aria-disabled="true"]{opacity:.45; pointer-events:none}
+.tj .conf{font-size:.74rem; color:var(--tenue); border-top:1px dashed var(--linea); padding-top:.45rem; margin-top:.2rem; line-height:1.45}
+.tj.pronto{background:#f7f8fa; border-style:dashed}
+.tj.pronto h3{color:var(--tenue)}
+.nuevo{position:absolute; top:.7rem; right:.8rem; font-size:.64rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--accion); background:#fbeae8; padding:.15rem .5rem; border-radius:20px}
+.oculta{display:none}
+.vacio{padding:1.2rem; color:var(--tenue); font-size:.9rem; background:#fff; border:1px dashed var(--linea); border-radius:6px}
+
+/* bloques generales */
+.card{background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1.1rem 1.3rem; margin:0 0 .9rem}
+h2.sec{font-family:"Source Serif 4",Georgia,serif; font-size:1.7rem; font-weight:600; margin:2.6rem 0 .25rem; line-height:1.2; color:var(--plum)}
+h2.sec small{display:block; font-family:"Inter",sans-serif; font-size:.66rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.2rem; color:var(--tenue)}
+.sec-lin{height:3px; border-radius:2px; margin:.45rem 0 1rem; width:4rem; background:var(--plum)}
+.tres{display:grid; grid-template-columns:repeat(auto-fit,minmax(14rem,1fr)); gap:.8rem; margin:0 0 1rem}
+.tres div{background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1rem 1.1rem; font-size:.9rem}
+.tres b{display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.1em; margin-bottom:.3rem; color:var(--plum)}
+.tres strong{display:block; font-family:"Source Serif 4",Georgia,serif; font-size:1.1rem; margin-bottom:.3rem}
+.integrantes{display:grid; grid-template-columns:repeat(auto-fit,minmax(20rem,1fr)); gap:.8rem}
+.autora{display:flex; gap:1rem; align-items:flex-start; background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1rem 1.2rem}
+.autora .ini{flex:none; width:3.2rem; height:3.2rem; border-radius:50%; background:var(--plum); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Source Serif 4",Georgia,serif; font-weight:700; font-size:1.15rem}
+.autora b{display:block; font-size:1.02rem}
+.autora p{margin:.1rem 0 0; font-size:.86rem; color:var(--suave); line-height:1.5}
+.autora a{color:var(--navy); text-decoration:none; border-bottom:1px solid #b0bcd8}
+.orcid{display:inline-block; width:1em; height:1em; vertical-align:-.15em; margin-right:.25em; border-radius:50%; background:#a6ce39; color:#fff; font-size:.75em; line-height:1.35em; text-align:center; font-weight:700; font-family:sans-serif}
+.legal{background:#fff; border:1px solid var(--linea); border-left:4px solid var(--navy); border-radius:4px; padding:1rem 1.2rem; font-size:.86rem; color:#2f3641; line-height:1.55}
+.legal p{margin:0 0 .6rem} .legal p:last-child{margin:0}
+.citar{background:#fff; border:1px solid var(--linea); border-radius:4px; padding:.8rem 1rem; font-size:.86rem; color:var(--suave)}
+.citar code{font-family:inherit; color:var(--tinta)}
+.pie{margin-top:3rem; padding-top:1.2rem; border-top:1px solid var(--linea); font-size:.8rem; color:#4b5462; line-height:1.55}
+.pie .lema{font-family:"Source Serif 4",Georgia,serif; font-style:italic; font-size:.95rem; color:var(--plum); margin-bottom:.3rem}
+.pie a{color:var(--navy); text-decoration:none; border-bottom:1px solid #b0bcd8}
+@media (max-width:820px){
+  .w{padding:1rem 1.05rem 5rem} .top .in{padding:.5rem 1.05rem; overflow-x:auto; flex-wrap:nowrap}
+  .hero{grid-template-columns:1fr; padding:1.5rem 1.2rem} .hero .arte{order:-1} .hero svg{max-width:13rem} .hero h1{font-size:1.9rem}
+  .busca{grid-template-columns:1fr 1fr}
+}
+@media print{.top,.busca{display:none} body{background:#fff} .tj{break-inside:avoid}}
+</style>
+</head>
+<body>
+<nav class="top"><div class="in">
+  <a class="marca" href="#inicio">Laboratorio</a>
+  <a class="n" href="#herramientas">Herramientas</a><a class="n" href="#como">Cómo usar</a><a class="n" href="#quienes">Quiénes</a><a class="n" href="#legal">Aviso legal</a>
+  <a class="n" href="/herramientas" target="_top" title="Todas las herramientas del Cuerpo Académico">Todas las herramientas ↗</a>
+</div></nav>
+
+<div class="w" id="inicio">
+<div class="hero">
+  <div>
+    <p class="lema">“Del tubo al diagnóstico”</p>
+    <h1>Herramientas de laboratorio clínico</h1>
+    <p class="baj"><b>Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara.</b> Calculadoras, guías y materiales de consulta para el laboratorio clínico: verificación de resultados, intervalos de referencia, preanalítica, calidad analítica y consulta de biomarcadores. Cada tarjeta dice qué pregunta responde, para quién es y qué necesitas para usarla. Todas funcionan en el navegador; las que capturan datos los procesan en tu equipo y no los envían a ningún servidor.</p>
+  </div>
+  <div class="arte">
+    <svg viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tres tubos de muestra y una distribución de referencia: laboratorio clínico">
+      <ellipse cx="260" cy="150" rx="250" ry="125" fill="#fff" fill-opacity=".06"/>
+      <!-- distribución de referencia -->
+      <path d="M300,215 C340,213 360,205 380,180 C400,150 410,80 430,80 C450,80 460,150 480,180 C500,205 505,213 510,215" fill="none" stroke="#FDCF85" stroke-width="3" stroke-linecap="round"/>
+      <line x1="300" y1="215" x2="510" y2="215" stroke="#fff" stroke-opacity=".7" stroke-width="1.5"/>
+      <line x1="372" y1="120" x2="372" y2="215" stroke="#fff" stroke-opacity=".6" stroke-dasharray="5 4"/>
+      <line x1="488" y1="120" x2="488" y2="215" stroke="#fff" stroke-opacity=".6" stroke-dasharray="5 4"/>
+      <text x="372" y="110" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#e3e8f2">2.5</text>
+      <text x="488" y="110" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="#e3e8f2">97.5</text>
+      <!-- tubos: EDTA (lila), suero (amarillo), citrato (azul) -->
+      <g transform="translate(60,62)"><rect x="-10" y="-8" width="44" height="18" rx="6" fill="#8e6bbf"/><path d="M-4,10 h32 v110 a16,16 0 0 1 -32,0 z" fill="#fff" fill-opacity=".14" stroke="#fff" stroke-opacity=".85" stroke-width="2"/><path d="M-4,54 h32 v66 a16,16 0 0 1 -32,0 z" fill="#a61e12"/><rect x="2" y="16" width="5" height="80" rx="2" fill="#fff" opacity=".5"/></g>
+      <g transform="translate(140,62)"><rect x="-10" y="-8" width="44" height="18" rx="6" fill="#e6c02e"/><path d="M-4,10 h32 v110 a16,16 0 0 1 -32,0 z" fill="#fff" fill-opacity=".14" stroke="#fff" stroke-opacity=".85" stroke-width="2"/><path d="M-4,40 h32 v40 a0,0 0 0 1 0,0 v0 h-32 z" fill="#f2dc74" fill-opacity=".9"/><path d="M-4,80 h32 v40 a16,16 0 0 1 -32,0 z" fill="#a61e12"/><rect x="2" y="16" width="5" height="80" rx="2" fill="#fff" opacity=".5"/></g>
+      <g transform="translate(220,62)"><rect x="-10" y="-8" width="44" height="18" rx="6" fill="#2f6fd6"/><path d="M-4,10 h32 v110 a16,16 0 0 1 -32,0 z" fill="#fff" fill-opacity=".14" stroke="#fff" stroke-opacity=".85" stroke-width="2"/><path d="M-4,60 h32 v60 a16,16 0 0 1 -32,0 z" fill="#a61e12"/><rect x="2" y="16" width="5" height="80" rx="2" fill="#fff" opacity=".5"/></g>
+      <text x="152" y="225" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="600" fill="#fff">preanalítica · analítica · postanalítica</text>
+      <text x="260" y="262" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#e3e8f2">funcionan en el navegador · los datos no salen de tu equipo</text>
+    </svg>
+  </div>
+</div>
+
+<div class="busca" id="busca">
+  <div><label for="q">Buscar</label><input id="q" type="search" placeholder="nombre, pregunta, analito, palabra clave…" autocomplete="off"></div>
+  <div><label for="fperfil">Para quién</label><select id="fperfil"><option value="">Todos</option><option value="quimico">Químico/a clínico/a</option><option value="medico">Médico/a</option><option value="calidad">Responsable de calidad</option><option value="epidemiologo">Epidemiólogo/a</option><option value="enfermeria">Enfermería</option><option value="estudiante">Estudiante</option></select></div>
+  <div><label for="festado">Estado</label><select id="festado"><option value="">Todos</option><option value="lista">Lista para usar</option><option value="prueba">En prueba</option><option value="doc">Solo docencia</option><option value="pronto">Próximamente</option></select></div>
+</div>
+<p class="conteo" id="conteo"></p>
+
+<!-- ═══════════════════ LABORATORIO ═══════════════════ -->
+<section class="cat lab" id="herramientas">
+  <h2><small>Sección Laboratorio</small>Herramientas disponibles</h2><div class="lin"></div>
+  <p class="desc">Laboratorio clínico, molecular y microbiológico: verificación de resultados, intervalos de referencia, preanalítica, calidad analítica y consulta de biomarcadores.</p>
+  <div class="grid">
+
+    <article class="tj" data-cat="lab" data-perfil="quimico medico enfermeria estudiante" data-estado="lista" data-texto="biomarcadores preanalítica tubo estabilidad interferencias valores críticos delta check variación biológica 60 marcadores">
+      <span class="nuevo">Nueva</span>
+      <span class="cat">Laboratorio · consulta</span>
+      <h3>Del tubo al diagnóstico: consulta de 60 biomarcadores</h3>
+      <p class="q">¿Qué es este marcador, en qué tubo se toma, cómo se conserva, cómo se mide, por qué sube o baja y cómo se interpreta?</p>
+      <dl><dt>Para</dt><dd>Químicos clínicos y médicos que leen sus resultados; enfermería y flebotomía para la parte preanalítica.</dd><dt>Necesitas</dt><dd>Nada: es una consulta. Se busca por nombre o sigla.</dd></dl>
+      <div class="meta"><span class="estado e-lista">Lista para usar</span>Versión 2.0 · septiembre 2026 · De Arcos-Jiménez JC, Briseño-Ramírez J</div>
+      <div class="acc"><a class="btn" href="biomarcadores.html">Abrir</a><a class="btn sec" href="biomarcadores.html#legal">Aviso y cómo citar</a></div>
+      <div class="conf">Basada en Tietz, Henry's, CLSI GP41/GP44/EP07, EFLM, guías clínicas e insertos vigentes · Funciona sin internet · Sin intervalos de referencia: los pone cada laboratorio.</div>
+    </article>
+
+    <article class="tj" data-cat="lab" data-perfil="quimico calidad estudiante" data-estado="lista" data-texto="intervalos de referencia verificar 20 individuos establecer 120 percentiles EP28 harris boyd hoffmann refineR indirecto partición">
+      <span class="nuevo">Nueva</span>
+      <span class="cat">Laboratorio · calidad</span>
+      <h3>Intervalos de referencia: verificar, establecer y transferir</h3>
+      <p class="q">¿El intervalo del inserto sirve para mi población y mi método? ¿Cómo construyo el mío?</p>
+      <dl><dt>Para</dt><dd>Químicos clínicos y responsables de calidad.</dd><dt>Necesitas</dt><dd>20 resultados de individuos de referencia y el intervalo publicado; o 120 o más resultados por grupo; o una exportación de resultados del sistema.</dd></dl>
+      <div class="meta"><span class="estado e-lista">Lista para usar</span>Versión 2.0 · septiembre 2026 · De Arcos-Jiménez JC, Briseño-Ramírez J</div>
+      <div class="acc"><a class="btn" href="intervalos-de-referencia.html">Abrir</a><a class="btn sec" href="intervalos-de-referencia.html#legal">Aviso y cómo citar</a></div>
+      <div class="conf">Basada en CLSI EP28-A3c, EP09c, IFCC C-RIDL, Harris y Boyd, refineR y reflimR · Funciona sin internet · Los datos no salen de tu equipo.</div>
+    </article>
+
+    <article class="tj" data-cat="lab" data-perfil="quimico calidad medico estudiante" data-estado="lista" data-texto="delta check comparar paciente consigo mismo RCV variación biológica umbral ventana alertas identificación muestra EP33">
+      <span class="nuevo">Nueva</span>
+      <span class="cat">Laboratorio · verificación de resultados</span>
+      <h3>Delta check: comparar al paciente consigo mismo</h3>
+      <p class="q">¿Este cambio entre dos resultados del mismo paciente es real, es error o es ruido? ¿Qué límite y qué ventana debo usar?</p>
+      <dl><dt>Para</dt><dd>Químicos clínicos, responsables de calidad y médicos que quieran entender las alertas.</dd><dt>Necesitas</dt><dd>Dos resultados del mismo paciente (y sus fechas); para fijar el umbral, los pares históricos exportados del sistema.</dd></dl>
+      <div class="meta"><span class="estado e-lista">Lista para usar</span>Versión 2.0 · septiembre 2026 · De Arcos-Jiménez JC, Briseño-Ramírez J</div>
+      <div class="acc"><a class="btn" href="delta-check.html">Abrir</a><a class="btn sec" href="delta-check.html#legal">Aviso y cómo citar</a></div>
+      <div class="conf">Basada en CLSI EP33 (2023), EFLM, Randell y Yenice 2019, KDIGO y ESC · Funciona sin internet · Los datos no salen de tu equipo.</div>
+    </article>
+
+<!-- ─── PLANTILLA DE TARJETA: copia este bloque, quita los guiones del comentario y llena los campos ───
+    <article class="tj" data-cat="lab" data-perfil="quimico medico calidad epidemiologo enfermeria estudiante" data-estado="lista|prueba|doc|pronto" data-texto="palabras clave para el buscador">
+      <span class="cat">Categoría · subtema</span>
+      <h3>Nombre con verbo o pregunta</h3>
+      <p class="q">¿Qué pregunta responde?</p>
+      <dl><dt>Para</dt><dd>Perfil de usuario.</dd><dt>Necesitas</dt><dd>Qué datos o material hay que tener a la mano.</dd></dl>
+      <div class="meta"><span class="estado e-lista">Lista para usar</span>Versión 1.0 · mes año · Apellido-Apellido Iniciales</div>
+      <div class="acc"><a class="btn" href="archivo.html">Abrir</a><a class="btn sec" href="archivo.html#legal">Aviso y cómo citar</a></div>
+      <div class="conf">Basada en … · Funciona sin internet · Los datos no salen de tu equipo.</div>
+    </article>
+──────────────────────────────────────────────────────────────────────────────────────────────────── -->
+
+  </div>
+</section>
+
+
+<div class="vacio oculta" id="vacio">Ninguna herramienta coincide con la búsqueda. Prueba con otra palabra o quita los filtros.</div>
+
+<!-- ═══════════════════ CÓMO USAR ═══════════════════ -->
+<h2 class="sec" id="como"><small>Antes de empezar</small>Cómo usar esta sección</h2><div class="sec-lin"></div>
+<div class="tres">
+  <div><b>1 · Encuentra</b><strong>Busca por lo que necesitas</strong>Escribe un analito, una palabra clave o una pregunta en el buscador, o filtra por categoría, perfil y estado. Cada tarjeta dice qué pregunta responde y qué necesitas tener a la mano.</div>
+  <div><b>2 · Revisa el estado</b><strong>Lista, en prueba o docencia</strong><span class="estado e-lista">Lista para usar</span> ha pasado revisión. <span class="estado e-prueba">En prueba</span> funciona pero aún se valida: úsala con cautela. <span class="estado e-doc">Solo docencia</span> es material didáctico, no para decisiones.</div>
+  <div><b>3 · Usa y cita</b><strong>Comparte el enlace, no el archivo</strong>Cada herramienta tiene su versión, su aviso legal y su forma de citar. Comparte el enlace de esta página para que siempre llegue la versión vigente. Los comentarios se envían desde el botón que tiene cada herramienta.</div>
+</div>
+<div class="card">
+  <p style="margin:0 0 .5rem"><b>Qué tienen en común todas las herramientas.</b> Funcionan en cualquier navegador moderno, en computadora o teléfono. Las que hacen cálculos los ejecutan en tu equipo: los datos que captures no se transmiten ni se guardan. Se pueden descargar y usar sin internet. Cada una declara sus fuentes (guías, normas, libros de texto, artículos e instructivos de fabricantes) y sus límites, y ninguna sustituye el juicio profesional, los procedimientos de tu institución ni la información del proveedor correspondiente.</p>
+  <p style="margin:0"><b>Si algo falla o falta.</b> Cada página tiene un botón de comentarios. Los errores señalados se corrigen y se agradecen en la siguiente versión.</p>
+</div>
+
+<!-- ═══════════════════ QUIÉNES ═══════════════════ -->
+<h2 class="sec" id="quienes"><small>Cuerpo Académico UDG-CA-1190</small>Quiénes desarrollamos estas herramientas</h2><div class="sec-lin"></div>
+<div class="integrantes">
+  <div class="autora"><div class="ini">JA</div><div><b>Dra. en C. Judith Carolina De Arcos Jiménez</b><p>Investigadora Nacional Nivel I (SNII) · Perfil PRODEP · Centro Universitario de Tlajomulco, Universidad de Guadalajara<br><a href="https://orcid.org/0000-0003-0251-6425" target="_blank" rel="noopener"><span class="orcid">iD</span>orcid.org/0000-0003-0251-6425</a></p></div></div>
+  <div class="autora"><div class="ini">JB</div><div><b>Dr. Jaime Briseño Ramírez</b><p>Investigador Nacional Nivel I (SNII) · Perfil PRODEP · Centro Universitario de Tlajomulco, Universidad de Guadalajara<br><a href="https://orcid.org/0009-0006-1901-392X" target="_blank" rel="noopener"><span class="orcid">iD</span>orcid.org/0009-0006-1901-392X</a></p></div></div>
+</div>
+<p class="conteo" style="margin-top:.8rem">Las herramientas de cada categoría llevan el nombre de quienes las desarrollaron. Colaboradores y estudiantes que participen en una herramienta aparecen en la tarjeta y en la página correspondiente.</p>
+
+<!-- ═══════════════════ LEGAL ═══════════════════ -->
+<h2 class="sec" id="legal"><small>Para toda la sección</small>Aviso legal</h2><div class="sec-lin"></div>
+<div class="legal">
+  <p><b>Aviso legal.</b> Las herramientas y materiales de esta sección tienen fines exclusivamente educativos y de apoyo a la práctica profesional y a la investigación. No constituyen asesoría médica ni sustituyen el juicio del profesional de la salud, los procedimientos normalizados de operación, el sistema de gestión de la calidad ni las políticas de cada institución.</p>
+  <p>Los criterios, límites, valores y algoritmos implementados provienen de las guías, normas, libros de texto, artículos e instructivos que cada herramienta cita, vigentes a la fecha de su edición, y en varios casos son simplificaciones didácticas de esos documentos. <b>No sustituyen la información contenida en el inserto o instructivo de uso del reactivo, equipo, dispositivo o programa del proveedor correspondiente</b>, ni la normatividad aplicable en México (Ley General de Salud y Normas Oficiales Mexicanas vigentes) ni las normas internacionales cuando apliquen.</p>
+  <p>Cada usuario y cada institución son responsables de la validez de los datos que capturan, de las decisiones que toman y de su documentación. Los cálculos se ejecutan localmente en el navegador; los datos capturados no se transmiten ni se almacenan. Los autores y el Cuerpo Académico UDG-CA-1190 no asumen responsabilidad alguna por decisiones clínicas, analíticas, epidemiológicas, regulatorias o administrativas que se tomen con base en estos materiales, ni por errores u omisiones involuntarios, y agradecen toda corrección enviada por los formularios de comentarios. El uso de esta sección implica la aceptación de estas condiciones.</p>
+  <p>© 2026 Cuerpo Académico UDG-CA-1190, Centro Universitario de Tlajomulco, Universidad de Guadalajara, y los autores de cada herramienta. Se permite compartir y reproducir con fines educativos, sin fines de lucro y citando la fuente; cualquier otro uso requiere autorización de los autores.</p>
+</div>
+<h3 style="font-family:'Inter',sans-serif; font-size:.76rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--navy); margin:1.6rem 0 .6rem; padding-bottom:.35rem; border-bottom:1px solid var(--linea)">Cómo citar la sección</h3>
+<div class="citar"><code>Cuerpo Académico UDG-CA-1190. Herramientas de apoyo a la práctica y la investigación en salud [sitio web]. Centro Universitario de Tlajomulco, Universidad de Guadalajara; 2026. Disponible en: https://udgca1190.com.mx/herramientas/laboratorio. Cada herramienta tiene su propia cita en su página.</code></div>
+
+<div class="pie" id="pie"><div class="lema">Herramientas multidisciplinarias para la salud</div>Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara<br>Coordinación de la sección: Dra. en C. Judith Carolina De Arcos Jiménez y Dr. Jaime Briseño Ramírez<br>Última actualización: septiembre de 2026 · <a href="#legal">Aviso legal</a></div>
+</div>
+
+<script>
+/* buscador y filtros: sin dependencias, solo muestra u oculta tarjetas */
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var tarjetas = Array.prototype.slice.call(document.querySelectorAll('.tj'));
+  function norm(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function filtrar(){
+    var q = norm($('q').value.trim()), per = $('fperfil').value, est = $('festado').value, vis = 0;
+    tarjetas.forEach(function(t){
+      var ok = true;
+      if(per && (t.getAttribute('data-perfil') || '').split(/\s+/).indexOf(per) < 0) ok = false;
+      if(est && t.getAttribute('data-estado') !== est) ok = false;
+      if(q){ var texto = norm(t.textContent + ' ' + (t.getAttribute('data-texto') || '')); if(texto.indexOf(q) < 0) ok = false; }
+      t.classList.toggle('oculta', !ok); if(ok) vis++;
+    });
+    $('vacio').classList.toggle('oculta', vis > 0);
+    var total = tarjetas.filter(function(t){ return t.getAttribute('data-estado') !== 'pronto'; }).length;
+    var pronto = tarjetas.length - total;
+    $('conteo').textContent = (q || per || est)
+      ? vis + ' resultado' + (vis === 1 ? '' : 's')
+      : total + ' herramienta' + (total === 1 ? '' : 's') + ' disponible' + (total === 1 ? '' : 's') + (pronto ? ' · ' + pronto + ' en preparación' : '');
+  }
+  ['q','fperfil','festado'].forEach(function(id){ $(id).addEventListener('input', filtrar); $(id).addEventListener('change', filtrar); });
+  filtrar();
+})();
+</script>
+</body>
+</html>

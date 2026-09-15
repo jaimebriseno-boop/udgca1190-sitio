@@ -1,0 +1,889 @@
+<!doctype html>
+<!-- Generado por scripts/laboratorio_retematizar.py a partir de «Intervalos de referencia - Verificar, establecer y transferir.html» (serie «Del tubo al diagnóstico», v2.0, septiembre de 2026). No editar a mano: regenerar. -->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Intervalos de referencia · Verificar, establecer y transferir</title>
+<meta name="description" content="Herramientas y guía práctica para verificar un intervalo de referencia con 20 individuos, establecer intervalos propios con 120 o más, estimarlos con datos ya existentes del laboratorio y documentarlo conforme a CLSI EP28.">
+<meta name="author" content="Judith Carolina De Arcos Jiménez; Jaime Briseño Ramírez">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --f-serif:"Source Serif 4",Georgia,serif; --f-sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --papel:#f7f8fa; --panel:#ffffff; --tinta:#14181f; --suave:#4b5462; --tenue:#6b7585;
+  --linea:#dde1e8; --plum:#27334f; --navy:#455a8c; --accion:#90303a;
+  --ok:#1a6b42; --ok-suave:#e7f2ec; --aviso:#8a5c0a; --aviso-suave:#fbf3dd; --no:#a61e12; --no-suave:#fbeae8;
+  --pre:#1a6b42; --ana:#455a8c; --post:#27334f;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; overflow-x:hidden}
+body{margin:0; background:var(--papel); color:var(--tinta); font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:15.5px; line-height:1.6; -webkit-font-smoothing:antialiased}
+a{color:var(--navy)}
+b,strong{font-weight:600}
+.w{max-width:60rem; margin:0 auto; padding:1.6rem 2rem 5rem}
+
+/* barra superior */
+.top{position:sticky; top:0; z-index:20; background:rgba(247,248,250,.96); backdrop-filter:blur(6px); border-bottom:1px solid var(--linea)}
+.top .in{max-width:60rem; margin:0 auto; padding:.55rem 2rem; display:flex; gap:.4rem; align-items:center; flex-wrap:wrap}
+.top .marca{font-family:"Source Serif 4",Georgia,serif; font-weight:700; color:var(--plum); font-size:1.05rem; margin-right:auto; text-decoration:none; white-space:nowrap}
+.top a.n{font-size:.76rem; font-weight:600; color:var(--suave); text-decoration:none; padding:.3rem .6rem; border-radius:20px; border:1px solid transparent; white-space:nowrap}
+.top .volver{font-family:var(--f-mono); font-size:.64rem; letter-spacing:.1em; text-transform:uppercase; color:var(--tenue); text-decoration:none; white-space:nowrap; padding:.3rem .6rem .3rem 0; margin-right:.4rem; border-right:1px solid var(--linea)}
+.top .volver:hover{color:var(--accion)}
+.top a.n:hover{background:#eef0f4; border-color:var(--linea)}
+
+/* hero */
+.hero{background:linear-gradient(120deg,#1d2533 0%,#27334f 55%,#455a8c 100%); color:#fff; border-radius:6px; padding:2rem 2.2rem 1.7rem; margin:.6rem 0 1.4rem; display:grid; grid-template-columns:1.2fr 1fr; gap:1.5rem; align-items:center; box-shadow:0 14px 34px rgba(39,51,79,.25)}
+.hero .lema{font-family:"Source Serif 4",Georgia,serif; font-style:italic; font-size:1.1rem; color:#b0bcd8; margin:0 0 .6rem}
+.hero h1{font-family:"Source Serif 4",Georgia,serif; font-size:2.5rem; color:#fff; font-weight:700; margin:0 0 .6rem; line-height:1.08; text-wrap:balance}
+.hero p.baj{font-size:1rem; color:#e3e8f2; margin:0; max-width:34rem; line-height:1.55}
+.hero p.baj b{color:#fff}
+.hero .arte{display:flex; justify-content:center}
+.hero svg{width:100%; max-width:22rem; height:auto; filter:drop-shadow(0 12px 18px rgba(0,0,0,.35))}
+
+.autores{display:grid; grid-template-columns:repeat(auto-fit,minmax(20rem,1fr)); gap:.8rem; margin:0 0 1.2rem}
+.autora{display:flex; gap:1rem; align-items:flex-start; background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1rem 1.2rem; margin:0}
+.autora .ini{flex:none; width:3.2rem; height:3.2rem; border-radius:50%; background:var(--plum); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Source Serif 4",Georgia,serif; font-weight:700; font-size:1.15rem}
+.autora b{display:block; font-size:1.02rem}
+.autora p{margin:.1rem 0 0; font-size:.86rem; color:var(--suave); line-height:1.5}
+.autora a{color:var(--navy); text-decoration:none; border-bottom:1px solid #b0bcd8}
+.orcid{display:inline-block; width:1em; height:1em; vertical-align:-.15em; margin-right:.25em; border-radius:50%; background:#a6ce39; color:#fff; font-size:.75em; line-height:1.35em; text-align:center; font-weight:700; font-family:sans-serif}
+
+/* secciones */
+section{margin-top:3rem; scroll-margin-top:3.6rem}
+h2.sec{font-family:"Source Serif 4",Georgia,serif; font-size:1.7rem; font-weight:600; margin:0 0 .25rem; line-height:1.2; color:var(--plum)}
+h2.sec small{display:block; font-family:"Inter",sans-serif; font-size:.66rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.2rem; color:var(--tenue)}
+.sec-lin{height:3px; border-radius:2px; margin:.45rem 0 1.1rem; width:4rem; background:var(--plum)}
+section.t1 h2.sec{color:var(--pre)} section.t1 .sec-lin{background:var(--pre)}
+section.t2 h2.sec{color:var(--ana)} section.t2 .sec-lin{background:var(--ana)}
+section.t3 h2.sec{color:var(--post)} section.t3 .sec-lin{background:var(--post)}
+h3{font-family:"Inter",sans-serif; font-size:.76rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--navy); margin:1.8rem 0 .7rem; padding-bottom:.35rem; border-bottom:1px solid var(--linea)}
+p.nota{font-size:.92rem; color:var(--suave); margin:0 0 1rem}
+.tarjetas{display:grid; grid-template-columns:repeat(auto-fit,minmax(14rem,1fr)); gap:.8rem; margin:0 0 1rem}
+.tj{border-radius:6px; padding:1rem 1.1rem; border:1px solid var(--linea); background:#fff; border-top:4px solid var(--plum)}
+.tj b{display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.1em; margin-bottom:.3rem; color:var(--plum)}
+.tj strong{display:block; font-family:"Source Serif 4",Georgia,serif; font-size:1.12rem; font-weight:600; margin-bottom:.35rem}
+.tj p{margin:0; font-size:.88rem; color:#2f3641}
+.tj.c1{border-top-color:var(--pre)} .tj.c1 b{color:var(--pre)}
+.tj.c2{border-top-color:var(--ana)} .tj.c2 b{color:var(--ana)}
+.tj.c3{border-top-color:var(--post)} .tj.c3 b{color:var(--post)}
+.card{background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1.1rem 1.3rem; margin:0 0 .9rem}
+.pasos{counter-reset:n; list-style:none; padding:0; margin:0; display:grid; gap:.55rem}
+.pasos li{counter-increment:n; display:grid; grid-template-columns:2.2rem 1fr; gap:.6rem; background:#fff; border:1px solid var(--linea); border-radius:4px; padding:.7rem .9rem; font-size:.92rem}
+.pasos li::before{content:counter(n); font-family:"Source Serif 4",Georgia,serif; font-size:1.5rem; font-weight:700; color:var(--accion); line-height:1}
+.pasos li b{display:block}
+.ruta{display:grid; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr)); gap:.8rem}
+.ruta .r{background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1rem 1.1rem; font-size:.9rem}
+.ruta .r b.q{display:block; font-family:"Source Serif 4",Georgia,serif; font-size:1.05rem; font-weight:600; margin-bottom:.4rem; color:var(--tinta)}
+.ruta .r .si,.ruta .r .no{display:block; padding:.4rem .6rem; border-radius:4px; margin-top:.35rem}
+.ruta .r .si{background:var(--ok-suave); color:#15532f} .ruta .r .no{background:var(--no-suave); color:#6d150c}
+.ruta .r .si b,.ruta .r .no b{font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; margin-right:.3rem}
+.llamada{border-radius:4px; padding:.9rem 1.1rem; margin:.6rem 0 1.2rem; font-size:.92rem}
+.llamada b.tit{display:block; font-size:.7rem; text-transform:uppercase; letter-spacing:.09em; margin-bottom:.3rem}
+.ll-ok{background:var(--ok-suave); border:1px solid #bcd9c8; color:#15532f} .ll-ok b.tit{color:var(--ok)}
+.ll-aviso{background:var(--aviso-suave); border:1px solid #ecd9a3; color:#5c3d06} .ll-aviso b.tit{color:var(--aviso)}
+.ll-no{background:var(--no-suave); border:1px solid #efc0bb; color:#6d150c} .ll-no b.tit{color:var(--no)}
+.ll-plum{background:#edf1f8; border:1px solid #b0bcd8; color:#27334f} .ll-plum b.tit{color:var(--post)}
+
+/* formularios */
+label{display:block; font-size:.72rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:#4b5462; margin:0 0 .3rem}
+input[type=text],input[type=number],textarea,select{width:100%; font:inherit; color:var(--tinta); background:#fff; border:1.5px solid var(--linea); border-radius:4px; padding:.55rem .7rem}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--plum); outline-offset:-1px; border-color:transparent}
+textarea{min-height:8rem; font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:.86rem; resize:vertical}
+.g4{display:grid; grid-template-columns:repeat(4,1fr); gap:.8rem 1rem}
+.g2{display:grid; grid-template-columns:1fr 1fr; gap:.8rem 1rem}
+.g3{display:grid; grid-template-columns:repeat(3,1fr); gap:.8rem 1rem}
+.chk{display:flex; align-items:center; gap:.5rem; font-size:.9rem; color:var(--suave); margin-top:.6rem}
+.chk input{width:auto}
+.v{display:grid; grid-template-columns:repeat(5,1fr); gap:.5rem}
+.v div{position:relative}
+.v i{position:absolute; left:.55rem; top:.45rem; font-style:normal; font-size:.66rem; color:var(--tenue); font-weight:700}
+.v input{padding-left:1.7rem; font-weight:600; font-variant-numeric:tabular-nums}
+.v input.fuera{border-color:#c9962e; background:#fbf3dd}
+.res{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:.6rem; margin-top:.9rem}
+.r2{background:#eef0f4; border-radius:4px; padding:.75rem .9rem}
+.r2 b{display:block; font-size:.66rem; letter-spacing:.09em; text-transform:uppercase; color:#4b5462}
+.r2 span{display:block; font-family:"Source Serif 4",Georgia,serif; font-size:1.8rem; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.15; margin-top:.1rem; color:var(--tinta)}
+.r2 small{display:block; color:var(--suave); font-size:.78rem; margin-top:.1rem}
+.ver{margin-top:.9rem; border-radius:4px; padding:.9rem 1.1rem; font-size:.95rem; line-height:1.5; border:2px solid var(--linea); background:#fff}
+.ver b.t{display:block; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; margin-bottom:.25rem}
+.ver.ok{border-color:var(--ok)} .ver.ok b.t{color:var(--ok)}
+.ver.rep{border-color:#c9962e} .ver.rep b.t{color:#8a5c0a}
+.ver.no{border-color:var(--no)} .ver.no b.t{color:var(--no)}
+.btn{font:inherit; font-size:.9rem; font-weight:600; padding:.55rem 1.05rem; border-radius:4px; border:1px solid var(--plum); background:var(--plum); color:#fff; cursor:pointer}
+.btn.sec{background:#fff; color:var(--plum)}
+.btn:hover{filter:brightness(1.08)}
+.acc{display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1rem}
+.tabla{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font-size:.88rem; margin:.2rem 0 1rem}
+th{text-align:left; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:#4b5462; font-weight:700; padding:.4rem .6rem .4rem 0; border-bottom:1px solid var(--linea)}
+td{padding:.5rem .6rem .5rem 0; border-bottom:1px solid var(--linea); vertical-align:top}
+td.n{font-variant-numeric:tabular-nums; white-space:nowrap}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:.84rem}
+pre.code{background:#14181f; color:#e4e8ef; border-radius:4px; padding:1rem 1.1rem; font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:.8rem; line-height:1.55; overflow-x:auto; margin:.6rem 0 1rem}
+.graf{width:100%; height:auto; background:#fff; border:1px solid var(--linea); border-radius:4px; margin:.6rem 0}
+.chips{display:flex; flex-wrap:wrap; gap:.35rem; margin:.4rem 0}
+.chips span{background:#fff; border:1px solid var(--linea); border-radius:4px; padding:.15rem .55rem; font-weight:600; font-variant-numeric:tabular-nums; font-size:.86rem}
+.chips span.f{border-color:#c9962e; background:#fbf3dd; color:#8a5c0a}
+.chips span.x{border-color:var(--no); background:var(--no-suave); color:#6d150c}
+.check{list-style:none; padding:0; margin:0; display:grid; gap:.35rem}
+.check li{display:grid; grid-template-columns:1.4rem 1fr; gap:.4rem; font-size:.9rem; align-items:start}
+.check li::before{content:""; width:1rem; height:1rem; border:1.5px solid var(--tenue); border-radius:2px; margin-top:.25rem}
+.qq{display:grid; grid-template-columns:repeat(auto-fit,minmax(13rem,1fr)); gap:.6rem; margin:0 0 1rem}
+.qq div{background:#eef0f4; border-radius:4px; padding:.75rem .9rem; font-size:.88rem}
+.qq b{display:block; font-size:.66rem; letter-spacing:.09em; text-transform:uppercase; color:#4b5462; margin-bottom:.2rem}
+.simple{background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1.1rem 1.3rem; margin:0 0 1rem}
+.simple p{margin:0 0 .7rem; font-size:.98rem} .simple p:last-child{margin:0}
+.simple .ana{font-family:"Source Serif 4",Georgia,serif; font-size:1.15rem; color:var(--plum); font-style:italic}
+.glos dt{font-weight:600; margin-top:.5rem} .glos dd{margin:0 0 .2rem; font-size:.9rem; color:#2f3641}
+.errs{display:grid; gap:.6rem}
+.err{background:#fff; border:1px solid var(--linea); border-left:4px solid var(--accion); border-radius:4px; padding:.75rem .95rem; font-size:.9rem}
+.err b{display:block; font-size:.95rem; margin-bottom:.15rem}
+.err span{display:block; color:#2f3641}
+.biblio{font-size:.88rem; line-height:1.5; color:#2f3641}
+.biblio ol{padding-left:1.3rem; margin:0} .biblio li{margin-bottom:.4rem}
+.legal{background:#fff; border:1px solid var(--linea); border-left:4px solid var(--navy); border-radius:4px; padding:1rem 1.2rem; font-size:.86rem; color:#2f3641; line-height:1.55}
+.legal p{margin:0 0 .6rem} .legal p:last-child{margin:0}
+.citar{background:#fff; border:1px solid var(--linea); border-radius:4px; padding:.8rem 1rem; font-size:.86rem; color:var(--suave)}
+.citar code{font-family:inherit; color:var(--tinta)}
+.cta{display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; background:#edf1f8; border:1px solid #b0bcd8; border-radius:6px; padding:1rem 1.2rem; margin:2rem 0 0}
+.cta p{margin:0; flex:1 1 18rem; font-size:.92rem; color:#27334f}
+.pie{margin-top:3rem; padding-top:1.2rem; border-top:1px solid var(--linea); font-size:.8rem; color:#4b5462; line-height:1.55}
+.pie .lema{font-family:"Source Serif 4",Georgia,serif; font-style:italic; font-size:.95rem; color:var(--plum); margin-bottom:.3rem}
+.pie a{color:var(--navy); text-decoration:none; border-bottom:1px solid #b0bcd8}
+.flot{position:fixed; right:1.2rem; bottom:1.2rem; z-index:30; font:inherit; font-size:.84rem; font-weight:600; padding:.6rem 1rem; border-radius:30px; border:0; background:var(--plum); color:#fff; cursor:pointer; box-shadow:0 6px 18px rgba(39,51,79,.35)}
+dialog{border:0; border-radius:6px; padding:0; max-width:34rem; width:calc(100% - 2rem); box-shadow:0 20px 60px rgba(0,0,0,.25); color:var(--tinta)}
+dialog::backdrop{background:rgba(20,24,31,.5)}
+.dlg{padding:1.4rem 1.5rem 1.3rem}
+.dlg h3{font-family:"Source Serif 4",Georgia,serif; font-size:1.4rem; color:var(--plum); margin:0 0 .2rem; font-weight:600; text-transform:none; letter-spacing:0; border:0; padding:0}
+.dlg p.intro{margin:0 0 .6rem; font-size:.88rem; color:var(--suave)}
+.dlg label{margin-top:.7rem}
+.dlg .acc{justify-content:flex-end}
+.dlg .ok{background:var(--ok-suave); border:1px solid #bcd9c8; color:#15532f; border-radius:4px; padding:.8rem 1rem; font-size:.9rem; margin-top:.8rem}
+.dlg .ok textarea{margin-top:.5rem; min-height:5rem; font-size:.8rem}
+@media (max-width:820px){
+  .w{padding:1rem 1.05rem 5rem} .top .in{padding:.5rem 1.05rem; overflow-x:auto; flex-wrap:nowrap}
+  .hero{grid-template-columns:1fr; padding:1.5rem 1.2rem} .hero .arte{order:-1} .hero svg{max-width:14rem} .hero h1{font-size:1.9rem}
+  .g4,.g3{grid-template-columns:1fr 1fr} .g2{grid-template-columns:1fr} .v{grid-template-columns:repeat(4,1fr)}
+}
+@media print{
+  .top,.flot,dialog,.acc,.cta{display:none} body{background:#fff} .hero{box-shadow:none} section{break-inside:auto} .card,.tj,.err,.ver{break-inside:avoid} @page{size:letter; margin:1.8cm}
+}
+</style>
+</head>
+<body>
+<nav class="top"><div class="in">
+  <a class="volver" href="index.html" title="Volver al índice de la sección Laboratorio">← Laboratorio</a>
+  <a class="marca" href="#inicio">Intervalos de referencia</a>
+  <a class="n" href="#porque">Por qué</a><a class="n" href="#ruta">Ruta</a><a class="n" href="#verificar">Verificar con 20</a>
+  <a class="n" href="#establecer">Establecer</a><a class="n" href="#indirecto">Con datos propios</a><a class="n" href="#fuentes">Intervalos publicados</a>
+  <a class="n" href="#cuestionario">Cuestionario</a><a class="n" href="#errores">Errores</a><a class="n" href="#referencias">Referencias</a><a class="n" href="#legal">Aviso legal</a>
+</div></nav>
+
+<div class="w" id="inicio">
+
+<div class="hero">
+  <div>
+    <p class="lema" id="lema-hero">“Del tubo al diagnóstico”</p>
+    <h1>Intervalos de referencia para mi laboratorio</h1>
+    <p class="baj"><b>Verificar, establecer y transferir.</b> Cómo saber si el intervalo del inserto sirve para tu población y tu método, cómo construir uno propio con 120 individuos, cómo estimarlo con los resultados que el laboratorio ya tiene, y cómo documentarlo. Con calculadoras que funcionan sin internet: los datos no salen de tu equipo.</p>
+  </div>
+  <div class="arte" id="arte"><svg viewBox="0 0 520 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Distribución de referencia con percentiles 2.5 y 97.5"><defs><linearGradient id="gc" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity=".55"/></linearGradient><linearGradient id="gr" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#FDCF85"/><stop offset="1" stop-color="#c0392b"/></linearGradient></defs><ellipse cx="260" cy="150" rx="250" ry="120" fill="#fff" fill-opacity=".06"/><path d="M40,215 L40,214.7 L44,214.7 L48,214.6 L52,214.5 L56,214.3 L60,214.2 L64,214.0 L68,213.8 L72,213.5 L76,213.2 L80,212.8 L84,212.3 L88,211.8 L92,211.2 L96,210.5 L100,209.6 L104,208.7 L108,207.6 L112,206.3 L116,204.9 L120,203.3 L124,201.5 L128,199.4 L132,197.2 L136,194.7 L140,192.0 L144,188.9 L148,185.7 L152,182.1 L156,178.3 L160,174.1 L164,169.8 L168,165.1 L172,160.2 L176,155.1 L180,149.8 L184,144.2 L188,138.6 L192,132.8 L196,127.0 L200,121.1 L204,115.2 L208,109.5 L212,103.8 L216,98.4 L220,93.2 L224,88.3 L228,83.7 L232,79.5 L236,75.8 L240,72.6 L244,69.9 L248,67.8 L252,66.2 L256,65.3 L260,65.0 L264,65.3 L268,66.2 L272,67.8 L276,69.9 L280,72.6 L284,75.8 L288,79.5 L292,83.7 L296,88.3 L300,93.2 L304,98.4 L308,103.8 L312,109.5 L316,115.2 L320,121.1 L324,127.0 L328,132.8 L332,138.6 L336,144.2 L340,149.8 L344,155.1 L348,160.2 L352,165.1 L356,169.8 L360,174.1 L364,178.3 L368,182.1 L372,185.7 L376,188.9 L380,192.0 L384,194.7 L388,197.2 L392,199.4 L396,201.5 L400,203.3 L404,204.9 L408,206.3 L412,207.6 L416,208.7 L420,209.6 L424,210.5 L428,211.2 L432,211.8 L436,212.3 L440,212.8 L444,213.2 L448,213.5 L452,213.8 L456,214.0 L460,214.2 L464,214.3 L468,214.5 L472,214.6 L476,214.7 L480,214.7 L480,215 Z" fill="#fff" fill-opacity=".14" stroke="#fff" stroke-opacity=".8" stroke-width="2"/><path d="M138.5,215 L138.5,193.0 L142.5,190.1 L146.5,186.9 L150.5,183.5 L154.5,179.8 L158.5,175.7 L162.5,171.5 L166.5,166.9 L170.5,162.1 L174.5,157.1 L178.5,151.8 L182.5,146.4 L186.5,140.7 L190.5,135.0 L194.5,129.2 L198.5,123.3 L202.5,117.5 L206.5,111.7 L210.5,106.0 L214.5,100.4 L218.5,95.1 L222.5,90.1 L226.5,85.4 L230.5,81.1 L234.5,77.2 L238.5,73.8 L242.5,70.9 L246.5,68.5 L250.5,66.8 L254.5,65.6 L258.5,65.0 L262.5,65.1 L266.5,65.8 L270.5,67.1 L274.5,69.0 L278.5,71.5 L282.5,74.5 L286.5,78.1 L290.5,82.1 L294.5,86.5 L298.5,91.3 L302.5,96.4 L306.5,101.7 L310.5,107.3 L314.5,113.0 L318.5,118.9 L322.5,124.7 L326.5,130.6 L330.5,136.4 L334.5,142.1 L338.5,147.7 L342.5,153.1 L346.5,158.3 L350.5,163.3 L354.5,168.0 L358.5,172.5 L362.5,176.7 L366.5,180.7 L370.5,184.3 L374.5,187.7 L378.5,190.8 L381.5,215 Z" fill="url(#gc)"/><line x1="40" y1="215" x2="480" y2="215" stroke="#fff" stroke-opacity=".8" stroke-width="2"/><line x1="138.5" y1="217" x2="138.5" y2="179.0" stroke="#b0bcd8" stroke-width="2" stroke-dasharray="5 4"/><text x="138.5" y="173.0" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#fff">2.5 %</text><line x1="381.5" y1="217" x2="381.5" y2="179.0" stroke="#b0bcd8" stroke-width="2" stroke-dasharray="5 4"/><text x="381.5" y="173.0" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#fff">97.5 %</text><text x="260" y="155" text-anchor="middle" font-family="'Source Serif 4', Georgia, serif" font-size="22" font-weight="700" fill="#27334f">95 %</text><text x="260" y="175" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#27334f">intervalo de referencia</text><text x="40" y="237" font-family="Inter, sans-serif" font-size="11" fill="#e3e8f2">bajo</text><text x="480" y="237" text-anchor="end" font-family="Inter, sans-serif" font-size="11" fill="#e3e8f2">alto</text><text x="260" y="255" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#e3e8f2">n ≥ 120 individuos de referencia por grupo</text></svg></div>
+</div>
+
+<div class="autores" id="autores">
+  <div class="autora"><div class="ini">JA</div><div><b>Dra. en C. Judith Carolina De Arcos Jiménez</b><p>Investigadora Nacional Nivel I (SNII) · Perfil PRODEP · Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara<br><a href="https://orcid.org/0000-0003-0251-6425" target="_blank" rel="noopener"><span class="orcid">iD</span>orcid.org/0000-0003-0251-6425</a></p></div></div>
+  <div class="autora"><div class="ini">JB</div><div><b>Dr. Jaime Briseño Ramírez</b><p>Investigador Nacional Nivel I (SNII) · Perfil PRODEP · Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara<br><a href="https://orcid.org/0009-0006-1901-392X" target="_blank" rel="noopener"><span class="orcid">iD</span>orcid.org/0009-0006-1901-392X</a></p></div></div>
+</div><p class="nota" id="version-linea" style="margin-top:-.6rem">Versión 2.0 · septiembre de 2026 · Diseño y desarrollo de la herramienta: Judith Carolina De Arcos Jiménez y Jaime Briseño Ramírez.</p>
+
+<!-- ───────── POR QUÉ ───────── -->
+<section id="porque">
+  <h2 class="sec"><small>Sección 1</small>Por qué importa el intervalo de referencia</h2><div class="sec-lin"></div>
+  <div class="simple">
+    <p class="ana">En pocas palabras</p>
+    <p>El intervalo de referencia que acompaña a cada resultado (por ejemplo, «70 a 100 mg/dL») es el rango central del 95 % de los valores de una población de referencia sana, definida por criterios explícitos. Es la base con la que el sistema informático marca un resultado como alto, bajo o normal y, por tanto, condiciona la lectura clínica de todos los informes del laboratorio.</p>
+    <p>En la práctica, ese intervalo rara vez lo generó el laboratorio que lo reporta: procede del inserto del reactivo o de una publicación, es decir, de otra población, con otra dieta, otra altitud, otra prevalencia de enfermedad y, en ocasiones, otro método analítico. La normativa (CLSI EP28, ISO 15189, NOM-007-SSA3-2011) exige demostrar que aplica a la población y al método propios antes de usarlo. Hay tres caminos, de menor a mayor esfuerzo: <b>verificar</b> un intervalo publicado con 20 individuos de referencia, <b>establecer</b> uno propio con al menos 120 por grupo, o <b>estimarlo</b> a partir de la base de datos de resultados del laboratorio mediante métodos indirectos. Esta página explica cuándo conviene cada uno y aporta las calculadoras para ejecutarlos.</p>
+  </div>
+  <p class="nota">El intervalo de referencia es la regla contra la que se lee cada resultado. Un resultado perfecto comparado con un intervalo equivocado produce un diagnóstico equivocado: una fosfatasa alcalina «alta» en un adolescente que está creciendo, una creatinina «normal» en una mujer mayor con sarcopenia, una hemoglobina «baja» en una embarazada sana. El intervalo que trae el inserto se obtuvo en otra población, con otra dieta, otra altitud, otra prevalencia de enfermedad y a veces otro método. La norma técnica que rige la práctica de laboratorio pide que cada laboratorio verifique o establezca los intervalos que reporta, y los acreditadores lo revisan.</p>
+  <div class="tarjetas">
+    <div class="tj c1"><b>Lo que exige la norma</b><strong>Verificar antes de reportar</strong><p>CLSI EP28-A3c y la ISO 15189 piden que el laboratorio demuestre que los intervalos que usa aplican a su población y a su método, y que lo documente. En México, la NOM-007-SSA3-2011 exige valores de referencia en el informe y su sustento.</p></div>
+    <div class="tj c2"><b>Lo que está en juego</b><strong>Cada decisión clínica</strong><p>Los intervalos definen qué se marca como anormal. Un límite superior 10 % más bajo de lo debido multiplica los «altos» y las consultas innecesarias; uno 10 % más alto oculta enfermedad temprana.</p></div>
+    <div class="tj c3"><b>Lo que se puede hacer</b><strong>Tres niveles de esfuerzo</strong><p>Verificar con 20 individuos (días). Establecer con 120 o más (semanas). Estimar con miles de resultados que ya existen en el sistema informático (horas de cómputo, meses de datos). Esta página cubre los tres.</p></div>
+  </div>
+  <h3>Vocabulario mínimo</h3>
+  <div class="tabla"><table>
+    <tr><th>Término</th><th>Qué significa</th><th>En pocas palabras</th></tr>
+    <tr><td><b>Individuo de referencia</b></td><td>Persona seleccionada con criterios definidos de inclusión, exclusión y partición para representar el estado de salud «de referencia». No es «cualquiera que pase por toma de muestra».</td><td>Persona aparentemente sana, seleccionada mediante cuestionario, representativa del grupo al que se aplicará el intervalo.</td></tr>
+    <tr><td><b>Intervalo de referencia</b></td><td>El intervalo entre dos límites (habitualmente los percentiles 2.5 y 97.5) que contiene el 95 % central de los valores de los individuos de referencia. Por definición, 5 % de personas sanas caen fuera.</td><td>El rango que aparece en el informe. Por construcción, el 5 % de los individuos sanos queda fuera de él.</td></tr>
+    <tr><td><b>Límite de decisión clínica</b></td><td>Un umbral fijado por guías a partir de desenlaces (colesterol LDL &lt; 100 mg/dL, HbA1c ≥ 6.5 %, troponina percentil 99). No es un intervalo de referencia y no se verifica con estas herramientas.</td><td>Umbral derivado de estudios de desenlaces clínicos, no de la distribución en sanos; se adopta de la guía, no se verifica con voluntarios.</td></tr>
+    <tr><td><b>Verificar (transferir)</b></td><td>Comprobar que un intervalo ya establecido (inserto, literatura, otro laboratorio) aplica a la población y el método propios. EP28 propone el recuento con 20 individuos.</td><td>Comprobar con 20 individuos de referencia que el intervalo publicado es aplicable a la población y el método locales.</td></tr>
+    <tr><td><b>Establecer</b></td><td>Construir el intervalo desde cero con individuos de referencia seleccionados a priori (≥ 120 por grupo) y calcular percentiles no paramétricos con su intervalo de confianza.</td><td>Generar el intervalo propio a partir de 120 o más individuos de referencia, tomando los percentiles 2.5 y 97.5.</td></tr>
+    <tr><td><b>Método indirecto</b></td><td>Estimar el intervalo a partir de la base de datos de resultados de pacientes, separando estadísticamente la distribución «sana» de la «enferma» (Hoffmann, Bhattacharya, refineR, reflimR, kosmic). Complementa; no sustituye al método directo cuando éste es posible.</td><td>Derivar el intervalo de la base de datos de resultados de pacientes, separando estadísticamente la subpoblación sin enfermedad.</td></tr>
+    <tr><td><b>Partición</b></td><td>Dividir el intervalo por sexo, edad u otro factor cuando las distribuciones difieren de forma relevante (criterio de Harris y Boyd).</td><td>Reportar intervalos distintos por sexo, edad u otro factor cuando un intervalo único clasificaría mal a alguno de los subgrupos.</td></tr>
+    <tr><td><b>Percentil</b></td><td>Valor por debajo del cual queda un porcentaje dado de los datos. El intervalo usa los percentiles 2.5 y 97.5.</td><td>Ordenados los valores de menor a mayor, el percentil 97.5 deja por debajo al 97.5 % de los individuos.</td></tr>
+    <tr><td><b>Intervalo de confianza (IC) de un límite</b></td><td>Rango en el que, con 90 % de confianza, está el verdadero percentil de la población; se estrecha al aumentar n.</td><td>Expresa la incertidumbre estadística del límite; con n pequeño el límite verdadero puede diferir de forma apreciable del calculado.</td></tr>
+    <tr><td><b>Atípico (outlier)</b></td><td>Valor alejado del resto que puede provenir de un error o de un individuo que no cumplía criterios; se investiga antes de excluir (Tukey, Dixon).</td><td>Valor discordante que se investiga (error de captura, muestra inadecuada, criterio no cumplido) y solo se excluye con causa documentada.</td></tr>
+  </table></div>
+</section>
+
+<!-- ───────── RUTA ───────── -->
+<section id="ruta">
+  <h2 class="sec"><small>Sección 2</small>Ruta de decisión: ¿adoptar, verificar o establecer?</h2><div class="sec-lin"></div>
+  <p class="nota">Antes de contar nada, responde estas preguntas en orden. El camino más corto que sea defendible es el correcto.</p>
+  <div class="ruta">
+    <div class="r"><b class="q">1 · ¿Es un límite de decisión clínica o un intervalo de referencia?</b>Glucosa de ayuno, HbA1c, lípidos, troponina, PSA, vitamina D usan umbrales de guía.<span class="si"><b>Decisión</b>Se adopta el límite de la guía vigente y se cita; no se verifica con individuos sanos.</span><span class="no"><b>Intervalo</b>Sigue con la pregunta 2.</span></div>
+    <div class="r"><b class="q">2 · ¿La fuente del intervalo es comparable?</b>Mismo principio de método, misma matriz, población de edad, sexo y origen parecidos, condiciones preanalíticas similares.<span class="si"><b>Sí</b>Verifica con 20 individuos (sección 3). Si cumple, adopta y documenta.</span><span class="no"><b>No o no se sabe</b>Busca otra fuente comparable o establece el intervalo propio (sección 4).</span></div>
+    <div class="r"><b class="q">3 · ¿El analito cambia mucho con edad, sexo o embarazo?</b>Fosfatasa alcalina, creatinina, hemoglobina, ferritina, hormonas, PSA, urato.<span class="si"><b>Sí</b>Verifica o establece por cada partición pertinente; el inserto suele traer particiones, úsalas.</span><span class="no"><b>No</b>Un solo intervalo para adultos puede bastar; documenta por qué.</span></div>
+    <div class="r"><b class="q">4 · ¿Hay recursos para 120 individuos por grupo?</b>Reclutamiento con cuestionario, consentimiento, muestras, análisis, tiempo.<span class="si"><b>Sí</b>Establece por método directo (sección 4): es el estándar.</span><span class="no"><b>No</b>Verifica con 20 (sección 3) y, si la base de datos es grande, estima por método indirecto (sección 5) para contrastar.</span></div>
+    <div class="r"><b class="q">5 · ¿Cambió algo desde la última vez?</b>Método, equipo, lote de reactivo con cambio de calibración, población atendida, procedimiento preanalítico.<span class="si"><b>Sí</b>Repite la verificación (20 individuos) o el estudio; conserva el registro anterior.</span><span class="no"><b>No</b>Revisa anualmente que sigue vigente y que los porcentajes de resultados fuera de intervalo son estables.</span></div>
+    <div class="r"><b class="q">6 · ¿Está documentado?</b>Quién, cuándo, con qué criterios, con qué método y lote, quién aprobó.<span class="si"><b>Sí</b>Listo para reportar y para auditoría.</span><span class="no"><b>No</b>Usa la plantilla de registro de la sección 7 antes de poner el intervalo en el informe.</span></div>
+  </div>
+</section>
+
+<!-- ───────── VERIFICAR CON 20 ───────── -->
+<section id="verificar" class="t1">
+  <h2 class="sec"><small>Herramienta 1</small>Verificar un intervalo con 20 individuos</h2><div class="sec-lin"></div>
+  <div class="qq">
+    <div><b>Qué hace</b>Cuenta cuántos de los 20 resultados de individuos de referencia caen fuera del intervalo que se quiere adoptar y aplica el criterio de CLSI EP28: cumple, no concluye o no se verifica.</div>
+    <div><b>Qué necesitas</b>El intervalo publicado (límites inferior y superior) y los resultados de 20 individuos de referencia del grupo correspondiente, seleccionados con el cuestionario de la sección 7 y medidos con el método en uso.</div>
+    <div><b>Qué obtienes</b>Dentro, fuera y mediana; los valores fuera marcados; el veredicto explicado y un resumen listo para copiar al registro de calidad.</div>
+  </div>
+  <p class="nota">Es el procedimiento de transferencia de CLSI EP28: si dos o menos de los 20 quedan fuera, el intervalo se considera verificado para ese grupo. Con tres o cuatro fuera se repite con otros 20; con cinco o más no se verifica. El fundamento es binomial: si el intervalo contiene de verdad el 95 % central, la probabilidad de que 3 o más de 20 individuos caigan fuera es menor del 8 %.</p>
+  <div class="card">
+    <h3 style="margin-top:0">Cómo se usa</h3>
+    <ol class="pasos">
+      <li><div><b>Selecciona a los 20 antes de mirar resultados.</b> Con el cuestionario de la sección 7, del grupo correcto (adultos, mujeres, niños de tal edad), sin las exclusiones del analito. Ni el personal del laboratorio sin cuestionario, ni pacientes hospitalizados, ni «los primeros veinte que lleguen».</div></li>
+      <li><div><b>Mídelos como a los pacientes.</b> Mismo tubo, ayuno, procesamiento y método, con control de calidad aceptado ese día.</div></li>
+      <li><div><b>Captura el intervalo publicado y los 20 resultados.</b> Los que queden fuera se marcan en ámbar. Acepta punto o coma decimal.</div></li>
+      <li><div><b>Lee el veredicto y documenta.</b> Si cumple, guarda el registro (sección 7). Si no concluye, otros 20 con los mismos criterios; nunca se eliminan los que quedaron fuera. Si no se verifica, investiga selección, método y población antes de decidir establecer uno propio.</div></li>
+    </ol>
+  </div>
+  <div class="card">
+    <div class="g4">
+      <div><label for="an">Analito</label><input id="an" type="text" placeholder="p. ej. fosfatasa alcalina"></div>
+      <div><label for="un">Unidad</label><input id="un" type="text" placeholder="p. ej. U/L"></div>
+      <div><label for="li">Límite inferior publicado</label><input id="li" type="text" inputmode="decimal" autocomplete="off" placeholder="p. ej. 40"></div>
+      <div><label for="ls">Límite superior publicado</label><input id="ls" type="text" inputmode="decimal" autocomplete="off" placeholder="p. ej. 130"></div>
+    </div>
+    <div class="g2" style="margin-top:.8rem">
+      <div><label for="grupo">Grupo al que se aplica (partición)</label><input id="grupo" type="text" placeholder="p. ej. adultos 18–60 años, ambos sexos"></div>
+      <div><label for="fuente20">Fuente del intervalo</label><input id="fuente20" type="text" placeholder="p. ej. inserto Roche ALP2, versión 2024"></div>
+    </div>
+    <label class="chk"><input id="inc" type="checkbox" checked> Los límites cuentan como «dentro» (límites incluidos)</label>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">Los 20 resultados de los individuos de referencia</h3>
+    <div class="v" id="vals"></div>
+    <div class="res">
+      <div class="r2"><b>Capturados</b><span id="nn">0</span><small>de 20</small></div>
+      <div class="r2"><b>Dentro</b><span id="nd">—</span><small id="ndn"></small></div>
+      <div class="r2"><b>Fuera</b><span id="nf">—</span><small id="nfn"></small></div>
+      <div class="r2"><b>Mediana observada</b><span id="nmed">—</span><small>de los capturados</small></div>
+    </div>
+    <div class="ver" id="ver"><b class="t">Recuento</b>Captura el intervalo y los veinte valores.</div>
+    <div class="acc"><button class="btn sec" id="bej" type="button">Cargar ejemplo</button><button class="btn sec" id="blimpiar" type="button">Limpiar</button><button class="btn sec" id="bcopiar20" type="button">Copiar resumen para el registro</button><button class="btn" onclick="window.print()" type="button">Imprimir</button></div>
+  </div>
+  <div class="llamada ll-aviso"><b class="tit">Lo que esta cuenta no hace</b>No convierte un intervalo en válido por sí sola. Veinte personas bien escogidas y bien medidas hacen que 18 de 20 signifique algo; veinte personas cualesquiera hacen que 20 de 20 no signifique nada. Tampoco cubre intervalos unilaterales (solo límite superior), en los que se cuenta únicamente el lado que existe, ni sustituye la revisión de que el método y la población sean comparables.</div>
+  <details class="card"><summary style="cursor:pointer; font-weight:600; color:var(--pre)">Ejemplo resuelto: fosfatasa alcalina en adultos</summary>
+    <p class="nota" style="margin-top:.8rem">El laboratorio cambió de equipo y el inserto del nuevo método trae, para adultos, 40 a 130 U/L (cifras de ejemplo). Se seleccionan 20 adultos de 18 a 60 años, ambos sexos, con cuestionario: sin enfermedad hepática u ósea conocida, sin embarazo, sin fármacos que eleven la enzima, sin fractura reciente. Se miden con el método nuevo, con control de calidad aceptado.</p>
+    <div class="chips"><span>52</span><span>61</span><span>74</span><span>88</span><span>95</span><span>103</span><span>67</span><span>79</span><span>110</span><span>58</span><span>84</span><span>92</span><span>121</span><span>70</span><span>99</span><span>66</span><span class="f">35</span><span>77</span><span class="f">138</span><span>86</span></div>
+    <p class="nota">Dos quedan fuera (35 y 138): cumple el criterio. Se adopta 40 a 130 U/L para adultos y se documenta. Para niños, adolescentes y embarazadas la fosfatasa alcalina necesita sus propios intervalos: es de los analitos que más cambian con la edad y el embarazo.</p>
+  </details>
+</section>
+
+<!-- ───────── ESTABLECER ───────── -->
+<section id="establecer" class="t2">
+  <h2 class="sec"><small>Herramienta 2</small>Establecer un intervalo propio (método directo, n ≥ 120)</h2><div class="sec-lin"></div>
+  <div class="qq">
+    <div><b>Qué hace</b>Con los resultados de 120 o más individuos de referencia calcula el intervalo propio (percentiles 2.5 y 97.5) con el intervalo de confianza de cada límite, señala atípicos y, si se capturan dos grupos, evalúa si requieren partición.</div>
+    <div><b>Qué necesitas</b>Los resultados de un grupo de individuos de referencia seleccionados con cuestionario (mínimo 120 por grupo). Opcional: un segundo grupo (otro sexo, otro rango de edad) para probar la partición.</div>
+    <div><b>Qué obtienes</b>El intervalo para reportar con sus intervalos de confianza, el intervalo paramétrico para comparar, atípicos señalados, histograma, la prueba de Harris y Boyd y un resumen para el registro.</div>
+  </div>
+  <p class="nota">Es el estándar de EP28 y de la IFCC. Con menos de 120 individuos los límites quedan demasiado inciertos; con 40 a 119, EP28 acepta el método robusto de Horn y Pesce (que esta página no calcula, pero sí referencia).</p>
+  <div class="card">
+    <h3 style="margin-top:0">Plan de trabajo del estudio directo</h3>
+    <ol class="pasos">
+      <li><div><b>Define la población y las particiones probables.</b> Sexo, edad (con los cortes fisiológicos del analito), embarazo, y si aplica, altitud o etnia. Cada grupo final necesita ≥ 120.</div></li>
+      <li><div><b>Escribe los criterios de exclusión y el cuestionario.</b> Usa la sección 7; añade lo específico del analito (fármacos, suplementos, condiciones). Aprobación por el comité de ética o bioseguridad institucional y consentimiento informado.</div></li>
+      <li><div><b>Fija la preanalítica.</b> Hora, ayuno, postura, tubo, tiempo al procesamiento, almacenamiento: idénticos a los que tendrán los pacientes. Registra la fecha, el equipo, el método y el lote.</div></li>
+      <li><div><b>Mide con control de calidad aceptado</b> y en el menor número de días posible; si hay varios lotes, verifica que no haya sesgo entre ellos.</div></li>
+      <li><div><b>Analiza:</b> inspecciona el histograma, revisa atípicos (no los borres sin investigar), decide la partición (Harris y Boyd), calcula percentiles 2.5 y 97.5 con IC 90 %. La calculadora de abajo lo hace.</div></li>
+      <li><div><b>Documenta y aprueba.</b> Registro completo, firma del responsable, fecha de vigencia y criterios para revisarlo (cambio de método, lote con sesgo, cambio de población, revisión anual).</div></li>
+    </ol>
+  </div>
+  <div class="card">
+    <div class="g2">
+      <div><label for="dA">Grupo A · resultados (uno por línea o separados por espacio, coma o punto y coma)</label><textarea id="dA" placeholder="p. ej.&#10;0.72&#10;0.81&#10;0.66&#10;…"></textarea></div>
+      <div><label for="dB">Grupo B (opcional, para probar partición)</label><textarea id="dB" placeholder="p. ej. el otro sexo o grupo de edad"></textarea></div>
+    </div>
+    <div class="g4" style="margin-top:.8rem">
+      <div><label for="anE">Analito</label><input id="anE" type="text" placeholder="p. ej. creatinina"></div>
+      <div><label for="unE">Unidad</label><input id="unE" type="text" placeholder="p. ej. mg/dL"></div>
+      <div><label for="nomA">Nombre del grupo A</label><input id="nomA" type="text" placeholder="p. ej. mujeres 18–60"></div>
+      <div><label for="nomB">Nombre del grupo B</label><input id="nomB" type="text" placeholder="p. ej. hombres 18–60"></div>
+    </div>
+    <div class="g3" style="margin-top:.8rem">
+      <div><label for="atip">Atípicos</label><select id="atip"><option value="ver">Solo señalar (recomendado)</option><option value="tukey">Excluir por cercas de Tukey (1.5 × RIC)</option><option value="dixon">Excluir por razón de Dixon (EP28, 1/3)</option></select></div>
+      <div><label for="trans">Transformación para el ajuste paramétrico</label><select id="trans"><option value="no">Ninguna</option><option value="log">Logarítmica (analitos sesgados a la derecha)</option></select></div>
+      <div><label for="dec">Decimales del reporte</label><select id="dec"><option>0</option><option>1</option><option selected>2</option><option>3</option></select></div>
+    </div>
+    <div class="acc"><button class="btn" id="bcalcE" type="button">Calcular</button><button class="btn sec" id="bejE" type="button">Cargar ejemplo (creatinina, dos sexos)</button><button class="btn sec" id="bcopiarE" type="button">Copiar resumen para el registro</button><button class="btn sec" id="blimpE" type="button">Limpiar</button></div>
+  </div>
+  <div id="salidaE"></div>
+  <div class="llamada ll-plum"><b class="tit">Cómo leer la salida</b>El intervalo que se reporta es el <b>no paramétrico</b> (percentiles 2.5 y 97.5). Los intervalos de confianza del 90 % de cada límite dicen cuánta incertidumbre tiene ese límite: si el IC es más ancho que un tercio del intervalo, faltan individuos. El intervalo paramétrico (media ± 1.96 DE, con o sin transformación logarítmica) se muestra solo para comparar; si difiere mucho del no paramétrico, la distribución no es gaussiana y se reporta el no paramétrico. La prueba de Harris y Boyd indica si los dos grupos requieren intervalos separados: si z supera el valor crítico, o si la desviación estándar de un grupo supera 1.5 veces la del otro, se particiona.</div>
+</section>
+
+<!-- ───────── INDIRECTO ───────── -->
+<section id="indirecto" class="t3">
+  <h2 class="sec"><small>Herramienta 3</small>Estimar con los datos que ya tiene el laboratorio (método indirecto)</h2><div class="sec-lin"></div>
+  <div class="qq">
+    <div><b>Qué hace</b>A partir de cientos o miles de resultados de pacientes exportados del sistema, identifica la distribución central correspondiente a la subpoblación sin enfermedad y estima el intervalo a partir de ella, sin reclutamiento.</div>
+    <div><b>Qué necesitas</b>Una columna de resultados exportada del sistema (un resultado por paciente, pacientes ambulatorios, mismo método), ya separada por sexo y edad. Mínimo 400 a 1000 por grupo.</div>
+    <div><b>Qué obtienes</b>El intervalo estimado, la gráfica de probabilidad normal que permite juzgar la validez del ajuste (linealidad del tramo central), el porcentaje de resultados fuera del intervalo y el código en R para confirmarlo con refineR y reflimR.</div>
+  </div>
+  <p class="nota">Todo laboratorio almacena miles de resultados; la mayoría proviene de personas sin enfermedad relevante para ese analito, aunque hayan acudido por otro motivo. Los métodos indirectos aprovechan esa mezcla. Son especialmente útiles en pediatría, adultos mayores y particiones finas, donde reclutar 120 individuos de referencia por grupo es casi inviable. Sus límites: pierden validez cuando la fracción de resultados patológicos es grande o se solapa con la distribución sana, y exigen preanalítica homogénea. La IFCC (C-RIDL) los acepta como complemento y como método cuando el directo no es viable, siempre con revisión crítica de los datos.</p>
+  <div class="card">
+    <h3 style="margin-top:0">Cómo preparar los datos</h3>
+    <ol class="pasos">
+      <li><div><b>Extrae del sistema</b> todos los resultados del analito de un periodo (6 a 24 meses) con el mismo método y lote de calibración estable; incluye sexo y edad para poder particionar.</div></li>
+      <li><div><b>Filtra lo obvio:</b> un resultado por paciente (el primero), sin hospitalizados, sin urgencias, sin unidades de cuidados intensivos y sin servicios que concentran enfermedad del analito (nefrología para creatinina, hepatología para transaminasas, oncología, diálisis). Quita resultados con comentarios de muestra inadecuada.</div></li>
+      <li><div><b>No filtres por «resultado normal»:</b> eso sesga el intervalo hacia el que ya usas. El método se encarga de las colas.</div></li>
+      <li><div><b>Particiona por sexo y edad</b> antes de estimar; cada grupo con al menos 400 a 1000 resultados (los métodos modernos piden más para las colas).</div></li>
+      <li><div><b>Estima con esta calculadora (Hoffmann simplificado)</b> para tener una primera cifra y una gráfica, y confirma con refineR o reflimR (abajo) antes de adoptar. Contrasta con el inserto y con la literatura; si difieren mucho, investiga.</div></li>
+    </ol>
+  </div>
+  <div class="card">
+    <label for="dI">Resultados de pacientes (cientos o miles; uno por línea o separados por espacio, coma o punto y coma)</label>
+    <textarea id="dI" style="min-height:10rem" placeholder="Pega aquí la columna de resultados exportada del sistema"></textarea>
+    <div class="g4" style="margin-top:.8rem">
+      <div><label for="anI">Analito y grupo</label><input id="anI" type="text" placeholder="p. ej. creatinina, mujeres 18–50"></div>
+      <div><label for="unI">Unidad</label><input id="unI" type="text" placeholder="p. ej. mg/dL"></div>
+      <div><label for="pI">Tramo central para el ajuste (percentiles)</label><select id="pI"><option value="25,75">25 a 75 (Hoffmann clásico)</option><option value="20,80">20 a 80</option><option value="30,70">30 a 70</option><option value="15,85">15 a 85</option></select></div>
+      <div><label for="tI">Transformación</label><select id="tI"><option value="auto">Automática (por asimetría)</option><option value="no">Ninguna</option><option value="log">Logarítmica</option></select></div>
+    </div>
+    <div class="acc"><button class="btn" id="bcalcI" type="button">Estimar</button><button class="btn sec" id="bejI" type="button">Cargar ejemplo simulado</button><button class="btn sec" id="bcopiarI" type="button">Copiar resumen</button><button class="btn sec" id="blimpI" type="button">Limpiar</button></div>
+  </div>
+  <div id="salidaI"></div>
+  <div class="llamada ll-aviso"><b class="tit">Antes de adoptar un intervalo indirecto</b>Este cálculo es una aproximación (regresión sobre la parte central de la gráfica de probabilidad normal, extrapolada a ±1.96 desviaciones). Funciona bien cuando la fracción de resultados patológicos es pequeña y las colas son claras, y se equivoca cuando hay mucha enfermedad, cuando el analito tiene un límite físico (cero) cercano, o cuando la distribución es bimodal. Los paquetes <b>refineR</b> (Ammer et al., 2021) y <b>reflimR</b> (Hoffmann et al., 2024) para R modelan la mezcla de forma más rigurosa y dan intervalos de confianza; son gratuitos y corren en cualquier computadora. Abajo tienes el código mínimo para ejecutarlos con el mismo archivo.</div>
+  <details class="card"><summary style="cursor:pointer; font-weight:600; color:var(--post)">Código mínimo en R para refineR y reflimR</summary>
+<pre class="code">## Instalar una sola vez (requiere R ≥ 4.1; https://cran.r-project.org)
+install.packages(c("refineR", "reflimR"))
+
+## Leer los resultados: un archivo CSV con una columna llamada "valor"
+datos <- read.csv("creatinina_mujeres_18_50.csv")
+x <- datos$valor[!is.na(datos$valor)]
+
+## 1) refineR: estima el intervalo modelando la distribución de la población sana
+library(refineR)
+modelo <- findRI(Data = x)
+print(modelo, RIperc = c(0.025, 0.975))        # límites estimados
+plot(modelo, showCI = TRUE)                    # gráfica con intervalo de confianza
+getRI(modelo, RIperc = c(0.025, 0.975), CIprop = 0.95)
+
+## 2) reflimR: método de Hoffmann/Bhattacharya con truncamiento iterativo
+library(reflimR)
+resultado <- reflim(x, plot.all = TRUE)
+resultado$limits                                # límites inferior y superior
+resultado$confidence.int                        # intervalos de confianza
+
+## Particionar por sexo y edad antes de estimar:
+mujeres <- datos$valor[datos$sexo == "F" & datos$edad >= 18 & datos$edad <= 50]</pre>
+  </details>
+</section>
+
+<!-- ───────── FUENTES DE INTERVALOS ───────── -->
+<section id="fuentes">
+  <h2 class="sec"><small>Sección 6</small>De dónde tomar intervalos ya publicados y cómo transferirlos</h2><div class="sec-lin"></div>
+  <p class="nota">Antes de establecer nada conviene saber qué existe. Un intervalo publicado se puede transferir si el método es comparable (mismo principio y trazabilidad, o sesgo conocido y pequeño), la población es parecida y la preanalítica es equivalente. Se verifica con 20 individuos y se documenta la fuente. Si el método es distinto pero existe una comparación de métodos con regresión, EP28 permite transferir el intervalo aplicando la ecuación de regresión y verificándolo después.</p>
+  <div class="tabla"><table>
+    <tr><th>Fuente</th><th>Qué ofrece</th><th>Cuidado</th></tr>
+    <tr><td><b>Inserto del reactivo</b> (Roche, Abbott, Siemens, Beckman, etc.)</td><td>Intervalos obtenidos con el método exacto, a veces con particiones por edad y sexo, y con la referencia del estudio de origen.</td><td>Población habitualmente europea o estadounidense; a veces cita a Tietz o a estudios antiguos; algunos insertos traen «valores esperados» sin describir la selección. Siempre verificar.</td></tr>
+    <tr><td><b>CALIPER</b> (Canadá, pediatría, Adeli et al.)</td><td>Intervalos pediátricos por edad y sexo para más de 100 analitos, con transferencia validada a varias plataformas (Abbott, Roche, Siemens, Beckman, Ortho).</td><td>Población canadiense multiétnica; para transferir hay que usar la plataforma que CALIPER validó o verificar.</td></tr>
+    <tr><td><b>Estudios multicéntricos IFCC C-RIDL</b> (Ozarda, Ichihara et al.)</td><td>Intervalos de adultos en múltiples países con protocolo común, análisis de fuentes de variación y factores de partición; hay datos para México y Latinoamérica dentro del estudio global.</td><td>Requieren alineación de métodos con paneles de sueros; las cifras publicadas se refieren a métodos «armonizados».</td></tr>
+    <tr><td><b>NORIP</b> (países nórdicos), <b>NHANES</b> (Estados Unidos), estudios chinos y japoneses</td><td>Grandes muestras, buena metodología, percentiles por edad.</td><td>Poblaciones distintas a la mexicana en dieta, masa corporal, altitud y prevalencia de enfermedad; útiles para comparar, no para adoptar sin verificar.</td></tr>
+    <tr><td><b>Literatura mexicana y latinoamericana</b></td><td>Estudios locales de hematología, química y hormonas (revistas de patología clínica y química clínica, tesis institucionales, estudios en altitud y en población pediátrica).</td><td>Calidad heterogénea: revisar tamaño de muestra, criterios de selección, método y año. Un estudio local pequeño no vale más que un inserto bien verificado.</td></tr>
+    <tr><td><b>Tietz, Henry's y bases de variación biológica (EFLM)</b></td><td>Tablas de intervalos por edad y sexo, compilados de la literatura; la base EFLM permite saber si el intervalo poblacional siquiera sirve para ese analito (índice de individualidad).</td><td>Son compilaciones: siempre buscar el estudio original y el método.</td></tr>
+    <tr><td><b>Método indirecto propio</b> (sección 5)</td><td>Refleja exactamente la población y el método del laboratorio.</td><td>Requiere revisión estadística y comparación con fuentes externas antes de adoptar.</td></tr>
+  </table></div>
+  <h3>Transferir un intervalo entre métodos con regresión</h3>
+  <p class="nota">Si el intervalo publicado corresponde al método antiguo (o a otro laboratorio) y el laboratorio cambió de método, y ya hizo la comparación de métodos según CLSI EP09 (al menos 40 muestras de pacientes en todo el rango), puede transformar los límites con la ecuación de regresión (Passing-Bablok o Deming) y luego verificarlos con 20 individuos. Calculadora rápida:</p>
+  <div class="card">
+    <div class="g4">
+      <div><label for="rl">Límite inferior (método de origen)</label><input id="rl" type="text" inputmode="decimal" placeholder="p. ej. 40"></div>
+      <div><label for="rh">Límite superior (método de origen)</label><input id="rh" type="text" inputmode="decimal" placeholder="p. ej. 130"></div>
+      <div><label for="rb">Pendiente (nuevo = a + b · origen)</label><input id="rb" type="text" inputmode="decimal" placeholder="p. ej. 1.08"></div>
+      <div><label for="ra">Intercepto a</label><input id="ra" type="text" inputmode="decimal" placeholder="p. ej. −2.5"></div>
+    </div>
+    <div class="ver" id="verR" style="margin-top:.9rem"><b class="t">Intervalo transferido</b>Captura los límites y la ecuación de regresión de la comparación de métodos.</div>
+    <p class="nota" style="margin:.8rem 0 0">Condiciones: la regresión debe cubrir el rango del intervalo, el coeficiente de correlación debe ser alto (r &gt; 0.975 o rango amplio según EP09) y los intervalos de confianza de pendiente e intercepto deben ser estrechos. Si la pendiente está lejos de 1 o el intercepto lejos de 0, el método nuevo mide algo distinto y es preferible establecer un intervalo propio.</p>
+  </div>
+</section>
+
+<!-- ───────── CUESTIONARIO Y REGISTRO ───────── -->
+<section id="cuestionario">
+  <h2 class="sec"><small>Sección 7</small>Cuestionario de selección y registro de documentación</h2><div class="sec-lin"></div>
+  <p class="nota">Lo que decide la validez de cualquier intervalo son las personas que lo formaron. El cuestionario se aplica antes de la toma y se conserva. Adáptalo al analito: para lípidos importan ayuno y fármacos; para fosfatasa alcalina, hueso, hígado y embarazo; para hierro y ferritina, menstruación, donación y suplementos.</p>
+  <div class="g2">
+    <div class="card">
+      <h3 style="margin-top:0">Criterios de exclusión generales (EP28, IFCC)</h3>
+      <ul class="check">
+        <li>Enfermedad aguda en las últimas 2 a 4 semanas (infección, fiebre, cirugía, trauma)</li>
+        <li>Enfermedad crónica conocida: diabetes, hipertensión no controlada, cardiopatía, hepatopatía, nefropatía, tiroidopatía, cáncer, autoinmunidad</li>
+        <li>Hospitalización en los últimos 3 meses; transfusión en los últimos 6 meses</li>
+        <li>Embarazo o lactancia (salvo que sea el grupo de estudio)</li>
+        <li>Medicación regular con efecto sobre el analito (incluidos anticonceptivos, suplementos, herbolaria)</li>
+        <li>Consumo de alcohol mayor de 2 bebidas al día o en las 48 h previas; tabaquismo (registrar; excluir según el analito)</li>
+        <li>Obesidad (IMC ≥ 30) o desnutrición (IMC &lt; 18.5), según el analito</li>
+        <li>Ejercicio intenso en las 24 a 48 h previas; ayuno no cumplido; donación de sangre reciente</li>
+        <li>Ocupación con exposición relevante (plomo, solventes, turnos nocturnos para hormonas)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Datos que se registran de cada individuo</h3>
+      <ul class="check">
+        <li>Folio anónimo, fecha y hora de toma, ayuno en horas, postura y tiempo de reposo</li>
+        <li>Sexo, edad, peso, talla, IMC; lugar de residencia (altitud); ascendencia si se va a particionar</li>
+        <li>Respuestas del cuestionario y firma de consentimiento informado</li>
+        <li>Tubo, volumen, hora de centrifugación, hora de análisis, temperatura de conservación</li>
+        <li>Equipo, método, lote de reactivo y calibrador, resultado del control de calidad del día</li>
+        <li>Resultado, unidades y quién lo liberó</li>
+      </ul>
+      <h3>Factores de partición habituales</h3>
+      <p class="nota" style="margin:0">Sexo (creatinina, urato, hemoglobina, ferritina, CK, GGT, hormonas). Edad (fosfatasa alcalina, fósforo, IGF-1, PSA, TSH en mayores, casi todo en pediatría y neonatos). Embarazo por trimestre. Menopausia (FSH, LH, estradiol, lípidos). Altitud (hemoglobina, hematocrito). Etnia solo con justificación fisiológica documentada (neutrófilos con variante Duffy).</p>
+    </div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">Registro de verificación o establecimiento (plantilla)</h3>
+    <div class="tabla"><table>
+      <tr><th style="width:32%">Campo</th><th>Contenido</th></tr>
+      <tr><td>Analito, unidad, matriz</td><td>&nbsp;</td></tr>
+      <tr><td>Grupo o partición</td><td>&nbsp;</td></tr>
+      <tr><td>Tipo de estudio</td><td>Verificación con 20 · Establecimiento directo n = ___ · Indirecto n = ___ · Transferencia por regresión</td></tr>
+      <tr><td>Fuente del intervalo (si se verifica)</td><td>Inserto (nombre, versión, fecha) · publicación (cita completa)</td></tr>
+      <tr><td>Criterios de selección y cuestionario aplicado</td><td>Anexo ___</td></tr>
+      <tr><td>Preanalítica</td><td>&nbsp;</td></tr>
+      <tr><td>Equipo, método, lotes, fechas de medición, control de calidad</td><td>&nbsp;</td></tr>
+      <tr><td>Resultados individuales y análisis (atípicos, partición, percentiles, IC)</td><td>Anexo ___</td></tr>
+      <tr><td>Decisión</td><td>Se adopta ___ a ___ (unidad) para ___ · No se verifica: acción ___</td></tr>
+      <tr><td>Elaboró / revisó / aprobó, con fecha y firma</td><td>&nbsp;</td></tr>
+      <tr><td>Vigencia y criterios de revisión</td><td>Revisión anual · cambio de método · cambio de lote con sesgo · cambio de población</td></tr>
+    </table></div>
+    <div class="acc"><button class="btn sec" type="button" onclick="window.print()">Imprimir esta página</button></div>
+  </div>
+</section>
+
+<!-- ───────── ERRORES ───────── -->
+<section id="errores">
+  <h2 class="sec"><small>Sección 8</small>Errores frecuentes al verificar o establecer intervalos</h2><div class="sec-lin"></div>
+  <div class="errs">
+    <div class="err"><b>Usar al personal del laboratorio o a estudiantes «porque están a la mano», sin cuestionario ni consentimiento</b><span>Sesgo de edad, sexo y estado de salud; además, problema ético. Reclutar con criterios y consentimiento, aunque sean voluntarios internos.</span></div>
+    <div class="err"><b>Eliminar los resultados que «estorban» para que cumpla</b><span>Invalida el estudio. Los atípicos se investigan (error de captura, muestra hemolizada, individuo que no cumplía criterios) y solo se excluyen con causa documentada; si no hay causa, se conservan.</span></div>
+    <div class="err"><b>Copiar el intervalo del inserto sin verificar, o el de un libro sin saber el método</b><span>Es la práctica más común y la primera observación en auditorías. Verificar con 20 es rápido y defendible.</span></div>
+    <div class="err"><b>Verificar con 20 «adultos» un intervalo que se aplicará a niños, embarazadas o adultos mayores</b><span>El recuento solo vale para el grupo del que provienen los 20. Cada partición reportada necesita su verificación.</span></div>
+    <div class="err"><b>Confundir intervalo de referencia con límite de decisión clínica</b><span>Un laboratorio que «verifica» el LDL &lt; 100 con voluntarios sanos obtendrá un intervalo poblacional inservible (la población tiene el LDL alto). Los límites de decisión se adoptan de la guía.</span></div>
+    <div class="err"><b>Medir a los individuos en condiciones distintas a las de los pacientes</b><span>Sin ayuno, a otra hora, en otro tubo, con demora distinta: el intervalo describe otra cosa.</span></div>
+    <div class="err"><b>Reportar el intervalo sin intervalo de confianza ni tamaño de muestra en el registro</b><span>Con 120 individuos el límite superior tiene una incertidumbre considerable; el registro debe mostrarla para que la próxima revisión sepa de dónde partió.</span></div>
+    <div class="err"><b>No revisar el intervalo cuando cambia el método o el lote produce sesgo</b><span>Un sesgo de 5 % en el método desplaza el 2.5 % de la cola superior a mucho más. Los cambios de método obligan a repetir la verificación.</span></div>
+    <div class="err"><b>Filtrar los datos del método indirecto por «resultados normales» o por el intervalo actual</b><span>Reproduce el intervalo que ya se usa. El método indirecto debe alimentarse con todos los resultados válidos de la población ambulatoria.</span></div>
+    <div class="err"><b>No vigilar el porcentaje de resultados fuera de intervalo después de adoptarlo</b><span>Si más del 10 al 15 % de los pacientes ambulatorios sale «anormal» para un analito de cribado, algo falla en el intervalo o en el método. Es un indicador de calidad sencillo y potente.</span></div>
+  </div>
+</section>
+
+<!-- ───────── REFERENCIAS ───────── -->
+<section id="referencias">
+  <h2 class="sec"><small>Sección 9</small>Referencias</h2><div class="sec-lin"></div>
+  <div class="biblio"><ol>
+    <li>CLSI. Defining, Establishing, and Verifying Reference Intervals in the Clinical Laboratory; Approved Guideline, 3rd ed. CLSI document EP28-A3c. Wayne, PA: Clinical and Laboratory Standards Institute; 2010.</li>
+    <li>CLSI. Measurement Procedure Comparison and Bias Estimation Using Patient Samples; Approved Guideline, 3rd ed. CLSI document EP09c. Wayne, PA: CLSI; 2018.</li>
+    <li>ISO 15189:2022. Medical laboratories: Requirements for quality and competence. Ginebra: International Organization for Standardization; 2022.</li>
+    <li>NOM-007-SSA3-2011. Para la organización y funcionamiento de los laboratorios clínicos. Diario Oficial de la Federación, 27 de marzo de 2012.</li>
+    <li>Solberg HE. International Federation of Clinical Chemistry (IFCC), Expert Panel on Theory of Reference Values: approved recommendation on the theory of reference values. Part 1–6. J Clin Chem Clin Biochem 1987;25:337–342 y siguientes.</li>
+    <li>Horn PS, Pesce AJ. Reference Intervals: A User's Guide. Washington, DC: AACC Press; 2005.</li>
+    <li>Harris EK, Boyd JC. On dividing reference data into subgroups to produce separate reference ranges. Clin Chem 1990;36:265–270.</li>
+    <li>Lahti A, Hyltoft Petersen P, Boyd JC, et al. Partitioning of nongaussian-distributed biochemical reference data into subgroups. Clin Chem 2004;50:891–900.</li>
+    <li>Ozarda Y, Ichihara K, Barth JH, Klee G; IFCC C-RIDL. Protocol and standard operating procedures for common use in a worldwide multicenter study on reference values. Clin Chem Lab Med 2013;51:1027–1040.</li>
+    <li>Ozarda Y, Higgins V, Adeli K. Verification of reference intervals in routine clinical laboratories: practical challenges and recommendations. Clin Chem Lab Med 2018;57:30–37.</li>
+    <li>Jones GRD, Haeckel R, Loh TP, et al.; IFCC C-RIDL. Indirect methods for reference interval determination: review and recommendations. Clin Chem Lab Med 2019;57:20–29.</li>
+    <li>Hoffmann RG. Statistics in the practice of medicine. JAMA 1963;185:864–873.</li>
+    <li>Bhattacharya CG. A simple method of resolution of a distribution into Gaussian components. Biometrics 1967;23:115–135.</li>
+    <li>Ammer T, Schützenmeister A, Prokosch HU, Rauh M, Rank CM, Zierk J. refineR: a novel algorithm for reference interval estimation from real-world data. Sci Rep 2021;11:16023.</li>
+    <li>Hoffmann G, Klawitter S, Trulson I, Adler J, Holdenrieder S, Klawonn F. A novel tool for the rapid and transparent verification of reference intervals in clinical laboratories (reflimR). J Clin Med 2024;13:4397.</li>
+    <li>Zierk J, Arzideh F, Rechenauer T, et al. Age- and sex-specific dynamic reference intervals for hematological and clinical chemistry analytes in a pediatric population (kosmic). Clin Chem Lab Med 2019;57:1595–1607.</li>
+    <li>Adeli K, Higgins V, Trajcevski K, White-Al Habeeb N. The Canadian laboratory initiative on pediatric reference intervals (CALIPER): a comprehensive review. Crit Rev Clin Lab Sci 2017;54:358–413.</li>
+    <li>Rustad P, Felding P, Franzson L, et al. The Nordic Reference Interval Project 2000 (NORIP). Scand J Clin Lab Invest 2004;64:271–284.</li>
+    <li>Ichihara K, Ozarda Y, Barth JH, et al. A global multicenter study on reference values: 1. Assessment of methods for derivation and comparison of reference intervals. Clin Chim Acta 2017;467:70–82.</li>
+    <li>Aarsand AK, Fernández-Calle P, Webster C, et al. The EFLM Biological Variation Database (biologicalvariation.eu); consulta 2025.</li>
+    <li>Rifai N, Horvath AR, Wittwer CT (eds.). Tietz Textbook of Clinical Chemistry and Molecular Diagnostics, 6ª ed. Elsevier; 2018 (capítulo de intervalos de referencia y límites de decisión).</li>
+    <li>Reed AH, Henry RJ, Mason WB. Influence of statistical method used on the resulting estimate of normal range. Clin Chem 1971;17:275–284 (fundamento del criterio n ≥ 120 y del IC no paramétrico).</li>
+  </ol></div>
+</section>
+
+<!-- ───────── LEGAL ───────── -->
+<section id="legal">
+  <h2 class="sec"><small>Sección 10</small>Aviso legal</h2><div class="sec-lin"></div>
+  <div class="legal" id="legal-texto">
+<p><b>Aviso legal.</b> Este material y sus calculadoras tienen fines exclusivamente educativos y de apoyo. No constituyen asesoría médica ni sustituyen el juicio profesional del químico clínico, del responsable sanitario ni del médico tratante, ni los procedimientos normalizados de operación y el sistema de gestión de la calidad de cada laboratorio.</p>
+<p>Los criterios estadísticos aquí implementados (recuento con 20 individuos, percentiles no paramétricos con intervalo de confianza, prueba de partición de Harris y Boyd, transferencia por regresión y estimación indirecta simplificada de Hoffmann) son simplificaciones didácticas de los documentos CLSI EP28-A3c y EP09c y de las recomendaciones de la IFCC. <b>No sustituyen la información contenida en el inserto o instructivo de uso del reactivo, del equipo, del middleware o del sistema informático del proveedor correspondiente</b>, ni la normatividad aplicable (Ley General de Salud, NOM-007-SSA3-2011 y demás disposiciones vigentes en México, e ISO 15189 cuando aplique).</p>
+<p>Cada laboratorio es responsable de la selección de los individuos de referencia, de la validez de sus datos, de la decisión de adoptar o no un intervalo y de su documentación. Los cálculos se ejecutan localmente en el navegador; los datos capturados no se transmiten ni se almacenan. Los autores no asumen responsabilidad alguna por decisiones clínicas, analíticas, regulatorias o administrativas que se tomen con base en este material, ni por errores u omisiones involuntarios, y agradecen toda corrección enviada por el formulario de comentarios. El uso de esta página implica la aceptación de estas condiciones.</p>
+<p>© 2026 Judith Carolina De Arcos Jiménez y Jaime Briseño Ramírez. Se permite compartir y reproducir con fines educativos, sin fines de lucro y citando la fuente; cualquier otro uso requiere autorización de los autores.</p>
+</div>
+  <h3>Cómo citar</h3>
+  <div class="citar"><code id="citar-texto">De Arcos-Jiménez Judith Carolina, Briseño-Ramírez Jaime. Intervalos de referencia para mi laboratorio: verificar, establecer y transferir [recurso electrónico y herramienta de cálculo]. Cuerpo Académico UDG-CA-1190, Centro Universitario de Tlajomulco, Universidad de Guadalajara; 2026. Disponible en: https://udgca1190.com.mx/herramientas/laboratorio/intervalos-de-referencia</code></div>
+  <div class="cta"><p><b>¿Qué haría más útil esta página?</b> Un cálculo que falta, un ejemplo mejor, una referencia más reciente, un error. Escríbeme: cada versión se corrige con lo que llega.</p><button class="btn" type="button" data-com="1">Dejar un comentario</button></div>
+</section>
+
+<div class="pie" id="pie"><div class="lema">“Del tubo al diagnóstico”</div>Dra. en C. Judith Carolina De Arcos Jiménez · <a href="https://orcid.org/0000-0003-0251-6425" target="_blank" rel="noopener"><span class="orcid">iD</span>0000-0003-0251-6425</a><br>Dr. Jaime Briseño Ramírez · <a href="https://orcid.org/0009-0006-1901-392X" target="_blank" rel="noopener"><span class="orcid">iD</span>0009-0006-1901-392X</a><br>Investigadores Nacionales Nivel I (SNII) · Perfil PRODEP · Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara<br>Versión 2.0 · septiembre de 2026 · <a href="#" data-com="1">Enviar un comentario</a>
+<div style="margin-top:.6rem">Material educativo y de apoyo. No sustituye el criterio profesional, los procedimientos de cada laboratorio, los documentos CLSI/IFCC ni la información del proveedor correspondiente. Los autores no asumen responsabilidad por decisiones tomadas con base en este contenido. <a href="#legal">Aviso legal completo</a>.</div></div>
+</div>
+
+<button class="flot" id="abrir-com" type="button">💬 Comentarios</button>
+<dialog id="dlg">
+  <form class="dlg" id="form-com" method="dialog">
+    <h3>Ayúdame a mejorar esta página</h3>
+    <p class="intro">Errores, cálculos que faltan, ejemplos, referencias. Todo comentario cuenta.</p>
+    <div class="g2">
+      <div><label for="c-nombre">Nombre (opcional)</label><input id="c-nombre" type="text" autocomplete="name"></div>
+      <div><label for="c-correo">Correo (opcional, para responderte)</label><input id="c-correo" type="text" inputmode="email" autocomplete="email"></div>
+    </div>
+    <div class="g2">
+      <div><label for="c-perfil">Soy</label><select id="c-perfil"><option>Químico/a clínico/a</option><option>Médico/a</option><option>Responsable de calidad</option><option>Estudiante</option><option>Docente o investigador/a</option><option>Otro</option></select></div>
+      <div><label for="c-tipo">Tipo de comentario</label><select id="c-tipo"><option>Sugerencia</option><option>Error o cifra a corregir</option><option>Pregunta</option><option>Felicitación</option></select></div>
+    </div>
+    <label for="c-seccion">Sección a la que se refiere</label>
+    <select id="c-seccion"><option>General</option><option>Verificar con 20</option><option>Establecer (n ≥ 120)</option><option>Método indirecto</option><option>Intervalos publicados y transferencia</option><option>Cuestionario y registro</option><option>Errores frecuentes</option><option>Referencias</option></select>
+    <label for="c-msg">Comentario</label>
+    <textarea id="c-msg" required style="font-family:inherit; min-height:6rem" placeholder="Sé tan concreto como puedas"></textarea>
+    <div class="acc"><button type="button" class="btn sec" id="cerrar-com">Cerrar</button><button type="submit" class="btn">Enviar comentario</button></div>
+    <div id="com-ok" class="ok" hidden></div>
+  </form>
+</dialog>
+
+<script>
+/* ═════════ CONFIGURACIÓN: edita aquí ═════════ */
+var CONFIG = {
+  correo: 'jcdearcosj@gmail.com',
+  formEndpoint: '',
+  lema: 'Del tubo al diagnóstico',
+  version: 'Versión 2.0 · septiembre de 2026',
+  autores: [
+    {nombre: 'Dra. en C. Judith Carolina De Arcos Jiménez', ini: 'JA', orcid: '0000-0003-0251-6425',
+     adscripcion: 'Investigadora Nacional Nivel I (SNII) · Perfil PRODEP · Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara'},
+    {nombre: 'Dr. Jaime Briseño Ramírez', ini: 'JB', orcid: '0009-0006-1901-392X',
+     adscripcion: 'Investigador Nacional Nivel I (SNII) · Perfil PRODEP · Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara'}
+  ],
+  cita: 'De Arcos-Jiménez Judith Carolina, Briseño-Ramírez Jaime',
+  autora: 'Judith Carolina De Arcos Jiménez y Jaime Briseño Ramírez',
+  titulo: 'Intervalos de referencia para mi laboratorio: verificar, establecer y transferir'
+};
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ── cabecera, autoría, legal, pie ── */
+var AVISO_LEGAL = [
+  '<b>Aviso legal.</b> Este material y sus calculadoras tienen fines exclusivamente educativos y de apoyo. No constituyen asesoría médica ni sustituyen el juicio profesional del químico clínico, del responsable sanitario ni del médico tratante, ni los procedimientos normalizados de operación y el sistema de gestión de la calidad de cada laboratorio.',
+  'Los criterios estadísticos aquí implementados (recuento con 20 individuos, percentiles no paramétricos con intervalo de confianza, prueba de partición de Harris y Boyd, transferencia por regresión y estimación indirecta simplificada de Hoffmann) son simplificaciones didácticas de los documentos CLSI EP28-A3c y EP09c y de las recomendaciones de la IFCC. <b>No sustituyen la consulta de dichos documentos ni la información contenida en el inserto o instructivo de uso del reactivo, del equipo o del dispositivo del proveedor correspondiente</b>, ni la normatividad aplicable (Ley General de Salud, NOM-007-SSA3-2011 y demás disposiciones vigentes en México, e ISO 15189 cuando aplique).',
+  'Cada laboratorio es responsable de la selección de los individuos de referencia, de la validez de sus datos, de la decisión de adoptar o no un intervalo y de su documentación. Los cálculos se ejecutan localmente en el navegador; los datos capturados no se transmiten ni se almacenan. Los autores no asumen responsabilidad alguna por decisiones clínicas, analíticas, regulatorias o administrativas que se tomen con base en este material, ni por errores u omisiones involuntarios, y agradecen toda corrección enviada por el formulario de comentarios. El uso de esta página implica la aceptación de estas condiciones.',
+  '© ' + new Date().getFullYear() + ' ' + CONFIG.autora + '. Se permite compartir y reproducir con fines educativos, sin fines de lucro y citando la fuente; cualquier otro uso requiere autorización de los autores.'
+];
+
+
+/* ── utilidades numéricas ── */
+function num(s){ s = String(s || '').trim().replace(/\s+/g, ''); if(!s) return NaN; s = s.replace(',', '.'); return /^[-+]?(\d+\.?\d*|\.\d+)$/.test(s) ? parseFloat(s) : NaN; }
+function parseLista(t){
+  var out = [], malos = 0;
+  String(t || '').split(/[\n\r;\t ]+|,(?=\s)|,(?=\d+[,;\s]|$)/).forEach(function(tok){
+    tok = tok.trim(); if(!tok) return;
+    // si el token tiene coma y punto, la coma es de miles
+    if(tok.indexOf(',') >= 0 && tok.indexOf('.') >= 0) tok = tok.replace(/,/g, '');
+    var v = num(tok); if(isNaN(v)) malos++; else out.push(v);
+  });
+  return {v: out, malos: malos};
+}
+function fmt(x, d){ if(x == null || isNaN(x)) return '—'; d = (d == null ? 2 : d); return Number(x).toLocaleString('es-MX', {minimumFractionDigits: d, maximumFractionDigits: d}); }
+function sortNum(a){ return a.slice().sort(function(p, q){ return p - q; }); }
+function media(a){ var s = 0; for(var i = 0; i < a.length; i++) s += a[i]; return s / a.length; }
+function de(a){ if(a.length < 2) return NaN; var m = media(a), s = 0; for(var i = 0; i < a.length; i++) s += (a[i] - m) * (a[i] - m); return Math.sqrt(s / (a.length - 1)); }
+function pctl(sorted, p){ // percentil con rango r = p(n+1), interpolación lineal (EP28)
+  var n = sorted.length, r = p * (n + 1);
+  if(r <= 1) return sorted[0]; if(r >= n) return sorted[n - 1];
+  var k = Math.floor(r), f = r - k; return sorted[k - 1] + f * (sorted[k] - sorted[k - 1]);
+}
+function icRango(n, p){ // IC 90 % del percentil por rangos (aproximación binomial normal)
+  var mu = n * p, sd = Math.sqrt(n * p * (1 - p));
+  var lo = Math.floor(mu - 1.645 * sd), hi = Math.ceil(mu + 1.645 * sd) + 1;
+  lo = Math.max(1, lo); hi = Math.min(n, hi); return [lo, hi];
+}
+function asimetria(a){ var n = a.length, m = media(a), s = de(a), t = 0; for(var i = 0; i < n; i++) t += Math.pow((a[i] - m) / s, 3); return t * n / ((n - 1) * (n - 2)); }
+function curtosis(a){ var n = a.length, m = media(a), s = de(a), t = 0; for(var i = 0; i < n; i++) t += Math.pow((a[i] - m) / s, 4); return t * n * (n + 1) / ((n - 1) * (n - 2) * (n - 3)) - 3 * (n - 1) * (n - 1) / ((n - 2) * (n - 3)); }
+function probit(p){ // Acklam
+  var a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+  var b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01];
+  var c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+  var d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00];
+  var pl = 0.02425, ph = 1 - pl, q, r;
+  if(p < pl){ q = Math.sqrt(-2 * Math.log(p)); return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+  if(p > ph){ q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1); }
+  q = p - 0.5; r = q * q; return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q / (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+}
+function tukey(sorted){ var q1 = pctl(sorted, .25), q3 = pctl(sorted, .75), ric = q3 - q1; return {lo: q1 - 1.5 * ric, hi: q3 + 1.5 * ric, q1: q1, q3: q3}; }
+function dixonExtremos(sorted){ // razón D/R > 1/3 en cada extremo (EP28)
+  var n = sorted.length, R = sorted[n - 1] - sorted[0], out = [];
+  if(n < 3 || R === 0) return out;
+  if((sorted[1] - sorted[0]) / R > 1 / 3) out.push(sorted[0]);
+  if((sorted[n - 1] - sorted[n - 2]) / R > 1 / 3) out.push(sorted[n - 1]);
+  return out;
+}
+function histograma(sorted, titulo, li, ls){
+  var n = sorted.length, k = Math.max(8, Math.min(30, Math.round(Math.sqrt(n)))), min = sorted[0], max = sorted[n - 1];
+  if(max === min){ max = min + 1; }
+  var w = (max - min) / k, cuentas = []; for(var i = 0; i < k; i++) cuentas.push(0);
+  sorted.forEach(function(v){ var j = Math.min(k - 1, Math.floor((v - min) / w)); cuentas[j]++; });
+  var W = 640, H = 220, ml = 36, mr = 14, mt = 22, mb = 34, pw = W - ml - mr, ph = H - mt - mb, maxc = Math.max.apply(null, cuentas);
+  var s = '<svg class="graf" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + esc(titulo) + '">';
+  s += '<text x="' + ml + '" y="14" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#4b5462">' + esc(titulo) + '</text>';
+  cuentas.forEach(function(c, i){
+    var bx = ml + i * pw / k, bh = maxc ? c / maxc * ph : 0;
+    s += '<rect x="' + bx.toFixed(1) + '" y="' + (mt + ph - bh).toFixed(1) + '" width="' + (pw / k - 1).toFixed(1) + '" height="' + bh.toFixed(1) + '" fill="#455a8c" fill-opacity=".75"/>';
+  });
+  function X(v){ return ml + (v - min) / (max - min) * pw; }
+  [[li, '2.5 %'], [ls, '97.5 %']].forEach(function(p){
+    if(p[0] == null || isNaN(p[0])) return; var x = X(p[0]);
+    s += '<line x1="' + x.toFixed(1) + '" y1="' + mt + '" x2="' + x.toFixed(1) + '" y2="' + (mt + ph) + '" stroke="#90303a" stroke-width="2" stroke-dasharray="5 4"/>' +
+         '<text x="' + x.toFixed(1) + '" y="' + (mt + ph + 26) + '" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#90303a">' + p[1] + '</text>';
+  });
+  s += '<line x1="' + ml + '" y1="' + (mt + ph) + '" x2="' + (W - mr) + '" y2="' + (mt + ph) + '" stroke="#6b7585"/>';
+  for(var t = 0; t <= 4; t++){ var v = min + (max - min) * t / 4; s += '<text x="' + X(v).toFixed(1) + '" y="' + (mt + ph + 13) + '" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#4b5462">' + fmt(v, (max - min) < 10 ? 2 : 0) + '</text>'; }
+  return s + '</svg>';
+}
+
+/* ═════════ HERRAMIENTA 1: verificar con 20 ═════════ */
+var V = $('vals');
+for(var k = 1; k <= 20; k++){ var dv = document.createElement('div'); dv.innerHTML = '<i>' + k + '</i><input type="text" inputmode="decimal" autocomplete="off" data-k="' + k + '" aria-label="Individuo ' + k + '">'; V.appendChild(dv); }
+var ULT20 = '';
+function calc20(){
+  var li = num($('li').value), ls = num($('ls').value), inc = $('inc').checked, u = $('un').value.trim();
+  var ins = [].slice.call(V.querySelectorAll('input')), n = 0, dentro = 0, fuera = [], vals = [];
+  ins.forEach(function(el){ el.classList.remove('fuera'); var x = num(el.value); if(isNaN(x)) return; n++; vals.push(x);
+    if(isNaN(li) || isNaN(ls)) return;
+    var ok = inc ? (x >= li && x <= ls) : (x > li && x < ls);
+    if(ok) dentro++; else { fuera.push(el.dataset.k + ': ' + x); el.classList.add('fuera'); } });
+  $('nn').textContent = n;
+  $('nmed').textContent = vals.length ? fmt(pctl(sortNum(vals), .5), 2).replace(/[.,]00$/, '') : '—';
+  var ver = $('ver'); ver.className = 'ver';
+  if(isNaN(li) || isNaN(ls)){ $('nd').textContent = '—'; $('nf').textContent = '—'; $('ndn').textContent = ''; $('nfn').textContent = ''; ver.innerHTML = '<b class="t">Recuento</b>Falta el intervalo publicado (límite inferior y superior).'; ULT20 = ''; return; }
+  if(li > ls){ ver.className = 'ver no'; ver.innerHTML = '<b class="t">Revisa</b>El límite inferior es mayor que el superior.'; return; }
+  $('nd').textContent = dentro; $('nf').textContent = fuera.length;
+  $('ndn').textContent = inc ? 'límites incluidos' : 'límites excluidos'; $('nfn').textContent = fuera.length ? fuera.join(' · ') : '';
+  var intervalo = li + ' a ' + ls + (u ? ' ' + u : '');
+  if(n < 20){ ver.innerHTML = '<b class="t">Recuento</b>Llevas ' + n + ' de 20. El criterio se aplica con los veinte capturados.'; ULT20 = ''; return; }
+  var vered;
+  if(fuera.length <= 2){ ver.className = 'ver ok'; vered = 'CUMPLE el criterio de transferencia (≤ 2 de 20 fuera)'; ver.innerHTML = '<b class="t">Cumple el criterio de transferencia</b>' + dentro + ' de 20 dentro del intervalo publicado (' + esc(intervalo) + '). Se puede adoptar para el grupo indicado, siempre que la selección de los individuos y el método estén justificados y documentados. Si la mediana observada está muy desplazada respecto al centro del intervalo, anótalo: el criterio se cumple pero la población podría estar corrida.'; }
+  else if(fuera.length <= 4){ ver.className = 'ver rep'; vered = 'NO CONCLUYE (' + fuera.length + ' de 20 fuera): repetir con otros 20'; ver.innerHTML = '<b class="t">No concluye todavía</b>' + fuera.length + ' de 20 fuera. EP28 indica seleccionar otros 20 individuos de referencia con los mismos criterios y repetir el recuento; no se eliminan los que quedaron fuera. Si en la segunda serie vuelven a quedar 3 o más fuera, el intervalo no se verifica.'; }
+  else { ver.className = 'ver no'; vered = 'NO SE VERIFICA (' + fuera.length + ' de 20 fuera)'; ver.innerHTML = '<b class="t">No se verifica con este criterio</b>' + fuera.length + ' de 20 fuera. Antes de concluir que el intervalo no aplica, revisa: ¿los 20 cumplían de verdad los criterios de referencia? ¿el método estaba calibrado y el control de calidad aceptado? ¿la preanalítica fue la de los pacientes? Si todo está bien, el intervalo publicado no es para esta población o este método: busca otra fuente comparable o establece uno propio (Herramienta 2).'; }
+  ULT20 = 'REGISTRO DE VERIFICACIÓN DE INTERVALO (CLSI EP28, transferencia con 20)\n' +
+    'Analito: ' + ($('an').value || '—') + ' · Unidad: ' + (u || '—') + '\nGrupo: ' + ($('grupo').value || '—') + '\nFuente del intervalo: ' + ($('fuente20').value || '—') + '\n' +
+    'Intervalo publicado: ' + intervalo + ' (' + (inc ? 'límites incluidos' : 'límites excluidos') + ')\n' +
+    'Resultados (n = 20): ' + vals.join(', ') + '\nDentro: ' + dentro + ' · Fuera: ' + fuera.length + (fuera.length ? ' (' + fuera.join('; ') + ')' : '') + '\nMediana observada: ' + fmt(pctl(sortNum(vals), .5), 2) + '\n' +
+    'Veredicto: ' + vered + '\nFecha: ' + new Date().toLocaleDateString('es-MX') + ' · Elaboró: ______ · Revisó: ______ · Aprobó: ______\n' +
+    'Herramienta: ' + CONFIG.titulo + ' (' + CONFIG.autora + ', ' + CONFIG.version + ')';
+}
+function limpiar20(){ ['an','un','li','ls','grupo','fuente20'].forEach(function(i){ $(i).value = ''; }); V.querySelectorAll('input').forEach(function(e){ e.value = ''; }); $('inc').checked = true; calc20(); }
+function ejemplo20(){
+  $('an').value = 'fosfatasa alcalina'; $('un').value = 'U/L'; $('li').value = '40'; $('ls').value = '130'; $('inc').checked = true;
+  $('grupo').value = 'adultos 18–60 años, ambos sexos'; $('fuente20').value = 'inserto del método nuevo (cifras de ejemplo)';
+  var EJ = [52, 61, 74, 88, 95, 103, 67, 79, 110, 58, 84, 92, 121, 70, 99, 66, 35, 77, 138, 86], ins = V.querySelectorAll('input');
+  for(var i = 0; i < 20; i++) ins[i].value = EJ[i];
+  calc20(); $('vals').scrollIntoView({behavior: 'smooth', block: 'center'});
+}
+function copiar(texto, boton){
+  if(!texto){ boton.textContent = 'Nada que copiar todavía'; setTimeout(function(){ boton.textContent = boton.getAttribute('data-orig'); }, 1500); return; }
+  function ok(){ boton.textContent = 'Copiado'; setTimeout(function(){ boton.textContent = boton.getAttribute('data-orig'); }, 1500); }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(texto).then(ok, function(){ window.prompt('Copia el texto:', texto); }); }
+  else { window.prompt('Copia el texto:', texto); }
+}
+['bcopiar20','bcopiarE','bcopiarI'].forEach(function(id){ $(id).setAttribute('data-orig', $(id).textContent); });
+$('bej').onclick = ejemplo20; $('blimpiar').onclick = limpiar20; $('bcopiar20').onclick = function(){ copiar(ULT20, $('bcopiar20')); };
+['input','change','keyup'].forEach(function(ev){ document.addEventListener(ev, function(e){ if(e.target && e.target.closest && e.target.closest('#verificar')) calc20(); if(e.target && e.target.closest && e.target.closest('#fuentes')) calcR(); }); });
+calc20();
+
+/* ═════════ HERRAMIENTA 2: establecer ═════════ */
+var ULTE = '';
+function analizaGrupo(vals, opc){
+  var s = sortNum(vals), n = s.length, marcados = [], excluidos = [];
+  var tk = tukey(s), dx = dixonExtremos(s);
+  s.forEach(function(v){ if(v < tk.lo || v > tk.hi) marcados.push(v); });
+  if(opc.atip === 'tukey'){ excluidos = marcados.slice(); s = s.filter(function(v){ return v >= tk.lo && v <= tk.hi; }); }
+  if(opc.atip === 'dixon'){ excluidos = dx.slice(); s = s.filter(function(v){ return dx.indexOf(v) < 0; }); }
+  var m = s.length, r = {n0: n, n: m, marcados: marcados, dixon: dx, excluidos: excluidos, s: s};
+  if(m < 3) return r;
+  r.media = media(s); r.de = de(s); r.mediana = pctl(s, .5); r.min = s[0]; r.max = s[m - 1];
+  r.p025 = pctl(s, .025); r.p975 = pctl(s, .975); r.asim = m > 3 ? asimetria(s) : NaN; r.curt = m > 4 ? curtosis(s) : NaN;
+  var ic1 = icRango(m, .025), ic2 = icRango(m, .975);
+  r.ic025 = [s[ic1[0] - 1], s[ic1[1] - 1]]; r.ic975 = [s[ic2[0] - 1], s[ic2[1] - 1]]; r.icOk = m >= 120;
+  if(opc.trans === 'log' && s[0] > 0){ var L = s.map(Math.log), ml = media(L), sl = de(L); r.par = [Math.exp(ml - 1.96 * sl), Math.exp(ml + 1.96 * sl)]; r.parTipo = 'log-gaussiano'; }
+  else { r.par = [r.media - 1.96 * r.de, r.media + 1.96 * r.de]; r.parTipo = 'gaussiano'; }
+  return r;
+}
+function tablaGrupo(r, nombre, u, d){
+  var h = '<h3>' + esc(nombre) + '</h3>';
+  if(r.n < 3) return h + '<p class="nota">Se necesitan al menos 3 valores para describir el grupo (y ≥ 120 para un intervalo no paramétrico con IC 90 %).</p>';
+  h += '<div class="res">' +
+    '<div class="r2"><b>n analizados</b><span>' + r.n + '</span><small>' + (r.n0 !== r.n ? 'de ' + r.n0 + ' capturados' : 'capturados') + '</small></div>' +
+    '<div class="r2"><b>Límite inferior (P2.5)</b><span>' + fmt(r.p025, d) + '</span><small>IC 90 %: ' + fmt(r.ic025[0], d) + ' a ' + fmt(r.ic025[1], d) + '</small></div>' +
+    '<div class="r2"><b>Límite superior (P97.5)</b><span>' + fmt(r.p975, d) + '</span><small>IC 90 %: ' + fmt(r.ic975[0], d) + ' a ' + fmt(r.ic975[1], d) + '</small></div>' +
+    '<div class="r2"><b>Mediana</b><span>' + fmt(r.mediana, d) + '</span><small>media ' + fmt(r.media, d) + ' · DE ' + fmt(r.de, d) + '</small></div></div>';
+  var avisos = [];
+  if(r.n < 120) avisos.push('<div class="llamada ll-aviso" style="margin-top:.8rem"><b class="tit">n = ' + r.n + ' es menor de 120</b>EP28 exige al menos 120 individuos por grupo para el intervalo no paramétrico con IC 90 %. Los límites mostrados son orientativos; con 40 a 119 puede usarse el método robusto (Horn y Pesce) y con menos de 40 no se establece un intervalo, solo se verifica.</div>');
+  var anchoIC = Math.max(r.ic975[1] - r.ic975[0], r.ic025[1] - r.ic025[0]), anchoRI = r.p975 - r.p025;
+  if(r.n >= 120 && anchoRI > 0 && anchoIC / anchoRI > 0.3) avisos.push('<div class="llamada ll-plum" style="margin-top:.8rem"><b class="tit">Incertidumbre de los límites</b>El IC 90 % del límite más incierto abarca el ' + Math.round(100 * anchoIC / anchoRI) + ' % de la anchura del intervalo. Con n cercano a 120 es esperable; si el laboratorio puede reclutar más individuos, los límites se afinan. Registra los IC junto con el intervalo.</div>');
+  if(Math.abs(r.asim) > 1) avisos.push('<div class="llamada ll-plum" style="margin-top:.8rem"><b class="tit">Distribución asimétrica (asimetría ' + fmt(r.asim, 2) + ')</b>Se reporta el intervalo no paramétrico. Si quieres comparar con el paramétrico, usa la transformación logarítmica.</div>');
+  h += avisos.join('');
+  h += '<div class="tabla"><table><tr><th>Estadístico</th><th>Valor</th><th>Comentario</th></tr>' +
+    '<tr><td>Intervalo no paramétrico (P2.5 a P97.5)</td><td class="n"><b>' + fmt(r.p025, d) + ' a ' + fmt(r.p975, d) + (u ? ' ' + esc(u) : '') + '</b></td><td>El que se reporta. Rango r = p(n+1) con interpolación.</td></tr>' +
+    '<tr><td>Intervalo paramétrico (' + r.parTipo + ', ±1.96 DE)</td><td class="n">' + fmt(r.par[0], d) + ' a ' + fmt(r.par[1], d) + '</td><td>Solo para comparar; válido si la distribución es gaussiana (o log-gaussiana).</td></tr>' +
+    '<tr><td>Mínimo y máximo</td><td class="n">' + fmt(r.min, d) + ' a ' + fmt(r.max, d) + '</td><td></td></tr>' +
+    '<tr><td>Asimetría · curtosis</td><td class="n">' + fmt(r.asim, 2) + ' · ' + fmt(r.curt, 2) + '</td><td>|asimetría| &lt; 0.5 y |curtosis| &lt; 1 sugieren forma cercana a la gaussiana.</td></tr>' +
+    '<tr><td>Atípicos por cercas de Tukey (1.5 × RIC)</td><td class="n">' + (r.marcados.length ? r.marcados.map(function(v){ return fmt(v, d); }).join(', ') : 'ninguno') + '</td><td>Se señalan para investigarlos; no se excluyen sin causa.</td></tr>' +
+    '<tr><td>Atípicos por razón de Dixon (D/R &gt; 1/3)</td><td class="n">' + (r.dixon.length ? r.dixon.map(function(v){ return fmt(v, d); }).join(', ') : 'ninguno') + '</td><td>Criterio de EP28 para los extremos.</td></tr>' +
+    (r.excluidos.length ? '<tr><td>Excluidos en este cálculo</td><td class="n">' + r.excluidos.map(function(v){ return fmt(v, d); }).join(', ') + '</td><td>Documentar la causa de cada exclusión.</td></tr>' : '') +
+    '</table></div>';
+  h += histograma(r.s, 'Distribución de ' + nombre + ' (n = ' + r.n + ')', r.p025, r.p975);
+  return h;
+}
+function harrisBoyd(a, b){
+  var n1 = a.n, n2 = b.n, m1 = a.media, m2 = b.media, s1 = a.de, s2 = b.de;
+  var z = Math.abs(m1 - m2) / Math.sqrt(s1 * s1 / n1 + s2 * s2 / n2), zc = 3 * Math.sqrt((n1 + n2) / 240);
+  var ratio = Math.max(s1, s2) / Math.min(s1, s2);
+  return {z: z, zc: zc, ratio: ratio, particiona: z > zc || ratio > 1.5};
+}
+function calcE(){
+  var A = parseLista($('dA').value), B = parseLista($('dB').value), u = $('unE').value.trim(), d = parseInt($('dec').value, 10);
+  var opc = {atip: $('atip').value, trans: $('trans').value}, nomA = $('nomA').value.trim() || 'Grupo A', nomB = $('nomB').value.trim() || 'Grupo B';
+  var out = '';
+  if(!A.v.length){ $('salidaE').innerHTML = '<div class="ver"><b class="t">Sin datos</b>Pega los resultados del grupo A.</div>'; ULTE = ''; return; }
+  if(A.malos || B.malos) out += '<div class="llamada ll-aviso"><b class="tit">Entradas ignoradas</b>' + (A.malos + B.malos) + ' valores no numéricos se omitieron.</div>';
+  var rA = analizaGrupo(A.v, opc), rB = B.v.length ? analizaGrupo(B.v, opc) : null;
+  out += '<div class="card">' + tablaGrupo(rA, nomA, u, d) + '</div>';
+  if(rB){ out += '<div class="card">' + tablaGrupo(rB, nomB, u, d) + '</div>';
+    if(rA.n >= 3 && rB.n >= 3){
+      var hb = harrisBoyd(rA, rB);
+      out += '<div class="card"><h3 style="margin-top:0">Prueba de partición de Harris y Boyd (' + esc(nomA) + ' frente a ' + esc(nomB) + ')</h3>' +
+        '<div class="res"><div class="r2"><b>z observada</b><span>' + fmt(hb.z, 2) + '</span><small>|media A − media B| / √(s²A/nA + s²B/nB)</small></div>' +
+        '<div class="r2"><b>z crítica</b><span>' + fmt(hb.zc, 2) + '</span><small>3 · √((nA + nB)/240)</small></div>' +
+        '<div class="r2"><b>Razón de DE</b><span>' + fmt(hb.ratio, 2) + '</span><small>mayor / menor; criterio &gt; 1.5</small></div></div>' +
+        '<div class="ver ' + (hb.particiona ? 'rep' : 'ok') + '"><b class="t">' + (hb.particiona ? 'Se recomienda particionar' : 'No se requiere particionar') + '</b>' +
+        (hb.particiona ? 'Las distribuciones difieren lo suficiente: reporta intervalos separados para cada grupo (cada uno con ≥ 120).' : 'Las diferencias entre grupos son pequeñas frente a la dispersión: puede reportarse un intervalo combinado (n = ' + (rA.n + rB.n) + '). Aun así, si la fisiología del analito justifica la partición, es válido separar.') +
+        ' Criterio de Harris y Boyd (1990); para distribuciones muy asimétricas considera además el criterio de Lahti (2004) sobre las proporciones fuera de los límites.</div></div>';
+    }
+  }
+  $('salidaE').innerHTML = out;
+  var lin = function(r, nombre){ return nombre + ': n = ' + r.n + (r.n0 !== r.n ? ' (capturados ' + r.n0 + ', excluidos ' + r.excluidos.join(', ') + ')' : '') + ' · P2.5 = ' + fmt(r.p025, d) + ' (IC 90 % ' + fmt(r.ic025[0], d) + ' a ' + fmt(r.ic025[1], d) + ') · P97.5 = ' + fmt(r.p975, d) + ' (IC 90 % ' + fmt(r.ic975[0], d) + ' a ' + fmt(r.ic975[1], d) + ') · mediana ' + fmt(r.mediana, d) + ' · media ' + fmt(r.media, d) + ' · DE ' + fmt(r.de, d) + ' · atípicos señalados: ' + (r.marcados.length ? r.marcados.join(', ') : 'ninguno'); };
+  ULTE = 'REGISTRO DE ESTABLECIMIENTO DE INTERVALO DE REFERENCIA (CLSI EP28, método directo no paramétrico)\nAnalito: ' + ($('anE').value || '—') + ' · Unidad: ' + (u || '—') + '\n' + (rA.n >= 3 ? lin(rA, nomA) : nomA + ': datos insuficientes') + (rB && rB.n >= 3 ? '\n' + lin(rB, nomB) : '') +
+    (rB && rA.n >= 3 && rB.n >= 3 ? '\nHarris y Boyd: z = ' + fmt(harrisBoyd(rA, rB).z, 2) + ', z crítica = ' + fmt(harrisBoyd(rA, rB).zc, 2) + ', razón DE = ' + fmt(harrisBoyd(rA, rB).ratio, 2) + ' → ' + (harrisBoyd(rA, rB).particiona ? 'particionar' : 'no particionar') : '') +
+    '\nTratamiento de atípicos: ' + $('atip').options[$('atip').selectedIndex].text + '\nFecha: ' + new Date().toLocaleDateString('es-MX') + ' · Elaboró: ______ · Revisó: ______ · Aprobó: ______\nHerramienta: ' + CONFIG.titulo + ' (' + CONFIG.autora + ', ' + CONFIG.version + ')';
+}
+function simula(n, mu, sigma, log, semilla){ // gaussiana (o log-gaussiana) reproducible
+  var s = semilla || 1, out = [];
+  function rnd(){ s = (s * 16807) % 2147483647; return s / 2147483647; }
+  for(var i = 0; i < n; i++){ var u1 = rnd() || 1e-9, u2 = rnd(); var z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2); out.push(log ? Math.exp(mu + sigma * z) : mu + sigma * z); }
+  return out;
+}
+function ejemploE(){
+  $('anE').value = 'creatinina'; $('unE').value = 'mg/dL'; $('nomA').value = 'mujeres 18–60'; $('nomB').value = 'hombres 18–60'; $('dec').value = '2';
+  $('dA').value = simula(125, 0.72, 0.11, false, 7).map(function(v){ return v.toFixed(2); }).join('\n');
+  $('dB').value = simula(122, 0.93, 0.13, false, 11).map(function(v){ return v.toFixed(2); }).join('\n');
+  calcE(); $('salidaE').scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+$('bcalcE').onclick = calcE; $('bejE').onclick = ejemploE; $('bcopiarE').onclick = function(){ copiar(ULTE, $('bcopiarE')); };
+$('blimpE').onclick = function(){ ['dA','dB','anE','unE','nomA','nomB'].forEach(function(i){ $(i).value = ''; }); $('salidaE').innerHTML = ''; ULTE = ''; };
+
+/* ═════════ HERRAMIENTA 3: indirecto (Hoffmann simplificado) ═════════ */
+var ULTI = '';
+function calcI(){
+  var P = parseLista($('dI').value), u = $('unI').value.trim(), tramo = $('pI').value.split(',').map(Number), tsel = $('tI').value;
+  if(P.v.length < 50){ $('salidaI').innerHTML = '<div class="ver"><b class="t">Datos insuficientes</b>Se necesitan al menos 50 resultados (idealmente cientos o miles).</div>'; ULTI = ''; return; }
+  var s0 = sortNum(P.v), n = s0.length, asim = asimetria(s0), usarLog = tsel === 'log' || (tsel === 'auto' && asim > 1 && s0[0] > 0);
+  if(usarLog && s0[0] <= 0) usarLog = false;
+  var s = usarLog ? s0.map(Math.log) : s0;
+  // gráfica de probabilidad normal: z_i = probit((i - 0.5)/n)
+  var pts = []; for(var i = 0; i < n; i++) pts.push([probit((i + 0.5) / n), s[i]]);
+  var lo = tramo[0] / 100, hi = tramo[1] / 100, sub = pts.filter(function(p, i){ var q = (i + 0.5) / n; return q >= lo && q <= hi; });
+  var mx = media(sub.map(function(p){ return p[0]; })), my = media(sub.map(function(p){ return p[1]; })), sxy = 0, sxx = 0;
+  sub.forEach(function(p){ sxy += (p[0] - mx) * (p[1] - my); sxx += (p[0] - mx) * (p[0] - mx); });
+  var b = sxy / sxx, a = my - b * mx, r2num = 0, r2den = 0;
+  sub.forEach(function(p){ var yh = a + b * p[0]; r2num += (p[1] - yh) * (p[1] - yh); r2den += (p[1] - my) * (p[1] - my); });
+  var r2 = 1 - r2num / r2den;
+  var liT = a - 1.96 * b, lsT = a + 1.96 * b, li = usarLog ? Math.exp(liT) : liT, ls = usarLog ? Math.exp(lsT) : lsT;
+  var d = (s0[n - 1] - s0[0]) < 10 ? 2 : (s0[n - 1] - s0[0]) < 100 ? 1 : 0;
+  var fueraPct = 100 * s0.filter(function(v){ return v < li || v > ls; }).length / n;
+  // gráfica
+  var W = 640, H = 300, ml = 46, mr = 14, mt = 22, mb = 34, pw = W - ml - mr, ph = H - mt - mb;
+  var zmin = -3.2, zmax = 3.2, ymin = Math.min(s[0], liT), ymax = Math.max(s[n - 1], lsT);
+  function X(z){ return ml + (z - zmin) / (zmax - zmin) * pw; } function Y(v){ return mt + ph - (v - ymin) / (ymax - ymin) * ph; }
+  var g = '<svg class="graf" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gráfica de probabilidad normal">';
+  g += '<text x="' + ml + '" y="14" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#4b5462">Gráfica de probabilidad normal (Hoffmann): valor' + (usarLog ? ' (log)' : '') + ' frente a z; en color el tramo ajustado</text>';
+  g += '<rect x="' + X(probit(lo)).toFixed(1) + '" y="' + mt + '" width="' + (X(probit(hi)) - X(probit(lo))).toFixed(1) + '" height="' + ph + '" fill="#1a6b42" fill-opacity=".08"/>';
+  var paso = Math.max(1, Math.floor(n / 400));
+  for(var j = 0; j < n; j += paso){ var enTramo = ((j + 0.5) / n) >= lo && ((j + 0.5) / n) <= hi; g += '<circle cx="' + X(pts[j][0]).toFixed(1) + '" cy="' + Y(pts[j][1]).toFixed(1) + '" r="2" fill="' + (enTramo ? '#1a6b42' : '#455a8c') + '" fill-opacity=".6"/>'; }
+  g += '<line x1="' + X(-1.96).toFixed(1) + '" y1="' + Y(liT).toFixed(1) + '" x2="' + X(1.96).toFixed(1) + '" y2="' + Y(lsT).toFixed(1) + '" stroke="#90303a" stroke-width="2"/>';
+  [[-1.96, liT, 'P2.5'], [1.96, lsT, 'P97.5']].forEach(function(p){ g += '<line x1="' + X(p[0]).toFixed(1) + '" y1="' + mt + '" x2="' + X(p[0]).toFixed(1) + '" y2="' + (mt + ph) + '" stroke="#90303a" stroke-dasharray="5 4"/><text x="' + X(p[0]).toFixed(1) + '" y="' + (mt + ph + 26) + '" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="#90303a">' + p[2] + '</text>'; });
+  g += '<line x1="' + ml + '" y1="' + (mt + ph) + '" x2="' + (W - mr) + '" y2="' + (mt + ph) + '" stroke="#6b7585"/><line x1="' + ml + '" y1="' + mt + '" x2="' + ml + '" y2="' + (mt + ph) + '" stroke="#6b7585"/>';
+  [-3, -2, -1, 0, 1, 2, 3].forEach(function(z){ g += '<text x="' + X(z).toFixed(1) + '" y="' + (mt + ph + 13) + '" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#4b5462">' + z + '</text>'; });
+  [0, .25, .5, .75, 1].forEach(function(f){ var v = ymin + (ymax - ymin) * f; g += '<text x="' + (ml - 4) + '" y="' + (Y(v) + 3).toFixed(1) + '" text-anchor="end" font-family="Inter, sans-serif" font-size="10" fill="#4b5462">' + fmt(usarLog ? Math.exp(v) : v, d) + '</text>'; });
+  g += '</svg>';
+  var out = '<div class="card"><h3 style="margin-top:0">Estimación indirecta · ' + esc($('anI').value || 'analito') + '</h3>' +
+    '<div class="res"><div class="r2"><b>n resultados</b><span>' + n + '</span><small>' + (P.malos ? P.malos + ' no numéricos omitidos' : 'todos numéricos') + '</small></div>' +
+    '<div class="r2"><b>Límite inferior estimado</b><span>' + fmt(li, d) + '</span><small>' + (u ? esc(u) : '') + '</small></div>' +
+    '<div class="r2"><b>Límite superior estimado</b><span>' + fmt(ls, d) + '</span><small>' + (u ? esc(u) : '') + '</small></div>' +
+    '<div class="r2"><b>Ajuste del tramo</b><span>' + fmt(r2, 3) + '</span><small>R² en percentiles ' + tramo[0] + ' a ' + tramo[1] + '</small></div></div>' +
+    '<div class="tabla"><table><tr><th>Dato</th><th>Valor</th><th>Comentario</th></tr>' +
+    '<tr><td>Transformación</td><td>' + (usarLog ? 'logarítmica' : 'ninguna') + '</td><td>' + (tsel === 'auto' ? 'elegida automáticamente por asimetría (' + fmt(asim, 2) + ')' : 'elegida por el usuario') + '</td></tr>' +
+    '<tr><td>Percentiles crudos de todos los resultados (P2.5 a P97.5)</td><td class="n">' + fmt(pctl(s0, .025), d) + ' a ' + fmt(pctl(s0, .975), d) + '</td><td>Incluyen enfermos: suelen ser más anchos que la estimación indirecta.</td></tr>' +
+    '<tr><td>Mediana de todos los resultados</td><td class="n">' + fmt(pctl(s0, .5), d) + '</td><td></td></tr>' +
+    '<tr><td>Resultados fuera del intervalo estimado</td><td class="n">' + fmt(fueraPct, 1) + ' %</td><td>En población ambulatoria mixta se espera 5 a 15 %; mucho más indica gran fracción de enfermos y el método pierde validez.</td></tr>' +
+    '<tr><td>Recta ajustada (valor' + (usarLog ? ' log' : '') + ' = a + b · z)</td><td class="n">a = ' + fmt(a, 4) + ' · b = ' + fmt(b, 4) + '</td><td>b es la desviación estándar estimada de la subpoblación sana' + (usarLog ? ' en escala log' : '') + '.</td></tr></table></div>' + g +
+    '<div class="ver ' + (r2 > 0.99 && fueraPct < 15 ? 'ok' : 'rep') + '"><b class="t">' + (r2 > 0.99 && fueraPct < 15 ? 'Estimación plausible' : 'Estimación con reservas') + '</b>' +
+    (r2 > 0.99 ? 'El tramo central es lineal (R² &gt; 0.99): la subpoblación dominante se comporta como gaussiana' + (usarLog ? ' en escala log' : '') + '. ' : 'El tramo central no es suficientemente lineal (R² = ' + fmt(r2, 3) + '): prueba otra transformación u otro tramo, o particiona por edad y sexo. ') +
+    (fueraPct >= 15 ? 'La fracción fuera del intervalo es alta: la base de datos contiene muchos resultados patológicos o la preanalítica es heterogénea. ' : '') +
+    'Contrasta con el inserto y con la literatura; confirma con refineR o reflimR antes de adoptar.</div></div>';
+  $('salidaI').innerHTML = out;
+  ULTI = 'ESTIMACIÓN INDIRECTA DE INTERVALO (Hoffmann simplificado)\nAnalito y grupo: ' + ($('anI').value || '—') + ' · Unidad: ' + (u || '—') + '\nn = ' + n + ' · transformación: ' + (usarLog ? 'log' : 'ninguna') + ' · tramo ' + tramo[0] + '–' + tramo[1] + ' · R² = ' + fmt(r2, 3) + '\nIntervalo estimado: ' + fmt(li, d) + ' a ' + fmt(ls, d) + ' · percentiles crudos: ' + fmt(pctl(s0, .025), d) + ' a ' + fmt(pctl(s0, .975), d) + ' · fuera del intervalo: ' + fmt(fueraPct, 1) + ' %\nPendiente de confirmar con refineR/reflimR y de contrastar con inserto y literatura.\nFecha: ' + new Date().toLocaleDateString('es-MX') + '\nHerramienta: ' + CONFIG.titulo + ' (' + CONFIG.autora + ', ' + CONFIG.version + ')';
+}
+function ejemploI(){
+  $('anI').value = 'creatinina, mujeres 18–50 (simulado: 1 800 sanas y 200 con enfermedad renal)'; $('unI').value = 'mg/dL'; $('pI').value = '25,75'; $('tI').value = 'no';
+  var sanas = simula(1800, 0.70, 0.11, false, 23), enfermas = simula(200, 1.6, 0.6, false, 29).map(function(v){ return Math.max(1.0, v); });
+  $('dI').value = sanas.concat(enfermas).map(function(v){ return v.toFixed(2); }).join('\n');
+  calcI(); $('salidaI').scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+$('bcalcI').onclick = calcI; $('bejI').onclick = ejemploI; $('bcopiarI').onclick = function(){ copiar(ULTI, $('bcopiarI')); };
+$('blimpI').onclick = function(){ ['dI','anI','unI'].forEach(function(i){ $(i).value = ''; }); $('salidaI').innerHTML = ''; ULTI = ''; };
+
+/* ═════════ transferencia por regresión ═════════ */
+function calcR(){
+  var l = num($('rl').value), h = num($('rh').value), b = num($('rb').value), a = num($('ra').value), v = $('verR');
+  if([l, h, b, a].some(isNaN)){ v.className = 'ver'; v.innerHTML = '<b class="t">Intervalo transferido</b>Captura los límites y la ecuación de regresión de la comparación de métodos.'; return; }
+  var nl = a + b * l, nh = a + b * h, d = Math.abs(h - l) < 10 ? 2 : 1;
+  var alerta = (b < 0.9 || b > 1.1 || Math.abs(a) > 0.1 * (h - l));
+  v.className = 'ver ' + (alerta ? 'rep' : 'ok');
+  v.innerHTML = '<b class="t">Intervalo transferido al método nuevo</b><span style="font-family:var(--f-serif); font-size:1.5rem; font-weight:700">' + fmt(nl, d) + ' a ' + fmt(nh, d) + '</span><br>' +
+    (alerta ? 'La pendiente o el intercepto se alejan de 1 y 0: el método nuevo difiere de forma relevante. Verifica el intervalo transferido con 20 individuos (Herramienta 1) y considera establecer uno propio.' : 'Pendiente e intercepto cercanos a 1 y 0. Verifica de todos modos con 20 individuos y documenta la regresión (n, rango, r, IC de a y b).');
+}
+calcR();
+
+/* ═════════ comentarios ═════════ */
+function abrirCom(){ var dl = $('dlg'); $('com-ok').hidden = true; if(dl.showModal) dl.showModal(); else dl.setAttribute('open', ''); $('c-msg').focus(); }
+function cerrarCom(){ var dl = $('dlg'); if(dl.close) dl.close(); else dl.removeAttribute('open'); }
+$('abrir-com').onclick = abrirCom; $('cerrar-com').onclick = cerrarCom;
+Array.prototype.forEach.call(document.querySelectorAll('[data-com]'), function(a){ a.onclick = function(e){ e.preventDefault(); abrirCom(); }; });
+$('form-com').onsubmit = function(e){
+  e.preventDefault(); var msg = $('c-msg').value.trim(); if(!msg){ $('c-msg').focus(); return; }
+  var v = function(id){ return $(id).value.trim(); };
+  var cuerpo = 'Comentario sobre «' + CONFIG.titulo + '»\nNombre: ' + (v('c-nombre') || '(no indicado)') + '\nCorreo: ' + (v('c-correo') || '(no indicado)') + '\nPerfil: ' + v('c-perfil') + '\nTipo: ' + v('c-tipo') + '\nSección: ' + v('c-seccion') + '\n\n' + msg + '\n';
+  var ok = $('com-ok');
+  function porCorreo(){ var url = 'mailto:' + CONFIG.correo + '?subject=' + encodeURIComponent('Comentario: Intervalos de referencia · ' + v('c-seccion')) + '&body=' + encodeURIComponent(cuerpo); window.location.href = url; ok.innerHTML = '<b>Se abrió tu programa de correo con el mensaje listo.</b> Si no se abrió, copia este texto y envíalo a ' + esc(CONFIG.correo) + ':<textarea readonly>' + esc(cuerpo) + '</textarea>'; ok.hidden = false; }
+  if(CONFIG.formEndpoint){ fetch(CONFIG.formEndpoint, {method: 'POST', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, body: JSON.stringify({nombre: v('c-nombre'), correo: v('c-correo'), perfil: v('c-perfil'), tipo: v('c-tipo'), seccion: v('c-seccion'), mensaje: msg})}).then(function(r){ if(!r.ok) throw new Error(); ok.innerHTML = '<b>Gracias.</b> Tu comentario quedó registrado.'; ok.hidden = false; $('c-msg').value = ''; }).catch(porCorreo); }
+  else porCorreo();
+};
+</script>
+</body>
+</html>

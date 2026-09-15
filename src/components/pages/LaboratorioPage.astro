@@ -1,0 +1,109 @@
+---
+// Páginas de la sección «Laboratorio» (serie «Del tubo al diagnóstico»): marco
+// institucional del sitio (Base + PageHeader) con el mini-sitio estático embebido
+// por iframe. El mini-sitio vive en public/herramientas/laboratorio/app/ (índice +
+// tres herramientas enlazadas entre sí) y se genera con
+// scripts/laboratorio_retematizar.py a partir de los HTML de trabajo. Como
+// Virología, es multipágina con navegación propia, por lo que el iframe usa
+// altura fija con desplazamiento interno (no el postMessage de altura de los
+// visores de una sola página).
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
+import { t, localePath } from '../../i18n.mjs';
+
+type App = 'index' | 'biomarcadores' | 'intervalos-de-referencia' | 'delta-check';
+interface Props { lang?: 'es' | 'en'; app?: App }
+const { lang = 'es', app = 'index' } = Astro.props;
+
+const appBase = '/herramientas/laboratorio/app/';
+// Se apunta al archivo, no al directorio: el servidor de desarrollo de Astro no
+// resuelve «.../app/» a su index.html, aunque Vercel sí lo haga en producción.
+const src = `${appBase}${app}.html`;
+const k = (s: string) => t(lang, `lab.${app}.${s}`);
+const indexHref = localePath('/herramientas/laboratorio', lang);
+---
+<Base titulo={k('title')} descripcion={k('meta')} lang={lang}>
+  <div class="tool-page">
+  <PageHeader eyebrow={t(lang, 'lab.kicker')} title={k('title')} description={k('intro')} />
+  <section class="section">
+    <div class="container">
+      <div class="tool-toolbar">
+        {app !== 'index'
+          ? <a class="back-link" href={indexHref}>{t(lang, 'lab.back')}</a>
+          : <span aria-hidden="true"></span>}
+        <a class="fullscreen-link" href={src} target="_blank" rel="noopener">{t(lang, 'lab.fullscreen')}</a>
+      </div>
+      <div class="viewer-frame">
+        <iframe
+          id="labFrame"
+          src={src}
+          title={k('iframe_title')}
+          loading="lazy"
+          referrerpolicy="no-referrer"></iframe>
+      </div>
+      <p class="viewer-note">{k('note')}</p>
+
+      <aside class="uso" aria-label={t(lang, 'lab.authors_heading')}>
+        <h2 class="uso__title">{t(lang, 'lab.authors_heading')}</h2>
+        <p class="uso__text">{t(lang, 'lab.authors_text')}</p>
+      </aside>
+
+      <aside class="cite" aria-label={t(lang, 'lab.cite_heading')}>
+        <h2 class="cite__title">{t(lang, 'lab.cite_heading')}</h2>
+        <p class="cite__text">{k('cite')}</p>
+      </aside>
+    </div>
+  </section>
+  </div>
+</Base>
+
+<style>
+  /* Herramienta ancha (la consulta de biomarcadores lleva barra lateral):
+     header + visor usan hasta 1400px en pantallas amplias. */
+  .tool-page :global(.container) { max-width: 1400px; }
+  .section { padding-block-start: var(--sp-6); }
+  .tool-toolbar {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-2);
+  }
+  .back-link, .fullscreen-link { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); }
+  .back-link:hover, .fullscreen-link:hover { color: var(--udg-red-600); }
+  .viewer-frame {
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--udg-gray-50);
+  }
+  #labFrame {
+    display: block;
+    width: 100%;
+    border: 0;
+    /* mini-sitio multipágina: altura de visor con scroll interno */
+    height: min(78vh, 900px);
+  }
+  .viewer-note {
+    margin-top: var(--sp-2);
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+  }
+  .uso, .cite {
+    margin-top: var(--sp-4);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-left: 3px solid var(--udg-navy-700);
+    border-radius: var(--radius-md, 8px);
+    background: var(--udg-gray-50, #f7f7f8);
+  }
+  .cite { border-left-color: var(--udg-red-600); }
+  .uso__title, .cite__title {
+    font-size: var(--fs-s1);
+    font-weight: var(--fw-semibold);
+    margin: 0 0 var(--sp-2);
+  }
+  .uso__text, .cite__text {
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed, 1.6);
+    margin: 0;
+  }
+</style>

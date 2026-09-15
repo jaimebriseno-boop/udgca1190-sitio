@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageHeader from '../PageHeader.astro';
 import { getCollection } from 'astro:content';
 import CardHerramienta from '../CardHerramienta.astro';
-import { t, getSitioL, localize } from '../../i18n.mjs';
+import { t, getSitioL, localize, localePath } from '../../i18n.mjs';
 
 interface Props { lang?: 'es' | 'en' }
 const { lang = 'es' } = Astro.props;
@@ -12,9 +12,16 @@ const lineas = await getCollection('lineas');
 const lineasMap = Object.fromEntries(lineas.map((l) => [l.id, localize('lineas', l.id, l.data, lang)]));
 
 const orden: Record<string, number> = { activa: 0, beta: 1, desarrollo: 2 };
-const herramientas = (await getCollection('herramientas'))
-  .map((e) => localize('herramientas', e.id, e.data, lang))
+const todas = (await getCollection('herramientas')).map((e) => localize('herramientas', e.id, e.data, lang));
+// Rejilla general (métodos y aplicaciones): destacadas primero, luego por estado.
+const generales = todas
+  .filter((h) => !h.seccion)
   .sort((a, b) => Number(b.destacado) - Number(a.destacado) || (orden[a.estado] ?? 9) - (orden[b.estado] ?? 9));
+// Sección «Laboratorio»: por `orden` (mismo orden que su índice); la colección
+// no conserva el orden del YAML.
+const laboratorio = todas
+  .filter((h) => h.seccion === 'laboratorio')
+  .sort((a, b) => (a.orden ?? 99) - (b.orden ?? 99));
 
 const intro = getSitioL(lang).page_intros?.tools || '';
 ---
@@ -22,8 +29,12 @@ const intro = getSitioL(lang).page_intros?.tools || '';
   <PageHeader eyebrow={t(lang, 'tools.kicker')} title={t(lang, 'tools.title')} description={intro} />
   <section class="section">
     <div class="container">
+      <div class="group-head">
+        <p class="kicker">{t(lang, 'tools.general.kicker')}</p>
+        <h2 class="group-head__title">{t(lang, 'tools.general.title')}</h2>
+      </div>
       <div class="tools-grid">
-        {herramientas.map((h) => <CardHerramienta data={h} lineasMap={lineasMap} lang={lang} />)}
+        {generales.map((h) => <CardHerramienta data={h} lineasMap={lineasMap} lang={lang} />)}
       </div>
 
       <p class="stack-line">
@@ -32,10 +43,55 @@ const intro = getSitioL(lang).page_intros?.tools || '';
       </p>
     </div>
   </section>
+
+  {laboratorio.length > 0 && (
+    <section class="section section--lab" id="laboratorio">
+      <div class="container">
+        <div class="group-head group-head--lab">
+          <p class="kicker">{t(lang, 'tools.lab.kicker')}</p>
+          <h2 class="group-head__title">{t(lang, 'tools.lab.title')}</h2>
+          <p class="group-head__desc">{t(lang, 'tools.lab.intro')}</p>
+          <a class="group-head__link" href={localePath('/herramientas/laboratorio', lang)}>{t(lang, 'tools.lab.index')}</a>
+        </div>
+        <div class="tools-grid">
+          {laboratorio.map((h) => <CardHerramienta data={h} lineasMap={lineasMap} lang={lang} />)}
+        </div>
+      </div>
+    </section>
+  )}
 </Base>
 
 <style>
   .section { padding-block-start: var(--sp-6); }
+  .section--lab {
+    padding-block-start: var(--sp-8);
+    padding-block-end: var(--sp-8);
+    border-top: 1px solid var(--udg-gray-200);
+    background: var(--udg-gray-50);
+  }
+  .group-head { margin-bottom: var(--sp-4); }
+  .group-head__title {
+    font-size: var(--fs-s2);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tr-display);
+    color: var(--udg-navy-900);
+    margin-top: var(--sp-1);
+  }
+  .group-head__desc {
+    max-width: var(--grid-prose);
+    color: var(--c-gray);
+    margin-top: var(--sp-2);
+  }
+  .group-head__link {
+    display: inline-block;
+    margin-top: var(--sp-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    color: var(--udg-navy-700);
+  }
+  .group-head__link:hover { color: var(--udg-red-600); }
   .tools-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

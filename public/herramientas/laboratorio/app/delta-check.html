@@ -1,0 +1,792 @@
+<!doctype html>
+<!-- Generado por scripts/laboratorio_retematizar.py a partir de «Delta check - Comparar al paciente consigo mismo.html» (serie «Del tubo al diagnóstico», v2.0, septiembre de 2026). No editar a mano: regenerar. -->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Delta check · Comparar al paciente consigo mismo</title>
+<meta name="description" content="Qué es el delta check, por qué importa, cómo calcularlo (absoluto, porcentual, por tiempo y por variación biológica), cómo fijar límites y ventanas con datos propios según CLSI EP33, y qué hacer cuando aparece la alerta. Con calculadoras que funcionan sin internet.">
+<meta name="author" content="Judith Carolina De Arcos Jiménez; Jaime Briseño Ramírez">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --f-serif:"Source Serif 4",Georgia,serif; --f-sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --papel:#f7f8fa; --panel:#ffffff; --tinta:#14181f; --suave:#4b5462; --tenue:#6b7585;
+  --linea:#dde1e8; --plum:#27334f; --navy:#455a8c; --accion:#90303a;
+  --ok:#1a6b42; --ok-suave:#e7f2ec; --aviso:#8a5c0a; --aviso-suave:#fbf3dd; --no:#a61e12; --no-suave:#fbeae8;
+  --pre:#1a6b42; --ana:#455a8c; --post:#27334f;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; overflow-x:hidden}
+body{margin:0; background:var(--papel); color:var(--tinta); font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; font-size:15.5px; line-height:1.6; -webkit-font-smoothing:antialiased}
+a{color:var(--navy)}
+b,strong{font-weight:600}
+.w{max-width:60rem; margin:0 auto; padding:1.6rem 2rem 5rem}
+.top{position:sticky; top:0; z-index:20; background:rgba(247,248,250,.96); backdrop-filter:blur(6px); border-bottom:1px solid var(--linea)}
+.top .in{max-width:60rem; margin:0 auto; padding:.55rem 2rem; display:flex; gap:.4rem; align-items:center; flex-wrap:wrap}
+.top .marca{font-family:"Source Serif 4",Georgia,serif; font-weight:700; color:var(--plum); font-size:1.05rem; margin-right:auto; text-decoration:none; white-space:nowrap}
+.top a.n{font-size:.76rem; font-weight:600; color:var(--suave); text-decoration:none; padding:.3rem .6rem; border-radius:20px; border:1px solid transparent; white-space:nowrap}
+.top .volver{font-family:var(--f-mono); font-size:.64rem; letter-spacing:.1em; text-transform:uppercase; color:var(--tenue); text-decoration:none; white-space:nowrap; padding:.3rem .6rem .3rem 0; margin-right:.4rem; border-right:1px solid var(--linea)}
+.top .volver:hover{color:var(--accion)}
+.top a.n:hover{background:#eef0f4; border-color:var(--linea)}
+.hero{background:linear-gradient(120deg,#1d2533 0%,#27334f 55%,#455a8c 100%); color:#fff; border-radius:6px; padding:2rem 2.2rem 1.7rem; margin:.6rem 0 1.4rem; display:grid; grid-template-columns:1.2fr 1fr; gap:1.5rem; align-items:center; box-shadow:0 14px 34px rgba(39,51,79,.25)}
+.hero .lema{font-family:"Source Serif 4",Georgia,serif; font-style:italic; font-size:1.1rem; color:#b0bcd8; margin:0 0 .6rem}
+.hero h1{font-family:"Source Serif 4",Georgia,serif; font-size:2.5rem; color:#fff; font-weight:700; margin:0 0 .6rem; line-height:1.08; text-wrap:balance}
+.hero p.baj{font-size:1rem; color:#e3e8f2; margin:0; max-width:34rem; line-height:1.55}
+.hero p.baj b{color:#fff}
+.hero .arte{display:flex; justify-content:center}
+.hero svg{width:100%; max-width:22rem; height:auto; filter:drop-shadow(0 12px 18px rgba(0,0,0,.35))}
+.autores{display:grid; grid-template-columns:repeat(auto-fit,minmax(20rem,1fr)); gap:.8rem; margin:0 0 1.2rem}
+.autora{display:flex; gap:1rem; align-items:flex-start; background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1rem 1.2rem; margin:0}
+.autora .ini{flex:none; width:3.2rem; height:3.2rem; border-radius:50%; background:var(--plum); color:#fff; display:flex; align-items:center; justify-content:center; font-family:"Source Serif 4",Georgia,serif; font-weight:700; font-size:1.15rem}
+.autora b{display:block; font-size:1.02rem}
+.autora p{margin:.1rem 0 0; font-size:.86rem; color:var(--suave); line-height:1.5}
+.autora a{color:var(--navy); text-decoration:none; border-bottom:1px solid #b0bcd8}
+.orcid{display:inline-block; width:1em; height:1em; vertical-align:-.15em; margin-right:.25em; border-radius:50%; background:#a6ce39; color:#fff; font-size:.75em; line-height:1.35em; text-align:center; font-weight:700; font-family:sans-serif}
+section{margin-top:3rem; scroll-margin-top:3.6rem}
+h2.sec{font-family:"Source Serif 4",Georgia,serif; font-size:1.7rem; font-weight:600; margin:0 0 .25rem; line-height:1.2; color:var(--plum)}
+h2.sec small{display:block; font-family:"Inter",sans-serif; font-size:.66rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:.2rem; color:var(--tenue)}
+.sec-lin{height:3px; border-radius:2px; margin:.45rem 0 1.1rem; width:4rem; background:var(--plum)}
+section.t1 h2.sec{color:var(--pre)} section.t1 .sec-lin{background:var(--pre)}
+section.t2 h2.sec{color:var(--ana)} section.t2 .sec-lin{background:var(--ana)}
+section.t3 h2.sec{color:var(--post)} section.t3 .sec-lin{background:var(--post)}
+h3{font-family:"Inter",sans-serif; font-size:.76rem; font-weight:700; text-transform:uppercase; letter-spacing:.09em; color:var(--navy); margin:1.8rem 0 .7rem; padding-bottom:.35rem; border-bottom:1px solid var(--linea)}
+p.nota{font-size:.92rem; color:var(--suave); margin:0 0 1rem}
+.tarjetas{display:grid; grid-template-columns:repeat(auto-fit,minmax(14rem,1fr)); gap:.8rem; margin:0 0 1rem}
+.tj{border-radius:6px; padding:1rem 1.1rem; border:1px solid var(--linea); background:#fff; border-top:4px solid var(--plum)}
+.tj b{display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.1em; margin-bottom:.3rem; color:var(--plum)}
+.tj strong{display:block; font-family:"Source Serif 4",Georgia,serif; font-size:1.12rem; font-weight:600; margin-bottom:.35rem}
+.tj p{margin:0; font-size:.88rem; color:#2f3641}
+.tj.c1{border-top-color:var(--pre)} .tj.c1 b{color:var(--pre)}
+.tj.c2{border-top-color:var(--ana)} .tj.c2 b{color:var(--ana)}
+.tj.c3{border-top-color:var(--post)} .tj.c3 b{color:var(--post)}
+.card{background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1.1rem 1.3rem; margin:0 0 .9rem}
+.pasos{counter-reset:n; list-style:none; padding:0; margin:0; display:grid; gap:.55rem}
+.pasos li{counter-increment:n; display:grid; grid-template-columns:2.2rem 1fr; gap:.6rem; background:#fff; border:1px solid var(--linea); border-radius:4px; padding:.7rem .9rem; font-size:.92rem}
+.pasos li::before{content:counter(n); font-family:"Source Serif 4",Georgia,serif; font-size:1.5rem; font-weight:700; color:var(--accion); line-height:1}
+.pasos li b{display:block}
+.llamada{border-radius:4px; padding:.9rem 1.1rem; margin:.6rem 0 1.2rem; font-size:.92rem}
+.llamada b.tit{display:block; font-size:.7rem; text-transform:uppercase; letter-spacing:.09em; margin-bottom:.3rem}
+.ll-ok{background:var(--ok-suave); border:1px solid #bcd9c8; color:#15532f} .ll-ok b.tit{color:var(--ok)}
+.ll-aviso{background:var(--aviso-suave); border:1px solid #ecd9a3; color:#5c3d06} .ll-aviso b.tit{color:var(--aviso)}
+.ll-no{background:var(--no-suave); border:1px solid #efc0bb; color:#6d150c} .ll-no b.tit{color:var(--no)}
+.ll-plum{background:#edf1f8; border:1px solid #b0bcd8; color:#27334f} .ll-plum b.tit{color:var(--post)}
+label{display:block; font-size:.72rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:#4b5462; margin:0 0 .3rem}
+label small{text-transform:none; letter-spacing:0; font-weight:500; color:var(--tenue)}
+input[type=text],input[type=number],input[type=datetime-local],textarea,select{width:100%; font:inherit; color:var(--tinta); background:#fff; border:1.5px solid var(--linea); border-radius:4px; padding:.55rem .7rem}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--plum); outline-offset:-1px; border-color:transparent}
+input.mal{border-color:var(--no); background:var(--no-suave)}
+textarea{min-height:8rem; font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:.86rem; resize:vertical}
+textarea.texto{font-family:inherit; font-size:.92rem; min-height:6rem}
+.g4{display:grid; grid-template-columns:repeat(4,1fr); gap:.8rem 1rem}
+.g2{display:grid; grid-template-columns:1fr 1fr; gap:.8rem 1rem}
+.g3{display:grid; grid-template-columns:repeat(3,1fr); gap:.8rem 1rem}
+.res{display:grid; grid-template-columns:repeat(auto-fit,minmax(9rem,1fr)); gap:.6rem; margin-top:.9rem}
+.r2{background:#eef0f4; border-radius:4px; padding:.75rem .9rem}
+.r2 b{display:block; font-size:.66rem; letter-spacing:.09em; text-transform:uppercase; color:#4b5462}
+.r2 span{display:block; font-family:"Source Serif 4",Georgia,serif; font-size:1.8rem; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.15; margin-top:.1rem; color:var(--tinta)}
+.r2 small{display:block; color:var(--suave); font-size:.78rem; margin-top:.1rem}
+.ver{margin-top:.9rem; border-radius:4px; padding:.9rem 1.1rem; font-size:.95rem; line-height:1.5; border:2px solid var(--linea); background:#fff}
+.ver b.t{display:block; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; margin-bottom:.25rem}
+.ver.ok{border-color:var(--ok)} .ver.ok b.t{color:var(--ok)}
+.ver.rep{border-color:#c9962e} .ver.rep b.t{color:#8a5c0a}
+.ver.no{border-color:var(--no)} .ver.no b.t{color:var(--no)}
+.semaforo{display:grid; grid-template-columns:repeat(auto-fit,minmax(13rem,1fr)); gap:.6rem; margin-top:.9rem}
+.sf{border-radius:4px; padding:.75rem .9rem; border:2px solid var(--linea); background:#fff; font-size:.88rem}
+.sf b{display:block; font-size:.66rem; letter-spacing:.09em; text-transform:uppercase; margin-bottom:.2rem}
+.sf strong{display:block; font-family:"Source Serif 4",Georgia,serif; font-size:1.15rem; margin-bottom:.2rem}
+.sf.ok{border-color:var(--ok)} .sf.ok b{color:var(--ok)} .sf.rep{border-color:#c9962e} .sf.rep b{color:#8a5c0a} .sf.no{border-color:var(--no)} .sf.no b{color:var(--no)} .sf.gris{border-color:var(--linea)} .sf.gris b{color:var(--tenue)}
+.btn{font:inherit; font-size:.9rem; font-weight:600; padding:.55rem 1.05rem; border-radius:4px; border:1px solid var(--plum); background:var(--plum); color:#fff; cursor:pointer}
+.btn.sec{background:#fff; color:var(--plum)}
+.btn:hover{filter:brightness(1.08)}
+.acc{display:flex; gap:.6rem; flex-wrap:wrap; margin-top:1rem}
+.tabla{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font-size:.88rem; margin:.2rem 0 1rem}
+th{text-align:left; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:#4b5462; font-weight:700; padding:.4rem .6rem .4rem 0; border-bottom:1px solid var(--linea)}
+td{padding:.5rem .6rem .5rem 0; border-bottom:1px solid var(--linea); vertical-align:top}
+td.n{font-variant-numeric:tabular-nums; white-space:nowrap}
+tr.sel td{background:#edf1f8}
+.formula{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace; font-size:.9rem; background:#eef0f4; border-radius:4px; padding:.6rem .9rem; display:inline-block; margin:.2rem 0 .5rem}
+.graf{width:100%; height:auto; background:#fff; border:1px solid var(--linea); border-radius:4px; margin:.6rem 0}
+.fic{display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin-top:.6rem}
+.fic > div{background:#eef0f4; border-radius:4px; padding:.75rem .9rem; font-size:.88rem}
+.fic b{display:block; font-size:.66rem; letter-spacing:.09em; text-transform:uppercase; color:#4b5462; margin-bottom:.15rem}
+.fic .big{display:block; font-family:"Source Serif 4",Georgia,serif; font-size:1.25rem; font-weight:700; margin-bottom:.2rem}
+.fic .ancha{grid-column:1 / -1} .fic ul{margin:.2rem 0 0; padding-left:1.1rem}
+.qq{display:grid; grid-template-columns:repeat(auto-fit,minmax(13rem,1fr)); gap:.6rem; margin:0 0 1rem}
+.qq div{background:#eef0f4; border-radius:4px; padding:.75rem .9rem; font-size:.88rem}
+.qq b{display:block; font-size:.66rem; letter-spacing:.09em; text-transform:uppercase; color:#4b5462; margin-bottom:.2rem}
+.simple{background:#fff; border:1px solid var(--linea); border-radius:6px; padding:1.1rem 1.3rem; margin:0 0 1rem}
+.simple p{margin:0 0 .7rem; font-size:.98rem} .simple p:last-child{margin:0}
+.simple .ana{font-family:"Source Serif 4",Georgia,serif; font-size:1.15rem; color:var(--plum); font-style:italic}
+.glos dt{font-weight:600; margin-top:.5rem} .glos dd{margin:0 0 .2rem; font-size:.9rem; color:#2f3641}
+.errs{display:grid; gap:.6rem}
+.err{background:#fff; border:1px solid var(--linea); border-left:4px solid var(--accion); border-radius:4px; padding:.75rem .95rem; font-size:.9rem}
+.err b{display:block; font-size:.95rem; margin-bottom:.15rem}
+.err span{display:block; color:#2f3641}
+.biblio{font-size:.88rem; line-height:1.5; color:#2f3641}
+.biblio ol{padding-left:1.3rem; margin:0} .biblio li{margin-bottom:.4rem}
+.legal{background:#fff; border:1px solid var(--linea); border-left:4px solid var(--navy); border-radius:4px; padding:1rem 1.2rem; font-size:.86rem; color:#2f3641; line-height:1.55}
+.legal p{margin:0 0 .6rem} .legal p:last-child{margin:0}
+.citar{background:#fff; border:1px solid var(--linea); border-radius:4px; padding:.8rem 1rem; font-size:.86rem; color:var(--suave)}
+.citar code{font-family:inherit; color:var(--tinta)}
+.cta{display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; background:#edf1f8; border:1px solid #b0bcd8; border-radius:6px; padding:1rem 1.2rem; margin:2rem 0 0}
+.cta p{margin:0; flex:1 1 18rem; font-size:.92rem; color:#27334f}
+.pie{margin-top:3rem; padding-top:1.2rem; border-top:1px solid var(--linea); font-size:.8rem; color:#4b5462; line-height:1.55}
+.pie .lema{font-family:"Source Serif 4",Georgia,serif; font-style:italic; font-size:.95rem; color:var(--plum); margin-bottom:.3rem}
+.pie a{color:var(--navy); text-decoration:none; border-bottom:1px solid #b0bcd8}
+.flot{position:fixed; right:1.2rem; bottom:1.2rem; z-index:30; font:inherit; font-size:.84rem; font-weight:600; padding:.6rem 1rem; border-radius:30px; border:0; background:var(--plum); color:#fff; cursor:pointer; box-shadow:0 6px 18px rgba(39,51,79,.35)}
+dialog{border:0; border-radius:6px; padding:0; max-width:34rem; width:calc(100% - 2rem); box-shadow:0 20px 60px rgba(0,0,0,.25); color:var(--tinta)}
+dialog::backdrop{background:rgba(20,24,31,.5)}
+.dlg{padding:1.4rem 1.5rem 1.3rem}
+.dlg h3{font-family:"Source Serif 4",Georgia,serif; font-size:1.4rem; color:var(--plum); margin:0 0 .2rem; font-weight:600; text-transform:none; letter-spacing:0; border:0; padding:0}
+.dlg p.intro{margin:0 0 .6rem; font-size:.88rem; color:var(--suave)}
+.dlg label{margin-top:.7rem}
+.dlg .acc{justify-content:flex-end}
+.dlg .ok{background:var(--ok-suave); border:1px solid #bcd9c8; color:#15532f; border-radius:4px; padding:.8rem 1rem; font-size:.9rem; margin-top:.8rem}
+.dlg .ok textarea{margin-top:.5rem; min-height:5rem; font-size:.8rem}
+@media (max-width:820px){
+  .w{padding:1rem 1.05rem 5rem} .top .in{padding:.5rem 1.05rem; overflow-x:auto; flex-wrap:nowrap}
+  .hero{grid-template-columns:1fr; padding:1.5rem 1.2rem} .hero .arte{order:-1} .hero svg{max-width:14rem} .hero h1{font-size:1.9rem}
+  .g4,.g3{grid-template-columns:1fr 1fr} .g2,.fic{grid-template-columns:1fr}
+}
+@media print{
+  .top,.flot,dialog,.acc,.cta{display:none} body{background:#fff} .hero{box-shadow:none} .card,.tj,.err,.ver,.sf{break-inside:avoid} @page{size:letter; margin:1.8cm}
+}
+</style>
+</head>
+<body>
+<nav class="top"><div class="in">
+  <a class="volver" href="index.html" title="Volver al índice de la sección Laboratorio">← Laboratorio</a>
+  <a class="marca" href="#inicio">Delta check</a>
+  <a class="n" href="#que">Qué es</a><a class="n" href="#tipos">Tipos y fórmulas</a><a class="n" href="#calc">Calculadora</a>
+  <a class="n" href="#historico">Fijar el umbral</a><a class="n" href="#analitos">Por analito</a><a class="n" href="#alerta">Ante la alerta</a>
+  <a class="n" href="#implementar">Implementar</a><a class="n" href="#errores">Errores</a><a class="n" href="#referencias">Referencias</a><a class="n" href="#legal">Aviso legal</a>
+</div></nav>
+
+<div class="w" id="inicio">
+<div class="hero">
+  <div>
+    <p class="lema" id="lema-hero">“Del tubo al diagnóstico”</p>
+    <h1>Delta check: comparar al paciente consigo mismo</h1>
+    <p class="baj"><b>La verificación que ningún intervalo de referencia hace.</b> Un resultado «normal» puede ser un error de identificación, una muestra diluida o una lesión renal en marcha. El delta check compara el resultado de hoy con el anterior del mismo paciente y avisa cuando el cambio no cuadra. Aquí: qué es, cómo se calcula, cómo se fija el umbral con datos propios y qué hacer con la alerta. Las calculadoras funcionan sin internet.</p>
+  </div>
+  <div class="arte" id="arte"><svg viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Delta check: el resultado previo, la banda de cambio esperado y el resultado actual del mismo paciente">
+<defs><linearGradient id="gtub" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".4" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-color="#fff" stop-opacity=".3"/></linearGradient></defs>
+<ellipse cx="260" cy="150" rx="250" ry="125" fill="#fff" fill-opacity=".06"/>
+<rect x="130" y="150" width="300" height="50" rx="8" fill="#fff" fill-opacity=".14"/>
+<line x1="130" y1="175" x2="430" y2="175" stroke="#b0bcd8" stroke-dasharray="6 5" stroke-width="1.5"/>
+<text x="280" y="216" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" fill="#e3e8f2">banda de cambio esperado en la misma persona (± RCV)</text>
+<g transform="translate(60,90)"><rect x="-8" y="-6" width="34" height="14" rx="5" fill="#8e6bbf"/><path d="M-3,8 h24 v54 a12,12 0 0 1 -24,0 z" fill="#fff" fill-opacity=".14" stroke="#fff" stroke-opacity=".8" stroke-width="1.5"/><path d="M-3,30 h24 v32 a12,12 0 0 1 -24,0 z" fill="#a61e12"/><path d="M-3,8 h24 v54 a12,12 0 0 1 -24,0 z" fill="url(#gtub)"/></g>
+<text x="69" y="182" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#e3e8f2">lunes 18:00</text>
+<g transform="translate(452,30)"><rect x="-8" y="-6" width="34" height="14" rx="5" fill="#8e6bbf"/><path d="M-3,8 h24 v54 a12,12 0 0 1 -24,0 z" fill="#fff" fill-opacity=".14" stroke="#fff" stroke-opacity=".8" stroke-width="1.5"/><path d="M-3,30 h24 v32 a12,12 0 0 1 -24,0 z" fill="#a61e12"/><path d="M-3,8 h24 v54 a12,12 0 0 1 -24,0 z" fill="url(#gtub)"/></g>
+<text x="461" y="122" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#e3e8f2">miércoles 06:00</text>
+<line x1="110" y1="240" x2="440" y2="240" stroke="#FDCF85" stroke-width="2"/><polygon points="440,234 452,240 440,246" fill="#FDCF85"/>
+<text x="275" y="260" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#e3e8f2">36 h · mismo paciente · mismo método</text>
+<line x1="150" y1="175" x2="400" y2="80" stroke="#FDCF85" stroke-width="4" stroke-linecap="round"/>
+<circle cx="150" cy="175" r="10" fill="#fff" stroke="#27334f" stroke-width="3"/><text x="150" y="132" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#fff">previo 0.6</text>
+<circle cx="400" cy="80" r="10" fill="#c0392b" stroke="#fff" stroke-width="3"/><text x="400" y="60" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#fff">actual 1.1</text>
+<rect x="217" y="96" width="116" height="40" rx="20" fill="#fff"/><text x="275" y="123" text-anchor="middle" font-family="'Source Serif 4', Georgia, serif" font-size="22" font-weight="700" fill="#27334f">Δ +83 %</text>
+<text x="260" y="284" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#e3e8f2">creatinina, mg/dL · los dos «dentro» del intervalo de referencia</text>
+</svg></div>
+</div>
+<div class="autores" id="autores">
+  <div class="autora"><div class="ini">JA</div><div><b>Dra. en C. Judith Carolina De Arcos Jiménez</b><p>Investigadora Nacional Nivel I (SNII) · Perfil PRODEP · Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara<br><a href="https://orcid.org/0000-0003-0251-6425" target="_blank" rel="noopener"><span class="orcid">iD</span>orcid.org/0000-0003-0251-6425</a></p></div></div>
+  <div class="autora"><div class="ini">JB</div><div><b>Dr. Jaime Briseño Ramírez</b><p>Investigador Nacional Nivel I (SNII) · Perfil PRODEP · Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara<br><a href="https://orcid.org/0009-0006-1901-392X" target="_blank" rel="noopener"><span class="orcid">iD</span>orcid.org/0009-0006-1901-392X</a></p></div></div>
+</div><p class="nota" id="version-linea" style="margin-top:-.6rem">Versión 2.0 · septiembre de 2026 · Diseño y desarrollo de la herramienta: Judith Carolina De Arcos Jiménez y Jaime Briseño Ramírez.</p>
+
+<!-- ───────── QUÉ ES ───────── -->
+<section id="que">
+  <h2 class="sec"><small>Sección 1</small>Qué es el delta check y por qué importa</h2><div class="sec-lin"></div>
+  <div class="simple">
+    <p class="ana">En pocas palabras</p>
+    <p>Cada persona mantiene sus analitos dentro de un margen estrecho y propio: la variación biológica intraindividual de la creatinina, el calcio o el volumen corpuscular medio es de pocas unidades porcentuales de un día a otro. Por eso, cuando el resultado actual de un paciente se aleja de su resultado previo más de lo que ese margen permite en el tiempo transcurrido, hay tres explicaciones posibles: la muestra no es de ese paciente, hubo un problema preanalítico (dilución por venoclisis, hemólisis, contaminación, demora), o el paciente cambió clínicamente. El <b>delta check</b> es la regla que detecta esa discrepancia antes de liberar el resultado.</p>
+    <p>Implementarlo exige tres definiciones por analito: el <b>límite</b> (cuánto debe cambiar para generar alerta), la <b>ventana</b> (el tiempo máximo entre ambos resultados para que la comparación sea válida) y la <b>respuesta</b> (qué revisa quién, en cuánto tiempo y cómo se documenta). Esta página aporta el fundamento, las calculadoras para fijar límite y ventana con datos propios, y la secuencia de respuesta.</p>
+  </div>
+  <p class="nota">El delta check es una regla de verificación que compara el resultado actual de un analito con el resultado previo del mismo paciente y marca la diferencia («delta») cuando supera un límite definido dentro de una ventana de tiempo. Lo describieron Nosanchuk y Gottmann en 1974 y Ladenson en 1975 como un método para detectar muestras mal identificadas; hoy es un requisito de los sistemas de gestión de la calidad (ISO 15189 pide procedimientos para verificar la plausibilidad de los resultados antes de liberarlos) y tiene guía propia: CLSI EP33, <i>Use of Delta Checks in the Medical Laboratory</i>, 2ª edición, 2023. Su fundamento es sencillo: dentro de una persona, la mayoría de los analitos varían poco de un día a otro (variación biológica intraindividual), de modo que un cambio grande en poco tiempo es, o un error, o un evento clínico que alguien debe conocer.</p>
+  <div class="tarjetas">
+    <div class="tj c1"><b>Lo que detecta</b><strong>Errores que el control de calidad no ve</strong><p>Muestra de otro paciente, tubo mal etiquetado, sangre tomada del brazo con venoclisis, contaminación con EDTA, hemólisis, retraso en separar, muestra mal conservada. Ninguno de ellos altera el control de calidad del día: el analizador mide bien una muestra equivocada.</p></div>
+    <div class="tj c2"><b>Lo que además aporta</b><strong>Un aviso clínico temprano</strong><p>Una creatinina que sube 0.5 mg/dL en 36 h y sigue «en rango», una hemoglobina que cae 2 g/dL, un potasio que sube 1 mmol/L. El delta señala el cambio antes de que el valor cruce el límite del intervalo o el valor crítico.</p></div>
+    <div class="tj c3"><b>Lo que cuesta</b><strong>Alertas que hay que revisar</strong><p>La mayoría de los deltas que se disparan son cambios clínicos reales o variación esperada; el valor predictivo para error de identificación es bajo (en la literatura, del 1 al 10 % según el analito y el umbral). Por eso el umbral se elige con datos propios y la respuesta se escribe antes.</p></div>
+  </div>
+  <h3>Lo que dice la evidencia</h3>
+  <div class="tabla"><table>
+    <tr><th>Hallazgo</th><th>Fuente</th></tr>
+    <tr><td>Los errores de identificación de muestra ocurren en alrededor de 1 de cada 1000 a 2000 muestras y son la causa principal de resultados «imposibles» que llegan al clínico.</td><td>Valenstein et al., CAP Q-Probes 2006; Lippi et al., 2017</td></tr>
+    <tr><td>El delta check univariado detecta una fracción limitada de las muestras mal identificadas (sensibilidad del 5 al 50 % según analito) con especificidad alta; los analitos más estables dentro del individuo (VCM, creatinina, calcio, albúmina) son los más útiles.</td><td>Strathmann et al., 2011; Ovens y Naugler, 2012; Randell y Yenice, 2019</td></tr>
+    <tr><td>Combinar varios analitos (delta multivariado, puntuaciones ponderadas o modelos de aprendizaje automático) mejora de forma importante la detección de muestras cambiadas frente a las reglas univariadas.</td><td>Rosenbaum y Baron, 2018; Gruenberg et al., 2018; Tan et al., 2019</td></tr>
+    <tr><td>Los límites publicados varían mucho entre laboratorios para el mismo analito; ningún porcentaje es universal. La guía recomienda derivar los límites de datos propios (percentiles de los deltas históricos) o de la variación biológica, y validarlos antes de usarlos.</td><td>Lacher y Connelly, 1988; Schifman et al., CAP Q-Probes 2017; CLSI EP33, 2023</td></tr>
+    <tr><td>Cada alerta consume tiempo del personal y retrasa la liberación; la tasa de alertas debe mantenerse en un nivel que el laboratorio pueda revisar en tiempo útil (en muchos laboratorios, por debajo del 1 al 3 % de los resultados del analito).</td><td>Schifman et al., 2017; Randell y Yenice, 2019</td></tr>
+  </table></div>
+  <h3>Glosario mínimo</h3>
+  <div class="card"><dl class="glos" style="margin:0">
+    <dt>Delta (Δ)</dt><dd>La diferencia entre el resultado actual y el anterior. Se puede expresar en unidades (por ejemplo, +0.5 mg/dL) o en porcentaje (+83 %).</dd>
+    <dt>Ventana de tiempo</dt><dd>El tiempo máximo entre los dos resultados para que tenga sentido compararlos. Fuera de la ventana, un cambio grande puede ser simplemente que la enfermedad avanzó.</dd>
+    <dt>Límite o umbral</dt><dd>El tamaño de cambio a partir del cual el sistema avisa. No hay uno universal: cada analito y cada laboratorio tiene el suyo.</dd>
+    <dt>Variación biológica intraindividual (CVi)</dt><dd>Cuánto cambia un analito de forma natural en la misma persona sana de un día a otro, en porcentaje. La creatinina cambia poco (≈ 4.5 %); los leucocitos, mucho (≈ 11 %). Se consulta en la base de datos de la EFLM.</dd>
+    <dt>CV analítico (CVa)</dt><dd>Imprecisión del método, obtenida del control de calidad interno; se expresa como coeficiente de variación.</dd>
+    <dt>Valor de cambio de referencia (RCV)</dt><dd>El cambio mínimo entre dos mediciones que no se explica por la combinación de la variación analítica y la biológica (al 95 %). Es el piso de cualquier límite de delta check.</dd>
+    <dt>Percentil</dt><dd>El valor por debajo del cual queda cierto porcentaje de los datos. El percentil 97.5 de los deltas históricos es el cambio que solo el 2.5 % de los pares supera: un buen candidato a límite.</dd>
+    <dt>Tasa de alertas</dt><dd>Porcentaje de resultados del analito que activan la regla. Debe ser revisable en tiempo útil; una tasa cercana a cero indica que la regla no aporta detección.</dd>
+  </dl></div>
+  <div class="llamada ll-plum"><b class="tit">La idea en una frase</b>El intervalo de referencia compara al paciente con la población; el delta check lo compara consigo mismo. Para analitos con baja variación intraindividual el segundo es mucho más sensible: una persona con creatinina habitual de 0.6 mg/dL que hoy tiene 1.1 sigue «normal» para la población, pero acaba de perder casi la mitad de su filtrado.</div>
+</section>
+
+<!-- ───────── TIPOS Y FÓRMULAS ───────── -->
+<section id="tipos">
+  <h2 class="sec"><small>Sección 2</small>Tipos de delta check y sus fórmulas</h2><div class="sec-lin"></div>
+  <p class="nota">EP33 describe cuatro formas de expresar el cambio. Se pueden combinar (por ejemplo, alerta si se supera el límite absoluto O el porcentual) y todas exigen definir una ventana de tiempo máxima entre los dos resultados.</p>
+  <div class="tabla"><table>
+    <tr><th>Tipo</th><th>Fórmula</th><th>En palabras</th><th>Cuándo conviene</th><th>Limitación</th></tr>
+    <tr><td><b>Delta absoluto</b></td><td><span class="formula">Δ = actual − previo</span></td><td>Magnitud del cambio en las unidades del analito.</td><td>Analitos con intervalo estrecho y unidades clínicas (sodio, calcio, hemoglobina, creatinina en valores bajos).</td><td>Un mismo límite absoluto es enorme para valores bajos y trivial para valores altos.</td></tr>
+    <tr><td><b>Delta porcentual</b></td><td><span class="formula">Δ% = (actual − previo) / previo × 100</span></td><td>Magnitud del cambio relativa al valor previo.</td><td>Analitos con rango amplio (enzimas, bilirrubina, leucocitos).</td><td>Con valores previos cercanos a cero el porcentaje se dispara sin significado; se acompaña de un mínimo absoluto.</td></tr>
+    <tr><td><b>Tasa de cambio</b></td><td><span class="formula">Δ/t = (actual − previo) / horas</span></td><td>Velocidad del cambio por unidad de tiempo.</td><td>Cuando la ventana es variable y lo que importa es la velocidad (creatinina en lesión renal aguda, troponina en el algoritmo 0/1 h).</td><td>Requiere fecha y hora exactas de ambas tomas.</td></tr>
+    <tr><td><b>Valor de cambio de referencia (RCV)</b></td><td><span class="formula">RCV = Z · √2 · √(CVa² + CVi²)</span> Z = 1.96 (95 %, bidireccional) → 2.77 · √(CVa² + CVi²)</td><td>El menor cambio atribuible a algo distinto de la variación analítica y biológica combinadas.</td><td>Como piso científico: por debajo del RCV la diferencia se explica por variación analítica y biológica. Ideal para analitos con CVi conocido (EFLM).</td><td>Asume distribución gaussiana y estado estable; para analitos muy asimétricos se calcula en escala logarítmica.</td></tr>
+  </table></div>
+  <h3>Qué límite usar: el criterio en tres capas</h3>
+  <div class="tarjetas">
+    <div class="tj c1"><b>Capa 1 · piso</b><strong>Variación biológica (RCV)</strong><p>Todo límite debe ser mayor o igual al RCV; si no, la regla dispara por ruido. Con CVa 2.5 % y CVi 4.5 % (creatinina), el RCV es 14 %.</p></div>
+    <div class="tj c2"><b>Capa 2 · datos propios</b><strong>Percentil de los deltas históricos</strong><p>Se extraen los pares de resultados del último año dentro de la ventana, se calculan los deltas y se toma el percentil 97.5 o 99 como límite. Herramienta 2 lo calcula y simula la tasa de alertas.</p></div>
+    <div class="tj c3"><b>Capa 3 · clínica</b><strong>Umbrales con significado</strong><p>KDIGO: creatinina +0.3 mg/dL en 48 h define lesión renal aguda. ESC: cambios de troponina de alta sensibilidad en 1 a 3 h. Carga viral: 0.5 log10. Cuando existe un umbral clínico, el delta debe respetarlo.</p></div>
+  </div>
+  <div class="llamada ll-aviso"><b class="tit">La ventana de tiempo decide si el par es comparable</b>Se elige por la fisiología del analito (cuánto tarda en cambiar de verdad en una persona) y por la práctica (cada cuánto se repite). Glucosa: horas. Creatinina, potasio, hemoglobina: 1 a 3 días. VCM y HbA1c: semanas o meses. Fuera de la ventana el par no se compara: el cambio puede ser evolución real y la alerta estorba.</div>
+</section>
+
+<!-- ───────── CALCULADORA ───────── -->
+<section id="calc" class="t1">
+  <h2 class="sec"><small>Herramienta 1</small>Calculadora de delta check</h2><div class="sec-lin"></div>
+  <div class="qq">
+    <div><b>Qué hace</b>Compara dos resultados del mismo paciente y calcula el cambio absoluto, porcentual y por unidad de tiempo; lo contrasta con el RCV, con los límites publicados y con la regla local del laboratorio.</div>
+    <div><b>Qué necesitas</b>Los dos resultados. Opcional pero recomendable: fecha y hora de cada uno, el analito de la lista, tu CV analítico (del control de calidad) y los límites de tu procedimiento.</div>
+    <div><b>Qué obtienes</b>Un semáforo de cuatro luces, una gráfica del cambio frente a la banda de variación esperada, la ficha del analito con qué revisar primero, y un resumen listo para copiar a la bitácora.</div>
+  </div>
+  <p class="nota">La calculadora hace la cuenta; la decisión es del profesional y de la regla escrita del laboratorio.</p>
+  <div class="card">
+    <div class="g4">
+      <div><label for="oa">Analito</label><select id="oa"><option value="">— elige o escribe abajo —</option></select></div>
+      <div><label for="an">Nombre libre <small>(si no está en la lista)</small></label><input id="an" type="text" placeholder="p. ej. creatinina"></div>
+      <div><label for="un">Unidad</label><input id="un" type="text" placeholder="p. ej. mg/dL"></div>
+      <div><label for="cva">Tu CV analítico (%) <small>del control de calidad</small></label><input id="cva" type="text" inputmode="decimal" placeholder="p. ej. 2.5"></div>
+    </div>
+    <div class="g4" style="margin-top:.8rem">
+      <div><label for="v0">Resultado previo</label><input id="v0" type="text" inputmode="decimal" autocomplete="off" placeholder="0.6"></div>
+      <div><label for="v1">Resultado actual</label><input id="v1" type="text" inputmode="decimal" autocomplete="off" placeholder="1.1"></div>
+      <div><label for="t0">Fecha y hora del previo <small>(opcional)</small></label><input id="t0" type="datetime-local"></div>
+      <div><label for="t1">Fecha y hora del actual <small>(opcional)</small></label><input id="t1" type="datetime-local"></div>
+    </div>
+    <h3>Tu regla local <small style="text-transform:none; letter-spacing:0; font-weight:500; color:var(--tenue)">(opcional: la que está o estará en tu procedimiento)</small></h3>
+    <div class="g4">
+      <div><label for="la">Límite absoluto</label><input id="la" type="text" inputmode="decimal" placeholder="p. ej. 0.3"></div>
+      <div><label for="lp">Límite porcentual (%)</label><input id="lp" type="text" inputmode="decimal" placeholder="p. ej. 30"></div>
+      <div><label for="lv">Ventana máxima (horas)</label><input id="lv" type="text" inputmode="decimal" placeholder="p. ej. 72"></div>
+      <div><label for="lm">Cómo se combinan</label><select id="lm"><option value="o">Alerta si se supera cualquiera</option><option value="y">Alerta solo si se superan ambos</option></select></div>
+    </div>
+    <div class="res">
+      <div class="r2"><b>Cambio absoluto</b><span id="dabs">—</span><small id="dabsu"></small></div>
+      <div class="r2"><b>Cambio porcentual</b><span id="dpct">—</span><small id="dpctn">respecto al previo</small></div>
+      <div class="r2"><b>Tiempo transcurrido</b><span id="dt">—</span><small id="dtn">si capturas las dos fechas</small></div>
+      <div class="r2"><b>Tasa de cambio</b><span id="dtasa">—</span><small id="dtasan">por 24 h</small></div>
+      <div class="r2"><b>RCV (95 %)</b><span id="drcv">—</span><small id="drcvn">variación biológica + analítica</small></div>
+    </div>
+    <div class="semaforo" id="semaforo"></div>
+    <div id="grafdelta"></div>
+    <div class="ver" id="ver"><b class="t">Lectura</b>Escribe el resultado previo y el actual para ver la cuenta.</div>
+    <div class="acc"><button class="btn sec" id="bej" type="button">Cargar ejemplo (creatinina 0.6 → 1.1)</button><button class="btn sec" id="blimpiar" type="button">Limpiar</button><button class="btn sec" id="bcopiar" type="button">Copiar resumen para la bitácora</button><button class="btn" onclick="window.print()" type="button">Imprimir</button></div>
+  </div>
+  <div id="ficha"></div>
+  <details class="card"><summary style="cursor:pointer; font-weight:600; color:var(--pre)">Ejemplo resuelto paso a paso: creatinina de 0.6 a 1.1 mg/dL en 36 horas</summary>
+    <div class="tabla" style="margin-top:.8rem"><table>
+      <tr><th style="width:26%">1 · Lo que capturas</th><td>Creatinina, mg/dL, previo 0.6 (lunes 18:00), actual 1.1 (miércoles 06:00). CV analítico del laboratorio 2.5 %.</td></tr>
+      <tr><th>2 · Lo que calcula</th><td>Δ = +0.5 mg/dL · Δ% = +83 % · 36 h · tasa +0.33 mg/dL por 24 h · RCV = 2.77 × √(2.5² + 4.5²) = 14 %.</td></tr>
+      <tr><th>3 · Lo que compara</th><td>Ventana: 36 h está dentro de 72 h, el par es comparable. RCV: 83 % es seis veces el ruido esperado; el cambio es real o la muestra está mal. Literatura: supera 0.3 mg/dL y 30 %. Clínica: KDIGO define lesión renal aguda con +0.3 mg/dL en 48 h.</td></tr>
+      <tr><th>4 · Lo que hace el profesional</th><td>Revisa identificación, índice de hemólisis y si la toma fue del brazo con venoclisis. Mira urea y potasio de la misma muestra: la urea subió y el potasio está en el límite alto; la historia es coherente. No repite «por si acaso». Libera con comentario y avisa al servicio según la regla escrita; registra hora y a quién avisó.</td></tr>
+      <tr><th>5 · Lo que la hoja no decidió</th><td>Que el límite sea 0.3 mg/dL o 30 %, que la ventana sea 72 h y quién llama a quién: eso se fija con los deltas históricos (Herramienta 2) y se escribe en el procedimiento.</td></tr>
+    </table></div>
+  </details>
+</section>
+
+<!-- ───────── HISTÓRICO ───────── -->
+<section id="historico" class="t2">
+  <h2 class="sec"><small>Herramienta 2</small>Fijar el umbral con tus pares históricos (método de EP33)</h2><div class="sec-lin"></div>
+  <div class="qq">
+    <div><b>Qué hace</b>Analiza cientos o miles de pares de resultados consecutivos del laboratorio, describe la distribución de los deltas y muestra qué límite generaría alerta en el 5 %, el 2.5 % o el 1 % de los pares, para elegir un umbral con carga de trabajo asumible y capacidad de detección.</div>
+    <div><b>Qué necesitas</b>Una exportación del sistema informático: por cada paciente, el resultado anterior, el siguiente y, si se puede, las horas entre ambos, de los últimos 6 a 12 meses. Cuantos más pares, mejor (mínimo 300).</div>
+    <div><b>Qué obtienes</b>Percentiles de los deltas absolutos y porcentuales, histograma, comparación con el RCV y un simulador que calcula la tasa de alertas de cualquier umbral candidato.</div>
+  </div>
+  <p class="nota">El límite se elige donde la tasa de alertas sea manejable y, a la vez, quede por encima del RCV. Antes de adoptarlo se valida: se revisa una muestra de las alertas que habría generado y se cuenta cuántas fueron útiles.</p>
+  <div class="card">
+    <h3 style="margin-top:0">Cómo preparar los datos</h3>
+    <ol class="pasos">
+      <li><div><b>Un par por línea:</b> resultado previo, resultado actual y, opcionalmente, horas entre ambos. Separados por tabulador, coma, punto y coma o espacio. Ejemplo: <span class="formula" style="padding:.1rem .5rem">0.72  0.78  24</span></div></li>
+      <li><div><b>Solo pares consecutivos del mismo paciente</b> con el mismo método; excluye resultados de muestras rechazadas y, si el analito lo exige, los servicios donde el cambio real es la norma (diálisis para creatinina, transfusión para hemoglobina) o analízalos por separado.</div></li>
+      <li><div><b>Al menos 300 a 500 pares</b> para que los percentiles altos sean estables; miles si es posible. Si tienes horas, indica abajo la ventana para filtrar los pares comparables.</div></li>
+    </ol>
+  </div>
+  <div class="card">
+    <label for="dH">Pares históricos (previo, actual, horas opcional)</label>
+    <textarea id="dH" style="min-height:10rem" placeholder="0.72  0.78  24&#10;1.10  1.05  48&#10;0.90  1.60  36&#10;…"></textarea>
+    <div class="g4" style="margin-top:.8rem">
+      <div><label for="anH">Analito</label><input id="anH" type="text" placeholder="p. ej. creatinina"></div>
+      <div><label for="unH">Unidad</label><input id="unH" type="text" placeholder="p. ej. mg/dL"></div>
+      <div><label for="venH">Ventana máxima (horas) <small>solo si pegaste horas</small></label><input id="venH" type="text" inputmode="decimal" placeholder="p. ej. 72"></div>
+      <div><label for="rcvH">RCV de referencia (%) <small>opcional, de la Herramienta 1</small></label><input id="rcvH" type="text" inputmode="decimal" placeholder="p. ej. 14"></div>
+    </div>
+    <h3>Simular un umbral candidato</h3>
+    <div class="g3">
+      <div><label for="sa">Límite absoluto</label><input id="sa" type="text" inputmode="decimal" placeholder="p. ej. 0.3"></div>
+      <div><label for="sp">Límite porcentual (%)</label><input id="sp" type="text" inputmode="decimal" placeholder="p. ej. 30"></div>
+      <div><label for="sm">Combinación</label><select id="sm"><option value="o">Cualquiera</option><option value="y">Ambos</option></select></div>
+    </div>
+    <div class="acc"><button class="btn" id="bcalcH" type="button">Analizar</button><button class="btn sec" id="bejH" type="button">Cargar ejemplo simulado (creatinina, 900 pares)</button><button class="btn sec" id="bcopiarH" type="button">Copiar resumen</button><button class="btn sec" id="blimpH" type="button">Limpiar</button></div>
+  </div>
+  <div id="salidaH"></div>
+  <div class="llamada ll-plum"><b class="tit">Cómo leer la salida</b>Los percentiles de |Δ%| y |Δ| dicen qué tan grande es el cambio en el 95, 97.5 o 99 % de los pares habituales: un umbral en el percentil 97.5 producirá alertas en cerca del 2.5 % de los resultados; en el 99, en cerca del 1 %. El simulador muestra la tasa exacta para el umbral que escribas. Un umbral por debajo del RCV dispara por ruido; por encima del percentil 99 casi no dispara y pierde errores. La decisión final se toma revisando las alertas que habría generado el umbral en una muestra de casos reales.</div>
+</section>
+
+<!-- ───────── POR ANALITO ───────── -->
+<section id="analitos" class="t3">
+  <h2 class="sec"><small>Sección 5</small>Orientación por analito: ventana, límites de la literatura y RCV</h2><div class="sec-lin"></div>
+  <p class="nota">Punto de partida con fuente, no umbral autorizado. Los límites provienen de los rangos publicados (Lacher y Connelly 1988; Ovens y Naugler 2012; Randell y Yenice 2019; EP33 2023); los CVi, de la base EFLM de variación biológica, redondeados: confírmalos en biologicalvariation.eu antes de fijar un límite. El RCV se calcula con el CV analítico que escribas (por defecto 3 %).</p>
+  <div class="card">
+    <div class="g3"><div><label for="cvaT">CV analítico para la tabla (%)</label><input id="cvaT" type="text" inputmode="decimal" value="3"></div></div>
+    <div class="tabla" id="tablaAn"></div>
+    <p class="nota" style="margin:.5rem 0 0">Haz clic en un analito para verlo en la calculadora con su ficha completa (qué suele explicar la alerta y qué revisar primero).</p>
+  </div>
+</section>
+
+<!-- ───────── ANTE LA ALERTA ───────── -->
+<section id="alerta">
+  <h2 class="sec"><small>Sección 6</small>Cuando aparece la alerta: la misma secuencia siempre</h2><div class="sec-lin"></div>
+  <ol class="pasos">
+    <li><div><b>Antes que nada, la muestra.</b> Identificación del tubo y del paciente (dos identificadores), tubo correcto y orden de llenado, volumen, coágulo, y los índices de hemólisis, lipemia e ictericia del analizador. La mayoría de las alertas útiles se resuelven aquí.</div></li>
+    <li><div><b>Coherencia con lo demás de la misma muestra.</b> ¿Los otros analitos también se movieron y en la dirección esperada? Potasio alto con índice de hemólisis alto; sodio, glucosa y proteínas «raros» juntos (venoclisis); hemoglobina baja con VCM intacto (dilución o sangrado real) o con VCM cambiado (otro paciente); creatinina alta con urea y potasio altos (clínica coherente).</div></li>
+    <li><div><b>Repetir la medición</b> en la misma muestra solo si el paso 1 no explicó nada. Si repite igual, el resultado es analíticamente cierto y la pregunta pasa a ser clínica; repetir «por si acaso» retrasa un resultado correcto.</div></li>
+    <li><div><b>Contexto del paciente.</b> Servicio (urgencias, terapia intensiva, diálisis, quirófano), líquidos intravenosos, transfusión, cirugía, cambio de medicamento. Si hay explicación clínica, el cambio es real y hay que liberarlo rápido, no retenerlo.</div></li>
+    <li><div><b>Decidir y documentar.</b> Liberar con comentario · llamar al clínico (cambio real y relevante) · pedir nueva muestra (sospecha de identificación o preanalítica). Quién llama, a quién y en cuánto tiempo debe estar escrito en el procedimiento. Todo queda en bitácora: hora, hallazgo, decisión y a quién se avisó.</div></li>
+  </ol>
+  <h3>Patrones que delatan la causa</h3>
+  <div class="tabla"><table>
+    <tr><th>Patrón en la misma muestra</th><th>Causa probable</th><th>Acción</th></tr>
+    <tr><td>Varios analitos cambian a la vez sin lógica fisiológica; el VCM también «cambió»</td><td>Muestra de otro paciente</td><td>No liberar; nueva muestra; investigar el proceso de identificación</td></tr>
+    <tr><td>Sodio y cloro bajos o altos, glucosa muy alta o potasio alto, proteínas y hemoglobina bajas</td><td>Toma del brazo con infusión</td><td>Nueva muestra del otro brazo; no liberar</td></tr>
+    <tr><td>Potasio alto, calcio y magnesio muy bajos, fosfatasa alcalina baja</td><td>Contaminación con EDTA (orden de llenado)</td><td>Nueva muestra; capacitar en orden de tubos</td></tr>
+    <tr><td>Potasio, LDH, AST y fósforo altos con índice de hemólisis elevado</td><td>Hemólisis in vitro</td><td>Rechazar o liberar con comentario según el índice y el analito</td></tr>
+    <tr><td>Glucosa baja, potasio y fósforo altos, sin hemólisis, muestra procesada tarde</td><td>Retraso en centrifugar o separar</td><td>Nueva muestra; revisar tiempos de transporte</td></tr>
+    <tr><td>Creatinina y urea suben juntas, potasio en ascenso, diuresis baja</td><td>Lesión renal aguda real</td><td>Liberar con comentario y avisar al servicio; no retrasar</td></tr>
+    <tr><td>Hemoglobina baja con VCM y RDW iguales; hematocrito proporcional</td><td>Sangrado o hemodilución real</td><td>Liberar rápido; correlacionar con la clínica</td></tr>
+  </table></div>
+</section>
+
+<!-- ───────── IMPLEMENTAR ───────── -->
+<section id="implementar">
+  <h2 class="sec"><small>Sección 7</small>Implementar el delta check en el laboratorio</h2><div class="sec-lin"></div>
+  <ol class="pasos">
+    <li><div><b>Elige pocos analitos para empezar</b> y justifícalos: alta estabilidad intraindividual (VCM, creatinina, calcio, albúmina, sodio) para detectar identificación; relevancia clínica del cambio (potasio, hemoglobina, glucosa, plaquetas) para el aviso temprano. Uno o dos al inicio; se amplía cuando la regla ya está probada.</div></li>
+    <li><div><b>Define la ventana de tiempo</b> por analito con la fisiología y la práctica clínica (sección 2 y tabla de la sección 5).</div></li>
+    <li><div><b>Extrae los pares históricos y calcula los deltas</b> (Herramienta 2). Fija el umbral en el percentil 97.5 o 99, comprueba que supere el RCV y respeta los umbrales clínicos existentes (KDIGO, ESC).</div></li>
+    <li><div><b>Valida retrospectivamente.</b> Aplica la regla a los pares del último año, revisa una muestra de las alertas que habría generado y clasifícalas: error detectado, cambio clínico relevante, cambio esperado, ruido. Ajusta el umbral hasta que la tasa de alertas sea manejable y la proporción útil, aceptable.</div></li>
+    <li><div><b>Escribe el procedimiento:</b> analitos, ventana, límites, cómo se combinan, quién revisa, la secuencia de respuesta (sección 6), tiempos máximos, qué se documenta y cómo se comunica. Configúralo en el sistema informático o en el middleware para que la alerta detenga la liberación automática.</div></li>
+    <li><div><b>Capacita y arranca en paralelo:</b> un periodo en que las alertas se registran pero no retienen resultados, para medir la carga real antes de activarlas.</div></li>
+    <li><div><b>Mide y revisa cada mes:</b> con los indicadores de abajo; revisa los umbrales cuando cambie el método, la población o la tasa de alertas.</div></li>
+  </ol>
+  <h3>Indicadores para seguir el delta check</h3>
+  <div class="tabla"><table>
+    <tr><th>Indicador</th><th>Cómo se calcula</th><th>Orientación</th></tr>
+    <tr><td>Tasa de alertas</td><td>Alertas / resultados del analito × 100</td><td>Debe ser revisable en tiempo útil; muchos laboratorios operan entre 0.5 y 3 % por analito</td></tr>
+    <tr><td>Proporción de alertas útiles</td><td>(Errores detectados + cambios clínicos relevantes comunicados) / alertas</td><td>Si es baja de forma sostenida, el umbral está demasiado bajo o la ventana es demasiado larga</td></tr>
+    <tr><td>Errores de identificación detectados</td><td>Número por mes y por 10 000 muestras</td><td>Se comparan con los detectados por otras vías (reclamaciones, clínicos)</td></tr>
+    <tr><td>Tiempo de resolución</td><td>Desde la alerta hasta la liberación o el rechazo</td><td>Meta escrita (p. ej. &lt; 30 min en urgencias)</td></tr>
+    <tr><td>Retraso de resultados correctos</td><td>Resultados retenidos por alerta que resultaron válidos, y su demora</td><td>Es el costo de la regla; se muestra a los clínicos junto con los beneficios</td></tr>
+  </table></div>
+  <div class="card">
+    <h3 style="margin-top:0">Las tres preguntas que se contestan antes de usar un delta en rutina</h3>
+    <div class="g3">
+      <div><label for="q1">1 · ¿Para qué analito y por qué ése?</label><textarea id="q1" class="texto"></textarea></div>
+      <div><label for="q2">2 · ¿Qué ventana y qué límite, con qué evidencia?</label><textarea id="q2" class="texto"></textarea></div>
+      <div><label for="q3">3 · ¿Qué se hace con la alerta y quién lo hace?</label><textarea id="q3" class="texto"></textarea></div>
+    </div>
+    <div class="acc"><button class="btn sec" id="bq" type="button">Copiar el ejemplo de creatinina a los tres espacios para editarlo</button><button class="btn sec" id="bqcopiar" type="button">Copiar mis respuestas</button></div>
+  </div>
+</section>
+
+<!-- ───────── ERRORES ───────── -->
+<section id="errores">
+  <h2 class="sec"><small>Sección 8</small>Errores frecuentes al usar el delta check</h2><div class="sec-lin"></div>
+  <div class="errs">
+    <div class="err"><b>Copiar un porcentaje «universal» (el 20 %, el 50 %) para todos los analitos</b><span>No existe. Un 20 % en sodio es imposible fisiológicamente; en leucocitos es cambio de un día. Cada analito tiene su límite, derivado de sus datos y de su variación biológica.</span></div>
+    <div class="err"><b>Fijar un límite por debajo del RCV</b><span>La regla dispara por ruido analítico y biológico; el personal deja de hacer caso a las alertas. Calcular el RCV es el primer paso.</span></div>
+    <div class="err"><b>Sin ventana de tiempo, o con una ventana enorme</b><span>Comparar la creatinina de hoy con la de hace seis meses genera alertas por evolución real. La ventana forma parte de la regla.</span></div>
+    <div class="err"><b>Repetir la muestra como primera respuesta</b><span>La repetición en la misma muestra no detecta identificación equivocada ni contaminación por venoclisis: mide bien la muestra equivocada. Primero la muestra y la coherencia; repetir solo cuando eso no explique nada.</span></div>
+    <div class="err"><b>Retener resultados de cambios clínicos reales</b><span>El paciente con lesión renal aguda necesita el resultado ahora. Si la clínica lo explica, se libera con comentario y se avisa.</span></div>
+    <div class="err"><b>No escribir quién responde ni cómo</b><span>La alerta de las tres de la mañana la resuelve el procedimiento, no la improvisación. Nombres de puesto, tiempos y vías de aviso van en el documento.</span></div>
+    <div class="err"><b>Usar el porcentaje con valores previos cercanos a cero</b><span>De 0.1 a 0.3 mg/dL es +200 % sin significado. Se acompaña de un mínimo absoluto o se usa solo el delta absoluto en el rango bajo.</span></div>
+    <div class="err"><b>No medir la carga ni la utilidad</b><span>Sin indicadores no se sabe si la regla ayuda o estorba. Tasa de alertas, proporción útil y tiempo de resolución cada mes.</span></div>
+    <div class="err"><b>Olvidar el delta al cambiar de método o de equipo</b><span>Un sesgo entre métodos produce deltas artificiales en todos los pacientes durante la transición. Se recalculan los umbrales o se suspende el delta hasta tener pares nuevos.</span></div>
+    <div class="err"><b>Confiar solo en el delta univariado para detectar muestras cambiadas</b><span>Detecta una fracción. Las reglas multivariadas (varios analitos a la vez), la verificación de identidad en la toma y los sistemas de código de barras son la primera línea; el delta es una red más.</span></div>
+  </div>
+</section>
+
+<!-- ───────── REFERENCIAS ───────── -->
+<section id="referencias">
+  <h2 class="sec"><small>Sección 9</small>Referencias</h2><div class="sec-lin"></div>
+  <div class="biblio"><ol>
+    <li>CLSI. Use of Delta Checks in the Medical Laboratory, 2nd ed. CLSI guideline EP33. Wayne, PA: Clinical and Laboratory Standards Institute; 2023.</li>
+    <li>ISO 15189:2022. Medical laboratories: Requirements for quality and competence. Ginebra: ISO; 2022.</li>
+    <li>NOM-007-SSA3-2011. Para la organización y funcionamiento de los laboratorios clínicos. Diario Oficial de la Federación; 2012.</li>
+    <li>Nosanchuk JS, Gottmann AW. CUMS and delta checks: a systematic approach to quality control. Am J Clin Pathol 1974;62:707–712.</li>
+    <li>Ladenson JH. Patients as their own controls: use of the computer to identify «laboratory error». Clin Chem 1975;21:1648–1653.</li>
+    <li>Lacher DA, Connelly DP. Rate and delta checks compared for selected chemistry tests. Clin Chem 1988;34:1966–1970.</li>
+    <li>Ovens K, Naugler C. How useful are delta checks in the 21st century? A stochastic-dynamic model of specimen mix-up and detection. J Pathol Inform 2012;3:5. Y: Ovens K, Naugler C. Clin Biochem 2012;45:592–597.</li>
+    <li>Randell EW, Yenice S. Delta checks in the clinical laboratory. Crit Rev Clin Lab Sci 2019;56:75–97.</li>
+    <li>Strathmann FG, Baird GS, Hoffman NG. Simulations of delta check rule performance to detect specimen mislabeling using historical laboratory data. Clin Chim Acta 2011;412:1973–1977.</li>
+    <li>Schifman RB, Talbert M, Souers RJ. Delta check practices and outcomes: a Q-Probes study involving 49 health care facilities and 2 771 delta check alerts. Arch Pathol Lab Med 2017;141:813–823.</li>
+    <li>Rosenbaum MW, Baron JM. Using machine learning-based multianalyte delta checks to detect wrong blood in tube errors. Am J Clin Pathol 2018;150:555–566.</li>
+    <li>Gruenberg JM, Stein TA, Karger AB. Determining the utility of creatinine delta checks: a large retrospective analysis. Clin Biochem 2018;53:139–142.</li>
+    <li>Tan RZ, Markus C, Loh TP. Impact of delta check time intervals on error detection capability. Clin Chem Lab Med 2020;58:384–389.</li>
+    <li>Valenstein PN, Raab SS, Walsh MK. Identification errors involving clinical laboratories: a College of American Pathologists Q-Probes study of patient and specimen identification errors at 120 institutions. Arch Pathol Lab Med 2006;130:1106–1113.</li>
+    <li>Lippi G, Chiozza L, Mattiuzzi C, Plebani M. Patient and sample identification: out of the maze? J Med Biochem 2017;36:107–112.</li>
+    <li>Fraser CG. Biological Variation: From Principles to Practice. Washington, DC: AACC Press; 2001.</li>
+    <li>Aarsand AK, et al. The EFLM Biological Variation Database (biologicalvariation.eu); consulta 2025.</li>
+    <li>Fraser CG, Harris EK. Generation and application of data on biological variation in clinical chemistry. Crit Rev Clin Lab Sci 1989;27:409–437 (origen de la fórmula del RCV).</li>
+    <li>KDIGO Clinical Practice Guideline for Acute Kidney Injury. Kidney Int Suppl 2012;2:1–138.</li>
+    <li>Byrne RA, et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J 2023;44:3720–3826 (cambios de troponina de alta sensibilidad en los algoritmos 0/1 h y 0/2 h).</li>
+    <li>Department of Health and Human Services (EE. UU.). Guidelines for the Use of Antiretroviral Agents in Adults and Adolescents with HIV; sección de monitoreo de carga viral (cambio ≥ 0.5 log10). Actualización vigente.</li>
+    <li>Rifai N, Horvath AR, Wittwer CT (eds.). Tietz Textbook of Clinical Chemistry and Molecular Diagnostics, 6ª ed. Elsevier; 2018 (verificación de resultados y autoverificación).</li>
+    <li>CLSI. Autoverification of Medical Laboratory Results for Specific Disciplines. CLSI guideline AUTO15. Wayne, PA: CLSI; 2019.</li>
+  </ol></div>
+</section>
+
+<!-- ───────── LEGAL ───────── -->
+<section id="legal">
+  <h2 class="sec"><small>Sección 10</small>Aviso legal</h2><div class="sec-lin"></div>
+  <div class="legal" id="legal-texto">
+<p><b>Aviso legal.</b> Este material y sus calculadoras tienen fines exclusivamente educativos y de apoyo. No constituyen asesoría médica ni sustituyen el juicio profesional del químico clínico, del responsable sanitario ni del médico tratante, ni los procedimientos normalizados de operación y el sistema de gestión de la calidad de cada laboratorio.</p>
+<p>Las ventanas, los límites y los valores de variación biológica que aquí se muestran son orientativos, provienen de la literatura citada y de la base EFLM de variación biológica, y deben confirmarse y adaptarse con datos propios antes de usarse en rutina, conforme a CLSI EP33. <b>No sustituyen la información contenida en el inserto o instructivo de uso del reactivo, del equipo, del middleware o del sistema informático del proveedor correspondiente</b>, ni la normatividad aplicable (Ley General de Salud, NOM-007-SSA3-2011 y demás disposiciones vigentes en México, e ISO 15189 cuando aplique).</p>
+<p>Cada laboratorio es responsable de definir, validar y documentar sus reglas de delta check, de la respuesta ante cada alerta y de la liberación de sus resultados. Los cálculos se ejecutan localmente en el navegador; los datos capturados no se transmiten ni se almacenan. Los autores no asumen responsabilidad alguna por decisiones clínicas, analíticas, regulatorias o administrativas que se tomen con base en este material, ni por errores u omisiones involuntarios, y agradecen toda corrección enviada por el formulario de comentarios. El uso de esta página implica la aceptación de estas condiciones.</p>
+<p>© 2026 Judith Carolina De Arcos Jiménez y Jaime Briseño Ramírez. Se permite compartir y reproducir con fines educativos, sin fines de lucro y citando la fuente; cualquier otro uso requiere autorización de los autores.</p>
+</div>
+  <h3>Cómo citar</h3>
+  <div class="citar"><code id="citar-texto">De Arcos-Jiménez Judith Carolina, Briseño-Ramírez Jaime. Delta check: comparar al paciente consigo mismo [recurso electrónico y herramienta de cálculo]. Cuerpo Académico UDG-CA-1190, Centro Universitario de Tlajomulco, Universidad de Guadalajara; 2026. Disponible en: https://udgca1190.com.mx/herramientas/laboratorio/delta-check</code></div>
+  <div class="cta"><p><b>¿Qué haría más útil esta página?</b> Un analito que falta, un límite mejor documentado, un ejemplo, un error. Escríbenos: cada versión se corrige con lo que llega.</p><button class="btn" type="button" data-com="1">Dejar un comentario</button></div>
+</section>
+<div class="pie" id="pie"><div class="lema">“Del tubo al diagnóstico”</div>Dra. en C. Judith Carolina De Arcos Jiménez · <a href="https://orcid.org/0000-0003-0251-6425" target="_blank" rel="noopener"><span class="orcid">iD</span>0000-0003-0251-6425</a><br>Dr. Jaime Briseño Ramírez · <a href="https://orcid.org/0009-0006-1901-392X" target="_blank" rel="noopener"><span class="orcid">iD</span>0009-0006-1901-392X</a><br>Investigadores Nacionales Nivel I (SNII) · Perfil PRODEP · Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara<br>Versión 2.0 · septiembre de 2026 · <a href="#" data-com="1">Enviar un comentario</a>
+<div style="margin-top:.6rem">Material educativo y de apoyo. No sustituye el criterio profesional, los procedimientos de cada laboratorio, la guía CLSI EP33 ni la información del proveedor correspondiente. Los autores no asumen responsabilidad por decisiones tomadas con base en este contenido. <a href="#legal">Aviso legal completo</a>.</div></div>
+</div>
+
+<button class="flot" id="abrir-com" type="button">💬 Comentarios</button>
+<dialog id="dlg">
+  <form class="dlg" id="form-com" method="dialog">
+    <h3>Ayúdanos a mejorar esta página</h3>
+    <p class="intro">Errores, límites, analitos que faltan, ejemplos, referencias.</p>
+    <div class="g2">
+      <div><label for="c-nombre">Nombre (opcional)</label><input id="c-nombre" type="text" autocomplete="name"></div>
+      <div><label for="c-correo">Correo (opcional, para responderte)</label><input id="c-correo" type="text" inputmode="email" autocomplete="email"></div>
+    </div>
+    <div class="g2">
+      <div><label for="c-perfil">Soy</label><select id="c-perfil"><option>Químico/a clínico/a</option><option>Médico/a</option><option>Responsable de calidad</option><option>Estudiante</option><option>Docente o investigador/a</option><option>Otro</option></select></div>
+      <div><label for="c-tipo">Tipo de comentario</label><select id="c-tipo"><option>Sugerencia</option><option>Error o cifra a corregir</option><option>Pregunta</option><option>Felicitación</option></select></div>
+    </div>
+    <label for="c-seccion">Sección a la que se refiere</label>
+    <select id="c-seccion"><option>General</option><option>Qué es</option><option>Tipos y fórmulas</option><option>Calculadora</option><option>Fijar el umbral</option><option>Por analito</option><option>Ante la alerta</option><option>Implementar</option><option>Errores</option><option>Referencias</option></select>
+    <label for="c-msg">Comentario</label>
+    <textarea id="c-msg" class="texto" required placeholder="Sé tan concreto como puedas"></textarea>
+    <div class="acc"><button type="button" class="btn sec" id="cerrar-com">Cerrar</button><button type="submit" class="btn">Enviar comentario</button></div>
+    <div id="com-ok" class="ok" hidden></div>
+  </form>
+</dialog>
+
+<script>
+/* ═════════ CONFIGURACIÓN: edita aquí ═════════ */
+var CONFIG = {
+  correo: 'jcdearcosj@gmail.com',
+  formEndpoint: '',
+  lema: 'Del tubo al diagnóstico',
+  version: 'Versión 2.0 · septiembre de 2026',
+  autores: [
+    {nombre: 'Dra. en C. Judith Carolina De Arcos Jiménez', ini: 'JA', orcid: '0000-0003-0251-6425',
+     adscripcion: 'Investigadora Nacional Nivel I (SNII) · Perfil PRODEP · Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara'},
+    {nombre: 'Dr. Jaime Briseño Ramírez', ini: 'JB', orcid: '0009-0006-1901-392X',
+     adscripcion: 'Investigador Nacional Nivel I (SNII) · Perfil PRODEP · Cuerpo Académico UDG-CA-1190 · Centro Universitario de Tlajomulco, Universidad de Guadalajara'}
+  ],
+  cita: 'De Arcos-Jiménez Judith Carolina, Briseño-Ramírez Jaime',
+  autora: 'Judith Carolina De Arcos Jiménez y Jaime Briseño Ramírez',
+  titulo: 'Delta check: comparar al paciente consigo mismo'
+};
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmt(x, d){ if(x == null || isNaN(x)) return '—'; d = (d == null ? 2 : d); return Number(x).toLocaleString('es-MX', {minimumFractionDigits: 0, maximumFractionDigits: d}); }
+function num(s){ s = String(s || '').trim().replace(/\s+/g, ''); if(!s) return NaN;
+  if(s.indexOf(',') > -1 && s.indexOf('.') > -1){ s = s.lastIndexOf(',') > s.lastIndexOf('.') ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, ''); } else s = s.replace(',', '.');
+  return /^[-+]?(\d+\.?\d*|\.\d+)$/.test(s) ? parseFloat(s) : NaN; }
+function sortNum(a){ return a.slice().sort(function(p, q){ return p - q; }); }
+function pctl(sorted, p){ var n = sorted.length, r = p * (n + 1); if(r <= 1) return sorted[0]; if(r >= n) return sorted[n - 1]; var k = Math.floor(r), f = r - k; return sorted[k - 1] + f * (sorted[k] - sorted[k - 1]); }
+
+/* ── cabecera, autoría, legal, pie ── */
+var AVISO_LEGAL = [
+  '<b>Aviso legal.</b> Este material y sus calculadoras tienen fines exclusivamente educativos y de apoyo. No constituyen asesoría médica ni sustituyen el juicio profesional del químico clínico, del responsable sanitario ni del médico tratante, ni los procedimientos normalizados de operación y el sistema de gestión de la calidad de cada laboratorio.',
+  'Las ventanas, los límites y los valores de variación biológica que aquí se muestran son orientativos, provienen de la literatura citada y de la base EFLM de variación biológica, y deben confirmarse y adaptarse con datos propios antes de usarse en rutina, conforme a CLSI EP33. <b>No sustituyen la información contenida en el inserto o instructivo de uso del reactivo, del equipo, del middleware o del sistema informático del proveedor correspondiente</b>, ni la normatividad aplicable (Ley General de Salud, NOM-007-SSA3-2011 y demás disposiciones vigentes en México, e ISO 15189 cuando aplique).',
+  'Cada laboratorio es responsable de definir, validar y documentar sus reglas de delta check, de la respuesta ante cada alerta y de la liberación de sus resultados. Los cálculos se ejecutan localmente en el navegador; los datos capturados no se transmiten ni se almacenan. Los autores no asumen responsabilidad alguna por decisiones clínicas, analíticas, regulatorias o administrativas que se tomen con base en este material, ni por errores u omisiones involuntarios, y agradecen toda corrección enviada por el formulario de comentarios. El uso de esta página implica la aceptación de estas condiciones.',
+  '© ' + new Date().getFullYear() + ' ' + CONFIG.autora + '. Se permite compartir y reproducir con fines educativos, sin fines de lucro y citando la fuente; cualquier otro uso requiere autorización de los autores.'
+];
+
+
+/* ═════════ DATOS POR ANALITO ═════════ */
+var ORI = [
+ {n:'Sodio',u:'mmol/L',re:/sodio|\bna\b|natr/i,ven:'24 a 72 h',venh:72,porque:'Se regula muy fino: en una persona casi no se mueve de un día a otro.',lim:'5 a 8 mmol/L',la:5,lp:null,cvi:0.5,
+  causas:['Contaminación con líquido intravenoso (toma del brazo de la venoclisis)','Muestra equivocada de paciente','Cambio real: sueros hipertónicos, diuréticos, pérdidas, SIADH'],primero:'Pregunta primero por la venoclisis: es la causa más frecuente de un sodio que «cambió».'},
+ {n:'Potasio',u:'mmol/L',re:/potasio|\bk\b|kal/i,ven:'24 a 72 h',venh:72,porque:'Cambia con la enfermedad, pero un salto grande casi siempre es preanalítico.',lim:'1.0 a 1.5 mmol/L (≈ 20 a 30 %)',la:1,lp:25,cvi:4,
+  causas:['Hemólisis (revisa el índice H antes que nada)','Contaminación con EDTA por orden de llenado','Retraso en centrifugar o muestra refrigerada sin separar','Trombocitosis o leucocitosis marcadas (pseudohiperpotasemia)','Cambio real: insuficiencia renal, medicamentos, suplementos'],primero:'Índice de hemólisis y orden de tubos, antes de repetir.'},
+ {n:'Cloro',u:'mmol/L',re:/clor|\bcl\b/i,ven:'24 a 72 h',venh:72,porque:'Sigue al sodio; sus deltas grandes casi siempre acompañan a un sodio alterado por dilución.',lim:'5 a 8 mmol/L',la:6,lp:null,cvi:1.2,
+  causas:['Contaminación con solución salina','Muestra de otro paciente','Cambio real: acidosis hiperclorémica, pérdidas digestivas'],primero:'Compara con el sodio: si ambos se movieron igual, piensa en venoclisis.'},
+ {n:'Calcio total',u:'mg/dL',re:/calcio|\bca\b/i,ven:'24 a 72 h',venh:72,porque:'Muy regulado; los saltos grandes suelen ser preanalíticos o por albúmina.',lim:'≈ 1.0 mg/dL',la:1,lp:null,cvi:2,
+  causas:['Contaminación con EDTA (calcio falsamente muy bajo, potasio alto)','Cambio de albúmina (revisa el calcio corregido)','Hemoconcentración por torniquete prolongado'],primero:'Si el calcio bajó mucho y el potasio subió en la misma muestra, piensa en EDTA.'},
+ {n:'Magnesio',u:'mg/dL',re:/magnes|\bmg\b/i,ven:'24 a 72 h',venh:72,porque:'Estable dentro del individuo; cambia de verdad con diuréticos, nutrición parenteral y sulfato de magnesio.',lim:'≈ 0.5 mg/dL',la:0.5,lp:null,cvi:2.9,
+  causas:['Contaminación con EDTA (baja junto con el calcio)','Hemólisis (sube)','Infusión de sulfato de magnesio (sube de verdad)'],primero:'Calcio y potasio de la misma muestra delatan el EDTA.'},
+ {n:'Fósforo',u:'mg/dL',re:/f[oó]sf|\bp\b|fosfato/i,ven:'24 a 72 h',venh:72,porque:'Varía con la comida y el ritmo circadiano; sube con hemólisis y con retraso en separar.',lim:'1.0 a 1.5 mg/dL o 30 a 50 %',la:1.2,lp:40,cvi:7.7,
+  causas:['Hemólisis o retraso en centrifugar (sube)','Nutrición parenteral o realimentación (baja de verdad)','Insuficiencia renal (sube con creatinina)'],primero:'Hora de toma y de proceso; índice de hemólisis.'},
+ {n:'Creatinina',u:'mg/dL',re:/creat/i,ven:'24 a 72 h; hasta 7 días en pacientes estables',venh:72,porque:'Refleja función renal; sube de verdad en horas si hay lesión aguda. KDIGO define lesión renal aguda con +0.3 mg/dL en 48 h.',lim:'0.3 a 0.5 mg/dL o 30 a 50 %',la:0.3,lp:30,cvi:4.5,
+  causas:['Lesión renal aguda real (coherente con urea y potasio)','Dilución por venoclisis (baja «de golpe» con sodio y proteínas también bajos)','Muestra de otro paciente','Interferencias del método Jaffé (cetonas, bilirrubina, algunos fármacos)'],primero:'Mira urea y potasio de la misma muestra: si van juntos, es clínica y se libera rápido.'},
+ {n:'Urea',u:'mg/dL',re:/urea|\bbun\b/i,ven:'24 a 72 h',venh:72,porque:'Varía con dieta, hidratación y catabolismo; el delta es menos sensible que el de creatinina.',lim:'≈ 50 %',la:null,lp:50,cvi:14,
+  causas:['Deshidratación o sangrado digestivo (sube sin que la creatinina lo haga igual)','Dilución por venoclisis','Cambio real de función renal'],primero:'Interpretar junto con creatinina; sola dispara muchas alertas poco útiles.'},
+ {n:'Glucosa',u:'mg/dL',re:/gluc/i,ven:'Horas; rara vez más de 24 h',venh:24,porque:'Depende del ayuno, la comida, la insulina y el suero glucosado: cambia de verdad en minutos.',lim:'50 a 100 % (muchos laboratorios no la usan)',la:null,lp:75,cvi:5,
+  causas:['Glucólisis por retraso en separar el suero (baja con el tiempo)','Contaminación con solución glucosada','Cambio real: ayuno, insulina, descompensación'],primero:'Hora de toma y hora de proceso: un retraso de dos horas ya explica una baja.'},
+ {n:'Albúmina',u:'g/dL',re:/alb/i,ven:'1 a 7 días',venh:168,porque:'Vida media larga (≈ 20 días): un cambio brusco real es raro salvo dilución o pérdida masiva.',lim:'≈ 1 g/dL o 25 %',la:1,lp:25,cvi:2.5,
+  causas:['Dilución por líquidos intravenosos','Torniquete prolongado o posición (sube por hemoconcentración)','Muestra de otro paciente'],primero:'Si bajó junto con hemoglobina y proteínas totales, casi siempre es dilución.'},
+ {n:'Proteínas totales',u:'g/dL',re:/prote/i,ven:'1 a 7 días',venh:168,porque:'Estables; se mueven con la hidratación, la postura y la dilución.',lim:'≈ 1 g/dL o 15 a 20 %',la:1,lp:18,cvi:2.6,
+  causas:['Dilución por venoclisis','Hemoconcentración por torniquete o deshidratación','Muestra de otro paciente'],primero:'Si albúmina y hemoglobina bajaron igual, es dilución.'},
+ {n:'ALT (TGP)',u:'U/L',re:/\balt\b|tgp|alanin/i,ven:'1 a 7 días',venh:168,porque:'Sube rápido con daño hepático y baja con vida media de un par de días; los cambios grandes suelen ser reales.',lim:'50 a 100 % (o valores absolutos altos)',la:null,lp:75,cvi:10,
+  causas:['Daño hepático real: fármacos, hepatitis viral, isquemia','Hemólisis (afecta más a AST que a ALT)','Muestra de otro paciente'],primero:'Coherencia con AST, bilirrubina y GGT de la misma muestra.'},
+ {n:'AST (TGO)',u:'U/L',re:/\bast\b|tgo|aspart/i,ven:'1 a 7 días',venh:168,porque:'Muy sensible a hemólisis y a daño muscular; vida media corta (≈ 17 h).',lim:'50 a 100 %',la:null,lp:75,cvi:9.5,
+  causas:['Hemólisis (sube con LDH y potasio)','Daño muscular, ejercicio, inyecciones (sube con CK)','Daño hepático real'],primero:'Índice de hemólisis y CK antes de pensar en hígado.'},
+ {n:'Bilirrubina total',u:'mg/dL',re:/bilir/i,ven:'1 a 3 días',venh:72,porque:'Alta variación biológica y sensibilidad a la luz; en neonatos cambia de verdad en horas.',lim:'≈ 50 % o 1 mg/dL',la:1,lp:50,cvi:21,
+  causas:['Exposición de la muestra a la luz (baja)','Hemólisis (interfiere según el método)','Cambio real: hemólisis in vivo, colestasis, neonato en fototerapia'],primero:'¿La muestra estuvo a la luz? Es la causa más frecuente de una bilirrubina que «bajó».'},
+ {n:'Fosfatasa alcalina',u:'U/L',re:/fosfatasa|\balp\b|\bfa\b/i,ven:'1 a 7 días',venh:168,porque:'Estable en el adulto; cambios grandes suelen ser reales (colestasis, hueso) o contaminación con EDTA (baja).',lim:'30 a 50 %',la:null,lp:40,cvi:5.3,
+  causas:['Contaminación con EDTA (baja junto con calcio y magnesio)','Colestasis o enfermedad ósea real','Muestra de otro paciente'],primero:'Con calcio y magnesio de la misma muestra se descarta el EDTA.'},
+ {n:'Colesterol total',u:'mg/dL',re:/coles/i,ven:'Semanas a meses',venh:720,porque:'Estable dentro del individuo (CVi ≈ 5 %); cambia con dieta, fármacos y enfermedad aguda, no de un día a otro.',lim:'≈ 30 %',la:null,lp:30,cvi:5.3,
+  causas:['Fase aguda (cae 20 a 40 % tras infarto, cirugía o infección)','Cambio de tratamiento (estatina)','Muestra de otro paciente'],primero:'Fecha de la última muestra y evento clínico intermedio.'},
+ {n:'Hemoglobina',u:'g/dL',re:/hemog|\bhb\b|hgb/i,ven:'24 a 72 h',venh:72,porque:'Baja de verdad con sangrado o hemodilución y sube con transfusión: el delta aquí sí puede ser clínica urgente.',lim:'2 a 3 g/dL o 20 a 25 %',la:2,lp:20,cvi:2.8,
+  causas:['Muestra tomada del brazo de la venoclisis (diluida)','Transfusión reciente (sube)','Sangrado real','Tubo de otro paciente: revisa que el VCM también «cambió»'],primero:'Mira el VCM del par: si el VCM saltó, sospecha tubo equivocado; si no, la baja es de la persona.'},
+ {n:'Hematocrito',u:'%',re:/hemat[oó]c|\bhct\b|\bhto\b/i,ven:'24 a 72 h',venh:72,porque:'Sigue a la hemoglobina; un hematocrito que cambia sin la hemoglobina apunta a artefacto (muestra vieja, aglutinación).',lim:'6 a 8 puntos o 20 %',la:6,lp:20,cvi:2.8,
+  causas:['Dilución por venoclisis','Muestra envejecida (sube el VCM y el hematocrito)','Transfusión o sangrado real'],primero:'CHCM fuera de 31 a 36 g/dL delata el artefacto.'},
+ {n:'VCM (volumen corpuscular medio)',u:'fL',re:/vcm|\bmcv\b|corpusc/i,ven:'Semanas; muchos laboratorios usan hasta 30 días o más',venh:720,porque:'Es el analito más estable dentro de una persona: los eritrocitos viven 120 días. Por eso es el mejor detector de muestra equivocada.',lim:'3 a 7 fL',la:4,lp:null,cvi:1.2,
+  causas:['Muestra de otro paciente (la causa clásica)','Transfusión reciente','Crioaglutininas o hiperglucemia marcada (interferencia del contador)','Cambio real lento: déficit de B12/folato, hierro, alcohol'],primero:'Un VCM que cambió 6 fL en dos días es identificación hasta que se demuestre lo contrario.'},
+ {n:'Plaquetas',u:'×10³/µL',re:/plaq|plt|plate/i,ven:'24 a 72 h',venh:72,porque:'Cambian de verdad con sepsis, quimioterapia o transfusión, pero una baja súbita aislada suele ser del tubo.',lim:'≈ 50 %',la:null,lp:50,cvi:8,
+  causas:['Coágulo en el tubo o agregados por EDTA (pseudotrombocitopenia): mira el frotis','Muestra de otro paciente','Transfusión de plaquetas (sube)','Cambio real: sepsis, quimioterapia, CID'],primero:'Frotis y revisión del tubo antes de reportar una caída aislada.'},
+ {n:'Leucocitos',u:'×10³/µL',re:/leuc|\bwbc\b|blanc/i,ven:'24 h',venh:24,porque:'Responden en horas a infección, estrés y esteroides; el delta genera muchas alertas que son clínica real.',lim:'50 a 100 %',la:null,lp:75,cvi:11,
+  causas:['Cambio real: infección, esteroides, quimioterapia, posoperatorio','Agregados plaquetarios o eritroblastos que el contador cuenta como leucocitos','Muestra de otro paciente'],primero:'Con el diferencial y el contexto clínico se resuelve casi siempre sin repetir.'},
+ {n:'Hemoglobina glucosilada (HbA1c)',u:'%',re:/glucosil|glicos|a1c/i,ven:'30 a 90 días entre determinaciones',venh:2160,porque:'Promedia dos a tres meses de glucemia: un cambio grande en pocas semanas es biológicamente improbable.',lim:'≈ 1 punto porcentual absoluto (o 20 % relativo)',la:1,lp:20,cvi:1.5,
+  causas:['Transfusión reciente o hemólisis (baja falsamente)','Variantes de hemoglobina según el método','Muestra de otro paciente','Cambio real solo si pasaron meses y hubo cambio de tratamiento'],primero:'Si el intervalo fue de días, no de meses, el cambio no es de la persona.'},
+ {n:'TSH',u:'mUI/L',re:/tsh|tirotrop/i,ven:'6 a 12 semanas',venh:2160,porque:'Alta variación biológica y respuesta lenta al tratamiento: los deltas cortos no se interpretan.',lim:'≈ 50 a 100 % (poco usada)',la:null,lp:75,cvi:19.5,
+  causas:['Cambio de dosis de levotiroxina o adherencia irregular','Biotina o interferencia por anticuerpos','Enfermedad aguda intercurrente'],primero:'Fecha del último ajuste de dosis y suplementos con biotina.'},
+ {n:'Troponina de alta sensibilidad',u:'ng/L',re:/tropon|hs-?ctn/i,ven:'1 a 3 h (algoritmos 0/1 h y 0/2 h de la ESC)',venh:6,porque:'El cambio entre dos mediciones seriadas es criterio diagnóstico de infarto; aquí el delta es clínica, no verificación.',lim:'Según ensayo: Δ absoluto de 3 a 12 ng/L en 1 h o ≥ 20 % relativo (ESC 2023)',la:null,lp:20,cvi:7,
+  causas:['Infarto agudo (cambio dinámico)','Daño miocárdico no isquémico (miocarditis, insuficiencia cardiaca, sepsis)','Muestra hemolizada o de otro paciente'],primero:'Usa los deltas absolutos del ensayo y del algoritmo validado; no un porcentaje genérico.'},
+ {n:'Carga viral VIH (log10)',u:'log10 copias/mL',re:/carga|viral|vih|hiv|arn/i,ven:'Según el esquema de seguimiento: 3 a 6 meses; antes si hay cambio de tratamiento',venh:4320,porque:'La variabilidad del método obliga a comparar en escala logarítmica, no en copias.',lim:'≥ 0.5 log10 (≈ 3 veces) es el cambio que las guías consideran real',la:0.5,lp:null,cvi:null,
+  causas:['Muestra procesada fuera de tiempo o mal conservada','Repunte transitorio (blip) que vuelve a indetectable','Falla de adherencia o resistencia (cambio sostenido)','Cambio de plataforma o de kit entre las dos mediciones'],primero:'Convierte a log10 antes de comparar; un cambio menor a 0.5 log10 no se interpreta como progresión.'}
+];
+
+/* ═════════ HERRAMIENTA 1 ═════════ */
+var OA = $('oa'); ORI.forEach(function(o, i){ var op = document.createElement('option'); op.value = i; op.textContent = o.n; OA.appendChild(op); });
+var ULT = '';
+function analitoActual(){ return OA.value === '' ? null : ORI[OA.value]; }
+function rcvDe(o, cva){ if(!o || o.cvi == null) return NaN; cva = isNaN(cva) ? 0 : cva; return 2.77 * Math.sqrt(cva * cva + o.cvi * o.cvi); }
+function calc(){
+  var a = num($('v0').value), b = num($('v1').value), u = $('un').value.trim(), o = analitoActual(), cva = num($('cva').value);
+  $('v0').classList.toggle('mal', !!$('v0').value.trim() && isNaN(a)); $('v1').classList.toggle('mal', !!$('v1').value.trim() && isNaN(b));
+  var nombre = o ? o.n : ($('an').value.trim() || 'El analito');
+  var t0 = $('t0').value, t1 = $('t1').value, horas = NaN;
+  if(t0 && t1){ horas = (new Date(t1) - new Date(t0)) / 36e5; }
+  var rcv = rcvDe(o, cva);
+  $('drcv').textContent = isNaN(rcv) ? '—' : '± ' + fmt(rcv, 1) + ' %';
+  $('drcvn').textContent = o ? (o.cvi == null ? 'no aplica: se compara en log10' : '2.77 × √(' + (isNaN(cva) ? '0' : fmt(cva, 2)) + '² + ' + o.cvi + '²)' + (isNaN(cva) ? ' · escribe tu CVa' : '')) : 'elige el analito';
+  if(isNaN(horas)){ $('dt').textContent = '—'; $('dtn').textContent = 'si capturas las dos fechas'; } else if(horas < 0){ $('dt').textContent = 'revisa'; $('dtn').textContent = 'el actual es anterior al previo'; } else { $('dt').textContent = horas < 48 ? fmt(horas, 1) + ' h' : fmt(horas / 24, 1) + ' días'; $('dtn').textContent = horas < 48 ? 'entre los dos resultados' : fmt(horas, 0) + ' horas'; }
+  var ver = $('ver'), sem = $('semaforo'), gr = $('grafdelta');
+  if(isNaN(a) || isNaN(b)){ ['dabs','dpct','dtasa'].forEach(function(i){ $(i).textContent = '—'; }); $('dabsu').textContent = ''; $('dpctn').textContent = 'respecto al previo'; $('dtasan').textContent = 'por 24 h';
+    ver.className = 'ver'; ver.innerHTML = '<b class="t">Lectura</b>' + ((!$('v0').value.trim() && !$('v1').value.trim()) ? 'Escribe el resultado previo y el actual para ver la cuenta.' : 'Falta un número válido en uno de los dos resultados.'); sem.innerHTML = ''; gr.innerHTML = ''; ULT = ''; return; }
+  var d = b - a, p = a === 0 ? NaN : d / Math.abs(a) * 100;
+  $('dabs').textContent = (d > 0 ? '+' : '') + fmt(d, 3); $('dabsu').textContent = u || (o ? o.u : '');
+  $('dpct').textContent = isNaN(p) ? 'no se calcula' : (p > 0 ? '+' : '') + fmt(p, 1) + ' %'; $('dpctn').textContent = isNaN(p) ? 'el previo es cero' : 'respecto al previo (' + fmt(a, 3) + ')';
+  if(!isNaN(horas) && horas > 0){ $('dtasa').textContent = (d > 0 ? '+' : '') + fmt(d / horas * 24, 3); $('dtasan').textContent = (u || (o ? o.u : '')) + ' por 24 h'; } else { $('dtasa').textContent = '—'; $('dtasan').textContent = 'requiere las dos fechas'; }
+  /* semáforo */
+  var h = '', lineas = [];
+  // ventana
+  var venMax = num($('lv').value); if(isNaN(venMax) && o) venMax = o.venh;
+  if(!isNaN(horas) && !isNaN(venMax)){ var dentro = horas >= 0 && horas <= venMax; h += '<div class="sf ' + (dentro ? 'ok' : 'gris') + '"><b>Ventana</b><strong>' + (dentro ? 'Par comparable' : 'Fuera de ventana') + '</strong>' + fmt(horas, 1) + ' h frente a un máximo de ' + fmt(venMax, 0) + ' h' + (dentro ? '.' : ': el cambio puede ser evolución real; el delta no aplica.') + '</div>'; lineas.push('Ventana: ' + fmt(horas, 1) + ' h de ' + fmt(venMax, 0) + ' h máximas → ' + (dentro ? 'comparable' : 'fuera de ventana')); }
+  else h += '<div class="sf gris"><b>Ventana</b><strong>Sin fechas</strong>Captura fecha y hora de ambos resultados para saber si el par es comparable.</div>';
+  // RCV
+  if(!isNaN(rcv) && !isNaN(p)){ var supera = Math.abs(p) > rcv; h += '<div class="sf ' + (supera ? 'rep' : 'ok') + '"><b>Variación biológica</b><strong>' + (supera ? 'Supera el RCV' : 'Dentro del ruido esperado') + '</strong>|Δ%| = ' + fmt(Math.abs(p), 1) + ' % frente a RCV ' + fmt(rcv, 1) + ' % (' + fmt(Math.abs(p) / rcv, 1) + ' veces).' + (supera ? ' El cambio no se explica por variación analítica y biológica.' : ' La diferencia puede ser solo variación; no es evidencia de cambio.') + '</div>'; lineas.push('RCV ' + fmt(rcv, 1) + ' % → ' + (supera ? 'superado' : 'no superado')); }
+  else if(o && o.cvi == null){ var dl = Math.abs(d); h += '<div class="sf ' + (dl >= 0.5 ? 'rep' : 'ok') + '"><b>Criterio log10</b><strong>' + (dl >= 0.5 ? 'Cambio ≥ 0.5 log10' : 'Cambio < 0.5 log10') + '</strong>Captura los valores en log10 copias/mL.</div>'; }
+  else h += '<div class="sf gris"><b>Variación biológica</b><strong>Sin RCV</strong>Elige el analito (y escribe tu CV analítico) para calcular el cambio mínimo con significado.</div>';
+  // literatura
+  if(o && (o.la != null || o.lp != null)){ var supL = (o.la != null && Math.abs(d) >= o.la) || (o.lp != null && !isNaN(p) && Math.abs(p) >= o.lp); h += '<div class="sf ' + (supL ? 'rep' : 'ok') + '"><b>Límite de la literatura</b><strong>' + (supL ? 'Lo rebasa' : 'No lo rebasa') + '</strong>' + esc(o.lim) + '. Orientativo, no autorizado.</div>'; lineas.push('Literatura (' + o.lim + ') → ' + (supL ? 'rebasado' : 'no rebasado')); }
+  // regla local
+  var la = num($('la').value), lp = num($('lp').value), modo = $('lm').value;
+  if(!isNaN(la) || !isNaN(lp)){ var cA = !isNaN(la) ? Math.abs(d) >= la : null, cP = (!isNaN(lp) && !isNaN(p)) ? Math.abs(p) >= lp : null;
+    var alerta = modo === 'o' ? (cA === true || cP === true) : ((cA === null || cA) && (cP === null || cP) && (cA !== null || cP !== null));
+    var enVentana = isNaN(horas) || isNaN(venMax) ? true : (horas >= 0 && horas <= venMax);
+    if(!enVentana) alerta = false;
+    h += '<div class="sf ' + (alerta ? 'no' : 'ok') + '"><b>Tu regla local</b><strong>' + (alerta ? 'ALERTA' : (enVentana ? 'Sin alerta' : 'No aplica (fuera de ventana)')) + '</strong>' + (isNaN(la) ? '' : 'absoluto ≥ ' + fmt(la, 3) + ' ') + (!isNaN(la) && !isNaN(lp) ? (modo === 'o' ? 'o ' : 'y ') : '') + (isNaN(lp) ? '' : 'porcentual ≥ ' + fmt(lp, 1) + ' %') + '.</div>'; lineas.push('Regla local → ' + (alerta ? 'ALERTA' : 'sin alerta')); }
+  else h += '<div class="sf gris"><b>Tu regla local</b><strong>Sin regla</strong>Escribe el límite absoluto o porcentual y la ventana de tu procedimiento para evaluar la alerta.</div>';
+  sem.innerHTML = h;
+  /* gráfica */
+  gr.innerHTML = grafDelta(a, b, rcv, u || (o ? o.u : ''), o);
+  ver.className = 'ver'; ver.innerHTML = '<b class="t">Lectura</b>' + esc(nombre) + ': de ' + fmt(a, 3) + ' a ' + fmt(b, 3) + (u ? ' ' + esc(u) : '') + ' (' + (d > 0 ? '+' : '') + fmt(d, 3) + (isNaN(p) ? '' : ', ' + (p > 0 ? '+' : '') + fmt(p, 1) + ' %') + ')' + (isNaN(horas) ? '' : ' en ' + fmt(horas, 1) + ' h') + '. La cuenta está hecha; si esto es una alerta y qué se hace con ella lo dice la regla escrita del laboratorio y la secuencia de la sección 6.' + (o ? ' <b>Lo primero que revisaría:</b> ' + esc(o.primero) : '');
+  ULT = 'BITÁCORA DE DELTA CHECK\nAnalito: ' + nombre + (u ? ' (' + u + ')' : '') + '\nPrevio: ' + a + (t0 ? ' (' + t0.replace('T', ' ') + ')' : '') + ' · Actual: ' + b + (t1 ? ' (' + t1.replace('T', ' ') + ')' : '') + '\nΔ = ' + (d > 0 ? '+' : '') + fmt(d, 3) + ' · Δ% = ' + (isNaN(p) ? 'n/a' : (p > 0 ? '+' : '') + fmt(p, 1) + ' %') + (isNaN(horas) ? '' : ' · ' + fmt(horas, 1) + ' h') + (isNaN(rcv) ? '' : ' · RCV ' + fmt(rcv, 1) + ' % (CVa ' + (isNaN(cva) ? 0 : cva) + ' %, CVi ' + o.cvi + ' %)') + '\n' + lineas.join('\n') + '\nRevisión de muestra: ______ · Coherencia con otros analitos: ______ · Decisión: ______ · Avisó a: ______ · Hora: ______\nFecha: ' + new Date().toLocaleString('es-MX') + ' · Herramienta: ' + CONFIG.titulo + ' (' + CONFIG.autora + ', ' + CONFIG.version + ')';
+}
+function grafDelta(a, b, rcv, u, o){
+  var W = 640, H = 150, ml = 24, mr = 24, y = 78;
+  var lo = Math.min(a, b), hi = Math.max(a, b), span = Math.max(hi - lo, Math.abs(a) * 0.1, 1e-9);
+  var min = lo - span * 0.6, max = hi + span * 0.6;
+  if(!isNaN(rcv)){ min = Math.min(min, a * (1 - rcv / 100) - span * 0.2); max = Math.max(max, a * (1 + rcv / 100) + span * 0.2); }
+  function X(v){ return ml + (v - min) / (max - min) * (W - ml - mr); }
+  var s = '<svg class="graf" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cambio entre el resultado previo y el actual frente a la banda del RCV">';
+  s += '<text x="' + ml + '" y="16" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#4b5462">Escala del analito' + (u ? ' (' + esc(u) + ')' : '') + ': previo, banda de cambio esperado (RCV) y actual</text>';
+  if(!isNaN(rcv)){ var x1 = X(a * (1 - rcv / 100)), x2 = X(a * (1 + rcv / 100)); s += '<rect x="' + Math.min(x1, x2).toFixed(1) + '" y="' + (y - 22) + '" width="' + Math.abs(x2 - x1).toFixed(1) + '" height="44" rx="6" fill="#1a6b42" fill-opacity=".15"/><text x="' + ((x1 + x2) / 2).toFixed(1) + '" y="' + (y - 28) + '" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#1a6b42" font-weight="600">± RCV ' + fmt(rcv, 1) + ' %</text>'; }
+  s += '<line x1="' + ml + '" y1="' + y + '" x2="' + (W - mr) + '" y2="' + y + '" stroke="#6b7585"/>';
+  s += '<line x1="' + X(a).toFixed(1) + '" y1="' + y + '" x2="' + X(b).toFixed(1) + '" y2="' + y + '" stroke="#e6c02e" stroke-width="5" stroke-linecap="round"/>';
+  s += '<circle cx="' + X(a).toFixed(1) + '" cy="' + y + '" r="8" fill="#fff" stroke="#455a8c" stroke-width="3"/><text x="' + X(a).toFixed(1) + '" y="' + (y + 30) + '" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#455a8c">previo ' + fmt(a, 3) + '</text>';
+  s += '<circle cx="' + X(b).toFixed(1) + '" cy="' + y + '" r="8" fill="#90303a" stroke="#fff" stroke-width="3"/><text x="' + X(b).toFixed(1) + '" y="' + (y + 46) + '" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#90303a">actual ' + fmt(b, 3) + '</text>';
+  if(o && o.la != null){ [a - o.la, a + o.la].forEach(function(v){ if(v > min && v < max) s += '<line x1="' + X(v).toFixed(1) + '" y1="' + (y - 26) + '" x2="' + X(v).toFixed(1) + '" y2="' + (y + 18) + '" stroke="#8a5c0a" stroke-dasharray="4 3"/>'; }); s += '<text x="' + (W - mr) + '" y="' + (y - 28) + '" text-anchor="end" font-family="Inter, sans-serif" font-size="10" fill="#8a5c0a">líneas punteadas: ± límite absoluto de la literatura (' + o.la + ')</text>'; }
+  return s + '</svg>';
+}
+function ficha(){
+  var o = analitoActual(), F = $('ficha'), cva = num($('cva').value);
+  if(!o){ F.innerHTML = ''; return; }
+  var rcv = rcvDe(o, cva);
+  F.innerHTML = '<div class="card"><h3 style="margin-top:0">Ficha del analito: ' + esc(o.n) + '</h3><div class="fic">' +
+    '<div><b>Ventana de tiempo orientativa</b><span class="big">' + esc(o.ven) + '</span>' + esc(o.porque) + '</div>' +
+    '<div><b>Límites que reporta la literatura</b><span class="big">' + esc(o.lim) + '</span>Punto de partida en ' + esc(o.u) + '. Se ajusta con tus deltas históricos (percentil 97.5 a 99).</div>' +
+    '<div><b>Cambio mínimo con significado (RCV)</b><span class="big">' + (o.cvi == null ? 'se compara en log10' : '≥ ' + fmt(rcv, 1) + ' %') + '</span>' + (o.cvi == null ? 'No aplica el cálculo por variación biológica: criterio de ≥ 0.5 log10.' : 'CVi ≈ ' + o.cvi + ' % (EFLM)' + (isNaN(cva) ? ', suponiendo CV analítico cero; escribe el tuyo para el valor real.' : ' y CVa ' + fmt(cva, 2) + ' %.')) + '</div>' +
+    '<div><b>Lo primero que revisaría</b>' + esc(o.primero) + '</div>' +
+    '<div class="ancha"><b>Qué suele explicar la alerta</b><ul>' + o.causas.map(function(c){ return '<li>' + esc(c) + '</li>'; }).join('') + '</ul></div></div></div>';
+}
+function ejemplo(){
+  for(var k = 0; k < ORI.length; k++){ if(ORI[k].n === 'Creatinina'){ OA.value = k; break; } }
+  $('an').value = ''; $('un').value = 'mg/dL'; $('cva').value = '2.5'; $('v0').value = '0.6'; $('v1').value = '1.1'; $('la').value = '0.3'; $('lp').value = '30'; $('lv').value = '72'; $('lm').value = 'o';
+  var d = new Date(); d.setMinutes(0, 0, 0); var p = new Date(d.getTime() - 36 * 36e5);
+  var iso = function(x){ var z = function(n){ return (n < 10 ? '0' : '') + n; }; return x.getFullYear() + '-' + z(x.getMonth() + 1) + '-' + z(x.getDate()) + 'T' + z(x.getHours()) + ':' + z(x.getMinutes()); };
+  $('t0').value = iso(p); $('t1').value = iso(d);
+  ficha(); calc(); $('v0').scrollIntoView({behavior: 'smooth', block: 'center'});
+}
+function limpiar(){ ['an','un','cva','v0','v1','t0','t1','la','lp','lv'].forEach(function(i){ $(i).value = ''; }); OA.value = ''; ficha(); calc(); }
+function copiar(texto, boton){
+  var orig = boton.getAttribute('data-orig') || boton.textContent; boton.setAttribute('data-orig', orig);
+  if(!texto){ boton.textContent = 'Nada que copiar todavía'; setTimeout(function(){ boton.textContent = orig; }, 1500); return; }
+  function ok(){ boton.textContent = 'Copiado'; setTimeout(function(){ boton.textContent = orig; }, 1500); }
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(ok, function(){ window.prompt('Copia el texto:', texto); }); else window.prompt('Copia el texto:', texto);
+}
+OA.addEventListener('change', function(){ if(analitoActual() && !$('un').value.trim()) $('un').value = analitoActual().u; ficha(); calc(); });
+$('an').addEventListener('input', function(){ var t = $('an').value.trim(); if(!t) return; for(var k = 0; k < ORI.length; k++){ if(ORI[k].re.test(t)){ if(OA.value !== String(k)){ OA.value = k; if(!$('un').value.trim()) $('un').value = ORI[k].u; ficha(); } return; } } });
+['input','change','keyup'].forEach(function(ev){ document.addEventListener(ev, function(e){ if(e.target && e.target.closest && e.target.closest('#calc')){ calc(); if(e.target.id === 'cva') ficha(); } }); });
+$('bej').onclick = ejemplo; $('blimpiar').onclick = limpiar; $('bcopiar').onclick = function(){ copiar(ULT, $('bcopiar')); };
+calc();
+
+/* ═════════ HERRAMIENTA 2: pares históricos ═════════ */
+var ULTH = '';
+function parsePares(t){
+  var pares = [], malas = 0;
+  String(t || '').split(/\r?\n/).forEach(function(l){
+    l = l.trim(); if(!l) return;
+    var tok = l.split(/[\t;]+|,\s+|\s+/).map(function(x){ return num(x); }).filter(function(x){ return !isNaN(x); });
+    if(tok.length >= 2) pares.push({a: tok[0], b: tok[1], h: tok.length >= 3 ? tok[2] : NaN}); else malas++;
+  });
+  return {pares: pares, malas: malas};
+}
+function histo(vals, titulo, marcas){
+  var s0 = sortNum(vals), n = s0.length; if(!n) return '';
+  var lo = pctl(s0, .005), hi = pctl(s0, .995); if(hi <= lo){ lo = s0[0]; hi = s0[n - 1] + 1e-9; }
+  var k = Math.max(10, Math.min(40, Math.round(Math.sqrt(n)))), w = (hi - lo) / k, c = []; for(var i = 0; i < k; i++) c.push(0);
+  var fuera = 0; s0.forEach(function(v){ if(v < lo || v > hi){ fuera++; return; } c[Math.min(k - 1, Math.floor((v - lo) / w))]++; });
+  var W = 640, H = 220, ml = 36, mr = 14, mt = 22, mb = 34, pw = W - ml - mr, ph = H - mt - mb, mx = Math.max.apply(null, c);
+  function X(v){ return ml + (v - lo) / (hi - lo) * pw; }
+  var s = '<svg class="graf" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' + esc(titulo) + '">';
+  s += '<text x="' + ml + '" y="14" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#4b5462">' + esc(titulo) + (fuera ? ' (se omiten ' + fuera + ' valores extremos en la gráfica)' : '') + '</text>';
+  c.forEach(function(v, i){ var bh = mx ? v / mx * ph : 0; s += '<rect x="' + (ml + i * pw / k).toFixed(1) + '" y="' + (mt + ph - bh).toFixed(1) + '" width="' + (pw / k - 1).toFixed(1) + '" height="' + bh.toFixed(1) + '" fill="#455a8c" fill-opacity=".75"/>'; });
+  (marcas || []).forEach(function(m){ if(m.v == null || isNaN(m.v) || m.v < lo || m.v > hi) return; s += '<line x1="' + X(m.v).toFixed(1) + '" y1="' + mt + '" x2="' + X(m.v).toFixed(1) + '" y2="' + (mt + ph) + '" stroke="' + m.c + '" stroke-width="2" stroke-dasharray="5 4"/><text x="' + X(m.v).toFixed(1) + '" y="' + (mt + ph + 26) + '" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" font-weight="600" fill="' + m.c + '">' + esc(m.t) + '</text>'; });
+  s += '<line x1="' + ml + '" y1="' + (mt + ph) + '" x2="' + (W - mr) + '" y2="' + (mt + ph) + '" stroke="#6b7585"/>';
+  for(var t = 0; t <= 4; t++){ var v = lo + (hi - lo) * t / 4; s += '<text x="' + X(v).toFixed(1) + '" y="' + (mt + ph + 13) + '" text-anchor="middle" font-family="Inter, sans-serif" font-size="10" fill="#4b5462">' + fmt(v, (hi - lo) < 10 ? 2 : 0) + '</text>'; }
+  return s + '</svg>';
+}
+function calcH(){
+  var P = parsePares($('dH').value), u = $('unH').value.trim(), ven = num($('venH').value), rcvRef = num($('rcvH').value);
+  var out = $('salidaH');
+  if(P.pares.length < 20){ out.innerHTML = '<div class="ver"><b class="t">Datos insuficientes</b>Se necesitan al menos 20 pares (idealmente cientos).</div>'; ULTH = ''; return; }
+  var conH = P.pares.filter(function(p){ return !isNaN(p.h); }).length, usados = P.pares, filtrados = 0;
+  if(!isNaN(ven) && conH){ usados = P.pares.filter(function(p){ return isNaN(p.h) || (p.h >= 0 && p.h <= ven); }); filtrados = P.pares.length - usados.length; }
+  var dAbs = [], dPct = [], sinPct = 0;
+  usados.forEach(function(p){ var d = p.b - p.a; dAbs.push(Math.abs(d)); if(p.a !== 0) dPct.push(Math.abs(d / p.a * 100)); else sinPct++; });
+  var sA = sortNum(dAbs), sP = sortNum(dPct), n = usados.length;
+  var ps = [.90, .95, .975, .99];
+  var h = '<div class="card"><h3 style="margin-top:0">Distribución de los deltas · ' + esc($('anH').value || 'analito') + '</h3>' +
+    '<div class="res"><div class="r2"><b>Pares analizados</b><span>' + n + '</span><small>' + (filtrados ? filtrados + ' fuera de la ventana de ' + fmt(ven, 0) + ' h' : (conH ? 'todos dentro de ventana' : 'sin horas: sin filtro de ventana')) + (P.malas ? ' · ' + P.malas + ' líneas ignoradas' : '') + '</small></div>' +
+    '<div class="r2"><b>|Δ%| mediana</b><span>' + fmt(pctl(sP, .5), 1) + ' %</span><small>cambio típico entre dos resultados</small></div>' +
+    '<div class="r2"><b>|Δ%| percentil 97.5</b><span>' + fmt(pctl(sP, .975), 1) + ' %</span><small>umbral que alerta en ≈ 2.5 %</small></div>' +
+    '<div class="r2"><b>|Δ%| percentil 99</b><span>' + fmt(pctl(sP, .99), 1) + ' %</span><small>umbral que alerta en ≈ 1 %</small></div></div>';
+  h += '<div class="tabla"><table><tr><th>Percentil de los pares</th>' + ps.map(function(p){ return '<th>P' + (p * 100) + '</th>'; }).join('') + '<th>Máximo</th></tr>' +
+    '<tr><td>|Δ| absoluto' + (u ? ' (' + esc(u) + ')' : '') + '</td>' + ps.map(function(p){ return '<td class="n">' + fmt(pctl(sA, p), 3) + '</td>'; }).join('') + '<td class="n">' + fmt(sA[sA.length - 1], 3) + '</td></tr>' +
+    '<tr><td>|Δ%| porcentual</td>' + ps.map(function(p){ return '<td class="n">' + fmt(pctl(sP, p), 1) + ' %</td>'; }).join('') + '<td class="n">' + fmt(sP[sP.length - 1], 1) + ' %</td></tr></table></div>';
+  if(!isNaN(rcvRef)){ var bajoRcv = 100 * sP.filter(function(v){ return v <= rcvRef; }).length / sP.length; h += '<div class="llamada ' + (pctl(sP, .975) < rcvRef ? 'll-aviso' : 'll-ok') + '"><b class="tit">Frente al RCV de ' + fmt(rcvRef, 1) + ' %</b>El ' + fmt(bajoRcv, 1) + ' % de los pares cambia menos que el RCV. ' + (pctl(sP, .975) < rcvRef ? 'El percentil 97.5 está por debajo del RCV: un umbral en ese percentil dispararía por ruido; usa al menos el RCV.' : 'Un umbral en el percentil 97.5 (' + fmt(pctl(sP, .975), 1) + ' %) queda por encima del RCV: adecuado como punto de partida.') + '</div>'; }
+  h += histo(dPct, 'Histograma de |Δ%| (n = ' + sP.length + ')', [{v: pctl(sP, .975), c: '#90303a', t: 'P97.5'}, {v: pctl(sP, .99), c: '#27334f', t: 'P99'}, {v: isNaN(rcvRef) ? null : rcvRef, c: '#1a6b42', t: 'RCV'}]);
+  /* simulador */
+  var sa = num($('sa').value), sp = num($('sp').value), modo = $('sm').value, resSim = '';
+  if(!isNaN(sa) || !isNaN(sp)){
+    var al = 0; usados.forEach(function(p){ var d = Math.abs(p.b - p.a), pc = p.a === 0 ? NaN : Math.abs(d / p.a * 100); var cA = isNaN(sa) ? null : d >= sa, cP = (isNaN(sp) || isNaN(pc)) ? null : pc >= sp; var a = modo === 'o' ? (cA === true || cP === true) : ((cA === null || cA) && (cP === null || cP) && (cA !== null || cP !== null)); if(a) al++; });
+    var tasa = 100 * al / n;
+    resSim = '<div class="ver ' + (tasa > 5 ? 'rep' : (tasa < 0.3 ? 'rep' : 'ok')) + '"><b class="t">Simulación del umbral candidato</b><span style="font-family:var(--f-serif); font-size:1.5rem; font-weight:700">' + fmt(tasa, 2) + ' % de alertas</span> (' + al + ' de ' + n + ' pares) con ' + (isNaN(sa) ? '' : '|Δ| ≥ ' + fmt(sa, 3) + (u ? ' ' + esc(u) : '')) + (!isNaN(sa) && !isNaN(sp) ? (modo === 'o' ? ' o ' : ' y ') : '') + (isNaN(sp) ? '' : '|Δ%| ≥ ' + fmt(sp, 1) + ' %') + '. ' + (tasa > 5 ? 'Más del 5 % suele ser inmanejable: sube el umbral o acorta la ventana.' : tasa < 0.3 ? 'Menos del 0.3 % casi no dispara: podría estar perdiendo errores; compara con el percentil 99.' : 'Tasa manejable para la mayoría de los laboratorios; valida revisando una muestra de estas alertas.') + '</div>';
+  } else resSim = '<p class="nota" style="margin-top:.6rem">Escribe un umbral candidato arriba (absoluto, porcentual o ambos) y pulsa Analizar para ver cuántas alertas produciría.</p>';
+  h += '<h3>Umbrales candidatos y su tasa de alertas</h3><div class="tabla"><table><tr><th>Umbral porcentual</th><th>Alertas</th><th>Tasa</th></tr>' + [10, 15, 20, 25, 30, 40, 50, 75, 100].map(function(th){ var c = sP.filter(function(v){ return v >= th; }).length; return '<tr><td>|Δ%| ≥ ' + th + ' %</td><td class="n">' + c + '</td><td class="n">' + fmt(100 * c / sP.length, 2) + ' %</td></tr>'; }).join('') + '</table></div>' + resSim + '</div>';
+  out.innerHTML = h;
+  ULTH = 'ANÁLISIS DE DELTAS HISTÓRICOS (CLSI EP33)\nAnalito: ' + ($('anH').value || '—') + (u ? ' (' + u + ')' : '') + '\nPares: ' + n + (filtrados ? ' (excluidos ' + filtrados + ' fuera de ' + ven + ' h)' : '') + '\n|Δ%| mediana ' + fmt(pctl(sP, .5), 1) + ' % · P95 ' + fmt(pctl(sP, .95), 1) + ' % · P97.5 ' + fmt(pctl(sP, .975), 1) + ' % · P99 ' + fmt(pctl(sP, .99), 1) + ' %\n|Δ| P95 ' + fmt(pctl(sA, .95), 3) + ' · P97.5 ' + fmt(pctl(sA, .975), 3) + ' · P99 ' + fmt(pctl(sA, .99), 3) + (isNaN(rcvRef) ? '' : '\nRCV de referencia: ' + rcvRef + ' %') + (resSim.indexOf('% de alertas') > -1 ? '\nUmbral simulado: ' + (isNaN(sa) ? '' : '|Δ| ≥ ' + sa + ' ') + (isNaN(sp) ? '' : '|Δ%| ≥ ' + sp + ' %') + ' → ' + resSim.replace(/<[^>]+>/g, '').split('(')[0].replace('Simulación del umbral candidato', '').trim() : '') + '\nFecha: ' + new Date().toLocaleDateString('es-MX') + ' · Herramienta: ' + CONFIG.titulo + ' (' + CONFIG.autora + ', ' + CONFIG.version + ')';
+}
+function simulaPares(){
+  var s = 17, out = []; function rnd(){ s = (s * 16807) % 2147483647; return s / 2147483647; }
+  function gauss(){ var u1 = rnd() || 1e-9, u2 = rnd(); return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2); }
+  for(var i = 0; i < 900; i++){
+    var base = Math.exp(Math.log(0.85) + 0.28 * gauss()); // creatinina previa
+    var cambio = 0.06 * gauss(); // variación habitual ~6 %
+    if(rnd() < 0.04) cambio += (rnd() < 0.5 ? 1 : -1) * (0.3 + 0.6 * rnd()); // 4 % cambios clínicos grandes
+    var b = Math.max(0.3, base * (1 + cambio)), h = Math.round(6 + rnd() * 78);
+    out.push(base.toFixed(2) + '\t' + b.toFixed(2) + '\t' + h);
+  }
+  return out.join('\n');
+}
+$('bcalcH').onclick = calcH;
+$('bejH').onclick = function(){ $('anH').value = 'creatinina (simulada)'; $('unH').value = 'mg/dL'; $('venH').value = '72'; $('rcvH').value = '14'; $('sa').value = '0.3'; $('sp').value = '30'; $('sm').value = 'o'; $('dH').value = simulaPares(); calcH(); $('salidaH').scrollIntoView({behavior: 'smooth', block: 'start'}); };
+$('bcopiarH').onclick = function(){ copiar(ULTH, $('bcopiarH')); };
+$('blimpH').onclick = function(){ ['dH','anH','unH','venH','rcvH','sa','sp'].forEach(function(i){ $(i).value = ''; }); $('salidaH').innerHTML = ''; ULTH = ''; };
+
+/* ═════════ TABLA POR ANALITO ═════════ */
+function tablaAn(){
+  var cva = num($('cvaT').value); if(isNaN(cva)) cva = 3;
+  var h = '<table><tr><th>Analito</th><th>Ventana orientativa</th><th>Límites en la literatura</th><th>CVi (EFLM)</th><th>RCV con CVa ' + fmt(cva, 1) + ' %</th></tr>';
+  ORI.forEach(function(o, i){ var r = rcvDe(o, cva); h += '<tr data-i="' + i + '" style="cursor:pointer"' + (OA.value === String(i) ? ' class="sel"' : '') + '><td><b>' + esc(o.n) + '</b><br><small style="color:var(--tenue)">' + esc(o.u) + '</small></td><td>' + esc(o.ven) + '</td><td>' + esc(o.lim) + '</td><td class="n">' + (o.cvi == null ? '—' : o.cvi + ' %') + '</td><td class="n">' + (isNaN(r) ? 'log10' : '± ' + fmt(r, 1) + ' %') + '</td></tr>'; });
+  $('tablaAn').innerHTML = h + '</table>';
+  Array.prototype.forEach.call($('tablaAn').querySelectorAll('tr[data-i]'), function(tr){ tr.onclick = function(){ OA.value = tr.getAttribute('data-i'); if(!$('un').value.trim()) $('un').value = analitoActual().u; if(!$('cva').value.trim()) $('cva').value = $('cvaT').value; ficha(); calc(); tablaAn(); $('calc').scrollIntoView({behavior: 'smooth'}); }; });
+}
+$('cvaT').addEventListener('input', tablaAn); OA.addEventListener('change', tablaAn); tablaAn();
+
+/* ═════════ tres preguntas ═════════ */
+var EJQ = [
+  'Creatinina, en pacientes hospitalizados. Un cambio real en horas indica lesión renal aguda (KDIGO: +0.3 mg/dL en 48 h) y un valor «normal» puede esconderla: 0.6 → 1.1 mg/dL está dentro del intervalo y nadie lo vería. Su variación biológica es baja (CVi ≈ 4.5 %), así que un salto grande casi nunca es ruido. Empezamos por un solo analito; potasio y hemoglobina entran después, cuando éste ya esté probado.',
+  'Ventana: hasta 72 h en hospitalizados (la mayoría se repite cada 24 h); en consulta externa, hasta 7 días si el paciente está estable. Límite de arranque: 0.3 mg/dL o 30 %, lo que ocurra primero; ambos superan el RCV de 14 % (CVa 2.5 %, CVi 4.5 %). Antes de fijarlo se revisan los pares del último año: el percentil 97.5 de nuestros propios deltas es el límite que se documenta, y se simula la tasa de alertas.',
+  'La alerta detiene la liberación automática y la ve el profesional de turno, que: (1) revisa identificación, índice de hemólisis y si la muestra se tomó del brazo con venoclisis; (2) mira urea y potasio de la misma muestra; (3) repite solo si nada de eso lo explica; (4) si el cambio es coherente, libera con comentario y llama al servicio tratante; (5) si sospecha muestra equivocada, pide nueva muestra y no libera. Todo queda en bitácora: hora, a quién se avisó y qué se decidió. Meta: resolver en menos de 30 minutos. Cada mes se cuentan las alertas útiles y las que estorbaron, y con eso se ajusta el límite.'
+];
+$('bq').onclick = function(){ [1, 2, 3].forEach(function(i){ $('q' + i).value = EJQ[i - 1]; $('q' + i).style.minHeight = '11rem'; }); };
+$('bqcopiar').onclick = function(){ var t = [1, 2, 3].map(function(i){ return i + '. ' + $('q' + i).previousElementSibling.textContent + '\n' + $('q' + i).value.trim(); }).join('\n\n'); copiar($('q1').value.trim() || $('q2').value.trim() || $('q3').value.trim() ? 'DELTA CHECK: LAS TRES PREGUNTAS\n' + t : '', $('bqcopiar')); };
+
+/* ═════════ comentarios ═════════ */
+function abrirCom(){ var dl = $('dlg'); $('com-ok').hidden = true; if(dl.showModal) dl.showModal(); else dl.setAttribute('open', ''); $('c-msg').focus(); }
+function cerrarCom(){ var dl = $('dlg'); if(dl.close) dl.close(); else dl.removeAttribute('open'); }
+$('abrir-com').onclick = abrirCom; $('cerrar-com').onclick = cerrarCom;
+Array.prototype.forEach.call(document.querySelectorAll('[data-com]'), function(a){ a.onclick = function(e){ e.preventDefault(); abrirCom(); }; });
+$('form-com').onsubmit = function(e){
+  e.preventDefault(); var msg = $('c-msg').value.trim(); if(!msg){ $('c-msg').focus(); return; }
+  var v = function(id){ return $(id).value.trim(); };
+  var cuerpo = 'Comentario sobre «' + CONFIG.titulo + '»\nNombre: ' + (v('c-nombre') || '(no indicado)') + '\nCorreo: ' + (v('c-correo') || '(no indicado)') + '\nPerfil: ' + v('c-perfil') + '\nTipo: ' + v('c-tipo') + '\nSección: ' + v('c-seccion') + '\n\n' + msg + '\n';
+  var ok = $('com-ok');
+  function porCorreo(){ window.location.href = 'mailto:' + CONFIG.correo + '?subject=' + encodeURIComponent('Comentario: Delta check · ' + v('c-seccion')) + '&body=' + encodeURIComponent(cuerpo); ok.innerHTML = '<b>Se abrió tu programa de correo con el mensaje listo.</b> Si no se abrió, copia este texto y envíalo a ' + esc(CONFIG.correo) + ':<textarea readonly>' + esc(cuerpo) + '</textarea>'; ok.hidden = false; }
+  if(CONFIG.formEndpoint){ fetch(CONFIG.formEndpoint, {method: 'POST', headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}, body: JSON.stringify({nombre: v('c-nombre'), correo: v('c-correo'), perfil: v('c-perfil'), tipo: v('c-tipo'), seccion: v('c-seccion'), mensaje: msg})}).then(function(r){ if(!r.ok) throw new Error(); ok.innerHTML = '<b>Gracias.</b> Tu comentario quedó registrado.'; ok.hidden = false; $('c-msg').value = ''; }).catch(porCorreo); }
+  else porCorreo();
+};
+</script>
+</body>
+</html>

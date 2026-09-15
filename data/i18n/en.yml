@@ -19,7 +19,7 @@ sitio:
       label: Members
     - num: "66"
       label: Publications
-    - num: "5"
+    - num: "8"
       label: Tools
   page_intros:
     members: Research professors who make up the UDG-CA-1190 Research Group, led by Dr. Jaime Briseño Ramírez.
@@ -177,6 +177,42 @@ lineas:
       - id: biomarcadores-moleculares-patogenesis-viral-inmune
         titulo: Molecular Biomarkers and Viral/Immune-Mediated Pathogenesis
 herramientas:
+  lab-biomarcadores:
+    nombre: "From the tube to the diagnosis: a 60-biomarker reference"
+    enlace_app: /en/herramientas/laboratorio/biomarcadores
+    resumen: What each marker is, which tube it is drawn in, how it is stored and measured, why it rises or falls and how it is interpreted.
+    descripcion: >-
+      A reference covering sixty biomarkers end to end, following the sample cycle: preanalytical
+      (specimen, tube, fasting, collection, processing, stability and rejection criteria), analytical
+      (method, units, conversion, standardization and quality control), interpretation (why it rises or
+      falls, modifiers and interferences) and postanalytical (critical values, biological variation,
+      delta check, reporting and follow-up). Search by name or abbreviation. Based on Tietz, Henry's,
+      CLSI GP41/GP44/EP07, the EFLM biological variation database, clinical guidelines and current
+      package inserts. No reference intervals: each laboratory sets its own. Works offline. Content is
+      in Spanish.
+  lab-intervalos-referencia:
+    nombre: "Reference intervals: verify, establish and transfer"
+    enlace_app: /en/herramientas/laboratorio/intervalos-de-referencia
+    resumen: Does the package-insert interval fit my population and my method? How do I build my own?
+    descripcion: >-
+      A practical guide with three calculators: verify a published interval with 20 reference
+      individuals (CLSI EP28), establish your own interval with 120 or more results per group (direct
+      method, non-parametric percentiles with outlier detection) and estimate it from the results the
+      laboratory already has (indirect method: Hoffmann, refineR/reflimR). Includes a decision path
+      (adopt, verify or establish), transfer between methods, partitioning by sex and age (Harris and
+      Boyd), a selection questionnaire and a documentation log. Data are processed in the browser.
+      Content is in Spanish.
+  lab-delta-check:
+    nombre: "Delta check: comparing the patient with themself"
+    enlace_app: /en/herramientas/laboratorio/delta-check
+    resumen: Is this change between two results from the same patient real, an error or noise? Which limit and which window to use.
+    descripcion: >-
+      What a delta check is and why it matters; types and formulas (absolute, percentage, rate-based
+      and biological-variation based with the reference change value, RCV); a calculator with a traffic
+      light and chart; a tool to set the threshold and window from the laboratory's own historical pairs
+      following CLSI EP33; guidance by analyte; a response sequence for the alert and an implementation
+      guide. Based on CLSI EP33 (2023), EFLM, Randell and Yenice 2019, KDIGO and ESC. Data are processed
+      in the browser. Content is in Spanish.
   virologia:
     nombre: VIROLOGY
     enlace_app: /en/herramientas/virologia

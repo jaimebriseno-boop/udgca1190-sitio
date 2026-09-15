@@ -25,12 +25,20 @@ npm run check      # valida Astro/TypeScript
 npm run test:performance   # regresiones de reutilización y actualización de gráficas
 npm run audit:performance  # audita recursos de dist/; ejecutar después del build
 node scripts/check-bib.mjs   # lint del .bib (avisa de campos/DOI faltantes)
+python3 scripts/laboratorio_retematizar.py   # regenera la sección Laboratorio desde sus HTML de trabajo
 ```
 
 Los comandos `dev`, `build` y `check` preparan automáticamente las fuentes locales
 desde Fontsource. `public/fonts/` y `src/styles/fonts.css` son generados: no se
 editan. Virología comparte `/fonts/fonts.css`, `app/css/guide.css` y
 `app/js/guide.js`; al trasladarla a otro servidor deben incluirse esos recursos.
+La sección **Laboratorio** (`/herramientas/laboratorio`: índice + Consulta de
+biomarcadores, Intervalos de referencia y Delta check, serie «Del tubo al
+diagnóstico») es un mini-sitio en `public/herramientas/laboratorio/app/` que
+**no se edita a mano**: `scripts/laboratorio_retematizar.py` lo regenera desde los
+HTML de trabajo de la autora (paleta UdeG, fuentes locales, enlaces de ida y
+vuelta con el índice). Sus tarjetas llevan `seccion: laboratorio` en
+`data/herramientas.yml`.
 La caché anual se aplica únicamente a archivos con hash en el nombre; los datos
 y recursos sin versión conservan la revalidación.
 

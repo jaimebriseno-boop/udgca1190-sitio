@@ -46,7 +46,7 @@ const herramientas = defineCollection({
   loader: file('data/herramientas.yml', { parser: parseYaml }),
   schema: z.object({
     nombre: z.string(),
-    tipo: z.enum(['predictiva', 'estadistica', 'pipeline', 'docente']),
+    tipo: z.enum(['predictiva', 'estadistica', 'pipeline', 'docente', 'consulta']),
     estado: z.enum(['activa', 'beta', 'desarrollo']),
     resumen: z.string(),
     descripcion: z.string().optional(),
@@ -57,6 +57,11 @@ const herramientas = defineCollection({
     doi: z.string().optional(),
     captura: z.string().optional(),
     destacado: z.boolean().default(false),
+    // Agrupación en la página de Herramientas: sin valor = rejilla general;
+    // 'laboratorio' = sección «Laboratorio» (serie «Del tubo al diagnóstico»).
+    seccion: z.enum(['laboratorio']).optional(),
+    // Orden dentro de su sección (menor primero); sin valor = al final, por id.
+    orden: z.number().optional(),
   }),
 });
 
