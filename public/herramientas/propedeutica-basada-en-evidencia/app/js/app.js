@@ -26,7 +26,8 @@
       'v.ajusta.l': 'Ajusta la probabilidad', 'v.debil.l': 'Cambio mínimo · LR entre 0.5 y 2',
       'v.nulo.l': 'No discrimina · ambos IC 95 % cruzan 1', 'v.na.l': 'Sin razón de verosimilitud publicada',
       'f.full': 'Con cifras', 'f.ep': 'Con epónimo', 'f.mn': 'Con maniobra', 'f.limpiar': 'Limpiar',
-      'or.full': 'Cifras', 'or.idx': 'Índice',
+      'or.full': 'Cifras', 'or.idx': 'McGee 3e',
+      'm.nopub': 'No publicado en la fuente',
       'sel.dom': 'Todas las regiones', 'sel.cond': 'Todas las condiciones',
       'cuenta': '{n} de {t} hallazgos', 'vacio': 'Sin resultados. Pruebe otro término o limpie los filtros.',
       'mas': 'Mostrar {n} más', 'ficha.vacia': 'Seleccione un hallazgo de la lista para ver su ficha.',
@@ -39,7 +40,6 @@
       'b.cita': 'Cita textual de la fuente', 'b.loc': 'Dónde consultar la cifra', 'b.region': 'Región',
       'b.calc': 'Qué hace en este paciente', 'b.pre': 'Preprueba',
       'b.si_esta': 'Si el signo está', 'b.no_esta': 'Si el signo no está',
-      'idx.aviso': 'Las cifras de este hallazgo (sensibilidad, especificidad y razones de verosimilitud) provienen de la compilación de <i>Evidence-Based Physical Diagnosis</i> de McGee y no se reproducen aquí por respeto a los derechos de la obra. Este registro funciona como índice: le dice que el signo <b>sí ha sido medido</b>, cómo se busca, contra qué patrón de referencia y en qué página exacta encontrarlo.',
       'idx.ver': 'Consultar la obra ↗', 'pmid.ver': 'Ver en PubMed ↗', 'doi.ver': 'Ver el artículo ↗',
       'nc.A': 'Nivel A · cifra localizada en la fuente primaria',
       'nc.B': 'Nivel B · verificable en McGee 3e con caja y página',
@@ -52,7 +52,7 @@
       'calc.nomo': 'Nomograma de Fagan', 'calc.nomo_pie': 'La línea recta que une la probabilidad preprueba con la razón de verosimilitud corta el eje derecho en la probabilidad posprueba. Fagan TJ. N Engl J Med. 1975;293(5):257.',
       'calc.cambio': 'cambio absoluto',
       'guia.tit': 'Cómo se lee este material',
-      'pie': 'Propedéutica médica basada en evidencia · Cuerpo Académico UDG-CA-1190, Universidad de Guadalajara (CUTlajomulco). {full} hallazgos con cifras verificadas contra el resumen de su fuente primaria y {idx} entradas de índice que remiten a la obra de referencia. Este material tiene fines docentes y no sustituye el juicio clínico.',
+      'pie': 'Propedéutica médica basada en evidencia · Cuerpo Académico UDG-CA-1190, Universidad de Guadalajara (CUTlajomulco). {full} hallazgos con cifras verificadas contra el resumen de su fuente primaria y {idx} entradas documentadas en la obra de referencia, con localizador exacto (caja y página). Este material tiene fines docentes y no sustituye el juicio clínico.',
       'ir.buscar': 'Ir al buscador'
     },
     en: {
@@ -65,7 +65,8 @@
       'v.ajusta.l': 'Shifts the probability', 'v.debil.l': 'Minimal change · LR between 0.5 and 2',
       'v.nulo.l': 'Does not discriminate · both 95% CIs cross 1', 'v.na.l': 'No likelihood ratio published',
       'f.full': 'With figures', 'f.ep': 'With eponym', 'f.mn': 'With maneuver', 'f.limpiar': 'Clear',
-      'or.full': 'Figures', 'or.idx': 'Index',
+      'or.full': 'Figures', 'or.idx': 'McGee 3e',
+      'm.nopub': 'Not published in the source',
       'sel.dom': 'All regions', 'sel.cond': 'All conditions',
       'cuenta': '{n} of {t} findings', 'vacio': 'No results. Try another term or clear the filters.',
       'mas': 'Show {n} more', 'ficha.vacia': 'Select a finding from the list to see its full record.',
@@ -78,7 +79,6 @@
       'b.cita': 'Verbatim quote from the source', 'b.loc': 'Where to find the figure', 'b.region': 'Region',
       'b.calc': 'What it does in this patient', 'b.pre': 'Pre-test',
       'b.si_esta': 'If the sign is present', 'b.no_esta': 'If the sign is absent',
-      'idx.aviso': 'The figures for this finding (sensitivity, specificity and likelihood ratios) come from the compilation in McGee’s <i>Evidence-Based Physical Diagnosis</i> and are not reproduced here out of respect for the rights in that work. This record works as an index: it tells you the sign <b>has been measured</b>, how it is elicited, against which reference standard, and on exactly which page to find it.',
       'idx.ver': 'Consult the source ↗', 'pmid.ver': 'View on PubMed ↗', 'doi.ver': 'View the article ↗',
       'nc.A': 'Level A · figure located in the primary source',
       'nc.B': 'Level B · verifiable in McGee 3e with box and page',
@@ -91,7 +91,7 @@
       'calc.nomo': 'Fagan nomogram', 'calc.nomo_pie': 'A straight line joining the pre-test probability to the likelihood ratio crosses the right-hand axis at the post-test probability. Fagan TJ. N Engl J Med. 1975;293(5):257.',
       'calc.cambio': 'absolute change',
       'guia.tit': 'How to read this material',
-      'pie': 'Evidence-based physical diagnosis · UDG-CA-1190 Research Group, University of Guadalajara (CUTlajomulco). {full} findings with figures verified against the abstract of their primary source, and {idx} index entries pointing to the reference work. This material is for teaching purposes and does not replace clinical judgement.',
+      'pie': 'Evidence-based physical diagnosis · UDG-CA-1190 Research Group, University of Guadalajara (CUTlajomulco). {full} findings with figures verified against the abstract of their primary source, and {idx} entries documented in the reference work with exact locators (box and page). This material is for teaching purposes and does not replace clinical judgement.',
       'ir.buscar': 'Go to the finder'
     }
   };
@@ -278,10 +278,10 @@
 
     if (r.f === 'full') {
       h += '<div class="met">' +
-        celda(t('m.sn'), r.sn == null ? '—' : rango(r.sn) + ' %', r.snic) +
-        celda(t('m.sp'), r.sp == null ? '—' : rango(r.sp) + ' %', r.spic) +
-        celda(t('m.lp'), r.lp == null ? '—' : fmtLr(r.lp), r.lpic) +
-        celda(t('m.ln'), r.ln == null ? '—' : fmtLr(r.ln), r.lnic) +
+        celda(t('m.sn'), r.sn == null ? t('m.nopub') : rango(r.sn) + ' %', r.snic) +
+        celda(t('m.sp'), r.sp == null ? t('m.nopub') : rango(r.sp) + ' %', r.spic) +
+        celda(t('m.lp'), r.lp == null ? t('m.nopub') : fmtLr(r.lp), r.lpic) +
+        celda(t('m.ln'), r.ln == null ? t('m.nopub') : fmtLr(r.ln), r.lnic) +
         '</div>';
       if (r.vps) {
         var filasVp = r.vps.map(function (f) {
@@ -295,8 +295,6 @@
           '<tbody>' + filasVp + '</tbody></table>' +
           '<p class="nota" style="margin:6px 0 0">' + esc(t('m.vpnota')) + '</p>');
       }
-    } else {
-      h += '<div class="aviso-idx">' + t('idx.aviso') + '</div>';
     }
 
     if (r.d) h += bloque(t('b.region'), esc(nombreDom(r.d)));
@@ -577,7 +575,7 @@
 '<p>Reúne dos cuerpos de evidencia con reglas distintas, y el buscador los distingue siempre:</p>',
 '<table><tr><th>Origen</th><th>Qué contiene</th></tr>',
 '<tr><td><b>Cifras</b></td><td>Investigación propia del Cuerpo Académico: búsqueda en PubMed por dominio, recuperación del resumen de cada PMID declarado y verificación de cada cifra contra el texto real del resumen. Se publican sensibilidad, especificidad, razones de verosimilitud, intervalos, población y la cita textual que respalda el dato.</td></tr>',
-'<tr><td><b>Índice</b></td><td>Entradas cuyo rendimiento diagnóstico está compilado en <i>Evidence-Based Physical Diagnosis</i> de Steven McGee. Se publica la nomenclatura en español, la descripción de la maniobra, el patrón de referencia, la clasificación cualitativa y el localizador exacto —caja y página—, pero <b>no las cifras</b>: la compilación es obra protegida de su autor y su editorial. El registro le dice que el signo <i>ha sido medido</i> y dónde leer el número.</td></tr></table>',
+'<tr><td><b>McGee 3e</b></td><td>Entradas cuyo rendimiento diagnóstico está compilado en <i>Evidence-Based Physical Diagnosis</i> de Steven McGee. Se publica la nomenclatura en español, la descripción de la maniobra, el patrón de referencia (cuando la caja lo declara), la clasificación cualitativa y el localizador exacto —caja EBM y página— para consultar la cifra en la obra. Cuando la fuente primaria solo publica razones de verosimilitud, la sensibilidad y la especificidad se muestran como «no publicado en la fuente».</td></tr></table>',
 '<p>El nivel de confianza de cada registro es <b>calculado, nunca declarado</b>: A si la cifra se localizó literalmente en la fuente primaria, C si la cita se verificó pero las cifras no pudieron anclarse al resumen. Ninguna cifra fue escrita a mano y ninguna referencia fue redactada sin resolverse antes contra Crossref o PubMed.</p>',
 '<p class="fuente">Fuente de referencia del índice: McGee S. <i>Evidence-Based Physical Diagnosis</i>. 3rd ed. Philadelphia: Elsevier Saunders; 2012. Marco conceptual: Fagan TJ. <i>N Engl J Med</i>. 1975;293(5):257 · Pauker SG, Kassirer JP. <i>N Engl J Med</i>. 1980;302:1109-1117 · Jaeschke R, Guyatt GH, Sackett DL. <i>JAMA</i>. 1994;271(9):703-707.</p>'
   ].join('');
@@ -627,7 +625,7 @@
 '<p>It brings together two bodies of evidence with different rules, and the finder always keeps them apart:</p>',
 '<table><tr><th>Source</th><th>What it contains</th></tr>',
 '<tr><td><b>Figures</b></td><td>Original research by the Research Group: PubMed searches by domain, retrieval of the abstract for every declared PMID, and verification of every figure against the actual text of that abstract. Sensitivity, specificity, likelihood ratios, intervals, population and the verbatim quote supporting the datum are all published.</td></tr>',
-'<tr><td><b>Index</b></td><td>Entries whose diagnostic performance is compiled in Steven McGee’s <i>Evidence-Based Physical Diagnosis</i>. We publish the Spanish nomenclature, the description of the maneuver, the reference standard, the qualitative classification and the exact locator — box and page — but <b>not the figures</b>: the compilation is protected work belonging to its author and publisher. The record tells you the sign <i>has been measured</i> and where to read the number.</td></tr></table>',
+'<tr><td><b>McGee 3e</b></td><td>Entries whose diagnostic performance is compiled in Steven McGee’s <i>Evidence-Based Physical Diagnosis</i>. We publish the Spanish nomenclature, the description of the maneuver, the reference standard (when the box states one), the qualitative classification and the exact locator — EBM box and page — to look up the figures in the work. When the primary source publishes likelihood ratios only, sensitivity and specificity are shown as “not published in the source”.</td></tr></table>',
 '<p>The confidence level of each record is <b>computed, never asserted</b>: A when the figure was located verbatim in the primary source, C when the citation was verified but the figures could not be anchored to the abstract. No figure was hand-entered and no reference was written without first being resolved against Crossref or PubMed.</p>',
 '<p class="fuente">Reference work for the index: McGee S. <i>Evidence-Based Physical Diagnosis</i>. 3rd ed. Philadelphia: Elsevier Saunders; 2012. Conceptual framework: Fagan TJ. <i>N Engl J Med</i>. 1975;293(5):257 · Pauker SG, Kassirer JP. <i>N Engl J Med</i>. 1980;302:1109-1117 · Jaeschke R, Guyatt GH, Sackett DL. <i>JAMA</i>. 1994;271(9):703-707.</p>'
   ].join('');

@@ -15,18 +15,21 @@ los mantiene separados mediante el campo `f`:
                 verificación de cada cifra contra el resumen real del PMID). Se
                 publican todas las cifras y la cita textual que las respalda.
 
-  f = "idx"   → 876 hallazgos cuyo rendimiento diagnóstico está compilado en
+  f = "idx"   → hallazgos cuyo rendimiento diagnóstico está compilado en
                 McGee S. «Evidence-Based Physical Diagnosis», 3.ª ed. (Elsevier,
                 2012). Se publica lo que es aportación del proyecto —nomenclatura
-                en español, maniobra, patrón de referencia, veredicto cualitativo—
-                y el localizador exacto (caja y página), pero NO las cifras
-                (Sn, Sp, LR, IC, VPP, kappa): la selección y disposición de esas
-                ~107 tablas, y los LR agrupados por efectos aleatorios, son obra
-                de su autor y su editorial.
+                en español, maniobra, patrón de referencia (cuando la caja lo
+                declara), veredicto cualitativo— y el localizador exacto (caja y
+                página) para consultar la cifra en la obra. Las cifras NO se
+                reproducen: su selección y disposición son compilación del autor.
 
-Si en el futuro se obtiene autorización de Elsevier, basta con cambiar
-PUBLICAR_CIFRAS_MCGEE a True y volver a generar: la app ya sabe mostrar la ficha
-completa para cualquier registro marcado como "full".
+La app ya no muestra avisos de restricción: los registros «idx» se presentan
+como entradas documentadas en la obra (etiqueta «McGee 3e»), con localizador,
+y las cifras que la fuente primaria no publica (p. ej. Sn/Sp cuando el
+artículo solo da LR) aparecen como «No publicado en la fuente».
+
+PUBLICAR_CIFRAS_MCGEE sigue en False: si se obtiene autorización expresa de
+Elsevier, basta con ponerlo en True y volver a generar.
 """
 import argparse, json, re, unicodedata
 from collections import Counter, defaultdict
@@ -382,7 +385,7 @@ def main():
         "n_full": sum(1 for r in recs if r["f"] == "full"),
         "n_idx":  sum(1 for r in recs if r["f"] == "idx"),
         "dom": {d: DOMINIOS.get(d, [d.replace("_", " ").capitalize()] * 2) for d in doms},
-        "version": "1.0", "fecha": a.fecha,
+        "version": "1.1", "fecha": a.fecha,
         "cifras_mcgee": PUBLICAR_CIFRAS_MCGEE,
     }
     out = Path(a.salida); out.parent.mkdir(parents=True, exist_ok=True)

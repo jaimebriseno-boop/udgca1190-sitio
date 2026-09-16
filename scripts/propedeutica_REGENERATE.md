@@ -51,17 +51,25 @@ El generador separa los registros en dos clases mediante el campo `f`:
   la ficha muestra además los **VPP/VPN calculados por el proyecto** a
   prevalencias preprueba supuestas (5 %, 20 % y 50 %), con nota aclaratoria.
 
-- **`f: "idx"`** — los 876 hallazgos cuyo rendimiento diagnóstico está compilado
+- **`f: "idx"`** — los 696 hallazgos cuyo rendimiento diagnóstico está compilado
   en McGee S. *Evidence-Based Physical Diagnosis*, 3.ª ed. (Elsevier, 2012).
   Se publica lo que es aportación del proyecto —nomenclatura en español,
-  descripción de la maniobra, patrón de referencia, clasificación cualitativa—
-  y el **localizador exacto** (caja EBM y página), pero **no las cifras**.
+  descripción de la maniobra, patrón de referencia (cuando la caja lo declara),
+  clasificación cualitativa— y el **localizador exacto** (caja EBM y página)
+  para consultar la cifra en la obra. Las cifras no se reproducen: su selección
+  y disposición son compilación del autor.
 
-  La razón: aunque un dato aislado es un hecho no protegible, la *selección y
-  disposición* de esas ~107 tablas constituye una compilación protegida, y los
-  LR agrupados por efectos aleatorios son cálculo propio del autor. El contenido
-  de este sitio se publica bajo CC BY 4.0, licencia que no podríamos otorgar
-  sobre material de terceros.
+  Desde 2026-09-16 la app **ya no muestra avisos de restricción**: los registros
+  `idx` se presentan como entradas documentadas en la obra (etiqueta «McGee 3e»)
+  y las cifras que la fuente primaria no publica (p. ej. Sn/Sp cuando el
+  artículo solo da LR) aparecen como «No publicado en la fuente».
+
+  Pendientes del libro (no inventables desde el vault): 30 celdas `idx` sin
+  patrón de referencia en las cajas EBM 8-1, 14-1, 16-3, 17-3, 30-2, 31-2 y
+  65-2; el bloque «Patrón de referencia» queda vacío y su localizador es la
+  referencia pendiente. Y 191 registros `full` sin Sn y/o Sp porque el artículo
+  citado solo publica razones de verosimilitud: se muestran explícitamente, sin
+  rellenar con valores no verificados.
 
 Si en el futuro se obtiene **autorización expresa de Elsevier**, basta con poner
 `PUBLICAR_CIFRAS_MCGEE = True` en `scripts/propedeutica_generar_signos.py` y volver a generar: la app
