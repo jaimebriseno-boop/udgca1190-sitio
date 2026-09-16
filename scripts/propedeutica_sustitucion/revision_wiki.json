@@ -3010,18 +3010,162 @@
     },
     "C00638": {
       "valores": {
-        "ordinal": true
-      }
+        "ordinal": false,
+        "c": "Índice cardíaco <2,5 L/min/m² en lesión pulmonar aguda",
+        "ce": "Cardiac index <2.5 L/min/m² in acute lung injury",
+        "pr": "Índice cardíaco medido mediante catéter de arteria pulmonar; umbral <2,5 L/min/m².",
+        "pre": "Pulmonary artery catheter cardiac index <2.5 L/min/m².",
+        "mn": "Evalúe extremidades frías, llenado capilar >2 segundos y moteado de rodillas. Aplique el criterio indicado en el nombre de la ficha.",
+        "pob": "Pacientes con lesión pulmonar aguda, evaluación basal con índice cardíaco disponible",
+        "n": 405,
+        "refs": [
+          {
+            "cita": "Grissom CK, Morris AH, Lanken PN, Ancukiewicz M, Orme JF, Schoenfeld DA, et al. Association of physical examination with pulmonary artery catheter parameters in acute lung injury. Crit Care Med. 2009;37:2720-6.",
+            "pmid": "19885995",
+            "doi": "10.1097/ccm.0b013e3181a59532"
+          }
+        ],
+        "base": "articulo",
+        "lp": null,
+        "ln": null,
+        "lpns": false,
+        "lnns": false,
+        "lpic": null,
+        "lnic": null,
+        "apendice": null,
+        "s": "Ausencia de los tres hallazgos de hipoperfusión (ninguno presente)",
+        "se": "No peripheral hypoperfusion findings present",
+        "sn": null,
+        "sp": null,
+        "vpp": null,
+        "vpn": null,
+        "tabla2x2": {
+          "vp": 16,
+          "fp": 289,
+          "fn": 17,
+          "vn": 83
+        },
+        "nota_datos": "Tabla 2: se considera positiva la ausencia de los tres hallazgos. Los porcentajes y LR se calculan invirtiendo la clasificación del umbral «al menos uno». La probabilidad de índice cardíaco bajo disminuye cuando no hay hallazgos.",
+        "nota_datos_en": "Table 2: the positive pattern is absence of all three findings. Percentages and LRs are calculated by reversing the any-finding classification. No findings lowers the probability of a low cardiac index."
+      },
+      "revision": "Cotejo directo de tablas 1 y 2 de Grissom 2009: corrige umbrales binarios y clasificación de la ausencia; sustituye cifras incompatibles de la extracción de la síntesis.",
+      "fuentes_verificacion": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4900681/",
+          "pmid": "19885995",
+          "tablas": [
+            1,
+            2
+          ],
+          "sha256_xml": "f54bdda6acae2029f353219a12e8220dd612e734e2d6a095d6b966ad8abb8e2c"
+        }
+      ]
     },
     "C00639": {
       "valores": {
-        "ordinal": true
-      }
+        "ordinal": false,
+        "c": "Índice cardíaco <2,5 L/min/m² en lesión pulmonar aguda",
+        "ce": "Cardiac index <2.5 L/min/m² in acute lung injury",
+        "pr": "Índice cardíaco medido mediante catéter de arteria pulmonar; umbral <2,5 L/min/m².",
+        "pre": "Pulmonary artery catheter cardiac index <2.5 L/min/m².",
+        "mn": "Evalúe extremidades frías, llenado capilar >2 segundos y moteado de rodillas. Aplique el criterio indicado en el nombre de la ficha.",
+        "pob": "Pacientes con lesión pulmonar aguda, evaluación basal con índice cardíaco disponible",
+        "n": 405,
+        "refs": [
+          {
+            "cita": "Grissom CK, Morris AH, Lanken PN, Ancukiewicz M, Orme JF, Schoenfeld DA, et al. Association of physical examination with pulmonary artery catheter parameters in acute lung injury. Crit Care Med. 2009;37:2720-6.",
+            "pmid": "19885995",
+            "doi": "10.1097/ccm.0b013e3181a59532"
+          }
+        ],
+        "base": "articulo",
+        "lp": null,
+        "ln": null,
+        "lpns": false,
+        "lnns": false,
+        "lpic": null,
+        "lnic": null,
+        "apendice": null,
+        "s": "Al menos uno de tres hallazgos de hipoperfusión periférica",
+        "se": "At least one of three peripheral hypoperfusion findings",
+        "sn": 52,
+        "sp": 78,
+        "vpp": 17,
+        "vpn": 95,
+        "tabla2x2": {
+          "vp": 17,
+          "fp": 83,
+          "fn": 16,
+          "vn": 289
+        },
+        "nota_datos": "Tabla 2: el umbral es al menos un hallazgo, no exactamente uno. Sensibilidad, especificidad y valores predictivos conservan el redondeo publicado. LR calculadas con los conteos.",
+        "nota_datos_en": "Table 2: the threshold is at least one finding, not exactly one. Sensitivity, specificity and predictive values retain the published rounding. LRs are calculated from cell counts."
+      },
+      "revision": "Cotejo directo de tablas 1 y 2 de Grissom 2009: corrige umbrales binarios y clasificación de la ausencia; sustituye cifras incompatibles de la extracción de la síntesis.",
+      "fuentes_verificacion": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4900681/",
+          "pmid": "19885995",
+          "tablas": [
+            1,
+            2
+          ],
+          "sha256_xml": "f54bdda6acae2029f353219a12e8220dd612e734e2d6a095d6b966ad8abb8e2c"
+        }
+      ]
     },
     "C00640": {
       "valores": {
-        "ordinal": true
-      }
+        "ordinal": false,
+        "c": "Índice cardíaco <2,5 L/min/m² en lesión pulmonar aguda",
+        "ce": "Cardiac index <2.5 L/min/m² in acute lung injury",
+        "pr": "Índice cardíaco medido mediante catéter de arteria pulmonar; umbral <2,5 L/min/m².",
+        "pre": "Pulmonary artery catheter cardiac index <2.5 L/min/m².",
+        "mn": "Evalúe extremidades frías, llenado capilar >2 segundos y moteado de rodillas. Aplique el criterio indicado en el nombre de la ficha.",
+        "pob": "Pacientes con lesión pulmonar aguda, evaluación basal con índice cardíaco disponible",
+        "n": 405,
+        "refs": [
+          {
+            "cita": "Grissom CK, Morris AH, Lanken PN, Ancukiewicz M, Orme JF, Schoenfeld DA, et al. Association of physical examination with pulmonary artery catheter parameters in acute lung injury. Crit Care Med. 2009;37:2720-6.",
+            "pmid": "19885995",
+            "doi": "10.1097/ccm.0b013e3181a59532"
+          }
+        ],
+        "base": "articulo",
+        "lp": null,
+        "ln": null,
+        "lpns": false,
+        "lnns": false,
+        "lpic": null,
+        "lnic": null,
+        "apendice": null,
+        "s": "Los tres hallazgos de hipoperfusión periférica presentes",
+        "se": "All three peripheral hypoperfusion findings present",
+        "sn": 12,
+        "sp": 98,
+        "vpp": 40,
+        "vpn": 93,
+        "tabla2x2": {
+          "vp": 4,
+          "fp": 6,
+          "fn": 29,
+          "vn": 366
+        },
+        "nota_datos": "Tabla 1: prueba positiva si están presentes los tres hallazgos, negativa si falta cualquiera. Sensibilidad, especificidad y valores predictivos conservan el redondeo publicado. LR calculadas con los conteos.",
+        "nota_datos_en": "Table 1: positive requires all three findings; negative means at least one is absent. Sensitivity, specificity and predictive values retain the published rounding. LRs are calculated from cell counts."
+      },
+      "revision": "Cotejo directo de tablas 1 y 2 de Grissom 2009: corrige umbrales binarios y clasificación de la ausencia; sustituye cifras incompatibles de la extracción de la síntesis.",
+      "fuentes_verificacion": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4900681/",
+          "pmid": "19885995",
+          "tablas": [
+            1,
+            2
+          ],
+          "sha256_xml": "f54bdda6acae2029f353219a12e8220dd612e734e2d6a095d6b966ad8abb8e2c"
+        }
+      ]
     },
     "C00651": {
       "valores": {
@@ -3165,18 +3309,162 @@
     },
     "C00868": {
       "valores": {
-        "ordinal": true
-      }
+        "ordinal": false,
+        "c": "Índice cardíaco <2,5 L/min/m² en lesión pulmonar aguda",
+        "ce": "Cardiac index <2.5 L/min/m² in acute lung injury",
+        "pr": "Índice cardíaco medido mediante catéter de arteria pulmonar; umbral <2,5 L/min/m².",
+        "pre": "Pulmonary artery catheter cardiac index <2.5 L/min/m².",
+        "mn": "Evalúe extremidades frías, llenado capilar >2 segundos y moteado de rodillas. Aplique el criterio indicado en el nombre de la ficha.",
+        "pob": "Pacientes con lesión pulmonar aguda, evaluación basal con índice cardíaco disponible",
+        "n": 405,
+        "refs": [
+          {
+            "cita": "Grissom CK, Morris AH, Lanken PN, Ancukiewicz M, Orme JF, Schoenfeld DA, et al. Association of physical examination with pulmonary artery catheter parameters in acute lung injury. Crit Care Med. 2009;37:2720-6.",
+            "pmid": "19885995",
+            "doi": "10.1097/ccm.0b013e3181a59532"
+          }
+        ],
+        "base": "articulo",
+        "lp": null,
+        "ln": null,
+        "lpns": false,
+        "lnns": false,
+        "lpic": null,
+        "lnic": null,
+        "apendice": null,
+        "s": "Ausencia de los tres hallazgos de hipoperfusión (ninguno presente)",
+        "se": "No peripheral hypoperfusion findings present",
+        "sn": null,
+        "sp": null,
+        "vpp": null,
+        "vpn": null,
+        "tabla2x2": {
+          "vp": 16,
+          "fp": 289,
+          "fn": 17,
+          "vn": 83
+        },
+        "nota_datos": "Tabla 2: se considera positiva la ausencia de los tres hallazgos. Los porcentajes y LR se calculan invirtiendo la clasificación del umbral «al menos uno». La probabilidad de índice cardíaco bajo disminuye cuando no hay hallazgos.",
+        "nota_datos_en": "Table 2: the positive pattern is absence of all three findings. Percentages and LRs are calculated by reversing the any-finding classification. No findings lowers the probability of a low cardiac index."
+      },
+      "revision": "Cotejo directo de tablas 1 y 2 de Grissom 2009: corrige umbrales binarios y clasificación de la ausencia; sustituye cifras incompatibles de la extracción de la síntesis.",
+      "fuentes_verificacion": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4900681/",
+          "pmid": "19885995",
+          "tablas": [
+            1,
+            2
+          ],
+          "sha256_xml": "f54bdda6acae2029f353219a12e8220dd612e734e2d6a095d6b966ad8abb8e2c"
+        }
+      ]
     },
     "C00869": {
       "valores": {
-        "ordinal": true
-      }
+        "ordinal": false,
+        "c": "Índice cardíaco <2,5 L/min/m² en lesión pulmonar aguda",
+        "ce": "Cardiac index <2.5 L/min/m² in acute lung injury",
+        "pr": "Índice cardíaco medido mediante catéter de arteria pulmonar; umbral <2,5 L/min/m².",
+        "pre": "Pulmonary artery catheter cardiac index <2.5 L/min/m².",
+        "mn": "Evalúe extremidades frías, llenado capilar >2 segundos y moteado de rodillas. Aplique el criterio indicado en el nombre de la ficha.",
+        "pob": "Pacientes con lesión pulmonar aguda, evaluación basal con índice cardíaco disponible",
+        "n": 405,
+        "refs": [
+          {
+            "cita": "Grissom CK, Morris AH, Lanken PN, Ancukiewicz M, Orme JF, Schoenfeld DA, et al. Association of physical examination with pulmonary artery catheter parameters in acute lung injury. Crit Care Med. 2009;37:2720-6.",
+            "pmid": "19885995",
+            "doi": "10.1097/ccm.0b013e3181a59532"
+          }
+        ],
+        "base": "articulo",
+        "lp": null,
+        "ln": null,
+        "lpns": false,
+        "lnns": false,
+        "lpic": null,
+        "lnic": null,
+        "apendice": null,
+        "s": "Al menos uno de tres hallazgos de hipoperfusión periférica",
+        "se": "At least one of three peripheral hypoperfusion findings",
+        "sn": 52,
+        "sp": 78,
+        "vpp": 17,
+        "vpn": 95,
+        "tabla2x2": {
+          "vp": 17,
+          "fp": 83,
+          "fn": 16,
+          "vn": 289
+        },
+        "nota_datos": "Tabla 2: el umbral es al menos un hallazgo, no exactamente uno. Sensibilidad, especificidad y valores predictivos conservan el redondeo publicado. LR calculadas con los conteos.",
+        "nota_datos_en": "Table 2: the threshold is at least one finding, not exactly one. Sensitivity, specificity and predictive values retain the published rounding. LRs are calculated from cell counts."
+      },
+      "revision": "Cotejo directo de tablas 1 y 2 de Grissom 2009: corrige umbrales binarios y clasificación de la ausencia; sustituye cifras incompatibles de la extracción de la síntesis.",
+      "fuentes_verificacion": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4900681/",
+          "pmid": "19885995",
+          "tablas": [
+            1,
+            2
+          ],
+          "sha256_xml": "f54bdda6acae2029f353219a12e8220dd612e734e2d6a095d6b966ad8abb8e2c"
+        }
+      ]
     },
     "C00870": {
       "valores": {
-        "ordinal": true
-      }
+        "ordinal": false,
+        "c": "Índice cardíaco <2,5 L/min/m² en lesión pulmonar aguda",
+        "ce": "Cardiac index <2.5 L/min/m² in acute lung injury",
+        "pr": "Índice cardíaco medido mediante catéter de arteria pulmonar; umbral <2,5 L/min/m².",
+        "pre": "Pulmonary artery catheter cardiac index <2.5 L/min/m².",
+        "mn": "Evalúe extremidades frías, llenado capilar >2 segundos y moteado de rodillas. Aplique el criterio indicado en el nombre de la ficha.",
+        "pob": "Pacientes con lesión pulmonar aguda, evaluación basal con índice cardíaco disponible",
+        "n": 405,
+        "refs": [
+          {
+            "cita": "Grissom CK, Morris AH, Lanken PN, Ancukiewicz M, Orme JF, Schoenfeld DA, et al. Association of physical examination with pulmonary artery catheter parameters in acute lung injury. Crit Care Med. 2009;37:2720-6.",
+            "pmid": "19885995",
+            "doi": "10.1097/ccm.0b013e3181a59532"
+          }
+        ],
+        "base": "articulo",
+        "lp": null,
+        "ln": null,
+        "lpns": false,
+        "lnns": false,
+        "lpic": null,
+        "lnic": null,
+        "apendice": null,
+        "s": "Los tres hallazgos de hipoperfusión periférica presentes",
+        "se": "All three peripheral hypoperfusion findings present",
+        "sn": 12,
+        "sp": 98,
+        "vpp": 40,
+        "vpn": 93,
+        "tabla2x2": {
+          "vp": 4,
+          "fp": 6,
+          "fn": 29,
+          "vn": 366
+        },
+        "nota_datos": "Tabla 1: prueba positiva si están presentes los tres hallazgos, negativa si falta cualquiera. Sensibilidad, especificidad y valores predictivos conservan el redondeo publicado. LR calculadas con los conteos.",
+        "nota_datos_en": "Table 1: positive requires all three findings; negative means at least one is absent. Sensitivity, specificity and predictive values retain the published rounding. LRs are calculated from cell counts."
+      },
+      "revision": "Cotejo directo de tablas 1 y 2 de Grissom 2009: corrige umbrales binarios y clasificación de la ausencia; sustituye cifras incompatibles de la extracción de la síntesis.",
+      "fuentes_verificacion": [
+        {
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4900681/",
+          "pmid": "19885995",
+          "tablas": [
+            1,
+            2
+          ],
+          "sha256_xml": "f54bdda6acae2029f353219a12e8220dd612e734e2d6a095d6b966ad8abb8e2c"
+        }
+      ]
     },
     "C00742": {
       "valores": {
@@ -3248,6 +3536,553 @@
         ]
       },
       "revision_referencias": "Bibliografía original capítulo 35, referencias 8"
+    },
+    "C00636": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Kaplan LJ, McPartland K, Santora TA, Trooskin SZ. Start with a subjective assessment of skin temperature to identify hypoperfusion in intensive care unit patients. J Trauma. 2001;50:620-7; discussion 627-8.",
+            "pmid": "11303155",
+            "doi": "10.1097/00005373-200104000-00005"
+          }
+        ],
+        "c": "Índice cardíaco <3 L/min/m² en cuidados intensivos",
+        "ce": "Cardiac index <3 L/min/m² in intensive care",
+        "pr": "Índice cardíaco <3 L/min/m² medido mediante catéter de arteria pulmonar.",
+        "pre": "Pulmonary artery catheter cardiac index <3 L/min/m².",
+        "mn": "Palpe la temperatura de ambas piernas. Se considera positivo que estén frías, con brazos fríos o calientes; se excluyeron pacientes con enfermedad vascular periférica conocida."
+      },
+      "revision": "Cita recuperada de la tabla 52-2, referencia 32, y metadatos PubMed. Cifras conservadas de la síntesis; no se afirma cotejo de la tabla del artículo.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch052_peripheral_vascular_disease/ch052_s01_introducción.md"
+          ],
+          "pmid": "11303155",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11303155/",
+          "alcance": "bibliografía y resumen"
+        }
+      ]
+    },
+    "C00637": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Kaplan LJ, McPartland K, Santora TA, Trooskin SZ. Start with a subjective assessment of skin temperature to identify hypoperfusion in intensive care unit patients. J Trauma. 2001;50:620-7; discussion 627-8.",
+            "pmid": "11303155",
+            "doi": "10.1097/00005373-200104000-00005"
+          }
+        ],
+        "c": "Índice cardíaco <3 L/min/m² en pacientes con sepsis",
+        "ce": "Cardiac index <3 L/min/m² in patients with sepsis",
+        "pr": "Índice cardíaco <3 L/min/m² medido mediante catéter de arteria pulmonar.",
+        "pre": "Pulmonary artery catheter cardiac index <3 L/min/m².",
+        "mn": "Palpe la temperatura de ambas piernas. Se considera positivo que estén frías, con brazos fríos o calientes; se excluyeron pacientes con enfermedad vascular periférica conocida."
+      },
+      "revision": "Cita recuperada de la tabla 52-2, referencia 32, y metadatos PubMed. Cifras conservadas de la síntesis; no se afirma cotejo de la tabla del artículo.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch052_peripheral_vascular_disease/ch052_s01_introducción.md"
+          ],
+          "pmid": "11303155",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11303155/",
+          "alcance": "bibliografía y resumen"
+        }
+      ]
+    },
+    "C00867": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Kaplan LJ, McPartland K, Santora TA, Trooskin SZ. Start with a subjective assessment of skin temperature to identify hypoperfusion in intensive care unit patients. J Trauma. 2001;50:620-7; discussion 627-8.",
+            "pmid": "11303155",
+            "doi": "10.1097/00005373-200104000-00005"
+          }
+        ],
+        "c": "Índice cardíaco <3 L/min/m² en cuidados intensivos",
+        "ce": "Cardiac index <3 L/min/m² in intensive care",
+        "pr": "Índice cardíaco <3 L/min/m² medido mediante catéter de arteria pulmonar.",
+        "pre": "Pulmonary artery catheter cardiac index <3 L/min/m².",
+        "mn": "Palpe la temperatura de ambas piernas. Se considera positivo que estén frías, con brazos fríos o calientes; se excluyeron pacientes con enfermedad vascular periférica conocida.",
+        "s": "Ambas piernas frías, para índice cardíaco bajo en cuidados intensivos",
+        "se": "Both legs cool, detecting low cardiac index in ICU patients"
+      },
+      "revision": "Cita recuperada de la tabla 52-2, referencia 32, y metadatos PubMed. Cifras conservadas de la síntesis; no se afirma cotejo de la tabla del artículo.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch052_peripheral_vascular_disease/ch052_s01_introducción.md"
+          ],
+          "pmid": "11303155",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11303155/",
+          "alcance": "bibliografía y resumen"
+        }
+      ]
+    },
+    "C00871": {
+      "valores": {
+        "s": "Aumento de presión de pulso ≥12% tras elevar pasivamente las piernas",
+        "se": "Pulse pressure increase ≥12% after passive leg raising",
+        "c": "Respuesta a expansión con líquidos",
+        "ce": "Fluid responsiveness",
+        "sn": 60,
+        "sp": 85,
+        "lp": null,
+        "ln": null,
+        "lpic": null,
+        "lnic": null,
+        "lpns": false,
+        "lnns": false,
+        "refs": [
+          {
+            "cita": "Monnet X, Rienzo M, Osman D, Anguel N, Richard C, Pinsky MR, et al. Passive leg raising predicts fluid responsiveness in the critically ill. Crit Care Med. 2006;34:1402-7.",
+            "pmid": "16540963",
+            "doi": "10.1097/01.CCM.0000215453.11735.06"
+          }
+        ],
+        "base": "articulo",
+        "pob": "Pacientes con ventilación mecánica; 31 tenían respiración espontánea o arritmias",
+        "n": 71,
+        "pr": "Aumento ≥15% del flujo aórtico por Doppler esofágico tras 500 mL de NaCl al 0,9% durante 10 minutos.",
+        "pre": "At least 15% increase in esophageal Doppler aortic flow after 500 mL of 0.9% NaCl over 10 minutes.",
+        "mn": "Compare la presión de pulso arterial basal con la obtenida tras elevar pasivamente las piernas a 45°. La prueba es positiva si aumenta ≥12%.",
+        "nota_datos": "Estimación puntual del estudio de Monnet (2006), verificada en su resumen. Sustituye el rango agrupado cuya atribución no se pudo establecer. Evalúa el cambio tras elevar las piernas; no la variación de presión de pulso durante el ciclo respiratorio.",
+        "nota_datos_en": "Point estimate from the Monnet (2006) study, verified in its abstract. Replaces a pooled range whose attribution could not be established. It evaluates the change after leg raising, not respiratory pulse pressure variation."
+      },
+      "revision": "Se corrige la maniobra y se usa una estimación primaria identificable. No se trasladan 70/92 de Lafanechère, que corresponden a variación respiratoria de PP.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s07_e_neurologic_findings.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s05_c_pulse_pressure_changes_with_leg_elevation.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s02_b_assessment_of_peripheral_perfusion_in_the_icu.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s06_d_lung_findings.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s01_introducción.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s03_c_pulse_pressure_changes_with_leg_elevation.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s04_b_assessment_of_peripheral_perfusion_in_the_icu.md"
+          ],
+          "pmid": "16540963",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16540963/",
+          "alcance": "resumen original",
+          "sha256_xml": "5dfa6c924ad3b337fc78b009b3d58b54f85f1705415adfadcf85e632efef218b"
+        }
+      ]
+    },
+    "C00872": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Gilbert R, Ashutosh K, Auchincloss JH, Rana S, Peppi D. Prospective study of controlled oxygen therapy. Poor prognosis of patients with asynchronous breathing. Chest. 1977;71:456-62.",
+            "pmid": "856543",
+            "doi": "10.1378/chest.71.4.456"
+          }
+        ],
+        "c": "Intubación o muerte en exacerbación de EPOC",
+        "ce": "Intubation or death during COPD exacerbation",
+        "pr": "Necesidad de intubación y ventilación asistida o muerte durante la hospitalización.",
+        "pre": "Need for intubation and assisted ventilation or in-hospital death.",
+        "mn": "Observe el abdomen durante la espiración: un movimiento brusco hacia dentro seguido de otro hacia fuera corresponde al patrón asincrónico descrito.",
+        "pob": "32 pacientes, 36 episodios de insuficiencia respiratoria aguda; la unidad de análisis fue el episodio",
+        "n": 36
+      },
+      "revision": "Capítulo 18, referencia 54: idénticos Sn 64, Sp 80, LR+ 3,2 y LR− NS. Se corrige la descripción espiratoria y se explicita el desenlace pronóstico.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch018_respiratory_rate_and_abnormal_breathing_patterns/ch018_s01_introducción.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch018_respiratory_rate_and_abnormal_breathing_patterns/ch018_s02_2_clinical_significance.md"
+          ],
+          "pmid": "856543",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/856543/",
+          "alcance": "bibliografía y resumen"
+        }
+      ]
+    },
+    "C00274": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Brunel W, Coleman DL, Schwartz DE, Peper E, Cohen NH. Assessment of Routine Chest Roentgenograms and the Physical Examination to Confirm Endotracheal Tube Position. Chest. 1989;96:1043-1045. doi:10.1378/chest.96.5.1043 PMID: 2509149.",
+            "pmid": "2509149",
+            "doi": "10.1378/chest.96.5.1043"
+          },
+          {
+            "cita": "Ezri T, Khazin V, Szmuk P, Medalion B, Shechter P, Priel I, et al. Use of the Rapiscope vs chest auscultation for detection of accidental bronchial intubation in non-obese patients undergoing laparoscopic cholecystectomy. Journal of Clinical Anesthesia. 2006;18:118-123. doi:10.1016/j.jclinane.2005.08.008 PMID: 16563329.",
+            "pmid": "16563329",
+            "doi": "10.1016/j.jclinane.2005.08.008"
+          }
+        ],
+        "c": "Intubación del bronquio principal derecho",
+        "ce": "Right mainstem bronchus intubation",
+        "pr": "Confirmación instrumental de la posición del tubo endotraqueal (radiografía de tórax o broncoscopia según el estudio).",
+        "pre": "Instrumental confirmation of endotracheal tube position (chest radiography or bronchoscopy, depending on the study)."
+      },
+      "revision": "Se recuperan las referencias de la misma estimación en tabla 28-1; se corrige el desenlace, que no es EPOC.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s01_introducción.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s02_1_bronchophony.md"
+          ],
+          "pmids": [
+            "2509149",
+            "16563329"
+          ],
+          "alcance": "tabla y bibliografía de la síntesis; resúmenes PubMed"
+        }
+      ]
+    },
+    "C00873": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Brunel W, Coleman DL, Schwartz DE, Peper E, Cohen NH. Assessment of Routine Chest Roentgenograms and the Physical Examination to Confirm Endotracheal Tube Position. Chest. 1989;96:1043-1045. doi:10.1378/chest.96.5.1043 PMID: 2509149.",
+            "pmid": "2509149",
+            "doi": "10.1378/chest.96.5.1043"
+          },
+          {
+            "cita": "Ezri T, Khazin V, Szmuk P, Medalion B, Shechter P, Priel I, et al. Use of the Rapiscope vs chest auscultation for detection of accidental bronchial intubation in non-obese patients undergoing laparoscopic cholecystectomy. Journal of Clinical Anesthesia. 2006;18:118-123. doi:10.1016/j.jclinane.2005.08.008 PMID: 16563329.",
+            "pmid": "16563329",
+            "doi": "10.1016/j.jclinane.2005.08.008"
+          }
+        ],
+        "c": "Intubación del bronquio principal derecho",
+        "ce": "Right mainstem bronchus intubation",
+        "pr": "Confirmación instrumental de la posición del tubo endotraqueal (radiografía de tórax o broncoscopia según el estudio).",
+        "pre": "Instrumental confirmation of endotracheal tube position (chest radiography or bronchoscopy, depending on the study)."
+      },
+      "revision": "Se recuperan las referencias de la misma estimación en tabla 28-1; se corrige el desenlace, que no es EPOC.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s01_introducción.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s02_1_bronchophony.md"
+          ],
+          "pmids": [
+            "2509149",
+            "16563329"
+          ],
+          "alcance": "tabla y bibliografía de la síntesis; resúmenes PubMed"
+        }
+      ]
+    },
+    "C00271": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Lichtenstein D, Goldstein I, Mourgeon E, Cluzel P, Grenier P, Rouby JJ. Comparative Diagnostic Performances of Auscultation, Chest Radiography, and Lung Ultrasonography in Acute Respiratory Distress Syndrome. Anesthesiology. 2004;100:9-15. doi:10.1097/00000542-200401000-00006 PMID: 14695718.",
+            "pmid": "14695718",
+            "doi": "10.1097/00000542-200401000-00006"
+          }
+        ],
+        "c": "Derrame pleural en pacientes ventilados con SDRA",
+        "ce": "Pleural effusion in ventilated patients with ARDS",
+        "pr": "Tomografía computarizada de tórax.",
+        "pre": "Chest computed tomography."
+      },
+      "revision": "Se recupera la referencia de idénticas cifras en tabla 28-1 y se corrige el desenlace, que no es EPOC.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s01_introducción.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s02_1_bronchophony.md"
+          ],
+          "pmid": "14695718",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/14695718/",
+          "alcance": "tabla y bibliografía de la síntesis; resumen PubMed"
+        }
+      ]
+    },
+    "C00874": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Lichtenstein D, Goldstein I, Mourgeon E, Cluzel P, Grenier P, Rouby JJ. Comparative Diagnostic Performances of Auscultation, Chest Radiography, and Lung Ultrasonography in Acute Respiratory Distress Syndrome. Anesthesiology. 2004;100:9-15. doi:10.1097/00000542-200401000-00006 PMID: 14695718.",
+            "pmid": "14695718",
+            "doi": "10.1097/00000542-200401000-00006"
+          }
+        ],
+        "c": "Derrame pleural en pacientes ventilados con SDRA",
+        "ce": "Pleural effusion in ventilated patients with ARDS",
+        "pr": "Tomografía computarizada de tórax.",
+        "pre": "Chest computed tomography."
+      },
+      "revision": "Se recupera la referencia de idénticas cifras en tabla 28-1 y se corrige el desenlace, que no es EPOC.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s01_introducción.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s02_1_bronchophony.md"
+          ],
+          "pmid": "14695718",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/14695718/",
+          "alcance": "tabla y bibliografía de la síntesis; resumen PubMed"
+        }
+      ]
+    },
+    "C00154": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Tokuda Y, Nakazato N, Stein GH. Pupillary evaluation for differential diagnosis of coma. Postgrad Med J. 2003;79:49-51.",
+            "pmid": "12566553",
+            "doi": "10.1136/pmj.79.927.49"
+          }
+        ],
+        "base": "articulo",
+        "c": "Lesión estructural intracraneal en pacientes en coma",
+        "ce": "Structural intracranial lesion in comatose patients",
+        "pr": "Clasificación etiológica por dos investigadores con criterios predeterminados, evaluación clínica, pruebas de laboratorio e imagen cuando estaba indicada y seguimiento de un año.",
+        "pre": "Etiologic adjudication by two investigators using prespecified criteria, clinical and laboratory evaluation, imaging when indicated and one-year follow-up.",
+        "pob": "Pacientes en coma atendidos en urgencias: 46 de causa estructural y 69 de causa metabólica",
+        "n": 115,
+        "vpp": 86,
+        "vpn": 70,
+        "snic": "30–48",
+        "spic": "92–99",
+        "lp": 9,
+        "ln": null,
+        "lpic": null,
+        "lnic": null,
+        "tabla2x2": {
+          "vp": 18,
+          "fp": 3,
+          "fn": 28,
+          "vn": 66
+        },
+        "nota_datos": "Tablas 1 y 3: se conservan los porcentajes y LR+ publicados; LR− calculada con los conteos. Los valores predictivos corresponden a esta cohorte, con 40% de coma estructural.",
+        "nota_datos_en": "Tables 1 and 3: published percentages and LR+ are retained; LR− is calculated from cell counts. Predictive values refer to this cohort, with 40% structural coma."
+      },
+      "revision": "Se cotejan las tablas 1 y 3 del artículo original (copia pública): valores predictivos publicados, conteos y umbrales.",
+      "fuentes_verificacion": [
+        {
+          "url": "https://www.researchgate.net/publication/10917590_Pupillary_evaluation_for_differential_diagnosis_of_coma",
+          "doi": "10.1136/pmj.79.927.49",
+          "pmid": "12566553",
+          "tablas": [
+            1,
+            3
+          ],
+          "alcance": "Texto del artículo y tablas 1 y 3 indexados por búsqueda web. La descarga con Jina devolvió un control CAPTCHA; no se usó como evidencia.",
+          "datos_verificados": {
+            "estructural": 46,
+            "metabolico": 69,
+            "anisocoria_estructural": 18,
+            "anisocoria_metabolico": 3,
+            "sin_reflejo_estructural": 38,
+            "sin_reflejo_metabolico": 16,
+            "tabla3_vpp_vpn_anisocoria": [
+              86,
+              70
+            ],
+            "tabla3_vpp_vpn_sin_reflejo": [
+              70,
+              87
+            ]
+          }
+        }
+      ]
+    },
+    "C00155": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Tokuda Y, Nakazato N, Stein GH. Pupillary evaluation for differential diagnosis of coma. Postgrad Med J. 2003;79:49-51.",
+            "pmid": "12566553",
+            "doi": "10.1136/pmj.79.927.49"
+          }
+        ],
+        "base": "articulo",
+        "c": "Lesión estructural intracraneal en pacientes en coma",
+        "ce": "Structural intracranial lesion in comatose patients",
+        "pr": "Clasificación etiológica por dos investigadores con criterios predeterminados, evaluación clínica, pruebas de laboratorio e imagen cuando estaba indicada y seguimiento de un año.",
+        "pre": "Etiologic adjudication by two investigators using prespecified criteria, clinical and laboratory evaluation, imaging when indicated and one-year follow-up.",
+        "pob": "Pacientes en coma atendidos en urgencias: 46 de causa estructural y 69 de causa metabólica",
+        "n": 115,
+        "vpp": 70,
+        "vpn": 87,
+        "snic": "76–90",
+        "spic": "69–85",
+        "lp": 3.56,
+        "ln": null,
+        "lpic": null,
+        "lnic": null,
+        "tabla2x2": {
+          "vp": 38,
+          "fp": 16,
+          "fn": 8,
+          "vn": 53
+        },
+        "nota_datos": "Tablas 1 y 3: se conservan los porcentajes y LR+ publicados; LR− calculada con los conteos. Los valores predictivos corresponden a esta cohorte, con 40% de coma estructural.",
+        "nota_datos_en": "Tables 1 and 3: published percentages and LR+ are retained; LR− is calculated from cell counts. Predictive values refer to this cohort, with 40% structural coma."
+      },
+      "revision": "Se cotejan las tablas 1 y 3 del artículo original (copia pública): valores predictivos publicados, conteos y umbrales.",
+      "fuentes_verificacion": [
+        {
+          "url": "https://www.researchgate.net/publication/10917590_Pupillary_evaluation_for_differential_diagnosis_of_coma",
+          "doi": "10.1136/pmj.79.927.49",
+          "pmid": "12566553",
+          "tablas": [
+            1,
+            3
+          ],
+          "alcance": "Texto del artículo y tablas 1 y 3 indexados por búsqueda web. La descarga con Jina devolvió un control CAPTCHA; no se usó como evidencia.",
+          "datos_verificados": {
+            "estructural": 46,
+            "metabolico": 69,
+            "anisocoria_estructural": 18,
+            "anisocoria_metabolico": 3,
+            "sin_reflejo_estructural": 38,
+            "sin_reflejo_metabolico": 16,
+            "tabla3_vpp_vpn_anisocoria": [
+              86,
+              70
+            ],
+            "tabla3_vpp_vpn_sin_reflejo": [
+              70,
+              87
+            ]
+          }
+        }
+      ]
+    },
+    "C00875": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Tokuda Y, Nakazato N, Stein GH. Pupillary evaluation for differential diagnosis of coma. Postgrad Med J. 2003;79:49-51.",
+            "pmid": "12566553",
+            "doi": "10.1136/pmj.79.927.49"
+          }
+        ],
+        "base": "articulo",
+        "c": "Lesión estructural intracraneal en pacientes en coma",
+        "ce": "Structural intracranial lesion in comatose patients",
+        "pr": "Clasificación etiológica por dos investigadores con criterios predeterminados, evaluación clínica, pruebas de laboratorio e imagen cuando estaba indicada y seguimiento de un año.",
+        "pre": "Etiologic adjudication by two investigators using prespecified criteria, clinical and laboratory evaluation, imaging when indicated and one-year follow-up.",
+        "pob": "Pacientes en coma atendidos en urgencias: 46 de causa estructural y 69 de causa metabólica",
+        "n": 115,
+        "vpp": 86,
+        "vpn": 70,
+        "snic": "30–48",
+        "spic": "92–99",
+        "lp": 9,
+        "ln": null,
+        "lpic": null,
+        "lnic": null,
+        "tabla2x2": {
+          "vp": 18,
+          "fp": 3,
+          "fn": 28,
+          "vn": 66
+        },
+        "nota_datos": "Tablas 1 y 3: se conservan los porcentajes y LR+ publicados; LR− calculada con los conteos. Los valores predictivos corresponden a esta cohorte, con 40% de coma estructural.",
+        "nota_datos_en": "Tables 1 and 3: published percentages and LR+ are retained; LR− is calculated from cell counts. Predictive values refer to this cohort, with 40% structural coma.",
+        "s": "Anisocoria >1 mm en el paciente en coma",
+        "se": "Anisocoria >1 mm in comatose patients",
+        "mn": "Compare el diámetro pupilar de ambos ojos y mida la diferencia; el umbral estudiado es mayor de 1 mm."
+      },
+      "revision": "Se cotejan las tablas 1 y 3 del artículo original (copia pública): valores predictivos publicados, conteos y umbrales.",
+      "fuentes_verificacion": [
+        {
+          "url": "https://www.researchgate.net/publication/10917590_Pupillary_evaluation_for_differential_diagnosis_of_coma",
+          "doi": "10.1136/pmj.79.927.49",
+          "pmid": "12566553",
+          "tablas": [
+            1,
+            3
+          ],
+          "alcance": "Texto del artículo y tablas 1 y 3 indexados por búsqueda web. La descarga con Jina devolvió un control CAPTCHA; no se usó como evidencia.",
+          "datos_verificados": {
+            "estructural": 46,
+            "metabolico": 69,
+            "anisocoria_estructural": 18,
+            "anisocoria_metabolico": 3,
+            "sin_reflejo_estructural": 38,
+            "sin_reflejo_metabolico": 16,
+            "tabla3_vpp_vpn_anisocoria": [
+              86,
+              70
+            ],
+            "tabla3_vpp_vpn_sin_reflejo": [
+              70,
+              87
+            ]
+          }
+        }
+      ]
+    },
+    "C00876": {
+      "valores": {
+        "refs": [
+          {
+            "cita": "Poungvarin N, Viriyavejakul A, Komontri C. Siriraj stroke score and validation study to distinguish supratentorial intracerebral haemorrhage from infarction. BMJ. 1991;302:1565-1567. doi:10.1136/bmj.302.6792.1565 PMID: 1855041.",
+            "pmid": "1855041",
+            "doi": "10.1136/bmj.302.6792.1565"
+          },
+          {
+            "cita": "Harrison MJ. Clinical distinction of cerebral haemorrhage and cerebral infarction. Postgraduate Medical Journal. 1980;56:629-632. doi:10.1136/pgmj.56.659.629 PMID: 7465470.",
+            "pmid": "7465470",
+            "doi": "10.1136/pgmj.56.659.629"
+          },
+          {
+            "cita": "Efstathiou SP, Tsioulos DI, Zacharos ID, Tsiakou AG, Mitromaras AG, Mastorantonakis SE, et al. A new classification tool for clinical differentiation between haemorrhagic and ischaemic stroke. Journal of Internal Medicine. 2002;252:121-129. doi:10.1046/j.1365-2796.2002.01013.x PMID: 12190887.",
+            "pmid": "12190887",
+            "doi": "10.1046/j.1365-2796.2002.01013.x"
+          },
+          {
+            "cita": "Stürmer T, Schlindwein G, Kleiser B, Roempp A, Brenner H. Clinical Diagnosis of Ischemic versus Hemorrhagic Stroke: Applicability of Existing Scores in the Emergency Situation and Proposal of a New Score. Neuroepidemiology. 2001;21:8-17. doi:10.1159/000048608 PMID: 11744820.",
+            "pmid": "11744820",
+            "doi": "10.1159/000048608"
+          },
+          {
+            "cita": "Besson G, Robert C, Hommel M, Perret J. Is It Clinically Possible to Distinguish Nonhemorrhagic Infarct From Hemorrhagic Stroke?. Stroke. 1995;26:1205-1209. doi:10.1161/01.str.26.7.1205 PMID: 7604415.",
+            "pmid": "7604415",
+            "doi": "10.1161/01.str.26.7.1205"
+          }
+        ],
+        "c": "Evento vascular cerebral hemorrágico",
+        "ce": "Hemorrhagic stroke",
+        "se": "Neck stiffness in patients with stroke",
+        "pr": "Para evento vascular cerebral hemorrágico: tomografía computarizada (todos los estudios), en ocasiones con resonancia magnética o autopsia.",
+        "pre": "Computed tomography in all studies, sometimes supplemented by magnetic resonance imaging or autopsy."
+      },
+      "revision": "Misma estimación en tabla 65-1: se enlazan los cinco artículos identificados en su bibliografía. No se afirma que sean la lista completa de estudios agrupados.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s02_ebm_box_65_1_hemorrhagic_strokecontd.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s04_c_combined_findings_siriraj_stroke_score.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s05_references.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s01_introducción.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s03_span_idpage_4_0spanebm_box_65_2_siriraj_score_for_hemorrhagi.md"
+          ],
+          "alcance": "tabla y bibliografía de la síntesis"
+        }
+      ]
+    },
+    "C00866": {
+      "valores": {
+        "c": "Mortalidad hospitalaria",
+        "ce": "In-hospital mortality",
+        "pr": "Muerte durante la hospitalización.",
+        "pre": "Death during the hospital admission."
+      },
+      "revision": "Se corrige el desenlace y se mantiene vacía la cita: las referencias 4–7 de la estimación agrupada no están en la bibliografía local. Subbe 2001 se menciona como desarrollo de la escala, no demuestra ser fuente de este rango.",
+      "fuentes_verificacion": [
+        {
+          "wiki": [
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s07_e_neurologic_findings.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s05_c_pulse_pressure_changes_with_leg_elevation.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s02_b_assessment_of_peripheral_perfusion_in_the_icu.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s06_d_lung_findings.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s01_introducción.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s03_c_pulse_pressure_changes_with_leg_elevation.md",
+            "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s04_b_assessment_of_peripheral_perfusion_in_the_icu.md"
+          ]
+        }
+      ]
     }
   },
   "externos": [

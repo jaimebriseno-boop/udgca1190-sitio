@@ -243,8 +243,9 @@ def veredicto(lp, ln, lpns, lnns):
     if lpns and lnns: return "nulo"
     if lp is not None and not lpns and lp >= 5:  return "confirma"
     if ln is not None and not lnns and ln <= 0.2: return "descarta"
-    if (lp is not None and not lpns and 0.5 < lp < 2) or \
-       (ln is not None and not lnns and 0.5 < ln < 2): return "debil"
+    evaluables = [lr for lr, ns in ((lp, lpns), (ln, lnns))
+                 if lr is not None and not ns]
+    if evaluables and all(0.5 < lr < 2 for lr in evaluables): return "debil"
     if lp is not None or ln is not None: return "ajusta"
     return None
 

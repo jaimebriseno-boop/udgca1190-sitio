@@ -114,8 +114,6 @@ C00149,111,Frecuencia respiratoria >28/min para detectar neumonía en el pacient
 C00150,112,Frecuencia respiratoria >30/min como predictor de mortalidad hospitalaria en neumonía,Taquipnea,vpp;vpn,False,hallazgo
 C00151,113,Saturación de oxígeno <90% como predictor de mortalidad hospitalaria en el paciente hospitalizado,Saturación de oxígeno por oximetría de pulso,vpp;vpn,False,hallazgo
 C00153,114,Saturación de oxígeno <95% para detectar neumonía en el paciente ambulatorio con tos y fiebre,Saturación de oxígeno por oximetría de pulso,vpp;vpn,False,hallazgo
-C00154,115,Anisocoria mayor de 1 mm,Pupilas (lesión estructural intracraneal),vpp;vpn,False,hallazgo
-C00155,116,Ausencia del reflejo fotomotor en al menos un ojo,Pupilas (lesión estructural intracraneal),vpp;vpn,False,hallazgo
 C00156,117,Anisocoria con parálisis completa del III par craneal,Pupilas (lesión estructural intracraneal),vpp;vpn,False,hallazgo
 C00157,118,Anisocoria o reflejo fotomotor anormal,Pupilas (lesión estructural intracraneal),vpp;vpn,False,hallazgo
 C00158,119,Anisocoria ≥1 mm tras cocaína tópica (prueba de la cocaína),Pupilas (lesión estructural intracraneal),vpp;vpn,False,hallazgo
@@ -221,10 +219,10 @@ C00267,218,Puntaje de intensidad del murmullo vesicular de 13 a 15 puntos,Enferm
 C00268,219,Puntaje de intensidad del murmullo vesicular ≥16 puntos,Enfermedad pulmonar obstructiva crónica,ln;vpp;vpn,False,categoria
 C00269,220,Disminución del murmullo vesicular,Enfermedad pulmonar obstructiva crónica,vpp;vpn,False,hallazgo
 C00270,221,Disminución del murmullo vesicular,Enfermedad pulmonar obstructiva crónica,vpp;vpn,False,hallazgo
-C00271,222,Disminución del murmullo vesicular en el paciente con ventilación mecánica,Enfermedad pulmonar obstructiva crónica,vpp;vpn,False,hallazgo
+C00271,222,Disminución del murmullo vesicular en el paciente con ventilación mecánica,Derrame pleural en pacientes ventilados con SDRA,vpp;vpn,False,hallazgo
 C00272,223,Disminución del murmullo vesicular durante la prueba de reto con metacolina,Enfermedad pulmonar obstructiva crónica,vpp;vpn,False,hallazgo
 C00273,224,Disminución del murmullo vesicular,Enfermedad pulmonar obstructiva crónica,vpp;vpn,False,hallazgo
-C00274,225,Asimetría del murmullo vesicular después de la intubación,Enfermedad pulmonar obstructiva crónica,vpp;vpn,False,hallazgo
+C00274,225,Asimetría del murmullo vesicular después de la intubación,Intubación del bronquio principal derecho,vpp;vpn,False,hallazgo
 C00275,226,Soplo tubario (respiración bronquial),Enfermedad pulmonar obstructiva crónica,vpp;vpn,False,hallazgo
 C00276,227,Egofonía,Enfermedad pulmonar obstructiva crónica,vpp;vpn,False,hallazgo
 C00277,228,Disminución de la resonancia vocal,Derrame pleural,vpp;vpn,False,hallazgo
@@ -513,11 +511,8 @@ C00631,510,Ausencia del pulso femoral,Enfermedad arterial periférica,vpp;vpn,Fa
 C00632,511,Ausencia de los pulsos tibial posterior y pedio,Enfermedad arterial periférica,vpp;vpn,False,hallazgo
 C00633,512,Soplo audible sobre la extremidad (femoral o poplíteo),Enfermedad arterial periférica,vpp;vpn,False,hallazgo
 C00634,513,Llenado capilar ≥5 segundos,Enfermedad arterial periférica,vpp;vpn,False,hallazgo
-C00636,514,"Ambas piernas frías, para detectar gasto cardiaco bajo (todos los pacientes)",Hipoperfusión en el paciente de terapia intensiva,vpp;vpn,False,hallazgo
-C00637,515,"Ambas piernas frías, para detectar gasto cardiaco bajo (pacientes con sepsis)",Hipoperfusión en el paciente de terapia intensiva,vpp;vpn,False,hallazgo
-C00638,516,Combinación de hallazgos de hipoperfusión: 0 de 3 hallazgos presentes,Hipoperfusión en el paciente de terapia intensiva,ln;vpp;vpn,False,categoria
-C00639,517,Combinación de hallazgos de hipoperfusión: 1 de 3 hallazgos presentes,Hipoperfusión en el paciente de terapia intensiva,sp;ln;vpp;vpn,False,categoria
-C00640,518,Combinación de hallazgos de hipoperfusión: 3 de 3 hallazgos presentes,Hipoperfusión en el paciente de terapia intensiva,ln;vpp;vpn,False,categoria
+C00636,514,"Ambas piernas frías, para detectar gasto cardiaco bajo (todos los pacientes)",Índice cardíaco <3 L/min/m² en cuidados intensivos,vpp;vpn,False,hallazgo
+C00637,515,"Ambas piernas frías, para detectar gasto cardiaco bajo (pacientes con sepsis)",Índice cardíaco <3 L/min/m² en pacientes con sepsis,vpp;vpn,False,hallazgo
 C00641,519,"Extremidad fría o llenado capilar >4.5 segundos, para detectar lactato arterial elevado",Hipoperfusión en el paciente de terapia intensiva,vpp;vpn,False,hallazgo
 C00642,520,"Extremidad fría o llenado capilar >4.5 segundos, para predecir disfunción orgánica múltiple",Hipoperfusión en el paciente de terapia intensiva,vpp;vpn,False,hallazgo
 C00645,521,Área de la úlcera >3 cm² como predictor de osteomielitis,Pie diabético,vpp;vpn,False,hallazgo
@@ -680,17 +675,13 @@ C00861,677,"Prueba de impulso cefálico normal, sin sacada correctora (Halmagyi)
 C00863,678,Prueba de la silla (chair test) positiva,Enfermedad neurológica no orgánica (funcional),vpp;vpn,False,hallazgo
 C00864,679,Prueba de elevación de la rodilla positiva (paraparesia no orgánica),Enfermedad neurológica no orgánica (funcional),vpp;vpn,False,hallazgo
 C00865,680,Signo de Hoover positivo,Enfermedad neurológica no orgánica (funcional),vpp;vpn,False,hallazgo
-C00866,681,"Escala MEWS (Modified Early Warning Score) ≥5 puntos, para mortalidad hospitalaria",Exploración del paciente en la unidad de cuidados intensivos,vpp;vpn,True,hallazgo
-C00867,682,"Extremidades frías en el paciente de terapia intensiva, para índice cardíaco bajo",Exploración del paciente en la unidad de cuidados intensivos,vpp;vpn,True,hallazgo
-C00868,683,"Hipoperfusión periférica: 0 de 3 hallazgos (piel fría, llenado capilar >2 s, moteado en rodillas), para índice cardíaco bajo",Exploración del paciente en la unidad de cuidados intensivos,ln;vpp;vpn,True,categoria
-C00869,684,"Hipoperfusión periférica: 1 de 3 hallazgos (piel fría, llenado capilar >2 s, moteado en rodillas), para índice cardíaco bajo",Exploración del paciente en la unidad de cuidados intensivos,sp;ln;vpp;vpn,True,categoria
-C00870,685,"Hipoperfusión periférica: 3 de 3 hallazgos (piel fría, llenado capilar >2 s, moteado en rodillas), para índice cardíaco bajo",Exploración del paciente en la unidad de cuidados intensivos,ln;vpp;vpn,True,categoria
-C00871,686,"Variación de la presión de pulso ≥12%, para respuesta a la carga hídrica",Exploración del paciente en la unidad de cuidados intensivos,vpp;vpn,True,hallazgo
-C00872,687,"Respiración asincrónica (asincronía toracoabdominal) en la exacerbación de EPOC, para intubación o muerte",Exploración del paciente en la unidad de cuidados intensivos,vpp;vpn,True,hallazgo
-C00873,688,"Ruidos respiratorios asimétricos después de la intubación, para intubación selectiva del bronquio principal derecho",Exploración del paciente en la unidad de cuidados intensivos,vpp;vpn,True,hallazgo
-C00874,689,"Ausencia de ruidos respiratorios en pacientes con SDRA, para derrame pleural subyacente",Exploración del paciente en la unidad de cuidados intensivos,vpp;vpn,True,hallazgo
-C00875,690,"Anisocoria en el paciente en coma, para lesión estructural intracraneal",Exploración del paciente en la unidad de cuidados intensivos,vpp;vpn,True,hallazgo
-C00876,691,"Rigidez de nuca en el paciente con evento vascular cerebral, para ictus hemorrágico",Exploración del paciente en la unidad de cuidados intensivos,vpp;vpn,True,hallazgo
+C00866,681,"Escala MEWS (Modified Early Warning Score) ≥5 puntos, para mortalidad hospitalaria",Mortalidad hospitalaria,vpp;vpn,True,hallazgo
+C00867,682,"Ambas piernas frías, para índice cardíaco bajo en cuidados intensivos",Índice cardíaco <3 L/min/m² en cuidados intensivos,vpp;vpn,False,hallazgo
+C00871,686,Aumento de presión de pulso ≥12% tras elevar pasivamente las piernas,Respuesta a expansión con líquidos,vpp;vpn,False,hallazgo
+C00872,687,"Respiración asincrónica (asincronía toracoabdominal) en la exacerbación de EPOC, para intubación o muerte",Intubación o muerte en exacerbación de EPOC,vpp;vpn,False,hallazgo
+C00873,688,"Ruidos respiratorios asimétricos después de la intubación, para intubación selectiva del bronquio principal derecho",Intubación del bronquio principal derecho,vpp;vpn,False,hallazgo
+C00874,689,"Ausencia de ruidos respiratorios en pacientes con SDRA, para derrame pleural subyacente",Derrame pleural en pacientes ventilados con SDRA,vpp;vpn,False,hallazgo
+C00876,691,"Rigidez de nuca en el paciente con evento vascular cerebral, para ictus hemorrágico",Evento vascular cerebral hemorrágico,vpp;vpn,False,hallazgo
 C00877,692,Vesícula biliar palpable en el paciente con ictericia,Enfermedad hepatocelular (ictericia no obstructiva) en el paciente con ictericia,vpp;vpn,False,hallazgo
 C00879,693,Prurito generalizado,Enfermedad grave (maligna o granulomatosa) en el paciente con linfadenopatía periférica,vpp;vpn,False,hallazgo
 C00880,694,Cáncer activo,Trombosis venosa profunda de miembro inferior,vpp;vpn,False,hallazgo

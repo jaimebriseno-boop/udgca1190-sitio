@@ -75,6 +75,12 @@ class Calculos(unittest.TestCase):
         self.assertEqual(veredicto('Infinity', 0, False, False), 'confirma')
         self.assertEqual(veredicto([3, 9], None, False, False), 'ajusta')
 
+    def test_lr_de_efecto_minimo_no_oculta_la_otra(self):
+        self.assertEqual(veredicto(2.309, .624, False, False), 'ajusta')
+        self.assertEqual(veredicto(.624, 2.309, False, False), 'ajusta')
+        self.assertEqual(veredicto(1.5, .8, False, False), 'debil')
+        self.assertEqual(veredicto(None, .8, False, False), 'debil')
+
 
 class Correspondencia(unittest.TestCase):
     def setUp(self):
@@ -213,6 +219,41 @@ class Catalogo(unittest.TestCase):
             self.assertRegex(item['sha256'], r'^[a-f0-9]{64}$')
             self.assertGreaterEqual(item['lineas'][1], item['lineas'][0])
             self.assertEqual(item['sha256'], revision['textos_revisados'][item['texto']]['sha256'])
+
+    def test_hipoperfusion_umbrales_binarios_y_complemento(self):
+        ninguno, alguno, todos = (self.rows[i] for i in (683, 684, 685))
+        self.assertEqual((ninguno['sn'], ninguno['sp']), (48.5, 22.3))
+        self.assertEqual((ninguno['vpp'], ninguno['vpn']), (5.2, 83.0))
+        self.assertEqual((alguno['sn'], alguno['sp'], alguno['vpp'], alguno['vpn']),
+                         (52, 78, 17, 95))
+        self.assertEqual((todos['vpp'], todos['vpn']), (40, 93))
+        self.assertAlmostEqual(ninguno['lp'], alguno['ln'])
+        self.assertAlmostEqual(ninguno['ln'], alguno['lp'])
+        self.assertIn('Al menos uno', alguno['s'])
+        for a, b in ((516, 683), (517, 684), (518, 685)):
+            for key in ('sn', 'sp', 'lp', 'ln', 'vpp', 'vpn', 'tabla2x2'):
+                self.assertEqual(self.rows[a][key], self.rows[b][key])
+            self.assertFalse(self.rows[a].get('ordinal'))
+            self.assertEqual(sum(self.rows[a]['tabla2x2'].values()), 405)
+            self.assertEqual(self.rows[a]['refs'][0]['pmid'], '19885995')
+
+    def test_elevacion_de_piernas_no_es_variacion_respiratoria(self):
+        r = self.rows[686]
+        self.assertIn('elevar pasivamente', r['s'])
+        self.assertEqual((r['sn'], r['sp']), (60, 85))
+        self.assertEqual((r['lp'], r['ln']), (4, .471))
+        self.assertEqual(r['refs'][0]['pmid'], '16540963')
+        self.assertNotIn('ciclo respiratorio', r['mn'])
+
+    def test_citas_uci_y_valores_predictivos_pupilares(self):
+        self.assertFalse(self.rows[681].get('refs'))  # No atribuir el rango MEWS a su creador.
+        self.assertTrue(all(self.rows[i].get('refs') for i in range(682, 692)))
+        self.assertEqual((self.rows[690]['vpp'], self.rows[690]['vpn']), (86, 70))
+        self.assertEqual((self.rows[116]['vpp'], self.rows[116]['vpn']), (70, 87))
+        for i in (115, 116, 690):
+            self.assertEqual(sum(self.rows[i]['tabla2x2'].values()), 115)
+        self.assertIn('espiración', self.rows[687]['mn'])
+        self.assertEqual([r['pmid'] for r in self.rows[515]['refs']], ['11303155'])
 
 
 if __name__ == '__main__':
