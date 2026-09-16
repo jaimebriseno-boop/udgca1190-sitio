@@ -1,0 +1,1351 @@
+{
+  "fecha": "2026-09-16",
+  "revisiones": [
+    {
+      "uid": "C00437",
+      "i": 365,
+      "pmid": null,
+      "url": "https://doi.org/10.1016/j.amjmed.2010.04.027",
+      "localizador": "Tabla 3, líneas 466–565",
+      "archivo_consultado": "/Volumes/Bioinformatics/Wiki/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "revision": "Tabla 2×2 recuperada por suma de categorías explícitas; Sn/Sp/VPP/VPN se calculan de los conteos.",
+      "valores": {
+        "tabla2x2": {
+          "vp": 2,
+          "fp": 38,
+          "fn": 71,
+          "vn": 256
+        },
+        "n": 367,
+        "pob": "367 pacientes con velocidad aórtica evaluable, de 376 incluidos.",
+        "nota_datos": "Conteos de tabla 3: estenosis aórtica con velocidad ≥2,5 m/s. Se suman las categorías de velocidad de la misma columna; no se usan los 376 pacientes como denominador cuando falta la velocidad. LR publicadas conservadas.",
+        "nota_datos_en": "Table 3 counts: aortic stenosis with velocity ≥2.5 m/s. Velocity categories within each column are summed; the 376 enrolled patients are not used as the denominator when velocity is missing. Published LR retained."
+      },
+      "pmids": [
+        "20920693"
+      ]
+    },
+    {
+      "uid": "C00438",
+      "i": 366,
+      "pmid": null,
+      "url": "https://doi.org/10.1016/j.amjmed.2010.04.027",
+      "localizador": "Tabla 3, líneas 466–565",
+      "archivo_consultado": "/Volumes/Bioinformatics/Wiki/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "revision": "Tabla 2×2 recuperada por suma de categorías explícitas; Sn/Sp/VPP/VPN se calculan de los conteos.",
+      "valores": {
+        "tabla2x2": {
+          "vp": 3,
+          "fp": 17,
+          "fn": 70,
+          "vn": 277
+        },
+        "n": 367,
+        "pob": "367 pacientes con velocidad aórtica evaluable, de 376 incluidos.",
+        "nota_datos": "Conteos de tabla 3: estenosis aórtica con velocidad ≥2,5 m/s. Se suman las categorías de velocidad de la misma columna; no se usan los 376 pacientes como denominador cuando falta la velocidad. LR publicadas conservadas.",
+        "nota_datos_en": "Table 3 counts: aortic stenosis with velocity ≥2.5 m/s. Velocity categories within each column are summed; the 376 enrolled patients are not used as the denominator when velocity is missing. Published LR retained."
+      },
+      "pmids": [
+        "20920693"
+      ]
+    },
+    {
+      "uid": "C00697",
+      "i": 558,
+      "pmid": null,
+      "url": "https://cdn-links.lww.com/permalink/jbjs/c/jbjs_2017_03_12_mcfarland_432_sdc1.pdf",
+      "localizador": "Página 5, tabla E4, desgarro de espesor completo",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/shoulder-supp.pdf",
+      "sha256": "5e506adf74669f5e4e4ebc812f30f57f5deb6af15455dfb9dfc9c482fb052b24",
+      "revision": "Recupera conteos de categoría y corrige conjunto de maniobras, sin convertir ordinal en binario.",
+      "valores": {
+        "s": "3 de 3 hallazgos presentes (Park: arco doloroso, brazo caído y prueba del infraespinoso)",
+        "se": "3 of 3 findings present (Park: painful arc, drop arm and infraspinatus test)",
+        "c": "Desgarro de espesor completo del manguito rotador",
+        "ce": "Full-thickness rotator cuff tear",
+        "vpp": 92.6,
+        "porcentajes_calculados": [
+          "vpp"
+        ],
+        "n": 348,
+        "pob": "348 pacientes con las tres pruebas: 153 con desgarro de espesor completo y 195 controles.",
+        "nota_datos": "Tabla V de Park 2005, reproducida en tabla E4 del suplemento JBJS: 50 casos y 4 controles con exactamente 3 hallazgos. VPP observado calculado con esos conteos. No se usa la probabilidad posterior modelada ni se infieren LR−/VPN de esta categoría ordinal. El conjunto de pruebas para desgarro completo incluye brazo caído; Hawkins pertenece al conjunto para pinzamiento global.",
+        "nota_datos_en": "Park 2005 Table V reproduced in JBJS supplement Table E4: 50 cases and 4 controls with exactly 3 findings. Observed PPV calculated from those counts. Modelled post-test probability is not used, and no LR−/NPV is inferred for this ordinal category. The full-thickness-tear cluster includes drop arm; Hawkins belongs to the overall-impingement cluster.",
+        "pre": "Arthroscopy for rotator cuff tear."
+      },
+      "pmids": [
+        "15995110"
+      ]
+    },
+    {
+      "uid": "C00698",
+      "i": 559,
+      "pmid": null,
+      "url": "https://cdn-links.lww.com/permalink/jbjs/c/jbjs_2017_03_12_mcfarland_432_sdc1.pdf",
+      "localizador": "Página 5, tabla E4, desgarro de espesor completo",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/shoulder-supp.pdf",
+      "sha256": "5e506adf74669f5e4e4ebc812f30f57f5deb6af15455dfb9dfc9c482fb052b24",
+      "revision": "Recupera conteos de categoría y corrige conjunto de maniobras, sin convertir ordinal en binario.",
+      "valores": {
+        "s": "2 de 3 hallazgos presentes (Park: arco doloroso, brazo caído y prueba del infraespinoso)",
+        "se": "2 of 3 findings present (Park: painful arc, drop arm and infraspinatus test)",
+        "c": "Desgarro de espesor completo del manguito rotador",
+        "ce": "Full-thickness rotator cuff tear",
+        "vpp": 73.6,
+        "porcentajes_calculados": [
+          "vpp"
+        ],
+        "n": 348,
+        "pob": "348 pacientes con las tres pruebas: 153 con desgarro de espesor completo y 195 controles.",
+        "nota_datos": "Tabla V de Park 2005, reproducida en tabla E4 del suplemento JBJS: 53 casos y 19 controles con exactamente 2 hallazgos. VPP observado calculado con esos conteos. No se usa la probabilidad posterior modelada ni se infieren LR−/VPN de esta categoría ordinal. El conjunto de pruebas para desgarro completo incluye brazo caído; Hawkins pertenece al conjunto para pinzamiento global.",
+        "nota_datos_en": "Park 2005 Table V reproduced in JBJS supplement Table E4: 53 cases and 19 controls with exactly 2 findings. Observed PPV calculated from those counts. Modelled post-test probability is not used, and no LR−/NPV is inferred for this ordinal category. The full-thickness-tear cluster includes drop arm; Hawkins belongs to the overall-impingement cluster.",
+        "pre": "Arthroscopy for rotator cuff tear."
+      },
+      "pmids": [
+        "15995110"
+      ]
+    },
+    {
+      "uid": "C00699",
+      "i": 560,
+      "pmid": null,
+      "url": "https://cdn-links.lww.com/permalink/jbjs/c/jbjs_2017_03_12_mcfarland_432_sdc1.pdf",
+      "localizador": "Página 5, tabla E4, desgarro de espesor completo",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/shoulder-supp.pdf",
+      "sha256": "5e506adf74669f5e4e4ebc812f30f57f5deb6af15455dfb9dfc9c482fb052b24",
+      "revision": "Recupera conteos de categoría y corrige conjunto de maniobras, sin convertir ordinal en binario.",
+      "valores": {
+        "s": "1 de 3 hallazgos presentes (Park: arco doloroso, brazo caído y prueba del infraespinoso)",
+        "se": "1 of 3 findings present (Park: painful arc, drop arm and infraspinatus test)",
+        "c": "Desgarro de espesor completo del manguito rotador",
+        "ce": "Full-thickness rotator cuff tear",
+        "vpp": 38.3,
+        "porcentajes_calculados": [
+          "vpp"
+        ],
+        "n": 348,
+        "pob": "348 pacientes con las tres pruebas: 153 con desgarro de espesor completo y 195 controles.",
+        "nota_datos": "Tabla V de Park 2005, reproducida en tabla E4 del suplemento JBJS: 36 casos y 58 controles con exactamente 1 hallazgo. VPP observado calculado con esos conteos. No se usa la probabilidad posterior modelada ni se infieren LR−/VPN de esta categoría ordinal. El conjunto de pruebas para desgarro completo incluye brazo caído; Hawkins pertenece al conjunto para pinzamiento global.",
+        "nota_datos_en": "Park 2005 Table V reproduced in JBJS supplement Table E4: 36 cases and 58 controls with exactly 1 finding. Observed PPV calculated from those counts. Modelled post-test probability is not used, and no LR−/NPV is inferred for this ordinal category. The full-thickness-tear cluster includes drop arm; Hawkins belongs to the overall-impingement cluster.",
+        "pre": "Arthroscopy for rotator cuff tear."
+      },
+      "pmids": [
+        "15995110"
+      ]
+    },
+    {
+      "uid": "C00866",
+      "i": 681,
+      "pmid": null,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9449083/",
+      "localizador": "Bibliografía 4–7, cotejo con llamadas 4–7 del capítulo 68, 3.ª edición; PubMed",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/mcgee4-uci.txt",
+      "sha256": "1c1b29a5ad4425e381f5897284159a393d43e8e8e38e9f275383aed557d6ca23",
+      "revision": "Referencias recuperadas por correspondencia entre ediciones, con alcance explícito; sin trasladar estimaciones de la edición posterior.",
+      "valores": {
+        "refs": [
+          {
+            "cita": "Rylance J, Baker T, Mushi E, Mashaga D. Use of an early warning score and ability to walk predicts mortality in medical patients admitted to hospitals in Tanzania. Trans R Soc Trop Med Hyg. 2009;103(8):790.",
+            "pmid": "19540542",
+            "doi": "10.1016/j.trstmh.2009.05.004"
+          },
+          {
+            "cita": "Groarke JD, Gallagher J, Stack J, Aftab A, Dwyer C, McGovern R, Courtney G. Use of an admission early warning score to predict patient morbidity and mortality and treatment success. Emerg Med J. 2008;25(12):803.",
+            "pmid": "19033494",
+            "doi": "10.1136/emj.2007.051425"
+          },
+          {
+            "cita": "Cei M, Bartolomei C, Mumoli N. In-hospital mortality and morbidity of elderly medical patients can be predicted at admission by the Modified Early Warning Score: a prospective study. Int J Clin Pract. 2009;63(4):591.",
+            "pmid": "19220521",
+            "doi": "10.1111/j.1742-1241.2008.01986.x"
+          },
+          {
+            "cita": "Burch VC, Tarr G, Morroni C. Modified early warning score predicts the need for hospital admission and inhospital mortality. Emerg Med J. 2008;25(10):674.",
+            "pmid": "18843068",
+            "doi": "10.1136/emj.2007.057661"
+          }
+        ],
+        "nota_datos": "Referencias 4–7 recuperadas por correspondencia bibliográfica del capítulo de cuidados intensivos entre ediciones; metadatos de los cuatro artículos cotejados en PubMed. Se conservan Sn/Sp y LR de la síntesis de 2012. La edición posterior añade un quinto estudio y LR+ 4,7: esas cifras no se trasladan aquí. No equivale a cotejo de las cuatro tablas primarias.",
+        "nota_datos_en": "References 4–7 recovered by bibliographic correspondence between editions of the intensive-care chapter; metadata of all four papers checked in PubMed. Sensitivity, specificity and LR remain those of the 2012 synthesis. The later edition adds a fifth study and LR+ 4.7; those values are not transferred here. This is not verification of all four primary tables."
+      },
+      "pmids": [
+        "19540542",
+        "19033494",
+        "19220521",
+        "18843068"
+      ]
+    },
+    {
+      "uid": "PMID:35608575:779",
+      "i": 779,
+      "pmid": "35608575",
+      "url": "https://www.ncbi.nlm.nih.gov/books/NBK581092/",
+      "localizador": "KQ3, Tests of IOP Measurement, Tonometry; tabla 1",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/glaucoma.txt",
+      "sha256": "9ee96b282dcad9144399c7ee7ee719bc52d5e2a244c6c0f5ed2d1ca90f686881",
+      "revision": "Especificidad de la misma estimación agrupada, informe AHRQ de Chou 2022; se conserva la cita del artículo JAMA.",
+      "valores": {
+        "sp": 94,
+        "spic": "90–96",
+        "snic": "31–66",
+        "nota_datos": "Informe completo de la misma revisión: 13 estudios, n=32 892. Sn y Sp agrupadas; LR calculadas de sus estimaciones puntuales, sin reconstruir una tabla 2×2 ni valores predictivos observados.",
+        "nota_datos_en": "Full report of the same review: 13 studies, n=32,892. Pooled sensitivity and specificity; LR calculated from their point estimates, without reconstructing a 2×2 table or observed predictive values.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:17652298:888",
+      "i": 888,
+      "pmid": "17652298",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2703737/",
+      "localizador": "Tabla 2; transcripción pública doczz.net/doc/6451635",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bundy-web.txt",
+      "sha256": "28032e69d8e130b8f8656361700453960830245c999cdcb1c425b5d09462fdb7",
+      "revision": "Se completa la misma estimación de fiebre, sin atribuirla a todos los estudios de la revisión.",
+      "valores": {
+        "sn": 75,
+        "sp": 78,
+        "nota_datos": "Tabla 2 de Bundy 2007: fila de O’Shea 1988, niños con dolor abdominal sin selección previa por sospecha de apendicitis. No son Sn/Sp agrupadas de los 42 estudios.",
+        "nota_datos_en": "Bundy 2007 Table 2: O’Shea 1988 row, children with undifferentiated abdominal pain. These are not pooled sensitivity/specificity from all 42 studies.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:17652298:890",
+      "i": 890,
+      "pmid": "17652298",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2703737/",
+      "localizador": "Tabla 2, resumen de dolor en cuadrante inferior derecho; transcripción doczz.net/doc/6451635",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bundy-web.txt",
+      "sha256": "28032e69d8e130b8f8656361700453960830245c999cdcb1c425b5d09462fdb7",
+      "revision": "LR negativa agrupada publicada.",
+      "valores": {
+        "ln": 0.56,
+        "lnic": "0.43–0.73",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:17652298:891",
+      "i": 891,
+      "pmid": "17652298",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2703737/",
+      "localizador": "Tabla 4, resumen >10 000 o >10 100; transcripción doczz.net/doc/6451635",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bundy-table4-web.txt",
+      "sha256": "8eecfed193b98eca2f4c77ce71fc78de425dfd2296d6965bc8bf63325846688b",
+      "revision": "Se corrige polaridad y completa LR positiva agrupada.",
+      "valores": {
+        "s": "Leucocitos >10 000/µL (o >10 100/µL según el estudio)",
+        "se": "White blood cell count >10,000/µL (or >10,100/µL by study)",
+        "lp": 2.0,
+        "lpic": "1.3–2.9",
+        "ln": 0.22,
+        "lnic": "0.17–0.30",
+        "nota_datos": "Tabla 4: LR agrupadas para el umbral alto. La LR− 0,22 corresponde a estar por debajo del umbral; se corrige el nombre que antes describía ese resultado negativo como si fuera la prueba positiva. No se infieren Sn/Sp agrupadas.",
+        "nota_datos_en": "Table 4: pooled LR for the high threshold. LR− 0.22 applies below that threshold. The label previously described the negative result as the positive test. Pooled sensitivity/specificity are not inferred.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:17652298:892",
+      "i": 892,
+      "pmid": "17652298",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2703737/",
+      "localizador": "Tabla 4, Kharbanda 2005; transcripción doczz.net/doc/6451635",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bundy-table4-web.txt",
+      "sha256": "8eecfed193b98eca2f4c77ce71fc78de425dfd2296d6965bc8bf63325846688b",
+      "revision": "Se corrige polaridad y recupera fila completa.",
+      "valores": {
+        "s": "Cuenta absoluta de neutrófilos >6750/µL",
+        "se": "Absolute neutrophil count >6750/µL",
+        "sn": 97,
+        "sp": 51,
+        "lp": 2,
+        "lpic": "1.7–2.2",
+        "ln": 0.06,
+        "lnic": "0.03–0.16",
+        "nota_datos": "Tabla 4, Kharbanda 2005: prueba positiva con neutrófilos >6750/µL. La LR− corresponde a ≤6750/µL. Se conserva la LR publicada aunque Sn/Sp estén redondeadas.",
+        "nota_datos_en": "Table 4, Kharbanda 2005: positive test means neutrophils >6,750/µL; LR− applies at or below 6,750/µL. Published LR retained despite rounded sensitivity/specificity.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:19066257:912",
+      "i": 912,
+      "pmid": "19066257",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2600962/",
+      "localizador": "Tablas 2 y 3, columna combined/fracture",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/PMC2600962.xml",
+      "sha256": "92a16d53f6244c10f3ce761d16e0b12210f33a22eb885a74733a3b09e0aa4d5a",
+      "revision": "Conteos y seis métricas de la misma población; corrección de LR− y denominador.",
+      "valores": {
+        "n": 1736,
+        "pob": "1736 pacientes con desenlace evaluable (958 adultos y 778 niños); 1740 elegibles.",
+        "ln": 0.06,
+        "lnic": "0.04–0.10",
+        "vpp": 45.8,
+        "vppic": "42.9–48.7",
+        "vpn": 97.2,
+        "vpnic": "95.5–98.3",
+        "tabla2x2": {
+          "vp": 521,
+          "fp": 617,
+          "fn": 17,
+          "vn": 581
+        },
+        "nota_datos": "Tablas 2 y 3, fractura confirmada. Prueba positiva: incapacidad para extender completamente el codo. Se excluyen 4 pacientes sin desenlace. LR− publicada: 0,06.",
+        "nota_datos_en": "Tables 2 and 3, confirmed fracture. Positive test: inability to fully extend the elbow. Four patients without an outcome are excluded. Published LR−: 0.06.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:19066257:913",
+      "i": 913,
+      "pmid": "19066257",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2600962/",
+      "localizador": "Tablas 2 y 3, columna children/fracture",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/PMC2600962.xml",
+      "sha256": "92a16d53f6244c10f3ce761d16e0b12210f33a22eb885a74733a3b09e0aa4d5a",
+      "revision": "Se completa el subgrupo pediátrico sin usar métricas de adultos o de fractura/derrame.",
+      "valores": {
+        "sn": 94.6,
+        "snic": "90.7–97.2",
+        "sp": 49.5,
+        "spic": "45.2–53.7",
+        "lp": 1.87,
+        "lpic": "1.72–2.05",
+        "vpp": 42.8,
+        "vppic": "38.4–47.3",
+        "vpn": 95.8,
+        "vpnic": "92.6–97.8",
+        "n": 778,
+        "pob": "778 niños de 3 a 15 años con lesión aguda de codo y desenlace evaluable.",
+        "tabla2x2": {
+          "vp": 210,
+          "fp": 281,
+          "fn": 12,
+          "vn": 275
+        },
+        "nota_datos": "Tablas 2 y 3: subgrupo pediátrico, desenlace fractura; prueba positiva si no puede extender completamente el codo.",
+        "nota_datos_en": "Tables 2 and 3: pediatric subgroup, fracture outcome; positive test means inability to fully extend the elbow.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:15187057:948",
+      "i": 948,
+      "pmid": "15187057",
+      "url": "https://www.mcgill.ca/files/emergency/Child_Dehydration.pdf",
+      "localizador": "Página 2751 (PDF 6), tabla 3, columnas cotejadas visualmente",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/dehydration.pdf",
+      "sha256": "2e99bc939898f24d80761806155f357409a205f6fe7cd6e278e154da01d7d553",
+      "revision": "Se recuperan Sn/Sp/LR− de la misma fila agrupada.",
+      "valores": {
+        "sn": 60,
+        "sp": 85,
+        "ln": 0.57,
+        "n": 478,
+        "snic": "29–91",
+        "spic": "72–98",
+        "lnic": "0.39–0.82",
+        "nota_datos": "Tabla 3 de Steiner 2004: Sn/Sp y LR agrupadas publicadas para detectar deshidratación ≥5%. Se conserva cada LR publicada; no se obtiene de invertir ni recombinar las estimaciones agrupadas.",
+        "nota_datos_en": "Steiner 2004 Table 3: reported pooled sensitivity, specificity and LR for ≥5% dehydration. Each reported LR is retained rather than reconstructed from other pooled estimates.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:15187057:949",
+      "i": 949,
+      "pmid": "15187057",
+      "url": "https://www.mcgill.ca/files/emergency/Child_Dehydration.pdf",
+      "localizador": "Página 2751 (PDF 6), tabla 3, columnas cotejadas visualmente",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/dehydration.pdf",
+      "sha256": "2e99bc939898f24d80761806155f357409a205f6fe7cd6e278e154da01d7d553",
+      "revision": "Se recuperan Sn/Sp/LR− de la misma fila agrupada.",
+      "valores": {
+        "sn": 58,
+        "sp": 76,
+        "ln": 0.66,
+        "n": 602,
+        "snic": "40–75",
+        "spic": "59–93",
+        "lnic": "0.57–0.75",
+        "nota_datos": "Tabla 3 de Steiner 2004: Sn/Sp y LR agrupadas publicadas para detectar deshidratación ≥5%. Se conserva cada LR publicada; no se obtiene de invertir ni recombinar las estimaciones agrupadas.",
+        "nota_datos_en": "Steiner 2004 Table 3: reported pooled sensitivity, specificity and LR for ≥5% dehydration. Each reported LR is retained rather than reconstructed from other pooled estimates.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:15187057:950",
+      "i": 950,
+      "pmid": "15187057",
+      "url": "https://www.mcgill.ca/files/emergency/Child_Dehydration.pdf",
+      "localizador": "Página 2751 (PDF 6), tabla 3, columnas cotejadas visualmente",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/dehydration.pdf",
+      "sha256": "2e99bc939898f24d80761806155f357409a205f6fe7cd6e278e154da01d7d553",
+      "revision": "Se recuperan Sn/Sp/LR− de la misma fila agrupada.",
+      "valores": {
+        "sn": 43,
+        "sp": 79,
+        "ln": 0.76,
+        "n": 581,
+        "snic": "31–55",
+        "spic": "72–86",
+        "lnic": "0.62–0.88",
+        "nota_datos": "Tabla 3 de Steiner 2004: Sn/Sp y LR agrupadas publicadas para detectar deshidratación ≥5%. Se conserva cada LR publicada; no se obtiene de invertir ni recombinar las estimaciones agrupadas.",
+        "nota_datos_en": "Steiner 2004 Table 3: reported pooled sensitivity, specificity and LR for ≥5% dehydration. Each reported LR is retained rather than reconstructed from other pooled estimates.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:20132979:958",
+      "i": 958,
+      "pmid": "20132979",
+      "url": "https://bjgp.org/cgi/data/57/540/538/DC1/Supplementary_Data_PDF6",
+      "localizador": "Tabla suplementaria 1, primeras dos filas, cotejo visual",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bruel-supp.pdf",
+      "sha256": "91a675afc0c24f461ed0fd146c1344f4f9b64a209b1f5c17a33bd4e0e24cba71",
+      "revision": "Se recupera estudio primario específico, sin usar las cifras del reanálisis de 2012 ni todos los denominadores de la cohorte.",
+      "valores": {
+        "sn": 63.33,
+        "sp": 97.3,
+        "lp": 23.48,
+        "ln": 0.38,
+        "vpp": 15.45,
+        "vpn": 99.71,
+        "snic": "46.09–80.58",
+        "spic": "96.79–97.81",
+        "lpic": "16.85–32.71",
+        "lnic": "0.24–0.60",
+        "vppic": "9.06–21.83",
+        "vpnic": "99.54–99.88",
+        "refs": [
+          {
+            "cita": "Van den Bruel A, Haj-Hassan T, Thompson M, Buntinx F, Mant D, European Research Network on Recognising Serious Infection investigators. Diagnostic value of clinical features at presentation to identify serious infection in children in developed countries: a systematic review. Lancet. 2010;375(9717):834.",
+            "pmid": "20132979",
+            "doi": "10.1016/S0140-6736(09)62000-6"
+          },
+          {
+            "cita": "Van den Bruel A, Aertgeerts B, Bruyninckx R, Aerts M, Buntinx F. Signs and symptoms for diagnosis of serious infections in children: a prospective study in primary care. Br J Gen Pract. 2007;57(540):538–546.",
+            "pmid": "17727746"
+          }
+        ],
+        "pob": "Cohorte de 3981 niños con enfermedad aguda en atención primaria; el número evaluable varía por hallazgo.",
+        "nota_datos": "Tabla suplementaria 1 de Van den Bruel 2007, estudio que origina esta estimación de la revisión de 2010. Se trasladan sus seis métricas publicadas; no se reconstruyen conteos usando el total de la cohorte porque hay datos ausentes por variable.",
+        "nota_datos_en": "Van den Bruel 2007 Supplementary Table 1, the study underlying this estimate in the 2010 review. All six reported metrics are used; counts are not reconstructed from the full cohort because evaluable denominators vary by variable.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:20132979:959",
+      "i": 959,
+      "pmid": "20132979",
+      "url": "https://bjgp.org/cgi/data/57/540/538/DC1/Supplementary_Data_PDF6",
+      "localizador": "Tabla suplementaria 1, primeras dos filas, cotejo visual",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bruel-supp.pdf",
+      "sha256": "91a675afc0c24f461ed0fd146c1344f4f9b64a209b1f5c17a33bd4e0e24cba71",
+      "revision": "Se recupera estudio primario específico, sin usar las cifras del reanálisis de 2012 ni todos los denominadores de la cohorte.",
+      "valores": {
+        "sn": 46.43,
+        "sp": 96.76,
+        "lp": 14.35,
+        "ln": 0.55,
+        "vpp": 9.49,
+        "vpn": 99.6,
+        "snic": "27.96–64.90",
+        "spic": "96.20–97.33",
+        "lpic": "9.30–22.15",
+        "lnic": "0.39–0.78",
+        "vppic": "4.58–14.40",
+        "vpnic": "99.39–99.80",
+        "refs": [
+          {
+            "cita": "Van den Bruel A, Haj-Hassan T, Thompson M, Buntinx F, Mant D, European Research Network on Recognising Serious Infection investigators. Diagnostic value of clinical features at presentation to identify serious infection in children in developed countries: a systematic review. Lancet. 2010;375(9717):834.",
+            "pmid": "20132979",
+            "doi": "10.1016/S0140-6736(09)62000-6"
+          },
+          {
+            "cita": "Van den Bruel A, Aertgeerts B, Bruyninckx R, Aerts M, Buntinx F. Signs and symptoms for diagnosis of serious infections in children: a prospective study in primary care. Br J Gen Pract. 2007;57(540):538–546.",
+            "pmid": "17727746"
+          }
+        ],
+        "pob": "Cohorte de 3981 niños con enfermedad aguda en atención primaria; el número evaluable varía por hallazgo.",
+        "nota_datos": "Tabla suplementaria 1 de Van den Bruel 2007, estudio que origina esta estimación de la revisión de 2010. Se trasladan sus seis métricas publicadas; no se reconstruyen conteos usando el total de la cohorte porque hay datos ausentes por variable.",
+        "nota_datos_en": "Van den Bruel 2007 Supplementary Table 1, the study underlying this estimate in the 2010 review. All six reported metrics are used; counts are not reconstructed from the full cohort because evaluable denominators vary by variable.",
+        "s": "Los padres refieren que esta enfermedad es diferente de las previas",
+        "se": "Parents report that this illness is different from previous illnesses",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:20132979:960",
+      "i": 960,
+      "pmid": "20132979",
+      "url": "https://bjgp.org/cgi/data/57/540/538/DC1/Supplementary_Data_PDF3",
+      "localizador": "Figura suplementaria 3, árbol sin instinto clínico",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bruel-tree3.pdf",
+      "sha256": "6ffc9a0e7395be7cfe40ec99c21acb9ef168eab1c489d6b4fd83187aeceeb64b",
+      "revision": "Conteos explícitos del árbol con preocupación parental, no del árbol con instinto clínico; corrección de polaridad.",
+      "valores": {
+        "s": "Disnea o enfermedad diferente de las previas según los padres (árbol para neumonía)",
+        "se": "Dyspnoea or parent-reported different illness (pneumonia decision tree)",
+        "tabla2x2": {
+          "vp": 15,
+          "fp": 330,
+          "fn": 1,
+          "vn": 3635
+        },
+        "refs": [
+          {
+            "cita": "Van den Bruel A, Haj-Hassan T, Thompson M, Buntinx F, Mant D, European Research Network on Recognising Serious Infection investigators. Diagnostic value of clinical features at presentation to identify serious infection in children in developed countries: a systematic review. Lancet. 2010;375(9717):834.",
+            "pmid": "20132979",
+            "doi": "10.1016/S0140-6736(09)62000-6"
+          },
+          {
+            "cita": "Van den Bruel A, Aertgeerts B, Bruyninckx R, Aerts M, Buntinx F. Signs and symptoms for diagnosis of serious infections in children: a prospective study in primary care. Br J Gen Pract. 2007;57(540):538–546.",
+            "pmid": "17727746"
+          }
+        ],
+        "n": 3981,
+        "pob": "3981 niños con enfermedad aguda en atención primaria; 16 neumonías.",
+        "nota_datos": "Figura suplementaria 3: 345 positivos (15 neumonías) y 3636 negativos (1 neumonía). Positivo: disnea sí, o respuesta parental sí/incierta a enfermedad diferente. Se corrige la etiqueta que describía la ausencia de ambos hallazgos como positiva. La LR− 0,07 se conserva; VPN redondeado a 100% no implica cero falsos negativos. La duda sobre disnea sigue la rama no/duda; la duda parental sigue la rama positiva. VPN 100% es redondeado: hubo un falso negativo.",
+        "nota_datos_en": "Supplementary Figure 3: 345 positive (15 pneumonia) and 3,636 negative (1 pneumonia). Positive means dyspnoea yes, or parent response yes/unsure to different illness. The former label described absence of both findings as positive. Reported LR− 0.07 retained; NPV rounded to 100% does not imply zero false negatives. Uncertain dyspnoea follows the no/uncertain branch; parental uncertainty follows the positive branch. NPV 100% is rounded: there was one false negative.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:18209169:970",
+      "i": 970,
+      "pmid": "18209169",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18209169/",
+      "localizador": "Resumen, resultado del consenso ≥2/3",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed-pendientes.xml",
+      "sha256": "50cd6055255cbfcd5dfe9da3f7d1c7e7c279fa117a894917e1db4e4b558605eb",
+      "revision": "Conteos explícitos de consenso; se corrige definición de positividad y unidad de análisis.",
+      "valores": {
+        "s": "Patito feo evidente para ≥2/3 de los observadores en imágenes",
+        "se": "Ugly duckling perceived by ≥2/3 of observers in images",
+        "sn": 100,
+        "sp": null,
+        "tabla2x2": {
+          "vp": 5,
+          "fp": 3,
+          "fn": 0,
+          "vn": 137
+        },
+        "n": 145,
+        "pob": "145 lesiones (5 melanomas y 140 benignas) en imágenes de 12 pacientes seleccionados, evaluadas por 34 observadores.",
+        "nota_datos": "Resumen: los 5 melanomas y 3/140 lesiones benignas fueron distintos para ≥2/3 de observadores. Conteos por lesión, no por paciente. Se sustituye la sensibilidad media individual de 90% por el criterio de consenso explícito para poder completar la misma tabla; no se mezclan ambos criterios. Estudio pequeño de imágenes seleccionadas.",
+        "nota_datos_en": "Abstract: all 5 melanomas and 3/140 benign lesions were different to ≥2/3 of observers. Counts are per lesion, not per patient. The 90% individual-observer mean is replaced with the explicit consensus criterion so one coherent table can be completed. Small study of selected images.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:28196213:971",
+      "i": 971,
+      "pmid": "28196213",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28196213/",
+      "localizador": "Resumen, imágenes clínicas e IPCA",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed-pendientes.xml",
+      "sha256": "50cd6055255cbfcd5dfe9da3f7d1c7e7c279fa117a894917e1db4e4b558605eb",
+      "revision": "Sn explícita del mismo grupo clínico; no mezcla con dermatoscopia.",
+      "valores": {
+        "sn": 100,
+        "pob": "2089 imágenes clínicas de lesiones de 80 pacientes, evaluadas por 9 dermatólogos; las imágenes dermatoscópicas se analizan por separado.",
+        "nota_datos": "Resumen: todos los melanomas fueron identificados por los 9 dermatólogos. Se completa Sn 100% para imágenes clínicas con Sp 96%; no se usa Sp 95% de las imágenes dermatoscópicas ni se reconstruyen conteos por observador.",
+        "nota_datos_en": "Abstract: all melanomas were identified by all 9 dermatologists. Clinical-image sensitivity 100% is paired with specificity 96%, not dermoscopic specificity 95%; no per-observer counts are reconstructed.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:15492186:975",
+      "i": 975,
+      "pmid": "15492186",
+      "url": "https://jamanetwork.com/journals/jamadermatology/fullarticle/480829",
+      "localizador": "Tablas 3 y 4, patrón de crestas paralelas, todos los melanomas",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/acral-web.txt",
+      "sha256": "578188139cf4ba1e24a0ce431aa28c58ae4c85f3a0aec4df44ceff9b8d1ec767",
+      "revision": "Datos y conteos de la misma población; no se mezclan subgrupos invasivo/in situ.",
+      "valores": {
+        "sn": 86.4,
+        "vpp": 93.7,
+        "tabla2x2": {
+          "vp": 89,
+          "fp": 6,
+          "fn": 14,
+          "vn": 603
+        },
+        "n": 712,
+        "nota_datos": "Tablas 3 y 4: 103 melanomas (invasivos e in situ) y 609 nevos, 712 lesiones. Se conserva el grupo de todos los melanomas. LR calculadas de conteos exactos, no de porcentajes redondeados.",
+        "nota_datos_en": "Tables 3 and 4: 103 melanomas (invasive and in situ) and 609 nevi, 712 lesions. The all-melanoma group is retained. LR calculated from exact counts, not rounded percentages.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:38536160:978",
+      "i": 978,
+      "pmid": "38536160",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10974680/",
+      "localizador": "Tabla 5 y métodos, umbral ALT-70 ≥3; líneas 88, 183–196",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/cellulitis.txt",
+      "sha256": "8c743be3caeaa78f18d5fca6bf72769fdb25dbda412481e70841a50edea12096",
+      "revision": "Misma fila de tabla y denominador. LR faltantes calculadas desde Sn/Sp puntuales; no se reconstruyen conteos de cifras redondeadas.",
+      "valores": {
+        "sn": 98.8,
+        "snic": "97.2–100",
+        "sp": 22,
+        "spic": "15.8–28.1",
+        "vpp": 53.9,
+        "vppic": "46.5–61.3",
+        "vpn": 95.2,
+        "vpnic": "92.1–98.4",
+        "n": 175,
+        "s": "ALT-70 ≥3 puntos (validación prospectiva independiente)",
+        "se": "ALT-70 score ≥3 (external validation)",
+        "pob": "175 adultos evaluables para esta prueba; cohorte total de 204 personas en urgencias.",
+        "nota_datos": "Tabla 5: estimaciones en los pacientes evaluables. Los 96,8% de sensibilidad del resumen son la media de validación cruzada (tabla 4); no se combinan con la especificidad de la tabla 5.",
+        "nota_datos_en": "Table 5: estimates in evaluable patients. The abstract sensitivity of 96.8% is the cross-validation mean (Table 4); it is not combined with Table 5 specificity.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:38536160:979",
+      "i": 979,
+      "pmid": "38536160",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10974680/",
+      "localizador": "Tabla 5, temperatura máxima de piel afectada ≥31,2 °C; n=204",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/cellulitis.txt",
+      "sha256": "8c743be3caeaa78f18d5fca6bf72769fdb25dbda412481e70841a50edea12096",
+      "revision": "Misma fila de tabla y denominador. LR faltantes calculadas desde Sn/Sp puntuales; no se reconstruyen conteos de cifras redondeadas.",
+      "valores": {
+        "sn": 93.5,
+        "snic": "90.1–96.9",
+        "sp": 38.4,
+        "spic": "31.7–45.1",
+        "vpp": 55.5,
+        "vppic": "48.7–62.3",
+        "vpn": 87.8,
+        "vpnic": "83.3–92.3",
+        "n": 204,
+        "lp": null,
+        "ln": null,
+        "pob": "204 adultos evaluables para esta prueba; cohorte total de 204 personas en urgencias.",
+        "nota_datos": "Tabla 5: estimaciones en los pacientes evaluables. Los 96,8% de sensibilidad del resumen son la media de validación cruzada (tabla 4); no se combinan con la especificidad de la tabla 5.",
+        "nota_datos_en": "Table 5: estimates in evaluable patients. The abstract sensitivity of 96.8% is the cross-validation mean (Table 4); it is not combined with Table 5 specificity.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:38536160:981",
+      "i": 981,
+      "pmid": "38536160",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10974680/",
+      "localizador": "Tabla 5, combinación ALT-70 ≥3 y temperatura máxima ≥31,2 °C; n=175",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/cellulitis.txt",
+      "sha256": "8c743be3caeaa78f18d5fca6bf72769fdb25dbda412481e70841a50edea12096",
+      "revision": "Misma fila de tabla y denominador. LR faltantes calculadas desde Sn/Sp puntuales; no se reconstruyen conteos de cifras redondeadas.",
+      "valores": {
+        "sn": 91.7,
+        "snic": "87.7–95.6",
+        "sp": 53.9,
+        "spic": "46.5–61.2",
+        "vpp": 64.7,
+        "vppic": "57.6–71.8",
+        "vpn": 87.5,
+        "vpnic": "82.6–92.4",
+        "n": 175,
+        "s": "ALT-70 ≥3 y temperatura máxima de piel afectada ≥31.2 °C",
+        "se": "ALT-70 ≥3 and affected skin maximum temperature ≥31.2 °C",
+        "pob": "175 adultos evaluables para esta prueba; cohorte total de 204 personas en urgencias.",
+        "nota_datos": "Tabla 5: estimaciones en los pacientes evaluables. Los 96,8% de sensibilidad del resumen son la media de validación cruzada (tabla 4); no se combinan con la especificidad de la tabla 5.",
+        "nota_datos_en": "Table 5: estimates in evaluable patients. The abstract sensitivity of 96.8% is the cross-validation mean (Table 4); it is not combined with Table 5 specificity.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:10460203:1008",
+      "i": 1008,
+      "pmid": "10460203",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10460203/",
+      "localizador": "Resumen, estimaciones globales",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed.xml",
+      "sha256": "b04825b74f5203a7a6432f15c52c549938a82f7340c755b5f5de6941e7056d44",
+      "revision": "Mismo signo y artículo; corrige umbral de anemia y estimación puntual y añade Sn.",
+      "valores": {
+        "s": "Palidez en al menos uno de tres sitios (conjuntiva, palma o lecho ungueal)",
+        "se": "Pallor at any of three sites (conjunctiva, palm or nail bed)",
+        "c": "Anemia grave (hemoglobina <7 g/dL)",
+        "ce": "Severe anemia (hemoglobin <7 g/dL)",
+        "pr": "Hemoglobina <70 g/L.",
+        "pob": "5760 personas en cinco muestras de Nepal y Zanzíbar, incluidas mujeres posparto y preescolares; 192 con anemia grave.",
+        "n": 5760,
+        "sn": 50,
+        "sp": 92,
+        "mn": "Busque palidez en conjuntiva, palma y lecho ungueal; el hallazgo es positivo si hay palidez en cualquiera de los tres sitios.",
+        "nota_datos": "Resumen original: estimaciones globales Sn 50% y Sp 92%. Se reemplaza el límite >84% entre poblaciones, que se había importado como Sp puntual 84%. No se mezclan rangos entre subgrupos.",
+        "nota_datos_en": "Original abstract: overall sensitivity 50% and specificity 92%. Replaces the >84% lower bound across populations previously imported as a point specificity of 84%. Subgroup ranges are not combined.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:10460203:1011",
+      "i": 1011,
+      "pmid": "10460203",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10460203/",
+      "localizador": "Resumen, estimaciones globales",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed.xml",
+      "sha256": "b04825b74f5203a7a6432f15c52c549938a82f7340c755b5f5de6941e7056d44",
+      "revision": "Mismo signo y artículo; corrige umbral de anemia y estimación puntual y añade Sn.",
+      "valores": {
+        "s": "Palidez en al menos uno de tres sitios (conjuntiva, palma o lecho ungueal)",
+        "se": "Pallor at any of three sites (conjunctiva, palm or nail bed)",
+        "c": "Anemia grave (hemoglobina <7 g/dL)",
+        "ce": "Severe anemia (hemoglobin <7 g/dL)",
+        "pr": "Hemoglobina <70 g/L.",
+        "pob": "5760 personas en cinco muestras de Nepal y Zanzíbar, incluidas mujeres posparto y preescolares; 192 con anemia grave.",
+        "n": 5760,
+        "sn": 50,
+        "sp": 92,
+        "mn": "Busque palidez en conjuntiva, palma y lecho ungueal; el hallazgo es positivo si hay palidez en cualquiera de los tres sitios.",
+        "nota_datos": "Resumen original: estimaciones globales Sn 50% y Sp 92%. Se reemplaza el límite >84% entre poblaciones, que se había importado como Sp puntual 84%. No se mezclan rangos entre subgrupos.",
+        "nota_datos_en": "Original abstract: overall sensitivity 50% and specificity 92%. Replaces the >84% lower bound across populations previously imported as a point specificity of 84%. Subgroup ranges are not combined.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:10460203:1012",
+      "i": 1012,
+      "pmid": "10460203",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10460203/",
+      "localizador": "Resumen: complemento binario de la estimación global",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed.xml",
+      "sha256": "b04825b74f5203a7a6432f15c52c549938a82f7340c755b5f5de6941e7056d44",
+      "revision": "Corrige la especificidad de palidez presente que se había asignado erróneamente a palidez ausente.",
+      "valores": {
+        "s": "Ausencia de palidez en conjuntiva, palma y lecho ungueal",
+        "se": "Absence of pallor at all three sites",
+        "c": "Anemia grave (hemoglobina <7 g/dL)",
+        "ce": "Severe anemia (hemoglobin <7 g/dL)",
+        "pr": "Hemoglobina <70 g/L.",
+        "pob": "Mismas cinco muestras de Nepal y Zanzíbar; 5760 participantes.",
+        "n": 5760,
+        "sn": 50,
+        "sp": 8,
+        "porcentajes_calculados": [
+          "sn",
+          "sp"
+        ],
+        "mn": "Confirme ausencia de palidez en los tres sitios examinados: conjuntiva, palma y lecho ungueal.",
+        "nota_datos": "Prueba complementaria de palidez en cualquiera de tres sitios. Sn de ausencia = 100−50; Sp de ausencia = 100−92. Cálculo desde las estimaciones globales redondeadas; ausencia de palidez no descarta anemia grave.",
+        "nota_datos_en": "Complement of pallor at any of three sites. Sensitivity of absence = 100−50; specificity of absence = 100−92. Calculated from rounded overall estimates; absence of pallor does not exclude severe anemia.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:15069148:1044",
+      "i": 1044,
+      "pmid": "15069148",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6396285/table/T3/",
+      "localizador": "Tabla 3, fila Paxinos; Walton es el único estudio de ese signo",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/walton-table3-web.txt",
+      "sha256": "fc99f0480517a2b29007e1fd9f2828233e127f92e196274e4c7dd546019faa91",
+      "revision": "Recuperación indirecta del mismo estudio; se excluyen valores predictivos sin procedencia observada confirmada. Se corrige además Sn 96→79 y se especifica Paxinos, conforme al resumen primario.",
+      "valores": {
+        "sp": 50,
+        "lp": 1.58,
+        "ln": 0.42,
+        "base": "sintesis",
+        "nota_datos": "Sp y LR de Paxinos recuperadas de la tabla 3 de Krill et al., que extrae el estudio de Walton 2004. No se incorporan sus VPP/VPN, que coinciden con un escenario de prevalencia del 50% y no se verificaron como observados en Walton. Sn corregida a 79%: el 96% del resumen corresponde a dolor a la palpación, una maniobra distinta.",
+        "nota_datos_en": "Paxinos specificity and LR recovered from Krill et al. Table 3, extracting Walton 2004. Its predictive values are not incorporated: they match a 50% prevalence scenario and were not verified as observed Walton results. Sensitivity corrected to 79%: the abstract’s 96% refers to tenderness on palpation, a different test.",
+        "cit": null,
+        "sn": 79,
+        "s": "Dolor con la compresión acromioclavicular de Paxinos",
+        "se": "Pain with the Paxinos acromioclavicular compression test",
+        "c": "Dolor de origen acromioclavicular",
+        "ce": "Acromioclavicular joint pain",
+        "pr": "Disminución del dolor ≥50% tras inyección en la articulación acromioclavicular.",
+        "pre": "At least 50% pain reduction after acromioclavicular joint injection.",
+        "n": 38,
+        "pob": "38 pacientes evaluados; 28 con dolor acromioclavicular confirmado mediante inyección."
+      }
+    },
+    {
+      "uid": "PMID:10627426:1046",
+      "i": 1046,
+      "pmid": "10627426",
+      "url": "https://cdn-links.lww.com/permalink/jbjs/c/jbjs_2017_03_12_mcfarland_432_sdc1.pdf",
+      "localizador": "Página 1, tabla E1, filas Caliş 2000",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/shoulder-supp.pdf",
+      "sha256": "5e506adf74669f5e4e4ebc812f30f57f5deb6af15455dfb9dfc9c482fb052b24",
+      "revision": "Extracción indirecta claramente identificada; se mantiene atribución a Caliş y no se afirma lectura del original.",
+      "valores": {
+        "s": "Signo de pinzamiento de Neer",
+        "se": "Neer impingement sign",
+        "c": "Síndrome de pinzamiento subacromial",
+        "ce": "Subacromial impingement syndrome",
+        "sn": 88.7,
+        "sp": 30.5,
+        "vpp": 75.9,
+        "vpn": 52.3,
+        "pr": "Prueba de inyección subacromial positiva (alivio del dolor), Caliş 2000.",
+        "n": 125,
+        "pob": "125 hombros de 120 pacientes con dolor de hombro.",
+        "base": "sintesis",
+        "nota_datos": "Fila de Caliş 2000 recuperada de la tabla E1 del suplemento de JBJS (reproducción de Park 2005); PDF y columnas cotejados visualmente. Cita del estudio original conservada; no se obtuvo su PDF completo. VPP/VPN publicados en esa tabla, no escenarios.",
+        "nota_datos_en": "Caliş 2000 row recovered from Table E1 of the JBJS supplement (reproducing Park 2005); PDF columns visually checked. Original study citation retained; its full PDF was unavailable. Predictive values are reported in that table, not prevalence scenarios.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:10627426:1047",
+      "i": 1047,
+      "pmid": "10627426",
+      "url": "https://cdn-links.lww.com/permalink/jbjs/c/jbjs_2017_03_12_mcfarland_432_sdc1.pdf",
+      "localizador": "Página 1, tabla E1, filas Caliş 2000",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/shoulder-supp.pdf",
+      "sha256": "5e506adf74669f5e4e4ebc812f30f57f5deb6af15455dfb9dfc9c482fb052b24",
+      "revision": "Extracción indirecta claramente identificada; se mantiene atribución a Caliş y no se afirma lectura del original.",
+      "valores": {
+        "s": "Signo de pinzamiento de Hawkins",
+        "se": "Hawkins impingement sign",
+        "c": "Síndrome de pinzamiento subacromial",
+        "ce": "Subacromial impingement syndrome",
+        "sn": 92.1,
+        "sp": 25,
+        "vpp": 75.2,
+        "vpn": 56.2,
+        "pr": "Prueba de inyección subacromial positiva (alivio del dolor), Caliş 2000.",
+        "n": 125,
+        "pob": "125 hombros de 120 pacientes con dolor de hombro.",
+        "base": "sintesis",
+        "nota_datos": "Fila de Caliş 2000 recuperada de la tabla E1 del suplemento de JBJS (reproducción de Park 2005); PDF y columnas cotejados visualmente. Cita del estudio original conservada; no se obtuvo su PDF completo. VPP/VPN publicados en esa tabla, no escenarios.",
+        "nota_datos_en": "Caliş 2000 row recovered from Table E1 of the JBJS supplement (reproducing Park 2005); PDF columns visually checked. Original study citation retained; its full PDF was unavailable. Predictive values are reported in that table, not prevalence scenarios.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:10627426:1048",
+      "i": 1048,
+      "pmid": "10627426",
+      "url": "https://cdn-links.lww.com/permalink/jbjs/c/jbjs_2017_03_12_mcfarland_432_sdc1.pdf",
+      "localizador": "Página 1, tabla E1, filas Caliş 2000",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/shoulder-supp.pdf",
+      "sha256": "5e506adf74669f5e4e4ebc812f30f57f5deb6af15455dfb9dfc9c482fb052b24",
+      "revision": "Extracción indirecta claramente identificada; se mantiene atribución a Caliş y no se afirma lectura del original.",
+      "valores": {
+        "s": "Signo de Yergason",
+        "se": "Yergason sign",
+        "c": "Síndrome de pinzamiento subacromial",
+        "ce": "Subacromial impingement syndrome",
+        "sn": 37,
+        "sp": 86.1,
+        "vpp": 86.8,
+        "vpn": 35.6,
+        "pr": "Prueba de inyección subacromial positiva (alivio del dolor), Caliş 2000.",
+        "n": 125,
+        "pob": "125 hombros de 120 pacientes con dolor de hombro.",
+        "base": "sintesis",
+        "nota_datos": "Fila de Caliş 2000 recuperada de la tabla E1 del suplemento de JBJS (reproducción de Park 2005); PDF y columnas cotejados visualmente. Cita del estudio original conservada; no se obtuvo su PDF completo. VPP/VPN publicados en esa tabla, no escenarios.",
+        "nota_datos_en": "Caliş 2000 row recovered from Table E1 of the JBJS supplement (reproducing Park 2005); PDF columns visually checked. Original study citation retained; its full PDF was unavailable. Predictive values are reported in that table, not prevalence scenarios.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:10627426:1049",
+      "i": 1049,
+      "pmid": "10627426",
+      "url": "https://cdn-links.lww.com/permalink/jbjs/c/jbjs_2017_03_12_mcfarland_432_sdc1.pdf",
+      "localizador": "Página 1, tabla E1, filas Caliş 2000",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/shoulder-supp.pdf",
+      "sha256": "5e506adf74669f5e4e4ebc812f30f57f5deb6af15455dfb9dfc9c482fb052b24",
+      "revision": "Extracción indirecta claramente identificada; se mantiene atribución a Caliş y no se afirma lectura del original.",
+      "valores": {
+        "s": "Arco doloroso",
+        "se": "Painful arc",
+        "c": "Síndrome de pinzamiento subacromial",
+        "ce": "Subacromial impingement syndrome",
+        "sn": 32.5,
+        "sp": 80.5,
+        "vpp": 80.5,
+        "vpn": 32.5,
+        "pr": "Prueba de inyección subacromial positiva (alivio del dolor), Caliş 2000.",
+        "n": 125,
+        "pob": "125 hombros de 120 pacientes con dolor de hombro.",
+        "base": "sintesis",
+        "nota_datos": "Fila de Caliş 2000 recuperada de la tabla E1 del suplemento de JBJS (reproducción de Park 2005); PDF y columnas cotejados visualmente. Cita del estudio original conservada; no se obtuvo su PDF completo. VPP/VPN publicados en esa tabla, no escenarios.",
+        "nota_datos_en": "Caliş 2000 row recovered from Table E1 of the JBJS supplement (reproducing Park 2005); PDF columns visually checked. Original study citation retained; its full PDF was unavailable. Predictive values are reported in that table, not prevalence scenarios.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:20049324:1072",
+      "i": 1072,
+      "pmid": "20049324",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2797134/",
+      "localizador": "Tabla 2, Tongue / Severe / Hb 7 g/dL",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/kalantri.txt",
+      "sha256": "124715d082514c94564704411ec024016c207bcc174d2d7221bdae6e0e8110d8",
+      "revision": "Corrección de intensidad y desenlace; no se trasladan LR entre categorías.",
+      "valores": {
+        "s": "Palidez lingual intensa (categoría ordinal)",
+        "se": "Severe tongue pallor (ordinal category)",
+        "c": "Anemia grave (hemoglobina <7 g/dL)",
+        "ce": "Severe anemia (hemoglobin <7 g/dL)",
+        "pr": "Hemoglobina <7 g/dL por contador electrónico.",
+        "lpic": "2.81–34.6",
+        "ordinal": true,
+        "nota_datos": "Tabla 2: LR de la categoría palidez intensa. La LR 0 de ausencia de palidez corresponde a otra categoría y no es LR− de «palidez intensa».",
+        "nota_datos_en": "Table 2: likelihood ratio for the severe-pallor category. The zero LR for no pallor belongs to another category and is not the negative LR of severe pallor.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:10189538:1082",
+      "i": 1082,
+      "pmid": "10189538",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10189538/",
+      "localizador": "Resumen, Results: combinación sitios 3 y 4",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed.xml",
+      "sha256": "b04825b74f5203a7a6432f15c52c549938a82f7340c755b5f5de6941e7056d44",
+      "revision": "Se sustituye la mezcla de desenlace y cifra aproximada por la estrategia explícita evaluada en la misma fuente.",
+      "valores": {
+        "s": "Insensibilidad al monofilamento de 10 g en la cabeza del primer o quinto metatarsiano",
+        "se": "Insensitivity to a 10-g monofilament at the first or fifth metatarsal head",
+        "c": "Pie insensible en personas con diabetes",
+        "ce": "Insensate foot in people with diabetes",
+        "pr": "Umbral de percepción vibratoria >40.",
+        "pre": "Vibration perception threshold >40.",
+        "sn": 80,
+        "sp": 86,
+        "nota_datos": "Resumen original: combinación de sitios 3 y 4. Positiva si cualquiera de las dos cabezas metatarsianas es insensible. El desenlace es pie insensible, no aparición futura de una úlcera; se usa la pareja 80%/86% de esta estrategia, no la especificidad aproximada de sitios individuales.",
+        "nota_datos_en": "Original abstract: combination of sites 3 and 4. Positive if either metatarsal head is insensate. The outcome is insensate foot, not future ulceration; the paired 80%/86% estimates are used instead of the approximate specificity for individual sites.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:20920693:1093",
+      "i": 1093,
+      "pmid": "20920693",
+      "url": "https://doi.org/10.1016/j.amjmed.2010.04.027",
+      "localizador": "Correspondencia con ficha maestra i=329; tabla 4 del artículo para LR+",
+      "archivo_consultado": "/Volumes/Bioinformatics/Wiki/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/maestra_borrador.jsonl",
+      "sha256": "84a2afceaf88e6d4a81d0e12a85f0e176c8f560982d075bd35e6282b2adf62a6",
+      "revision": "Correspondencia de síntesis existente con el mismo estudio, signo y desenlace, no inversión de LR.",
+      "valores": {
+        "sn": 37.0,
+        "sp": 97.0,
+        "ln": 0.7,
+        "base": "sintesis",
+        "nota_datos": "Sn/Sp/LR− recuperadas de la ficha maestra i=329, que cita el mismo estudio de McGee 2010 para el mismo hallazgo y desenlace. El artículo disponible solo tabula LR+; no se afirma verificación primaria de esos tres campos.",
+        "nota_datos_en": "Sensitivity/specificity/LR− recovered from master record i=329, citing the same McGee 2010 study for the same finding and outcome. The available article only tabulates LR+; primary verification of these three fields is not claimed.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:20920693:1094",
+      "i": 1094,
+      "pmid": "20920693",
+      "url": "https://doi.org/10.1016/j.amjmed.2010.04.027",
+      "localizador": "Correspondencia con ficha maestra i=342; tabla 4 del artículo para LR+",
+      "archivo_consultado": "/Volumes/Bioinformatics/Wiki/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/maestra_borrador.jsonl",
+      "sha256": "84a2afceaf88e6d4a81d0e12a85f0e176c8f560982d075bd35e6282b2adf62a6",
+      "revision": "Correspondencia de síntesis existente con el mismo estudio, signo y desenlace, no inversión de LR.",
+      "valores": {
+        "sn": 17.0,
+        "sp": 99.0,
+        "ln": 0.8,
+        "base": "sintesis",
+        "nota_datos": "Sn/Sp/LR− recuperadas de la ficha maestra i=342, que cita el mismo estudio de McGee 2010 para el mismo hallazgo y desenlace. El artículo disponible solo tabula LR+; no se afirma verificación primaria de esos tres campos.",
+        "nota_datos_en": "Sensitivity/specificity/LR− recovered from master record i=342, citing the same McGee 2010 study for the same finding and outcome. The available article only tabulates LR+; primary verification of these three fields is not claimed.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:20920693:1095",
+      "i": 1095,
+      "pmid": "20920693",
+      "url": "https://doi.org/10.1016/j.amjmed.2010.04.027",
+      "localizador": "Correspondencia con ficha maestra i=344; tabla 4 del artículo para LR+",
+      "archivo_consultado": "/Volumes/Bioinformatics/Wiki/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/maestra_borrador.jsonl",
+      "sha256": "84a2afceaf88e6d4a81d0e12a85f0e176c8f560982d075bd35e6282b2adf62a6",
+      "revision": "Correspondencia de síntesis existente con el mismo estudio, signo y desenlace, no inversión de LR.",
+      "valores": {
+        "sn": 5.0,
+        "sp": 100.0,
+        "ln": 0.9,
+        "base": "sintesis",
+        "nota_datos": "Sn/Sp/LR− recuperadas de la ficha maestra i=344, que cita el mismo estudio de McGee 2010 para el mismo hallazgo y desenlace. El artículo disponible solo tabula LR+; no se afirma verificación primaria de esos tres campos.",
+        "nota_datos_en": "Sensitivity/specificity/LR− recovered from master record i=344, citing the same McGee 2010 study for the same finding and outcome. The available article only tabulates LR+; primary verification of these three fields is not claimed.",
+        "cit": null
+      }
+    },
+    {
+      "uid": "PMID:15995110:1109",
+      "i": 1109,
+      "pmid": "15995110",
+      "url": "https://www.scribd.com/document/409028986/79cda9dc726a2fd95caf3513505aa0bfef24",
+      "localizador": "Página 1450, tabla II, fila Speed",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/park-web.txt",
+      "sha256": "b16475cfb3aab0f82dd977d5078d6495e52a8af3173d09794ce2d7bdffaad964",
+      "revision": "Recupera dato antes ilegible; no se invierte la LR.",
+      "valores": {
+        "sp": 83.3,
+        "pob": "Pacientes evaluados por pinzamiento subacromial de cualquier gravedad; referencia artroscópica.",
+        "pr": "Artroscopia de hombro.",
+        "nota_datos": "Tabla II, Park 2005: Sp 83,3%, ahora legible en una transcripción pública del artículo. Se conservan Sn 38,3%, VPP 80,5%, VPN 42,9% y LR+ 2,29 de esa misma fila.",
+        "nota_datos_en": "Park 2005 Table II: specificity 83.3%, now legible in a public article transcription. Sensitivity 38.3%, PPV 80.5%, NPV 42.9% and LR+ 2.29 retained from that same row.",
+        "cit": null
+      }
+    }
+  ],
+  "fuentes_consultadas": [
+    {
+      "url": "https://doi.org/10.1016/j.amjmed.2010.04.027",
+      "archivo_consultado": "/Volumes/Bioinformatics/Wiki/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "fichas": [
+        365,
+        366
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://cdn-links.lww.com/permalink/jbjs/c/jbjs_2017_03_12_mcfarland_432_sdc1.pdf",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/shoulder-supp.pdf",
+      "sha256": "5e506adf74669f5e4e4ebc812f30f57f5deb6af15455dfb9dfc9c482fb052b24",
+      "fichas": [
+        558,
+        559,
+        560,
+        1046,
+        1047,
+        1048,
+        1049
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9449083/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/mcgee4-uci.txt",
+      "sha256": "1c1b29a5ad4425e381f5897284159a393d43e8e8e38e9f275383aed557d6ca23",
+      "fichas": [
+        681
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://www.ncbi.nlm.nih.gov/books/NBK581092/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/glaucoma.txt",
+      "sha256": "9ee96b282dcad9144399c7ee7ee719bc52d5e2a244c6c0f5ed2d1ca90f686881",
+      "fichas": [
+        779
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2703737/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bundy-web.txt",
+      "sha256": "28032e69d8e130b8f8656361700453960830245c999cdcb1c425b5d09462fdb7",
+      "fichas": [
+        888,
+        890
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2703737/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bundy-table4-web.txt",
+      "sha256": "8eecfed193b98eca2f4c77ce71fc78de425dfd2296d6965bc8bf63325846688b",
+      "fichas": [
+        891,
+        892
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2600962/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/PMC2600962.xml",
+      "sha256": "92a16d53f6244c10f3ce761d16e0b12210f33a22eb885a74733a3b09e0aa4d5a",
+      "fichas": [
+        912,
+        913
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://www.mcgill.ca/files/emergency/Child_Dehydration.pdf",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/dehydration.pdf",
+      "sha256": "2e99bc939898f24d80761806155f357409a205f6fe7cd6e278e154da01d7d553",
+      "fichas": [
+        948,
+        949,
+        950
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://bjgp.org/cgi/data/57/540/538/DC1/Supplementary_Data_PDF6",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bruel-supp.pdf",
+      "sha256": "91a675afc0c24f461ed0fd146c1344f4f9b64a209b1f5c17a33bd4e0e24cba71",
+      "fichas": [
+        958,
+        959
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://bjgp.org/cgi/data/57/540/538/DC1/Supplementary_Data_PDF3",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/bruel-tree3.pdf",
+      "sha256": "6ffc9a0e7395be7cfe40ec99c21acb9ef168eab1c489d6b4fd83187aeceeb64b",
+      "fichas": [
+        960
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18209169/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed-pendientes.xml",
+      "sha256": "50cd6055255cbfcd5dfe9da3f7d1c7e7c279fa117a894917e1db4e4b558605eb",
+      "fichas": [
+        970
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28196213/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed-pendientes.xml",
+      "sha256": "50cd6055255cbfcd5dfe9da3f7d1c7e7c279fa117a894917e1db4e4b558605eb",
+      "fichas": [
+        971
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://jamanetwork.com/journals/jamadermatology/fullarticle/480829",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/acral-web.txt",
+      "sha256": "578188139cf4ba1e24a0ce431aa28c58ae4c85f3a0aec4df44ceff9b8d1ec767",
+      "fichas": [
+        975
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10974680/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/cellulitis.txt",
+      "sha256": "8c743be3caeaa78f18d5fca6bf72769fdb25dbda412481e70841a50edea12096",
+      "fichas": [
+        978,
+        979,
+        981
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10460203/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed.xml",
+      "sha256": "b04825b74f5203a7a6432f15c52c549938a82f7340c755b5f5de6941e7056d44",
+      "fichas": [
+        1008,
+        1011,
+        1012
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6396285/table/T3/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/walton-table3-web.txt",
+      "sha256": "fc99f0480517a2b29007e1fd9f2828233e127f92e196274e4c7dd546019faa91",
+      "fichas": [
+        1044
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2797134/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/kalantri.txt",
+      "sha256": "124715d082514c94564704411ec024016c207bcc174d2d7221bdae6e0e8110d8",
+      "fichas": [
+        1072
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10189538/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed.xml",
+      "sha256": "b04825b74f5203a7a6432f15c52c549938a82f7340c755b5f5de6941e7056d44",
+      "fichas": [
+        1082
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://doi.org/10.1016/j.amjmed.2010.04.027",
+      "archivo_consultado": "/Volumes/Bioinformatics/Wiki/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/maestra_borrador.jsonl",
+      "sha256": "84a2afceaf88e6d4a81d0e12a85f0e176c8f560982d075bd35e6282b2adf62a6",
+      "fichas": [
+        1093,
+        1094,
+        1095
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://www.scribd.com/document/409028986/79cda9dc726a2fd95caf3513505aa0bfef24",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/park-web.txt",
+      "sha256": "b16475cfb3aab0f82dd977d5078d6495e52a8af3173d09794ce2d7bdffaad964",
+      "fichas": [
+        1109
+      ],
+      "resultado": "Usada; el alcance real del cotejo consta en cada revisión."
+    },
+    {
+      "url": "https://www.jornaldepneumologia.com.br/export-pdf/951/2009_35_5_3_english.pdf",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/copd.pdf",
+      "sha256": "400f8cc6f2c5d8ddc1ccbee2f6e835a5366aff67f8455eac99a41fa92c998791",
+      "fichas": [
+        1198
+      ],
+      "resultado": "Tabla 2: LR+ por dos observadores; no aporta los denominadores necesarios para completar Sn/Sp/VPP/VPN del tórax en tonel."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6092787/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/lymph1000.txt",
+      "sha256": "542f6550ee64a4ac5d3719aca6dc05f209dfdd901a059913d11973a7fb0ac1b2",
+      "fichas": [
+        1103,
+        1110,
+        1111
+      ],
+      "resultado": "Desenlace malignidad distinto del compuesto malignidad o enfermedad granulomatosa; no sustituir ni convertir rendimiento de biopsia en exactitud del signo."
+    },
+    {
+      "url": "https://doi.org/10.1016/j.jpeds.2011.09.011",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/strep-tables.txt",
+      "sha256": "caab38cee31f7e73dd52630562ed6c86438bbf631f31714098e7fe07e2367ac1",
+      "fichas": [
+        932,
+        933,
+        934,
+        935,
+        936
+      ],
+      "resultado": "Resumen disponible; tablas no recuperadas. Segunda vía Scite también indicó texto completo no disponible."
+    },
+    {
+      "url": "https://doi.org/10.1542/peds.2010-0277",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/meningitis.txt",
+      "sha256": "e20c105aefd4e2c5dbf036ce26fd9f195ce591c5fc6c744ea29f4b31b3957dbe",
+      "fichas": [
+        938,
+        939,
+        940,
+        941,
+        942,
+        943
+      ],
+      "resultado": "Respuesta de acceso sin tabla utilizable. Resumen no completa cifras; Scite tampoco dispone del texto completo."
+    },
+    {
+      "url": "https://doi.org/10.1001/jama.2017.9039",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pneumonia2017.txt",
+      "sha256": "3afc51adebe4b6c5102983e7645d2d1c4d56ba8d27798d512fbefd5b8fe4f796",
+      "fichas": [
+        922
+      ],
+      "resultado": "Texto completo no recuperado, también en Scite; el resumen no da Sn/Sp del trabajo respiratorio conjunto."
+    },
+    {
+      "url": "https://doi.org/10.1001/jama.2013.276185",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/osa.txt",
+      "sha256": "bae40e784ee75c25069adbd02b9a85f7ddc10613f162739a165bab9531f5b55d",
+      "fichas": [
+        849,
+        850,
+        851
+      ],
+      "resultado": "Texto completo no recuperado, también en Scite; no invertir LR agrupadas para inferir Sn/Sp."
+    },
+    {
+      "url": "https://doi.org/10.2106/00004623-200404000-00021",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/walton-full.txt",
+      "sha256": "f5af41bab489403e4a5d5098e85d18a201feb571a36f611da3098e12bafc6ea4",
+      "fichas": [
+        1043
+      ],
+      "resultado": "Solo resumen original accesible; Scite sin acceso. La revisión mezcla estudios para la palpación, por lo que su Sp no se combina con Sn 96 del original."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2486997/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/kenya.txt",
+      "sha256": "70d34107b83fc3de83cd2218f065a50df2ce0d94d781cea59dc8e6b9839cc865",
+      "fichas": [
+        1070
+      ],
+      "resultado": "Artículo escaneado; no se recuperaron tablas legibles para el subgrupo o criterio requerido."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30003987/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed-pendientes.xml",
+      "sha256": "50cd6055255cbfcd5dfe9da3f7d1c7e7c279fa117a894917e1db4e4b558605eb",
+      "fichas": [
+        977
+      ],
+      "resultado": "Resumen sin especificidad para el criterio correspondiente. Scite sin texto completo. No combinar datos secundarios de umbrales ALT-70 distintos."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8780468/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed-pendientes.xml",
+      "sha256": "50cd6055255cbfcd5dfe9da3f7d1c7e7c279fa117a894917e1db4e4b558605eb",
+      "fichas": [
+        1040
+      ],
+      "resultado": "Murphy no documentado en 35 pacientes; el total n=100 no permite reconstruir la tabla del hallazgo."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19095111/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed-pendientes.xml",
+      "sha256": "50cd6055255cbfcd5dfe9da3f7d1c7e7c279fa117a894917e1db4e4b558605eb",
+      "fichas": [
+        987
+      ],
+      "resultado": "Serie de casos: no aporta grupo sin enfermedad para especificidad o valores predictivos."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21156442/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed-pendientes.xml",
+      "sha256": "50cd6055255cbfcd5dfe9da3f7d1c7e7c279fa117a894917e1db4e4b558605eb",
+      "fichas": [
+        1086
+      ],
+      "resultado": "Serie de pacientes con lesiones; no completar especificidad sin grupo control."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41796463/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed-pendientes.xml",
+      "sha256": "50cd6055255cbfcd5dfe9da3f7d1c7e7c279fa117a894917e1db4e4b558605eb",
+      "fichas": [
+        1124
+      ],
+      "resultado": "Rangos de distintas estimaciones; no formar LR combinando extremos no emparejados."
+    },
+    {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42335308/",
+      "archivo_consultado": "/private/tmp/propedeutica-continuacion-20260916/pubmed-pendientes.xml",
+      "sha256": "50cd6055255cbfcd5dfe9da3f7d1c7e7c279fa117a894917e1db4e4b558605eb",
+      "fichas": [
+        1078
+      ],
+      "resultado": "Inconsistencia entre porcentaje y numerador/denominador en el resumen; no reconstruir una tabla."
+    },
+    {
+      "url": "https://jamanetwork.com/journals/jama/fullarticle/2656145",
+      "fichas": [
+        922
+      ],
+      "resultado": "Errata de Shah 2017 cotejada en JAMA: corrige ejemplo bayesiano de Métodos y redacción de Key Points; no aporta Sn/Sp adicionales. La copia PMC enlazada muestra por error una corrección de otro artículo, por lo que no se usó."
+    }
+  ],
+  "alcance": "Revisión dirigida de pendientes, no revisión sistemática exhaustiva. Las rutas temporales y hashes documentan los archivos consultados; no son dependencias para regenerar el catálogo. No se incorporan textos completos al repositorio."
+}

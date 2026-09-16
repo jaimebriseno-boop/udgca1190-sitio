@@ -41,6 +41,21 @@ class Evidencia:
         self.revisados = json.loads((base / 'revision_wiki.json').read_text())
         textos = json.loads((base / 'revision_textos_wiki.json').read_text())
         self.textos = {r['uid']: r for r in textos['revisiones']}
+        continuacion = json.loads((base / 'revision_continuacion.json').read_text())
+        self.continuacion = {r['uid']: r for r in continuacion['revisiones']}
+        if len(self.continuacion) != len(continuacion['revisiones']):
+            raise ValueError('UID duplicado en la revisión de continuación')
+
+    def completar_revision(self, r):
+        """Aplica el cotejo posterior también a maestras y variantes publicadas."""
+        revision = self.continuacion.get(r['uid'])
+        if revision:
+            if revision['i'] != r['i']:
+                raise ValueError('La revisión no corresponde al identificador publicado')
+            r.update(revision['valores'])
+            for key in ('lp', 'ln'):
+                if key + 'ic' in revision['valores']:
+                    r[key + 'ns'] = cruza_uno(r.get(key + 'ic'))
 
     def referencia(self, fuente):
         if not fuente:

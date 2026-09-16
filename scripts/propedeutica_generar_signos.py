@@ -380,7 +380,11 @@ def main():
             adicionales.append({**r, **variante, 'i': len(recs) + len(adicionales),
                                 'uid': r['uid'] + ':' + str(j)})
     recs.extend(adicionales)
+    pendientes = set(evidencia.continuacion) - {r['uid'] for r in recs}
+    if pendientes:
+        raise ValueError(f'Revisiones sin ficha: {sorted(pendientes)}')
     for r in recs:
+        evidencia.completar_revision(r)
         completar_lr(r)
         r['v'] = veredicto(r.get('lp'), r.get('ln'), r.get('lpns'), r.get('lnns'))
         r['vps'] = vp_escenarios(None if r.get('ordinal') else r.get('sn'),
