@@ -27,7 +27,10 @@ nota maestra, ejecutar backlinks y leer sus wikilinks del cuerpo y `related_*`.
 
 Rama `main`; remoto `https://github.com/jaimebriseno-boop/udgca1190-sitio.git`.
 Base de esta continuación: `44fa230`; implementación previa `e5a49af`.
-Publicación de esta continuación: pendiente de cotejo final.
+Implementación de esta continuación: `95a239d`, en `origin/main` y publicada.
+Vercel confirmó el despliegue; JSON y JavaScript de la URL canónica cotejados
+byte por byte, más fichas de MEWS, Park y celulitis en navegador de producción.
+El guardado de este resultado se realiza en un commit documental posterior.
 
 - Página: <https://udgca1190.com.mx/herramientas/propedeutica>.
 - Aplicación: `/herramientas/propedeutica-basada-en-evidencia/app/index.html`.

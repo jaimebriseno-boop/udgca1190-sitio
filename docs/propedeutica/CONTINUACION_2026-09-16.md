@@ -94,7 +94,11 @@ ausencia, PMID y criterio para retomarla; no confunde «no recuperado» con
   cero advertencias y 75 sugerencias preexistentes.
 - Compilación correcta: 33 páginas. Navegador local: MEWS, Park, Paxinos,
   celulitis en inglés y cobertura de la página contenedora. Único error de
-  consola: favicon local 404. Cotejo de producción pendiente del push.
+  consola: favicon local 404. En producción se comprobaron MEWS, Park y
+  celulitis (español/inglés), incluidas referencias, cifras y notas.
+- Implementación `95a239d` enviada a `origin/main`. Vercel confirmó el
+  despliegue. JSON y JavaScript de las URLs canónicas idénticos byte por byte
+  a los archivos locales, comprobados después de la publicación.
 - El primer build simultáneo con check falló por una colisión del archivo
   temporal de Astro; se ejecutó de nuevo secuencialmente y terminó correctamente.
 - El rótulo de porcentajes calculados dice ahora «conteos publicados del estudio»,

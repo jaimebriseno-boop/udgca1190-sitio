@@ -48,7 +48,10 @@ La Wiki permanece sin modificación. El recorrido previo de cuatro maestras y
 byte por byte. Navegador local comprobado: MEWS, Park, celulitis en inglés,
 Paxinos y página contenedora con 1.233 referencias.
 
-Compilación final correcta: 33 páginas. Publicación: pendiente de cotejo tras el push.
+Compilación final correcta: 33 páginas. Implementación publicada en `95a239d`,
+enviado a `origin/main`; Vercel confirmó despliegue correcto. JSON y JavaScript
+servidos idénticos byte por byte a los locales. Fichas de MEWS, Park y celulitis
+verificadas también en producción (español e inglés).
 URL: <https://udgca1190.com.mx/herramientas/propedeutica>.
 SHA-256 del catálogo actualizado:
 `83762d828880bddf24693038c30d5bb326d7373cf6c432ee26702974eda0cc1e`.
