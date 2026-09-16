@@ -18,6 +18,9 @@ El enriquecimiento de `scripts/propedeutica_evidencia.py` incorpora:
 
 - `propedeutica_sustitucion/revision_wiki.json`: correspondencias revisadas,
   referencias de encabezados, correcciones de maniobra/desenlace y cifras.
+- `propedeutica_sustitucion/revision_textos_wiki.json`: datos revisados en las
+  extracciones de artículos, conteos 2×2, correcciones de correspondencia y
+  trazabilidad (PMID, UID, ruta, SHA-256, líneas).
 - `propedeutica_sustitucion/articulos.json`: metadatos bibliográficos recuperados
   con PubMed efetch para los 298 PMID de los registros externos.
 - `docs/propedeutica/REVISION_2026-09-16.md`: cobertura, limitaciones y validación.
@@ -56,7 +59,10 @@ puntuales llevan `derivadas`; no se invierten LR agrupadas ni se promedian
 rangos para obtener Sn/Sp. Las categorías ordinales no generan una LR negativa.
 `"Infinity"` representa infinito con JSON válido; 0/0 sigue vacío.
 
-`vpp` y `vpn` son valores observados publicados. `vps` contiene escenarios
+`vpp` y `vpn` son valores de la población del artículo, publicados o
+calculados desde `tabla2x2`. Los calculados llevan `porcentajes_calculados`;
+la interfaz los identifica. `nota_datos`/`nota_datos_en` explican las
+particularidades de la estimación cuando se requiere. `vps` contiene escenarios
 calculados a probabilidades preprueba supuestas de 5, 20 y 50 %, con LR
 publicadas como primera opción. La interfaz explica esta diferencia.
 

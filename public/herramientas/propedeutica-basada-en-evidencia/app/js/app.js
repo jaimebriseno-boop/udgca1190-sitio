@@ -30,6 +30,8 @@
       'm.nopub': '',
       'm.ns': 'NS: resultado no significativo; no equivale a LR = 1.',
       'm.derivadas': 'cálculo a partir de la sensibilidad y especificidad puntuales publicadas, sujetas a redondeo.',
+      'm.conteos': 'cálculo a partir de los conteos de la tabla 2×2 publicada.',
+      'b.datos': 'Detalle del dato',
       'm.vpobservados': 'VPP y VPN observados en la población del artículo',
       'b.articulos': 'Artículo(s) de referencia',
       'b.sintesis': 'Artículos citados por la síntesis consultada. Las cifras resumidas pueden proceder de varios estudios; no representan necesariamente una estimación individual de cada artículo.',
@@ -76,6 +78,8 @@
       'm.nopub': '',
       'm.ns': 'NS: not statistically significant; this does not mean LR = 1.',
       'm.derivadas': 'calculated from the reported point sensitivity and specificity, subject to rounding.',
+      'm.conteos': 'calculated from the counts in the published 2×2 table.',
+      'b.datos': 'Data details',
       'm.vpobservados': 'PPV and NPV observed in the article population',
       'b.articulos': 'Reference article(s)',
       'b.sintesis': 'Articles cited by the consulted synthesis. Summary figures may involve several studies and need not be an individual estimate from each article.',
@@ -304,11 +308,12 @@
         celda(t('m.ln'), r.ln == null ? (r.lnns ? 'NS' : '') : fmtLr(r.ln) + (r.lnns ? ' · NS' : ''), r.lnic) +
         '</div>';
       if (r.lpns || r.lnns) h += '<p class="nota">' + esc(t('m.ns')) + '</p>';
-      if (r.derivadas) h += '<p class="nota">' + esc(r.derivadas.join(', ') + ': ' + t('m.derivadas')) + '</p>';
+      if (r.derivadas) h += '<p class="nota">' + esc(r.derivadas.join(', ') + ': ' + t(r.tabla2x2 ? 'm.conteos' : 'm.derivadas')) + '</p>';
       h += bloque(t('m.vpobservados'),
         '<div class="met">' + celda(t('m.vpp'), r.vpp == null ? '' : rango(r.vpp) + ' %', r.vppic) +
         celda(t('m.vpn'), r.vpn == null ? '' : rango(r.vpn) + ' %', r.vpnic) + '</div>');
       if (r.vpnota) h += '<p class="nota">' + esc(LANG === 'en' ? (r.vpnotae || r.vpnota) : r.vpnota) + '</p>';
+      if (r.porcentajes_calculados) h += '<p class="nota">' + esc(r.porcentajes_calculados.map(function (k) { return t('m.' + k); }).join(', ') + ': ' + t('m.conteos')) + '</p>';
       if (r.ordinal) h += '<p class="nota">' + esc(t('m.ordinal')) + '</p>';
       if (r.vps) {
         var filasVp = r.vps.map(function (f) {
@@ -328,6 +333,7 @@
     if (r.mn) h += bloque(t('b.maniobra'), esc(r.mn));
     var pr = LANG === 'en' ? (r.pre || r.pr) : (r.pr || r.pre);
     if (pr) h += bloque(t('b.patron'), esc(pr));
+    if (r.nota_datos) h += bloque(t('b.datos'), esc(LANG === 'en' ? (r.nota_datos_en || r.nota_datos) : r.nota_datos));
     if (r.pob) h += bloque(t('b.poblacion'), esc(r.pob) +
       (r.n ? ' · n = ' + nfmt(r.n) : '') +
       (r.ne ? ' · ' + r.ne + (LANG === 'en' ? ' studies' : ' estudios') : ''));

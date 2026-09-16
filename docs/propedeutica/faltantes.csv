@@ -702,7 +702,6 @@ PMID:36811717:699,699,Escala TWIST con punto de corte de 5 puntos (para confirma
 PMID:36811717:700,700,Escala TWIST con punto de corte de 2 puntos (para descartar torsión),Torsión testicular,vpp;vpn,False,hallazgo
 PMID:36811717:701,701,Escala TWIST con punto de corte de 4 puntos,Torsión testicular,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:36811717:702,702,Escala TWIST con punto de corte de 7 puntos (puntaje máximo),Torsión testicular,sp;lp;ln;vpp;vpn,False,hallazgo
-PMID:28833896:703,703,Escala TWIST de alto riesgo (puntaje de 7) aplicada por urgenciologos pediatras,Torsión testicular,sn;lp;ln;vpn,False,hallazgo
 PMID:40368720:704,704,Ultrasonido Doppler color escrotal (ausencia de flujo testicular),Torsión testicular,vpp;vpn,False,hallazgo
 PMID:30847624:705,705,Ultrasonido escrotal en adultos con dolor escrotal agudo,Torsión testicular,vpp;vpn,False,hallazgo
 PMID:29335899:706,706,Signo del remolino (whirlpool) del cordón espermatico en ultrasonido,Torsión testicular,vpp;vpn,False,hallazgo
@@ -716,7 +715,6 @@ PMID:22733195:713,713,Herniografía en hernia inguinal oculta,Hernia inguinal oc
 PMID:12831490:714,714,Ultrasonido para clasificar la hernia inguinal como directa,Hernia inguinal directa,vpp;vpn,False,hallazgo
 PMID:12831490:715,715,Ultrasonido para clasificar la hernia inguinal como indirecta,Hernia inguinal indirecta,vpp;vpn,False,hallazgo
 PMID:16903932:716,716,Palpación del plexo pampiniforme (varicocele clínico izquierdo),Varicocele izquierdo,vpp;vpn,False,hallazgo
-PMID:32289199:717,717,Exploración física de varicocele por urologo experto (más de 10 años en infertilidad masculina),Varicocele,sn;lp;ln;vpn,False,hallazgo
 PMID:32289199:718,718,Exploración física de varicocele por residente de urología,Varicocele,vpp;vpn,False,hallazgo
 PMID:15371858:719,719,Termografía escrotal de contacto (varicoscreen) para varicocele izquierdo,Varicocele izquierdo,vpp;vpn,False,hallazgo
 PMID:12235612:720,720,Palpación abdominal y percusión suprapubica para detectar globo vesical,Vejiga llena (volumen vesical de 400 a 600 mL),vpp;vpn,False,hallazgo
@@ -724,10 +722,10 @@ PMID:32734725:721,721,Grosor de la pared vesical de 4.0 mm o mas por ultrasonido
 PMID:32734725:722,722,Grosor del detrusor de 3.0 mm o mas por ultrasonido suprapubico,Obstrucción del tracto urinario de salida por hiperplasia prostática,vpp;vpn,False,hallazgo
 PMID:36605912:723,723,Punopercusión lumbar positiva (dolor a la percusión del ángulo costovertebral),Litiasis ureteral,vpp;vpn,False,hallazgo
 PMID:12020306:724,724,Punopercusión lumbar positiva (dolor a la percusión del ángulo costovertebral),Infección urinaria aguda no complicada,sn;sp;vpp;vpn,False,hallazgo
-PMID:12020306:725,725,Flujo vaginal observado en la exploración,Infección urinaria aguda no complicada,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:12020306:725,725,Flujo vaginal observado en la exploración,Infección urinaria aguda no complicada,sn;sp;vpp;vpn,False,hallazgo
 PMID:12020306:726,726,Disuria,Infección urinaria aguda no complicada,sn;sp;vpp;vpn,False,hallazgo
-PMID:12020306:727,727,Polaquiuria (aumento de la frecuencia urinaria),Infección urinaria aguda no complicada,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:12020306:728,728,Hematuria referida por la paciente,Infección urinaria aguda no complicada,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:12020306:727,727,Polaquiuria (aumento de la frecuencia urinaria),Infección urinaria aguda no complicada,sn;sp;vpp;vpn,False,hallazgo
+PMID:12020306:728,728,Hematuria referida por la paciente,Infección urinaria aguda no complicada,sn;sp;vpp;vpn,False,hallazgo
 PMID:12020306:729,729,Dolor lumbar,Infección urinaria aguda no complicada,sn;sp;vpp;vpn,False,hallazgo
 PMID:12020306:730,730,Combinación de disuria y polaquiuria sin flujo ni irritación vaginal,Infección urinaria aguda no complicada,sn;sp;ln;vpp;vpn,False,hallazgo
 PMID:36349207:731,731,Dolor a la palpación pelvica bimanual (hipersensibilidad pelvica),Enfermedad pelvica inflamatoria,vpp;vpn,False,hallazgo
@@ -736,7 +734,7 @@ PMID:36349207:733,733,Dolor a la palpación anexial,Enfermedad pelvica inflamato
 PMID:8441133:734,734,Combinación clínica: dolor anexial + dolor abdominal bajo de menos de una semana + leucocitosis,Enfermedad pelvica inflamatoria aguda,vpp;vpn,False,hallazgo
 PMID:23613077:735,735,Dolor a la movilización cervical,Embarazo ectopico,vpp;vpn,False,hallazgo
 PMID:23613077:736,736,Masa anexial palpable,Embarazo ectopico,vpp;vpn,False,hallazgo
-PMID:23613077:737,737,Dolor a la palpación anexial,Embarazo ectopico,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:23613077:737,737,Dolor a la palpación anexial,Embarazo ectopico,vpp;vpn,False,hallazgo
 PMID:31462118:738,738,Maniobras de Leopold para diagnosticar presentación cefalica de vértice,Presentación cefalica de vértice,vpp;vpn,False,hallazgo
 PMID:20873072:739,739,Maniobras de Leopold para detectar presentación no cefalica,Presentación no cefalica (pelvica o transversa),vpp;vpn,False,hallazgo
 PMID:8240620:740,740,Maniobras de Leopold realizadas por parteras certificadas con experiencia,Presentación fetal anomala (malpresentación),vpp;vpn,False,hallazgo
@@ -754,7 +752,7 @@ PMID:16756982:751,751,pH vaginal mayor de 4.5 (criterio aislado de Amsel),Vagino
 PMID:16756982:752,752,Secreción vaginal homogenea (criterio aislado de Amsel),Vaginosis bacteriana,vpp;vpn,False,hallazgo
 PMID:16756982:753,753,Células clave en fresco (criterio aislado de Amsel),Vaginosis bacteriana,vpp;vpn,False,hallazgo
 PMID:24135180:754,754,pH vaginal mayor de 4.5 medido con tira reactiva,Vaginosis bacteriana,vpp;vpn,False,hallazgo
-PMID:18480117:755,755,Presión arterial media de 90 mmHg o mas en el segundo trimestre,Preeclampsia,sn;sp;vpp;vpn,False,hallazgo
+PMID:18480117:755,755,Presión arterial media de 90 mmHg o mas en el segundo trimestre,Preeclampsia,vpp;vpn,False,hallazgo
 PMID:18480117:756,756,Presión arterial diastólica de 75 mmHg o mas entre las semanas 13 y 20,Preeclampsia en embarazadas de alto riesgo,sn;sp;vpp;vpn,False,hallazgo
 PMID:35051804:757,757,Tira reactiva urinaria con proteinuria de 1+ o mas,Proteinuria significativa en sospecha de preeclampsia,vpp;vpn,False,hallazgo
 PMID:24073412:758,758,"Evaluación clínica convencional: acumulación de líquido en fondo de saco, prueba de nitrazina y cristalización en helecho",Ruptura de membranas,vpp;vpn,False,hallazgo
@@ -774,8 +772,8 @@ PMID:18055793:771,771,Prueba estándar de la linterna oblicua (estudio poblacion
 PMID:18055793:772,772,Prueba de linterna oblicua simulada en lámpara de hendidura (razón sombra/diámetro corneal ≥0.18),Ángulo estrecho,vpp;vpn,False,hallazgo
 PMID:8913128:773,773,Prueba de la linterna (cámara estrecha) en consulta general,Ángulo camerular ocluible,vpp;vpn,False,hallazgo
 PMID:8913128:774,774,Prueba de van Herick en consulta general,Ángulo camerular ocluible,vpp;vpn,False,hallazgo
-PMID:23677315:775,775,Relación excavación/disco (copa/disco) ≥0.7 en el fondo de ojo,Glaucoma primario de ángulo abierto,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:23677315:776,776,Asimetría de la relación excavación/disco ≥0.3 entre ambos ojos,Glaucoma primario de ángulo abierto,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:23677315:775,775,Relación excavación/disco (copa/disco) ≥0.7 en el fondo de ojo,Glaucoma primario de ángulo abierto,sn;sp;vpp;vpn,False,hallazgo
+PMID:23677315:776,776,Asimetría de la relación excavación/disco ≥0.3 entre ambos ojos,Glaucoma primario de ángulo abierto,sn;sp;vpp;vpn,False,hallazgo
 PMID:23677315:777,777,Hemorragia en astilla del borde del disco óptico,Glaucoma primario de ángulo abierto,sn;sp;vpp;vpn,False,hallazgo
 PMID:23677315:778,778,Presión intraocular ≥22 mmHg,Glaucoma primario de ángulo abierto,sn;sp;vpp;vpn,False,hallazgo
 PMID:35608575:779,779,Tonometría aislada como prueba de tamizaje,Glaucoma primario de ángulo abierto,sp;lp;ln;vpp;vpn,False,hallazgo
@@ -794,17 +792,15 @@ PMID:30636351:791,791,Ultrasonido ocular a pie de cama (POCUS),Desprendimiento d
 PMID:32074291:792,792,Ultrasonido ocular a pie de cama realizado por urgenciólogos,Desprendimiento de retina,vpp;vpn,False,hallazgo
 PMID:32074291:793,793,Ultrasonido ocular a pie de cama,Hemorragia vítrea,vpp;vpn,False,hallazgo
 PMID:32074291:794,794,Ultrasonido ocular a pie de cama,Desprendimiento del vítreo posterior,vpp;vpn,False,hallazgo
-PMID:19934426:795,795,Hemorragia vítrea vista en biomicroscopía con lámpara de hendidura,Desgarro retiniano en desprendimiento agudo de vítreo posterior,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:19934426:796,796,Ausencia de pigmento en el vítreo anterior (signo de Shafer negativo),Desgarro retiniano en desprendimiento agudo de vítreo posterior,sn;sp;lp;vpp;vpn,False,hallazgo
-PMID:19934426:797,797,Disminución subjetiva de la visión referida por el paciente,Desgarro retiniano en desprendimiento agudo de vítreo posterior,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:19934426:795,795,Hemorragia vítrea vista en biomicroscopía con lámpara de hendidura,Desgarro retiniano en desprendimiento agudo de vítreo posterior,vpp;vpn,False,hallazgo
+PMID:19934426:796,796,Pigmento en el vítreo anterior (signo de Shafer),Desgarro retiniano en desprendimiento agudo de vítreo posterior,vpp;vpn,False,hallazgo
+PMID:19934426:797,797,Disminución subjetiva de la visión referida por el paciente,Desgarro retiniano en desprendimiento agudo de vítreo posterior,vpp;vpn,False,hallazgo
 PMID:32555518:798,798,"Escala BERT de Belfast (sexo masculino 1, miopía 1, visión borrosa 2, sombra 2, hemorragia vítrea 3, polvo de tabaco 4; total >3)",Desgarro o desprendimiento de retina en paciente con fotopsias y miodesopsias,vpp;vpn,False,hallazgo
 PMID:35699701:799,799,Secreción mucopurulenta ocular,Conjuntivitis bacteriana (frente a viral),vpp;vpn,False,hallazgo
 PMID:35699701:800,800,Otitis media concomitante,Conjuntivitis bacteriana (frente a viral),vpp;vpn,False,hallazgo
 PMID:35699701:801,801,Contacto con otra persona con ojo rojo,Conjuntivitis viral (frente a bacteriana),vpp;vpn,False,hallazgo
 PMID:35699701:802,802,Faringitis concomitante,Conjuntivitis viral (frente a bacteriana),ln;vpp;vpn,False,hallazgo
 PMID:35699701:803,803,Adenopatía preauricular palpable,Conjuntivitis viral (frente a bacteriana),ln;vpp;vpn,False,hallazgo
-PMID:21175516:804,804,Ojo rojo en herpes zóster oftálmico,Enfermedad ocular moderada a grave (afección corneal o intraocular) en herpes zóster oftálmico,sp;lp;ln;vpp;vpn,False,hallazgo
-PMID:25697458:805,805,Algoritmo diagnóstico de Edimburgo para ojo rojo aplicado por no oftalmólogos,Glaucoma agudo de ángulo cerrado dentro del diagnóstico diferencial del ojo rojo,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:30893373:806,806,"Modelo clínico de 7 factores (ocupación, trauma, evolución, profundidad, lesiones satélite, placa endotelial, adelgazamiento estromal)",Queratitis micótica (frente a bacteriana) en queratitis microbiana grave,vpp;vpn,False,hallazgo
 PMID:24909916:807,807,Mejoría de la visión con agujero estenopeico (visión <6/12 que mejora a 6/12 o mejor),Error refractivo significativo (equivalente esférico > ±0.50 D),vpp;vpn,False,hallazgo
 PMID:24909916:808,808,Mejoría de más de una línea logMAR con agujero estenopeico,Error refractivo significativo (equivalente esférico > ±0.50 D),vpp;vpn,False,hallazgo
@@ -812,8 +808,6 @@ PMID:24909916:809,809,Mejoría de más de dos líneas logMAR con agujero estenop
 PMID:33180103:810,810,Reflejo rojo (prueba de Brückner) sin dilatación pupilar,Cualquier patología ocular en el lactante,vpp;vpn,False,hallazgo
 PMID:33180103:811,811,Reflejo rojo sin dilatación pupilar (patología que requiere intervención),Patología ocular del lactante que requiere intervención médica o quirúrgica,vpp;vpn,False,hallazgo
 PMID:34304165:812,812,Prueba del reflejo rojo en el recién nacido,Anomalías oculares del recién nacido (sobre todo del segmento anterior),vpp;vpn,False,hallazgo
-PMID:32546747:813,813,Reflejo rojo con oftalmoscopio Arclight realizado por enfermeras,Catarata pediátrica y retinoblastoma,sp;lp;ln;vpp;vpn,False,hallazgo
-PMID:32546747:814,814,Exploración con linterna simple (sin reflejo rojo),Catarata pediátrica y retinoblastoma,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:26250688:815,815,Ultrasonido ocular en modo B a pie de cama,Hemorragia vítrea o prerretiniana asociada a hemorragia subaracnoidea (síndrome de Terson),vpp;vpn,False,hallazgo
 PMID:26250688:816,816,Ultrasonido ocular en modo B a pie de cama para hemorragias retinianas,Hemorragias retinianas asociadas a hemorragia subaracnoidea,vpp;vpn,False,hallazgo
 PMID:20385890:817,817,Campimetría por confrontación con objeto rojo en movimiento (cinética),Defecto del campo visual,vpp;vpn,False,hallazgo
@@ -825,25 +819,24 @@ PMID:20638734:822,822,Microscopia binocular del oído por adscrito,Derrame en o�
 PMID:14506123:823,823,Membrana timpánica abombada,Otitis media aguda,sn;sp;ln;vpp;vpn,False,hallazgo
 PMID:14506123:824,824,Membrana timpánica opaca o turbia,Otitis media aguda,sn;sp;ln;vpp;vpn,False,hallazgo
 PMID:14506123:825,825,Membrana timpánica claramente inmovil a la otoscopia neumatica,Otitis media aguda,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:14506123:826,826,Membrana timpánica francamente eritematosa,Otitis media aguda,sn;sp;vpp;vpn,False,hallazgo
+PMID:14506123:826,826,Membrana timpánica francamente eritematosa,Otitis media aguda,sn;sp;ln;vpp;vpn,False,hallazgo
 PMID:14506123:827,827,Membrana timpánica de coloración normal,Otitis media aguda,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:14506123:828,828,Otalgia referida por el paciente o el cuidador,Otitis media aguda,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:14506123:828,828,Otalgia referida por el paciente o el cuidador,Otitis media aguda,vpp;vpn,False,hallazgo
 PMID:30858261:829,829,Secreción purulenta en el meato medio (rinoscopia),Rinosinusitis aguda,vpp;vpn,False,hallazgo
-PMID:30858261:830,830,Transiluminación de senos paranasales normal,Rinosinusitis aguda,sn;sp;lp;vpp;vpn,False,hallazgo
-PMID:30858261:831,831,Cacosmia (aliento fetido percibido por el paciente),Rinosinusitis aguda bacteriana,sn;sp;vpp;vpn,False,hallazgo
-PMID:30858261:832,832,Dolor en los dientes superiores,Rinosinusitis aguda bacteriana,sn;sp;vpp;vpn,False,hallazgo
-PMID:31208974:833,833,Impresión clínica global del medico (gestalt),Rinosinusitis aguda bacteriana,sn;sp;vpp;vpn,False,hallazgo
-PMID:25782075:834,834,Secreción moderada o abundante en fosa nasal a la rinoscopia anterior (día 9-10),Rinosinusitis aguda bacteriana,sn;sp;vpp;vpn,False,hallazgo
-PMID:25782075:835,835,Secreción visible en el meato medio (día 9-10),Rinosinusitis aguda bacteriana,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:25782075:836,836,Secreción visible en la pared posterior de la faringe (día 9-10),Rinosinusitis aguda bacteriana,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:30858261:830,830,Transiluminación de senos paranasales anormal,Rinosinusitis aguda,vpp;vpn,False,hallazgo
+PMID:30858261:831,831,Cacosmia (aliento fetido percibido por el paciente),Rinosinusitis aguda bacteriana,vpp;vpn,False,hallazgo
+PMID:30858261:832,832,Dolor en los dientes superiores,Rinosinusitis aguda bacteriana,vpp;vpn,False,hallazgo
+PMID:31208974:833,833,Impresión clínica global del medico (gestalt),Rinosinusitis aguda bacteriana,vpp;vpn,False,hallazgo
+PMID:25782075:834,834,Secreción moderada o abundante en fosa nasal a la rinoscopia anterior (día 9-10),Rinosinusitis aguda bacteriana,vpp;vpn,False,hallazgo
+PMID:25782075:835,835,Secreción visible en el meato medio (día 9-10),Rinosinusitis aguda bacteriana,vpp;vpn,False,hallazgo
+PMID:25782075:836,836,Secreción visible en la pared posterior de la faringe (día 9-10),Rinosinusitis aguda bacteriana,vpp;vpn,False,hallazgo
 PMID:25782075:837,837,Odontalgia (dolor dental) a los 9-10 días de evolución,Rinosinusitis aguda bacteriana,vpp;vpn,False,hallazgo
 PMID:16434632:838,838,Prueba de la voz susurrada (incapacidad para percibir el susurro),Hipoacusia,sn;sp;vpp;vpn,False,hallazgo
 PMID:16434632:839,839,Prueba de Weber anormal (lateralización),Hipoacusia,sn;sp;vpp;vpn,False,hallazgo
 PMID:16434632:840,840,Prueba de Rinne anormal (conducción ósea mayor que la aerea),Hipoacusia,sn;sp;vpp;vpn,False,hallazgo
-PMID:14576249:841,841,Prueba de la voz susurrada en adultos,Hipoacusia,lp;ln;vpp;vpn,False,hallazgo
-PMID:14576249:842,842,Prueba de la voz susurrada en niños,Hipoacusia,lp;ln;vpp;vpn,False,hallazgo
+PMID:14576249:841,841,Prueba de la voz susurrada en adultos,Hipoacusia,vpp;vpn,False,hallazgo
+PMID:14576249:842,842,Prueba de la voz susurrada en niños,Hipoacusia,vpp;vpn,False,hallazgo
 PMID:29661046:843,843,Prueba de Rinne con diapasón de 256 Hz,Hipoacusia conductiva,lp;ln;vpp;vpn,False,hallazgo
-PMID:19414727:844,844,"Prueba del frote de dedos calibrado, intensidad débil (CALFRAST-Faint 70)",Hipoacusia,sp;lp;vpp,False,hallazgo
 PMID:27919588:845,845,"Cuestionario STOP-BANG (detección de apnea leve, IAH mayor o igual a 5)",Apnea obstructiva del sueno leve,vpp;vpn,False,hallazgo
 PMID:27919588:846,846,"Cuestionario STOP-BANG (detección de apnea moderada, IAH mayor o igual a 15)",Apnea obstructiva del sueno moderada,vpp;vpn,False,hallazgo
 PMID:27919588:847,847,"Cuestionario STOP-BANG (detección de apnea grave, IAH mayor o igual a 30)",Apnea obstructiva del sueno grave,vpp;vpn,False,hallazgo
@@ -867,26 +860,26 @@ PMID:36453134:864,864,Bateria HINTS mas prueba de audición (HINTS+),Causa centr
 PMID:32167642:865,865,Bateria HINTS aplicada por medicos de urgencias,Causa central de vértigo (ictus vertebrobasilar),vpp;vpn,False,hallazgo
 PMID:32167642:866,866,Bateria HINTS aplicada por neurologos,Causa central de vértigo (ictus vertebrobasilar),vpp;vpn,False,hallazgo
 PMID:18469678:867,867,Maniobra de Dix-Hallpike,Vértigo posicional paroxistico benigno del canal semicircular posterior,vpp;vpn,False,hallazgo
-PMID:11147989:868,868,Exudado amigdalino,Faringitis por estreptococo beta hemolitico del grupo A,sn;sp;vpp;vpn,False,hallazgo
-PMID:11147989:869,869,Exudado faringeo,Faringitis por estreptococo beta hemolitico del grupo A,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:11147989:870,870,Adenopatias cervicales anteriores dolorosas (ausencia),Faringitis por estreptococo beta hemolitico del grupo A,sn;sp;lp;vpp;vpn,False,hallazgo
+PMID:11147989:868,868,Exudado amigdalino,Faringitis por estreptococo beta hemolitico del grupo A,vpp;vpn,False,hallazgo
+PMID:11147989:869,869,Exudado faringeo,Faringitis por estreptococo beta hemolitico del grupo A,vpp;vpn,False,hallazgo
+PMID:11147989:870,870,Adenopatías cervicales anteriores dolorosas,Faringitis por estreptococo beta hemolitico del grupo A,vpp;vpn,False,hallazgo
 PMID:15900010:871,871,"Paresia facial aguda, deriva del brazo o alteración del habla (al menos uno)",Evento vascular cerebral,vpp;vpn,False,hallazgo
-PMID:28214369:872,872,Migración del dolor al cuadrante inferior derecho (fosa iliaca derecha),Apendicitis aguda,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:28214369:873,873,Dolor en fosa iliaca derecha al toser o al brincar (prueba del salto),Apendicitis aguda,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:28214369:872,872,Migración del dolor al cuadrante inferior derecho (fosa iliaca derecha),Apendicitis aguda,vpp;vpn,False,hallazgo
+PMID:28214369:873,873,Dolor en fosa iliaca derecha al toser o al brincar (prueba del salto),Apendicitis aguda,vpp;vpn,False,hallazgo
 PMID:28214369:874,874,Signo de Rovsing (dolor referido a fosa iliaca derecha al palpar la fosa iliaca izquierda),Apendicitis aguda,vpp;vpn,False,hallazgo
-PMID:28214369:875,875,Escala de Apendicitis Pediátrica (PAS) mayor o igual a 9 puntos,Apendicitis aguda,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:28214369:876,876,Ultrasonido a pie de cama realizado por el urgenciologo (POCUS) para apendicitis,Apendicitis aguda,sn;sp;vpp;vpn,False,hallazgo
+PMID:28214369:875,875,Escala de Apendicitis Pediátrica (PAS) mayor o igual a 9 puntos,Apendicitis aguda,sn;vpp;vpn,False,hallazgo
+PMID:28214369:876,876,Ultrasonido a pie de cama realizado por el urgenciologo (POCUS) para apendicitis,Apendicitis aguda,vpp;vpn,False,hallazgo
 PMID:36966018:877,877,"Escala de Alvarado (MANTRELS) en niños, punto de corte habitual",Apendicitis aguda,vpp;vpn,False,hallazgo
 PMID:36966018:878,878,Escala de Alvarado modificada en niños,Apendicitis aguda,vpp;vpn,False,hallazgo
-PMID:24731432:879,879,Escala de Alvarado menor de 4 puntos (umbral de descarte en niños),Apendicitis aguda,sn;sp;lp;vpp;vpn,False,hallazgo
-PMID:24731432:880,880,Escala de Alvarado mayor o igual a 7 puntos en niños,Apendicitis aguda,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:24731432:881,881,Escala de Alvarado mayor o igual a 9 puntos en niños,Apendicitis aguda,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:24731432:882,882,Escala PAS menor de 4 puntos (umbral de descarte),Apendicitis aguda,sn;sp;lp;vpp;vpn,False,hallazgo
-PMID:24731432:883,883,Escala PAS mayor o igual a 8 puntos,Apendicitis aguda,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:24731432:879,879,Escala de Alvarado menor de 4 puntos (umbral de descarte en niños),Apendicitis aguda,sn;sp;ln;vpp;vpn,False,categoria
+PMID:24731432:880,880,Escala de Alvarado mayor o igual a 7 puntos en niños,Apendicitis aguda,sn;sp;ln;vpp;vpn,False,categoria
+PMID:24731432:881,881,Escala de Alvarado mayor o igual a 9 puntos en niños,Apendicitis aguda,sn;sp;ln;vpp;vpn,False,categoria
+PMID:24731432:882,882,Escala PAS menor de 4 puntos (umbral de descarte),Apendicitis aguda,sn;sp;ln;vpp;vpn,False,categoria
+PMID:24731432:883,883,Escala PAS mayor o igual a 8 puntos,Apendicitis aguda,sn;sp;ln;vpp;vpn,False,categoria
 PMID:25706925:884,884,Escala de Alvarado mayor o igual a 7 puntos (validación prospectiva),Apendicitis aguda,vpp;vpn,False,hallazgo
 PMID:25706925:885,885,Escala PAS mayor o igual a 7 puntos (validación prospectiva),Apendicitis aguda,vpp;vpn,False,hallazgo
-PMID:19549016:886,886,Escala PAS menor o igual a 4 puntos (umbral de alta segura),Apendicitis aguda,sp;lp;ln;vpp,False,hallazgo
-PMID:19549016:887,887,Escala PAS mayor o igual a 8 puntos (umbral quirúrgico),Apendicitis aguda,sn;lp;ln;vpn,False,hallazgo
+PMID:19549016:886,886,Escala PAS ≥5 puntos (resultado negativo: ≤4),Apendicitis aguda,vpp,False,hallazgo
+PMID:19549016:887,887,Escala PAS mayor o igual a 8 puntos (umbral quirúrgico),Apendicitis aguda,vpn,False,hallazgo
 PMID:17652298:888,888,Fiebre,Apendicitis aguda,sn;sp;vpp;vpn,False,hallazgo
 PMID:17652298:889,889,Dolor de rebote (signo de Blumberg / descompresión dolorosa),Apendicitis aguda,sn;sp;vpp;vpn,False,hallazgo
 PMID:17652298:890,890,Dolor localizado en fosa iliaca derecha (sin migración),Apendicitis aguda,sn;sp;ln;vpp;vpn,False,hallazgo
@@ -1008,11 +1001,11 @@ PMID:2754158:1005,1005,Prueba del dibujo del reloj anormal,Demencia y delirium,v
 PMID:8790257:1006,1006,Mini-Mental ≤23 puntos (umbral tradicional),Demencia y delirium,vpp;vpn,False,hallazgo
 PMID:15618841:1007,1007,Lóbulo hepático izquierdo palpable en epigastrio,Cirrosis en el paciente con hepatopatía crónica,vpp;vpn,False,hallazgo
 PMID:10460203:1008,1008,Palidez en cualquier sitio,Anemia,sn;lp;ln;vpp;vpn,False,hallazgo
-PMID:2297289:1009,1009,Palidez facial,Anemia,sn;lp;ln;vpp;vpn,False,hallazgo
-PMID:2297289:1010,1010,Palidez de los pliegues palmares,Anemia,sn;lp;ln;vpp;vpn,False,hallazgo
+PMID:2297289:1009,1009,Palidez facial,Hematocrito <40%,vpp;vpn,False,hallazgo
+PMID:2297289:1010,1010,Palidez de los pliegues palmares,Hematocrito <40%,vpp;vpn,False,hallazgo
 PMID:10460203:1011,1011,Palidez calificada como presente (impresión global del examinador),Anemia,sn;lp;ln;vpp;vpn,False,hallazgo
 PMID:10460203:1012,1012,Palidez calificada como ausente (impresión global del examinador),Anemia,sn;lp;ln;vpp;vpn,False,hallazgo
-PMID:16913989:1013,1013,Turgencia cutánea disminuida en la región subclavicular,Hipovolemia,sn;lp;ln;vpp;vpn,False,hallazgo
+PMID:16913989:1013,1013,Turgencia cutánea disminuida en la región subclavicular,Hipernatremia,vpp;vpn,False,hallazgo
 PMID:2926976:1014,1014,Fuerza de prensión de la mano disminuida,Desnutrición proteico-energética y complicaciones quirúrgicas mayores,vpp;vpn,False,hallazgo
 PMID:7994860:1015,1015,Amplitud variable del pulso arterial,Taquicardia ventricular con disociación auriculoventricular,vpp;vpn,False,hallazgo
 PMID:12014534:1016,1016,Pulso caótico (irregularmente irregular),Fibrilación auricular,vpp;vpn,False,hallazgo
@@ -1029,10 +1022,9 @@ PMID:3963660:1026,1026,Soplo diastólico característico de insuficiencia aórti
 PMID:3963660:1027,1027,Soplo diastólico característico de insuficiencia aórtica (para detectar insuficiencia aórtica moderada a grave),Soplos y valvulopatías,vpp;vpn,False,hallazgo
 PMID:2897627:1028,1028,Soplo que aumenta durante la fase de esfuerzo de Valsalva (detección de miocardiopatía hipertrófica),Soplos sistólicos y maniobras,vpp;vpn,False,hallazgo
 PMID:2897627:1029,1029,Soplo que aumenta con el apretón de manos isométrico (detección de insuficiencia mitral o comunicación interventricular),Soplos sistólicos y maniobras,vpp;vpn,False,hallazgo
-PMID:20920693:1030,1030,Ascenso carotídeo retardado (pulso parvus et tardus),Características de la estenosis aórtica grave (todos los pacientes tienen soplo aórtico),sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:20920693:1031,1031,Soplo de timbre zumbante o musical,Características de la estenosis aórtica grave (todos los pacientes tienen soplo aórtico),sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:20920693:1030,1030,Ascenso carotídeo retardado (pulso parvus et tardus),Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s),sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:20920693:1031,1031,Soplo de timbre zumbante o musical,Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s),sn;sp;ln;vpp;vpn,False,hallazgo
 PMID:8409071:1032,1032,Prueba abdominoyugular positiva (reflujo abdominoyugular),Insuficiencia cardiaca congestiva: presiones de llenado izquierdas elevadas,vpp;vpn,False,hallazgo
-PMID:6881175:1033,1033,Respuesta anormal a la maniobra de Valsalva (patrón de onda cuadrada),Insuficiencia cardiaca congestiva: fracción de expulsión baja,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:2313224:1034,1034,Sexo masculino,Infarto agudo de miocardio,vpp;vpn,False,hallazgo
 PMID:2313224:1035,1035,Edad de 60 años o más,Infarto agudo de miocardio,vpp;vpn,False,hallazgo
 PMID:3049966:1036,1036,Flancos abombados,Ascitis,sn;sp;lp;vpp;vpn,False,hallazgo
@@ -1044,15 +1036,11 @@ PMID:8994152:1041,1041,Heridas o úlceras en el pie,Enfermedad arterial perifér
 PMID:9250264:1042,1042,Tiempo de llenado venoso >20 segundos,Enfermedad arterial periférica,vpp;vpn,False,hallazgo
 PMID:15069148:1043,1043,Dolor a la palpación de la articulación acromioclavicular,Dolor de hombro: hallazgos individuales,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:15069148:1044,1044,Dolor a la compresión de la articulación acromioclavicular,Dolor de hombro: hallazgos individuales,sp;lp;ln;vpp;vpn,False,hallazgo
-PMID:15090381:1045,1045,Prueba de aducción cruzada del brazo (cross-body adduction),Dolor de hombro: hallazgos individuales,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:10627426:1046,1046,Signo de pinzamiento de Neer (para tendinitis del manguito rotador),Dolor de hombro: hallazgos individuales,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:10627426:1047,1047,Signo de pinzamiento de Hawkins (para tendinitis del manguito rotador),Dolor de hombro: hallazgos individuales,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:10627426:1048,1048,Signo de Yergason,Dolor de hombro: hallazgos individuales,sn;lp;ln;vpp;vpn,False,hallazgo
 PMID:10627426:1049,1049,Arco doloroso (para tendinitis del manguito rotador),Dolor de hombro: hallazgos individuales,sn;lp;ln;vpp;vpn,False,hallazgo
-PMID:10979525:1050,1050,Signo de pinzamiento de Neer (para desgarro del manguito rotador),Dolor de hombro: hallazgos individuales,sp;lp;ln;vpp;vpn,False,hallazgo
-PMID:10979525:1051,1051,Signo de pinzamiento de Hawkins (para desgarro del manguito rotador),Dolor de hombro: hallazgos individuales,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:11641706:1052,1052,Desgarro palpable del manguito rotador,Dolor de hombro: hallazgos individuales,vpp;vpn,False,hallazgo
-PMID:15995467:1053,1053,Regla de Ottawa para rodilla positiva,Fractura de rodilla clínicamente significativa,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:3340785:1054,1054,Signo del cajón anterior (lesión del ligamento cruzado anterior),Lesiones ligamentarias y meniscales de la rodilla,vpp;vpn,False,hallazgo
 PMID:3340785:1055,1055,Signo de Lachman (lesión del ligamento cruzado anterior),Lesiones ligamentarias y meniscales de la rodilla,vpp;vpn,False,hallazgo
 PMID:7778700:1056,1056,Dolor a la palpación de la interlínea articular (lesión meniscal),Lesiones ligamentarias y meniscales de la rodilla,vpp;vpn,False,hallazgo
@@ -1075,8 +1063,7 @@ PMID:20049324:1072,1072,Palidez lingual,Anemia,sn;sp;ln;vpp;vpn,False,hallazgo
 PMID:7819896:1073,1073,Adenopatía epitroclear,Enfermedad grave (maligna o granulomatosa) en el paciente con linfadenopatía periférica,vpp;vpn,False,hallazgo
 PMID:10770147:1074,1074,Altura laríngea máxima de 4 cm o menos,Enfermedad pulmonar obstructiva crónica (EPOC),sn;sp;vpp;vpn,False,hallazgo
 PMID:19155458:1075,1075,Matidez a la percusión convencional,Derrame pleural,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:20920693:1076,1076,Patrón de irradiación amplio ápex-base del soplo sistólico,Diagnóstico diferencial de los soplos sistólicos en el adulto,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:8441078:1077,1077,Signo de percusión esplénica (percusión del espacio intercostal más bajo de la línea axilar anterior izquierda),Hepatomegalia y esplenomegalia,sp;lp;ln;vpp;vpn,False,hallazgo
+PMID:8441078:1077,1077,Signo de percusión esplénica (percusión del espacio intercostal más bajo de la línea axilar anterior izquierda),Esplenomegalia (longitud ecográfica ≥13 cm),ln;vpp;vpn,False,hallazgo
 PMID:42335308:1078,1078,Método de Nixon (percusión esplénica en decúbito lateral derecho),Hepatomegalia y esplenomegalia,sn;lp;ln;vpp;vpn,False,hallazgo
 PMID:1951414:1079,1079,Matidez del espacio de Traube,Hepatomegalia y esplenomegalia,vpp;vpn,False,hallazgo
 PMID:10218296:1080,1080,Matidez en flancos,Ascitis,sp;lp;ln;vpp;vpn,False,hallazgo
@@ -1087,15 +1074,13 @@ PMID:11726486:1084,1084,Regla de Ottawa para pie,Fractura de tobillo y de mediop
 PMID:25243736:1085,1085,Prueba de compresión de la pantorrilla (prueba de Thompson),Rotura del tendón de Aquiles,vpp;vpn,False,hallazgo
 PMID:21156442:1086,1086,Prueba de rodamiento de los dedos índices,Enfermedad hemisférica cerebral unilateral,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:15523162:1087,1087,Escala de Siriraj mayor de 1 (sugiere hemorragia),Evento vascular cerebral hemorrágico,vpp;vpn,False,hallazgo
-PMID:20920693:1088,1088,Soplo sistólico característico de insuficiencia tricuspídea (para detectar insuficiencia tricuspídea moderada a grave),Soplos y valvulopatías,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:20920693:1089,1089,Soplo sistólico aórtico (detección de estenosis aórtica leve o mayor),Soplo de estenosis aórtica,sn;sp;lp;vpp;vpn,False,hallazgo
-PMID:20920693:1090,1090,Soplo sistólico característico de estenosis aórtica (para detectar estenosis aórtica leve o mayor),Soplos y valvulopatías,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:20920693:1091,1091,Soplo protosistólico (pico temprano),Características de la estenosis aórtica grave (todos los pacientes tienen soplo aórtico),sn;sp;lp;vpp;vpn,False,hallazgo
-PMID:20920693:1092,1092,Soplo de timbre soplante,Características de la estenosis aórtica grave (todos los pacientes tienen soplo aórtico),sn;sp;lp;vpp;vpn,False,hallazgo
-PMID:20920693:1093,1093,Onda CV en el pulso venoso yugular (movimiento sistólico temprano hacia afuera),Gravedad de la insuficiencia mitral y tricuspídea,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:20920693:1094,1094,Pulsaciones precordiales en el borde esternal inferior,Gravedad de la insuficiencia mitral y tricuspídea,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:20920693:1095,1095,Balanceo ventricular derecho (RV rock),Gravedad de la insuficiencia mitral y tricuspídea,sn;sp;ln;vpp;vpn,False,hallazgo
-PMID:20920693:1096,1096,Hígado pulsátil,Gravedad de la insuficiencia mitral y tricuspídea,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:20920693:1088,1088,Soplo sistólico con patrón esternal inferior izquierdo,Insuficiencia tricuspídea moderada o grave,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:20920693:1091,1091,Soplo protosistólico,Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s),sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:20920693:1092,1092,Soplo de timbre soplante,Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s),sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:20920693:1093,1093,Onda CV en el pulso venoso yugular (movimiento sistólico temprano hacia afuera),Insuficiencia tricuspídea moderada o grave,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:20920693:1094,1094,Pulsaciones precordiales en el borde esternal inferior,Insuficiencia tricuspídea moderada o grave,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:20920693:1095,1095,Balanceo ventricular derecho (RV rock),Insuficiencia tricuspídea moderada o grave,sn;sp;ln;vpp;vpn,False,hallazgo
+PMID:20920693:1096,1096,Hígado pulsátil,Insuficiencia tricuspídea moderada o grave,sn;sp;ln;vpp;vpn,False,hallazgo
 PMID:6699126:1097,1097,Egofonía,Neumonía,vpp;vpn,False,hallazgo
 PMID:15618841:1098,1098,Arañas vasculares (telangiectasias aracniformes),Cirrosis en el paciente con hepatopatía crónica,vpp;vpn,False,hallazgo
 PMID:15618841:1099,1099,Ictericia,Cirrosis en el paciente con hepatopatía crónica,vpp;vpn,False,hallazgo
@@ -1104,11 +1089,8 @@ PMID:15618841:1101,1101,Esplenomegalia,Cirrosis en el paciente con hepatopatía 
 PMID:15618841:1102,1102,Ascitis,Cirrosis en el paciente con hepatopatía crónica,vpp;vpn,False,hallazgo
 PMID:6412660:1103,1103,Adenopatía supraclavicular,Enfermedad grave (maligna o granulomatosa) en el paciente con linfadenopatía periférica,sn;sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:7249303:1104,1104,Dolor torácico no anginoso,Enfermedad arterial coronaria,sn;sp;lp;ln;vpn,False,hallazgo
-PMID:2683709:1105,1105,Cambios inespecíficos del segmento ST,Infarto agudo de miocardio,sp;lp;ln;vpp;vpn,False,hallazgo
-PMID:2683709:1106,1106,Elevación del segmento ST,Infarto agudo de miocardio,sp;lp;ln;vpp;vpn,False,hallazgo
-PMID:2683709:1107,1107,Infradesnivel del segmento ST (depresión del ST),Infarto agudo de miocardio,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:8511921:1108,1108,Signo del psoas,Apendicitis aguda en el paciente con dolor abdominal agudo,vpp;vpn,False,hallazgo
-PMID:15995110:1109,1109,Prueba de Speed,Dolor de hombro: hallazgos individuales,sp;lp;ln;vpp;vpn,False,hallazgo
+PMID:15995110:1109,1109,Prueba de Speed,Síndrome de pinzamiento subacromial,sp;ln,False,hallazgo
 PMID:6412660:1110,1110,Adenopatía axilar,Enfermedad grave (maligna o granulomatosa) en el paciente con linfadenopatía periférica,sn;sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:6412660:1111,1111,Adenopatía inguinal,Enfermedad grave (maligna o granulomatosa) en el paciente con linfadenopatía periférica,sn;sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:18403664:1112,1112,Líneas B en USG pulmonar,Edema pulmonar cardiogénico / IC,vpp;vpn,False,hallazgo
@@ -1127,11 +1109,7 @@ PMID:41796463:1124,1124,FEVI reducida (<50%) en POCUS asistida por inteligencia 
 PMID:36997363:1125,1125,Líquido libre en FAST,Hemoperitoneo en trauma,vpp;vpn,False,hallazgo
 PMID:39344280:1126,1126,Diámetro aórtico en USG,Aneurisma de aorta abdominal,vpp;vpn,False,hallazgo
 PMID:28073795:1127,1127,Colección en USG de partes blandas,Absceso vs celulitis,vpp;vpn,False,hallazgo
-PMID:11041906:1128,1128,"Regla de predicción de disección aórtica: 0 de 3 predictores (déficit de pulso, soplo de insuficiencia aórtica y signos neurológicos focales)",Disección aórtica,sp;lp;ln;vpp;vpn,False,hallazgo
-PMID:7884108:1129,1129,Temperatura ≥38.5 °C,Bacteriemia en el paciente febril,sn;lp;ln;vpp;vpn,False,hallazgo
-PMID:2297281:1130,1130,Parálisis de cuerda vocal (en bocio),Carcinoma tiroideo (hallazgos en bocio y nódulo tiroideo),sn;sp;lp;ln;vpn,False,hallazgo
-PMID:2297281:1131,1131,Adenopatía cervical (en bocio),Carcinoma tiroideo (hallazgos en bocio y nódulo tiroideo),sn;sp;lp;ln;vpn,False,hallazgo
-PMID:2297281:1132,1132,Nódulo tiroideo muy duro (consistencia pétrea),Carcinoma tiroideo (hallazgos en bocio y nódulo tiroideo),sn;sp;lp;ln;vpn,False,hallazgo
+PMID:7884108:1129,1129,Temperatura ≥38.5 °C,Bacteriemia adquirida en la comunidad,vpp;vpn,False,hallazgo
 PMID:11834654:1133,1133,Uso de músculos accesorios (escalenos y esternocleidomastoideo) en esclerosis lateral amiotrófica,Enfermedad pulmonar obstructiva crónica,vpp;vpn,False,hallazgo
 PMID:18931619:1134,1134,Escala de Wells para tromboembolia pulmonar: 0 a 1 puntos (probabilidad baja),Tromboembolia pulmonar,sn;sp;lp;ln;vpn,False,categoria
 PMID:18931619:1135,1135,Escala de Wells para tromboembolia pulmonar: 2 a 6 puntos (probabilidad moderada),Tromboembolia pulmonar,sn;sp;lp;ln;vpn,False,categoria
@@ -1140,7 +1118,7 @@ PMID:16461960:1137,1137,Escala de Ginebra revisada: 11 puntos o más (probabilid
 PMID:2774371:1138,1138,Soplo sistólico característico de insuficiencia tricuspídea (para detectar insuficiencia tricuspídea leve o mayor),Soplos y valvulopatías,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:2897627:1139,1139,"Soplo sistólico que aumenta con la inspiración (signo de Rivero-Carvallo): detección de soplos derechos, insuficiencia tricuspídea o estenosis pulmonar",Soplos sistólicos y maniobras,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:2774371:1140,1140,Soplo protodiastólico de insuficiencia aórtica (detección de insuficiencia leve o mayor),Insuficiencia aórtica,sp;lp;ln;vpp;vpn,False,hallazgo
-PMID:12544957:1141,1141,Reflejo bicipital disminuido,Radiculopatía cervical en pacientes con dolor de cuello y brazo,sn;sp;lp;ln;vpn,False,hallazgo
+PMID:12544957:1141,1141,Reflejo bicipital disminuido,Radiculopatía cervical en pacientes con dolor de cuello y brazo,vpn,False,hallazgo
 PMID:9607648:1142,1142,Atrofia de la eminencia tenar,Síndrome del túnel del carpo,vpp;vpn,False,hallazgo
 PMID:9267967:1143,1143,Signos cerebelosos (atrofia multisistémica),Sospecha de enfermedad de Parkinson,vpp;vpn,False,hallazgo
 PMID:9267967:1144,1144,Signos piramidales (atrofia multisistémica),Sospecha de enfermedad de Parkinson,vpp;vpn,False,hallazgo
@@ -1159,7 +1137,6 @@ PMID:11911916:1156,1156,Electrocardiograma normal,Infarto agudo de miocardio,vpp
 PMID:11911916:1157,1157,Inversión de la onda T,Infarto agudo de miocardio,vpp;vpn,False,hallazgo
 PMID:2327426:1158,1158,Cordón venoso palpable,Trombosis venosa profunda de miembro inferior,vpp;vpn,False,hallazgo
 PMID:2327426:1159,1159,Signo de Homans,Trombosis venosa profunda de miembro inferior,vpp;vpn,False,hallazgo
-PMID:9934421:1160,1160,Debilidad del supraespinoso,Dolor de hombro: hallazgos individuales,sn;sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:11684217:1161,1161,Campimetría por confrontación con conteo de dedos,Defectos del campo visual,vpp;vpn,False,hallazgo
 PMID:11684217:1162,1162,Descripción del rostro del examinador,Defectos del campo visual,vpp;vpn,False,hallazgo
 PMID:11684217:1163,1163,Comparación de la saturación del rojo entre hemicampos,Defectos del campo visual,vpp;vpn,False,hallazgo
@@ -1169,10 +1146,8 @@ PMID:17392034:1166,1166,Cianosis,Síndrome hepatopulmonar en el paciente con hep
 PMID:17392034:1167,1167,Arañas vasculares (telangiectasias aracniformes),Síndrome hepatopulmonar en el paciente con hepatopatía crónica,vpp;vpn,False,hallazgo
 PMID:11434610:1168,1168,Ascitis,Síndrome hepatopulmonar en el paciente con hepatopatía crónica,vpp;vpn,False,hallazgo
 PMID:16913989:1169,1169,Axila seca,Hipovolemia,vpp;vpn,False,hallazgo
-PMID:2913385:1170,1170,Estertores crepitantes,Estertores crepitantes y sibilancias,sp;lp;ln;vpp;vpn,False,hallazgo
-PMID:6232839:1171,1171,Desdoblamiento paradójico del segundo ruido (S2) (para detectar estenosis aórtica significativa en pacientes con soplo de expulsión aórtico),Primer y segundo ruidos cardiacos,sp;lp;ln;vpp;vpn,False,hallazgo
+PMID:6232839:1171,1171,"Componente aórtico del segundo ruido (A2) disminuido, sin enfermedad coronaria",Estenosis aórtica grave,sp;lp;ln;vpp;vpn,False,hallazgo
 PMID:835934:1172,1172,Frecuencia cardiaca >100 lpm en reposo,Insuficiencia cardiaca congestiva: presiones de llenado izquierdas elevadas,vpp;vpn,False,hallazgo
-PMID:10190376:1173,1173,Categoría de riesgo 'muy bajo' de la regla de predicción clínica,Complicaciones potencialmente mortales en el dolor torácico agudo,sn;lp;ln;vpp;vpn,False,hallazgo
 PMID:8209190:1174,1174,"Vesícula biliar palpable en el paciente con ictericia obstructiva, para detectar obstrucción maligna","Palpación de vesícula biliar, vejiga y aorta",vpp;vpn,False,hallazgo
 PMID:3963537:1175,1175,Fiebre,Peritonitis en el paciente con dolor abdominal agudo,vpp;vpn,False,hallazgo
 PMID:11103723:1176,1176,Prueba de la tos positiva,Peritonitis en el paciente con dolor abdominal agudo,vpp;vpn,False,hallazgo
@@ -1182,7 +1157,6 @@ PMID:3531786:1179,1179,Masa palpable en el hipocondrio derecho,Colecistitis agud
 PMID:2368790:1180,1180,"Dolor a la palpación del hipocondrio derecho, para detectar colelitiasis",Dolor abdominal alto crónico,vpp;vpn,False,hallazgo
 PMID:2368790:1181,1181,"Dolor a la palpación del abdomen inferior, para detectar colelitiasis",Dolor abdominal alto crónico,vpp;vpn,False,hallazgo
 PMID:20799429:1182,1182,Prueba de golpeteo rápido del pie,Enfermedad hemisférica cerebral unilateral,vpp;vpn,False,hallazgo
-PMID:2306060:1183,1183,Diagrama de la mano clasificado como clásico o probable,Síndrome del túnel del carpo,sn;sp;lp;ln;vpn,False,hallazgo
 PMID:15940389:1185,1185,Signos de vía piramidal (parkinsonismo vascular),Sospecha de enfermedad de Parkinson,vpp;vpn,False,hallazgo
 PMID:18344397:1186,1186,Seguimiento ocular sacádico,Evento vascular cerebral isquémico en vértigo agudo,vpp;vpn,False,hallazgo
 PMID:18344397:1187,1187,Nistagmo que cambia de dirección con la mirada,Evento vascular cerebral isquémico en vértigo agudo,vpp;vpn,False,hallazgo

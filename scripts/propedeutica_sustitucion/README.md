@@ -2,7 +2,8 @@
 
 ## Integración vigente (2026-09-16)
 
-La regeneración usa `revision_wiki.json`, `articulos.json` y
+La regeneración usa `revision_wiki.json`, `revision_textos_wiki.json`,
+`articulos.json` y
 `../propedeutica_evidencia.py` para recuperar cifras y citas sin escribir en
 la Wiki. Ver [instrucciones de regeneración](../propedeutica_REGENERATE.md)
 y [auditoría](../../docs/propedeutica/REVISION_2026-09-16.md).

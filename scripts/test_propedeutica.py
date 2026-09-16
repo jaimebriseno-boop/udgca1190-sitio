@@ -33,6 +33,23 @@ class Calculos(unittest.TestCase):
         completar_lr(r)
         self.assertNotIn('sn', r)
 
+    def test_conteos_exactos_y_porcentajes_observados(self):
+        r = {'sn': 77, 'sp': 68,
+             'tabla2x2': {'vp': 27, 'fp': 35, 'fn': 8, 'vn': 73}}
+        completar_lr(r)
+        self.assertEqual((r['sn'], r['sp']), (77, 68))
+        self.assertEqual((r['vpp'], r['vpn']), (43.5, 90.1))
+        self.assertEqual((r['lp'], r['ln']), (2.38, .338))
+        self.assertEqual(r['porcentajes_calculados'], ['vpp', 'vpn'])
+
+    def test_tablas_invalidas_o_sin_denominador(self):
+        for n in (-1, 1.5):
+            with self.assertRaises(ValueError):
+                completar_lr({'tabla2x2': {'vp': n, 'fp': 0, 'fn': 0, 'vn': 2}})
+        r = {'tabla2x2': {'vp': 0, 'fp': 0, 'fn': 0, 'vn': 0}}
+        completar_lr(r)
+        self.assertFalse(any(k in r for k in ('sn', 'sp', 'lp', 'ln', 'vpp', 'vpn')))
+
     def test_estimaciones_publicadas_tienen_prioridad(self):
         r = {'sn': 80, 'sp': 90, 'lp': 7.5, 'ln': .25}
         completar_lr(r)
@@ -168,6 +185,34 @@ class Catalogo(unittest.TestCase):
         for r in self.rows:
             for k in ('snic','spic','lpic','lnic'):
                 self.assertNotIn('rango', str(r.get(k, '')).lower(), r['uid'])
+
+    def test_maniobras_y_desenlaces_del_texto_completo(self):
+        self.assertEqual(self.rows[1160]['tabla2x2'], {'vp': 27, 'fp': 35, 'fn': 8, 'vn': 73})
+        self.assertIn('empty can', self.rows[1160]['s'])
+        self.assertEqual((self.rows[1050]['sn'], self.rows[1050]['sp']), (83.3, 50.8))
+        self.assertEqual((self.rows[1051]['sn'], self.rows[1051]['sp']), (87.5, 42.6))
+        self.assertIn('A2', self.rows[1171]['s'])
+        self.assertNotIn('paradójico', self.rows[1171]['s'])
+        self.assertEqual(self.rows[1013]['c'], 'Hipernatremia')
+
+    def test_polaridad_y_categorias_revisadas(self):
+        self.assertIn('≥5', self.rows[886]['s'])
+        self.assertIn('anormal', self.rows[830]['s'])
+        self.assertNotIn('ln', self.rows[826])  # Color normal no equivale a no-rojo.
+        for i in (879, 880, 881, 882, 883):
+            self.assertTrue(self.rows[i]['ordinal'])
+            self.assertNotIn('ln', self.rows[i])
+        self.assertEqual((self.rows[1091]['lp'], self.rows[1092]['lp']), (.7, .3))
+
+    def test_procedencia_de_cada_correccion_de_texto(self):
+        revision = json.loads((ROOT / 'scripts/propedeutica_sustitucion/revision_textos_wiki.json').read_text())
+        self.assertEqual(len(revision['revisiones']), len({r['uid'] for r in revision['revisiones']}))
+        for item in revision['revisiones']:
+            r = self.by_uid[item['uid']]
+            self.assertEqual(r['pmid'], item['pmid'])
+            self.assertRegex(item['sha256'], r'^[a-f0-9]{64}$')
+            self.assertGreaterEqual(item['lineas'][1], item['lineas'][0])
+            self.assertEqual(item['sha256'], revision['textos_revisados'][item['texto']]['sha256'])
 
 
 if __name__ == '__main__':

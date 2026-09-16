@@ -39,6 +39,8 @@ class Evidencia:
         base = Path(__file__).parent / 'propedeutica_sustitucion'
         self.articulos = json.loads((base / 'articulos.json').read_text())
         self.revisados = json.loads((base / 'revision_wiki.json').read_text())
+        textos = json.loads((base / 'revision_textos_wiki.json').read_text())
+        self.textos = {r['uid']: r for r in textos['revisiones']}
 
     def referencia(self, fuente):
         if not fuente:
@@ -109,6 +111,8 @@ class Evidencia:
         for edit in self.revisados.get('externos', []):
             if str(x['pmid']) == edit['pmid'] and x['signo_es'] == edit['signo_es']:
                 r.update(edit['valores'])
+        if r['uid'] in self.textos:
+            r.update(self.textos[r['uid']]['valores'])
         # Algunas extracciones antiguas guardaban rangos entre estudios en
         # campos IC95. No son intervalos de confianza: el rango va en la métrica.
         for key in ('snic', 'spic', 'lpic', 'lnic'):
@@ -120,12 +124,29 @@ class Evidencia:
 
 
 def completar_lr(r):
-    """Deriva LR solo de Sn/Sp puntuales de la misma estimación.
+    """Deriva LR de Sn/Sp puntuales o conteos de la misma estimación.
 
+    Una tabla 2×2 permite además completar los porcentajes observados.
     Con rangos o resultados ordinales (Sp ausente) no hace nada. ∞ se
     representa con una cadena JSON explícita, nunca con Infinity no estándar.
     """
     sn, sp = r.get('sn'), r.get('sp')
+    tabla = r.get('tabla2x2')
+    if tabla:
+        vp, fp, fn, vn = (tabla[k] for k in ('vp','fp','fn','vn'))
+        if any(not isinstance(n, int) or n < 0 for n in (vp,fp,fn,vn)):
+            raise ValueError('La tabla 2×2 requiere conteos enteros no negativos')
+        sn = 100 * vp / (vp + fn) if vp + fn else None
+        sp = 100 * vn / (vn + fp) if vn + fp else None
+        porcentajes = []
+        for key, numerador, denominador in (
+                ('sn', vp, vp + fn), ('sp', vn, vn + fp),
+                ('vpp', vp, vp + fp), ('vpn', vn, vn + fn)):
+            if r.get(key) is None and denominador:
+                r[key] = round(100 * numerador / denominador, 1)
+                porcentajes.append(key)
+        if porcentajes:
+            r['porcentajes_calculados'] = porcentajes
     if r.get('ordinal'):
         return
     if not isinstance(sn, (float, int)) or not isinstance(sp, (float, int)):

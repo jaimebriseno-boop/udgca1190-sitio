@@ -1,0 +1,2074 @@
+{
+  "fecha": "2026-09-16",
+  "revisiones": [
+    {
+      "uid": "PMID:28833896:703",
+      "pmid": "28833896",
+      "signo": "Escala TWIST de alto riesgo (puntaje de 7) aplicada por urgenciologos pediatras",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/28833896.txt",
+      "sha256": "e823faa5d2c5b4447a9db31ce6938932f75f17ab6938813f5cd06ef4b8de9c58",
+      "lineas": [
+        877,
+        915
+      ],
+      "valores": {
+        "sn": 21,
+        "snic": "6–45",
+        "sp": 100,
+        "spic": "98–100",
+        "vpn": 94,
+        "vpnic": "90–97",
+        "vpp": 100,
+        "vppic": "40–100",
+        "ln": 0.79,
+        "nota_datos": "Tabla 4, TWIST =7 y diagnóstico quirúrgico. La LR+ se calcula desde Sn/Sp: con especificidad 100%, el cociente es infinito; no se reproduce el 0.00 incompatible impreso en esa celda.",
+        "nota_datos_en": "Table 4, TWIST =7 and surgical diagnosis. LR+ is calculated from sensitivity/specificity: with 100% specificity the ratio is infinite; the incompatible printed 0.00 is not reproduced."
+      },
+      "revision": "Sn y VPN están en el texto completo, no en el resumen; LR− 0.79 publicada. LR+ derivada con denominador cero, no igual a cero."
+    },
+    {
+      "uid": "PMID:32289199:717",
+      "pmid": "32289199",
+      "signo": "Exploración física de varicocele por urologo experto (más de 10 años en infertilidad masculina)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/32289199.txt",
+      "sha256": "4606c610113f3ae6ca94035385eea1c4591db125281c1953d251f95128287a0f",
+      "lineas": [
+        246,
+        310
+      ],
+      "valores": {
+        "sn": 55,
+        "snic": "47.42–62.41",
+        "sp": 82.03,
+        "spic": "74.27–88.26",
+        "vpp": 81.15,
+        "vppic": "74.39–86.44",
+        "vpn": 56.45,
+        "vpnic": "51.97–60.83",
+        "nota_datos": "Tabla 2: urólogos con experiencia. La unidad analítica es el cordón espermático; 154 unidades evaluadas por dos examinadores (308 evaluaciones).",
+        "nota_datos_en": "Table 2: experienced urologists. The analysis unit is the spermatic cord; 154 units examined by two observers (308 assessments)."
+      },
+      "revision": "Misma fila y grupo que la especificidad original; se conservan dos decimales de la tabla."
+    },
+    {
+      "uid": "PMID:12020306:724",
+      "pmid": "12020306",
+      "signo": "Punopercusión lumbar positiva (dolor a la percusión del ángulo costovertebral)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/12020306.txt",
+      "sha256": "3ef942f9094a42b44cb2202daf13df92c04f0b7522f0f736b39b950f8965eac1",
+      "lineas": [
+        945,
+        955
+      ],
+      "valores": {
+        "ln": 0.9,
+        "lnic": "0.8–1.0"
+      },
+      "revision": "Tabla 2, fila Summary del mismo síntoma o signo. No invertir LR agrupadas para obtener Sn/Sp."
+    },
+    {
+      "uid": "PMID:12020306:725",
+      "pmid": "12020306",
+      "signo": "Flujo vaginal observado en la exploración",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/12020306.txt",
+      "sha256": "3ef942f9094a42b44cb2202daf13df92c04f0b7522f0f736b39b950f8965eac1",
+      "lineas": [
+        933,
+        944
+      ],
+      "valores": {
+        "ln": 1.1,
+        "lnic": "1.0–1.2"
+      },
+      "revision": "Tabla 2, fila Summary del mismo síntoma o signo. No invertir LR agrupadas para obtener Sn/Sp."
+    },
+    {
+      "uid": "PMID:12020306:726",
+      "pmid": "12020306",
+      "signo": "Disuria",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/12020306.txt",
+      "sha256": "3ef942f9094a42b44cb2202daf13df92c04f0b7522f0f736b39b950f8965eac1",
+      "lineas": [
+        697,
+        725
+      ],
+      "valores": {
+        "ln": 0.5,
+        "lnic": "0.3–0.7"
+      },
+      "revision": "Tabla 2, fila Summary del mismo síntoma o signo. No invertir LR agrupadas para obtener Sn/Sp."
+    },
+    {
+      "uid": "PMID:12020306:727",
+      "pmid": "12020306",
+      "signo": "Polaquiuria (aumento de la frecuencia urinaria)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/12020306.txt",
+      "sha256": "3ef942f9094a42b44cb2202daf13df92c04f0b7522f0f736b39b950f8965eac1",
+      "lineas": [
+        726,
+        757
+      ],
+      "valores": {
+        "ln": 0.6,
+        "lnic": "0.4–1.0"
+      },
+      "revision": "Tabla 2, fila Summary del mismo síntoma o signo. No invertir LR agrupadas para obtener Sn/Sp."
+    },
+    {
+      "uid": "PMID:12020306:728",
+      "pmid": "12020306",
+      "signo": "Hematuria referida por la paciente",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/12020306.txt",
+      "sha256": "3ef942f9094a42b44cb2202daf13df92c04f0b7522f0f736b39b950f8965eac1",
+      "lineas": [
+        758,
+        776
+      ],
+      "valores": {
+        "ln": 0.9,
+        "lnic": "0.9–1.0"
+      },
+      "revision": "Tabla 2, fila Summary del mismo síntoma o signo. No invertir LR agrupadas para obtener Sn/Sp."
+    },
+    {
+      "uid": "PMID:12020306:729",
+      "pmid": "12020306",
+      "signo": "Dolor lumbar",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/12020306.txt",
+      "sha256": "3ef942f9094a42b44cb2202daf13df92c04f0b7522f0f736b39b950f8965eac1",
+      "lineas": [
+        916,
+        928
+      ],
+      "valores": {
+        "ln": 0.8,
+        "lnic": "0.7–0.9"
+      },
+      "revision": "Tabla 2, fila Summary del mismo síntoma o signo. No invertir LR agrupadas para obtener Sn/Sp."
+    },
+    {
+      "uid": "PMID:23613077:737",
+      "pmid": "23613077",
+      "signo": "Dolor a la palpación anexial",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/23613077.txt",
+      "sha256": "d3d22df7b103e4d34bf7435d773cd8fa4167664406702ff72158c45844305ded",
+      "lineas": [
+        674,
+        716
+      ],
+      "valores": {
+        "sn": 61,
+        "snic": "52–69",
+        "sp": 65,
+        "spic": "42–83",
+        "ln": 0.57,
+        "lnic": "0.48–0.67"
+      },
+      "revision": "Tabla 2: fila dolor anexial, misma población de 1435 pacientes."
+    },
+    {
+      "uid": "PMID:18480117:755",
+      "pmid": "18480117",
+      "signo": "Presión arterial media de 90 mmHg o mas en el segundo trimestre",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/18480117.txt",
+      "sha256": "17ffc5cb163b7d94237922bbe8bf44d59268b4cf7180cac2becd370f21a95856",
+      "lineas": [
+        313,
+        324
+      ],
+      "valores": {
+        "sn": 62,
+        "snic": "35–89",
+        "sp": 82,
+        "spic": "72–92"
+      },
+      "revision": "Resultados, umbral PAM >=90 mmHg; misma estimación agrupada."
+    },
+    {
+      "uid": "PMID:23677315:775",
+      "pmid": "23677315",
+      "signo": "Relación excavación/disco (copa/disco) ≥0.7 en el fondo de ojo",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/23677315.txt",
+      "sha256": "9c1846c58bf3363402c7609fe2fe4876fec20cd7239b68d4270a391ffdaa8a80",
+      "lineas": [
+        702,
+        705
+      ],
+      "valores": {
+        "ln": 0.62,
+        "lnic": "0.53–0.71"
+      },
+      "revision": "Tabla 2: CDR >=0.7."
+    },
+    {
+      "uid": "PMID:23677315:776",
+      "pmid": "23677315",
+      "signo": "Asimetría de la relación excavación/disco ≥0.3 entre ambos ojos",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/23677315.txt",
+      "sha256": "9c1846c58bf3363402c7609fe2fe4876fec20cd7239b68d4270a391ffdaa8a80",
+      "lineas": [
+        831,
+        834
+      ],
+      "valores": {
+        "ln": 0.89,
+        "lnic": "0.83–0.94"
+      },
+      "revision": "Tabla 3: asimetría CDR >=0.3."
+    },
+    {
+      "uid": "PMID:19934426:795",
+      "pmid": "19934426",
+      "signo": "Hemorragia vítrea vista en biomicroscopía con lámpara de hendidura",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/19934426.txt",
+      "sha256": "387bfb05c7bbc61d88621c953b60c0765968dd491b1d13301bffae3f8c4a2230",
+      "lineas": [
+        645,
+        714
+      ],
+      "valores": {
+        "sn": [
+          20,
+          100
+        ],
+        "sp": [
+          71,
+          100
+        ],
+        "ln": 0.49,
+        "lnic": "0.38–0.64",
+        "nota_datos": "Tabla 1: Sn/Sp son rangos entre estudios; LR agrupadas publicadas.",
+        "nota_datos_en": "Table 1: sensitivity/specificity are ranges across studies; published pooled LRs."
+      },
+      "revision": "Rangos de once filas; LR− de fila Summary, no invertir LR para SnSp."
+    },
+    {
+      "uid": "PMID:19934426:796",
+      "pmid": "19934426",
+      "signo": "Pigmento en el vítreo anterior (signo de Shafer)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/19934426.txt",
+      "sha256": "387bfb05c7bbc61d88621c953b60c0765968dd491b1d13301bffae3f8c4a2230",
+      "lineas": [
+        715,
+        742
+      ],
+      "valores": {
+        "s": "Pigmento en el vítreo anterior (signo de Shafer)",
+        "se": "Anterior vitreous pigment (Shafer sign)",
+        "sn": [
+          63,
+          94
+        ],
+        "sp": [
+          68,
+          100
+        ],
+        "lp": 44,
+        "lpic": "2.3–852",
+        "nota_datos": "Tabla 1: pigmento presente = resultado positivo; ausencia = resultado negativo. Sn/Sp son rangos por estudio; LR agrupadas.",
+        "nota_datos_en": "Table 1: pigment present = positive result; absence = negative result. Sensitivity/specificity are study ranges; LRs are pooled."
+      },
+      "revision": "Corrección de polaridad de ausencia; LR agrupadas44/.23 mismafilaSummary."
+    },
+    {
+      "uid": "PMID:19934426:797",
+      "pmid": "19934426",
+      "signo": "Disminución subjetiva de la visión referida por el paciente",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/19934426.txt",
+      "sha256": "387bfb05c7bbc61d88621c953b60c0765968dd491b1d13301bffae3f8c4a2230",
+      "lineas": [
+        638,
+        644
+      ],
+      "valores": {
+        "sn": 45,
+        "sp": 91,
+        "ln": 0.6,
+        "lnic": "0.49–0.73"
+      },
+      "revision": "Tabla 1, Dayan et al, n295; misma fila LP5."
+    },
+    {
+      "uid": "PMID:21175516:804",
+      "pmid": "21175516",
+      "signo": "Ojo rojo en herpes zóster oftálmico",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/21175516.txt",
+      "sha256": "48fb9744a813b8f4857fa02881b207f9395d57634bcaf79b92ab20b6a903b018",
+      "lineas": [
+        502,
+        533
+      ],
+      "valores": {
+        "sp": 68,
+        "vpp": 70,
+        "vpn": 100,
+        "tabla2x2": {
+          "vp": 23,
+          "fp": 10,
+          "fn": 0,
+          "vn": 21
+        }
+      },
+      "revision": "Tabla 2: ojo rojo, afectación ocular clínicamente relevante; LR calculadas desde conteos."
+    },
+    {
+      "uid": "PMID:25697458:805",
+      "pmid": "25697458",
+      "signo": "Algoritmo diagnóstico de Edimburgo para ojo rojo aplicado por no oftalmólogos",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/25697458.txt",
+      "sha256": "8e92d52c92e2de91aee608df794a535be911c4e04b187f641f6b1e202889a1bd",
+      "lineas": [
+        215,
+        225
+      ],
+      "valores": {
+        "sp": 100,
+        "tabla2x2": {
+          "vp": 4,
+          "fp": 0,
+          "fn": 0,
+          "vn": 35
+        },
+        "nota_datos": "Glaucoma agudo de ángulo cerrado: 4 casos entre 39 pacientes; Sn y Sp de 100% publicadas también en la conclusión (líneas 434–438). La muestra de casos es pequeña. VPP/VPN calculados con esta población.",
+        "nota_datos_en": "Acute angle-closure glaucoma: 4 cases among 39 patients; 100% sensitivity and specificity also reported in the conclusion (lines 434–438). The case sample is small. PPV/NPV calculated for this population."
+      },
+      "revision": "No confundir exactitud global 72% del algoritmo con Sn/Sp para glaucoma; especificidad explícita en conclusión."
+    },
+    {
+      "uid": "PMID:32546747:813",
+      "pmid": "32546747",
+      "signo": "Reflejo rojo con oftalmoscopio Arclight realizado por enfermeras",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/32546747.txt",
+      "sha256": "3f71f23505b75fb36599e475a489a12cbe9185be50c48d815453400c6f05eee2",
+      "lineas": [
+        373,
+        406
+      ],
+      "valores": {
+        "sp": 96.7,
+        "spic": "88.5–99.6",
+        "snic": "80.1–98.5",
+        "tabla2x2": {
+          "vp": 38,
+          "fp": 2,
+          "fn": 3,
+          "vn": 58
+        }
+      },
+      "revision": "Tabla 1, Arclight. VPP/VPN y LR calculados de conteos de la misma población."
+    },
+    {
+      "uid": "PMID:32546747:814",
+      "pmid": "32546747",
+      "signo": "Exploración con linterna simple (sin reflejo rojo)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/32546747.txt",
+      "sha256": "3f71f23505b75fb36599e475a489a12cbe9185be50c48d815453400c6f05eee2",
+      "lineas": [
+        419,
+        430
+      ],
+      "valores": {
+        "sp": 95,
+        "spic": "86.1–99.0",
+        "snic": "1.5–19.9",
+        "tabla2x2": {
+          "vp": 3,
+          "fp": 3,
+          "fn": 38,
+          "vn": 57
+        }
+      },
+      "revision": "Tabla 1, Pen torch. VPP/VPN y LR calculados de conteos de la misma población."
+    },
+    {
+      "uid": "PMID:14506123:826",
+      "pmid": "14506123",
+      "signo": "Membrana timpánica francamente eritematosa",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/14506123.txt",
+      "sha256": "e6b76791cb485fcf9e9f58f3860f2d76cdf0af5fddedc112629c1adee114c997",
+      "lineas": [
+        954,
+        1004
+      ],
+      "valores": {
+        "ln": null,
+        "lnic": null,
+        "nota_datos": "Tabla 3: LR+ 8.4 para color francamente rojo. Color normal (LR 0.2) es una categoría distinta; no equivale a todos los resultados sin eritema franco y no se presenta como LR− de este signo.",
+        "nota_datos_en": "Table 3: LR+ 8.4 for distinctly red color. Normal color (LR 0.2) is a separate category; it is not equivalent to all results without marked redness and is not shown as this sign’s LR−."
+      },
+      "revision": "No mezclar categoría normal con complemento binario de categoría distinctlyred."
+    },
+    {
+      "uid": "PMID:14506123:828",
+      "pmid": "14506123",
+      "signo": "Otalgia referida por el paciente o el cuidador",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/14506123.txt",
+      "sha256": "e6b76791cb485fcf9e9f58f3860f2d76cdf0af5fddedc112629c1adee114c997",
+      "lineas": [
+        697,
+        806
+      ],
+      "valores": {
+        "sn": [
+          54,
+          100
+        ],
+        "sp": [
+          82,
+          92
+        ],
+        "ln": [
+          0.4,
+          0.6
+        ],
+        "nota_datos": "Tabla 2: rangos por estudio para otalgia. Sn disponible en tres estudios; Sp y LR en dos. Los estudios usan diagnóstico clínico con posible sesgo de incorporación.",
+        "nota_datos_en": "Table 2: study ranges for ear pain. Sensitivity available in three studies; specificity and LRs in two. Clinical diagnosis as reference may introduce incorporation bias."
+      },
+      "revision": "La tercera fila informa Sn 100%, con Sp/LR no disponibles; no imputarlas. El rango Sn incluye esa fila."
+    },
+    {
+      "uid": "PMID:30858261:830",
+      "pmid": "30858261",
+      "signo": "Transiluminación de senos paranasales anormal",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/30858261.txt",
+      "sha256": "5f67ff6b51f1b17ba3a74b010fcac8e5f06612e0111f84216a4fa2f70ae46d77",
+      "lineas": [
+        942,
+        948
+      ],
+      "valores": {
+        "s": "Transiluminación de senos paranasales anormal",
+        "se": "Abnormal sinus transillumination",
+        "sn": 69,
+        "snic": "63–75",
+        "sp": 56,
+        "spic": "50–62",
+        "lp": 1.6,
+        "lpic": "1.4–1.9",
+        "ln": 0.55,
+        "lnic": "0.44–0.67",
+        "mn": "En cuarto oscuro coloque una fuente de luz sobre el reborde infraorbitario y observe el paladar duro. La atenuación o asimetría es el resultado positivo; la transiluminación normal es el resultado negativo.",
+        "nota_datos": "Tabla 3: la prueba positiva es la transiluminación anormal. La LR− de 0.55 describe el resultado normal.",
+        "nota_datos_en": "Table 3: abnormal transillumination is a positive test. LR− of 0.55 describes a normal result."
+      },
+      "revision": "Se explicita la polaridad del signo para evitar presentar la normalidad como test positivo usando LR negativa."
+    },
+    {
+      "uid": "PMID:30858261:831",
+      "pmid": "30858261",
+      "signo": "Cacosmia (aliento fetido percibido por el paciente)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/30858261.txt",
+      "sha256": "5f67ff6b51f1b17ba3a74b010fcac8e5f06612e0111f84216a4fa2f70ae46d77",
+      "lineas": [
+        1074,
+        1080
+      ],
+      "valores": {
+        "sn": 23,
+        "snic": "11–42",
+        "sp": 93,
+        "spic": "59–99",
+        "lpic": "0.94–14",
+        "lnic": "0.76–0.99"
+      },
+      "revision": "Tabla 4, cacosmia, rinosinusitis bacteriana."
+    },
+    {
+      "uid": "PMID:30858261:832",
+      "pmid": "30858261",
+      "signo": "Dolor en los dientes superiores",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/30858261.txt",
+      "sha256": "5f67ff6b51f1b17ba3a74b010fcac8e5f06612e0111f84216a4fa2f70ae46d77",
+      "lineas": [
+        1081,
+        1087
+      ],
+      "valores": {
+        "sn": 38,
+        "snic": "10–78",
+        "sp": 80,
+        "spic": "37–97",
+        "lpic": "1.1–3.7",
+        "lnic": "0.50–0.96"
+      },
+      "revision": "Tabla 4, dolor dental, rinosinusitis bacteriana."
+    },
+    {
+      "uid": "PMID:31208974:833",
+      "pmid": "31208974",
+      "signo": "Impresión clínica global del medico (gestalt)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/31208974.txt",
+      "sha256": "2c1b6937efcb1d571b144fd43dc23cabce337ad98d64323c2f64c7f5ef8cb2df",
+      "lineas": [
+        1355,
+        1375
+      ],
+      "valores": {
+        "sn": 74,
+        "snic": "61–84",
+        "sp": 80,
+        "spic": "72–87",
+        "pr": "Inspección del líquido de punción antral (definición de ABRS de la tabla 3)."
+      },
+      "revision": "Tabla 3 ABRS adultos, estimación agrupada. No usar estándar de imagen de ARS."
+    },
+    {
+      "uid": "PMID:25782075:834",
+      "pmid": "25782075",
+      "signo": "Secreción moderada o abundante en fosa nasal a la rinoscopia anterior (día 9-10)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/25782075.txt",
+      "sha256": "9feae3fbbc4efcee2da7d27a3d2c880b781f90de7e1ca096f0a51d1c9686e900",
+      "lineas": [
+        478,
+        484
+      ],
+      "valores": {
+        "sn": 88,
+        "snic": "47–98",
+        "sp": 71,
+        "spic": "55–84",
+        "lp": 3.1,
+        "nota_datos": "Tabla III (días 9–10). Se usa LR+ 3.1 de la tabla; el resumen informa 3.2.",
+        "nota_datos_en": "Table III (days 9–10). LR+ 3.1 from the table is used; the abstract reports 3.2."
+      },
+      "revision": "Diferencia tabla/resumen explicitada, sin promediarla."
+    },
+    {
+      "uid": "PMID:25782075:835",
+      "pmid": "25782075",
+      "signo": "Secreción visible en el meato medio (día 9-10)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/25782075.txt",
+      "sha256": "9feae3fbbc4efcee2da7d27a3d2c880b781f90de7e1ca096f0a51d1c9686e900",
+      "lineas": [
+        492,
+        497
+      ],
+      "valores": {
+        "sn": 50,
+        "snic": "16–84",
+        "sp": 95,
+        "spic": "84–99",
+        "ln": 0.5
+      },
+      "revision": "Tabla III, meato medio, días 9–10."
+    },
+    {
+      "uid": "PMID:25782075:836",
+      "pmid": "25782075",
+      "signo": "Secreción visible en la pared posterior de la faringe (día 9-10)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/25782075.txt",
+      "sha256": "9feae3fbbc4efcee2da7d27a3d2c880b781f90de7e1ca096f0a51d1c9686e900",
+      "lineas": [
+        486,
+        491
+      ],
+      "valores": {
+        "sn": 50,
+        "snic": "16–84",
+        "sp": 91,
+        "spic": "77–97",
+        "ln": 0.6
+      },
+      "revision": "Tabla III, faringe posterior, días 9–10."
+    },
+    {
+      "uid": "PMID:14576249:841",
+      "pmid": "14576249",
+      "signo": "Prueba de la voz susurrada en adultos",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/14576249.txt",
+      "sha256": "bd40bb4b3e3c6c5945b061827c9fff219ac36822e713cf8969c8fc232a14d009",
+      "lineas": [
+        618,
+        638
+      ],
+      "valores": {
+        "lp": [
+          4.6,
+          7.7
+        ],
+        "ln": [
+          0,
+          0.12
+        ],
+        "nota_datos": "Rangos entre estudios, no intervalos de confianza. Sn/Sp: cuatro estudios; LR: tres estudios con datos suficientes (tabla 2).",
+        "nota_datos_en": "Ranges across studies, not confidence intervals. Sensitivity/specificity: four studies; LRs: three studies with sufficient data (Table 2)."
+      },
+      "revision": "LR publicadas por estudio; no derivadas de los extremos de Sn/Sp."
+    },
+    {
+      "uid": "PMID:14576249:842",
+      "pmid": "14576249",
+      "signo": "Prueba de la voz susurrada en niños",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/14576249.txt",
+      "sha256": "bd40bb4b3e3c6c5945b061827c9fff219ac36822e713cf8969c8fc232a14d009",
+      "lineas": [
+        701,
+        721
+      ],
+      "valores": {
+        "lp": [
+          9.1,
+          38.1
+        ],
+        "ln": [
+          0.04,
+          0.21
+        ],
+        "nota_datos": "Tabla 3: rangos entre cuatro estudios pediátricos, con umbrales audiométricos de 20–35 dB; no son intervalos de confianza.",
+        "nota_datos_en": "Table 3: ranges across four pediatric studies, with audiometric thresholds of 20–35 dB; these are not confidence intervals."
+      },
+      "revision": "Se conservan los rangos de las cuatro LR publicadas."
+    },
+    {
+      "uid": "PMID:19414727:844",
+      "pmid": "19414727",
+      "signo": "Prueba del frote de dedos calibrado, intensidad débil (CALFRAST-Faint 70)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/19414727.txt",
+      "sha256": "2202d000c96646cc1d3666351b5e66196ee049af6b8a2e54c3404a75bc237dae",
+      "lineas": [
+        388,
+        394
+      ],
+      "valores": {
+        "sp": 75,
+        "spic": "70–80",
+        "vpp": 67,
+        "vppic": "61–73",
+        "vpnic": "96–100",
+        "ln": 0.009,
+        "lnic": "0.002–0.04",
+        "nota_datos": "Se conserva la LR− 0.009 publicada en el texto y la tabla 2. Los conteos de esa tabla no reproducen exactamente esa LR−; no se usan para sustituirla. Resultado positivo = no oír el estímulo.",
+        "nota_datos_en": "LR− 0.009 reported in the text and Table 2 is retained. Counts in that table do not reproduce this LR− exactly and are not used to replace it. Positive result = failure to hear the stimulus."
+      },
+      "revision": "Se recupera Sp y VPP; se corrige LR− 0.1 que no corresponde al texto completo."
+    },
+    {
+      "uid": "PMID:11147989:868",
+      "pmid": "11147989",
+      "signo": "Exudado amigdalino",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/11147989.txt",
+      "sha256": "e676afe72cb91e2dbf498b8f9257df7eb13d42423d057e4f411da3f06924a475",
+      "lineas": [
+        627,
+        633
+      ],
+      "valores": {
+        "sn": 36,
+        "snic": "21–52",
+        "sp": [
+          71,
+          98
+        ],
+        "lp": 3.4,
+        "lpic": "1.8–6.0",
+        "ln": 0.72,
+        "lnic": "0.60–0.88",
+        "nota_datos": "Tabla 3: exudado amigdalino. La especificidad es un rango entre estudios. La LR− 0.74 del resumen corresponde a exudado amigdalino O faríngeo; para exudado amigdalino la tabla informa 0.72.",
+        "nota_datos_en": "Table 3: tonsillar exudates. Specificity is a range across studies. Abstract LR− 0.74 refers to tonsillar OR pharyngeal exudates; the table reports 0.72 for tonsillar exudates."
+      },
+      "revision": "Se corrige mezcla de filas con desenlaces diferentes."
+    },
+    {
+      "uid": "PMID:11147989:869",
+      "pmid": "11147989",
+      "signo": "Exudado faringeo",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/11147989.txt",
+      "sha256": "e676afe72cb91e2dbf498b8f9257df7eb13d42423d057e4f411da3f06924a475",
+      "lineas": [
+        599,
+        605
+      ],
+      "valores": {
+        "sn": [
+          3,
+          48
+        ],
+        "sp": [
+          76,
+          99
+        ],
+        "lpic": "1.4–3.1",
+        "ln": 0.9,
+        "lnic": "0.75–1.1",
+        "nota_datos": "Tabla 3: Sn/Sp son rangos entre estudios; LR agrupadas con IC95%.",
+        "nota_datos_en": "Table 3: sensitivity/specificity are study ranges; pooled LRs with 95% confidence intervals."
+      },
+      "revision": "Se diferencia rango entre estudios de IC95%."
+    },
+    {
+      "uid": "PMID:11147989:870",
+      "pmid": "11147989",
+      "signo": "Adenopatías cervicales anteriores dolorosas",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/11147989.txt",
+      "sha256": "e676afe72cb91e2dbf498b8f9257df7eb13d42423d057e4f411da3f06924a475",
+      "lineas": [
+        620,
+        626
+      ],
+      "valores": {
+        "s": "Adenopatías cervicales anteriores dolorosas",
+        "se": "Tender anterior cervical nodes",
+        "sn": [
+          32,
+          66
+        ],
+        "sp": [
+          53,
+          84
+        ],
+        "lp": [
+          1.2,
+          1.9
+        ],
+        "ln": 0.6,
+        "lnic": "0.49–0.71",
+        "nota_datos": "Tabla 3: ganglios dolorosos = resultado positivo; su ausencia corresponde a LR−. Sn/Sp/LR+ son rangos entre estudios.",
+        "nota_datos_en": "Table 3: tender nodes = positive result; their absence corresponds to LR−. Sensitivity/specificity/LR+ are study ranges."
+      },
+      "revision": "Se corrige etiqueta de ausencia para mantener coherencia con la polaridad de LR negativa."
+    },
+    {
+      "uid": "PMID:28214369:872",
+      "pmid": "28214369",
+      "signo": "Migración del dolor al cuadrante inferior derecho (fosa iliaca derecha)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/28214369.txt",
+      "sha256": "a44a8bff728b5afdd2cc7a44e265b786963946754385316043b6f254b60beb1f",
+      "lineas": [
+        2606,
+        2614
+      ],
+      "valores": {
+        "sn": 46,
+        "snic": "37–56",
+        "sp": 90,
+        "spic": "88–92",
+        "ln": 0.59,
+        "lnic": "0.50–0.70",
+        "lpic": "3.59–6.44",
+        "n": 849
+      },
+      "revision": "Tabla 2.2, Goldman2008, dolor abdominal indiferenciado. IC LR+ tabla corrige error resumen."
+    },
+    {
+      "uid": "PMID:28214369:873",
+      "pmid": "28214369",
+      "signo": "Dolor en fosa iliaca derecha al toser o al brincar (prueba del salto)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/28214369.txt",
+      "sha256": "a44a8bff728b5afdd2cc7a44e265b786963946754385316043b6f254b60beb1f",
+      "lineas": [
+        2615,
+        2622
+      ],
+      "valores": {
+        "sn": 72,
+        "snic": "63–79",
+        "sp": 91,
+        "spic": "88–93",
+        "ln": 0.31,
+        "lnic": "0.24–0.42",
+        "n": 849
+      },
+      "revision": "Tabla 2.2, Goldman2008, dolor abdominal indiferenciado."
+    },
+    {
+      "uid": "PMID:28214369:875",
+      "pmid": "28214369",
+      "signo": "Escala de Apendicitis Pediátrica (PAS) mayor o igual a 9 puntos",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/28214369.txt",
+      "sha256": "a44a8bff728b5afdd2cc7a44e265b786963946754385316043b6f254b60beb1f",
+      "lineas": [
+        3658,
+        3682
+      ],
+      "valores": {
+        "sp": 94,
+        "spic": "92–96",
+        "ln": 0.72,
+        "lnic": "0.62–0.83",
+        "nota_datos": "Tabla 2.6: no se presenta sensibilidad agrupada por heterogeneidad (I²=82%). Se conserva ese campo vacío.",
+        "nota_datos_en": "Table 2.6: pooled sensitivity is not reported because of heterogeneity (I²=82%). This field remains blank."
+      },
+      "revision": "Fila Pooled Data. I²82% no es sensibilidad."
+    },
+    {
+      "uid": "PMID:28214369:876",
+      "pmid": "28214369",
+      "signo": "Ultrasonido a pie de cama realizado por el urgenciologo (POCUS) para apendicitis",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/28214369.txt",
+      "sha256": "a44a8bff728b5afdd2cc7a44e265b786963946754385316043b6f254b60beb1f",
+      "lineas": [
+        434,
+        436
+      ],
+      "valores": {
+        "sn": 86,
+        "snic": "79–90",
+        "sp": 91,
+        "spic": "87–94",
+        "lpic": "6.42–13.28"
+      },
+      "revision": "Resultados: POCUS, mismos cuatro estudios de estimación LR9.24/.17."
+    },
+    {
+      "uid": "PMID:24731432:879",
+      "pmid": "24731432",
+      "signo": "Escala de Alvarado menor de 4 puntos (umbral de descarte en niños)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/24731432.txt",
+      "sha256": "4087ebb3491ff944a785c1d5328ad4bbfef7368c8ea65e41f65a016e06f77584",
+      "lineas": [
+        755,
+        801
+      ],
+      "valores": {
+        "ordinal": true,
+        "lp": 0.02,
+        "ln": null,
+        "lnic": null,
+        "nota_datos": "Tabla 4: razón de verosimilitud de una categoría de la escala. Para categorías de riesgo bajo, una LR menor de 1 corresponde a estar en esa categoría; no es el VPN.",
+        "nota_datos_en": "Table 4: likelihood ratio for a score category. For low-risk categories, LR below 1 describes being in that category; it is not NPV.",
+        "lpic": "0–0.36"
+      },
+      "revision": "Conservar LRdecategoríasbaja/moderada/altaynoinventarSnSpbinarizadas."
+    },
+    {
+      "uid": "PMID:24731432:880",
+      "pmid": "24731432",
+      "signo": "Escala de Alvarado mayor o igual a 7 puntos en niños",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/24731432.txt",
+      "sha256": "4087ebb3491ff944a785c1d5328ad4bbfef7368c8ea65e41f65a016e06f77584",
+      "lineas": [
+        755,
+        801
+      ],
+      "valores": {
+        "ordinal": true,
+        "lp": 4.21,
+        "ln": null,
+        "lnic": null,
+        "nota_datos": "Tabla 4: razón de verosimilitud de una categoría de la escala. Para categorías de riesgo bajo, una LR menor de 1 corresponde a estar en esa categoría; no es el VPN.",
+        "nota_datos_en": "Table 4: likelihood ratio for a score category. For low-risk categories, LR below 1 describes being in that category; it is not NPV.",
+        "lpic": "3.33–5.32"
+      },
+      "revision": "Conservar LRdecategoríasbaja/moderada/altaynoinventarSnSpbinarizadas."
+    },
+    {
+      "uid": "PMID:24731432:881",
+      "pmid": "24731432",
+      "signo": "Escala de Alvarado mayor o igual a 9 puntos en niños",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/24731432.txt",
+      "sha256": "4087ebb3491ff944a785c1d5328ad4bbfef7368c8ea65e41f65a016e06f77584",
+      "lineas": [
+        802,
+        841
+      ],
+      "valores": {
+        "ordinal": true,
+        "lp": 8.47,
+        "ln": null,
+        "lnic": null,
+        "nota_datos": "Tabla 4: razón de verosimilitud de una categoría de la escala. Para categorías de riesgo bajo, una LR menor de 1 corresponde a estar en esa categoría; no es el VPN.",
+        "nota_datos_en": "Table 4: likelihood ratio for a score category. For low-risk categories, LR below 1 describes being in that category; it is not NPV.",
+        "lpic": "5.61–12.8"
+      },
+      "revision": "Conservar LRdecategoríasbaja/moderada/altaynoinventarSnSpbinarizadas."
+    },
+    {
+      "uid": "PMID:24731432:882",
+      "pmid": "24731432",
+      "signo": "Escala PAS menor de 4 puntos (umbral de descarte)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/24731432.txt",
+      "sha256": "4087ebb3491ff944a785c1d5328ad4bbfef7368c8ea65e41f65a016e06f77584",
+      "lineas": [
+        842,
+        886
+      ],
+      "valores": {
+        "ordinal": true,
+        "lp": 0.13,
+        "ln": null,
+        "lnic": null,
+        "nota_datos": "Tabla 4: razón de verosimilitud de una categoría de la escala. Para categorías de riesgo bajo, una LR menor de 1 corresponde a estar en esa categoría; no es el VPN.",
+        "nota_datos_en": "Table 4: likelihood ratio for a score category. For low-risk categories, LR below 1 describes being in that category; it is not NPV.",
+        "lpic": "0.04–0.40"
+      },
+      "revision": "Conservar LRdecategoríasbaja/moderada/altaynoinventarSnSpbinarizadas."
+    },
+    {
+      "uid": "PMID:24731432:883",
+      "pmid": "24731432",
+      "signo": "Escala PAS mayor o igual a 8 puntos",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/24731432.txt",
+      "sha256": "4087ebb3491ff944a785c1d5328ad4bbfef7368c8ea65e41f65a016e06f77584",
+      "lineas": [
+        842,
+        886
+      ],
+      "valores": {
+        "ordinal": true,
+        "lp": 8.1,
+        "ln": null,
+        "lnic": null,
+        "nota_datos": "Tabla 4: razón de verosimilitud de una categoría de la escala. Para categorías de riesgo bajo, una LR menor de 1 corresponde a estar en esa categoría; no es el VPN.",
+        "nota_datos_en": "Table 4: likelihood ratio for a score category. For low-risk categories, LR below 1 describes being in that category; it is not NPV.",
+        "lpic": "4.13–15.9"
+      },
+      "revision": "Conservar LRdecategoríasbaja/moderada/altaynoinventarSnSpbinarizadas."
+    },
+    {
+      "uid": "PMID:19549016:886",
+      "pmid": "19549016",
+      "signo": "Escala PAS ≥5 puntos (resultado negativo: ≤4)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/19549016.txt",
+      "sha256": "e3ac9cc26db3098c843a5a1f1690f346c2ea180f106bd3ced5e592f840818d35",
+      "lineas": [
+        669,
+        700
+      ],
+      "valores": {
+        "s": "Escala PAS ≥5 puntos (resultado negativo: ≤4)",
+        "se": "PAS score ≥5 (negative result: ≤4)",
+        "sp": 52.1,
+        "spic": "44.5–59.7",
+        "nota_datos": "Tabla 3: sensibilidad 97.6% corresponde a PAS ≥5 positivo. PAS ≤4 es el resultado negativo al que corresponde el VPN publicado 97.7%.",
+        "nota_datos_en": "Table 3: sensitivity 97.6% refers to PAS ≥5 as positive. PAS ≤4 is the negative result associated with the published NPV of 97.7%."
+      },
+      "revision": "Corrección de polaridad del umbral; Sn97.6 no representa PAS<=4 como positivo."
+    },
+    {
+      "uid": "PMID:19549016:887",
+      "pmid": "19549016",
+      "signo": "Escala PAS mayor o igual a 8 puntos (umbral quirúrgico)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/19549016.txt",
+      "sha256": "e3ac9cc26db3098c843a5a1f1690f346c2ea180f106bd3ced5e592f840818d35",
+      "lineas": [
+        711,
+        715
+      ],
+      "valores": {
+        "sn": 55.4,
+        "snic": "44.7–65.6",
+        "spic": "90.6–97.5"
+      },
+      "revision": "Tabla 3 PAS>=8; PPV publicado en texto se conserva, no se deriva del porcentaje apendicectomías negativas incoherente."
+    },
+    {
+      "uid": "PMID:2297289:1009",
+      "pmid": "2297289",
+      "signo": "Palidez facial",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2297289.txt",
+      "sha256": "61f70a11b7cbf0de2e1df137b611d5a1935ea12827752dddf9b37eb16bf9e141",
+      "lineas": [
+        245,
+        267
+      ],
+      "valores": {
+        "sn": 34,
+        "lp": 3.4,
+        "ln": 0.73,
+        "c": "Hematocrito <40%",
+        "ce": "Hematocrit <40%",
+        "pr": "Hematocrito con punto de corte 0.40."
+      },
+      "revision": "Tabla3;umbralHct40noHbanemiageneral."
+    },
+    {
+      "uid": "PMID:2297289:1010",
+      "pmid": "2297289",
+      "signo": "Palidez de los pliegues palmares",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2297289.txt",
+      "sha256": "61f70a11b7cbf0de2e1df137b611d5a1935ea12827752dddf9b37eb16bf9e141",
+      "lineas": [
+        282,
+        290
+      ],
+      "valores": {
+        "sn": 7,
+        "ln": 0.93,
+        "c": "Hematocrito <40%",
+        "ce": "Hematocrit <40%",
+        "pr": "Hematocrito con punto de corte 0.40."
+      },
+      "revision": "Tabla3 sensibilidad7%; especificidad100%formalLR+infinita,sinceldaLPpublicada."
+    },
+    {
+      "uid": "PMID:16913989:1013",
+      "pmid": "16913989",
+      "signo": "Turgencia cutánea disminuida en la región subclavicular",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/16913989.txt",
+      "sha256": "e7feb21824228a9c68340ee788aa12d94dc5e6189b7f1a9c3dd80c571d02bdf5",
+      "lineas": [
+        499,
+        521
+      ],
+      "valores": {
+        "sn": 73.3,
+        "c": "Hipernatremia",
+        "ce": "Hypernatremia",
+        "pr": "Hipernatremia según concentración sérica de sodio; controles sin hipernatremia."
+      },
+      "revision": "Tabla3 definehipernatremia,nohipovolemiaindiferenciada; OR10.52 noLR."
+    },
+    {
+      "uid": "PMID:20920693:1030",
+      "pmid": "20920693",
+      "signo": "Ascenso carotídeo retardado (pulso parvus et tardus)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        621,
+        636
+      ],
+      "valores": {
+        "c": "Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s)",
+        "ce": "Mild or greater aortic stenosis (peak velocity ≥2.5 m/s)",
+        "lpic": "4–11.5",
+        "pob": "Todos los pacientes de la cohorte ecocardiográfica, incluidos aquellos sin soplo.",
+        "nota_datos": "Tabla 4: LR 6.8 para ascenso carotídeo lento en la cohorte completa. No corresponde al subgrupo con soplo aórtico ni exclusivamente a estenosis grave.",
+        "nota_datos_en": "Table 4: LR 6.8 for delayed carotid upstroke in the full cohort. It does not refer to the aortic-murmur subgroup or exclusively to severe stenosis."
+      },
+      "revision": "CorregirpoblaciónyumbraquecorrespondenalLP6.8."
+    },
+    {
+      "uid": "PMID:20920693:1031",
+      "pmid": "20920693",
+      "signo": "Soplo de timbre zumbante o musical",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        714,
+        718
+      ],
+      "valores": {
+        "c": "Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s)",
+        "ce": "Mild or greater aortic stenosis (peak velocity ≥2.5 m/s)",
+        "lpic": "4.3–16.5",
+        "pob": "Pacientes con soplos sistólicos de la cohorte ecocardiográfica."
+      },
+      "revision": "Tabla4pacientesconsoplo,cualidadzumbanteLP8.5,desenlace>=2.5no>=4."
+    },
+    {
+      "uid": "PMID:6881175:1033",
+      "pmid": "6881175",
+      "signo": "Respuesta anormal a Valsalva (onda cuadrada o ausencia de sobrepaso)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/6881175.txt",
+      "sha256": "6f4891522023ae99aa32a2716caa13440f842a35d5dc842691098b13364c432c",
+      "lineas": [
+        352,
+        391
+      ],
+      "valores": {
+        "s": "Respuesta anormal a Valsalva (onda cuadrada o ausencia de sobrepaso)",
+        "se": "Abnormal Valsalva response (square wave or absent overshoot)",
+        "sp": 91,
+        "vpp": 84,
+        "vpn": 81,
+        "tabla2x2": {
+          "vp": 56,
+          "fp": 11,
+          "fn": 25,
+          "vn": 108
+        },
+        "nota_datos": "Sn 69% corresponde al criterio combinado (onda cuadrada O ausencia de sobrepaso), no a onda cuadrada aislada.",
+        "nota_datos_en": "Sensitivity 69% refers to the combined criterion (square wave OR absent overshoot), not isolated square wave."
+      },
+      "revision": "Se corrige etiquetaqueasociabaSncombinadaasubtipoaislado."
+    },
+    {
+      "uid": "PMID:15090381:1045",
+      "pmid": "15090381",
+      "signo": "Prueba de aducción cruzada del brazo (cross-body adduction)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/15090381.txt",
+      "sha256": "968f7919d46cd29bca6bb57d85c9d3b3a2e5582a64ade37099d3906adcc2c3a0",
+      "lineas": [
+        468,
+        478
+      ],
+      "valores": {
+        "sp": 79,
+        "vpp": 20,
+        "vpn": 98,
+        "tabla2x2": {
+          "vp": 27,
+          "fp": 108,
+          "fn": 8,
+          "vn": 410
+        },
+        "c": "Lesión crónica de la articulación acromioclavicular",
+        "ce": "Chronic acromioclavicular joint lesion"
+      },
+      "revision": "Tabla3 no dolor de hombro genérico. LR desdeconteos27/35y410/518."
+    },
+    {
+      "uid": "PMID:10979525:1050",
+      "pmid": "10979525",
+      "signo": "Signo de pinzamiento de Neer (para desgarro del manguito rotador)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/10979525.txt",
+      "sha256": "38b2852da2f560f4b81a6b43e8ea8884215e458d2f82fa95bb031c0422b9a86a",
+      "lineas": [
+        165,
+        193
+      ],
+      "valores": {
+        "sn": 83.3,
+        "sp": 50.8,
+        "vpp": 40,
+        "vpn": 88.6,
+        "c": "Desgarro del manguito rotador",
+        "ce": "Rotator cuff tear",
+        "nota_datos": "Tabla II, lesión del manguito rotador. El resumen redondea Sn a 85%; el 75% anterior correspondía a bursitis.",
+        "nota_datos_en": "Table II, rotator cuff pathosis. Abstract rounds sensitivity to 85%; the former 75% value referred to bursitis."
+      },
+      "revision": "No mezclar bursitis condesgarro; Sn83.3tabla ySp50.8."
+    },
+    {
+      "uid": "PMID:10979525:1051",
+      "pmid": "10979525",
+      "signo": "Signo de pinzamiento de Hawkins (para desgarro del manguito rotador)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/10979525.txt",
+      "sha256": "38b2852da2f560f4b81a6b43e8ea8884215e458d2f82fa95bb031c0422b9a86a",
+      "lineas": [
+        165,
+        193
+      ],
+      "valores": {
+        "sn": 87.5,
+        "sp": 42.6,
+        "vpp": 37.5,
+        "vpn": 89.7,
+        "c": "Desgarro del manguito rotador",
+        "ce": "Rotator cuff tear",
+        "nota_datos": "Tabla II, lesión del manguito rotador. El 92% anterior correspondía a bursitis.",
+        "nota_datos_en": "Table II, rotator cuff pathosis. The former 92% sensitivity referred to bursitis."
+      },
+      "revision": "No mezclar tablaI bursitis yII manguito."
+    },
+    {
+      "uid": "PMID:15995467:1053",
+      "pmid": "15995467",
+      "signo": "Regla de Ottawa para rodilla positiva",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/15995467.txt",
+      "sha256": "e55f0f913a28472241dfd8e0f1a9faea24e4528d9bf258448cbc5de86c2e38b3",
+      "lineas": [
+        198,
+        214
+      ],
+      "valores": {
+        "sp": 47,
+        "vpp": 20,
+        "vpn": 100,
+        "tabla2x2": {
+          "vp": 16,
+          "fp": 65,
+          "fn": 0,
+          "vn": 57
+        },
+        "pob": "Primera etapa del estudio: 138 pacientes evaluados con radiografías sistemáticas; 16 fracturas.",
+        "nota_datos": "Tabla 2, cohorte con radiografía para todos. Sn/Sp/VPP/VPN publicados redondeados; LR calculadas desde conteos.",
+        "nota_datos_en": "Table 2, cohort with routine radiographs for all patients. Published rounded sensitivity/specificity/PPV/NPV; LRs calculated from counts."
+      },
+      "revision": "Seelige etapa1converificacióncompleta;nomezclaretapa2selectiva."
+    },
+    {
+      "uid": "PMID:20920693:1076",
+      "pmid": "20920693",
+      "signo": "Soplo sistólico con patrón amplio ápex-base",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        492,
+        568
+      ],
+      "valores": {
+        "c": "Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s)",
+        "ce": "Mild or greater aortic stenosis (peak velocity ≥2.5 m/s)",
+        "s": "Soplo sistólico con patrón amplio ápex-base",
+        "se": "Broad apical-base systolic murmur",
+        "tabla2x2": {
+          "vp": 65,
+          "fp": 27,
+          "fn": 8,
+          "vn": 267
+        },
+        "lpic": "6.7–14",
+        "nota_datos": "Tabla 3: 367 pacientes con velocidad aórtica disponible, 73 con ≥2.5 m/s. Conteos del patrón amplio ápex-base; LR+ 9.7 publicada en tabla 4.",
+        "nota_datos_en": "Table 3: 367 patients with available aortic velocity, 73 with ≥2.5 m/s. Counts for broad apical-base pattern; LR+ 9.7 published in Table 4."
+      },
+      "revision": "No usar376cohorteglobalsintenerencuentalos9sinmediciónaórtica."
+    },
+    {
+      "uid": "PMID:8441078:1077",
+      "pmid": "8441078",
+      "signo": "Signo de percusión esplénica (percusión del espacio intercostal más bajo de la línea axilar anterior izquierda)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/8441078.txt",
+      "sha256": "f409e25d3a2acf10cbe1834688c9131a1cb2d516afdbf14d115dc1fc6f93155a",
+      "lineas": [
+        339,
+        565
+      ],
+      "valores": {
+        "sn": [
+          23.1,
+          75
+        ],
+        "sp": [
+          60,
+          100
+        ],
+        "lp": 1.97,
+        "lpic": "1.22–3.19",
+        "c": "Esplenomegalia (longitud ecográfica ≥13 cm)",
+        "ce": "Splenomegaly (ultrasound length ≥13 cm)",
+        "nota_datos": "Tablas 2–3, método de Castell: Sn/Sp son rangos entre ocho examinadores; LR+ agrupada de Mantel–Haenszel. El 7.7% previo era un extremo de otro método de percusión.",
+        "nota_datos_en": "Tables 2–3, Castell method: sensitivity/specificity are ranges across eight examiners; pooled Mantel–Haenszel LR+. The former 7.7% came from a different percussion method."
+      },
+      "revision": "Reconstrucción de fila Castell en tabla2 (primeras columnas401–404,resto461–473),filaLR541–551."
+    },
+    {
+      "uid": "PMID:20920693:1088",
+      "pmid": "20920693",
+      "signo": "Soplo sistólico con patrón esternal inferior izquierdo",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        596,
+        600
+      ],
+      "valores": {
+        "s": "Soplo sistólico con patrón esternal inferior izquierdo",
+        "se": "Left lower sternal systolic murmur pattern",
+        "c": "Insuficiencia tricuspídea moderada o grave",
+        "ce": "Moderate or severe tricuspid regurgitation",
+        "lpic": "3.5–20.3"
+      },
+      "revision": "Tabla4,patrónexactoconLP8.4."
+    },
+    {
+      "uid": "PMID:20920693:1089",
+      "pmid": "20920693",
+      "signo": "Presencia de cualquier soplo sistólico",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        492,
+        568
+      ],
+      "valores": {
+        "s": "Presencia de cualquier soplo sistólico",
+        "se": "Any systolic murmur present",
+        "c": "Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s)",
+        "ce": "Mild or greater aortic stenosis (peak velocity ≥2.5 m/s)",
+        "tabla2x2": {
+          "vp": 71,
+          "fp": 146,
+          "fn": 2,
+          "vn": 148
+        },
+        "nota_datos": "Tabla 3: 367 pacientes con velocidad aórtica evaluable. LR− 0.05 publicada para ausencia de cualquier soplo en tabla 4. Las otras métricas se calculan de la tabla 3.",
+        "nota_datos_en": "Table 3: 367 patients with evaluable aortic velocity. LR− 0.05 published for absence of any murmur in Table 4. Other metrics calculated from Table 3."
+      },
+      "revision": "Umbralpresenciadecualquiersoplo;negativos150conevaluaciónaórtica,no155globales."
+    },
+    {
+      "uid": "PMID:20920693:1090",
+      "pmid": "20920693",
+      "signo": "Soplo sistólico con patrón amplio ápex-base",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        492,
+        568
+      ],
+      "valores": {
+        "c": "Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s)",
+        "ce": "Mild or greater aortic stenosis (peak velocity ≥2.5 m/s)",
+        "s": "Soplo sistólico con patrón amplio ápex-base",
+        "se": "Broad apical-base systolic murmur",
+        "tabla2x2": {
+          "vp": 65,
+          "fp": 27,
+          "fn": 8,
+          "vn": 267
+        },
+        "lpic": "6.7–14",
+        "nota_datos": "Tabla 3: 367 pacientes con velocidad aórtica disponible, 73 con ≥2.5 m/s. Conteos del patrón amplio ápex-base; LR+ 9.7 publicada en tabla 4.",
+        "nota_datos_en": "Table 3: 367 patients with available aortic velocity, 73 with ≥2.5 m/s. Counts for broad apical-base pattern; LR+ 9.7 published in Table 4."
+      },
+      "revision": "No usar376cohorteglobalsintenerencuentalos9sinmediciónaórtica."
+    },
+    {
+      "uid": "PMID:20920693:1091",
+      "pmid": "20920693",
+      "signo": "Soplo protosistólico",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        719,
+        729
+      ],
+      "valores": {
+        "s": "Soplo protosistólico",
+        "se": "Early systolic murmur",
+        "lp": 0.7,
+        "lpic": "0.5–1.2",
+        "ln": null,
+        "lnic": null,
+        "c": "Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s)",
+        "ce": "Mild or greater aortic stenosis (peak velocity ≥2.5 m/s)",
+        "pob": "Pacientes con soplos sistólicos.",
+        "nota_datos": "Tabla 4: la razón publicada corresponde a la presencia de esta cualidad del soplo. Se corrige su asignación anterior a LR−.",
+        "nota_datos_en": "Table 4: the published ratio refers to presence of this murmur characteristic. Its previous assignment to LR− is corrected."
+      },
+      "revision": "EltextocompletonosustentaLR−0.1anteriorextraídadesíntesis;usarfilareal."
+    },
+    {
+      "uid": "PMID:20920693:1092",
+      "pmid": "20920693",
+      "signo": "Soplo de timbre soplante",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        703,
+        708
+      ],
+      "valores": {
+        "s": "Soplo de timbre soplante",
+        "se": "Blowing systolic murmur",
+        "lp": 0.3,
+        "lpic": "0.2–0.4",
+        "ln": null,
+        "lnic": null,
+        "c": "Estenosis aórtica leve o mayor (velocidad pico ≥2.5 m/s)",
+        "ce": "Mild or greater aortic stenosis (peak velocity ≥2.5 m/s)",
+        "pob": "Pacientes con soplos sistólicos.",
+        "nota_datos": "Tabla 4: la razón publicada corresponde a la presencia de esta cualidad del soplo. Se corrige su asignación anterior a LR−.",
+        "nota_datos_en": "Table 4: the published ratio refers to presence of this murmur characteristic. Its previous assignment to LR− is corrected."
+      },
+      "revision": "EltextocompletonosustentaLR−0.1anteriorextraídadesíntesis;usarfilareal."
+    },
+    {
+      "uid": "PMID:20920693:1093",
+      "pmid": "20920693",
+      "signo": "Onda CV en el pulso venoso yugular (movimiento sistólico temprano hacia afuera)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        648,
+        653
+      ],
+      "valores": {
+        "c": "Insuficiencia tricuspídea moderada o grave",
+        "ce": "Moderate or severe tricuspid regurgitation",
+        "lpic": "5.5–22"
+      },
+      "revision": "Tabla4,desenlaceTRmoderadaopeor,noMRniTRindistintas."
+    },
+    {
+      "uid": "PMID:20920693:1094",
+      "pmid": "20920693",
+      "signo": "Pulsaciones precordiales en el borde esternal inferior",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        654,
+        659
+      ],
+      "valores": {
+        "c": "Insuficiencia tricuspídea moderada o grave",
+        "ce": "Moderate or severe tricuspid regurgitation",
+        "lpic": "4.1–38"
+      },
+      "revision": "Tabla4,desenlaceTRmoderadaopeor,noMRniTRindistintas."
+    },
+    {
+      "uid": "PMID:20920693:1095",
+      "pmid": "20920693",
+      "signo": "Balanceo ventricular derecho (RV rock)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        665,
+        669
+      ],
+      "valores": {
+        "c": "Insuficiencia tricuspídea moderada o grave",
+        "ce": "Moderate or severe tricuspid regurgitation",
+        "lpic": "1.6–600"
+      },
+      "revision": "Tabla4,desenlaceTRmoderadaopeor,noMRniTRindistintas."
+    },
+    {
+      "uid": "PMID:20920693:1096",
+      "pmid": "20920693",
+      "signo": "Hígado pulsátil",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt",
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "lineas": [
+        660,
+        664
+      ],
+      "valores": {
+        "c": "Insuficiencia tricuspídea moderada o grave",
+        "ce": "Moderate or severe tricuspid regurgitation",
+        "lpic": "3.3–44"
+      },
+      "revision": "Tabla4,desenlaceTRmoderadaopeor,noMRniTRindistintas."
+    },
+    {
+      "uid": "PMID:2683709:1105",
+      "pmid": "2683709",
+      "signo": "Cambios inespecíficos ST-T",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2683709.txt",
+      "sha256": "548eb0366213352aece21f7f08af4be242c8beecbd398882b0bbbbc70788eaa9",
+      "lineas": [
+        278,
+        344
+      ],
+      "valores": {
+        "s": "Cambios inespecíficos ST-T",
+        "se": "Nonspecific ST-T changes",
+        "vpp": 5,
+        "tabla2x2": {
+          "vp": 72,
+          "fp": 1361,
+          "fn": 952,
+          "vn": 4730
+        },
+        "nota_datos": "Tabla I: 7115 evaluaciones con ECG clasificado, 1024 con infarto. Sn/VPP publicados redondeados; Sp, VPN y LR calculados con los conteos.",
+        "nota_datos_en": "Table I: 7115 evaluations with classified ECGs, 1024 with infarction. Published rounded sensitivity/PPV; specificity, NPV and LRs calculated from counts."
+      },
+      "revision": "Denominador7115=7734-619sinECGclasificado;no5324submuestraquexcluyeECGold/other."
+    },
+    {
+      "uid": "PMID:2683709:1106",
+      "pmid": "2683709",
+      "signo": "Elevación ST >1 mm u ondas Q en ≥2 derivaciones",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2683709.txt",
+      "sha256": "548eb0366213352aece21f7f08af4be242c8beecbd398882b0bbbbc70788eaa9",
+      "lineas": [
+        278,
+        344
+      ],
+      "valores": {
+        "s": "Elevación ST >1 mm u ondas Q en ≥2 derivaciones",
+        "se": "ST elevation >1 mm or Q waves in ≥2 leads",
+        "vpp": 76,
+        "tabla2x2": {
+          "vp": 461,
+          "fp": 144,
+          "fn": 563,
+          "vn": 5947
+        },
+        "nota_datos": "Tabla I: 7115 evaluaciones con ECG clasificado, 1024 con infarto. Sn/VPP publicados redondeados; Sp, VPN y LR calculados con los conteos.",
+        "nota_datos_en": "Table I: 7115 evaluations with classified ECGs, 1024 with infarction. Published rounded sensitivity/PPV; specificity, NPV and LRs calculated from counts."
+      },
+      "revision": "Denominador7115=7734-619sinECGclasificado;no5324submuestraquexcluyeECGold/other."
+    },
+    {
+      "uid": "PMID:2683709:1107",
+      "pmid": "2683709",
+      "signo": "Isquemia nueva: depresión ST ≥1 mm en ≥2 derivaciones",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2683709.txt",
+      "sha256": "548eb0366213352aece21f7f08af4be242c8beecbd398882b0bbbbc70788eaa9",
+      "lineas": [
+        278,
+        344
+      ],
+      "valores": {
+        "s": "Isquemia nueva: depresión ST ≥1 mm en ≥2 derivaciones",
+        "se": "New ischemia: ST depression ≥1 mm in ≥2 leads",
+        "vpp": 38,
+        "tabla2x2": {
+          "vp": 203,
+          "fp": 328,
+          "fn": 821,
+          "vn": 5763
+        },
+        "nota_datos": "Tabla I: 7115 evaluaciones con ECG clasificado, 1024 con infarto. Sn/VPP publicados redondeados; Sp, VPN y LR calculados con los conteos.",
+        "nota_datos_en": "Table I: 7115 evaluations with classified ECGs, 1024 with infarction. Published rounded sensitivity/PPV; specificity, NPV and LRs calculated from counts."
+      },
+      "revision": "Denominador7115=7734-619sinECGclasificado;no5324submuestraquexcluyeECGold/other."
+    },
+    {
+      "uid": "PMID:15995110:1109",
+      "pmid": "15995110",
+      "signo": "Prueba de Speed",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/15995110.txt",
+      "sha256": "179e73e2422d5e8f56316b9f678a22d7f4ad95b1aae09b7af6a97fe2c3a57c6f",
+      "lineas": [
+        326,
+        500
+      ],
+      "valores": {
+        "lp": 2.29,
+        "vpp": 80.5,
+        "vpn": 42.9,
+        "c": "Síndrome de pinzamiento subacromial",
+        "ce": "Subacromial impingement syndrome"
+      },
+      "revision": "TablaII filaSpeed; recuperarLR+decontinuacióntabla,noinferirSpilegible."
+    },
+    {
+      "uid": "PMID:11041906:1128",
+      "pmid": "11041906",
+      "signo": "Ausencia de los tres predictores de disección aórtica",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/11041906.txt",
+      "sha256": "974998501456a17f0548d95389cbcc00af9b02e0fc41eeaa902736f8ca629aee",
+      "lineas": [
+        637,
+        698
+      ],
+      "valores": {
+        "s": "Ausencia de los tres predictores de disección aórtica",
+        "se": "Absence of all three aortic dissection predictors",
+        "tabla2x2": {
+          "vp": 5,
+          "fp": 65,
+          "fn": 123,
+          "vn": 57
+        },
+        "vpp": 7,
+        "mn": "Comprobar ausencia de dolor aórtico, ensanchamiento mediastínico/aórtico y diferencias de pulso o presión arterial.",
+        "nota_datos": "Tabla 3: los predictores son dolor aórtico, ensanchamiento mediastínico/aórtico y diferencias de pulso/presión. Se evalúa la presencia del patrón «ningún predictor»; su LR+ menor de 1 reduce la probabilidad.",
+        "nota_datos_en": "Table 3: predictors are aortic pain, mediastinal/aortic widening and pulse/blood-pressure differentials. The test is presence of the “no predictor” pattern; its LR+ below 1 reduces probability."
+      },
+      "revision": "Se corrigenpredictoresincorrectosetiquetaoriginalydefineausenciacomopatróndiagnóstico."
+    },
+    {
+      "uid": "PMID:7884108:1129",
+      "pmid": "7884108",
+      "signo": "Temperatura ≥38.5 °C",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/7884108.txt",
+      "sha256": "a886a2351ba02df65a73d91b90f73e5de3fa778a8df42b3edebbea9ab54b6bb2",
+      "lineas": [
+        375,
+        454
+      ],
+      "valores": {
+        "sn": 90,
+        "pob": "128 episodios de sospecha de bacteriemia adquirida en la comunidad en pacientes mayores; hemocultivo obtenido dentro de las primeras 48 horas del ingreso.",
+        "c": "Bacteriemia adquirida en la comunidad",
+        "ce": "Community-acquired bacteremia"
+      },
+      "revision": "Sp45.4correspondeCA,nomezclarconHA(Sp22Sn84.6)."
+    },
+    {
+      "uid": "PMID:2297281:1130",
+      "pmid": "2297281",
+      "signo": "Parálisis de cuerda vocal (en bocio)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2297281.txt",
+      "sha256": "d5bd88296b483215fec91e1c11a281675661a6b1a055cdbd7b6a95e0308364b0",
+      "lineas": [
+        89,
+        155
+      ],
+      "valores": {
+        "tabla2x2": {
+          "vp": 5,
+          "fp": 1,
+          "fn": 34,
+          "vn": 129
+        },
+        "nota_datos": "Tabla 1: cohorte quirúrgica de 169 pacientes, 39 con neoplasia maligna. Sn, Sp, VPN y LR calculados de los conteos; VPP publicado. Estos resultados corresponden a esa población seleccionada.",
+        "nota_datos_en": "Table 1: surgical cohort of 169 patients, 39 with malignancy. Sensitivity, specificity, NPV and LRs calculated from counts; published PPV. These results apply to this selected population."
+      },
+      "revision": "Conteos específicosporhallazgoytotales39malignos/130benignos,nosumasdegrupossolapados."
+    },
+    {
+      "uid": "PMID:2297281:1131",
+      "pmid": "2297281",
+      "signo": "Adenopatía cervical (en bocio)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2297281.txt",
+      "sha256": "d5bd88296b483215fec91e1c11a281675661a6b1a055cdbd7b6a95e0308364b0",
+      "lineas": [
+        89,
+        155
+      ],
+      "valores": {
+        "tabla2x2": {
+          "vp": 12,
+          "fp": 5,
+          "fn": 27,
+          "vn": 125
+        },
+        "nota_datos": "Tabla 1: cohorte quirúrgica de 169 pacientes, 39 con neoplasia maligna. Sn, Sp, VPN y LR calculados de los conteos; VPP publicado. Estos resultados corresponden a esa población seleccionada.",
+        "nota_datos_en": "Table 1: surgical cohort of 169 patients, 39 with malignancy. Sensitivity, specificity, NPV and LRs calculated from counts; published PPV. These results apply to this selected population."
+      },
+      "revision": "Conteos específicosporhallazgoytotales39malignos/130benignos,nosumasdegrupossolapados."
+    },
+    {
+      "uid": "PMID:2297281:1132",
+      "pmid": "2297281",
+      "signo": "Nódulo tiroideo muy duro (consistencia pétrea)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2297281.txt",
+      "sha256": "d5bd88296b483215fec91e1c11a281675661a6b1a055cdbd7b6a95e0308364b0",
+      "lineas": [
+        89,
+        155
+      ],
+      "valores": {
+        "tabla2x2": {
+          "vp": 1,
+          "fp": 1,
+          "fn": 38,
+          "vn": 129
+        },
+        "nota_datos": "Tabla 1: cohorte quirúrgica de 169 pacientes, 39 con neoplasia maligna. Sn, Sp, VPN y LR calculados de los conteos; VPP publicado. Estos resultados corresponden a esa población seleccionada.",
+        "nota_datos_en": "Table 1: surgical cohort of 169 patients, 39 with malignancy. Sensitivity, specificity, NPV and LRs calculated from counts; published PPV. These results apply to this selected population."
+      },
+      "revision": "Conteos específicosporhallazgoytotales39malignos/130benignos,nosumasdegrupossolapados."
+    },
+    {
+      "uid": "PMID:12544957:1141",
+      "pmid": "12544957",
+      "signo": "Reflejo bicipital disminuido",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/12544957.txt",
+      "sha256": "e42f92b2c28f7dcd360e6315a1da193c91b8d10e4a1187fe8d90142c933e93a5",
+      "lineas": [
+        654,
+        724
+      ],
+      "valores": {
+        "sn": 24,
+        "sp": 95,
+        "spic": "90–100",
+        "lp": 4.9,
+        "ln": 0.8,
+        "lpic": "1.2–20.0",
+        "lnic": "0.61–1.1",
+        "nota_datos": "Tabla 4, reflejo bicipital (Biceps brachii MSR). El intervalo de sensibilidad de la extracción es incoherente y no se transcribe.",
+        "nota_datos_en": "Table 4, biceps brachii muscle stretch reflex. The sensitivity interval in the text extraction is inconsistent and is not transcribed."
+      },
+      "revision": "Orden de columnas: sensibilidad, especificidad, LR−, LR+. No usar MMT biceps (fuerza)."
+    },
+    {
+      "uid": "PMID:9934421:1160",
+      "pmid": "9934421",
+      "signo": "Debilidad del supraespinoso en la prueba de Jobe (empty can)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/9934421.txt",
+      "sha256": "172820be5c332b9afbb6a9576332ee2892605d6dc5e2aea5a1fab01d0fceff72",
+      "lineas": [
+        277,
+        325
+      ],
+      "valores": {
+        "sn": 77,
+        "sp": 68,
+        "vpp": 44,
+        "vpn": 90,
+        "tabla2x2": {
+          "vp": 27,
+          "fp": 35,
+          "fn": 8,
+          "vn": 73
+        },
+        "c": "Desgarro completo del tendón supraespinoso",
+        "ce": "Full-thickness supraspinatus tendon tear",
+        "s": "Debilidad del supraespinoso en la prueba de Jobe (empty can)",
+        "se": "Supraspinatus weakness on the empty can test",
+        "pr": "Resonancia magnética de alta resolución.",
+        "pob": "143 hombros de 136 pacientes consecutivos; 35 hombros con desgarro completo del supraespinoso.",
+        "nota_datos": "Tabla 2: prueba empty can positiva por debilidad muscular (grado ≤4). Sn, Sp, VPP y VPN publicados; LR calculadas con los conteos de esa misma fila.",
+        "nota_datos_en": "Table 2: empty can test positive for muscle weakness (grade ≤4). Published sensitivity, specificity, PPV and NPV; LRs calculated from counts in the same row."
+      },
+      "revision": "La maniobra documentada usa pulgar abajo: corresponde a empty can, no full can. No confundir exactitud global 70% con sensibilidad."
+    },
+    {
+      "uid": "PMID:2913385:1170",
+      "pmid": "2913385",
+      "signo": "Estertores crepitantes",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2913385.txt",
+      "sha256": "29c223f99265536010f896a7aca81ef07bda272eb5b926c68a5490ae370e02be",
+      "lineas": [
+        378,
+        405
+      ],
+      "valores": {
+        "tabla2x2": {
+          "vp": 8,
+          "fp": 0,
+          "fn": 35,
+          "vn": 7
+        },
+        "c": "Presión capilar pulmonar enclavada ≥22 mmHg",
+        "ce": "Pulmonary capillary wedge pressure ≥22 mmHg",
+        "pr": "Medición hemodinámica de presión capilar pulmonar enclavada.",
+        "nota_datos": "Tabla 3 y su nota: crepitantes en 8 de 43 pacientes con presión ≥22 mmHg; ninguno en los 7 pacientes con presión ≤18 mmHg. Los porcentajes faltantes y LR se calculan de esos conteos.",
+        "nota_datos_en": "Table 3 and footnote: rales in 8 of 43 patients with wedge pressure ≥22 mmHg; none among 7 patients with pressure ≤18 mmHg. Missing percentages and LRs are calculated from these counts."
+      },
+      "revision": "No confundir sensibilidad58%combinada de cualquier signo con rales8/43."
+    },
+    {
+      "uid": "PMID:6232839:1171",
+      "pmid": "6232839",
+      "signo": "Componente aórtico del segundo ruido (A2) disminuido, sin enfermedad coronaria",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/6232839.txt",
+      "sha256": "f9c050dea7fdb98210b787d4d3e7e77794fb4b02497b4bca79842c009ac1413b",
+      "lineas": [
+        441,
+        458
+      ],
+      "valores": {
+        "s": "Componente aórtico del segundo ruido (A2) disminuido, sin enfermedad coronaria",
+        "se": "Faint aortic component of the second heart sound (A2), without coronary disease",
+        "c": "Estenosis aórtica grave",
+        "ce": "Severe aortic stenosis",
+        "mn": "Auscultar el componente aórtico de S2 y valorar si es débil.",
+        "nota_datos": "Tabla III: Sn 33% se refiere a A2 débil en pacientes sin enfermedad coronaria. El artículo no sustenta la etiqueta anterior de desdoblamiento paradójico. No se mezcla la especificidad de la cohorte completa con este subgrupo.",
+        "nota_datos_en": "Table III: 33% sensitivity refers to faint A2 in patients without coronary disease. The paper does not support the previous paradoxical splitting label. Whole-cohort specificity is not combined with this subgroup."
+      },
+      "revision": "Corregir signooriginalnorespaldadopor artículo vinculado,conservar33subgruposinCAD."
+    },
+    {
+      "uid": "PMID:10190376:1173",
+      "pmid": "10190376",
+      "signo": "Regla de dolor torácico: riesgo alto, moderado o bajo (negativo: muy bajo)",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/10190376.txt",
+      "sha256": "3a8930bd24ae7726580aeb4d290e9c8a337d123e7367f3f355a288cb7661ea8a",
+      "lineas": [
+        651,
+        702
+      ],
+      "valores": {
+        "s": "Regla de dolor torácico: riesgo alto, moderado o bajo (negativo: muy bajo)",
+        "se": "Chest-pain rule: high, moderate or low risk (negative: very low)",
+        "sn": 100,
+        "tabla2x2": {
+          "vp": 9,
+          "fp": 90,
+          "fn": 0,
+          "vn": 108
+        },
+        "nota_datos": "Tabla 4: historia y ECG estandarizados. Muy bajo riesgo es el resultado negativo; Sn 100% y Sp 55% corresponden al umbral complementario.",
+        "nota_datos_en": "Table 4: standardized history and ECG. Very low risk is the negative result; 100% sensitivity and 55% specificity refer to the complementary threshold."
+      },
+      "revision": "Se defineumbralbinarioreal,9complicaciones/198sincomplicaciones,nocategoríaordinalaislada."
+    },
+    {
+      "uid": "PMID:2306060:1183",
+      "pmid": "2306060",
+      "signo": "Diagrama de la mano clasificado como clásico o probable",
+      "texto": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2306060.txt",
+      "sha256": "28b2ff54af67dad7c452b7e0580a47ffd44acee086c0da1e29880fa80410c7c6",
+      "lineas": [
+        424,
+        432
+      ],
+      "valores": {
+        "sn": 61,
+        "sp": 71,
+        "vppic": "48–68",
+        "vpn": 73,
+        "vpnic": "66–80"
+      },
+      "revision": "Tabla 2, población real con prevalencia40%; no usar valores simulados a15%."
+    }
+  ],
+  "textos_revisados": {
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/9934421.txt": {
+      "sha256": "172820be5c332b9afbb6a9576332ee2892605d6dc5e2aea5a1fab01d0fceff72",
+      "bytes": 20215,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/32289199.txt": {
+      "sha256": "4606c610113f3ae6ca94035385eea1c4591db125281c1953d251f95128287a0f",
+      "bytes": 31301,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/12544957.txt": {
+      "sha256": "e42f92b2c28f7dcd360e6315a1da193c91b8d10e4a1187fe8d90142c933e93a5",
+      "bytes": 53041,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/28833896.txt": {
+      "sha256": "e823faa5d2c5b4447a9db31ce6938932f75f17ab6938813f5cd06ef4b8de9c58",
+      "bytes": 43092,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/12020306.txt": {
+      "sha256": "3ef942f9094a42b44cb2202daf13df92c04f0b7522f0f736b39b950f8965eac1",
+      "bytes": 59477,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/14576249.txt": {
+      "sha256": "bd40bb4b3e3c6c5945b061827c9fff219ac36822e713cf8969c8fc232a14d009",
+      "bytes": 28122,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/23613077.txt": {
+      "sha256": "d3d22df7b103e4d34bf7435d773cd8fa4167664406702ff72158c45844305ded",
+      "bytes": 48785,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/23677315.txt": {
+      "sha256": "9c1846c58bf3363402c7609fe2fe4876fec20cd7239b68d4270a391ffdaa8a80",
+      "bytes": 47470,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/14506123.txt": {
+      "sha256": "e6b76791cb485fcf9e9f58f3860f2d76cdf0af5fddedc112629c1adee114c997",
+      "bytes": 46760,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/30858261.txt": {
+      "sha256": "5f67ff6b51f1b17ba3a74b010fcac8e5f06612e0111f84216a4fa2f70ae46d77",
+      "bytes": 46137,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/25782075.txt": {
+      "sha256": "9feae3fbbc4efcee2da7d27a3d2c880b781f90de7e1ca096f0a51d1c9686e900",
+      "bytes": 29939,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/11147989.txt": {
+      "sha256": "e676afe72cb91e2dbf498b8f9257df7eb13d42423d057e4f411da3f06924a475",
+      "bytes": 37432,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/18480117.txt": {
+      "sha256": "17ffc5cb163b7d94237922bbe8bf44d59268b4cf7180cac2becd370f21a95856",
+      "bytes": 35662,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/21175516.txt": {
+      "sha256": "48fb9744a813b8f4857fa02881b207f9395d57634bcaf79b92ab20b6a903b018",
+      "bytes": 27946,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/32546747.txt": {
+      "sha256": "3f71f23505b75fb36599e475a489a12cbe9185be50c48d815453400c6f05eee2",
+      "bytes": 32852,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/25697458.txt": {
+      "sha256": "8e92d52c92e2de91aee608df794a535be911c4e04b187f641f6b1e202889a1bd",
+      "bytes": 23134,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/19414727.txt": {
+      "sha256": "2202d000c96646cc1d3666351b5e66196ee049af6b8a2e54c3404a75bc237dae",
+      "bytes": 32141,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/19934426.txt": {
+      "sha256": "387bfb05c7bbc61d88621c953b60c0765968dd491b1d13301bffae3f8c4a2230",
+      "bytes": 38908,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/28214369.txt": {
+      "sha256": "a44a8bff728b5afdd2cc7a44e265b786963946754385316043b6f254b60beb1f",
+      "bytes": 131795,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/19549016.txt": {
+      "sha256": "e3ac9cc26db3098c843a5a1f1690f346c2ea180f106bd3ced5e592f840818d35",
+      "bytes": 31562,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/31208974.txt": {
+      "sha256": "2c1b6937efcb1d571b144fd43dc23cabce337ad98d64323c2f64c7f5ef8cb2df",
+      "bytes": 43526,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2306060.txt": {
+      "sha256": "28b2ff54af67dad7c452b7e0580a47ffd44acee086c0da1e29880fa80410c7c6",
+      "bytes": 39276,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/15090381.txt": {
+      "sha256": "968f7919d46cd29bca6bb57d85c9d3b3a2e5582a64ade37099d3906adcc2c3a0",
+      "bytes": 29439,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/10979525.txt": {
+      "sha256": "38b2852da2f560f4b81a6b43e8ea8884215e458d2f82fa95bb031c0422b9a86a",
+      "bytes": 13771,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/16913989.txt": {
+      "sha256": "e7feb21824228a9c68340ee788aa12d94dc5e6189b7f1a9c3dd80c571d02bdf5",
+      "bytes": 28025,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/15995467.txt": {
+      "sha256": "e55f0f913a28472241dfd8e0f1a9faea24e4528d9bf258448cbc5de86c2e38b3",
+      "bytes": 18289,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2297289.txt": {
+      "sha256": "61f70a11b7cbf0de2e1df137b611d5a1935ea12827752dddf9b37eb16bf9e141",
+      "bytes": 25658,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/6881175.txt": {
+      "sha256": "6f4891522023ae99aa32a2716caa13440f842a35d5dc842691098b13364c432c",
+      "bytes": 35175,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2913385.txt": {
+      "sha256": "29c223f99265536010f896a7aca81ef07bda272eb5b926c68a5490ae370e02be",
+      "bytes": 30118,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/7884108.txt": {
+      "sha256": "a886a2351ba02df65a73d91b90f73e5de3fa778a8df42b3edebbea9ab54b6bb2",
+      "bytes": 33167,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2297281.txt": {
+      "sha256": "d5bd88296b483215fec91e1c11a281675661a6b1a055cdbd7b6a95e0308364b0",
+      "bytes": 22100,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/6232839.txt": {
+      "sha256": "f9c050dea7fdb98210b787d4d3e7e77794fb4b02497b4bca79842c009ac1413b",
+      "bytes": 34779,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/15995110.txt": {
+      "sha256": "179e73e2422d5e8f56316b9f678a22d7f4ad95b1aae09b7af6a97fe2c3a57c6f",
+      "bytes": 38990,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2683709.txt": {
+      "sha256": "548eb0366213352aece21f7f08af4be242c8beecbd398882b0bbbbc70788eaa9",
+      "bytes": 32908,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/11041906.txt": {
+      "sha256": "974998501456a17f0548d95389cbcc00af9b02e0fc41eeaa902736f8ca629aee",
+      "bytes": 32827,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/10190376.txt": {
+      "sha256": "3a8930bd24ae7726580aeb4d290e9c8a337d123e7367f3f355a288cb7661ea8a",
+      "bytes": 37902,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/20920693.txt": {
+      "sha256": "eb561480e2dae10d5008b18c68e019a884c7ec5ccc9e837992a9dc5aaea8b36b",
+      "bytes": 35670,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/8441078.txt": {
+      "sha256": "f409e25d3a2acf10cbe1834688c9131a1cb2d516afdbf14d115dc1fc6f93155a",
+      "bytes": 34176,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/24731432.txt": {
+      "sha256": "4087ebb3491ff944a785c1d5328ad4bbfef7368c8ea65e41f65a016e06f77584",
+      "bytes": 40635,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se recuperaron o corrigieron las métricas y correspondencias documentadas en revisiones; los campos no recuperados permanecen vacíos."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t7/16434632.txt": {
+      "sha256": "e100d5d7c005454c1f787a8a193c38a301f54aa92ba96b2294f767f598d1dfa7",
+      "bytes": 68015,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Tablas de Rinne, Weber y susurro informan LR; no se invierten estimaciones agrupadas para obtener Sn/Sp."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/16461960.txt": {
+      "sha256": "7ba459fed65a97020e1ff7c59ecaf14ef950aa194952aa12c69eb2b202c73d07",
+      "bytes": 40799,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Ginebra: categorías de riesgo con prevalencia, no un umbral binario. No se infieren Sn/Sp/LR−/VPN de una categoría."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/18931619.txt": {
+      "sha256": "5190b2cdd8be7d85d17e5f56cc904d3e3475785217b62ee9ebe8734d38f972c4",
+      "bytes": 19134,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Wells: categorías con riesgo observado; se preserva su interpretación ordinal."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2774371.txt": {
+      "sha256": "566a51a26cb8bc4d64af12a9a5f2f71b28fa26f3093c6774f90f2b5e605a29f2",
+      "bytes": 36437,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Tablas 1/2 presentan discrepancias entre conteos/porcentajes y denominadores. No se completan métricas combinando celdas incompatibles."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/2897627.txt": {
+      "sha256": "9d913985f1f474ee548c2d61ee57b1600dc338fdd9948527e1e59cb3ba302a64",
+      "bytes": 16831,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Extracción OCR severamente deteriorada; no puede recuperarse con seguridad la especificidad."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/29661046.txt": {
+      "sha256": "b92cf9240396834cac2100c3945d5fe01fb929297fb6936e2aec637e89505967",
+      "bytes": 46277,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Rinne: Sn/Sp como rangos heterogéneos ya recuperados; no derivar LR de extremos no apareados."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/3566496.txt": {
+      "sha256": "183b580d6c5adad11e613ec769c2386f726221376c0171e0fe5386ed24a593fe",
+      "bytes": 10652,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Se informa positividad de pivot shift entre lesionados (bajo anestesia); no existe grupo sin lesión completo adecuado para atribuir Sp al mismo contraste."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t6/36811717.txt": {
+      "sha256": "4ecfda85b82afcb6964c0e959b5b1ff505e8b8539b5a72d518ea8a67ae8d104c",
+      "bytes": 41785,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "TWIST 4/7: gráficos de cortes, sin tabla numérica completa para estos umbrales; no se estiman cifras leyendo alturas de curvas."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/6216867.txt": {
+      "sha256": "932b47071324ed4f3373b1cc9cfb54d56fcacb877f20963131bc63730e64fca2",
+      "bytes": 10422,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Extracción OCR severamente deteriorada; no se inventan cifras ilegibles."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/6412660.txt": {
+      "sha256": "66733721b6a66f4d19a14f6a8bfb851c92186d787ab4fe52dff9df38cdef1d3e",
+      "bytes": 13381,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Los conteos se refieren al rendimiento diagnóstico de biopsia, no al diagnóstico de enfermedad grave por presencia del signo."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/7249303.txt": {
+      "sha256": "5a0e5b2bcd1683072b1375ba720230e92ff1cf8cd508676e2b5f40e2344cee9e",
+      "bytes": 38254,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Dolor no anginoso: prevalencias específicas por sexo (6%/14%); no se mezclan poblaciones para crear Sn/Sp."
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs/.cache/textos_t8/8994152.txt": {
+      "sha256": "1aed0c3668cb656f77cdcc5c0a9f11798b2fef27456fd56d7d7a2793c0180f62",
+      "bytes": 40137,
+      "alcance": "Revisión dirigida de resultados/tablas para las fichas incompletas, con búsqueda en el texto disponible.",
+      "resultado": "Tabla 2 ilegible en la extracción disponible; no se reconstruyen dígitos por conjetura."
+    }
+  }
+}
