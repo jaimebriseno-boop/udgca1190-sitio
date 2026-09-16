@@ -1,0 +1,2137 @@
+{
+  "masters": [
+    {
+      "master": "10_WIKI_INFECTOLOGIA/exploracion_fisica/McGee_EBPD_MOC.md",
+      "outgoing": [
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_INDEX|_INDEX de McGee_EBPD_2012",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_INDEX.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch001_what_is_evidence_based_physical_diagnosis/ch001_s02_understanding_the_evidence\\|ch001_s02_understanding_the_evidence",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch001_what_is_evidence_based_physical_diagnosis/ch001_s02_understanding_the_evidence.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch002_diagnostic_accuracy_of_physical_findings/ch002_s02_span_idpage_0_0spani_introduction\\|ch002_s02_span_idpage_0_0spani_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch002_diagnostic_accuracy_of_physical_findings/ch002_s02_span_idpage_0_0spani_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch003_using_the_tables_in_this_book/ch003_s02_ii_frequency_of_findings_tables\\|ch003_s02_ii_frequency_of_findings_tables",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch003_using_the_tables_in_this_book/ch003_s02_ii_frequency_of_findings_tables.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch004_reliability_of_physical_findings/ch004_s02_appendix_calculation_of_the_kappa_statistic\\|ch004_s02_appendix_calculation_of_the_kappa_statistic",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch004_reliability_of_physical_findings/ch004_s02_appendix_calculation_of_the_kappa_statistic.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch005_mental_status_examination/ch005_s02_i_introduction\\|ch005_s02_i_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch005_mental_status_examination/ch005_s02_i_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch006_stance_and_gait/ch006_s02_stance_and_gait\\|ch006_s02_stance_and_gait",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch006_stance_and_gait/ch006_s02_stance_and_gait.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s02_i_introduction\\|ch007_s02_i_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s02_i_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch008_cyanosis/ch008_s02_cyanosis\\|ch008_s02_cyanosis",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch008_cyanosis/ch008_s02_cyanosis.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch009_anemia/ch009_s02_anemia\\|ch009_s02_anemia",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch009_anemia/ch009_s02_anemia.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch010_hypovolemia/ch010_s02_hypovolemia\\|ch010_s02_hypovolemia",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch010_hypovolemia/ch010_s02_hypovolemia.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch011_proteinenergy_malnutrition_and_weight_loss/ch011_s02_span_idpage_0_0spanprotein_energy_malnutrition\\|ch011_s02_span_idpage_0_0spanprotein_energy_malnutrition",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch011_proteinenergy_malnutrition_and_weight_loss/ch011_s02_span_idpage_0_0spanprotein_energy_malnutrition.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch012_obesity/ch012_s02_obesity\\|ch012_s02_obesity",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch012_obesity/ch012_s02_obesity.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch013_cushing_syndrome/ch013_s02_ii_findings_and_their_pathogenesis\\|ch013_s02_ii_findings_and_their_pathogenesis",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch013_cushing_syndrome/ch013_s02_ii_findings_and_their_pathogenesis.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch014_pulse_rate_and_contour/ch014_s01_introducción\\|ch014_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch014_pulse_rate_and_contour/ch014_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch015_abnormalities_of_pulse_rhythm/ch015_s01_introducción\\|ch015_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch015_abnormalities_of_pulse_rhythm/ch015_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch016_blood_pressure/ch016_s02_1_definition_of_systolic_and_diastolic_blood_pressure\\|ch016_s02_1_definition_of_systolic_and_diastolic_blood_pressure",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch016_blood_pressure/ch016_s02_1_definition_of_systolic_and_diastolic_blood_pressure.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch017_temperature/ch017_s01_introducción\\|ch017_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch017_temperature/ch017_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch018_respiratory_rate_and_abnormal_breathing_patterns/ch018_s02_2_clinical_significance\\|ch018_s02_2_clinical_significance",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch018_respiratory_rate_and_abnormal_breathing_patterns/ch018_s02_2_clinical_significance.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch019_pulse_oximetry/ch019_s02_iii_clinical_significance\\|ch019_s02_iii_clinical_significance",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch019_pulse_oximetry/ch019_s02_iii_clinical_significance.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch020_the_pupils/ch020_s01_introducción\\|ch020_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch020_the_pupils/ch020_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch021_diabetic_retinopathy/ch021_s02_i_introduction\\|ch021_s02_i_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch021_diabetic_retinopathy/ch021_s02_i_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch022_hearing/ch022_s02_hearing\\|ch022_s02_hearing",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch022_hearing/ch022_s02_hearing.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch023_thyroid_and_its_disorders/ch023_s02_thyroid_and_its_disorders\\|ch023_s02_thyroid_and_its_disorders",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch023_thyroid_and_its_disorders/ch023_s02_thyroid_and_its_disorders.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch024_meninges/ch024_s02_meninges\\|ch024_s02_meninges",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch024_meninges/ch024_s02_meninges.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch025_peripheral_lymphadenopathy/ch025_s02_span_idpage_0_0spani_introduction\\|ch025_s02_span_idpage_0_0spani_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch025_peripheral_lymphadenopathy/ch025_s02_span_idpage_0_0spani_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch026_inspection_of_the_chest/ch026_s02_1_interphalangeal_depth_ratio\\|ch026_s02_1_interphalangeal_depth_ratio",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch026_inspection_of_the_chest/ch026_s02_1_interphalangeal_depth_ratio.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s02_palpation\\|ch027_s02_palpation",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s02_palpation.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s02_1_bronchophony\\|ch028_s02_1_bronchophony",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s02_1_bronchophony.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch029_ancillary_tests/ch029_s01_introducción\\|ch029_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch029_ancillary_tests/ch029_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch030_pneumonia/ch030_s02_a_individual_findings\\|ch030_s02_a_individual_findings",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch030_pneumonia/ch030_s02_a_individual_findings.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s02_span_idpage_0_0spani_introduction\\|ch031_s02_span_idpage_0_0spani_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s02_span_idpage_0_0spani_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch032_pulmonary_embolism/ch032_s02_iii_clinical_significance\\|ch032_s02_iii_clinical_significance",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch032_pulmonary_embolism/ch032_s02_iii_clinical_significance.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch033_pleural_effusion/ch033_s02_pleural_effusion\\|ch033_s02_pleural_effusion",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch033_pleural_effusion/ch033_s02_pleural_effusion.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s02_span_idpage_0_0spani_introduction\\|ch034_s02_span_idpage_0_0spani_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s02_span_idpage_0_0spani_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch035_percussion_of_the_heart/ch035_s02_i_introduction\\|ch035_s02_i_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch035_percussion_of_the_heart/ch035_s02_i_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s02_i_introduction\\|ch036_s02_i_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s02_i_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch037_auscultation_of_the_heart_general_principles/ch037_s02_auscultation_of_the_heart_general_principles\\|ch037_s02_auscultation_of_the_heart_general_principles",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch037_auscultation_of_the_heart_general_principles/ch037_s02_auscultation_of_the_heart_general_principles.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s02_ii_pathogenesis\\|ch038_s02_ii_pathogenesis",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s02_ii_pathogenesis.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch039_the_third_and_fourth_heart_sounds/ch039_s02_span_idpage_0_0spani_introduction\\|ch039_s02_span_idpage_0_0spani_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch039_the_third_and_fourth_heart_sounds/ch039_s02_span_idpage_0_0spani_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch040_miscellaneous_heart_sounds/ch040_s01_introducción\\|ch040_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch040_miscellaneous_heart_sounds/ch040_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch041_heart_murmurs_general_principles/ch041_s02_c_timing_radiation_and_quality_of_sound_see_also_the_section\\|ch041_s02_c_timing_radiation_and_quality_of_sound_see_also_the_section",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch041_heart_murmurs_general_principles/ch041_s02_c_timing_radiation_and_quality_of_sound_see_also_the_section.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch042_aortic_stenosis/ch042_s02_iii_clinical_significance\\|ch042_s02_iii_clinical_significance",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch042_aortic_stenosis/ch042_s02_iii_clinical_significance.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch043_aortic_regurgitation/ch043_s02_1_early_diastolic_murmur_of_regurgitation\\|ch043_s02_1_early_diastolic_murmur_of_regurgitation",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch043_aortic_regurgitation/ch043_s02_1_early_diastolic_murmur_of_regurgitation.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s02_span_idpage_0_0spanhypertrophic_cardiomyopathy\\|ch044_s02_span_idpage_0_0spanhypertrophic_cardiomyopathy",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s02_span_idpage_0_0spanhypertrophic_cardiomyopathy.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s02_disorders_of_the_pericardium\\|ch045_s02_disorders_of_the_pericardium",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s02_disorders_of_the_pericardium.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch046_congestive_heart_failure/ch046_s02_b_technique\\|ch046_s02_b_technique",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch046_congestive_heart_failure/ch046_s02_b_technique.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch047_coronary_artery_disease/ch047_s02_i_introduction\\|ch047_s02_i_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch047_coronary_artery_disease/ch047_s02_i_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch048_inspection_of_the_abdomen/ch048_s02_ii_pathogenesis\\|ch048_s02_ii_pathogenesis",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch048_inspection_of_the_abdomen/ch048_s02_ii_pathogenesis.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s02_palpation_and_percussion_of_the_abdomen\\|ch049_s02_palpation_and_percussion_of_the_abdomen",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s02_palpation_and_percussion_of_the_abdomen.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s02_a_peritonitis\\|ch050_s02_a_peritonitis",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s02_a_peritonitis.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch051_auscultation_of_the_abdomen/ch051_s02_abdominal_bruits\\|ch051_s02_abdominal_bruits",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch051_auscultation_of_the_abdomen/ch051_s02_abdominal_bruits.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch052_peripheral_vascular_disease/ch052_s01_introducción\\|ch052_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch052_peripheral_vascular_disease/ch052_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch053_the_diabetic_foot/ch053_s02_the_diabetic_foot\\|ch053_s02_the_diabetic_foot",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch053_the_diabetic_foot/ch053_s02_the_diabetic_foot.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s02_edema_and_deep_vein_thrombosis\\|ch054_s02_edema_and_deep_vein_thrombosis",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s02_edema_and_deep_vein_thrombosis.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s02_a_impingement_signs\\|ch055_s02_a_impingement_signs",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s02_a_impingement_signs.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch056_visual_field_testing/ch056_s01_introducción\\|ch056_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch056_visual_field_testing/ch056_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch057_nerves_of_the_eye_muscles_iii_iv_and_vi_approach_to_diplopia/ch057_s01_introducción\\|ch057_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch057_nerves_of_the_eye_muscles_iii_iv_and_vi_approach_to_diplopia/ch057_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch058_miscellaneous_cranial_nerves/ch058_s01_introducción\\|ch058_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch058_miscellaneous_cranial_nerves/ch058_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s02_3_special_tests_for_unilateral_cerebral_lesions\\|ch059_s02_3_special_tests_for_unilateral_cerebral_lesions",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s02_3_special_tests_for_unilateral_cerebral_lesions.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch060_examination_of_the_sensory_system/ch060_s01_introducción\\|ch060_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch060_examination_of_the_sensory_system/ch060_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch061_examination_of_the_reflexes/ch061_s01_introducción\\|ch061_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch061_examination_of_the_reflexes/ch061_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch062_disorders_of_the_nerve_roots_plexuses_and_peripheral_nerves/ch062_s01_introducción\\|ch062_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch062_disorders_of_the_nerve_roots_plexuses_and_peripheral_nerves/ch062_s01_introducción.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s02_coordination_and_cerebellar_testing\\|ch063_s02_coordination_and_cerebellar_testing",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s02_coordination_and_cerebellar_testing.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch064_tremor_and_parkinson_disease/ch064_s02_span_idpage_3_0spanebm_box_64_1_suspected_parkinson_diseasep\\|ch064_s02_span_idpage_3_0spanebm_box_64_1_suspected_parkinson_diseasep",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch064_tremor_and_parkinson_disease/ch064_s02_span_idpage_3_0spanebm_box_64_1_suspected_parkinson_diseasep.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s02_ebm_box_65_1_hemorrhagic_strokecontd\\|ch065_s02_ebm_box_65_1_hemorrhagic_strokecontd",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s02_ebm_box_65_1_hemorrhagic_strokecontd.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch066_acute_vertigo_and_imbalance/ch066_s02_span_idpage_0_0spani_introduction\\|ch066_s02_span_idpage_0_0spani_introduction",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch066_acute_vertigo_and_imbalance/ch066_s02_span_idpage_0_0spani_introduction.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s02_examination_of_nonorganic_neurologic_disorders\\|ch067_s02_examination_of_nonorganic_neurologic_disorders",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s02_examination_of_nonorganic_neurologic_disorders.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s02_b_assessment_of_peripheral_perfusion_in_the_icu\\|ch068_s02_b_assessment_of_peripheral_perfusion_in_the_icu",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s02_b_assessment_of_peripheral_perfusion_in_the_icu.md"
+        },
+        {
+          "link": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch069_appendix_likelihood_ratios_confidence_intervals_and_pretest/ch069_s01_introducción\\|ch069_s01_introducción",
+          "resolved": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch069_appendix_likelihood_ratios_confidence_intervals_and_pretest/ch069_s01_introducción.md"
+        },
+        {
+          "link": "sindromes/Hepatitis_virales",
+          "resolved": "10_WIKI_INFECTOLOGIA/sindromes/Hepatitis_virales.md"
+        },
+        {
+          "link": "sindromes/Endocarditis_infecciosa",
+          "resolved": "10_WIKI_INFECTOLOGIA/sindromes/Endocarditis_infecciosa.md"
+        }
+      ],
+      "related_fields": [
+        "related_pathogens: []",
+        "related_syndromes: []",
+        "related_drugs: []",
+        "related_mechanisms: []"
+      ],
+      "command": "obsidian vault=Wiki backlinks path=\"10_WIKI_INFECTOLOGIA/exploracion_fisica/McGee_EBPD_MOC.md\" format=json",
+      "backlinks": [
+        {
+          "file": "10_WIKI_INFECTOLOGIA/_INDEX.md"
+        },
+        {
+          "file": "10_WIKI_INFECTOLOGIA/_NAVEGACION/exploracion_fisica.md"
+        },
+        {
+          "file": "10_WIKI_INFECTOLOGIA/_VISION.md"
+        },
+        {
+          "file": "10_WIKI_INFECTOLOGIA/medicina_interna/Harrison_PIM_MOC.md"
+        },
+        {
+          "file": "10_WIKI_INFECTOLOGIA/README.md"
+        }
+      ]
+    },
+    {
+      "master": "10_WIKI_INFECTOLOGIA/_NAVEGACION/exploracion_fisica.md",
+      "outgoing": [
+        {
+          "link": "INICIO|Inicio",
+          "resolved": "INICIO.md"
+        },
+        {
+          "link": "10_WIKI_INFECTOLOGIA/_NAVEGACION/_INDEX|Catálogo",
+          "resolved": "10_WIKI_INFECTOLOGIA/_NAVEGACION/_INDEX.md"
+        },
+        {
+          "link": "10_WIKI_INFECTOLOGIA/exploracion_fisica/McGee_EBPD_MOC|MOC Exploración Física — McGee EBPD 3e",
+          "resolved": "10_WIKI_INFECTOLOGIA/exploracion_fisica/McGee_EBPD_MOC.md"
+        }
+      ],
+      "related_fields": [
+        "related_pathogens: []",
+        "related_syndromes: []",
+        "related_drugs: []",
+        "related_mechanisms: []",
+        "related_diagnostics: []"
+      ],
+      "command": "obsidian vault=Wiki backlinks path=\"10_WIKI_INFECTOLOGIA/_NAVEGACION/exploracion_fisica.md\" format=json",
+      "backlinks": [
+        {
+          "file": "10_WIKI_INFECTOLOGIA/_NAVEGACION/_INDEX.md"
+        },
+        {
+          "file": "10_WIKI_INFECTOLOGIA/README.md"
+        },
+        {
+          "file": "INICIO.md"
+        }
+      ]
+    },
+    {
+      "master": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012.md",
+      "outgoing": [
+        {
+          "link": "INICIO|Inicio",
+          "resolved": "INICIO.md"
+        },
+        {
+          "link": "10_WIKI_INFECTOLOGIA/_NAVEGACION/_INDEX|Catálogo",
+          "resolved": "10_WIKI_INFECTOLOGIA/_NAVEGACION/_INDEX.md"
+        },
+        {
+          "link": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_001|Parte 1: 150 notas",
+          "resolved": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_001.md"
+        },
+        {
+          "link": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_002|Parte 2: 150 notas",
+          "resolved": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_002.md"
+        },
+        {
+          "link": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_003|Parte 3: 123 notas",
+          "resolved": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_003.md"
+        }
+      ],
+      "related_fields": [
+        "related_pathogens: []",
+        "related_syndromes: []",
+        "related_drugs: []",
+        "related_mechanisms: []",
+        "related_diagnostics: []"
+      ],
+      "command": "obsidian vault=Wiki backlinks path=\"10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012.md\" format=json",
+      "backlinks": [
+        {
+          "file": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_001.md"
+        },
+        {
+          "file": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_002.md"
+        },
+        {
+          "file": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_003.md"
+        },
+        {
+          "file": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuentes.md"
+        }
+      ]
+    },
+    {
+      "master": "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_INDEX.md",
+      "outgoing": [],
+      "related_fields": [],
+      "command": "obsidian vault=Wiki backlinks path=\"09_REFERENCIA_CLINICA/McGee_EBPD_2012/_INDEX.md\" format=json",
+      "backlinks": [
+        {
+          "file": "10_WIKI_INFECTOLOGIA/_INDEX.md"
+        },
+        {
+          "file": "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_001.md"
+        },
+        {
+          "file": "10_WIKI_INFECTOLOGIA/exploracion_fisica/McGee_EBPD_MOC.md"
+        }
+      ]
+    }
+  ],
+  "reads": {
+    "10_WIKI_INFECTOLOGIA/exploracion_fisica/McGee_EBPD_MOC.md": {
+      "bytes": 15423,
+      "sha256": "028c5066b4be2083636700468691597990d702b48ce411eca32efcb6d9620bae"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/_INDEX.md": {
+      "bytes": 3479,
+      "sha256": "737b6a3d9c816be83ae8a771a65dfb15ed2f15e02d4f8b52c4622c47cbf22758"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch001_what_is_evidence_based_physical_diagnosis/ch001_s02_understanding_the_evidence.md": {
+      "bytes": 748,
+      "sha256": "f77949e27f675829b904a25a1f6bf864515008194d584824e51a34eeb2ab4de9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch002_diagnostic_accuracy_of_physical_findings/ch002_s02_span_idpage_0_0spani_introduction.md": {
+      "bytes": 1706,
+      "sha256": "fb615b37b2546c91c0f30ee03131242590e361f12cc0a5f5ab7d6afa8ced3850"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch003_using_the_tables_in_this_book/ch003_s02_ii_frequency_of_findings_tables.md": {
+      "bytes": 8403,
+      "sha256": "171e19dec7985b838e017e9e70c96a0cf36762af78064d3f37e62f8d804a70f6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch004_reliability_of_physical_findings/ch004_s02_appendix_calculation_of_the_kappa_statistic.md": {
+      "bytes": 7167,
+      "sha256": "fdb0621d3f45326929a5d8eda1294413f4024c4eaa65b37c00fb3b7936efe1b2"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch005_mental_status_examination/ch005_s02_i_introduction.md": {
+      "bytes": 1162,
+      "sha256": "54f712f8d5cd1089dce44a397ed4711c94f96941628ba28882931a7db1fdb5de"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch006_stance_and_gait/ch006_s02_stance_and_gait.md": {
+      "bytes": 646,
+      "sha256": "6834b63ffa351e472c303008375a186f3439a6b0a1df292e3cbbd79d7066b986"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s02_i_introduction.md": {
+      "bytes": 1485,
+      "sha256": "585a456c49bc48fe8a4e81f2abf15c1a39d5d5efdaf8ebcff53963381bf2cf18"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch008_cyanosis/ch008_s02_cyanosis.md": {
+      "bytes": 647,
+      "sha256": "437b14c962da08874416406883d5f44410f85a7bbb8baff375e39ad13ae4faa7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch009_anemia/ch009_s02_anemia.md": {
+      "bytes": 7798,
+      "sha256": "8bed0df35e6080ac5a140eac7223c9ee2746ec58877c9d611ac73c6c2d53365a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch010_hypovolemia/ch010_s02_hypovolemia.md": {
+      "bytes": 683,
+      "sha256": "72b14ab7581e972aefe9fc89f560f7233ea4be42699bee5d1325f657c52d8dd6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch011_proteinenergy_malnutrition_and_weight_loss/ch011_s02_span_idpage_0_0spanprotein_energy_malnutrition.md": {
+      "bytes": 13178,
+      "sha256": "a4b1d74af72cd56de444d3d5b5c95bf39a12b76c1c16dfbd16355b1c955ffb0e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch012_obesity/ch012_s02_obesity.md": {
+      "bytes": 1105,
+      "sha256": "a713eb22c0c806c117280f93f8f2c0c2913016f9c1bc670e6a25fdb5b4c410ec"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch013_cushing_syndrome/ch013_s02_ii_findings_and_their_pathogenesis.md": {
+      "bytes": 10402,
+      "sha256": "da0ef89618ec3cc3696c625bf2d447f0f98d0dd7958c44f79ebd5ecc4e356365"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch014_pulse_rate_and_contour/ch014_s01_introducción.md": {
+      "bytes": 43104,
+      "sha256": "f84034c42288ba298b2652a18757a62d3ee7c264359cb9d645dc085428a9d141"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch015_abnormalities_of_pulse_rhythm/ch015_s01_introducción.md": {
+      "bytes": 27922,
+      "sha256": "956186dc9ddaa46bfea250a00f913930a49e5b6ef62059d9bda779c6a7a84ced"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch016_blood_pressure/ch016_s02_1_definition_of_systolic_and_diastolic_blood_pressure.md": {
+      "bytes": 21446,
+      "sha256": "84a71afae665654af8f4c182e1da3dcc9e123e80745c55fc60633409d2a66153"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch017_temperature/ch017_s01_introducción.md": {
+      "bytes": 34530,
+      "sha256": "d6c667c196223748e05df9a6a0fa226ee8a360d1df448259fb8d64eb8d2e6d0f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch018_respiratory_rate_and_abnormal_breathing_patterns/ch018_s02_2_clinical_significance.md": {
+      "bytes": 17733,
+      "sha256": "c490bbda482a766cf592324413ec095c7cfcdb46e4a70290b2681bc0ff0d01e1"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch019_pulse_oximetry/ch019_s02_iii_clinical_significance.md": {
+      "bytes": 9334,
+      "sha256": "24520fde61ec879b05e3ecf4bc040619d354a89c575e6cca4a34fc8dc641e713"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch020_the_pupils/ch020_s01_introducción.md": {
+      "bytes": 50067,
+      "sha256": "6af0d55bc5eb245e7ba2ae37153bce42bf96198dc1d5715c3d04ad345a30d3e6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch021_diabetic_retinopathy/ch021_s02_i_introduction.md": {
+      "bytes": 12365,
+      "sha256": "233819528a0b2c7065bdbba0eb865e1a552d959074ab9c5b39fecbb5808bd138"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch022_hearing/ch022_s02_hearing.md": {
+      "bytes": 646,
+      "sha256": "97ccabb525a4a9a1a67689659fbf307f3d18969e5a34fe5f92a5b8bdc34387be"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch023_thyroid_and_its_disorders/ch023_s02_thyroid_and_its_disorders.md": {
+      "bytes": 61688,
+      "sha256": "53bbb5ac5b1b429ffd44520e09a78cc48505975bb089789bef643dced2c7fedc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch024_meninges/ch024_s02_meninges.md": {
+      "bytes": 709,
+      "sha256": "268e069d2c6e0c74d75580861bf7200734ea730b0a407da38cf5b9cd7d489fc2"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch025_peripheral_lymphadenopathy/ch025_s02_span_idpage_0_0spani_introduction.md": {
+      "bytes": 2540,
+      "sha256": "0705c8fa307b3c34e877401b337483ee7c98a020a867165e5baf7eafe0303ea6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch026_inspection_of_the_chest/ch026_s02_1_interphalangeal_depth_ratio.md": {
+      "bytes": 2322,
+      "sha256": "daa800cd6f70ae9018019d0fc647655ce08c8a9665427dc220d48224cff06d6b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s02_palpation.md": {
+      "bytes": 670,
+      "sha256": "c25cbf9e10acc8ea4a2ebaa86aa7155a9fb074c6d33944ad76436101f4e0ff8e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s02_1_bronchophony.md": {
+      "bytes": 44062,
+      "sha256": "524e8a76504e5033230321df44c86a43ef334e4e4c49dcb0308f6da57e20f8e7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch029_ancillary_tests/ch029_s01_introducción.md": {
+      "bytes": 6554,
+      "sha256": "ef0099796c01ff4b0cc9cc396172e5124b90b7c7fc9a91bfb75c36d76d1254d8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch030_pneumonia/ch030_s02_a_individual_findings.md": {
+      "bytes": 2435,
+      "sha256": "70de37cf3f18143dc93ad54883b327a90eb4ff7e971eee00f8019361caae99b5"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s02_span_idpage_0_0spani_introduction.md": {
+      "bytes": 2366,
+      "sha256": "83b707def83abece844110522f9970f8498dc7a2aee5a6f8e957660325e5fc42"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch032_pulmonary_embolism/ch032_s02_iii_clinical_significance.md": {
+      "bytes": 1070,
+      "sha256": "4ae038c8622d7905725fa430f0bec6f046c69e289e608d17320661f226e9139d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch033_pleural_effusion/ch033_s02_pleural_effusion.md": {
+      "bytes": 7446,
+      "sha256": "584f32d8dbb3a006fdfe5d0642d81d4aef14d4fff0091115ccbac16240e35e30"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s02_span_idpage_0_0spani_introduction.md": {
+      "bytes": 1587,
+      "sha256": "c111b3ce562d4bbc5cb0917ee74ee59adecb7a2bbffe60b8e83ee4ea69bc3645"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch035_percussion_of_the_heart/ch035_s02_i_introduction.md": {
+      "bytes": 2115,
+      "sha256": "8faca981809b9d68b72ce7bf95a09d78d37bec1f71e0cfbce26fb52121197aee"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s02_i_introduction.md": {
+      "bytes": 1897,
+      "sha256": "e734d9b6156052b2fd9d8dc9e58a7434366edfb1c304a83d695feee07e59d9c7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch037_auscultation_of_the_heart_general_principles/ch037_s02_auscultation_of_the_heart_general_principles.md": {
+      "bytes": 772,
+      "sha256": "876fa41d0bf4d10b3a13f8cc07a327f0b4974d2e85e0efb3eb3a6166626a7795"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s02_ii_pathogenesis.md": {
+      "bytes": 674,
+      "sha256": "f8baafd61671467e3ef57bb861bb3d91d6a60ad70dcdcd629bc9de38b62acfdd"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch039_the_third_and_fourth_heart_sounds/ch039_s02_span_idpage_0_0spani_introduction.md": {
+      "bytes": 4159,
+      "sha256": "a7bbfd79b1f2b5d69175746e3ed8d2f670d7c29947836b4c52863d87dbae9740"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch040_miscellaneous_heart_sounds/ch040_s01_introducción.md": {
+      "bytes": 16623,
+      "sha256": "56e101141d60bf6c852c9b793814e392ca053e6bffdfbbd47b2d54ee75759b7c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch041_heart_murmurs_general_principles/ch041_s02_c_timing_radiation_and_quality_of_sound_see_also_the_section.md": {
+      "bytes": 30458,
+      "sha256": "122ea6f07a0e5ae07791f83eb981fca807ca7a79ae5b4d01e3f693892af6d5a0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch042_aortic_stenosis/ch042_s02_iii_clinical_significance.md": {
+      "bytes": 17049,
+      "sha256": "9716064379d37ae19295e3e5e58302d0ddf4c17441cd112bef9b19f976e39fca"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch043_aortic_regurgitation/ch043_s02_1_early_diastolic_murmur_of_regurgitation.md": {
+      "bytes": 1298,
+      "sha256": "1a5e46b5895dc4600f414b4eb66cb46e4d42d7649ccecc062dfd64dcf7a38461"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s02_span_idpage_0_0spanhypertrophic_cardiomyopathy.md": {
+      "bytes": 758,
+      "sha256": "b5229232670d8cb43e094a9be710d398bb66cac124d0951bfbc4b0cf62f45fc0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s02_disorders_of_the_pericardium.md": {
+      "bytes": 707,
+      "sha256": "0557fe92b8cf86e59294a281b0c5e92067acb12bf93f792283bec66ba9d12591"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch046_congestive_heart_failure/ch046_s02_b_technique.md": {
+      "bytes": 18830,
+      "sha256": "6e6601e0f646dccbef8bb245092f270f623a55aa38741ee7c7f5133bc92d0991"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch047_coronary_artery_disease/ch047_s02_i_introduction.md": {
+      "bytes": 2270,
+      "sha256": "ba57d50dd9babffa772dea6ae96d865370c676221a0f887b6b858456a3a0c870"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch048_inspection_of_the_abdomen/ch048_s02_ii_pathogenesis.md": {
+      "bytes": 5000,
+      "sha256": "047b7b9bfbe75c757adbd52744636de670a8bb66aa27cf4261cab1fdea0ac9f8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s02_palpation_and_percussion_of_the_abdomen.md": {
+      "bytes": 738,
+      "sha256": "3d128b50058d29ad7375c25fc85ef5987acb0723f07aaf8ff28aea588b608f23"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s02_a_peritonitis.md": {
+      "bytes": 1701,
+      "sha256": "99b542b71c625d640ff7f05679eb204f73953882a8972fe5f81b79ac24d3df2b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch051_auscultation_of_the_abdomen/ch051_s02_abdominal_bruits.md": {
+      "bytes": 679,
+      "sha256": "033e0a5de0e5c652f2343e6993f3f967e44b9925b5cb92cf37934750e537741f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch052_peripheral_vascular_disease/ch052_s01_introducción.md": {
+      "bytes": 28067,
+      "sha256": "f03a476eb290f846cdc21e1395d9537f78fec168ead7615c38e872f34ed8b3c2"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch053_the_diabetic_foot/ch053_s02_the_diabetic_foot.md": {
+      "bytes": 715,
+      "sha256": "8507c6a5123b0e4f64e46107dce96240727b4f6e90b069340fb502ef72610eff"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s02_edema_and_deep_vein_thrombosis.md": {
+      "bytes": 766,
+      "sha256": "6815baf63d99efbaa4ca7558a1a06889e2017c15df99f13314a3d86064b5f3b4"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s02_a_impingement_signs.md": {
+      "bytes": 1646,
+      "sha256": "5e40e71cd696f1feb377f73ff316ccd25ad3eb73a1528fc75eb3e9c93b280d07"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch056_visual_field_testing/ch056_s01_introducción.md": {
+      "bytes": 21499,
+      "sha256": "4fac11556c48d38755181f4cd6567168764a98a001ef769b4d24b534a50dc337"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch057_nerves_of_the_eye_muscles_iii_iv_and_vi_approach_to_diplopia/ch057_s01_introducción.md": {
+      "bytes": 44947,
+      "sha256": "4043e562cd912376d08537f49354ff0fc2d04a9a5792f4331c0b4f3134140556"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch058_miscellaneous_cranial_nerves/ch058_s01_introducción.md": {
+      "bytes": 40541,
+      "sha256": "827c060365b3c6b9f71860ea28124129eeff668a2484b2be7d6311631fb465af"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s02_3_special_tests_for_unilateral_cerebral_lesions.md": {
+      "bytes": 10212,
+      "sha256": "3e6f4f1a80cc4b2af3179bd07c1b95106f4d98db53c49f8ea4cc9daa38f40a5e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch060_examination_of_the_sensory_system/ch060_s01_introducción.md": {
+      "bytes": 37644,
+      "sha256": "84cfd0ad8f4ca63e9ba4edbdca3134bb1f4429a6fccecb7470c1b4ac119f998e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch061_examination_of_the_reflexes/ch061_s01_introducción.md": {
+      "bytes": 43478,
+      "sha256": "c00be0f49fe1743e3c9ba5fae7da3c7d5804044d54bf001d01af018c2dd6b167"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch062_disorders_of_the_nerve_roots_plexuses_and_peripheral_nerves/ch062_s01_introducción.md": {
+      "bytes": 54271,
+      "sha256": "3e9c9c97027b0f9a17db487fb32cb9f5592d645e27ab9c3fe44cdecefd4294b5"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s02_coordination_and_cerebellar_testing.md": {
+      "bytes": 702,
+      "sha256": "5c49b50b58d918c8f3c99e977f3817eb7359709cf725303e59185f3f75041c6f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch064_tremor_and_parkinson_disease/ch064_s02_span_idpage_3_0spanebm_box_64_1_suspected_parkinson_diseasep.md": {
+      "bytes": 11730,
+      "sha256": "d0aeb0939a20f145e4037e5b59e8ef732637a4ac1b347b88f560144fcbc28493"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s02_ebm_box_65_1_hemorrhagic_strokecontd.md": {
+      "bytes": 3558,
+      "sha256": "633e8064b30a54a317e520b726b31c438c095c3916de0858300b24183e948587"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch066_acute_vertigo_and_imbalance/ch066_s02_span_idpage_0_0spani_introduction.md": {
+      "bytes": 12078,
+      "sha256": "8f6e42462c98b974a86d199853118241999e95975c20472e7c1258f53f3d7802"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s02_examination_of_nonorganic_neurologic_disorders.md": {
+      "bytes": 732,
+      "sha256": "2ee6ed7103ece1ed4a3cda9a4c4dfce98f3122f65177e8cc029e45ecfdb4168e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s02_b_assessment_of_peripheral_perfusion_in_the_icu.md": {
+      "bytes": 1255,
+      "sha256": "aa5d1d981ce32fd64843806a7f454976ad7332ffba71258ffc17f9dd196011f6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch069_appendix_likelihood_ratios_confidence_intervals_and_pretest/ch069_s01_introducción.md": {
+      "bytes": 320483,
+      "sha256": "8f93e95728440ba58837c3b099e3601774f3ac12dbf3c8f17522ece872aa765c"
+    },
+    "10_WIKI_INFECTOLOGIA/_NAVEGACION/exploracion_fisica.md": {
+      "bytes": 776,
+      "sha256": "94774586a6f5703f4cad3717480f85d13c47ceafdf934e9326e0aba2674c51e2"
+    },
+    "INICIO.md": {
+      "bytes": 2479,
+      "sha256": "37332f30641399f0cafe7f0e6085ed5707488fe271beab53dfd688e13fb9c249"
+    },
+    "10_WIKI_INFECTOLOGIA/_NAVEGACION/_INDEX.md": {
+      "bytes": 1625,
+      "sha256": "031059d954f997909a8b21d007b2812acc03a8df42b1d204fdfcbb195242079e"
+    },
+    "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012.md": {
+      "bytes": 934,
+      "sha256": "43865845ba66dfc92a8f764eae070a3508c85a650e3b183024a9be74f3577cac"
+    },
+    "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_001.md": {
+      "bytes": 21974,
+      "sha256": "917656a651ea60b3fabe135e694c2c2734ea4d3a238cee9ac69cd8e5b2252baf"
+    },
+    "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_002.md": {
+      "bytes": 23798,
+      "sha256": "d42965e2e2bfd96c30312ff89b6b7d4d487db9ddee42bb4dbd5f00c5b6dc063f"
+    },
+    "10_WIKI_INFECTOLOGIA/_NAVEGACION/Fuente_McGee_EBPD_2012_003.md": {
+      "bytes": 20224,
+      "sha256": "f6e0ef5a2ec93b0ee98eaf01313d36d8ff2ca6fb8bb405f2f18acea667b60037"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch033_pleural_effusion/ch033_s01_chapter_33.md": {
+      "bytes": 677,
+      "sha256": "317d6448210c00da5f66f9cdae8f60eb82d5081b6d3246beb36372616e157ff9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s06_iii_clinical_significance.md": {
+      "bytes": 2999,
+      "sha256": "b10d5d19c16c0b91301d6072bb05bad41eb3a0187b2fc2fea3ab0678c1134dce"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s07_cardiac_tamponade.md": {
+      "bytes": 685,
+      "sha256": "11464e4dbc9559c7a6876b14f48183c8031f61c860dc3ad63face14e2a7da4ae"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s04_i_introduction.md": {
+      "bytes": 1104,
+      "sha256": "563fb926b09d3ed272baf2c2d76898ff1a2fc4c50e93359abc6d53c9ce75c687"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s05_ii_the_finding.md": {
+      "bytes": 1661,
+      "sha256": "5a1b9cc88c43457fddb553e5422b10a0c20cd453b84f7d2d4676e0dc46af2f7b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s09_ii_the_findings.md": {
+      "bytes": 3269,
+      "sha256": "da86a03b69910d185e5e740998bf47ad3ea09bebf3c14d26644187f7445e4f58"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s08_i_introduction.md": {
+      "bytes": 2204,
+      "sha256": "76d9b944a586b96aab5f4abf9ab760f4e3723dd2939e797559e02ff2a1f3c99d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s11_i_introduction.md": {
+      "bytes": 861,
+      "sha256": "2bd282a1cad9e0b6e7bb9f4f31d14dfdd421d77ee38649e3d90a4e1afaed658b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s10_constrictive_pericarditis.md": {
+      "bytes": 702,
+      "sha256": "6111ca33de329f77cf5928930ef49734916013b3fe9c68887aee97c1ba25062d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s03_span_idpage_0_0spanpericarditis_and_the_pericardial_rub.md": {
+      "bytes": 777,
+      "sha256": "0bdddb2c95ea0635bdf45f1cf05d16bcbc6630a074e1d7869ec44291f6c6bc91"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s01_introducción.md": {
+      "bytes": 693,
+      "sha256": "cc74a78a829a6068e69a5d1e5f712cfecbcc108e2144ec7c42282222bbc5a119"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch045_disorders_of_the_pericardium/ch045_s12_ii_the_findings.md": {
+      "bytes": 11525,
+      "sha256": "7120bb1921c070e129d1c1013bfde1a23b1354a93781f0edfdb3e0032377da73"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s01_introducción.md": {
+      "bytes": 717,
+      "sha256": "d6b885afb8e078c357363faf7b0ad0ef4498f61558c4f7603175f2aad9780c9a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s09_v_clinical_significance.md": {
+      "bytes": 15394,
+      "sha256": "fb2c991cb358bb805ebb23d142c7fd7902a539695bd54c3dff74de616078c224"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s05_iii_clinical_significance.md": {
+      "bytes": 6473,
+      "sha256": "e951f2b5501155f0e13e59a334d75da25644c5cb0e33aa51503a9e04e64b7b1b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s03_i_introduction.md": {
+      "bytes": 1545,
+      "sha256": "091dfbf6d08c2461f3feb28b7bca1089ddb56ee2e8513d548f50b2e485789c19"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s04_ii_tactile_fremitus.md": {
+      "bytes": 2584,
+      "sha256": "837ff52f7beb86b387cf280a5f69590bedaa24ce4549211eda734d6b1b37998f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s06_percussion.md": {
+      "bytes": 1495,
+      "sha256": "5c6451ea97365e2a96361b7c92ebdf8ec08a64774c887468cdd2e0ba467534c5"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s07_ii_technique.md": {
+      "bytes": 5600,
+      "sha256": "8b3b5fe58168d60e98f02e9be2abe1d60ddb9841c162f8a22a17d07607b6dfcc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch027_palpation_and_percussion_of_the_chest/ch027_s08_iii_the_finding.md": {
+      "bytes": 11214,
+      "sha256": "99318fa2fcd549ccff07723fb979a695a4192039394fec808039c4336ba07295"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch016_blood_pressure/ch016_s05_c_supine_pulse_and_supine_blood_pressure.md": {
+      "bytes": 2876,
+      "sha256": "d759ce2ef80e8855d7fc1c21c73d2f32b1a273e7156ea7fb66c000c517443215"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch016_blood_pressure/ch016_s04_2_vital_signs_and_hypovolemia.md": {
+      "bytes": 5155,
+      "sha256": "b212d7ba6ab6520ee397f0ddc3ea8204438e5ac0a2a4e8176351bf76662023e2"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch016_blood_pressure/ch016_s06_i_capillary_fragility_test_rumpel_leede_test.md": {
+      "bytes": 17825,
+      "sha256": "0d4225831e9178edc14958b21ccf55f4e88365f37e2a5c69b3954ad7e1b079ca"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch016_blood_pressure/ch016_s01_introducción.md": {
+      "bytes": 5037,
+      "sha256": "0f1ae84a7ff98729f5206e4b5dce504b0e9ce16390674b5a23096569ad0e527d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch016_blood_pressure/ch016_s03_1_subclavian_steal_syndrome.md": {
+      "bytes": 11676,
+      "sha256": "4c1bcd81b3c93b2a824690681f19b5088854b8c6c69da63642af0049870bbd67"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch018_respiratory_rate_and_abnormal_breathing_patterns/ch018_s01_introducción.md": {
+      "bytes": 20002,
+      "sha256": "af65fad5344bfbd5e8d114492480511b8741ae45507736a84859d517228fd63d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch051_auscultation_of_the_abdomen/ch051_s04_ii_clinical_significance.md": {
+      "bytes": 4384,
+      "sha256": "e48ede7a1d215bb6f59c92e05a2f852c9aec5ebaff7a10200ccd7fdeb9bc3952"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch051_auscultation_of_the_abdomen/ch051_s05_hepatic_rub.md": {
+      "bytes": 953,
+      "sha256": "147f7119008ecb155781019ce18b09c46174842b9ed2b39d8f971b11583d5089"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch051_auscultation_of_the_abdomen/ch051_s08_ii_clinical_significance.md": {
+      "bytes": 5412,
+      "sha256": "07406c5350c4b97e117a67d0907db36270979c6ed595cddde7ba93c0551be78d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch051_auscultation_of_the_abdomen/ch051_s07_i_the_finding.md": {
+      "bytes": 2329,
+      "sha256": "8c5d8842d2abf59371f4d46294b153ef61f0052ddbac8f63b696e3a0a35fbcca"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch051_auscultation_of_the_abdomen/ch051_s01_auscultation_of_the_abdomen.md": {
+      "bytes": 701,
+      "sha256": "6d4343d6c230c2946170c660cd7a148a58aa0fe82a1c25713539f0c586ce90f5"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch051_auscultation_of_the_abdomen/ch051_s03_i_the_finding.md": {
+      "bytes": 1044,
+      "sha256": "599c73c946249adfc729c966de9c36aaf37af5384f36d3cfb062b6daf1f781a8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch051_auscultation_of_the_abdomen/ch051_s06_bowel_sounds.md": {
+      "bytes": 671,
+      "sha256": "203684f1668c919ba62c58588df98f126d8e01f0945be10c6c5c0762e12f350b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch021_diabetic_retinopathy/ch021_s01_introducción.md": {
+      "bytes": 688,
+      "sha256": "fc45bfbdb955c3fc3cea44db41930b2c3b2359faca8b70fdfd7e50eabf49760b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch021_diabetic_retinopathy/ch021_s03_span_idpage_4_0spanebm_box_21_1_diabetic_retinopathypage_4_1.md": {
+      "bytes": 9194,
+      "sha256": "95a6ec6826103ccfebfa9b03c1c3e8ad99ee1d8cc21dae0bd44ee8767ffe1bb7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch047_coronary_artery_disease/ch047_s04_iii_clinical_significance.md": {
+      "bytes": 28858,
+      "sha256": "30b02a165cbc37729d06b4b9e5328ba5cbd67c369b71e4fbafb03cbd26156632"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch047_coronary_artery_disease/ch047_s01_coronary_artery_disease.md": {
+      "bytes": 695,
+      "sha256": "e128b016c5bea2fd7137bcde51e22d336cd65866712e5b1665714e989464e8b2"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch047_coronary_artery_disease/ch047_s03_ii_the_findings.md": {
+      "bytes": 17244,
+      "sha256": "067aafe35940e0de5db69fc8fb2317faae5dfd46e26e97679c5f9de83f542cbd"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s15_a_ottawa_ankle_and_midfoot_rules.md": {
+      "bytes": 1460,
+      "sha256": "4af5e6011696ea5ddd35517afb09f82f46439b5bc33ee0f53318fb404aa55ab7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s12_2_posterior_cruciate_tear.md": {
+      "bytes": 5199,
+      "sha256": "232816d708b2a03ec4720b4255d42a2add8c2952e6b000bfaf927c265cf8e2c7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s19_references.md": {
+      "bytes": 17688,
+      "sha256": "d19511fb5e2927c950b415ca2d3e2e792781295e69419752423e02c7aac71d95"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s13_4_medial_collateral_ligament.md": {
+      "bytes": 1143,
+      "sha256": "4137d02507fbd87769b6dc2819515b58289da0cd97bf49c7714d090da9b013ac"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s17_a_ankle_and_midfoot_fractures.md": {
+      "bytes": 1854,
+      "sha256": "6bfa364dc45823f75f4a9f969945b589f80b2eea0d6ab8ea16cfc1f3c882fdf9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s05_e_muscle_testing.md": {
+      "bytes": 2296,
+      "sha256": "181d83fe09231ac4164359c7ddb91bd5ee5e09fe24ce4221806e49c1e27b11df"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s04_span_idpage_6_0spanc_speed_test.md": {
+      "bytes": 1356,
+      "sha256": "dbe925ee0d133f0015b9a30d88d7bdc8b71e36a399428cd38e867596862f7db8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s01_introducción.md": {
+      "bytes": 27596,
+      "sha256": "1cc7611ae30d81d564ace5a15a122bbfddf9ae9ea1abfa0d5c5045877b5a4cbf"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s08_c_rotator_cuff_tears.md": {
+      "bytes": 22777,
+      "sha256": "3640e03c26c4398c56052b2f2e3ef684d8c7172b13e06eaae6f2c0d831e7b559"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s14_5_variables_affecting_sensitivity_of_signs.md": {
+      "bytes": 2340,
+      "sha256": "2aca5a0b74a86a0b98fa2403a3c17b8fe025942a172ad726a53454b31ddc22cb"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s06_f_dropped_arm_test.md": {
+      "bytes": 1432,
+      "sha256": "282482e3441a878434f2719864dd7379d600e0e938f54dd3a2262fac286b720a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s07_g_palpating_rotator_cuff_tears.md": {
+      "bytes": 5443,
+      "sha256": "2faebf66b22462c6b18e068ab21735669af8791b58297abb7813efd7a65f3357"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s09_1_anterior_cruciate_ligament.md": {
+      "bytes": 11615,
+      "sha256": "0d532f88dac5144e4f1df6e5dfb6870292950c919902f6ba370bf5cab04e81d3"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s11_1_anterior_cruciate_ligament_injury.md": {
+      "bytes": 2363,
+      "sha256": "53de9bdce3fe4b327b76db9887d348930b5c830e23a81275c53ec1154715500d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s18_b_achilles_tendon_rupture.md": {
+      "bytes": 8034,
+      "sha256": "9e2bb231d4d08d76a3037435076d4bb641e7246875505be87d7742aa7f28c911"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s16_b_achilles_tendon_rupture.md": {
+      "bytes": 1339,
+      "sha256": "a5438dbea5dd9663a302f878e5fc3ce3bcfe46137da54ad33630efc551c39607"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s10_b_detecting_knee_fracture.md": {
+      "bytes": 8017,
+      "sha256": "a10d56f3b350eded5e0121693b88b055f96f71df40ca91e590152c543c9ba31b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch055_examination_of_the_musculoskeletal_system/ch055_s03_b_yergason_sign.md": {
+      "bytes": 1859,
+      "sha256": "e93deb2dfabd3b1889ca7d5aded05164982d7ce45871ad608cca10d7ec84b369"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch022_hearing/ch022_s01_introducción.md": {
+      "bytes": 674,
+      "sha256": "de7d1896cce065db86b136a4dbf5f77dca776a8ab6f15c34746ab569f02a1d2c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch022_hearing/ch022_s04_ii_technique.md": {
+      "bytes": 8487,
+      "sha256": "8ddf6a7e6b8a4a1ddf072eecae810858f33cf46bed453fd45aee252045249eb1"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch022_hearing/ch022_s05_iii_clinical_significance.md": {
+      "bytes": 8611,
+      "sha256": "78d5ce23e7273928e92a0a7e06ed0246c861657269809dbcfe732d9776181014"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch022_hearing/ch022_s03_span_idpage_0_0spani_introduction.md": {
+      "bytes": 1463,
+      "sha256": "59c4159d3549713b7361accce7a36a001701ea1715407b9c324c43cfa7cad8e1"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch019_pulse_oximetry/ch019_s01_introducción.md": {
+      "bytes": 2662,
+      "sha256": "48ccd974c1174213afe03c39bf359ecb819eb0f23d6524bbd721fa869e072b04"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch064_tremor_and_parkinson_disease/ch064_s01_introducción.md": {
+      "bytes": 8832,
+      "sha256": "e18a8bccef8ee58ce0fab382f24125652ca5b00be0b34d82983b3ee332900028"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s08_v_pathogenesis_of_elevated_venous_pressure_abdominojugular_t.md": {
+      "bytes": 2965,
+      "sha256": "a06cfcb1ebcc96e69cef4ca960bb733803771103876298f0282690dc54138f52"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s01_introducción.md": {
+      "bytes": 707,
+      "sha256": "5ca00a16ea5122805c614aaa52924fa2b048f7675a3137200986b57876a9c9cb"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s06_span_idpage_4_0spanebm_box_34_1_inspection_of_the_neck_veins.md": {
+      "bytes": 12630,
+      "sha256": "c695eef98a4b115d11cdba0373e8c18ede2ce8a00be6dfefb45cd48d30eced85"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s04_2_physiologic_zero_point.md": {
+      "bytes": 5798,
+      "sha256": "04828e2a34fd6a56e257e09f1ad355805ef715f251f965b83c91a981386a7031"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s03_ii_venous_pressure.md": {
+      "bytes": 1702,
+      "sha256": "284ad5d4c86b4d24dc9c0b1e3aca956220e2254a504356d3f35ae9e6c7857a4e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s05_2_external_versus_internal_jugular_veins.md": {
+      "bytes": 4193,
+      "sha256": "20359a09186a9ad2306bcc29ffaa49eaf7170715012b45eb6b46aba38a50f9e2"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s07_iv_kussmaul_sign.md": {
+      "bytes": 1173,
+      "sha256": "433de1352430ecb8ff6b4f242ad2b997f28c3f34c41468147bf06d84d8e77798"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch034_inspection_of_the_neck_veins/ch034_s09_a_identifying_the_internal_jugular_vein.md": {
+      "bytes": 25316,
+      "sha256": "17f023de64b483269d166d6763a22d76e67259698ae31298044eafcfdfcb531c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s04_c_combined_findings_siriraj_stroke_score.md": {
+      "bytes": 1640,
+      "sha256": "f29cbf8777d898baa57a19072ad14042b9794d92ad6fe7d7159db1352edd2abf"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s05_references.md": {
+      "bytes": 7116,
+      "sha256": "b2e25108b58bd8aa41fdd06645057837ca33b0c02c67e92417ee5c42775b6754"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s01_introducción.md": {
+      "bytes": 8400,
+      "sha256": "cd2b77b0fd82414922dea60ded4186334851be8adffcda1e1c28a909df455f67"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch065_hemorrhagic_versus_ischemic_stroke/ch065_s03_span_idpage_4_0spanebm_box_65_2_siriraj_score_for_hemorrhagi.md": {
+      "bytes": 2644,
+      "sha256": "382c2b4b3b053ba1b6f1fb9c30bd49dc93f855ac6deaede30fc99ffbf89da2c2"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch043_aortic_regurgitation/ch043_s01_introducción.md": {
+      "bytes": 1831,
+      "sha256": "d3e31dc128980d9f1a226c31d02b386df4f7ffa3b012f518339603b68893c81a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch043_aortic_regurgitation/ch043_s04_span_idpage_4_0spanebm_box_43_1_aortic_regurgitationpage_4_1.md": {
+      "bytes": 24018,
+      "sha256": "9df06fd7d14b1a4bf8a44368a42d137aa4e5ba49343c2e38e5f8a1d0eafaf265"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch043_aortic_regurgitation/ch043_s03_2_systolic_aortic_flow_murmur.md": {
+      "bytes": 9685,
+      "sha256": "e3431b477b503709a7a8f4030047cb439f68ff4bf745c02c66134924cba454af"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch001_what_is_evidence_based_physical_diagnosis/ch001_s01_what_is_evidence_based_physical_diagnosis.md": {
+      "bytes": 7535,
+      "sha256": "18de280c14149002fad210877dcf4d97acab98b005563b0a5437656059429ab6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s11_1_the_findings.md": {
+      "bytes": 2605,
+      "sha256": "9dd1eb4cff02c3c5d9fa322d22651b927e9f804d2defdaad6218205eb814dbca"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s01_introducción.md": {
+      "bytes": 702,
+      "sha256": "b19b8127c0488840a6a7ee9d64d3e67aa5a0e50f79826bb025c6f3e8f1e7b9b8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s15_probability_ascites.md": {
+      "bytes": 1729,
+      "sha256": "ec68efe101d055f5d54c64cb32d8ac21950d6501e26352731ef1e658011c433b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s06_2_clinical_significance.md": {
+      "bytes": 708,
+      "sha256": "fd9f049102df96bdd8b9f78d8f1d29a2cc65f6730f14439fc552c359d80c6830"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s04_ii_liver.md": {
+      "bytes": 1360,
+      "sha256": "1a258b43d89de625d7e2c3910db72c7edac07ed05eb599963975723868427340"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s12_iv_gallbladder_courvoisier_sign.md": {
+      "bytes": 4278,
+      "sha256": "6fd9961f60639d21c7a66c3643610bc38ea35d8fb2e0962f056690a0e51efd67"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s10_iii_the_spleen.md": {
+      "bytes": 3547,
+      "sha256": "68fa1c204ebe12c522b38504c789003296cbc359a2bc8ac3c39fc9b6850df3a1"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s03_span_idpage_0_0spani_introductory_comments_on_technique.md": {
+      "bytes": 1613,
+      "sha256": "f54646dafc22f241c5201681c7f8ffb3757cbf6bbc1472993bf38a3429bed9af"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s09_ebm_box_49_2_palpation_of_liver_and_spleen_in_various_disord.md": {
+      "bytes": 5752,
+      "sha256": "cfb0e0ef1ce717932c62744b878bf44bf694a023e4167c2812c9a594e14c48fc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s07_a_detection_of_hepatomegaly.md": {
+      "bytes": 5938,
+      "sha256": "b74dfbb8c86d46394bfaac65cc9e5dd502ba2e174bf3c453be79c3307ec424a2"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s08_span_idpage_3_0spanebm_box_49_2_palpation_of_liver_and_splee.md": {
+      "bytes": 3011,
+      "sha256": "71d9d750108866e62a170146aef599851adfd8c4661ec4391ffbe25a6567617d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s14_vi_ascites.md": {
+      "bytes": 5336,
+      "sha256": "d1f8295431300f24fae94e09ff8cd5ab89bfeeac5cf11a80defb186673f6726e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s16_vii_abdominal_aortic_aneurysm.md": {
+      "bytes": 18982,
+      "sha256": "a17c5c395e902b3b1d1e0fe453b0e73386058cb29f6ccb406f6adb2e96c20e75"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s13_v_bladder_volume.md": {
+      "bytes": 4797,
+      "sha256": "3577a39a2ef31b95c428b366858ecd4876964e4449b2ba08c6f2d56080a8873e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch049_palpation_and_percussion_of_the_abdomen/ch049_s05_2_clinical_significance.md": {
+      "bytes": 3261,
+      "sha256": "dbb13dd7e446ea9fcdb6f73f049aaa86aed17081c611b664842406681f59eaf9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch037_auscultation_of_the_heart_general_principles/ch037_s01_introducción.md": {
+      "bytes": 722,
+      "sha256": "09b317998b29438e28dcfd2ae27c1bd6e5aa1b43896e1c20098c860ce9208dcc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch037_auscultation_of_the_heart_general_principles/ch037_s04_ii_the_stethoscope.md": {
+      "bytes": 2735,
+      "sha256": "64f7e9fc3c1866161b19a10d4904e75cf6b801cc7aff35a9ea18be8c3cc0302a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch037_auscultation_of_the_heart_general_principles/ch037_s03_span_idpage_0_0spani_characteristics_of_heart_sounds_and_mur.md": {
+      "bytes": 2343,
+      "sha256": "85fc550a4a1c895c3d95cdca577113d9f30d6cd7fead5d9c7363b369b443c509"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch037_auscultation_of_the_heart_general_principles/ch037_s05_iii_use_of_the_stethoscope.md": {
+      "bytes": 10418,
+      "sha256": "c9518ef5db9dcbf00a542d67d1bb451f4010bad3356be062fe9ab6e8ca8c810a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s07_e_neurologic_findings.md": {
+      "bytes": 1633,
+      "sha256": "c8eb590a785bfdcc954f3d318317fe914a0dae0f7b8d72908b8770a0cd4f1ed0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s05_c_pulse_pressure_changes_with_leg_elevation.md": {
+      "bytes": 1779,
+      "sha256": "a5b92daabe822545ec08247525dd37faf2623b9ff904b1526cc75b4e362865cd"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s06_d_lung_findings.md": {
+      "bytes": 1469,
+      "sha256": "1e054bb7274d481b5a357b48e4eae65b29e5f83ea6489ca77024dc8744a86488"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s01_introducción.md": {
+      "bytes": 3909,
+      "sha256": "c8556e4667677d74f57b0fd5ecb71406f95528a4b7cd3404ac9a16be13c5988d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s03_c_pulse_pressure_changes_with_leg_elevation.md": {
+      "bytes": 11350,
+      "sha256": "2b46633546893906a520a998967a10c7fbf70ad851a3cd4c8881ce3b3b480046"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch068_examination_of_patients_in_the_intensive_care_unit/ch068_s04_b_assessment_of_peripheral_perfusion_in_the_icu.md": {
+      "bytes": 1897,
+      "sha256": "6018db74c05efaa9efd6b5c88b7897b61bcb3c8b2807abb443685d645bbcae1d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch035_percussion_of_the_heart/ch035_s01_introducción.md": {
+      "bytes": 700,
+      "sha256": "f8ed3cc22a41e1f3a4d2ce3759057cbc0a78de507b8767754b7c0706f2d1b9e4"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch035_percussion_of_the_heart/ch035_s03_ii_clinical_significance.md": {
+      "bytes": 6296,
+      "sha256": "783546dcff888c78319559fe84b834530e08ed359d889b5c767b2039bde4f13f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch002_diagnostic_accuracy_of_physical_findings/ch002_s01_introducción.md": {
+      "bytes": 745,
+      "sha256": "f0061c20c7c580b587e520d4fab2cbd7cc6b0f116381f3e6c831a6d5f2d92bca"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch002_diagnostic_accuracy_of_physical_findings/ch002_s04_iii_sensitivity_and_specificity.md": {
+      "bytes": 4502,
+      "sha256": "57eee734e6c0bbed095da7b19e9a80a2bc49955f2082e3373d9731f99822d444"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch002_diagnostic_accuracy_of_physical_findings/ch002_s06_iv_likelihood_ratios.md": {
+      "bytes": 30029,
+      "sha256": "564192e3b0fe20cc0444f5e10d2ac722376870cd27bdc0c9791f03a4e0cf044c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch002_diagnostic_accuracy_of_physical_findings/ch002_s05_b_using_sensitivity_and_specificity_to_determine_probability.md": {
+      "bytes": 2980,
+      "sha256": "10b2b7d46b95bb0f219361c75d6647e677de95323e79a74022583c444a8c77c0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch002_diagnostic_accuracy_of_physical_findings/ch002_s03_ii_pretest_probability.md": {
+      "bytes": 3699,
+      "sha256": "e00e4ed02a7a2a2e11294e261ac1109e7793d90ea19f8d8dd76e2933f67546c9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch039_the_third_and_fourth_heart_sounds/ch039_s04_2_regurgitation_and_shunts.md": {
+      "bytes": 19633,
+      "sha256": "cc3aa95c3d6d72aea9c207901c0a08fed831e0c86d42aaed4d7b73b9e38a34b7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch039_the_third_and_fourth_heart_sounds/ch039_s03_e_quadruple_rhythm.md": {
+      "bytes": 8513,
+      "sha256": "7a93a329883b68d7860ec3b37ffe0456b407b83828ea2aedadda97af33f8c5f9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch039_the_third_and_fourth_heart_sounds/ch039_s01_introducción.md": {
+      "bytes": 717,
+      "sha256": "064d5ad424ec612de224272be5e049458b292fe2aa019559a8d0892935a10fb8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch028_auscultation_of_the_lungs/ch028_s01_introducción.md": {
+      "bytes": 14193,
+      "sha256": "e059ec1bc6159dbd92e5e50e342f5110e2267208c6fd05d0d40feaf6ebc88c23"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch025_peripheral_lymphadenopathy/ch025_s05_iv_clinical_significance.md": {
+      "bytes": 26606,
+      "sha256": "ffbf495292a532f14101d00ef5fe53dc8c02a36c0778a92d0490dfdfd7587360"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch025_peripheral_lymphadenopathy/ch025_s01_peripheral_lymphadenopathy.md": {
+      "bytes": 791,
+      "sha256": "b7a608f91a77fa4a0d7ace59bdae5d2810a2bdd217f85ee962e448afc971f2e3"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch025_peripheral_lymphadenopathy/ch025_s04_iii_the_finding.md": {
+      "bytes": 3046,
+      "sha256": "a21fe3845ee608b69d2bb0da791b8d7d0077a0ab99e54a5878c7541dd583b1d9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch025_peripheral_lymphadenopathy/ch025_s03_ii_anatomy_and_pathogenesis.md": {
+      "bytes": 12076,
+      "sha256": "860f388b99b09342573e16b26e1ef72a4e450fe21d2ba5e78ced4eb6d24bbff2"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s01_introducción.md": {
+      "bytes": 748,
+      "sha256": "16489cd2ac41ea9ffd04b098d06a0bc87f3d23ecd1324aefd9898bc53e6d8529"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s09_ii_the_findings.md": {
+      "bytes": 3748,
+      "sha256": "0c4766ecd35d6e534b22e2fff593a3c4f42b1208ec978b40e2c5482f3101ad6d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s08_i_introduction.md": {
+      "bytes": 1383,
+      "sha256": "313e203ba96239618f8bb6e3d47eccae42b9d8a0505a73ce6dd7171afc118e37"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s03_edema.md": {
+      "bytes": 716,
+      "sha256": "7efbc0f7221ffe4b0f7c63807cbb35ad3db24f9bda772629218e77bd1e3240bc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s04_i_introduction.md": {
+      "bytes": 1433,
+      "sha256": "898d06fa3214f828ea2bf9105526b9373a279e7eec287acbddefa8467699c368"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s05_ii_the_findings.md": {
+      "bytes": 2075,
+      "sha256": "fd19306aab77aa83fabbc972e4f5a25bd1b90b96c14ac95e6394ffeed82ebdd6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s06_iii_clinical_significance.md": {
+      "bytes": 2834,
+      "sha256": "ee69ef71b5476e378d4549d8e859972812941e4c62df54a595143202896e87c6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s10_iii_clinical_significance.md": {
+      "bytes": 22534,
+      "sha256": "b7b372ce66d1b753a35d8c709d7696cf2c4275c7bed5810e7234edc7754aa5c5"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch054_edema_and_deep_vein_thrombosis/ch054_s07_deep_vein_thrombosis.md": {
+      "bytes": 746,
+      "sha256": "553f679689cb4b6418e510fb13de32acfb3c2f40bad2baf55a51b41f22b908ce"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch066_acute_vertigo_and_imbalance/ch066_s01_introducción.md": {
+      "bytes": 684,
+      "sha256": "542a69bfd977699747e4f1af172bd4fb994c9e35e7e1d70b9198c66e08db643c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch066_acute_vertigo_and_imbalance/ch066_s03_iii_clinical_significance.md": {
+      "bytes": 1717,
+      "sha256": "a7bf679123885cbd6b16eec33e1d48df768ac8eee02f48389db930bd53823cbc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch066_acute_vertigo_and_imbalance/ch066_s04_span_idpage_5_0spanebm_box_66_1_acute_vertigo_detecting_isch.md": {
+      "bytes": 8012,
+      "sha256": "3a9a1dd0509099dec6bf0f895b7444f30ea9e94158721fc3689248f3e4a084c6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch048_inspection_of_the_abdomen/ch048_s01_introducción.md": {
+      "bytes": 5438,
+      "sha256": "48bd1a77821ee52e80a9d9a6974b1c139f805644cbad555c8d723f40b58b1d13"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch008_cyanosis/ch008_s01_introducción.md": {
+      "bytes": 672,
+      "sha256": "e25bf3eba04285764a706d480bbc0c24440240179dc58bd51bd598ba608690b5"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch008_cyanosis/ch008_s03_span_idpage_0_0spani_definitions.md": {
+      "bytes": 1762,
+      "sha256": "9d205d0ba43ef873eaff5b5431196aac1af2c5b2e5f9d36e3e50ec1c62f3b629"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch008_cyanosis/ch008_s05_iii_findings.md": {
+      "bytes": 6867,
+      "sha256": "443981fc39f4732409c2142e826a0ac6aea5afca2ff419a46682cc1410acb5a6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch008_cyanosis/ch008_s04_ii_pathogenesis.md": {
+      "bytes": 5951,
+      "sha256": "836b3560fd803b47954d54d242eb7cd73e6d1362ee22e31e5d52fc4b29741ab4"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s11_tricuspid_regurgitation.md": {
+      "bytes": 697,
+      "sha256": "b5f922391e7aebb3fbb93a60ee777142200c740ab5c15bb0da7c93a3d2aa1deb"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s08_i_introduction.md": {
+      "bytes": 1341,
+      "sha256": "a71ed79ac90d57a61780b3c6e20119e65377aef013bf06f9e1f9debb2509a419"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s16_pulmonic_regurgitation.md": {
+      "bytes": 1955,
+      "sha256": "94a1077d98974be28c33c1bfc867efda27c920fc1d2a62981f839adaca3fda7e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s04_ii_associated_findings.md": {
+      "bytes": 1166,
+      "sha256": "6296e49390da7d608eb7a17a8fe540748ea10379be6a545d263547670687aa6d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s06_ii_clinical_significance.md": {
+      "bytes": 1631,
+      "sha256": "026664ace5f7154666a0ea430cc74ecea5cac9099a0af0c6e5502409993d1594"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s14_c_estimating_venous_pressure_in_tricuspid_regurgitation.md": {
+      "bytes": 2187,
+      "sha256": "e13360e044dbcae0b0ff4ab7710aecf1cf3216a071a003995d31a20c32e92aca"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s12_i_the_findings.md": {
+      "bytes": 1323,
+      "sha256": "6985cbe9037c4b1042a4a07a977e6115a7904ed3185956000c977a8986beedab"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s15_ii_clinical_significance.md": {
+      "bytes": 1716,
+      "sha256": "e3b8d604c2e437e3d0b5bfd2c7d988978c608aaff54da12a7cf2b0793fd8bea4"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s07_2_other_findings.md": {
+      "bytes": 6844,
+      "sha256": "4662c5f44f5b81fca14bf31b503f352dc11fcdce36c49165f21f3a594713f801"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s20_ii_clinical_significance.md": {
+      "bytes": 2993,
+      "sha256": "dd9a723c6cdbfc984296665e89f5cdc24110262c87f7330bf4fa028097c781f9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s13_1_high_pressure_tricuspid_regurgitation.md": {
+      "bytes": 3179,
+      "sha256": "b084332f589d8d3759ae5653d9c66bf1b051e34b0212f88eefcfd5a1e5700fc6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s05_mitral_regurgitation.md": {
+      "bytes": 1954,
+      "sha256": "e3f70bb4ad6067fd8d3689f598fad278f26e65882e1ab92691f7b14a62850ac1"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s01_introducción.md": {
+      "bytes": 723,
+      "sha256": "4a30465b107eddcdea7c809aafa605dcef4317af9750e11bb205951ac822fae9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s21_span_idpage_11_0spanebm_box_44_2_other_cardiac_findings_in_m.md": {
+      "bytes": 10388,
+      "sha256": "6155a9a24a5a0a231788395231a851dff4c1af21330ce2e3087d587766b2d975"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s18_mitral_stenosis.md": {
+      "bytes": 681,
+      "sha256": "2b8302cf3c8700ddf20570a4f917e972d7094cd987f2d1c60057ee343958a3f4"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s10_iii_clinical_significance.md": {
+      "bytes": 3311,
+      "sha256": "40a305627fc334dbc04a547942378499e2bc1089b2b3075dac2c98bc00b83c44"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s03_i_the_murmur.md": {
+      "bytes": 1127,
+      "sha256": "8e12ffcf6886ea1dc141cc5e7f77259b92b0647a6846a4cbbfc4e6f89eb06271"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s19_i_the_findings.md": {
+      "bytes": 2985,
+      "sha256": "a97c56d5f2a3fbf00e17ae80d336b207b07a45f4ee0c6707ee2e0f4a576e6c4f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s09_ii_the_findings.md": {
+      "bytes": 3105,
+      "sha256": "2ee4947e152a1e49f0d716dee9dec66fa5e7744d26ee57cc58b13c72640003b3"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch044_miscellaneous_heart_murmurs/ch044_s17_ii_clinical_significance.md": {
+      "bytes": 1255,
+      "sha256": "ed27bef521bc152e41f2c5864e742a22356a0b272335f101d83de9378fd59af4"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch053_the_diabetic_foot/ch053_s03_span_idpage_0_0spani_introduction.md": {
+      "bytes": 1149,
+      "sha256": "42fea1e5f42fed64a014288bb336c65d06f5decb3cf8f426e5bddb42b88de256"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch053_the_diabetic_foot/ch053_s04_ii_the_findings.md": {
+      "bytes": 10539,
+      "sha256": "b7063bf49e409dfdd30d17f2fdae5bfad07f0c008c4856187429d5114bb7d2c7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch053_the_diabetic_foot/ch053_s01_introducción.md": {
+      "bytes": 723,
+      "sha256": "b526c29bd65425896fa464714084f4550ef49e1f42336f869ee3b07ca923da30"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch053_the_diabetic_foot/ch053_s05_iii_clinical_significance.md": {
+      "bytes": 8280,
+      "sha256": "c48c0cd2df793182f8283170bf8ce230beb991b96301d603d90bafea809628f1"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch011_proteinenergy_malnutrition_and_weight_loss/ch011_s01_introducción.md": {
+      "bytes": 768,
+      "sha256": "e17d356963eba8c658119eeb887597b18c1c2177b5348ef0e283e625c677321c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch026_inspection_of_the_chest/ch026_s01_introducción.md": {
+      "bytes": 2327,
+      "sha256": "56a29806b0de9761ee89a0b53e88caf005edcc432eadc64f27460f97084a3259"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch026_inspection_of_the_chest/ch026_s03_2_hyponychial_angle.md": {
+      "bytes": 3586,
+      "sha256": "cb3cd2bedb6487aac71c1551809e9b812f9542faa9c3e4ba792ace3055ae3049"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch026_inspection_of_the_chest/ch026_s04_2_relationship_of_clubbing_to_hypertrophic_osteoarthropathy.md": {
+      "bytes": 25588,
+      "sha256": "bf822414075a267a32466abb78d687abfe760c0ae895b0822100d3da4aed54d5"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s09_1_upper_motor_neuron_weakness.md": {
+      "bytes": 4875,
+      "sha256": "2e11c3ac95bdd68d2fe13a6e3d67b097ca35cc2daf6057ea75116d3c2742b7ce"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s06_a_upper_versus_lower_motor_neuron_lesions.md": {
+      "bytes": 1114,
+      "sha256": "70e55fe06d4f0f70333d8ec04300017ce83601358ba06841d23946a1b51a3a81"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s03_2_rigidity.md": {
+      "bytes": 3970,
+      "sha256": "6311f54d71c9f84f5d1e7b5e90230e078d7bbafae7882e057960f934f73565c1"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s05_c_clinical_significance.md": {
+      "bytes": 7685,
+      "sha256": "e588f7bbb4d5f48b4f3c36d247f10c8956182fa07c82935fa4c3af99e3b54630"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s04_b_technique.md": {
+      "bytes": 1037,
+      "sha256": "c23ef4c6927915e24fdd51fcecbc44dd54c4c6cf557047ccc251351365df6695"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s10_a_myelopathy.md": {
+      "bytes": 15693,
+      "sha256": "cc31c37b42f01eb827c4625f0096f3951ebc4c6df8c70935c56b1fe3f82d7f80"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s01_introducción.md": {
+      "bytes": 5044,
+      "sha256": "70783adb58b10505295b7fe649a8e740f29501e611b8cedb994f4cd10e6059b9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s08_3_babinski_sign.md": {
+      "bytes": 3866,
+      "sha256": "2f81bc67935688ba383fc41b58d48eb145ba1d3c697a7f90f23202edbfc6970a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch059_examination_of_the_motor_system_approach_to_weakness/ch059_s07_1_associated_findings_in_the_weak_limb_see_table_59_2page_9.md": {
+      "bytes": 1907,
+      "sha256": "4cfc0ab60b003f8add6569be3cf73a9083883a87cea7abec7c7e931efda06ee8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s11_e_palpable_spleen.md": {
+      "bytes": 959,
+      "sha256": "973b8f6e32ba668c909edfd033665cd0a44d4dd5a45a013b5ff2e2e23283dc5d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s03_ii_findings.md": {
+      "bytes": 696,
+      "sha256": "52538dbfcc4d86e552f0a6af2b53546222b200e4f889656a2a5a0c038a5cd4cb"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s05_b_associated_findings.md": {
+      "bytes": 830,
+      "sha256": "98db79c0495cf1172cecc1c703ec4c25db11bfe774296978e0c6a4f57cfccd3a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s18_c_diagnosis_of_cirrhosis.md": {
+      "bytes": 1930,
+      "sha256": "701c179b208b8eeed58626ad79298b43806a4238b273679c258842a30f2185ad"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s20_d_detecting_large_gastroesophageal_varices_in_patients_with.md": {
+      "bytes": 1572,
+      "sha256": "7e3ad1fa685e73f3c879f66b3e758f7cd3a73f148896c3d043b702356cff5f0c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s17_b_hepatocellular_versus_obstructive_jaundice.md": {
+      "bytes": 2303,
+      "sha256": "5026e736ef6c2f85613de195bb19012639141dcc1826930910a288cb35680b91"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s01_jaundice.md": {
+      "bytes": 688,
+      "sha256": "3d8f4a3cd98b0c189942ea2c9f018c4cd6fac414eedf1a917a1f3392fa44327e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s13_g_fetor_hepaticus.md": {
+      "bytes": 1169,
+      "sha256": "4a23206f1b7047400e2dd2dd4b1814580c136703140294f92e42c317ba38383b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s15_iii_clinical_significance.md": {
+      "bytes": 725,
+      "sha256": "6384d199710189c1768c8c2917cc71cd1f88484e6c3e720e2adafe1ae28c87c0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s09_c_gynecomastia_and_diminished_body_hair.md": {
+      "bytes": 1023,
+      "sha256": "c645d6f2f508365bf1ba7797be220b02da0c4f9c1119996e5876a01c216d33df"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s19_span_idpage_4_0spanebm_box_7_1_findings_predicting_hepatocel.md": {
+      "bytes": 3118,
+      "sha256": "62532d84e21390c15f49a2517e7548cd1f278003f88ef4fa6431a3d458267899"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s07_a_spider_telangiectasias_spider_angiomas.md": {
+      "bytes": 2272,
+      "sha256": "045ac278dd8df61b1bd4226cf753665922b91bf08a535782c325156545d6963d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s14_2_obstructive_jaundice_palpable_gallbladder_courvoisier_sign.md": {
+      "bytes": 1074,
+      "sha256": "b397402d899311128aa200a151cfc4a76927c891a9e6a5486149e134b9bf0417"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s06_1_hepatocellular_jaundice.md": {
+      "bytes": 882,
+      "sha256": "ca4d0c11fcc6c6419c64328e30469265d339a303354f8e963f1c2fe4bf337100"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s10_d_dilated_abdominal_veins.md": {
+      "bytes": 2109,
+      "sha256": "2076bbcde7c254c191bee19f06de24b09cf1af4bc4369f25cd314894954cc482"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s04_a_jaundice.md": {
+      "bytes": 1517,
+      "sha256": "f25683e91713378434ef72e8608d70bb923ad594ff0d6ab197ff9c2a5b9b2967"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s21_span_idpage_5_0spanebm_box_7_2_findings_predicting_cirrhosis.md": {
+      "bytes": 6612,
+      "sha256": "f796d94d0a573b83b4a5382dc43cd8d56132458dc2b28bef71ab0f14a62c8841"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s12_f_asterixis.md": {
+      "bytes": 2083,
+      "sha256": "6c48cfc41706f2f70b923d9a54ffa24691d3fe506261855b3369594d3ecd03e6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s22_references.md": {
+      "bytes": 8372,
+      "sha256": "cd17d784d3c8c7496d955290a6bb2b54b1821728bdf4ec121773f7d01ee35e2c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s16_a_detection_of_jaundice.md": {
+      "bytes": 1041,
+      "sha256": "84968da41d0052aeb67ccd43034983a17bf1c463a99c2ebb3ecac6aa18423aa1"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch007_jaundice/ch007_s08_b_palmar_erythema.md": {
+      "bytes": 966,
+      "sha256": "115ae0d00a2a5a5b8f71a09ebace5c8bfa423242903395dee7a2edac8daa3ea8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch046_congestive_heart_failure/ch046_s01_introducción.md": {
+      "bytes": 2805,
+      "sha256": "9a2947a42b684e970c518956b100659b4d4935664363f7aef50816d709a23f66"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch046_congestive_heart_failure/ch046_s03_d_physical_signs_and_consensus_diagnosis_of_congestive_heart.md": {
+      "bytes": 11411,
+      "sha256": "fcdcea693df2fd493f807fe57061d05111c68ab8984278d6abb5fb6001eced77"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch003_using_the_tables_in_this_book/ch003_s01_introducción.md": {
+      "bytes": 1132,
+      "sha256": "00c32684233aab5e8695eb7b357f64506d74ee086f099a5bf924bf22682d5505"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch003_using_the_tables_in_this_book/ch003_s03_span_idpage_3_0spanebm_box_3_1_pneumoniapage_3_1.md": {
+      "bytes": 12879,
+      "sha256": "a5e030232aa349af15fc33a3fc5b0ebe2e0ae81b9112ce1cb8fe0fb22d442a5e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch013_cushing_syndrome/ch013_s03_span_idpage_4_0spanebm_box_13_1cushing_syndrome.md": {
+      "bytes": 12403,
+      "sha256": "bbafe2ffcc5fd6f22fec25ff72741380ebb301689b44b015f595060f2f638a27"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch013_cushing_syndrome/ch013_s01_introducción.md": {
+      "bytes": 1910,
+      "sha256": "ed8c8890be1dc5e81b4237b00c410087ec288249042d513e0d992cb1e3d35fb4"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch024_meninges/ch024_s03_i_findings.md": {
+      "bytes": 4137,
+      "sha256": "13896e03d6bdb5043c4d0b4cf6c7f6926746661f01946700065bc5bbab91e566"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch024_meninges/ch024_s04_iii_clinical_significance.md": {
+      "bytes": 12816,
+      "sha256": "cb17906687db592ec06c608bad756e5ce15f4417bcaeca52a4ab39afa002c16d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch024_meninges/ch024_s01_introducción.md": {
+      "bytes": 735,
+      "sha256": "63c8e914f7469f5dc2ff477d52a073adbf278952342bfb8b2859bcfb17fa8f91"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch004_reliability_of_physical_findings/ch004_s03_references.md": {
+      "bytes": 25750,
+      "sha256": "ae54e10cce1db64fe7c4917383920e284f136f78f8e1e922ec6b5a8c639528c6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch004_reliability_of_physical_findings/ch004_s01_reliability_of_physical_findings.md": {
+      "bytes": 31768,
+      "sha256": "00f8abf07bc62e21cd6d15da19f5710f9b2d9bec30365334150dd94ae90935fc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch004_reliability_of_physical_findings/ch004_s04_general_appearance_of_the_patient.md": {
+      "bytes": 733,
+      "sha256": "602208d75db92e26a5e0794f5679e2330d5bb1cc67e2a05dceae434b9e78f84f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch042_aortic_stenosis/ch042_s01_introducción.md": {
+      "bytes": 3275,
+      "sha256": "54e8b7a6bdbd9d5f1c761af4e4039e6f911556c2aa8d19556693ee0b70e0d7e8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s07_span_idpage_2_0spanii_clinical_significance.md": {
+      "bytes": 3257,
+      "sha256": "783465293d1c5cc04eda2e017f78841188a96604ff7855e80ad57a1825a0f946"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s08_span_idpage_4_0spanebm_box_67_1_nonorganic_neurologic_diseas.md": {
+      "bytes": 2546,
+      "sha256": "5e90fcf3cb7b47fa160389cebce4921fe99f2f6f4f13a745462a1a53f1229a1a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s09_b_caveats_to_the_diagnosis_of_nonorganic_disorders.md": {
+      "bytes": 5353,
+      "sha256": "68536812bacb3cae21c572ea3cfcdda01afe7ad73d80ecb3ea520b7dcce27aa8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s06_c_bizarre_movements_not_normally_seen_in_organic_disease.md": {
+      "bytes": 2472,
+      "sha256": "889ddae39befeef592b2dc73cf323a96125e49367070e9df4bbdc5f82fd8cd16"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s04_a_findings_whose_severity_fluctuates_during_the_examination.md": {
+      "bytes": 1638,
+      "sha256": "c581739c174dbd5025beb7b715544aa84602e4c9dfda757c2de7e311c7e340d4"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s03_span_idpage_0_0spani_traditional_physical_findings_of_nonorg.md": {
+      "bytes": 1339,
+      "sha256": "2b361b3635ea88eb6b70fffd3dbed4bd903065c7d8f0936735c0c8595a758068"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s01_chapter_67.md": {
+      "bytes": 660,
+      "sha256": "8440e019986dd0ffcdb0794315d7776510dbac5331adfa204073e2510538d6fd"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch067_examination_of_nonorganic_neurologic_disorders/ch067_s05_b_findings_that_defy_neuroanatomic_explanation.md": {
+      "bytes": 2221,
+      "sha256": "1681a6b447b7828e6ea626aca55d1fdc90f7104e29d6c7f2b261f891525bd994"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s25_d_ssub2sub_splitting_versus_other_double_soundssup37sup.md": {
+      "bytes": 868,
+      "sha256": "8c2d08cf9be3e732a061c1d5e2728886b6ff61b4b4de968d216c3494b901ac06"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s28_3_ssub2sub_third_heart_sound.md": {
+      "bytes": 865,
+      "sha256": "2853cdab28895f28f08e7f5c100d0f543056edf9efa9addafdc5e6402daa49ce"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s22_i_wide_physiologic_splitting.md": {
+      "bytes": 1766,
+      "sha256": "4f1d03076c5107dc86bb66c1524fc996b48dc421ded953e191035f05c46a5285"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s16_i_normal_splitting_of_ssub2sub.md": {
+      "bytes": 3202,
+      "sha256": "e2292a2618344e09c7407f72be3ec565ab41d94001af9c339bb4ad8ec344abcb"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s06_i_vigorous_ventricular_contractions.md": {
+      "bytes": 888,
+      "sha256": "087e7f826a3c02f128d12bcccbf7a030be219785e68c8eef7cb8ba5fc08c25de"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s10_i_weak_ventricular_contractions_low_dpdt.md": {
+      "bytes": 866,
+      "sha256": "5e989ad02329904fc42785e66a17967920a00b87385824bbc998cbc1a0403ec3"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s13_b_acute_aortic_regurgitation.md": {
+      "bytes": 1355,
+      "sha256": "21e254798e5d519b2eb04811681a4c767833be20dd8ef6001f7c1033aa2d043d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s20_3_paradoxic_splitting_reversed_splitting.md": {
+      "bytes": 3291,
+      "sha256": "a5b639ace582309120fd4065e8117585f9d8a566b89d6a0dee439b88c8681229"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s26_i_ssub2sub_opening_snap.md": {
+      "bytes": 1059,
+      "sha256": "a90ab82a597b309dfbc62c398ba538308e4256f4c9efac12d0b3d6e0d7543a80"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s29_4_late_systolic_click_ssub2sub.md": {
+      "bytes": 2676,
+      "sha256": "d1610fa23f88a31ea70ca586bc0dc7671845a00c0842f18534fc7cad4d985835"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s11_2_early_closure_of_the_mitral_valve.md": {
+      "bytes": 801,
+      "sha256": "e05fc7c0fbc83b339ed9b3dca9db257ac54cb6777e739d9cc46c03ca1a9269e4"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s09_b_faint_or_absent_ssub1sub.md": {
+      "bytes": 849,
+      "sha256": "a540c009bab5d21fade9fdc76e166f63faa2c1625613405570039f3efa985bb0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s04_2_position_of_the_valve_leaflets_at_onset_of_ventricular_sys.md": {
+      "bytes": 1929,
+      "sha256": "a4d3fdf615e705825feb08b55bdefdaa87d0c4d0df9e49321bbf8077b74bf5df"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s17_c_technique.md": {
+      "bytes": 2275,
+      "sha256": "afd41e307af4142b59be4f4ef6bb57b42af138b74f1048fb533e257bbf14c1b0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s30_references.md": {
+      "bytes": 6881,
+      "sha256": "79fb3fa9dfb05e3cef8c3c7557c5096e5cdbd56487becfdc4568fe80798ec12c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s01_introducción.md": {
+      "bytes": 1935,
+      "sha256": "ebcc0a72c054cc3223104be69d6ca89e2f569ae3ddccd8e76d5f149ecf529fd6"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s27_2_ssub2sub_pericardial_knock.md": {
+      "bytes": 904,
+      "sha256": "48b88567b9133aaa5c4c66e5d0d09ba513aa8a517729b3c33d0ca9765796dc2b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s08_a_prolapsed_mitral_valve.md": {
+      "bytes": 1949,
+      "sha256": "07e355063e65cb009c4a1952c2b5d9319fec8c18d6d27383f26d8a6c1d173a4d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s12_a_long_pr_interval_020_seconds.md": {
+      "bytes": 753,
+      "sha256": "fc362c6fcdfe5bfef38400368cd0eab884b52383a113827a67de3598d7da767c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s21_b_screening_for_abnormal_splitting_of_ssub2sub.md": {
+      "bytes": 3278,
+      "sha256": "9dc817d0ba7f5d2b068ff04658de01bd6c4656da5394cd18ca50b52248eef1fc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s14_c_varying_intensity_of_ssub1sub.md": {
+      "bytes": 4910,
+      "sha256": "834baf9f28dc0cedf9fb2ae8b84f8dcc9957a500ac10f5f1702f6237af0a9564"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s07_2_delayed_closure_of_the_mitral_valve.md": {
+      "bytes": 718,
+      "sha256": "3aabd82512a99ba69cbbde7b3ac08a4f6db394491f443ca5de619ec3459ff7be"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s05_a_loud_ssub1sub.md": {
+      "bytes": 826,
+      "sha256": "f44534619832b87e6a0a468bfd0f7391a6bb61e638c552bbacfb9687b37c027a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s24_3_paradoxic_splitting.md": {
+      "bytes": 859,
+      "sha256": "841328b0341db2518bd4a16b0c8dfd64b8e8909b179cd79dd41474848cb82251"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s15_d_prominent_splitting_of_ssub1sub.md": {
+      "bytes": 1988,
+      "sha256": "feed461f9d7f7e27afd9ece283cf9bcd45dad2c60cddda22a187ff976920708f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s23_2_wide_and_fixed_splitting.md": {
+      "bytes": 1985,
+      "sha256": "ea3fe7bbd72627e9a264f9339f4d41861438e077ad2b7e54850a66406c36e0e7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s03_a_cause_of_ssub1sub.md": {
+      "bytes": 1955,
+      "sha256": "90a8b9c8412b4830d911f963d08acaca1963bba9a0c3be7d7ced5464419246cd"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s19_2_wide_fixed_splitting.md": {
+      "bytes": 823,
+      "sha256": "d657782965addb2427c85caee3a41fb7d884c504a061a848e0dc11bb5d72fcfa"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch038_the_first_and_second_heart_sounds/ch038_s18_i_wide_physiologic_splitting.md": {
+      "bytes": 873,
+      "sha256": "539966308f8ec51e102d44f02fbcf5a87f1566fb93a2ee401378055212f6ba62"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch006_stance_and_gait/ch006_s07_v_canes.md": {
+      "bytes": 8629,
+      "sha256": "a114aba4c2a6fe9d1e4ee095b7ed8a07909557c1a76957bdb6d93180087fa790"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch006_stance_and_gait/ch006_s01_introducción.md": {
+      "bytes": 657,
+      "sha256": "1449cc442eb1c8583ae32abdc3ba5d4a14bb5c5bcc3cdbbdd10da70247de6a1a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch006_stance_and_gait/ch006_s03_i_introduction.md": {
+      "bytes": 1491,
+      "sha256": "18ce5a8dd2b4f5e573ebf889639bb3146b15a17bd4dcecb4be7ef8382a70ecf7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch006_stance_and_gait/ch006_s04_ii_etiology_of_gait_disorders.md": {
+      "bytes": 1131,
+      "sha256": "f62c904511801a1d881baf88e9c82094f94c8bef27f2451d5fda18138d9c243f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch006_stance_and_gait/ch006_s06_iv_evaluation_of_gait_disorders.md": {
+      "bytes": 7767,
+      "sha256": "8cbc43c467eaeea0b6e1d6cbd5032d907f496d7357a2dfc157661e78e2e7719d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch006_stance_and_gait/ch006_s05_iii_types_of_gait_disorders_and_their_significance.md": {
+      "bytes": 27139,
+      "sha256": "f1c8b14892524b27d19d7a31f156bdf2a8e9c5cc836d6f735b9fd623515b55f8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch030_pneumonia/ch030_s01_introducción.md": {
+      "bytes": 1203,
+      "sha256": "9c6b2e2a4ac7dde9d6feca6fc70f91a4642bd2b4e25d9eba3ad47396efcb0988"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch030_pneumonia/ch030_s05_pneumonia_predictors_of_hospital_mortality.md": {
+      "bytes": 13182,
+      "sha256": "6555656873320ad6d73db583f2372321499da60361e5bd7c4cfaeb2aa33fa2c0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch030_pneumonia/ch030_s04_span_idpage_4_0spanebm_box_30_2.md": {
+      "bytes": 702,
+      "sha256": "398d12cf324805ba138faf663e086210dafede470db6030ef9395e57e72d4d57"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch030_pneumonia/ch030_s03_span_idpage_1_0spanebm_box_30_1_pneumoniapage_1_1.md": {
+      "bytes": 10181,
+      "sha256": "78779f18c32618f73fbd87f6ad29f5921c9dd95d524212e90f2f6db9f52bd0ac"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch010_hypovolemia/ch010_s01_introducción.md": {
+      "bytes": 703,
+      "sha256": "db04a56eaba00dd4623ce706e2b7232c6b38cdcf935b7b602cad1cf9cec5539a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch010_hypovolemia/ch010_s03_i_introduction.md": {
+      "bytes": 2276,
+      "sha256": "82b7e507aa8848e344cd1b7a2bd2c043f071711d11a29d2e4f95af0c2eeae09f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch010_hypovolemia/ch010_s04_iii_clinical_significance.md": {
+      "bytes": 5782,
+      "sha256": "430522069cba547691191ab4a46b267587dd213121a8902243888b6bad6c8a2c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch012_obesity/ch012_s03_ii_findings_and_their_significance.md": {
+      "bytes": 10462,
+      "sha256": "77ad8cf996d11c8c692cbf5b749c61bd4d10c02ebdb73710175d4a33b25c5e2a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch012_obesity/ch012_s01_introducción.md": {
+      "bytes": 698,
+      "sha256": "bd50f54c8a4b9c5bb6b415dea1771abda4a0693d207b1ca87e1ee66203485e6f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch023_thyroid_and_its_disorders/ch023_s01_introducción.md": {
+      "bytes": 683,
+      "sha256": "9436d0b5971d03ce9b0434c1a38997ff9d1df85f7ea49df362f9510c2496c403"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch041_heart_murmurs_general_principles/ch041_s01_introducción.md": {
+      "bytes": 36395,
+      "sha256": "7954cb76e9f73dae98549ed2985c311f4b0b88072b921303fcd33b993f1bc9dc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s26_2_anterior_cerebellar_degeneration_rostral_vermis_syndrome.md": {
+      "bytes": 1131,
+      "sha256": "93651dc0073bc5c432ad87afd1b61f6b4929698b80471065114aac095c578693"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s11_2_patterns_of_nystagmus.md": {
+      "bytes": 882,
+      "sha256": "18a35075b187fc029ca34afed8a76dc9e5fd45f9b0b9b5ce07bbe93afa2256b1"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s15_c_hypotonia.md": {
+      "bytes": 1451,
+      "sha256": "e713789a58d5a6606a48aaedaef4d26ec92f927b70ca4438ff9a568c8a0a02ac"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s24_a_cerebellar_findings.md": {
+      "bytes": 1600,
+      "sha256": "149760fb323221e5cab706cf557e54f4f0bb2bf87a095903da83826d920e3ae7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s29_references.md": {
+      "bytes": 3751,
+      "sha256": "81010a0917a04a5a234666a0d013aa20722329f30d628fb79c12d202fd1aac85"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s21_3_dysarthria.md": {
+      "bytes": 888,
+      "sha256": "eb2c3c6f64970ce7583c62366603cbec2aa4017d12eef3a76249e0e55424b209"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s04_ii_the_findings.md": {
+      "bytes": 664,
+      "sha256": "bf5f63b74bfcd59ebb69d71b5cd87b40f7f10d4170f01ef0d01fa16263fdc8a3"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s23_1_cerebellar_hemisphere_syndrome.md": {
+      "bytes": 699,
+      "sha256": "794bfa10a2f0e17cdd540a7c4236d3346066900f196561fcb59b50100897d597"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s14_3_effect_of_retinal_fixation.md": {
+      "bytes": 1791,
+      "sha256": "4f517a70c2d4288b22121a394a5c4b4ef528a3ff953390543bdc9d0cf1633fdb"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s22_b_cerebellar_syndromes.md": {
+      "bytes": 929,
+      "sha256": "dc20ccd3b55808794aa27e82022869659086217b463a57eee308e215a7111d3b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s20_2_nystagmus.md": {
+      "bytes": 1708,
+      "sha256": "1d26ece66242ae5f161a9084110c134af67945899364a20b9154f3d8660c9392"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s18_a_individual_findings.md": {
+      "bytes": 677,
+      "sha256": "f733ebf598239287215aa96dbea453ab6c3ba7520ba68dcdc96bbd201b022b8c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s12_a_cerebellar_nystagmus.md": {
+      "bytes": 1759,
+      "sha256": "671dc40739748ba118f1fd8c804b45bbb2fd678e2f8d8c21a9dbfd3764d57ef0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s17_iii_clinical_significance.md": {
+      "bytes": 685,
+      "sha256": "ce06acf29501e6383469c0b82cd587531f08bd95db14de4d3d50111f2c739375"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s16_d_dysarthria.md": {
+      "bytes": 2150,
+      "sha256": "8f5c5e8e545c089c51371dd0df1b2cde0d60e349cc14de416ad4c23599e58a06"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s07_2_heel_knee_shin_test.md": {
+      "bytes": 1198,
+      "sha256": "8606755bc6e0858bf36f6fee33a8511a432c5a2b783ecd31e178d70ebd2bd7b8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s10_1_definition.md": {
+      "bytes": 1422,
+      "sha256": "d033cd42d42cd62c155ce065380abf6ae2af4e3319745f373f156f6b8c96d316"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s05_a_ataxia.md": {
+      "bytes": 1149,
+      "sha256": "d0597d725e186adbb52627e219d3b965a9cbfb386d9e2e4c927a4f3b3d401f88"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s08_3_rapid_alternating_movements.md": {
+      "bytes": 1143,
+      "sha256": "3af8f2e1e4297594e75b32d5d054c70a4d17a38d8cf4912387df83f05b9a2cd5"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s01_chapter_63.md": {
+      "bytes": 652,
+      "sha256": "01fc44986e278373570e5d81923fec55284d2ee67b883e22efe07a4c50068392"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s28_4_cerebellar_infarction.md": {
+      "bytes": 1727,
+      "sha256": "8c7a87fbbbefdebfefd3468cadb53d54288aeb286c0b306f4bc0526f3f67b77d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s03_span_idpage_0_0spani_introduction.md": {
+      "bytes": 1018,
+      "sha256": "ba44e9870c55b3ab04f2f3807d9d743f5b0ee7111a1e33ecfd3c28a5dcf6120d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s25_b_associated_findings.md": {
+      "bytes": 1310,
+      "sha256": "92f9cebee92c23efde36c8292c54a37e469b40cf1c53ecef8784cb09f6fc0cbf"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s09_b_nystagmus.md": {
+      "bytes": 656,
+      "sha256": "34dfa76035b7d79d6d2843b239f3475fc4e52fa2218c5b8cd5b2a95e8e3312be"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s19_1_ataxia.md": {
+      "bytes": 1338,
+      "sha256": "fa58842dfd66a2004ed8ba1b240c4da2cb2b8fdb66f973534f13ce7b2992e38b"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s13_b_other_patterns_of_nystagmus.md": {
+      "bytes": 893,
+      "sha256": "e75dd950f5b077e094d3eb581c5b2bb1eca67bf7fc208559c8fde7adb97f3187"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s27_3_pancerebellar_syndrome.md": {
+      "bytes": 974,
+      "sha256": "e2aaf434f49ceb28ee71ba7f4f4bb970fa25dc39e58f28f18365cb7745abe9cc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch063_coordination_and_cerebellar_testing/ch063_s06_1_finger_nose_finger_test.md": {
+      "bytes": 2060,
+      "sha256": "e222b49f70c400b4ae914309fc0a6020d738ca51401a5d31a7b52eab107ba0b7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch005_mental_status_examination/ch005_s05_iv_mini_mental_status_examination_mmse.md": {
+      "bytes": 37294,
+      "sha256": "3958f33a14129fac70ee6b006b82b63838a402daf19f0c8d211e74165fcc281d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch005_mental_status_examination/ch005_s04_iii_mini_cog_test.md": {
+      "bytes": 1854,
+      "sha256": "d1312e6351a350fca51968d87b13933f9c50838927eed420c64ed975aa06ddb5"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch005_mental_status_examination/ch005_s03_ii_clock_drawing_test.md": {
+      "bytes": 3260,
+      "sha256": "c2840036362df1877f66dc88b6fdda176521fa385d9ce28ec42860e29bad87b0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch005_mental_status_examination/ch005_s01_introducción.md": {
+      "bytes": 665,
+      "sha256": "2d0ac069b50f31445a40b4daf329b1561609257cfa474b4f205ea819eb7d4961"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s09_a_peritonitis.md": {
+      "bytes": 20113,
+      "sha256": "5be3d1b2ee55657fb19a590f3244b1d451fbfdb366405c692c18fc60f8ed12a3"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s01_introducción.md": {
+      "bytes": 2307,
+      "sha256": "ae1ae8cde2ec84a2efd3bfee653383f8322456591c50e2baebd71e71f6b0d341"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s03_2_rebound_tenderness.md": {
+      "bytes": 1400,
+      "sha256": "d47834f75a1faa2b18d5097665db1355d78de5634583a650e9f125607e1d7731"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s05_5_abdominal_wall_tenderness_test.md": {
+      "bytes": 1943,
+      "sha256": "34b28b3cfbc6a331dbde20f4f64cce667778425fca25b922cabc2b432325fc98"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s08_d_small_bowel_obstruction.md": {
+      "bytes": 1872,
+      "sha256": "81c87104eb0c45ce8a0a4e0e81e0807ccd922dd89318f4a45db203df1e1f9cf8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s12_references.md": {
+      "bytes": 13629,
+      "sha256": "45223346aa7cdbf4f5ea860c99fbe248a2dedfc9115ad761f9ffd94da53b2d56"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s11_f_renal_colic.md": {
+      "bytes": 5058,
+      "sha256": "64048aa26ee4c1521585f843a2ef28de184ae29370e586e08761d737312c4506"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s07_c_cholecystitis_and_murphy_sign.md": {
+      "bytes": 1908,
+      "sha256": "d04e5a54cb3f3f357d71aa88682aca822c3e777dc33881d131ac3d3d132e12bc"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s04_3_percussion_tenderness.md": {
+      "bytes": 1250,
+      "sha256": "78aa8d478ed5c6d879f3406dbb7030a5cde290eecdbd9a8834a885ad4f4d73a3"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s06_1_mcburney_point_tenderness.md": {
+      "bytes": 2304,
+      "sha256": "575243e28f7e752789c214fda11711f66a43d66eb6b8e3b79dd38b205fe1ffe0"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch050_abdominal_pain_and_tenderness/ch050_s10_e_diverticulitis.md": {
+      "bytes": 919,
+      "sha256": "ea79e13a742211604534667549d4fbd742d25a132dfc1102fba3198538215046"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s09_ebm_box_31_1.md": {
+      "bytes": 694,
+      "sha256": "c2b2201d520a18a0eefceae5c9a0d1b88ad55609be877c05291e971f166edbd3"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s10_chronic_obstructive_pulmonary_diseasecontd.md": {
+      "bytes": 5140,
+      "sha256": "b0a319d2e96568383bc6930c3ccde9a825feb417af316bee61f1d2463e3b3d6c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s01_introducción.md": {
+      "bytes": 730,
+      "sha256": "14628b829c69dc45e1631f76d268f92a8b662d51c3747e3f54004a4180c0b2f4"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s06_2_costal_paradox_hoover_sign_costal_margin_paradox.md": {
+      "bytes": 1508,
+      "sha256": "ca83464dade9377e8940e56b70017f7a6c12939b2aa8e750e68c39b315bf67ed"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s07_3_leaning_forward_on_arms_propped_up_on_knees89.md": {
+      "bytes": 2327,
+      "sha256": "c829ff0c0e6fc0e0f9bfb6d978cd6797068cef9a1125e7eb5e27c6d5b7bf19b3"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s03_ii_the_findings.md": {
+      "bytes": 1281,
+      "sha256": "2882bf9130a65a2d3dfcc8c167d78af37d43ea5616d3e6ecc6f44ff443527b67"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s12_c_prognosis_in_copd_exacerbation_bap_65_score.md": {
+      "bytes": 1131,
+      "sha256": "511c5b1adb31f9a319a33cb952edcb032b17c9d68b4c47cda0b2a6dd2cbe32ed"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s11_b_combined_findings.md": {
+      "bytes": 1724,
+      "sha256": "2d74234fffcfc7f7159f41acd64dc359de13d289e466c8c6e05eeae36e852e0e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s05_1_inspiratory_recession_of_supraclavicular_fossa_and_interco.md": {
+      "bytes": 1174,
+      "sha256": "a2f313c08202ad85c105a8bc2bddd15fda14ec6b637350c7b41694402b7b9abe"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s04_a_inspection.md": {
+      "bytes": 696,
+      "sha256": "b9e791aef8bb40a21a226664732b03299d81ea9ce3e14af46096ea8ec9e5030e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s13_span_idpage_5_1spanebm_box_31_2.md": {
+      "bytes": 7136,
+      "sha256": "f8491e5926f15d85a52e9866a32f4fb053d64b649eeffb5bb1f8ccae45228617"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch031_chronic_obstructive_lung_disease/ch031_s08_ebm_box_31_1_chronic_obstructive_pulmonary_diseasepage_3_2.md": {
+      "bytes": 5627,
+      "sha256": "cf98727b941925ed03b2e5718447684669f525ceb5f1b2aedce63977555e4e52"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch032_pulmonary_embolism/ch032_s03_ebm_box_32_1_pulmonary_embolism.md": {
+      "bytes": 13724,
+      "sha256": "a2c4e430fca74d673c6db24cd9a0a999f904db90579c07b1ecaae9e01ae5e557"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch032_pulmonary_embolism/ch032_s01_introducción.md": {
+      "bytes": 5963,
+      "sha256": "85fc2beb327771504ea94cfb36df1d31ea93221b4e7105472412d93dbc7d060f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s22_c_retracting_apical_impulse.md": {
+      "bytes": 1131,
+      "sha256": "0b5793ec6732e0550be9719b036825c22eb08dda8b242d10b36a31cda10a3537"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s21_b_sustained_apical_movements.md": {
+      "bytes": 1632,
+      "sha256": "28cbd109adeef790b22c53ff93dd84a044e0705df96177f37faea98fb8ef3e96"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s03_ii_technique.md": {
+      "bytes": 809,
+      "sha256": "2a075f900bdb763502d2f2e9f1a94125fae348b23680d5f325e4ed995e32058c"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s18_span_idpage_4_0spanebm_box_36_1_size_and_position_of_palpabl.md": {
+      "bytes": 4897,
+      "sha256": "2e1f005d551a4c890155e66ba84ea0fbcdb765eba01cc1333f4006921e66d319"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s12_d_retracting_systolic_movement.md": {
+      "bytes": 1172,
+      "sha256": "040ea2c9ac5a162c3c8a8135036f4b9cd4d1cc207f6f92378898f56cc15f4b08"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s14_iv_clinical_significance.md": {
+      "bytes": 716,
+      "sha256": "bf395d6615612925c29287ab1e4a4ea4e42ba8ead3704eb777fe4739e10ba585"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s25_1_hyperkinetic_movements.md": {
+      "bytes": 1305,
+      "sha256": "f0fe34fedeaa5d7105e0401267ee609f6aeb3b736eca5d9eefff18ed43912e45"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s24_b_left_lower_parasternal_movements.md": {
+      "bytes": 975,
+      "sha256": "4aafc5ba49d9da2b8b849f71a35a45e5631dd8f60c70d5c1b21a6daaba5b969a"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s30_f_palpable_psub2sub.md": {
+      "bytes": 2415,
+      "sha256": "67616cd7f43de4725722c6554925006de7fd2a2a2e2256811e33da25d7eb41df"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s23_span_idpage_6_0spanebm_box_36_2_abnormal_palpable_movementsp.md": {
+      "bytes": 6507,
+      "sha256": "a6e49afb65d120bc0ff4efebb033bf8107260b01d0df1addb40f465a01c8c9f8"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s09_4_right_base_second_intercostal_space_near_right_edge_of_ste.md": {
+      "bytes": 1544,
+      "sha256": "145be792be55155fc14b6032dfb1a92e7c99d806fc31145a4abaa03d3f63b378"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s05_b_location_of_abnormal_movements.md": {
+      "bytes": 909,
+      "sha256": "d7fe276ea2948103517c5f7417e28325c2244a0319b9bc7e339d016344273abd"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s29_d_diffuse_precordial_movements.md": {
+      "bytes": 1678,
+      "sha256": "b4505001de23796297f9ea2f9cd2a19aa06c6525779eb615b8d32cb6fd77ba55"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s10_c_making_precordial_movements_more_conspicuous.md": {
+      "bytes": 1490,
+      "sha256": "836199ecbfc18ac49eb831a810ff3dd6541bdd81c53d6bcac07d17ad54220bf3"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s11_iii_the_findings.md": {
+      "bytes": 3253,
+      "sha256": "7a77131554a6e5c0f8edb8c69db707734a8bcae8203ab3ecd76b09e69a50cc8f"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s20_a_hyperkinetic_apical_movements.md": {
+      "bytes": 1262,
+      "sha256": "e3f02f9e21436bf2b2eac38754da2666bb917d0ceafe941747e3c38fa5a25e5d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s06_1_apex_beat.md": {
+      "bytes": 1074,
+      "sha256": "174a8d76fe9df7c517ae46b1df637dba42c9985441ba82fc37006abe9971d4ac"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s27_a_right_ventricular_movements.md": {
+      "bytes": 1818,
+      "sha256": "8bd79c617ef998cbacfbdcb412f74ac98207a8b6d9827821751d7ee3e7084e5d"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s28_b_left_atrium_and_mitral_regurgitation.md": {
+      "bytes": 2583,
+      "sha256": "e01d4811ac61fc6e3c9298d726a2f731c2a633d13cf6fd33f1a5558f2e84082e"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s26_2_sustained_movements.md": {
+      "bytes": 1237,
+      "sha256": "e9abbb9f254cef4be13de133744b4ad01bdd62973aa5b95e9e77676314d1d4a5"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s17_2_diameter_of_the_apical_impulse.md": {
+      "bytes": 1239,
+      "sha256": "0dc9c8e538b137a6f47b186d00ba5f35c93c9b50da428015f315aff806ceb068"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s31_references.md": {
+      "bytes": 8074,
+      "sha256": "854c3f81b307e3114de5fed95302df48564f5256e15f7acdba89a7b2af4721e9"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s19_3_abnormal_movements.md": {
+      "bytes": 708,
+      "sha256": "95492dc6af9e896f0182e2f0a794ae359e9b309b8f7daff0863ca0660871ed69"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s15_a_apex_beat.md": {
+      "bytes": 690,
+      "sha256": "32954162fee2130cbefa6a622a291667e2f8cdd243b62afcbeea7557d950c253"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s01_introducción.md": {
+      "bytes": 715,
+      "sha256": "d3c8bf595f251539f89186f17f937808a00551e42589abbea82be51f08f34e67"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s08_3_left_base_second_intercostal_space_near_left_sternum.md": {
+      "bytes": 856,
+      "sha256": "53847b652f8f42521790b55296d0b92645231628cf10831da522ae5e6e71b4c7"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s04_a_patient_position.md": {
+      "bytes": 1535,
+      "sha256": "63efbe2abf3a1ee5a5262b13ce480ecb18a53a37fa585385a0d5a782e2b95b79"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s16_1_location.md": {
+      "bytes": 2515,
+      "sha256": "5d4cc4762e097e52b0977e98913049b6af302041416f71dcf78c7b1699c44e54"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s13_e_heaves_lifts_and_thrusts.md": {
+      "bytes": 894,
+      "sha256": "90c1a6e89fee50f07a1b36c23210505b3a93ed1980b1519f7a0ccadeeb654e06"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch036_palpation_of_the_heart/ch036_s07_2_left_lower_sternal_area_fourth_intercostal_space_near_left.md": {
+      "bytes": 902,
+      "sha256": "5b460d4c5e7319cd70341c0b75b0165b8c60dcb99a37b54a684d12d76a407ecd"
+    },
+    "09_REFERENCIA_CLINICA/McGee_EBPD_2012/ch009_anemia/ch009_s01_introducción.md": {
+      "bytes": 687,
+      "sha256": "e2ca1136d8cef2ebe238f56a5b7379063b275929f11f42af0393cd60beec2fcf"
+    },
+    "10_WIKI_INFECTOLOGIA/sindromes/Hepatitis_virales.md": {
+      "bytes": 49744,
+      "sha256": "9e2da4420819401509e1db58c3a8fcbe813967f732b459b865a7ded7e1741493"
+    },
+    "10_WIKI_INFECTOLOGIA/sindromes/Endocarditis_infecciosa.md": {
+      "bytes": 50426,
+      "sha256": "574d2197dd6526d814f6e3b876de538206a2e4dcf9ce04f86e84e41c364124b6"
+    }
+  },
+  "fecha": "2026-09-16",
+  "vault": "/Volumes/Bioinformatics/Wiki"
+}

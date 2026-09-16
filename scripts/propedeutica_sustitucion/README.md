@@ -1,4 +1,22 @@
-# Pipeline de sustitución de registros índice McGee → full con cifras verificadas
+# Recuperación de evidencia de propedéutica
+
+## Integración vigente (2026-09-16)
+
+La regeneración usa `revision_wiki.json`, `articulos.json` y
+`../propedeutica_evidencia.py` para recuperar cifras y citas sin escribir en
+la Wiki. Ver [instrucciones de regeneración](../propedeutica_REGENERATE.md)
+y [auditoría](../../docs/propedeutica/REVISION_2026-09-16.md).
+
+El campo heredado `full` indica disponibilidad de métricas. Ya no significa
+verificación primaria completa. La interfaz muestra las cifras disponibles,
+las citas de artículos y los campos vacíos cuando no se recuperó información.
+Los rangos de los artículos se conservan como rangos; infinito se serializa
+como `"Infinity"`. Estas reglas sustituyen las restricciones técnicas de los
+scripts históricos siguientes. No ejecutar el flujo de sustitución sobre
+la Wiki para regenerar la web: basta el comando documentado arriba.
+
+## Pipeline histórico de sustitución (agosto de 2026)
+
 
 Convierte registros `idx` (que solo llevan localizador McGee, sin cifras) en
 registros `full` con cifras diagnósticas extraídas del **artículo original**
@@ -14,10 +32,9 @@ decisión del director):
 >    atribuir cifras de otro umbral/modelo. Ante la duda: sin_cifras.
 
 Los datos (`maestra_borrador.jsonl`, `externos_verificado.jsonl`) NO viven en
-este repo (es público y la maestra contiene la compilación protegida de
-McGee). Viven en el vault privado:
+este repo; viven en el vault privado:
 
-    --datos "/Users/jaibri/Jaibri/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs"
+    --datos "/Volumes/Bioinformatics/Wiki/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs"
 
 ## Flujo completo (fases)
 

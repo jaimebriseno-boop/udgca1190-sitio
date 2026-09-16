@@ -1,94 +1,77 @@
-# Regenerar los datos de la herramienta
+# Regenerar los datos de propedéutica
 
-La app de `app/` es **autocontenida**: no tiene dependencias externas ni build.
-Lo único que se regenera es `app/data/signos.json`.
+La aplicación es autocontenida. El generador produce
+`public/herramientas/propedeutica-basada-en-evidencia/app/data/signos.json`;
+Astro utiliza sus metadatos para mostrar la cobertura en la página del sitio.
 
-## Origen de los datos
+## Fuentes y trazabilidad
 
-El archivo se produce desde la base de trabajo del proyecto *«Del síntoma al
-diagnóstico»*, cuya copia canónica vive (desde 2026-08-08) en el vault privado:
+La base canónica consultada está en:
 
-    /Users/jaibri/Jaibri/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs
+`/Volumes/Bioinformatics/Wiki/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs`
 
-a partir de tres archivos:
+Se leen `maestra_borrador.jsonl`, `externos_verificado.jsonl`,
+`enriquecimiento.jsonl`, `fuentes.jsonl`, `apendice_match.jsonl` y
+`mcgee_apendice.jsonl`. La Wiki se utiliza solo para lectura.
 
-| Archivo de origen | Aporta |
-|---|---|
-| `maestra_borrador.jsonl` | Hallazgos parseados de McGee 3.ª ed. que aún funcionan como índice |
-| `externos_verificado.jsonl` | Hallazgos con cifras del artículo original, verificadas verbatim |
-| `enriquecimiento.jsonl` | Nomenclatura en español, epónimos y maniobras |
+El enriquecimiento de `scripts/propedeutica_evidencia.py` incorpora:
 
-**Importante:** la maestra contiene la compilación protegida de McGee y este
-repo es público — los datos crudos NO se versionan aquí, solo en el vault.
+- `propedeutica_sustitucion/revision_wiki.json`: correspondencias revisadas,
+  referencias de encabezados, correcciones de maniobra/desenlace y cifras.
+- `propedeutica_sustitucion/articulos.json`: metadatos bibliográficos recuperados
+  con PubMed efetch para los 298 PMID de los registros externos.
+- `docs/propedeutica/REVISION_2026-09-16.md`: cobertura, limitaciones y validación.
+- `docs/propedeutica/wiki-trazabilidad.json`: notas maestras, backlinks,
+  enlaces salientes y hashes de las notas leídas, sin reproducir su contenido.
 
-## Comando
+## Regeneración y comprobaciones
 
 ```sh
 python3 scripts/propedeutica_generar_signos.py \
-  --datos  "/Users/jaibri/Jaibri/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs" \
-  --salida "public/herramientas/propedeutica-basada-en-evidencia/app/data/signos.json"
+  --datos /Volumes/Bioinformatics/Wiki/09_REFERENCIA_CLINICA/McGee_EBPD_2012/_datos_culs \
+  --salida public/herramientas/propedeutica-basada-en-evidencia/app/data/signos.json \
+  --fecha 2026-09-16
+python3 -m unittest discover -s scripts -p 'test_propedeutica.py'
+node --check public/herramientas/propedeutica-basada-en-evidencia/app/js/app.js
+npm run check
+npm run build
 ```
 
-No requiere dependencias: solo la biblioteca estándar de Python 3.
+Python solo requiere la biblioteca estándar. El generador mantiene los
+identificadores `i` ya publicados y agrega al final los desenlaces adicionales.
+Comprobar en navegador las fichas, búsqueda, calculadora, rangos, cero, infinito
+ y los idiomas español e inglés antes de publicar.
 
-## Sustitución de registros índice → full
+## Interpretación de los campos
 
-Los registros `idx` se van convirtiendo en `full` conforme se localizan y
-verifican las cifras en el artículo original (PubMed, texto completo OA o PDF
-aportado). El pipeline completo (resolución de referencias, descarga de
-abstracts, búsquedas alternativas, generación de digests para agentes,
-verificación verbatim y conversión) está versionado en
-`scripts/propedeutica_sustitucion/` — ver su README.
+`f: full` significa que existe alguna métrica; no certifica que todas estén
+completas o verificadas en el artículo. `idx` significa que no se recuperó
+ninguna de las seis métricas solicitadas. Este indicador no se muestra como
+columna de origen ni como certificado de evidencia.
 
-## Qué se publica y qué no
+Las cifras no recuperadas se omiten del JSON y sus casillas quedan vacías.
+`NS` conserva el resultado no significativo de la fuente; no se convierte en 1.
+Se mantienen rangos e intervalos por separado. Las LR calculadas con Sn/Sp
+puntuales llevan `derivadas`; no se invierten LR agrupadas ni se promedian
+rangos para obtener Sn/Sp. Las categorías ordinales no generan una LR negativa.
+`"Infinity"` representa infinito con JSON válido; 0/0 sigue vacío.
 
-El generador separa los registros en dos clases mediante el campo `f`:
+`vpp` y `vpn` son valores observados publicados. `vps` contiene escenarios
+calculados a probabilidades preprueba supuestas de 5, 20 y 50 %, con LR
+publicadas como primera opción. La interfaz explica esta diferencia.
 
-- **`f: "full"`** — los hallazgos con cifras verificadas contra su fuente
-  primaria. Se publican todas las cifras (sensibilidad, especificidad, razones
-  de verosimilitud e intervalos), la población estudiada, el PMID, el DOI y la
-  **cita textual del resumen** que respalda cada dato. Cuando hay Sn+Sp o LR,
-  la ficha muestra además los **VPP/VPN calculados por el proyecto** a
-  prevalencias preprueba supuestas (5 %, 20 % y 50 %), con nota aclaratoria.
+`refs` contiene citas de artículos, con PMID/DOI cuando se localizaron. Se
+aceptan también artículos identificados por autor, título, revista, año y
+páginas en la bibliografía original. No se sustituyen con la cita del libro.
+Las fuentes de síntesis se identifican internamente como `base: sintesis` y
+la ficha aclara que sus cifras pueden resumir varios artículos. No se afirma
+que cada artículo haya sido revisado en texto completo.
 
-- **`f: "idx"`** — los 696 hallazgos cuyo rendimiento diagnóstico está compilado
-  en McGee S. *Evidence-Based Physical Diagnosis*, 3.ª ed. (Elsevier, 2012).
-  Se publica lo que es aportación del proyecto —nomenclatura en español,
-  descripción de la maniobra, patrón de referencia (cuando la caja lo declara),
-  clasificación cualitativa— y el **localizador exacto** (caja EBM y página)
-  para consultar la cifra en la obra. Las cifras no se reproducen: su selección
-  y disposición son compilación del autor.
-
-  Desde 2026-09-16 la app **ya no muestra avisos de restricción**: los registros
-  `idx` se presentan como entradas documentadas en la obra (etiqueta «McGee 3e»)
-  y las cifras que la fuente primaria no publica (p. ej. Sn/Sp cuando el
-  artículo solo da LR) aparecen como «No publicado en la fuente».
-
-  Pendientes del libro (no inventables desde el vault): 30 celdas `idx` sin
-  patrón de referencia en las cajas EBM 8-1, 14-1, 16-3, 17-3, 30-2, 31-2 y
-  65-2; el bloque «Patrón de referencia» queda vacío y su localizador es la
-  referencia pendiente. Y 191 registros `full` sin Sn y/o Sp porque el artículo
-  citado solo publica razones de verosimilitud: se muestran explícitamente, sin
-  rellenar con valores no verificados.
-
-Si en el futuro se obtiene **autorización expresa de Elsevier**, basta con poner
-`PUBLICAR_CIFRAS_MCGEE = True` en `scripts/propedeutica_generar_signos.py` y volver a generar: la app
-ya sabe mostrar la ficha completa de cualquier registro marcado como `full`.
-
-## Reacentuación
-
-El pipeline de dominios externos normalizó su texto en español a ASCII. El
-generador restituye los diacríticos de forma conservadora: aprende del propio
-corpus acentuado (McGee/enriquecimiento) la forma correcta de cada palabra,
-la combina con un léxico curado a mano, y **deja intactas las formas ambiguas**
-(`esta`/`está`, `mas`/`más` suelto, `publico`/`público`, `medico`/`médico`…).
-Ver `BLOQUEADAS` y `LEXICO` en el script.
-
-## Parámetros de URL de la app
+## URLs
 
 | Parámetro | Efecto |
 |---|---|
-| `?lang=es` · `?lang=en` | Idioma de la interfaz y de los nombres de signos |
-| `?embed=1` | Modo embebido: reporta su altura al contenedor por `postMessage` |
-| `?signo=<i>` | Abre directamente la ficha de un hallazgo |
+| `?lang=es` / `?lang=en` | Idioma |
+| `?embed=1` | Integración mediante iframe |
+| `?signo=<i>` | Abre una ficha conservando los enlaces anteriores |
 | `?q=<texto>` | Precarga una búsqueda |

@@ -7,6 +7,7 @@
 import Base from '../../layouts/Base.astro';
 import PageHeader from '../PageHeader.astro';
 import { t } from '../../i18n.mjs';
+import signos from '../../../public/herramientas/propedeutica-basada-en-evidencia/app/data/signos.json';
 
 interface Props { lang?: 'es' | 'en' }
 const { lang = 'es' } = Astro.props;
@@ -16,6 +17,9 @@ const appBase = '/herramientas/propedeutica-basada-en-evidencia/app/';
 // resuelve «.../app/» a su index.html, aunque Vercel sí lo haga en producción.
 const embedSrc = `${appBase}index.html?lang=${lang}&embed=1`;
 const fullSrc = `${appBase}index.html?lang=${lang}`;
+const coverage = t(lang, 'pebm.sources_status')
+  .replace('{n}', signos.meta.n.toLocaleString(lang === 'es' ? 'es-MX' : 'en-US'))
+  .replace('{refs}', signos.meta.n_articulos.toLocaleString(lang === 'es' ? 'es-MX' : 'en-US'));
 ---
 <Base titulo={t(lang, 'pebm.title')} descripcion={t(lang, 'pebm.meta')} lang={lang}>
   <div class="tool-page">
@@ -38,7 +42,7 @@ const fullSrc = `${appBase}index.html?lang=${lang}`;
       <aside class="fuentes" aria-label={t(lang, 'pebm.sources_heading')}>
         <div class="fuentes__head">
           <h2 class="fuentes__title">{t(lang, 'pebm.sources_heading')}</h2>
-          <span class="fuentes__status">{t(lang, 'pebm.sources_status')}</span>
+          <span class="fuentes__status">{coverage}</span>
         </div>
         <p class="fuentes__text" set:html={t(lang, 'pebm.sources_own')} />
         <p class="fuentes__text" set:html={t(lang, 'pebm.sources_index')} />

@@ -19,20 +19,27 @@
     es: {
       'tab.buscar': 'Buscador de signos', 'tab.calc': 'Calculadora de probabilidad', 'tab.guia': 'Cómo se lee',
       'buscar.ph': 'Buscar signo, epónimo, condición o maniobra… (Homans, Murphy, egofonía, neumonía)',
-      'col.signo': 'Signo · condición diana', 'col.veredicto': 'Veredicto', 'col.fuente': 'Origen',
+      'col.signo': 'Signo · condición diana', 'col.veredicto': 'Veredicto',
       'v.confirma': 'Confirma', 'v.descarta': 'Descarta', 'v.ajusta': 'Ajusta',
       'v.debil': 'Cambio mínimo', 'v.nulo': 'No discrimina', 'v.na': 'Sin LR publicado',
       'v.confirma.l': 'Confirma · LR+ ≥ 5', 'v.descarta.l': 'Descarta · LR− ≤ 0.2',
       'v.ajusta.l': 'Ajusta la probabilidad', 'v.debil.l': 'Cambio mínimo · LR entre 0.5 y 2',
-      'v.nulo.l': 'No discrimina · ambos IC 95 % cruzan 1', 'v.na.l': 'Sin razón de verosimilitud publicada',
+      'v.nulo.l': 'No discrimina · ambas LR se reportan como no significativas', 'v.na.l': 'Sin razón de verosimilitud publicada',
       'f.full': 'Con cifras', 'f.ep': 'Con epónimo', 'f.mn': 'Con maniobra', 'f.limpiar': 'Limpiar',
       'or.full': 'Cifras', 'or.idx': 'McGee 3e',
-      'm.nopub': 'No publicado en la fuente',
+      'm.nopub': '',
+      'm.ns': 'NS: resultado no significativo; no equivale a LR = 1.',
+      'm.derivadas': 'cálculo a partir de la sensibilidad y especificidad puntuales publicadas, sujetas a redondeo.',
+      'm.vpobservados': 'VPP y VPN observados en la población del artículo',
+      'b.articulos': 'Artículo(s) de referencia',
+      'b.sintesis': 'Artículos citados por la síntesis consultada. Las cifras resumidas pueden proceder de varios estudios; no representan necesariamente una estimación individual de cada artículo.',
       'sel.dom': 'Todas las regiones', 'sel.cond': 'Todas las condiciones',
       'cuenta': '{n} de {t} hallazgos', 'vacio': 'Sin resultados. Pruebe otro término o limpie los filtros.',
       'mas': 'Mostrar {n} más', 'ficha.vacia': 'Seleccione un hallazgo de la lista para ver su ficha.',
       'm.sn': 'Sensibilidad', 'm.sp': 'Especificidad', 'm.lp': 'LR+', 'm.ln': 'LR−',
       'm.vpp': 'VPP', 'm.vpn': 'VPN',
+      'm.lrcategoria': 'LR de la categoría',
+      'm.ordinal': 'Categoría de una escala: el VPP indica la proporción con el desenlace en esa categoría. Una LR de categoría no es la LR de un umbral binario; no se infieren LR− ni VPN.',
       'm.vptit': 'Valores predictivos según la prevalencia preprueba',
       'm.vpesc': 'Prevalencia preprueba',
       'm.vpnota': 'VPP: probabilidad de tener la condición si el signo está presente. VPN: probabilidad de no tenerla si está ausente. Son valores calculados por el proyecto a prevalencias preprueba supuestas (5 %, 20 %, 50 %), no la prevalencia del estudio citado; para su paciente use la calculadora con la LR.',
@@ -52,26 +59,33 @@
       'calc.nomo': 'Nomograma de Fagan', 'calc.nomo_pie': 'La línea recta que une la probabilidad preprueba con la razón de verosimilitud corta el eje derecho en la probabilidad posprueba. Fagan TJ. N Engl J Med. 1975;293(5):257.',
       'calc.cambio': 'cambio absoluto',
       'guia.tit': 'Cómo se lee este material',
-      'pie': 'Propedéutica médica basada en evidencia · Cuerpo Académico UDG-CA-1190, Universidad de Guadalajara (CUTlajomulco). {full} hallazgos con cifras verificadas contra el resumen de su fuente primaria y {idx} entradas documentadas en la obra de referencia, con localizador exacto (caja y página). Este material tiene fines docentes y no sustituye el juicio clínico.',
+      'pie': 'Propedéutica médica basada en evidencia · Cuerpo Académico UDG-CA-1190, Universidad de Guadalajara (CUTlajomulco). {full} hallazgos con métricas disponibles. Se enlazan los artículos identificados y se conservan vacíos los datos no recuperados. Este material tiene fines docentes y no sustituye el juicio clínico.',
       'ir.buscar': 'Ir al buscador'
     },
     en: {
       'tab.buscar': 'Sign finder', 'tab.calc': 'Probability calculator', 'tab.guia': 'How to read it',
       'buscar.ph': 'Search a sign, eponym, target condition or maneuver… (Homans, Murphy, egophony, pneumonia)',
-      'col.signo': 'Sign · target condition', 'col.veredicto': 'Verdict', 'col.fuente': 'Source',
+      'col.signo': 'Sign · target condition', 'col.veredicto': 'Verdict',
       'v.confirma': 'Rules in', 'v.descarta': 'Rules out', 'v.ajusta': 'Shifts',
       'v.debil': 'Minimal change', 'v.nulo': 'Does not discriminate', 'v.na': 'No LR published',
       'v.confirma.l': 'Rules in · LR+ ≥ 5', 'v.descarta.l': 'Rules out · LR− ≤ 0.2',
       'v.ajusta.l': 'Shifts the probability', 'v.debil.l': 'Minimal change · LR between 0.5 and 2',
-      'v.nulo.l': 'Does not discriminate · both 95% CIs cross 1', 'v.na.l': 'No likelihood ratio published',
+      'v.nulo.l': 'Does not discriminate · both LRs are reported as nonsignificant', 'v.na.l': 'No likelihood ratio published',
       'f.full': 'With figures', 'f.ep': 'With eponym', 'f.mn': 'With maneuver', 'f.limpiar': 'Clear',
       'or.full': 'Figures', 'or.idx': 'McGee 3e',
-      'm.nopub': 'Not published in the source',
+      'm.nopub': '',
+      'm.ns': 'NS: not statistically significant; this does not mean LR = 1.',
+      'm.derivadas': 'calculated from the reported point sensitivity and specificity, subject to rounding.',
+      'm.vpobservados': 'PPV and NPV observed in the article population',
+      'b.articulos': 'Reference article(s)',
+      'b.sintesis': 'Articles cited by the consulted synthesis. Summary figures may involve several studies and need not be an individual estimate from each article.',
       'sel.dom': 'All regions', 'sel.cond': 'All conditions',
       'cuenta': '{n} of {t} findings', 'vacio': 'No results. Try another term or clear the filters.',
       'mas': 'Show {n} more', 'ficha.vacia': 'Select a finding from the list to see its full record.',
       'm.sn': 'Sensitivity', 'm.sp': 'Specificity', 'm.lp': 'LR+', 'm.ln': 'LR−',
       'm.vpp': 'PPV', 'm.vpn': 'NPV',
+      'm.lrcategoria': 'Category LR',
+      'm.ordinal': 'Score category: PPV is the proportion with the outcome in this category. A category LR is not a binary threshold LR; LR− and NPV are not inferred.',
       'm.vptit': 'Predictive values by pre-test prevalence',
       'm.vpesc': 'Pre-test prevalence',
       'm.vpnota': 'PPV: probability of having the condition when the sign is present. NPV: probability of not having it when absent. These are figures calculated by the project at assumed pre-test prevalences (5 %, 20 %, 50 %), not the prevalence of the cited study; for your patient use the calculator with the LR.',
@@ -91,7 +105,7 @@
       'calc.nomo': 'Fagan nomogram', 'calc.nomo_pie': 'A straight line joining the pre-test probability to the likelihood ratio crosses the right-hand axis at the post-test probability. Fagan TJ. N Engl J Med. 1975;293(5):257.',
       'calc.cambio': 'absolute change',
       'guia.tit': 'How to read this material',
-      'pie': 'Evidence-based physical diagnosis · UDG-CA-1190 Research Group, University of Guadalajara (CUTlajomulco). {full} findings with figures verified against the abstract of their primary source, and {idx} entries documented in the reference work with exact locators (box and page). This material is for teaching purposes and does not replace clinical judgement.',
+      'pie': 'Evidence-based physical diagnosis · UDG-CA-1190 Research Group, University of Guadalajara (CUTlajomulco). {full} findings with available metrics. Identified articles are linked; unrecovered data remain blank. This material is for teaching purposes and does not replace clinical judgement.',
       'ir.buscar': 'Go to the finder'
     }
   };
@@ -109,12 +123,22 @@
   }
   var LOC = LANG === 'en' ? 'en-US' : 'es-MX';
   function nfmt(n) { return Number(n).toLocaleString(LOC); }
-  function fmtLr(v) { return v >= 10 ? v.toFixed(0) : (v >= 1 ? v.toFixed(1) : v.toFixed(2)); }
-  function fmtPc(p) { return (p * 100).toFixed(1).replace(/\.0$/, '') + ' %'; }
+  function fmtLr(v) {
+    if (Array.isArray(v)) return v.map(fmtLr).join('–');
+    if (v === 'Infinity' || v === Infinity) return '∞';
+    return Number(v).toFixed(3).replace(/\.?0+$/, '');
+  }
+  function fmtPc(p) {
+    if (Array.isArray(p)) return p.map(function (v) { return (v * 100).toFixed(1); }).join('–') + ' %';
+    return (p * 100).toFixed(1).replace(/\.0$/, '') + ' %';
+  }
   function rango(v) { return Array.isArray(v) ? v[0] + '–' + v[1] : (v == null ? '—' : v); }
   var odds = function (p) { return p / (1 - p); };
   var prob = function (o) { return o / (1 + o); };
-  function post(pre, lr) { return prob(odds(pre) * lr); }
+  function post(pre, lr) {
+    if (Array.isArray(lr)) return lr.map(function (v) { return post(pre, v); });
+    return Number(lr) === Infinity ? 1 : prob(odds(pre) * Number(lr));
+  }
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -251,7 +275,6 @@
         '<span class="fila__c">' + esc(nombreCond(r) || '—') +
           (r.d ? ' · ' + esc(nombreDom(r.d)) : '') + '</span></span>' +
         '<span>' + pillV(r.v) + '</span>' +
-        '<span class="fila__f">' + esc(t('or.' + r.f)) + '</span>' +
         '</button>';
     }).join('') +
       (res.length > est.tope
@@ -270,24 +293,28 @@
     h += '<p class="ficha__cond">' + esc(nombreCond(r) || '—') + '</p>';
 
     h += '<div class="ficha__pills">' + pillV(r.v);
-    if (r.nc) h += '<span class="pill pill--' + esc(r.nc) + '" title="' + esc(t('nc.' + r.nc)) + '">' +
-      (LANG === 'en' ? 'Level ' : 'Nivel ') + esc(r.nc) + '</span>';
     h += '</div>';
-    h += '<p class="nota" style="margin:0 0 8px">' + esc(t('v.' + (r.v || 'na') + '.l')) +
-         (r.nc ? ' · ' + esc(t('nc.' + r.nc)) : '') + '</p>';
+    h += '<p class="nota" style="margin:0 0 8px">' + esc(t('v.' + (r.v || 'na') + '.l')) + '</p>';
 
-    if (r.f === 'full') {
+    {
       h += '<div class="met">' +
-        celda(t('m.sn'), r.sn == null ? t('m.nopub') : rango(r.sn) + ' %', r.snic) +
-        celda(t('m.sp'), r.sp == null ? t('m.nopub') : rango(r.sp) + ' %', r.spic) +
-        celda(t('m.lp'), r.lp == null ? t('m.nopub') : fmtLr(r.lp), r.lpic) +
-        celda(t('m.ln'), r.ln == null ? t('m.nopub') : fmtLr(r.ln), r.lnic) +
+        celda(t('m.sn'), r.sn == null ? '' : rango(r.sn) + ' %', r.snic) +
+        celda(t('m.sp'), r.sp == null ? '' : rango(r.sp) + ' %', r.spic) +
+        celda(r.ordinal ? t('m.lrcategoria') : t('m.lp'), r.lp == null ? (r.lpns ? 'NS' : '') : fmtLr(r.lp) + (r.lpns ? ' · NS' : ''), r.lpic) +
+        celda(t('m.ln'), r.ln == null ? (r.lnns ? 'NS' : '') : fmtLr(r.ln) + (r.lnns ? ' · NS' : ''), r.lnic) +
         '</div>';
+      if (r.lpns || r.lnns) h += '<p class="nota">' + esc(t('m.ns')) + '</p>';
+      if (r.derivadas) h += '<p class="nota">' + esc(r.derivadas.join(', ') + ': ' + t('m.derivadas')) + '</p>';
+      h += bloque(t('m.vpobservados'),
+        '<div class="met">' + celda(t('m.vpp'), r.vpp == null ? '' : rango(r.vpp) + ' %', r.vppic) +
+        celda(t('m.vpn'), r.vpn == null ? '' : rango(r.vpn) + ' %', r.vpnic) + '</div>');
+      if (r.vpnota) h += '<p class="nota">' + esc(LANG === 'en' ? (r.vpnotae || r.vpnota) : r.vpnota) + '</p>';
+      if (r.ordinal) h += '<p class="nota">' + esc(t('m.ordinal')) + '</p>';
       if (r.vps) {
         var filasVp = r.vps.map(function (f) {
           return '<tr><td>' + esc(f[0] + ' %') + '</td>' +
-            '<td>' + (f[1] == null ? '—' : esc(f[1] + ' %')) + '</td>' +
-            '<td>' + (f[2] == null ? '—' : esc(f[2] + ' %')) + '</td></tr>';
+            '<td>' + (f[1] == null ? '' : esc(rango(f[1]) + ' %')) + '</td>' +
+            '<td>' + (f[2] == null ? '' : esc(rango(f[2]) + ' %')) + '</td></tr>';
         }).join('');
         h += bloque(t('m.vptit'),
           '<table class="vptab"><thead><tr><th>' + esc(t('m.vpesc')) + '</th><th>' +
@@ -309,33 +336,29 @@
     if (r.calc) h += '<div class="bloque"><div class="t">' +
       (LANG === 'en' ? 'Note on the figures' : 'Nota sobre las cifras') +
       '</div><div class="x">' + esc(LANG === 'en'
-        ? 'Figures calculated by the project from the published frequencies/counts in the quote.'
-        : 'Cifras calculadas por el proyecto a partir de las frecuencias o conteos publicados en la cita.') +
+        ? 'Calculated metrics; see the reported figures and the source article.'
+        : r.calc) +
       '</div></div>';
 
-    if (r.loc || r.pmid || r.doi) {
-      h += '<div class="loc"><div class="t">' + esc(t('b.loc')) + '</div><div class="x">';
-      if (r.loc) h += esc(r.loc);
-      if (r.pmid) h += (r.loc ? '<br>' : '') + 'PMID ' + esc(r.pmid);
-      if (r.doi) h += '<br>doi:' + esc(r.doi);
-      h += '</div>';
-      if (r.pmid) h += '<a href="https://pubmed.ncbi.nlm.nih.gov/' + encodeURIComponent(r.pmid) +
+    h += '<div class="loc"><div class="t">' + esc(t('b.articulos')) + '</div>';
+    (r.refs || []).forEach(function (ref) {
+      h += '<p class="x">' + esc(ref.cita) + '</p>';
+      if (ref.pmid) h += '<a href="https://pubmed.ncbi.nlm.nih.gov/' + encodeURIComponent(ref.pmid) +
         '/" target="_blank" rel="noopener">' + esc(t('pmid.ver')) + '</a> ';
-      if (r.doi) h += '<a href="https://doi.org/' + encodeURIComponent(r.doi) +
+      if (ref.doi) h += '<a href="https://doi.org/' + encodeURIComponent(ref.doi) +
         '" target="_blank" rel="noopener">' + esc(t('doi.ver')) + '</a>';
-      if (r.f === 'idx') h += '<a href="https://www.sciencedirect.com/book/9781437722079/evidence-based-physical-diagnosis" target="_blank" rel="noopener">' +
-        esc(t('idx.ver')) + '</a>';
-      h += '</div>';
-    }
+    });
+    if (r.refs && r.refs.length && r.base === 'sintesis') h += '<p class="nota">' + esc(t('b.sintesis')) + '</p>';
+    h += '</div>';
 
     var lrp = (r.f === 'full' && r.lp != null) ? r.lp : null;
     var lrn = (r.f === 'full' && r.ln != null) ? r.ln : null;
-    if (lrp || lrn) {
+    if (lrp != null || lrn != null) {
       h += '<div class="minicalc"><div class="t">' + esc(t('b.calc')) + '</div>' +
         '<div class="row"><span>' + esc(t('b.pre')) + '</span>' +
         '<input type="range" id="mcPre" min="1" max="95" step="1" value="25"><b id="mcPreV">25 %</b></div>' +
-        (lrp ? '<div class="fl"><span>' + esc(t('b.si_esta')) + ' <span class="mono">(LR+ ' + fmtLr(lrp) + ')</span></span><b id="mcPos">—</b></div>' : '') +
-        (lrn ? '<div class="fl"><span>' + esc(t('b.no_esta')) + ' <span class="mono">(LR− ' + fmtLr(lrn) + ')</span></span><b id="mcNeg">—</b></div>' : '') +
+        (lrp != null ? '<div class="fl"><span>' + esc(r.ordinal ? (LANG === 'en' ? 'For this category' : 'Para esta categoría') : t('b.si_esta')) + ' <span class="mono">(' + (r.ordinal ? 'LR ' : 'LR+ ') + fmtLr(lrp) + ')</span></span><b id="mcPos">—</b></div>' : '') +
+        (lrn != null ? '<div class="fl"><span>' + esc(t('b.no_esta')) + ' <span class="mono">(LR− ' + fmtLr(lrn) + ')</span></span><b id="mcNeg">—</b></div>' : '') +
         '</div>';
     }
 
@@ -573,11 +596,9 @@
 
 '<h3>Cómo está construida esta base</h3>',
 '<p>Reúne dos cuerpos de evidencia con reglas distintas, y el buscador los distingue siempre:</p>',
-'<table><tr><th>Origen</th><th>Qué contiene</th></tr>',
-'<tr><td><b>Cifras</b></td><td>Investigación propia del Cuerpo Académico: búsqueda en PubMed por dominio, recuperación del resumen de cada PMID declarado y verificación de cada cifra contra el texto real del resumen. Se publican sensibilidad, especificidad, razones de verosimilitud, intervalos, población y la cita textual que respalda el dato.</td></tr>',
-'<tr><td><b>McGee 3e</b></td><td>Entradas cuyo rendimiento diagnóstico está compilado en <i>Evidence-Based Physical Diagnosis</i> de Steven McGee. Se publica la nomenclatura en español, la descripción de la maniobra, el patrón de referencia (cuando la caja lo declara), la clasificación cualitativa y el localizador exacto —caja EBM y página— para consultar la cifra en la obra. Cuando la fuente primaria solo publica razones de verosimilitud, la sensibilidad y la especificidad se muestran como «no publicado en la fuente».</td></tr></table>',
-'<p>El nivel de confianza de cada registro es <b>calculado, nunca declarado</b>: A si la cifra se localizó literalmente en la fuente primaria, C si la cita se verificó pero las cifras no pudieron anclarse al resumen. Ninguna cifra fue escrita a mano y ninguna referencia fue redactada sin resolverse antes contra Crossref o PubMed.</p>',
-'<p class="fuente">Fuente de referencia del índice: McGee S. <i>Evidence-Based Physical Diagnosis</i>. 3rd ed. Philadelphia: Elsevier Saunders; 2012. Marco conceptual: Fagan TJ. <i>N Engl J Med</i>. 1975;293(5):257 · Pauker SG, Kassirer JP. <i>N Engl J Med</i>. 1980;302:1109-1117 · Jaeschke R, Guyatt GH, Sackett DL. <i>JAMA</i>. 1994;271(9):703-707.</p>'
+'<p>Cada ficha muestra sensibilidad, especificidad y razones de verosimilitud cuando se recuperaron. Los rangos conservan la variación publicada; no se sustituyen por promedios. NS identifica resultados no significativos. Las celdas sin evidencia recuperada quedan vacías.</p>',
+'<p>VPP y VPN observados corresponden a la población del artículo. Los escenarios de 5 %, 20 % y 50 % son cálculos docentes basados en las LR disponibles (o en una pareja puntual de sensibilidad y especificidad). Los artículos citados por una síntesis se identifican como tales. La referencia queda vacía cuando no se pudo establecer el artículo.</p>',
+'<p class="fuente">Marco conceptual: Fagan TJ. <i>N Engl J Med</i>. 1975;293(5):257 · Jaeschke R, Guyatt GH, Sackett DL. <i>JAMA</i>. 1994;271(9):703-707.</p>'
   ].join('');
 
   var GUIA_EN = [
@@ -623,10 +644,8 @@
 
 '<h3>How this database is built</h3>',
 '<p>It brings together two bodies of evidence with different rules, and the finder always keeps them apart:</p>',
-'<table><tr><th>Source</th><th>What it contains</th></tr>',
-'<tr><td><b>Figures</b></td><td>Original research by the Research Group: PubMed searches by domain, retrieval of the abstract for every declared PMID, and verification of every figure against the actual text of that abstract. Sensitivity, specificity, likelihood ratios, intervals, population and the verbatim quote supporting the datum are all published.</td></tr>',
-'<tr><td><b>McGee 3e</b></td><td>Entries whose diagnostic performance is compiled in Steven McGee’s <i>Evidence-Based Physical Diagnosis</i>. We publish the Spanish nomenclature, the description of the maneuver, the reference standard (when the box states one), the qualitative classification and the exact locator — EBM box and page — to look up the figures in the work. When the primary source publishes likelihood ratios only, sensitivity and specificity are shown as “not published in the source”.</td></tr></table>',
-'<p>The confidence level of each record is <b>computed, never asserted</b>: A when the figure was located verbatim in the primary source, C when the citation was verified but the figures could not be anchored to the abstract. No figure was hand-entered and no reference was written without first being resolved against Crossref or PubMed.</p>',
-'<p class="fuente">Reference work for the index: McGee S. <i>Evidence-Based Physical Diagnosis</i>. 3rd ed. Philadelphia: Elsevier Saunders; 2012. Conceptual framework: Fagan TJ. <i>N Engl J Med</i>. 1975;293(5):257 · Pauker SG, Kassirer JP. <i>N Engl J Med</i>. 1980;302:1109-1117 · Jaeschke R, Guyatt GH, Sackett DL. <i>JAMA</i>. 1994;271(9):703-707.</p>'
+'<p>Each record displays sensitivity, specificity and likelihood ratios when recovered. Published ranges are preserved, never replaced by averages. NS denotes a nonsignificant result. Cells without recovered evidence remain blank.</p>',
+'<p>Observed PPV and NPV apply to the article population. The 5%, 20% and 50% scenarios are teaching calculations based on available LRs (or a point sensitivity/specificity pair). Articles cited by a synthesis are identified as such. The reference is blank when an article could not be established.</p>',
+'<p class="fuente">Conceptual framework: Fagan TJ. <i>N Engl J Med</i>. 1975;293(5):257 · Jaeschke R, Guyatt GH, Sackett DL. <i>JAMA</i>. 1994;271(9):703-707.</p>'
   ].join('');
 })();

@@ -233,14 +233,11 @@ herramientas:
     enlace_app: /en/herramientas/propedeutica
     resumen: A finder for physical examination signs with their measured diagnostic performance.
     descripcion: >-
-      A teaching tool bringing together 1,185 physical examination findings with their diagnostic
-      performance: sensitivity, specificity, likelihood ratios with confidence intervals, and a
-      declared reference standard. It includes a finder by sign, eponym, target condition or
-      maneuver; a post-test probability calculator with a Fagan nomogram; and a critical-reading
-      guide covering LR bands, interobserver agreement, and design biases in diagnostic accuracy
-      studies. Of the 1,185 findings, 309 come from the group's own research, verified against the
-      abstract of each PMID and published with complete figures; the remaining 876 act as a locator
-      index into the reference work. Bilingual (es/en).
+      A teaching tool for physical examination findings with sensitivity, specificity,
+      likelihood ratios, predictive values and reference articles when recovered.
+      Includes search by sign, eponym, condition or maneuver, a post-test probability
+      calculator and a critical-reading guide. Distinguishes observed values from
+      calculations and leaves unrecovered data blank. Bilingual (es/en).
   dengue-forecast:
     nombre: Dengue Forecast
     enlace_app: /en/herramientas/dengue-forecast

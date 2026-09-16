@@ -1,41 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Genera public/herramientas/propedeutica-basada-en-evidencia/app/data/signos.json
-a partir de la base de trabajo del proyecto «Del síntoma al diagnóstico».
+Genera signos.json desde la Wiki, con referencias a artículos y correcciones
+revisadas en propedeutica_sustitucion/revision_wiki.json.
 
-  python3 generar_signos.py --datos <ruta a CULS/datos> --salida <ruta a app/data/signos.json>
+  python3 scripts/propedeutica_generar_signos.py --datos <datos> --salida <json>
 
-REGLA DE PUBLICACIÓN
-────────────────────
-La base reúne dos cuerpos con estatus de derechos distinto y el archivo generado
-los mantiene separados mediante el campo `f`:
-
-  f = "full"  → 309 hallazgos de investigación propia del CA (búsqueda en PubMed,
-                verificación de cada cifra contra el resumen real del PMID). Se
-                publican todas las cifras y la cita textual que las respalda.
-
-  f = "idx"   → hallazgos cuyo rendimiento diagnóstico está compilado en
-                McGee S. «Evidence-Based Physical Diagnosis», 3.ª ed. (Elsevier,
-                2012). Se publica lo que es aportación del proyecto —nomenclatura
-                en español, maniobra, patrón de referencia (cuando la caja lo
-                declara), veredicto cualitativo— y el localizador exacto (caja y
-                página) para consultar la cifra en la obra. Las cifras NO se
-                reproducen: su selección y disposición son compilación del autor.
-
-La app ya no muestra avisos de restricción: los registros «idx» se presentan
-como entradas documentadas en la obra (etiqueta «McGee 3e»), con localizador,
-y las cifras que la fuente primaria no publica (p. ej. Sn/Sp cuando el
-artículo solo da LR) aparecen como «No publicado en la fuente».
-
-PUBLICAR_CIFRAS_MCGEE sigue en False: si se obtiene autorización expresa de
-Elsevier, basta con ponerlo en True y volver a generar.
+Publica las métricas recuperadas, conserva los rangos y deja ausentes los
+valores sin respaldo. Las LR derivadas de Sn/Sp puntuales se identifican;
+VPP/VPN observados se separan de los escenarios calculados. El campo heredado
+f indica disponibilidad de alguna métrica, no verificación primaria completa.
+Los identificadores numéricos existentes se conservan para los enlaces web.
 """
-import argparse, json, re, unicodedata
+import argparse, json, re, unicodedata, math
 from collections import Counter, defaultdict
 from pathlib import Path
+from propedeutica_evidencia import Evidencia, completar_lr
 
-PUBLICAR_CIFRAS_MCGEE = False   # ← requiere autorización expresa de Elsevier
+PUBLICAR_CIFRAS_MCGEE = True
 
 # ─────────────────────────── Regiones (es / en) ───────────────────────────
 DOMINIOS = {
@@ -256,6 +238,8 @@ def rango(a, b):
 
 def veredicto(lp, ln, lpns, lnns):
     """Clasificación cualitativa propia del proyecto, en cinco bandas."""
+    lp = min(lp) if isinstance(lp, list) else (float(lp) if lp is not None else None)
+    ln = max(ln) if isinstance(ln, list) else (float(ln) if ln is not None else None)
     if lpns and lnns: return "nulo"
     if lp is not None and not lpns and lp >= 5:  return "confirma"
     if ln is not None and not lnns and ln <= 0.2: return "descarta"
@@ -275,29 +259,33 @@ ESCENARIOS_VPP = [5, 20, 50]
 def vp_escenarios(sn, sp, lp, ln):
     """VPP/VPN (%) por escenario de prevalencia preprueba.
 
-    Prefiere Sn+Sp (fórmula directa); si faltan, usa LR+ para el VPP y
-    LR− para el VPN (odds post = LR · odds pre). Devuelve
+    Prefiere LR publicadas; usa Sn/Sp puntuales solo como alternativa.
+    LR+ calcula VPP y LR− calcula VPN (odds post = LR · odds pre). Devuelve
     [[p, vpp, vpn], …] o None si ningún escenario es calculable.
     """
+    def valor(lr, p, negativo=False):
+        if isinstance(lr, list):
+            return sorted([valor(v, p, negativo) for v in lr])
+        odds = float(lr) * p / (100 - p)
+        post = 100 if math.isinf(odds) else 100 * odds / (1 + odds)
+        return round(100 - post if negativo else post, 1)
     filas, alguno = [], False
     for p in ESCENARIOS_VPP:
         vpp = vpn = None
-        if sn is not None and sp is not None:
+        # LR publicadas tienen prioridad: Sn/Sp pueden ser rangos de estudios
+        # diferentes. Nunca promediar sus extremos para fabricar un VPP/VPN.
+        if lp is not None:
+            vpp = valor(lp, p)
+        if ln is not None:
+            vpn = valor(ln, p, True)
+        if isinstance(sn, (int, float)) and isinstance(sp, (int, float)):
             d_pos = sn * p + (100 - sp) * (100 - p)
             d_neg = sp * (100 - p) + (100 - sn) * p
-            if d_pos: vpp = 100 * sn * p / d_pos
-            if d_neg: vpn = 100 * sp * (100 - p) / d_neg
-        else:
-            odds_pre = p / (100 - p)
-            if lp is not None:
-                odds = lp * odds_pre
-                vpp = 100 * odds / (1 + odds)
-            if ln is not None:
-                odds = ln * odds_pre
-                vpn = 100 * (1 - odds / (1 + odds))
+            if vpp is None and d_pos: vpp = 100 * sn * p / d_pos
+            if vpn is None and d_neg: vpn = 100 * sp * (100 - p) / d_neg
         alguno = alguno or vpp is not None or vpn is not None
-        filas.append([p, round(vpp, 1) if vpp is not None else None,
-                        round(vpn, 1) if vpn is not None else None])
+        filas.append([p, round(vpp, 1) if isinstance(vpp, (int, float)) else vpp,
+                        round(vpn, 1) if isinstance(vpn, (int, float)) else vpn])
     return filas if alguno else None
 
 # ──────────────────────────────── Programa ────────────────────────────────
@@ -305,13 +293,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--datos", required=True, help="carpeta CULS/datos")
     ap.add_argument("--salida", required=True, help="ruta del signos.json a escribir")
-    ap.add_argument("--fecha", default="2026-08-07")
+    ap.add_argument("--fecha", default="2026-09-16")
     a = ap.parse_args()
     D = Path(a.datos)
 
     maestra = leer_jsonl(D / "maestra_borrador.jsonl")
     ext     = leer_jsonl(D / "externos_verificado.jsonl")
     enr     = {e["celda_id"]: e for e in leer_jsonl(D / "enriquecimiento.jsonl")}
+    evidencia = Evidencia(D)
 
     global MAPA_CORPUS
     MAPA_CORPUS = derivar_mapa(
@@ -322,7 +311,7 @@ def main():
 
     recs, i = [], 0
 
-    # ── McGee: índice localizador (sin cifras) ──
+    # ── Métricas de la síntesis y artículos vinculados desde la Wiki ──
     for m in maestra:
         e = enr.get(m["celda_id"], {})
         v = veredicto(num(m.get("lr_pos")), num(m.get("lr_neg")),
@@ -347,7 +336,8 @@ def main():
                 "lp": num(m.get("lr_pos")), "ln": num(m.get("lr_neg")),
                 "lpic": m.get("lr_pos_ic95"), "lnic": m.get("lr_neg_ic95"),
             })
-        recs.append(limpio(r)); i += 1
+        evidencia.completar_maestra(m, r)
+        recs.append(r); i += 1
 
     # ── PubMed: ficha completa (investigación propia del CA) ──
     for x in ext:
@@ -377,7 +367,27 @@ def main():
             "calc": x.get("cifras_calculadas"),     # nota si las cifras son cálculo propio
             "nc": x.get("nivel_confianza"),
         }
-        recs.append(limpio(r)); i += 1
+        evidencia.completar_externo(x, r)
+        recs.append(r); i += 1
+
+    # Mantener los i existentes para conservar los enlaces ?signo= publicados.
+    # Las condiciones adicionales de una tabla multidiagnóstico van al final.
+    adicionales = []
+    for r in recs:
+        revision = evidencia.revisados.get('maestra', {}).get(r['uid'], {})
+        for j, variante in enumerate(revision.get('variantes', []), 1):
+            adicionales.append({**r, **variante, 'i': len(recs) + len(adicionales),
+                                'uid': r['uid'] + ':' + str(j)})
+    recs.extend(adicionales)
+    for r in recs:
+        completar_lr(r)
+        r['v'] = veredicto(r.get('lp'), r.get('ln'), r.get('lpns'), r.get('lnns'))
+        r['vps'] = vp_escenarios(None if r.get('ordinal') else r.get('sn'),
+                                None if r.get('ordinal') else r.get('sp'), r.get('lp'), r.get('ln'))
+        # "full" significa que hay métricas disponibles, no que estén todas
+        # completas o verificadas en el artículo primario.
+        r['f'] = 'full' if any(r.get(k) is not None for k in ('sn','sp','lp','ln','vpp','vpn')) else 'idx'
+    recs = [limpio(r) for r in recs]
 
     doms = sorted({r.get("d") for r in recs if r.get("d")})
     meta = {
@@ -385,7 +395,9 @@ def main():
         "n_full": sum(1 for r in recs if r["f"] == "full"),
         "n_idx":  sum(1 for r in recs if r["f"] == "idx"),
         "dom": {d: DOMINIOS.get(d, [d.replace("_", " ").capitalize()] * 2) for d in doms},
-        "version": "1.1", "fecha": a.fecha,
+        "version": "1.2", "fecha": a.fecha,
+        "n_articulos": sum(bool(r.get('refs')) for r in recs),
+        "faltantes": {k: sum(r.get(k) is None for r in recs) for k in ('sn','sp','lp','ln')},
         "cifras_mcgee": PUBLICAR_CIFRAS_MCGEE,
     }
     out = Path(a.salida); out.parent.mkdir(parents=True, exist_ok=True)
@@ -396,9 +408,8 @@ def main():
     print(f"  {meta['n']} hallazgos · {meta['n_full']} con cifras · {meta['n_idx']} de índice")
     print(f"  {out.stat().st_size/1024:.0f} KB · cifras de McGee: "
           f"{'PUBLICADAS' if PUBLICAR_CIFRAS_MCGEE else 'retenidas'}")
-    fuga = [r for r in recs if r["f"] == "idx"
-            and any(k in r for k in ("sn", "sp", "lp", "ln", "lpic", "lnic"))]
-    print(f"  verificación: {len(fuga)} registros de índice con cifras (debe ser 0)")
+    incompletos = sum(any(r.get(k) is None for k in ('sn','sp','lp','ln')) for r in recs)
+    print(f"  {meta['n_articulos']} fichas con artículos · {incompletos} con alguna métrica no recuperada")
 
 if __name__ == "__main__":
     main()
