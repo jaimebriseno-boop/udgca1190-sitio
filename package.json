@@ -10,6 +10,10 @@
     "prebuild": "npm run fonts",
     "precheck": "npm run fonts",
     "test:performance": "node --test scripts/performance.test.mjs",
+    "test:bio": "node --test 'tests/bioestadistica/*.test.ts'",
+    "test": "npm run test:performance && npm run test:bio",
+    "fixtures:bio": "node scripts/bio-fixtures.mjs",
+    "fixtures:bio:check": "node scripts/bio-fixtures.mjs --check",
     "audit:performance": "python3 scripts/audit-performance.py",
     "dev": "astro dev",
     "build": "npm run tokens && astro build",
@@ -24,10 +28,13 @@
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@retorquere/bibtex-parser": "^10.0.0",
     "astro": "^6.4.4",
-    "js-yaml": "^4.2.0"
+    "js-yaml": "^4.2.0",
+    "katex": "^0.18.7"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@types/katex": "^0.16.8",
+    "@types/node": "^24.13.5",
     "typescript": "^6.0.3"
   }
 }

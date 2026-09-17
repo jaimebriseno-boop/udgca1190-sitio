@@ -277,6 +277,52 @@ herramientas:
       Population-level ecological analysis to identify inequalities, healthcare deserts, and amenable
       (avoidable) mortality: spatial autocorrelation (Moran's I, LISA), multilevel models, and linkage of
       national registries with marginalization indices.
+  bio-diagnostico:
+    nombre: "Open Biostatistics: diagnostic tests"
+    enlace_app: /en/herramientas/bioestadistica#diagnostico
+    resumen: Sensitivity, specificity, predictive values and likelihood ratios from a 2×2 table; post-test probability with Fagan's nomogram.
+    descripcion: >-
+      Explained calculators for diagnostic accuracy: a 2×2 table with Wilson CIs and Simel CIs for the
+      likelihood ratios, post-test probability by Bayes' theorem with Fagan's nomogram, and predictive
+      values from sensitivity, specificity and prevalence. Each one shows the classic equation, a simple
+      explanation, a plain-language interpretation, the equivalent R code and the original sources.
+      Data are processed in the browser. Bilingual (es/en).
+  bio-asociacion:
+    nombre: "Open Biostatistics: association and effect in 2×2 tables"
+    enlace_app: /en/herramientas/bioestadistica#asociacion
+    resumen: Relative risk, odds ratio, absolute risk reduction and NNT; chi-squared, Fisher's exact test and McNemar.
+    descripcion: >-
+      Measures of association and effect with CIs (Katz RR, Woolf OR, Newcombe ARR, Altman NNT), tests of
+      independence (Pearson chi-squared, Yates, Fisher's exact test, phi) and McNemar for paired
+      proportions. With equations, explanation, interpretation, R code and original references. Bilingual.
+  bio-muestra:
+    nombre: "Open Biostatistics: sample size and power"
+    enlace_app: /en/herramientas/bioestadistica#muestra
+    resumen: Estimate a proportion or a mean, compare two proportions or two means, diagnostic precision (Buderer) and correlation, with power curves.
+    descripcion: >-
+      Seven sample-size and power calculators with the classic formulas (Cochran, Fleiss, noncentral t
+      identical to power.t.test, Buderer, Fisher's z), an inverse mode (power for a given n), adjustment
+      for losses and a power curve. With equations, explanation, interpretation, R code and references.
+      Bilingual.
+  bio-acuerdo:
+    nombre: "Open Biostatistics: agreement and descriptive statistics"
+    enlace_app: /en/herramientas/bioestadistica#acuerdo
+    resumen: Cohen's kappa, CI for a proportion (six methods) and for a mean, mean and SD from the median, descriptive statistics with a chart.
+    descripcion: >-
+      Unweighted and weighted kappa with the Fleiss, Cohen and Everitt standard error; confidence interval
+      for a proportion comparing Wilson, Clopper-Pearson, Agresti-Coull, Jeffreys and Wald; CI for a mean;
+      mean and SD from the median, range or IQR (Luo, Wan, Hozo); descriptive statistics of a pasted column
+      with histogram and box plot. With equations, explanation, interpretation, R code and references.
+      Bilingual.
+  bio-modelos:
+    nombre: "Open Biostatistics: regression and survival models"
+    enlace_app: /en/herramientas/bioestadistica#modelos
+    resumen: Logistic regression, Cox, Kaplan-Meier with log-rank and linear regression, with real R running in the browser (webR).
+    descripcion: >-
+      Simple multivariable models fitted with R inside the browser (webR): binary logistic regression with
+      ORs and CIs, Hosmer-Lemeshow and AUC; Cox proportional hazards with a proportionality test;
+      Kaplan-Meier curves with log-rank; multiple linear regression. Pasted data never leave the browser.
+      Bilingual.
 actividades:
   libro-infecto-springer:
     titulo: Infectious Diseases Textbook (Springer, open access)

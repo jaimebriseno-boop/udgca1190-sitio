@@ -1,0 +1,72 @@
+---
+// Campo numérico de una calculadora. Como en Laboratorio, el control es
+// `type="text"` con `inputmode="decimal"`: `type="number"` pelea con la coma
+// decimal, con los separadores de miles y con las ruedas del ratón.
+interface Props {
+  id: string;
+  etiqueta: string;
+  valor?: string;
+  ayuda?: string;
+}
+const { id, etiqueta, valor = '', ayuda } = Astro.props;
+const idCampo = `campo-${id}`;
+const idAyuda = `ayuda-${id}`;
+const idError = `error-${id}`;
+const describedby = [ayuda ? idAyuda : null, idError].filter(Boolean).join(' ');
+---
+
+<div class="campo">
+  <label class="campo__label" for={idCampo}>{etiqueta}</label>
+  <input
+    class="campo__input"
+    id={idCampo}
+    type="text"
+    inputmode="decimal"
+    value={valor}
+    data-entrada={id}
+    autocomplete="off"
+    autocapitalize="off"
+    spellcheck="false"
+    aria-describedby={describedby}
+  />
+  {ayuda && <p class="campo__ayuda" id={idAyuda}>{ayuda}</p>}
+  <p class="campo__error" id={idError} data-error-for={id} hidden></p>
+</div>
+
+<style>
+  .campo { display: block; }
+  .campo + :global(.campo) { margin-top: var(--sp-3); }
+  .campo__label {
+    display: block;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--udg-gray-900);
+    margin-bottom: var(--sp-1);
+  }
+  .campo__input {
+    width: 100%;
+    height: 40px;
+    padding: 0 var(--sp-2);
+    border: 1px solid var(--udg-gray-300);
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--udg-gray-900);
+    font-family: var(--font-mono);
+    font-size: var(--fs-base);
+    font-variant-numeric: tabular-nums;
+  }
+  .campo__input:focus-visible { outline: 2px solid var(--udg-navy-700); outline-offset: 1px; }
+  .campo__input[aria-invalid='true'] { border-color: var(--udg-err-fg); }
+  .campo__ayuda {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-500);
+    line-height: var(--lh-normal);
+  }
+  .campo__error {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--udg-err-fg);
+  }
+</style>

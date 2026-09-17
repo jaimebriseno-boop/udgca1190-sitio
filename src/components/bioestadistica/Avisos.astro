@@ -1,0 +1,43 @@
+---
+// Avisos de la calculadora. Se renderizan TODOS los que declara el YAML, ocultos
+// salvo los activos: así el controlador solo alterna `hidden` y el texto nunca
+// se construye en el navegador a partir de cadenas sueltas. La lista no es una
+// región viva por sí misma: la página envuelve interpretación y avisos en una
+// sola región `aria-live="polite"` para no anunciar dos veces cada cambio.
+interface Props {
+  /** código de aviso → texto en el idioma de la página. */
+  avisos: Record<string, string>;
+  /** Códigos activos para las entradas que se están mostrando. */
+  activos: string[];
+  etiqueta: string;
+}
+const { avisos, activos, etiqueta } = Astro.props;
+const codigos = Object.keys(avisos);
+---
+
+{
+  codigos.length > 0 && (
+    <ul class="avisos" aria-label={etiqueta}>
+      {codigos.map((codigo) => (
+        <li class="avisos__item" data-aviso={codigo} hidden={!activos.includes(codigo)}>
+          {avisos[codigo]}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .avisos { margin-top: var(--sp-2); list-style: none; padding: 0; }
+  .avisos__item {
+    padding: var(--sp-1) var(--sp-2);
+    border: 1px solid var(--udg-warn-fg);
+    border-radius: var(--radius-md);
+    background: var(--udg-warn-bg);
+    color: var(--udg-warn-fg);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-normal);
+  }
+  .avisos__item + .avisos__item { margin-top: var(--sp-1); }
+  .avisos__item[hidden] { display: none; }
+</style>

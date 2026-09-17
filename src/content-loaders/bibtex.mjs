@@ -1,6 +1,9 @@
 /**
- * Carga y normaliza las publicaciones desde data/publicaciones.bib,
- * fusionando metadatos web de data/publicaciones.overrides.yml por citation key.
+ * Carga y normaliza archivos BibTeX del sitio:
+ *  - `loadPublicaciones()`: data/publicaciones.bib (producción del CA) fusionando
+ *    los metadatos web de data/publicaciones.overrides.yml por citation key.
+ *  - `loadBib(ruta, overridesRuta?)`: cualquier .bib (p. ej. las referencias
+ *    metodológicas de Bioestadística abierta en data/bioestadistica/referencias.bib).
  * Pensado para usarse en build (Astro) y desde scripts/check-bib.mjs.
  */
 import { readFileSync } from 'node:fs';
@@ -9,6 +12,7 @@ import yaml from 'js-yaml';
 import * as Bib from '@retorquere/bibtex-parser';
 
 const ROOT = process.cwd();
+const cache = new Map();
 
 function initials(first) {
   if (!first) return '';
@@ -28,10 +32,20 @@ function authorsText(list) {
 
 const first = (v) => (Array.isArray(v) ? v[0] : v);
 
-export function loadPublicaciones() {
-  const bibText = readFileSync(join(ROOT, 'data/publicaciones.bib'), 'utf8');
-  const overrides =
-    yaml.load(readFileSync(join(ROOT, 'data/publicaciones.overrides.yml'), 'utf8')) || {};
+/**
+ * Carga un .bib (ruta relativa a la raíz del proyecto) y devuelve entradas
+ * normalizadas ordenadas por año descendente. Resultado en caché por ruta.
+ * @param {string} bibPath p. ej. 'data/publicaciones.bib'
+ * @param {string} [overridesPath] YAML con metadatos web por citation key (opcional)
+ */
+export function loadBib(bibPath, overridesPath) {
+  const k = `${bibPath}|${overridesPath ?? ''}`;
+  if (cache.has(k)) return cache.get(k);
+
+  const bibText = readFileSync(join(ROOT, bibPath), 'utf8');
+  const overrides = overridesPath
+    ? yaml.load(readFileSync(join(ROOT, overridesPath), 'utf8')) || {}
+    : {};
 
   // sentenceCase:false preserva el casing original del título (biomédico).
   const parsed = Bib.parse(bibText, { sentenceCase: false });
@@ -53,6 +67,14 @@ export function loadPublicaciones() {
       number: first(f.number) || '',
       pages: first(f.pages) || '',
       publisher: first(f.publisher) || '',
+      // libros y capítulos:
+      address: first(f.address) || '',
+      edition: first(f.edition) || '',
+      booktitle: first(f.booktitle) || '',
+      isbn: first(f.isbn) || '',
+      // identificadores no estándar (el parser conserva campos desconocidos):
+      pmid: first(f.pmid) || '',
+      pmcid: first(f.pmcid) || '',
       // metadatos web (overrides):
       destacado: ov.destacado ?? false,
       estado: ov.estado ?? '',
@@ -64,5 +86,11 @@ export function loadPublicaciones() {
   });
 
   entries.sort((a, b) => (b.year || 0) - (a.year || 0));
+  cache.set(k, entries);
   return entries;
+}
+
+/** Producción académica del CA (compatibilidad con el resto del sitio). */
+export function loadPublicaciones() {
+  return loadBib('data/publicaciones.bib', 'data/publicaciones.overrides.yml');
 }

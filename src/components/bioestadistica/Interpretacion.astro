@@ -1,0 +1,42 @@
+---
+// Lectura en lenguaje llano del resultado. La página la envuelve, junto con los
+// avisos, en la única región viva (`aria-live="polite"`): anunciar además cada
+// celda saturaría a quien usa lector de pantalla mientras teclea.
+interface Props {
+  titulo: string;
+  parrafos: string[];
+}
+const { titulo, parrafos } = Astro.props;
+---
+
+<section class="interpretacion" aria-label={titulo}>
+  <h2 class="interpretacion__titulo">{titulo}</h2>
+  <div class="interpretacion__cuerpo" data-interpretacion>
+    {parrafos.map((p) => <p>{p}</p>)}
+  </div>
+</section>
+
+<style>
+  .interpretacion {
+    margin-top: var(--sp-3);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-md);
+    background: var(--udg-gray-50);
+  }
+  .interpretacion__titulo {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tr-kicker);
+    font-weight: var(--fw-medium);
+    color: var(--udg-gray-500);
+    margin: 0 0 var(--sp-2);
+  }
+  .interpretacion__cuerpo :global(p) {
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    color: var(--udg-gray-900);
+  }
+  .interpretacion__cuerpo :global(p + p) { margin-top: var(--sp-2); }
+</style>

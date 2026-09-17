@@ -1,0 +1,67 @@
+---
+// Una medida del panel de resultados: valor grande en navy con cifras de ancho
+// fijo (el mismo tratamiento que `.kpi__num`), intervalo debajo y nota corta con
+// el método o la advertencia puntual. El controlador repinta el contenido de
+// `.celda__valor`, `.celda__ic` y `.celda__nota` sin rehacer la estructura.
+import type { Celda } from '../../lib/bioestadistica/nucleo/tipos.ts';
+
+interface Props {
+  id: string;
+  etiqueta: string;
+  celda: Celda;
+}
+const { id, etiqueta, celda } = Astro.props;
+---
+
+<div
+  class:list={[
+    'celda',
+    celda.clase === 'destacada' && 'is-destacada',
+    celda.clase === 'invalida' && 'is-invalida',
+  ]}
+  data-celda={id}
+>
+  <p class="celda__label">{etiqueta}</p>
+  <p class="celda__valor">{celda.valor}</p>
+  <p class="celda__ic" hidden={!celda.ic}>{celda.ic}</p>
+  <p class="celda__nota" hidden={!celda.nota}>{celda.nota}</p>
+</div>
+
+<style>
+  .celda {
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-md);
+    background: #fff;
+  }
+  .celda.is-destacada { border-color: var(--udg-navy-700); background: var(--udg-gray-50); }
+  .celda.is-invalida { border-color: var(--udg-err-fg); background: var(--udg-err-bg); }
+  .celda__label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--udg-gray-500);
+  }
+  .celda__valor {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-s2);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--tr-display);
+    color: var(--udg-navy-900);
+    font-variant-numeric: tabular-nums;
+  }
+  .celda.is-invalida .celda__valor { color: var(--udg-err-fg); }
+  .celda__ic {
+    margin-top: 2px;
+    font-size: var(--fs-sm);
+    color: var(--udg-gray-700);
+    font-variant-numeric: tabular-nums;
+  }
+  .celda__nota {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-500);
+  }
+</style>

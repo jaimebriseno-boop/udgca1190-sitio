@@ -1,0 +1,71 @@
+---
+// Referencias de la calculadora, numeradas en el orden del YAML: ese mismo
+// número es el que sustituye a `{ref:key}` en el párrafo de Métodos, de modo que
+// el texto para el manuscrito cita con los números que se ven en la lista.
+//
+// Una clave que no exista en el `.bib` DETIENE el build, igual que un campo que
+// no valida contra Zod: una referencia inventada no debe llegar a publicarse.
+import { loadBib } from '../../content-loaders/bibtex.mjs';
+import { t } from '../../i18n.mjs';
+import { formatCita } from '../../lib/formatCita.mjs';
+
+interface Props {
+  refs: { key: string; rol: 'original' | 'didactica' | 'complementaria' }[];
+  lang: 'es' | 'en';
+}
+const { refs, lang } = Astro.props;
+
+/** `bibtex.mjs` es JavaScript sin tipos; aquí solo se necesita la clave de cita. */
+interface EntradaBib {
+  key: string;
+}
+
+const publicaciones = loadBib('data/bioestadistica/referencias.bib') as EntradaBib[];
+const porKey = new Map(publicaciones.map((p) => [p.key, p]));
+const items = refs.map((r, i) => {
+  const publicacion = porKey.get(r.key);
+  if (!publicacion) {
+    throw new Error(`data/bioestadistica/referencias.bib: no existe la clave «${r.key}»`);
+  }
+  return { key: r.key, rol: r.rol, n: String(i + 1).padStart(2, '0'), cita: formatCita(publicacion, lang) };
+});
+---
+
+<ol class="refs">
+  {
+    items.map((item) => (
+      <li class="refs__item" id={`ref-${item.key}`}>
+        <span class="refs__n">{item.n}</span>
+        <span class="refs__cita" set:html={item.cita} />
+        <span class="tag">{t(lang, `bio.ui.ref_${item.rol}`)}</span>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .refs { list-style: none; padding: 0; margin: 0; }
+  .refs__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--sp-1) var(--sp-2);
+    padding-block: var(--sp-2);
+    border-top: 1px solid var(--udg-gray-200);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    color: var(--udg-gray-700);
+    /* Los DOI y los PMID son cadenas largas sin espacios. */
+    overflow-wrap: anywhere;
+  }
+  .refs__item:last-child { border-bottom: 1px solid var(--udg-gray-200); }
+  .refs__n {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-500);
+    padding-top: 3px;
+  }
+  .refs__cita :global(.cita__titulo) { color: var(--udg-gray-900); }
+  .refs__cita :global(a) { color: var(--udg-navy-700); }
+  .refs__cita :global(a:hover) { color: var(--udg-navy-900); }
+  .refs__item .tag { grid-column: 2; justify-self: start; }
+</style>

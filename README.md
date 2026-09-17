@@ -23,8 +23,13 @@ npm run preview    # sirve dist/ (idéntico a producción)
 npm run tokens     # regenera src/styles/tokens.css desde design/tokens/*.json
 npm run check      # valida Astro/TypeScript
 npm run test:performance   # regresiones de reutilización y actualización de gráficas
+npm run test:bio           # pruebas de Bioestadística abierta (node --test sobre .ts; no necesita R)
+npm run test               # ambas suites
+npm run fixtures:bio       # regenera los fixtures de Bioestadística abierta con R (Rscript)
+npm run fixtures:bio:check # detecta deriva entre plantillas R, casos y fixtures (sale con 1 si la hay)
 npm run audit:performance  # audita recursos de dist/; ejecutar después del build
 node scripts/check-bib.mjs   # lint del .bib (avisa de campos/DOI faltantes)
+node scripts/check-bib.mjs data/bioestadistica/referencias.bib   # lint de las referencias metodológicas
 python3 scripts/laboratorio_retematizar.py   # regenera la sección Laboratorio desde sus HTML de trabajo
 ```
 
@@ -39,6 +44,14 @@ diagnóstico») es un mini-sitio en `public/herramientas/laboratorio/app/` que
 HTML de trabajo de la autora (paleta UdeG, fuentes locales, enlaces de ida y
 vuelta con el índice). Sus tarjetas llevan `seccion: laboratorio` en
 `data/herramientas.yml`.
+La sección **Bioestadística abierta** (`/herramientas/bioestadistica`: calculadoras
+estadísticas explicadas, bilingües, con ecuación, interpretación, código R y fuentes
+originales) son páginas nativas de Astro: cada calculadora es un YAML en
+`data/bioestadistica/calculadoras/<slug>.yml` (contenido es/en + snippet R) más un
+módulo puro en `src/lib/bioestadistica/calculadoras/<slug>.ts`; sus referencias
+viven en `data/bioestadistica/referencias.bib`. El código R que se muestra es el
+mismo que `scripts/bio-fixtures.mjs` ejecuta con `Rscript` para generar los fixtures
+que validan TypeScript. Plan, diseños y decisiones en [`docs/bioestadistica/`](docs/bioestadistica/).
 La caché anual se aplica únicamente a archivos con hash en el nombre; los datos
 y recursos sin versión conservan la revalidación.
 
@@ -58,6 +71,8 @@ Todo el contenido vive en `data/` (YAML) y en un BibTeX. **No** se edita HTML/JS
 | `data/actividades.yml` | Docencia, edición, revisión, divulgación, eventos. |
 | `data/publicaciones.bib` | Publicaciones (exportar de Zotero/JabRef). |
 | `data/publicaciones.overrides.yml` | Metadatos web por publicación (estado, líneas, PDF). |
+| `data/bioestadistica/calculadoras/*.yml` | Calculadoras de Bioestadística abierta (contenido es/en, ejemplo, código R, referencias). |
+| `data/bioestadistica/referencias.bib` | Referencias metodológicas citadas por las calculadoras. |
 
 Los datos se **validan** al compilar (esquemas Zod en `src/content.config.ts`):
 si falta un campo, el build falla con un mensaje claro. Tras editar, `npm run dev`

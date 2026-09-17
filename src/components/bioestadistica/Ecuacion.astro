@@ -1,0 +1,78 @@
+---
+// Una ecuación del bloque didáctico, compuesta en build con KaTeX.
+//
+// `output: 'mathml'` emite solo `<math>` (con la anotación en LaTeX, útil para
+// copiar la fórmula): cero CSS y cero fuentes en el cliente, así que la
+// auditoría de rendimiento no ve ningún recurso. `throwOnError` y
+// `strict: 'error'` convierten un LaTeX mal escrito en un error de build, la
+// misma política que aplica Zod al contenido.
+import katex from 'katex';
+import { MACROS } from '../../lib/bioestadistica/nucleo/macros.ts';
+import type { EcuacionTexto } from '../../lib/bioestadistica/nucleo/tipos.ts';
+
+interface Props {
+  ecuacion: EcuacionTexto;
+}
+const { ecuacion } = Astro.props;
+
+// Se pasa una copia de las macros: KaTeX puede escribir en ese objeto y las
+// macros son compartidas por todas las ecuaciones de la sección.
+const opciones = { output: 'mathml' as const, throwOnError: true, strict: 'error' as const, macros: { ...MACROS } };
+const html = katex.renderToString(ecuacion.tex, { ...opciones, displayMode: true });
+const simbolos = ecuacion.simbolos.map((s) => ({
+  def: s.def,
+  html: katex.renderToString(s.s, { ...opciones, displayMode: false }),
+}));
+---
+
+<figure class="ecuacion" id={`ec-${ecuacion.id}`}>
+  <div class="ecuacion__math" set:html={html} />
+  {
+    simbolos.length > 0 && (
+      <dl class="ecuacion__simbolos">
+        {simbolos.map((s) => (
+          <Fragment>
+            <dt set:html={s.html} />
+            <dd>{s.def}</dd>
+          </Fragment>
+        ))}
+      </dl>
+    )
+  }
+  {ecuacion.nota && <figcaption class="ecuacion__nota">{ecuacion.nota}</figcaption>}
+</figure>
+
+<style>
+  .ecuacion {
+    margin-top: var(--sp-3);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-md);
+    background: var(--udg-gray-50);
+  }
+  .ecuacion__math {
+    overflow-x: auto;
+    overflow-y: hidden;
+    font-size: var(--fs-s1);
+    color: var(--udg-gray-900);
+    padding-block: var(--sp-1);
+  }
+  .ecuacion__math :global(math) { font-size: inherit; }
+  .ecuacion__simbolos {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--sp-1) var(--sp-2);
+    margin-top: var(--sp-2);
+    padding-top: var(--sp-2);
+    border-top: 1px solid var(--udg-gray-200);
+    font-size: var(--fs-sm);
+  }
+  .ecuacion__simbolos :global(dt) { color: var(--udg-gray-900); }
+  .ecuacion__simbolos :global(dd) { color: var(--udg-gray-700); margin: 0; }
+  .ecuacion__nota {
+    margin-top: var(--sp-2);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-500);
+    line-height: var(--lh-normal);
+  }
+</style>

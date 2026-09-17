@@ -1,0 +1,72 @@
+% Referencias metodológicas de «Bioestadística abierta» (clásicos y textos didácticos).
+% Separado de data/publicaciones.bib (producción propia del CA). Se lintea con
+%   node scripts/check-bib.mjs data/bioestadistica/referencias.bib
+% Campo no estándar `pmid` cuando existe (el cargador lo conserva y formatCita lo enlaza).
+% Cada clave usada en un YAML de data/bioestadistica/calculadoras/ debe existir aquí:
+% una clave faltante rompe el build (Referencias.astro).
+
+@article{wilson1927,
+  author  = {Wilson, Edwin B.},
+  title   = {Probable inference, the law of succession, and statistical inference},
+  journal = {Journal of the American Statistical Association},
+  year    = {1927},
+  volume  = {22},
+  number  = {158},
+  pages   = {209--212},
+  doi     = {10.1080/01621459.1927.10502953}
+}
+
+@article{clopper1934,
+  author  = {Clopper, C. J. and Pearson, E. S.},
+  title   = {The use of confidence or fiducial limits illustrated in the case of the binomial},
+  journal = {Biometrika},
+  year    = {1934},
+  volume  = {26},
+  number  = {4},
+  pages   = {404--413},
+  doi     = {10.1093/biomet/26.4.404}
+}
+
+@article{agresti1998,
+  author  = {Agresti, Alan and Coull, Brent A.},
+  title   = {Approximate is better than ``exact'' for interval estimation of binomial proportions},
+  journal = {The American Statistician},
+  year    = {1998},
+  volume  = {52},
+  number  = {2},
+  pages   = {119--126},
+  doi     = {10.1080/00031305.1998.10480550}
+}
+
+@article{newcombe1998,
+  author  = {Newcombe, Robert G.},
+  title   = {Two-sided confidence intervals for the single proportion: comparison of seven methods},
+  journal = {Statistics in Medicine},
+  year    = {1998},
+  volume  = {17},
+  number  = {8},
+  pages   = {857--872},
+  doi     = {10.1002/(SICI)1097-0258(19980430)17:8<857::AID-SIM777>3.0.CO;2-E},
+  pmid    = {9595616}
+}
+
+@article{brown2001,
+  author  = {Brown, Lawrence D. and Cai, T. Tony and DasGupta, Anirban},
+  title   = {Interval estimation for a binomial proportion},
+  journal = {Statistical Science},
+  year    = {2001},
+  volume  = {16},
+  number  = {2},
+  pages   = {101--133},
+  doi     = {10.1214/ss/1009213286}
+}
+
+@book{altman2000,
+  author    = {Altman, Douglas G. and Machin, David and Bryant, Trevor N. and Gardner, Martin J.},
+  title     = {Statistics with Confidence: Confidence Intervals and Statistical Guidelines},
+  edition   = {2},
+  publisher = {BMJ Books},
+  address   = {London},
+  year      = {2000},
+  isbn      = {978-0-7279-1375-3}
+}

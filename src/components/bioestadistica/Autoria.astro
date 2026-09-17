@@ -1,0 +1,51 @@
+---
+// Autoría, versión, privacidad y licencias de la sección. Mismo tratamiento que
+// el aside `.uso` de Laboratorio: borde navy y sin ningún rojo dentro.
+import { t } from '../../i18n.mjs';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+---
+
+<aside class="uso" aria-label={t(lang, 'bio.authors_heading')}>
+  <h2 class="uso__title">{t(lang, 'bio.authors_heading')}</h2>
+  <p class="uso__text">{t(lang, 'bio.authors_text')}</p>
+  <p class="uso__meta">
+    <span>{t(lang, 'bio.version')}</span>
+    <span>{t(lang, 'bio.privacy')}</span>
+    <span>{t(lang, 'bio.license')}</span>
+  </p>
+</aside>
+
+<style>
+  .uso {
+    margin-top: var(--sp-4);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-left: 3px solid var(--udg-navy-700);
+    border-radius: var(--radius-md);
+    background: var(--udg-gray-50);
+  }
+  .uso__title {
+    font-size: var(--fs-s1);
+    font-weight: var(--fw-semibold);
+    margin: 0 0 var(--sp-2);
+  }
+  .uso__text {
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    margin: 0;
+  }
+  .uso__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-1) var(--sp-3);
+    margin-top: var(--sp-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-500);
+  }
+</style>

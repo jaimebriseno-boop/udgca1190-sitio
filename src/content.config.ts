@@ -2,7 +2,7 @@
 // Los datos viven en data/*.yml (el dueño edita SOLO esos archivos).
 // Si falta un campo o un valor es inválido, el build falla con un mensaje claro.
 import { defineCollection, z } from 'astro:content';
-import { file } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import yaml from 'js-yaml';
 
 const parseYaml = (text: string) => yaml.load(text) as Array<Record<string, unknown>>;
@@ -58,8 +58,9 @@ const herramientas = defineCollection({
     captura: z.string().optional(),
     destacado: z.boolean().default(false),
     // Agrupación en la página de Herramientas: sin valor = rejilla general;
-    // 'laboratorio' = sección «Laboratorio» (serie «Del tubo al diagnóstico»).
-    seccion: z.enum(['laboratorio']).optional(),
+    // 'laboratorio' = sección «Laboratorio» (serie «Del tubo al diagnóstico»);
+    // 'bioestadistica' = sección «Bioestadística abierta» (calculadoras).
+    seccion: z.enum(['laboratorio', 'bioestadistica']).optional(),
     // Orden dentro de su sección (menor primero); sin valor = al final, por id.
     orden: z.number().optional(),
   }),
@@ -100,4 +101,72 @@ const actividades = defineCollection({
   }),
 });
 
-export const collections = { integrantes, lineas, herramientas, actividades, estudios };
+// ---------------------------------------------------------------------------
+// Sección «Bioestadística abierta»: una calculadora por YAML en
+// data/bioestadistica/calculadoras/<slug>.yml. El nombre del archivo es el slug
+// de la URL (/herramientas/bioestadistica/<slug>) en ambos idiomas. El bloque
+// neutro (entradas, ejemplo, R, referencias) se comparte; los bloques `es` y
+// `en` tienen exactamente la misma forma. Ver docs/bioestadistica/ARQUITECTURA.md.
+// ---------------------------------------------------------------------------
+const Texto = z.string().min(1);
+const EcuacionBio = z.object({
+  id: z.string().regex(/^[a-z][a-z0-9_]*$/),
+  tex: Texto, // LaTeX (KaTeX); por idioma porque las siglas cambian (VPP/PPV)
+  simbolos: z.array(z.object({ s: Texto, def: Texto })).default([]),
+  nota: z.string().optional(),
+});
+const ContenidoBio = z.object({
+  titulo: Texto,
+  titulo_corto: Texto,
+  meta: Texto, // <meta name="description">
+  intro: Texto, // PageHeader
+  explicacion: z.array(Texto).min(1),
+  ecuaciones: z.array(EcuacionBio).min(1),
+  etiquetas: z.record(z.string(), Texto), // id de entrada/salida → rótulo
+  ayudas: z.record(z.string(), Texto).default({}),
+  interpretacion: z.record(z.string(), Texto), // clave → plantilla con {var}
+  avisos: z.record(z.string(), Texto).default({}), // código → texto
+  metodos: Texto, // plantilla del párrafo de Métodos ({var}, {ref:key})
+  ejemplo_descripcion: Texto,
+  grafica_titulo: z.string().optional(),
+});
+const EntradaBio = z.object({
+  id: z.string().regex(/^[a-z][a-z0-9_]*$/),
+  tipo: z.enum(['entero', 'decimal', 'proporcion', 'porcentaje', 'columna', 'tabla', 'opcion']),
+  min: z.number().optional(),
+  max: z.number().optional(),
+  paso: z.number().optional(),
+  opciones: z.array(z.string()).optional(),
+  requerido: z.boolean().default(true),
+  derivado: z.boolean().default(false), // se calcula desde otras (totales, prevalencia)
+});
+const ReferenciaBio = z.object({
+  key: Texto, // citation key en data/bioestadistica/referencias.bib
+  rol: z.enum(['original', 'didactica', 'complementaria']),
+});
+
+const calculadoras = defineCollection({
+  loader: glob({ pattern: '*.yml', base: 'data/bioestadistica/calculadoras' }),
+  schema: z
+    .object({
+      grupo: z.enum(['diagnostico', 'asociacion', 'muestra', 'acuerdo', 'modelos']),
+      orden: z.number(),
+      estado: z.enum(['activa', 'beta', 'desarrollo']).default('activa'),
+      // ts: forma cerrada instantánea + «Verificar con R»; webr: R obligatorio.
+      motor: z.enum(['ts', 'webr']),
+      entradas: z.array(EntradaBio).min(1),
+      ejemplo: z.record(z.string(), z.union([z.number(), z.string(), z.boolean(), z.array(z.number())])),
+      // El código R vive UNA sola vez: es el bloque copiable, lo que ejecuta webR y
+      // lo que ejecuta Rscript para los fixtures. Marcadores {id} en minúsculas.
+      r: z.object({ paquetes: z.array(Texto).default([]), codigo: Texto }),
+      referencias: z.array(ReferenciaBio).min(1),
+      grafica: z.enum(['ninguna', 'ic-forest', 'fagan', 'barras', 'histograma-boxplot', 'km', 'potencia']).default('ninguna'),
+      es: ContenidoBio,
+      en: ContenidoBio,
+    })
+    .refine((c) => c.referencias.some((r) => r.rol === 'original'), {
+      message: 'Falta la referencia original del método (rol: original)',
+    }),
+});
+
+export const collections = { integrantes, lineas, herramientas, actividades, estudios, calculadoras };

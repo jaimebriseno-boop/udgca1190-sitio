@@ -3,7 +3,8 @@
 # estado: activa | beta | desarrollo
 # linea:  id de una LGAC (data/lineas.yml)
 # seccion: (opcional) laboratorio → se agrupa en la sección «Laboratorio» de la
-#          página de Herramientas; `orden` (1, 2, 3…) fija su posición ahí.
+#          página de Herramientas; bioestadistica → sección «Bioestadística
+#          abierta»; `orden` (1, 2, 3…) fija su posición dentro de su sección.
 
 - id: propedeutica-basada-en-evidencia
   nombre: "Propedéutica médica basada en evidencia"
@@ -219,3 +220,115 @@
   doi: ""
   captura: "/herramientas/placeholder.svg"
   destacado: true
+
+# ── Sección «Bioestadística abierta» · calculadoras explicadas ───────────────
+# Páginas nativas de Astro: src/pages/herramientas/bioestadistica/[slug].astro a
+# partir de data/bioestadistica/calculadoras/<slug>.yml. Una tarjeta por grupo
+# (no una por calculadora); el ancla apunta al grupo en el índice de la sección.
+# Autoría: Briseño-Ramírez J, De Arcos-Jiménez JC · Versión 1.0 · septiembre 2026.
+
+- id: bio-diagnostico
+  orden: 1
+  nombre: "Bioestadística abierta: pruebas diagnósticas"
+  tipo: estadistica
+  estado: beta
+  seccion: bioestadistica
+  resumen: "Sensibilidad, especificidad, valores predictivos y razones de verosimilitud desde una tabla 2×2; probabilidad posprueba con nomograma de Fagan."
+  descripcion: |
+    Calculadoras explicadas de rendimiento diagnóstico: tabla 2×2 con IC de
+    Wilson y de Simel para las razones de verosimilitud, probabilidad posprueba
+    por el teorema de Bayes con nomograma de Fagan y valores predictivos a
+    partir de sensibilidad, especificidad y prevalencia. Cada una muestra la
+    ecuación clásica, una explicación sencilla, la interpretación en lenguaje
+    llano, el código R equivalente y las fuentes originales. Los datos se
+    procesan en el navegador. Bilingüe (es/en).
+  tecnologias: ["TypeScript", "R", "webR"]
+  linea: clinica-epidemiologica-traslacional
+  enlace_app: "/herramientas/bioestadistica#diagnostico"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: true
+
+- id: bio-asociacion
+  orden: 2
+  nombre: "Bioestadística abierta: asociación y efecto en tablas 2×2"
+  tipo: estadistica
+  estado: beta
+  seccion: bioestadistica
+  resumen: "Riesgo relativo, razón de momios, reducción absoluta del riesgo y NNT; χ², Fisher exacto y McNemar."
+  descripcion: |
+    Medidas de asociación y efecto con IC (RR de Katz, OR de Woolf, RRA de
+    Newcombe, NNT de Altman), pruebas de independencia (χ² de Pearson, Yates,
+    Fisher exacto, φ) y McNemar para proporciones pareadas. Con ecuaciones,
+    explicación, interpretación, código R y referencias originales. Bilingüe.
+  tecnologias: ["TypeScript", "R", "webR"]
+  linea: clinica-epidemiologica-traslacional
+  enlace_app: "/herramientas/bioestadistica#asociacion"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: true
+
+- id: bio-muestra
+  orden: 3
+  nombre: "Bioestadística abierta: tamaño de muestra y poder"
+  tipo: estadistica
+  estado: beta
+  seccion: bioestadistica
+  resumen: "Estimar una proporción o una media, comparar dos proporciones o dos medias, precisión diagnóstica (Buderer) y correlación, con curvas de poder."
+  descripcion: |
+    Siete calculadoras de tamaño de muestra y poder con las fórmulas clásicas
+    (Cochran, Fleiss, t no central idéntica a power.t.test, Buderer, z de
+    Fisher), modo inverso (poder dado n), ajuste por pérdidas y curva de poder.
+    Con ecuaciones, explicación, interpretación, código R y referencias. Bilingüe.
+  tecnologias: ["TypeScript", "R", "webR"]
+  linea: clinica-epidemiologica-traslacional
+  enlace_app: "/herramientas/bioestadistica#muestra"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: false
+
+- id: bio-acuerdo
+  orden: 4
+  nombre: "Bioestadística abierta: concordancia y descriptivos"
+  tipo: estadistica
+  estado: beta
+  seccion: bioestadistica
+  resumen: "Kappa de Cohen, IC de una proporción (seis métodos) y de una media, media y DE a partir de la mediana, descriptivos con gráfica."
+  descripcion: |
+    Kappa simple y ponderada con el error estándar de Fleiss, Cohen y Everitt;
+    intervalo de confianza de una proporción con Wilson, Clopper-Pearson,
+    Agresti-Coull, Jeffreys y Wald comparados; IC de una media; media y DE a
+    partir de mediana, rango o IQR (Luo, Wan, Hozo); descriptivos de una
+    columna pegada con histograma y caja. Con ecuaciones, explicación,
+    interpretación, código R y referencias. Bilingüe.
+  tecnologias: ["TypeScript", "R", "webR"]
+  linea: clinica-epidemiologica-traslacional
+  enlace_app: "/herramientas/bioestadistica#acuerdo"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: false
+
+- id: bio-modelos
+  orden: 5
+  nombre: "Bioestadística abierta: modelos de regresión y supervivencia"
+  tipo: estadistica
+  estado: desarrollo
+  seccion: bioestadistica
+  resumen: "Regresión logística, Cox, Kaplan-Meier con log-rank y regresión lineal, con R real ejecutado en el navegador (webR)."
+  descripcion: |
+    Modelos multivariables sencillos ajustados con R dentro del navegador
+    (webR): regresión logística binaria con OR e IC, Hosmer-Lemeshow y AUC;
+    riesgos proporcionales de Cox con prueba de proporcionalidad; curvas de
+    Kaplan-Meier con log-rank; regresión lineal múltiple. Los datos pegados
+    nunca salen del navegador. Bilingüe.
+  tecnologias: ["TypeScript", "R", "webR"]
+  linea: clinica-epidemiologica-traslacional
+  enlace_app: "/herramientas/bioestadistica#modelos"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: false

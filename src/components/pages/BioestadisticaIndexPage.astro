@@ -1,0 +1,135 @@
+---
+// Índice de la sección «Bioestadística abierta»: los cinco grupos de la
+// especificación, cada uno con las calculadoras publicadas. Los grupos que
+// todavía no tienen ninguna se anuncian en lugar de esconderse, para que se vea
+// el mapa completo de la sección.
+import { getCollection } from 'astro:content';
+import { t, tPrefijo } from '../../i18n.mjs';
+import Base from '../../layouts/Base.astro';
+import Autoria from '../bioestadistica/Autoria.astro';
+import CardCalculadora from '../bioestadistica/CardCalculadora.astro';
+import Cita from '../bioestadistica/Cita.astro';
+import PageHeader from '../PageHeader.astro';
+
+interface Props {
+  lang?: 'es' | 'en';
+}
+const { lang = 'es' } = Astro.props;
+// `i18n.mjs` es JavaScript sin tipos: el diccionario se acota aquí.
+const ui = tPrefijo(lang, 'bio.ui.') as Record<string, string>;
+
+// Orden de la especificación: A diagnóstico, B asociación, C muestra,
+// D concordancia y descriptivos, E modelos.
+const GRUPOS = ['diagnostico', 'asociacion', 'muestra', 'acuerdo', 'modelos'] as const;
+
+const todas = await getCollection('calculadoras');
+const porGrupo = GRUPOS.map((grupo) => ({
+  grupo,
+  calculadoras: todas
+    .filter((c) => c.data.grupo === grupo)
+    .sort((a, b) => a.data.orden - b.data.orden),
+}));
+---
+
+<Base titulo={t(lang, 'bio.index.title')} descripcion={t(lang, 'bio.index.meta')} lang={lang}>
+  <div class="tool-page">
+    <PageHeader
+      eyebrow={t(lang, 'bio.kicker')}
+      title={t(lang, 'bio.index.title')}
+      description={t(lang, 'bio.index.intro')}
+    >
+      <p class="lema">{t(lang, 'bio.lema')}</p>
+    </PageHeader>
+
+    <section class="section">
+      <div class="container">
+        {
+          porGrupo.map(({ grupo, calculadoras }) => (
+            <section class="grupo" id={grupo} aria-labelledby={`grupo-${grupo}`}>
+              <div class="group-head">
+                <h2 class="group-head__title" id={`grupo-${grupo}`}>
+                  {t(lang, `bio.grupo.${grupo}`)}
+                </h2>
+                <p class="group-head__desc">{t(lang, `bio.grupo_desc.${grupo}`)}</p>
+              </div>
+              {calculadoras.length > 0 ? (
+                <div class="tools-grid">
+                  {calculadoras.map((entry) => (
+                    <CardCalculadora entry={entry} lang={lang} />
+                  ))}
+                </div>
+              ) : (
+                <p class="grupo__vacio">
+                  <span class="pill-info">{ui.pronto}</span>
+                  <span>{ui.grupo_vacio}</span>
+                </p>
+              )}
+            </section>
+          ))
+        }
+
+        <p class="privacidad">{t(lang, 'bio.privacy')}</p>
+        <Autoria lang={lang} />
+        <Cita lang={lang} cita={t(lang, 'bio.index.cite')} />
+      </div>
+    </section>
+
+    <script>
+      import { montarCita } from '../../bioestadistica/cita.ts';
+
+      montarCita();
+    </script>
+  </div>
+</Base>
+
+<style>
+  .tool-page :global(.container) { max-width: 1400px; }
+  .section { padding-block-start: var(--sp-6); }
+  .lema {
+    margin-top: var(--sp-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tr-kicker);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .grupo + .grupo { margin-top: var(--sp-8); }
+  .group-head { margin-bottom: var(--sp-4); }
+  .group-head__title {
+    font-size: var(--fs-s2);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--tr-display);
+    color: var(--udg-navy-900);
+    scroll-margin-top: var(--sp-4);
+  }
+  .group-head__desc {
+    max-width: var(--grid-prose);
+    color: var(--c-gray);
+    margin-top: var(--sp-2);
+  }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--sp-3);
+  }
+  .grupo__vacio {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+    padding: var(--sp-3);
+    border: 1px dashed var(--udg-gray-300);
+    border-radius: var(--radius-md);
+    background: var(--udg-gray-50);
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+  }
+  .privacidad {
+    margin-top: var(--sp-8);
+    font-size: var(--fs-sm);
+    color: var(--udg-gray-500);
+    max-width: var(--grid-prose);
+  }
+</style>

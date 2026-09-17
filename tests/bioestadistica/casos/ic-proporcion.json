@@ -1,0 +1,65 @@
+{
+  "calculadora": "ic-proporcion",
+  "casos": [
+    {
+      "id": "x0_n20",
+      "entradas": { "x": 0, "n": 20, "nivel": 0.95 },
+      "nota": "Proporcion 0: Wald colapsa a [0, 0]; el limite inferior de Wilson sale a -1.16e-17 por redondeo y Clopper-Pearson y Jeffreys fijan 0."
+    },
+    {
+      "id": "xn_n20",
+      "entradas": { "x": 20, "n": 20, "nivel": 0.95 },
+      "nota": "Proporcion 1: caso espejo del anterior; Agresti-Coull se sale de [0, 1] por arriba y binom no lo recorta."
+    },
+    {
+      "id": "x1_n2",
+      "entradas": { "x": 1, "n": 2, "nivel": 0.95 },
+      "nota": "n minusculo con p = 0.5: Wald se sale de [0, 1] por ambos lados."
+    },
+    {
+      "id": "x1_n1000",
+      "entradas": { "x": 1, "n": 1000, "nivel": 0.95 },
+      "nota": "Proporcion muy pequena con n grande: es donde mas se separan Wilson, Wald y Clopper-Pearson."
+    },
+    {
+      "id": "x500_n1000",
+      "entradas": { "x": 500, "n": 1000, "nivel": 0.95 },
+      "nota": "Caso benigno (p = 0.5, n grande): los seis metodos deben coincidir en las primeras cifras."
+    },
+    {
+      "id": "x0_n1",
+      "entradas": { "x": 0, "n": 1, "nivel": 0.95 },
+      "nota": "n = 1 con x = 0: minimo absoluto; Clopper-Pearson da [0, 0.975]."
+    },
+    {
+      "id": "x1_n1",
+      "entradas": { "x": 1, "n": 1, "nivel": 0.95 },
+      "nota": "n = 1 con x = n: Clopper-Pearson da [0.025, 1]; el radicando de Wilson con correccion de continuidad queda al limite."
+    },
+    {
+      "id": "x3_n7",
+      "entradas": { "x": 3, "n": 7, "nivel": 0.95 },
+      "nota": "n pequeno e impar sin simetria: comprueba qbeta con parametros no enteros en Jeffreys."
+    },
+    {
+      "id": "x123456_n1000000",
+      "entradas": { "x": 123456, "n": 1000000, "nivel": 0.95 },
+      "nota": "n grande (1e6): cancelacion catastrofica potencial en Wilson y qbeta con parametros enormes."
+    },
+    {
+      "id": "nivel_090",
+      "entradas": { "x": 68, "n": 80, "nivel": 0.9 },
+      "nota": "Mismo ejemplo de la interfaz al 90 %: z = 1.6449 y alfa = 0.1 exacta."
+    },
+    {
+      "id": "nivel_099",
+      "entradas": { "x": 68, "n": 80, "nivel": 0.99 },
+      "nota": "Mismo ejemplo al 99 %: z = 2.5758; comprueba que el nivel viaja igual a binom y a qbeta."
+    },
+    {
+      "id": "x68_n80_0999",
+      "entradas": { "x": 68, "n": 80, "nivel": 0.999 },
+      "nota": "Nivel maximo que admite la entrada (0.999): colas de 5e-4, donde qnorm y qbeta pierden mas cifras."
+    }
+  ]
+}

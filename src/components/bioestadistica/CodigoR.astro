@@ -1,0 +1,64 @@
+---
+// Bloque de código R: el mismo texto que valida la calculadora contra el
+// oráculo, ya relleno con las entradas que se están mostrando. Se copia tal cual
+// y se ejecuta en R o RStudio.
+//
+// El botón «Verificar con R» (webR en el navegador) llega en un hito posterior;
+// hasta entonces se explica dónde ejecutar el código, sin prometer nada que la
+// página todavía no haga.
+import { t } from '../../i18n.mjs';
+
+interface Props {
+  codigo: string;
+  lang: 'es' | 'en';
+}
+const { codigo, lang } = Astro.props;
+---
+
+<section class="bloque" id="codigo-r" aria-labelledby="codigo-r-titulo" data-obsolescible>
+  <div class="bloque__cabecera">
+    <h2 class="bloque__titulo" id="codigo-r-titulo">{t(lang, 'bio.ui.codigo_r')}</h2>
+    <button type="button" class="btn btn--ghost" data-accion="copiar" data-copiar="r">
+      {t(lang, 'bio.ui.copiar')}
+    </button>
+  </div>
+  <pre class="codigo"><code data-codigo-r>{codigo}</code></pre>
+  <p class="nota">{t(lang, 'bio.ui.codigo_r_nota')}</p>
+  <p class="nota nota--pendiente">{t(lang, 'bio.ui.verificar_pendiente')}</p>
+</section>
+
+<style>
+  .bloque { margin-top: var(--sp-6); }
+  .bloque__cabecera {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-2);
+  }
+  .bloque__titulo { font-size: var(--fs-s1); margin: 0; }
+  .codigo {
+    margin: 0;
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-md);
+    background: var(--udg-gray-50);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    line-height: var(--lh-normal);
+    color: var(--udg-gray-900);
+    tab-size: 2;
+  }
+  .nota {
+    margin-top: var(--sp-2);
+    font-size: var(--fs-sm);
+    color: var(--udg-gray-500);
+    line-height: var(--lh-normal);
+    max-width: var(--grid-prose);
+  }
+  .nota--pendiente { color: var(--udg-gray-700); }
+  /* Código que ya no corresponde a lo capturado (captura inválida). */
+  .bloque.is-obsoleto .codigo { opacity: 0.45; }
+</style>

@@ -1,0 +1,58 @@
+---
+// Tarjeta ligera de una calculadora en el índice de la sección: título corto,
+// qué resuelve, con qué motor y en qué estado está.
+import type { CollectionEntry } from 'astro:content';
+import { localePath, t } from '../../i18n.mjs';
+
+interface Props {
+  entry: CollectionEntry<'calculadoras'>;
+  lang: 'es' | 'en';
+}
+const { entry, lang } = Astro.props;
+const textos = entry.data[lang];
+const href = localePath(`/herramientas/bioestadistica/${entry.id}`, lang);
+const motor = t(lang, entry.data.motor === 'webr' ? 'bio.ui.motor_webr' : 'bio.ui.motor_ts');
+const estado = t(lang, `tool.estado.${entry.data.estado}`);
+---
+
+<article class="card-flat calc-card">
+  <h3 class="calc-card__title">
+    <a href={href}>{textos.titulo_corto}</a>
+  </h3>
+  <p class="calc-card__intro">{textos.intro}</p>
+  <p class="calc-card__pills">
+    <span class="tag">{motor}</span>
+    <span class="tag">{estado}</span>
+  </p>
+  <a class="calc-card__link" href={href}>{t(lang, 'bio.ui.ver_calculadora')}</a>
+</article>
+
+<style>
+  .calc-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    height: 100%;
+  }
+  .calc-card__title {
+    font-size: var(--fs-s1);
+    line-height: var(--lh-snug);
+    margin: 0;
+  }
+  .calc-card__title a { color: var(--udg-navy-900); text-decoration: none; }
+  .calc-card__title a:hover { color: var(--udg-navy-700); text-decoration: underline; }
+  .calc-card__intro {
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    color: var(--c-gray);
+    margin: 0;
+  }
+  .calc-card__pills { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin: 0; }
+  .calc-card__link {
+    margin-top: auto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--udg-navy-700);
+  }
+  .calc-card__link:hover { color: var(--udg-navy-900); }
+</style>

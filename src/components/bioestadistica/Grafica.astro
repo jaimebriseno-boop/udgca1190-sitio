@@ -1,0 +1,73 @@
+---
+// Gráfica de la calculadora. El SVG lo produce `nucleo/svg.ts`, el mismo módulo
+// que usa el controlador al recalcular, y aquí solo se envuelve en un `<figure>`.
+//
+// Los estilos son GLOBALES a propósito: el SVG que el navegador inserta con
+// `innerHTML` no lleva el atributo de ámbito que Astro añade en build, así que
+// con estilos de componente se vería distinto al recalcular. Todos los colores
+// salen de los tokens del sitio.
+interface Props {
+  svg: string;
+  titulo: string;
+}
+const { svg, titulo } = Astro.props;
+---
+
+<figure class="grafica" data-grafica-figura>
+  <div class="grafica__lienzo" data-grafica set:html={svg} />
+  <figcaption class="grafica__pie">{titulo}</figcaption>
+</figure>
+
+<style>
+  .grafica {
+    margin-top: var(--sp-3);
+    padding: var(--sp-2);
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-md);
+    background: #fff;
+  }
+  .grafica[hidden] { display: none; }
+  .grafica__lienzo { width: 100%; }
+  .grafica__pie {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-500);
+    line-height: var(--lh-normal);
+  }
+</style>
+
+<style is:global>
+  /* El tamaño de letra viaja en el propio SVG (`font-size`), donde se calcula el
+     reparto del lienzo; aquí solo se define el color. El `max-width` es el del
+     `viewBox`: por encima el dibujo no crece y las letras quedan a su tamaño. */
+  .bio-svg {
+    display: block;
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    margin-inline: auto;
+    font-family: var(--font-sans);
+  }
+  .bio-svg__etiqueta { fill: var(--udg-gray-700); }
+  .bio-svg__ic,
+  .bio-svg__tope {
+    stroke: var(--udg-gray-500);
+    stroke-width: 2;
+  }
+  .bio-svg__punto { fill: var(--udg-gray-500); }
+  .bio-svg__fila.is-destacada .bio-svg__ic,
+  .bio-svg__fila.is-destacada .bio-svg__tope { stroke: var(--udg-navy-700); stroke-width: 3; }
+  .bio-svg__fila.is-destacada .bio-svg__punto { fill: var(--udg-navy-700); }
+  .bio-svg__fila.is-destacada .bio-svg__etiqueta { fill: var(--udg-navy-900); font-weight: 600; }
+  .bio-svg__eje { stroke: var(--udg-gray-300); stroke-width: 1; }
+  .bio-svg__tick { stroke: var(--udg-gray-300); stroke-width: 1; }
+  .bio-svg__tick-texto {
+    fill: var(--udg-gray-500);
+    font-variant-numeric: tabular-nums;
+  }
+  .bio-svg__ref {
+    stroke: var(--udg-gray-300);
+    stroke-width: 1;
+    stroke-dasharray: 4 3;
+  }
+</style>

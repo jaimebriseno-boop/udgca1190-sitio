@@ -1,0 +1,400 @@
+---
+// Página de una calculadora de «Bioestadística abierta».
+//
+// El ejemplo se resuelve AQUÍ, en build, con el mismo módulo puro que usa el
+// navegador: quien llega sin JavaScript, quien imprime la página y quien la ve
+// en un buscador encuentra números reales, no huecos. El controlador solo
+// repinta esos mismos ganchos `data-*` cuando algo cambia.
+import type { CollectionEntry } from 'astro:content';
+import { cargarDefinicion } from '../../bioestadistica/registro.ts';
+import { localePath, t, tPrefijo } from '../../i18n.mjs';
+import { codigoR } from '../../lib/bioestadistica/nucleo/codigoR.ts';
+import { crearFormateador } from '../../lib/bioestadistica/nucleo/formato.ts';
+import { renderGrafica } from '../../lib/bioestadistica/nucleo/svg.ts';
+import type { Celda, Contexto, Entradas, Presentacion } from '../../lib/bioestadistica/nucleo/tipos.ts';
+import Base from '../../layouts/Base.astro';
+import Autoria from '../bioestadistica/Autoria.astro';
+import Avisos from '../bioestadistica/Avisos.astro';
+import CampoNumero from '../bioestadistica/CampoNumero.astro';
+import Cita from '../bioestadistica/Cita.astro';
+import CodigoR from '../bioestadistica/CodigoR.astro';
+import Ecuacion from '../bioestadistica/Ecuacion.astro';
+import Exportar from '../bioestadistica/Exportar.astro';
+import Grafica from '../bioestadistica/Grafica.astro';
+import Interpretacion from '../bioestadistica/Interpretacion.astro';
+import Referencias from '../bioestadistica/Referencias.astro';
+import ResultadoCelda from '../bioestadistica/ResultadoCelda.astro';
+import PageHeader from '../PageHeader.astro';
+
+interface Props {
+  lang?: 'es' | 'en';
+  entry: CollectionEntry<'calculadoras'>;
+}
+const { lang = 'es', entry } = Astro.props;
+
+const datos = entry.data;
+const textos = datos[lang];
+// `i18n.mjs` es JavaScript sin tipos: el diccionario se acota aquí, que es
+// donde se sabe qué forma tiene.
+const ui = tPrefijo(lang, 'bio.ui.') as Record<string, string>;
+const fmt = crearFormateador(lang);
+
+// Niveles de confianza ofrecidos cuando la calculadora declara la entrada `nivel`.
+const NIVELES = [0.9, 0.95, 0.99];
+const tieneNivel = datos.entradas.some((e) => e.id === 'nivel');
+const nivel = typeof datos.ejemplo.nivel === 'number' ? datos.ejemplo.nivel : 0.95;
+
+// Numeración de las referencias = orden del YAML; es la que sustituye a
+// {ref:key} en el párrafo de Métodos.
+const refs: Record<string, number> = {};
+datos.referencias.forEach((r, i) => {
+  refs[r.key] = i + 1;
+});
+
+const rutaCanonica = `/herramientas/bioestadistica/${entry.id}`;
+const url = new URL(localePath(rutaCanonica, lang), Astro.site).href;
+
+// Controles disponibles hoy. Un tipo sin control detiene el build antes que
+// publicar una calculadora a la que le falte un campo (misma política que Zod).
+const CONTROLES = new Set(['entero', 'decimal', 'proporcion', 'porcentaje']);
+const sinControl = datos.entradas.filter((e) => !e.derivado && !CONTROLES.has(e.tipo));
+if (sinControl.length > 0) {
+  throw new Error(
+    `CalculadoraPage: la calculadora «${entry.id}» declara entradas sin control (${sinControl
+      .map((e) => `${e.id}: ${e.tipo}`)
+      .join(', ')})`,
+  );
+}
+const campos = datos.entradas.filter((e) => !e.derivado && e.id !== 'nivel');
+
+const def = await cargarDefinicion(entry.id);
+const ctx: Contexto = { lang, nivel, textos, fmt, refs, url, ui };
+const ejemplo: Entradas = { ...datos.ejemplo };
+if (def.derivar) Object.assign(ejemplo, def.derivar(ejemplo));
+const resultado = def.calcular ? def.calcular(ejemplo, nivel) : null;
+const presentacion: Presentacion | null = resultado ? def.presentar(resultado, ejemplo, ctx) : null;
+const celdas: Record<string, Celda> = presentacion?.celdas ?? {};
+const avisosActivos = presentacion?.avisos ?? [];
+const svg = presentacion?.grafica ? renderGrafica(presentacion.grafica, { fmt }) : '';
+// `Definicion.rScript` recibe también el nivel de confianza; la plantilla de R
+// solo pasa las entradas, así que se fija aquí el nivel de esta página.
+const rScript = def.rScript;
+const rCodigo = codigoR(
+  {
+    id: entry.id,
+    paquetes: datos.r.paquetes,
+    codigo: datos.r.codigo,
+    rScript: rScript ? (e: Entradas) => rScript(e, nivel) : undefined,
+  },
+  ejemplo,
+);
+
+const cita = t(lang, 'bio.cite_template', {
+  autores: t(lang, 'bio.authors_short'),
+  titulo: textos.titulo,
+  anio: 2026,
+  url,
+});
+
+const motorTexto = t(lang, datos.motor === 'webr' ? 'bio.motor.webr' : 'bio.motor.ts');
+const estadoTexto = t(lang, `tool.estado.${datos.estado}`);
+const indexHref = localePath('/herramientas/bioestadistica', lang);
+
+// Lo que el navegador necesita para repintar sin volver a pedir nada al servidor.
+const payload = {
+  slug: entry.id,
+  lang,
+  motor: datos.motor,
+  entradas: datos.entradas,
+  ejemplo: datos.ejemplo,
+  textos,
+  r: datos.r,
+  refs,
+  ui,
+  url,
+};
+---
+
+<Base titulo={textos.titulo} descripcion={textos.meta} lang={lang}>
+  <div class="tool-page">
+    <PageHeader eyebrow={t(lang, 'bio.kicker')} title={textos.titulo} description={textos.intro} />
+    <section class="section">
+      <div class="container">
+        <div class="tool-toolbar">
+          <a class="back-link" href={indexHref}>{t(lang, 'bio.back')}</a>
+          <div class="tool-toolbar__meta">
+            <span class="tag">{motorTexto}</span>
+            <span class="tag">{estadoTexto}</span>
+            <button type="button" class="btn btn--ghost" data-accion="copiar" data-copiar="enlace">
+              {ui.compartir}
+            </button>
+          </div>
+        </div>
+        <p class="print-url" data-print-url>{url}</p>
+
+        <div class="calc" id="calculadora" data-slug={entry.id} data-lang={lang}>
+          <form class="calc__panel calc__entradas" novalidate>
+            <h2 class="calc__titulo">{ui.entradas}</h2>
+            {
+              campos.map((e) => (
+                <CampoNumero
+                  id={e.id}
+                  etiqueta={textos.etiquetas[e.id] ?? e.id}
+                  valor={datos.ejemplo[e.id] === undefined ? '' : String(datos.ejemplo[e.id])}
+                  ayuda={textos.ayudas[e.id]}
+                />
+              ))
+            }
+            {
+              tieneNivel && (
+                <div class="campo-nivel">
+                  <label class="campo-nivel__label" for="campo-nivel">
+                    {textos.etiquetas.nivel ?? ui.nivel}
+                  </label>
+                  <select class="campo-nivel__select" id="campo-nivel" data-entrada="nivel">
+                    {NIVELES.map((v) => (
+                      <option value={String(v)} selected={v === nivel}>
+                        {fmt.nivel(v)}
+                      </option>
+                    ))}
+                  </select>
+                  <p class="campo-nivel__error" data-error-for="nivel" hidden />
+                </div>
+              )
+            }
+            <div class="calc__acciones">
+              <button type="button" class="btn btn--ghost" data-accion="ejemplo">{ui.cargar_ejemplo}</button>
+              <button type="button" class="btn btn--ghost" data-accion="limpiar">{ui.limpiar}</button>
+            </div>
+            <p class="calc__ejemplo">
+              <span class="pill-info" data-ejemplo-cargado>{ui.ejemplo_cargado}</span>
+            </p>
+            <p class="calc__ejemplo-desc">{textos.ejemplo_descripcion}</p>
+            <p class="calc__ejemplo-nota">{t(lang, 'bio.ejemplo_nota')}</p>
+          </form>
+
+          <div class="calc__panel calc__resultados" data-resultados>
+            <h2 class="calc__titulo">{ui.resultados}</h2>
+            <div class="calc__celdas">
+              {
+                def.salidas.map((id) => (
+                  <ResultadoCelda
+                    id={id}
+                    etiqueta={textos.etiquetas[id] ?? id}
+                    celda={celdas[id] ?? { valor: ui.no_definido }}
+                  />
+                ))
+              }
+            </div>
+            <div class="calc__vivo" aria-live="polite">
+              <Interpretacion titulo={ui.interpretacion} parrafos={presentacion?.interpretacion ?? []} />
+              <Avisos avisos={textos.avisos} activos={avisosActivos} etiqueta={ui.avisos} />
+            </div>
+            {svg && <Grafica svg={svg} titulo={textos.grafica_titulo ?? ui.grafica} />}
+            <Exportar lang={lang} />
+          </div>
+        </div>
+
+        <section class="bloque" aria-labelledby="explicacion-titulo">
+          <h2 class="bloque__titulo" id="explicacion-titulo">{ui.explicacion}</h2>
+          <div class="prose">
+            {textos.explicacion.map((p) => <p>{p}</p>)}
+          </div>
+          <h3 class="bloque__subtitulo">{ui.ecuaciones}</h3>
+          {textos.ecuaciones.map((e) => <Ecuacion ecuacion={e} />)}
+        </section>
+
+        <CodigoR codigo={rCodigo} lang={lang} />
+
+        <section class="bloque" aria-labelledby="metodos-titulo" data-obsolescible>
+          <div class="bloque__cabecera">
+            <h2 class="bloque__titulo" id="metodos-titulo">{ui.metodos}</h2>
+            <button type="button" class="btn btn--ghost" data-accion="copiar" data-copiar="metodos">
+              {ui.copiar}
+            </button>
+          </div>
+          <p class="metodos" data-metodos>{presentacion?.metodos ?? ''}</p>
+          <p class="bloque__nota">{t(lang, 'bio.ui.metodos_nota')}</p>
+        </section>
+
+        <section class="bloque" aria-labelledby="referencias-titulo">
+          <h2 class="bloque__titulo" id="referencias-titulo">{ui.referencias}</h2>
+          <Referencias refs={datos.referencias} lang={lang} />
+        </section>
+
+        <Autoria lang={lang} />
+        <Cita lang={lang} cita={cita} />
+      </div>
+    </section>
+
+    <script
+      type="application/json"
+      is:inline
+      id="bio-datos"
+      set:html={JSON.stringify(payload).replace(/</g, '\\u003c')}
+    />
+    <script>
+      import { montar } from '../../bioestadistica/montar.ts';
+
+      void montar();
+    </script>
+  </div>
+</Base>
+
+<style>
+  /* Herramienta ancha, como Laboratorio: el panel de resultados necesita aire. */
+  .tool-page :global(.container) { max-width: 1400px; }
+  .section { padding-block-start: var(--sp-6); }
+
+  .tool-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-3);
+  }
+  .tool-toolbar__meta { display: flex; align-items: center; gap: var(--sp-1); flex-wrap: wrap; }
+  .back-link { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); }
+  .back-link:hover { color: var(--udg-navy-900); }
+
+  /* La URL con los datos solo se ve al imprimir. */
+  .print-url { display: none; }
+
+  .calc { display: grid; gap: var(--sp-3); align-items: start; }
+  @media (min-width: 1024px) {
+    .calc { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  }
+  .calc__panel {
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-lg);
+    background: var(--udg-gray-50);
+  }
+  .calc__titulo {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tr-kicker);
+    font-weight: var(--fw-medium);
+    color: var(--udg-gray-500);
+    margin: 0 0 var(--sp-3);
+  }
+  .calc__acciones { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-3); }
+  .calc__ejemplo { margin-top: var(--sp-3); }
+  .calc__ejemplo-desc {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-700);
+    line-height: var(--lh-normal);
+  }
+  .calc__ejemplo-nota { margin-top: 2px; font-size: var(--fs-xs); color: var(--udg-gray-500); }
+
+  .calc__celdas { display: grid; gap: var(--sp-2); }
+  @media (min-width: 600px) {
+    .calc__celdas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  /* Resultados que ya no corresponden a lo capturado: se atenúan hasta que la
+     captura vuelva a ser válida, nunca se muestran como si fueran vigentes. */
+  .calc__resultados.is-obsoleto .calc__celdas,
+  .calc__resultados.is-obsoleto .calc__vivo,
+  .calc__resultados.is-obsoleto :global(.grafica),
+  .bloque.is-obsoleto .metodos { opacity: 0.45; }
+
+  .campo-nivel { margin-top: var(--sp-3); }
+  .campo-nivel__label {
+    display: block;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--udg-gray-900);
+    margin-bottom: var(--sp-1);
+  }
+  .campo-nivel__select {
+    width: 100%;
+    height: 40px;
+    padding: 0 var(--sp-2);
+    border: 1px solid var(--udg-gray-300);
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--udg-gray-900);
+    font-family: var(--font-sans);
+    font-size: var(--fs-base);
+  }
+  .campo-nivel__select:focus-visible { outline: 2px solid var(--udg-navy-700); outline-offset: 1px; }
+  .campo-nivel__error {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--udg-err-fg);
+  }
+
+  .bloque { margin-top: var(--sp-6); }
+  .bloque__cabecera {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-2);
+  }
+  .bloque__titulo { font-size: var(--fs-s1); margin: 0 0 var(--sp-2); }
+  .bloque__cabecera .bloque__titulo { margin-bottom: 0; }
+  .bloque__subtitulo {
+    font-size: var(--fs-base);
+    margin-top: var(--sp-4);
+    color: var(--udg-gray-900);
+  }
+  .bloque__nota {
+    margin-top: var(--sp-2);
+    font-size: var(--fs-sm);
+    color: var(--udg-gray-500);
+    max-width: var(--grid-prose);
+  }
+  .prose :global(p) { font-size: var(--fs-base); line-height: var(--lh-relaxed); color: var(--udg-gray-700); }
+  .metodos {
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-md);
+    background: var(--udg-gray-50);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    color: var(--udg-gray-900);
+    max-width: 90ch;
+    /* Termina con la URL canónica: sin permitir el corte empuja la página en un teléfono. */
+    overflow-wrap: anywhere;
+  }
+
+  @media print {
+    :global(#sidebar),
+    :global(.nav-toggle),
+    :global(#navOverlay),
+    :global(.skip-link),
+    :global(footer),
+    .tool-toolbar,
+    .calc__acciones,
+    :global(.exportar),
+    :global(.bloque__cabecera .btn),
+    :global(.cite__head .btn) { display: none !important; }
+    :global(#main) { margin: 0 !important; }
+    :global(#wrapper) { display: block !important; }
+    .print-url {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      color: var(--udg-gray-700);
+      margin-bottom: var(--sp-2);
+      word-break: break-all;
+    }
+    .calc { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+    /* Se protegen las piezas pequeñas, no los paneles enteros: un panel más
+       alto que la hoja obligaría a dejar una página en blanco antes. */
+    .metodos,
+    :global(.ecuacion),
+    :global(.refs__item),
+    :global(.celda),
+    :global(.interpretacion),
+    :global(.grafica) { break-inside: avoid; }
+    .bloque__titulo, .bloque__subtitulo { break-after: avoid; }
+    :global(details) { display: block; }
+  }
+</style>

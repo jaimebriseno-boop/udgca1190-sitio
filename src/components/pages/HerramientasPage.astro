@@ -22,6 +22,10 @@ const generales = todas
 const laboratorio = todas
   .filter((h) => h.seccion === 'laboratorio')
   .sort((a, b) => (a.orden ?? 99) - (b.orden ?? 99));
+// Sección «Bioestadística abierta»: una tarjeta por grupo, por `orden`.
+const bioestadistica = todas
+  .filter((h) => h.seccion === 'bioestadistica')
+  .sort((a, b) => (a.orden ?? 99) - (b.orden ?? 99));
 
 const intro = getSitioL(lang).page_intros?.tools || '';
 ---
@@ -59,6 +63,22 @@ const intro = getSitioL(lang).page_intros?.tools || '';
       </div>
     </section>
   )}
+
+  {bioestadistica.length > 0 && (
+    <section class="section section--lab section--bio" id="bioestadistica">
+      <div class="container">
+        <div class="group-head group-head--lab">
+          <p class="kicker">{t(lang, 'tools.bio.kicker')}</p>
+          <h2 class="group-head__title">{t(lang, 'tools.bio.title')}</h2>
+          <p class="group-head__desc">{t(lang, 'tools.bio.intro')}</p>
+          <a class="group-head__link" href={localePath('/herramientas/bioestadistica', lang)}>{t(lang, 'tools.bio.index')}</a>
+        </div>
+        <div class="tools-grid">
+          {bioestadistica.map((h) => <CardHerramienta data={h} lineasMap={lineasMap} lang={lang} />)}
+        </div>
+      </div>
+    </section>
+  )}
 </Base>
 
 <style>
@@ -69,6 +89,10 @@ const intro = getSitioL(lang).page_intros?.tools || '';
     border-top: 1px solid var(--udg-gray-200);
     background: var(--udg-gray-50);
   }
+  /* Bioestadística abierta: mismas reglas que Laboratorio; se distingue por el
+     kicker y el enlace al índice. Orden en la página: general → Laboratorio →
+     Bioestadística. */
+  .section--bio { background: #fff; }
   .group-head { margin-bottom: var(--sp-4); }
   .group-head__title {
     font-size: var(--fs-s2);

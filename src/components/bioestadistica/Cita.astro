@@ -1,0 +1,64 @@
+---
+// «Cómo citar». Con 25 calculadoras, escribir a mano 50 citas bilingües sería un
+// foco de erratas: la cita se genera con `bio.cite_template` a partir del título
+// de la calculadora y de su URL canónica.
+//
+// Aside de borde rojo y, dentro, ningún navy: los dos colores institucionales no
+// comparten componente.
+import { t } from '../../i18n.mjs';
+
+interface Props {
+  lang: 'es' | 'en';
+  /** Cita ya compuesta (índice de la sección o calculadora). */
+  cita: string;
+}
+const { lang, cita } = Astro.props;
+---
+
+<aside class="cite" aria-label={t(lang, 'bio.cite_heading')}>
+  <div class="cite__head">
+    <h2 class="cite__title">{t(lang, 'bio.cite_heading')}</h2>
+    <button
+      type="button"
+      class="btn btn--ghost"
+      data-accion="copiar"
+      data-copiar="cita"
+      data-copiado={t(lang, 'bio.ui.copiado')}
+    >
+      {t(lang, 'bio.ui.copiar')}
+    </button>
+  </div>
+  <p class="cite__text" data-cita-texto>{cita}</p>
+</aside>
+
+<style>
+  .cite {
+    margin-top: var(--sp-3);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-left: 3px solid var(--udg-red-600);
+    border-radius: var(--radius-md);
+    background: var(--udg-gray-50);
+  }
+  .cite__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-2);
+  }
+  .cite__title {
+    font-size: var(--fs-s1);
+    font-weight: var(--fw-semibold);
+    margin: 0;
+  }
+  .cite__text {
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    margin: 0;
+    /* La cita acaba en la URL canónica, que no tiene espacios donde cortar. */
+    overflow-wrap: anywhere;
+  }
+</style>

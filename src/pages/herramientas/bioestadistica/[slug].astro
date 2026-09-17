@@ -1,0 +1,15 @@
+---
+// Una página por YAML de la colección `calculadoras`. Es la primera
+// `getStaticPaths` del repositorio: la alternativa serían decenas de envoltorios
+// idénticos, uno más por cada calculadora que se añada.
+import { getCollection } from 'astro:content';
+import CalculadoraPage from '../../../components/pages/CalculadoraPage.astro';
+
+export async function getStaticPaths() {
+  const calculadoras = await getCollection('calculadoras');
+  return calculadoras.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+<CalculadoraPage lang="es" entry={entry} />

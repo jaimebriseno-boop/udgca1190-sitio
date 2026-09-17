@@ -1,0 +1,29 @@
+---
+// Barra de exportación del panel de resultados. Todo se genera en el navegador
+// con lo que está capturado: nada se envía a ningún servidor.
+import { t } from '../../i18n.mjs';
+
+interface Props {
+  lang: 'es' | 'en';
+}
+const { lang } = Astro.props;
+---
+
+<div class="exportar" role="group" aria-label={t(lang, 'bio.ui.exportar')}>
+  <button type="button" class="btn btn--ghost" data-accion="copiar" data-copiar="markdown">
+    {t(lang, 'bio.ui.copiar_md')}
+  </button>
+  <button type="button" class="btn btn--ghost" data-accion="csv">{t(lang, 'bio.ui.csv')}</button>
+  <button type="button" class="btn btn--ghost" data-accion="imprimir">{t(lang, 'bio.ui.imprimir')}</button>
+</div>
+
+<style>
+  .exportar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-1);
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--udg-gray-200);
+  }
+</style>
