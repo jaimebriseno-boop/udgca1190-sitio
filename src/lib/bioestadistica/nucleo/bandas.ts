@@ -86,3 +86,30 @@ export function icCruzaNulo(ic: [number, number] | undefined, nulo: 0 | 1): bool
 export function decisionP(p: number, alfa = 0.05): 'rechaza' | 'no_rechaza' {
   return !Number.isNaN(p) && p < alfa ? 'rechaza' : 'no_rechaza';
 }
+
+/**
+ * Asimetría muestral G₁ (Joanes y Gill 1998, tipo 2): |G₁| < 0.5 se lee como
+ * aproximadamente simétrica; por encima, cola a la derecha (G₁ > 0) o a la
+ * izquierda (G₁ < 0). Corte convencional; NaN (n < 3 o columna constante) → 'simetrica'.
+ */
+export type BandaAsimetria = 'simetrica' | 'derecha' | 'izquierda';
+export const BANDAS_ASIMETRIA = ['simetrica', 'derecha', 'izquierda'] as const;
+
+export function bandaAsimetria(g1: number): BandaAsimetria {
+  if (Number.isNaN(g1) || Math.abs(g1) < 0.5) return 'simetrica';
+  return g1 > 0 ? 'derecha' : 'izquierda';
+}
+
+/**
+ * Asimetría de un resumen de cinco números: cociente (máx − mediana)/(mediana −
+ * mín) o (Q₃ − mediana)/(mediana − Q₁). Entre 0.5 y 2 se considera compatible
+ * con la simetría que suponen Hozo, Wan y Luo; fuera, 'marcada' (aviso). Un
+ * denominador 0 con numerador > 0 da ±∞ → 'marcada'; un resumen degenerado
+ * (0/0 = NaN: los tres valores iguales) no aporta evidencia → 'compatible'.
+ */
+export type BandaAsimetriaResumen = 'compatible' | 'marcada';
+
+export function bandaAsimetriaResumen(cociente: number): BandaAsimetriaResumen {
+  if (Number.isNaN(cociente)) return 'compatible';
+  return cociente >= 0.5 && cociente <= 2 ? 'compatible' : 'marcada';
+}

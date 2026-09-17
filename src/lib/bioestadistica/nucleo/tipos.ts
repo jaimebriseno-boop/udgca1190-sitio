@@ -33,16 +33,22 @@ export type MetodoId =
   | 'logit-mercaldo'
   | 'logit-mercaldo-ajustado'
   | 'delta'
+  | 'altman'
   // Pruebas 2×2 y pareadas
   | 'sin-correccion'
   | 'yates'
   | 'n-menos-1'
+  | 'fisher-exacto'
   | 'fisher-condicional'
   | 'mcnemar-exacto'
+  | 'binomial-exacto'
   | 'edwards'
-  // Medias y varianzas
+  // Medias, varianzas y descriptivos
   | 't'
   | 'chi2-varianza'
+  | 'cuantil-7'
+  | 'joanes-gill'
+  | 'shapiro-wilk'
   // Supervivencia y acuerdo
   | 'greenwood-log'
   | 'greenwood-log-log'
@@ -281,8 +287,85 @@ export interface GraficaCurvas extends GraficaBase {
   marcador?: { x: number; etiqueta?: string; valores?: Record<string, number> };
 }
 
+/** Una serie de la gráfica de barras (p. ej. «observado» y «esperado»). */
+export interface SerieBarras {
+  id: string;
+  etiqueta: string;
+  /** La serie destacada se rellena en navy sólido; las demás, con trama gris (legibles en blanco y negro). */
+  destacada?: boolean;
+}
+
+/** Una categoría del eje horizontal con un valor por serie, en el orden de `series`. */
+export interface CategoriaBarras {
+  id: string;
+  etiqueta: string;
+  valores: number[];
+}
+
+/**
+ * Barras agrupadas: una categoría por celda o por grupo y una barra por serie
+ * dentro de cada categoría (p. ej. frecuencias observadas frente a esperadas
+ * en las cuatro celdas de una tabla 2×2, o los pares discordantes b y c).
+ */
+export interface GraficaBarras extends GraficaBase {
+  tipo: 'barras';
+  series: SerieBarras[];
+  categorias: CategoriaBarras[];
+  /** Eje de frecuencias; el dominio declarado se amplía si algún valor lo supera. */
+  ejeY: EjeGrafica;
+  /** Línea horizontal de referencia (p. ej. el valor esperado bajo H0) con rótulo opcional. */
+  referencia?: { valor: number; etiqueta?: string };
+}
+
+/** Una clase del histograma: intervalo [desde, hasta) y su frecuencia. */
+export interface BinHistograma {
+  desde: number;
+  hasta: number;
+  n: number;
+}
+
+/** Resumen de cinco números con bigotes de Tukey y atípicos, en unidades de la variable. */
+export interface CajaResumen {
+  min: number;
+  q1: number;
+  mediana: number;
+  q3: number;
+  max: number;
+  /** Extremos de los bigotes (el dato más extremo dentro de las cercas de Tukey; sin datos, min y max). */
+  bigoteInf: number;
+  bigoteSup: number;
+  /** Valores fuera de las cercas, dibujados como puntos. */
+  atipicos: number[];
+}
+
+/** Marcador vertical sobre el eje x (p. ej. la media, o la media estimada por cada método). */
+export interface MarcadorX {
+  id: string;
+  etiqueta: string;
+  x: number;
+  destacada?: boolean;
+}
+
+/**
+ * Histograma con curva normal superpuesta y diagrama de caja debajo, ambos
+ * sobre el mismo eje x. Sin `bins` solo se dibujan la caja, la curva normal
+ * implícita y los marcadores (p. ej. media y DE estimadas desde la mediana).
+ */
+export interface GraficaHistogramaBoxplot extends GraficaBase {
+  tipo: 'histograma-boxplot';
+  /** Eje de la variable: rótulo, dominio (se amplía a los datos) y pista de formato. */
+  ejeX: EjeGrafica;
+  bins?: BinHistograma[];
+  /** Rótulo del eje de frecuencias (solo con `bins`). */
+  etiquetaFrecuencia?: string;
+  caja: CajaResumen;
+  /** Curva normal N(media, de²) escalada a las frecuencias del histograma (o sola, sin histograma). */
+  normal?: { media: number; de: number; etiqueta: string };
+  marcadores?: MarcadorX[];
+}
+
 /** Descripción declarativa de la gráfica; `nucleo/svg.ts` la convierte en SVG (cadena, sin DOM). */
-export type DatosGrafica = GraficaForest | GraficaFagan | GraficaCurvas;
+export type DatosGrafica = GraficaForest | GraficaFagan | GraficaCurvas | GraficaBarras | GraficaHistogramaBoxplot;
 
 /**
  * Contexto que la página entrega a `presentar()`. El código R relleno NO forma

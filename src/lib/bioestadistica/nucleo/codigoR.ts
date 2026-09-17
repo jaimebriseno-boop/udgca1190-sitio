@@ -33,14 +33,58 @@ export function num(x: number): string {
   return String(x);
 }
 
-/** Literal de R para un valor de entrada. Los vectores exigen `rScript`. */
+/** Ancho de línea a partir del cual un vector `c(...)` salta de línea en el snippet. */
+const ANCHO_LINEA_VECTOR = 72;
+
+/**
+ * Vector numérico a literal de R: `c(1, 2, 3)`, partido en varias líneas con
+ * sangría de dos espacios cuando no cabe en `ANCHO_LINEA_VECTOR`, para que la
+ * columna pegada se lea (y se pegue en RStudio) sin una línea kilométrica. Un
+ * vector vacío es `c()` (NULL en R): la validación de la calculadora debe
+ * impedir que llegue aquí.
+ *
+ * @throws {RangeError} si algún elemento no es un número finito.
+ */
+function vector(clave: string, v: number[]): string {
+  const piezas = v.map((x, i) => {
+    if (typeof x !== 'number' || !Number.isFinite(x)) {
+      throw new RangeError(`la entrada {${clave}}[${i}] no es un número finito: ${String(x)}`);
+    }
+    return num(x);
+  });
+  if (piezas.length === 0) return 'c()';
+  const lineas: string[] = [];
+  let actual = '';
+  for (const pieza of piezas) {
+    const tentativa = actual === '' ? pieza : `${actual}, ${pieza}`;
+    if (tentativa.length > ANCHO_LINEA_VECTOR && actual !== '') {
+      lineas.push(`${actual},`);
+      actual = pieza;
+    } else {
+      actual = tentativa;
+    }
+  }
+  lineas.push(actual);
+  return `c(${lineas.join('\n  ')})`;
+}
+
+/**
+ * Literal de R para un valor de entrada.
+ *
+ * - Número finito → su literal; `NaN` → `NA` (una entrada opcional que no se
+ *   capturó, p. ej. los cuartiles en el escenario «mínimo y máximo»); ±∞ no
+ *   tiene literal y se rechaza.
+ * - Booleano → `TRUE`/`FALSE`; cadena → entre comillas dobles.
+ * - Vector numérico (columna pegada) → `c(...)`. El snippet copiable lleva los
+ *   datos porque es lo que quien lo pega en RStudio necesita; las tablas de
+ *   varias columnas (modelos) irán en `datos.csv` con `rScript` (H5).
+ */
 function literal(clave: string, v: ValorEntrada): string {
-  if (typeof v === 'number') return num(v);
+  if (typeof v === 'number') return Number.isNaN(v) ? 'NA' : num(v);
   if (typeof v === 'boolean') return v ? 'TRUE' : 'FALSE';
   if (typeof v === 'string') return JSON.stringify(v);
-  throw new TypeError(
-    `la entrada {${clave}} es un vector; una plantilla de texto no puede interpolarlo: usa rScript(entradas)`,
-  );
+  if (Array.isArray(v)) return vector(clave, v);
+  throw new TypeError(`la entrada {${clave}} tiene un tipo sin literal de R`);
 }
 
 /**

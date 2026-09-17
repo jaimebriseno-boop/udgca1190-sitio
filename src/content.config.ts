@@ -197,6 +197,15 @@ const calculadoras = defineCollection({
             (['es', 'en'] as const).every((lang) => e.opciones!.every((op) => typeof c[lang].etiquetas[`${e.id}.${op}`] === 'string')),
         ),
       { message: 'cada opción de una entrada con `opciones` necesita su etiqueta `<id>.<opcion>` en es y en' },
+    )
+    // Una columna pegada (`tipo: columna`) viaja como vector numérico; su `min`
+    // es el número mínimo de valores. El ejemplo, si la trae, debe ser una lista.
+    .refine(
+      (c) =>
+        c.entradas.every(
+          (e) => e.tipo !== 'columna' || c.ejemplo[e.id] === undefined || Array.isArray(c.ejemplo[e.id]),
+        ),
+      { message: 'el ejemplo de una entrada de tipo `columna` debe ser una lista de números' },
     ),
 });
 

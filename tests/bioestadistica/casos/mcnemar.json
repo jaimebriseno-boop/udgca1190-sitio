@@ -1,0 +1,70 @@
+{
+  "calculadora": "mcnemar",
+  "casos": [
+    {
+      "id": "b_igual_c",
+      "entradas": { "a": 40, "b": 10, "c": 10, "d": 90, "metodo_delta": "wald", "nivel": 0.95 },
+      "nota": "b = c: la diferencia es 0, el p exacto vale 1 y mcnemar.test(correct = TRUE) NO aplica la correccion de Edwards (el estadistico corregido es 0, no 1/(b+c))."
+    },
+    {
+      "id": "sin_discordantes",
+      "entradas": { "a": 40, "b": 0, "c": 0, "d": 90, "metodo_delta": "wald", "nivel": 0.95 },
+      "nota": "Sin pares discordantes: chi2, Edwards y sus p son NaN en R y en TS; el p exacto y el OR pareado son NA; delta = 0 con IC [0, 0]."
+    },
+    {
+      "id": "b1_c0",
+      "entradas": { "a": 40, "b": 1, "c": 0, "d": 90, "metodo_delta": "wald", "nivel": 0.95 },
+      "nota": "Un solo par discordante: |b - c| = 1 deja el estadistico de Edwards en 0 y el p exacto en 1; el OR pareado es Inf con limite superior Inf."
+    },
+    {
+      "id": "muchos",
+      "entradas": { "a": 300, "b": 200, "c": 100, "d": 900, "metodo_delta": "wald", "nivel": 0.95 },
+      "nota": "300 pares discordantes: la p exacta de binom.test recorre 300 densidades y los tres valores p caen en 1e-8 (comprueba las colas)."
+    },
+    {
+      "id": "agresti_min",
+      "entradas": { "a": 40, "b": 15, "c": 5, "d": 90, "metodo_delta": "agresti-min", "nivel": 0.95 },
+      "nota": "El ejemplo con el intervalo de Agresti-Min: misma estimacion puntual (b - c)/n y distinto intervalo, centrado en (b - c)/(n + 2)."
+    },
+    {
+      "id": "nivel_090",
+      "entradas": { "a": 40, "b": 15, "c": 5, "d": 90, "metodo_delta": "wald", "nivel": 0.9 },
+      "nota": "Ejemplo al 90 %: z = 1.6449 en la diferencia y alpha/2 = 0.05 en los cuantiles beta del OR pareado."
+    },
+    {
+      "id": "nivel_099",
+      "entradas": { "a": 40, "b": 15, "c": 5, "d": 90, "metodo_delta": "wald", "nivel": 0.99 },
+      "nota": "Ejemplo al 99 %: z = 2.5758; los valores p no cambian con el nivel."
+    },
+    {
+      "id": "b0_c7",
+      "entradas": { "a": 40, "b": 0, "c": 7, "d": 90, "metodo_delta": "wald", "nivel": 0.95 },
+      "nota": "b = 0: el OR pareado vale 0 con limite inferior 0 (qbeta no se evalua) y la diferencia es negativa."
+    },
+    {
+      "id": "grande",
+      "entradas": { "a": 1000, "b": 60, "c": 40, "d": 900, "metodo_delta": "wald", "nivel": 0.95 },
+      "nota": "100 pares discordantes (>= 25): la correccion de Edwards es la prueba principal y el p exacto queda cerca del corregido."
+    },
+    {
+      "id": "frontera_25",
+      "entradas": { "a": 50, "b": 13, "c": 12, "d": 80, "metodo_delta": "wald", "nivel": 0.95 },
+      "nota": "b + c = 25 justo en el umbral: se reporta Edwards; con |b - c| = 1 el estadistico corregido es 0 y el p exacto, 1."
+    },
+    {
+      "id": "frontera_24",
+      "entradas": { "a": 50, "b": 12, "c": 12, "d": 80, "metodo_delta": "wald", "nivel": 0.95 },
+      "nota": "b + c = 24, un par por debajo del umbral: se reporta la exacta y salta el aviso pocos_discordantes."
+    },
+    {
+      "id": "todo_discordante",
+      "entradas": { "a": 0, "b": 9, "c": 3, "d": 0, "metodo_delta": "wald", "nivel": 0.95 },
+      "nota": "Sin concordantes (n = b + c = 12): la diferencia de Wald casi toca [0, 1] porque la varianza pareada se queda sin holgura."
+    },
+    {
+      "id": "agresti_recorte",
+      "entradas": { "a": 0, "b": 5, "c": 0, "d": 0, "metodo_delta": "agresti-min", "nivel": 0.95 },
+      "nota": "n = 5 con los cinco pares discordantes en la misma direccion: delta = 1 con EE de Wald 0 y el intervalo de Agresti-Min recortado en 1."
+    }
+  ]
+}

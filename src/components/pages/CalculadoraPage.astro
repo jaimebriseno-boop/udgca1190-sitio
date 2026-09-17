@@ -8,8 +8,10 @@
 import type { CollectionEntry } from 'astro:content';
 import { cargarDefinicion } from '../../bioestadistica/registro.ts';
 import { localePath, t, tPrefijo } from '../../i18n.mjs';
+import { paramsDeAvisos } from '../../lib/bioestadistica/nucleo/avisos.ts';
 import { codigoR } from '../../lib/bioestadistica/nucleo/codigoR.ts';
 import { crearFormateador } from '../../lib/bioestadistica/nucleo/formato.ts';
+import { parsearPegado, resumenPegado } from '../../lib/bioestadistica/nucleo/pegado.ts';
 import { renderGrafica } from '../../lib/bioestadistica/nucleo/svg.ts';
 import type { Celda, Contexto, Entradas, Presentacion } from '../../lib/bioestadistica/nucleo/tipos.ts';
 import Base from '../../layouts/Base.astro';
@@ -23,6 +25,7 @@ import Ecuacion from '../bioestadistica/Ecuacion.astro';
 import Exportar from '../bioestadistica/Exportar.astro';
 import Grafica from '../bioestadistica/Grafica.astro';
 import Interpretacion from '../bioestadistica/Interpretacion.astro';
+import PegarColumna from '../bioestadistica/PegarColumna.astro';
 import Referencias from '../bioestadistica/Referencias.astro';
 import ResultadoCelda from '../bioestadistica/ResultadoCelda.astro';
 import Tabla2x2Input from '../bioestadistica/Tabla2x2Input.astro';
@@ -58,7 +61,7 @@ const url = new URL(localePath(rutaCanonica, lang), Astro.site).href;
 
 // Controles disponibles hoy. Un tipo sin control detiene el build antes que
 // publicar una calculadora a la que le falte un campo (misma política que Zod).
-const CONTROLES = new Set(['entero', 'decimal', 'proporcion', 'porcentaje', 'opcion']);
+const CONTROLES = new Set(['entero', 'decimal', 'proporcion', 'porcentaje', 'opcion', 'columna']);
 const sinControl = datos.entradas.filter((e) => !e.derivado && !CONTROLES.has(e.tipo));
 if (sinControl.length > 0) {
   throw new Error(
@@ -75,8 +78,21 @@ const campos = datos.entradas.filter((e) => !e.derivado && e.id !== 'nivel');
 const celdasTabla = datos.tabla2x2 ? (datos.tabla2x2.celdas as [string, string, string, string]) : null;
 const enTabla = new Set<string>(celdasTabla ?? []);
 
-/** Valor inicial de un campo: lo que trae el ejemplo del YAML, como texto. */
-const valorEjemplo = (id: string): string => (datos.ejemplo[id] === undefined ? '' : String(datos.ejemplo[id]));
+/**
+ * Valor inicial de un campo suelto: lo que trae el ejemplo del YAML, como
+ * texto. Una columna pegada nunca pasa por aquí (`String([1, 2, 3])` daría
+ * «1,2,3»): la resuelve `valorColumna`.
+ */
+const valorEjemplo = (id: string): string => {
+  const v = datos.ejemplo[id];
+  return v === undefined || Array.isArray(v) ? '' : String(v);
+};
+
+/** Valor inicial de una columna pegada: un número por línea, como se pega. */
+const valorColumna = (id: string): string => {
+  const v = datos.ejemplo[id];
+  return Array.isArray(v) ? v.join('\n') : '';
+};
 
 const valoresTabla: Record<string, string> = {};
 for (const id of celdasTabla ?? []) valoresTabla[id] = valorEjemplo(id);
@@ -96,6 +112,10 @@ const resultado = def.calcular ? def.calcular(ejemplo, nivel) : null;
 const presentacion: Presentacion | null = resultado ? def.presentar(resultado, ejemplo, ctx) : null;
 const celdas: Record<string, Celda> = presentacion?.celdas ?? {};
 const avisosActivos = presentacion?.avisos ?? [];
+// Los códigos activos no llevan sus parámetros: se toman del resultado para que
+// el aviso del ejemplo salga ya relleno en el HTML, igual que lo pintará el
+// controlador («3 valores…», no «{n_atipicos} valores…»).
+const avisosParams = paramsDeAvisos(resultado?.avisos ?? []);
 const svg = presentacion?.grafica ? renderGrafica(presentacion.grafica, { fmt }) : '';
 // `Definicion.rScript` recibe también el nivel de confianza; la plantilla de R
 // solo pasa las entradas, así que se fija aquí el nivel de esta página.
@@ -170,6 +190,21 @@ const payload = {
                     />
                   ) : null;
                 }
+                // Columna de datos: un área de pegado con su línea de resumen,
+                // resuelta aquí con el mismo analizador que usa el navegador.
+                if (e.tipo === 'columna') {
+                  const texto = valorColumna(e.id);
+                  return (
+                    <PegarColumna
+                      id={e.id}
+                      etiqueta={textos.etiquetas[e.id] ?? e.id}
+                      valor={texto}
+                      ayuda={textos.ayudas[e.id]}
+                      placeholder={ui.pegado_placeholder}
+                      resumen={resumenPegado(parsearPegado(texto), ui, fmt)}
+                    />
+                  );
+                }
                 // Lista cerrada de valores (método, corrección): un selector, sea
                 // cual sea el tipo del que se leen después esos valores.
                 if (e.opciones && e.opciones.length > 0) {
@@ -231,7 +266,7 @@ const payload = {
             </div>
             <div class="calc__vivo" aria-live="polite">
               <Interpretacion titulo={ui.interpretacion} parrafos={presentacion?.interpretacion ?? []} />
-              <Avisos avisos={textos.avisos} activos={avisosActivos} etiqueta={ui.avisos} />
+              <Avisos avisos={textos.avisos} activos={avisosActivos} params={avisosParams} etiqueta={ui.avisos} />
             </div>
             {svg && <Grafica svg={svg} titulo={textos.grafica_titulo ?? ui.grafica} />}
             <Exportar lang={lang} />

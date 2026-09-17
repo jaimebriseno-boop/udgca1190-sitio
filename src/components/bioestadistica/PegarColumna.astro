@@ -1,0 +1,121 @@
+---
+// Captura de una columna de datos: un `<textarea>` donde se pega tal cual lo
+// que se copió de Excel, de Google Sheets o de un `.csv`. No se pide subir un
+// archivo ni rellenar una tabla celda por celda; tampoco sale nada del
+// navegador.
+//
+// Bajo el campo va siempre una línea de resumen («40 valores leídos · 2
+// faltantes omitidos…») que dice qué se entendió del pegado. La resuelve quien
+// usa el componente con `resumenPegado()`, en build para el ejemplo; el
+// controlador la reescribe sobre el mismo gancho `data-pegado-resumen` cada vez
+// que cambia el texto. Va en `aria-describedby` del campo y con `aria-live` en
+// «off»: la región viva de la página es una sola (interpretación y avisos), y
+// un recuento que cambia en cada tecla no debe interrumpir la lectura.
+interface Props {
+  id: string;
+  etiqueta: string;
+  /** Texto inicial: los valores del ejemplo ya unidos por salto de línea. */
+  valor?: string;
+  ayuda?: string;
+  /** Instrucción dentro del campo vacío (`bio.ui.pegado_placeholder`). */
+  placeholder: string;
+  /** Línea de resumen ya resuelta con `resumenPegado()`. */
+  resumen: string;
+}
+const { id, etiqueta, valor = '', ayuda, placeholder, resumen } = Astro.props;
+const idCampo = `campo-${id}`;
+const idAyuda = `ayuda-${id}`;
+const idResumen = `resumen-${id}`;
+const idError = `error-${id}`;
+const describedby = [idResumen, ayuda ? idAyuda : null, idError].filter(Boolean).join(' ');
+---
+
+<div class="campo">
+  <label class="campo__label" for={idCampo}>{etiqueta}</label>
+  <textarea
+    class="campo__textarea"
+    id={idCampo}
+    data-entrada={id}
+    data-tipo="columna"
+    rows="7"
+    spellcheck="false"
+    autocomplete="off"
+    autocapitalize="off"
+    placeholder={placeholder}
+    aria-describedby={describedby}>{valor}</textarea
+  >
+  <p class="campo__resumen" id={idResumen} data-pegado-resumen={id} aria-live="off">{resumen}</p>
+  {ayuda && <p class="campo__ayuda" id={idAyuda}>{ayuda}</p>}
+  <p class="campo__error" id={idError} data-error-for={id} hidden></p>
+</div>
+
+<style>
+  /* Una sola columna que puede encogerse: sin `minmax(0, …)` el ancho mínimo
+     del `<textarea>` (sus `cols` implícitos) empuja la columna de entradas
+     fuera de la pantalla en un teléfono. */
+  .campo { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .campo + :global(.campo) { margin-top: var(--sp-3); }
+  .campo__label {
+    display: block;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--udg-gray-900);
+    margin-bottom: var(--sp-1);
+  }
+  .campo__textarea {
+    width: 100%;
+    padding: var(--sp-1) var(--sp-2);
+    border: 1px solid var(--udg-gray-300);
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--udg-gray-900);
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-normal);
+    font-variant-numeric: tabular-nums;
+    /* Vertical y no libre: a lo ancho, la columna de entradas manda. */
+    resize: vertical;
+    min-height: 7em;
+  }
+  .campo__textarea::placeholder {
+    color: var(--udg-gray-500);
+    font-family: var(--font-sans);
+    font-size: var(--fs-xs);
+  }
+  .campo__textarea:focus-visible { outline: 2px solid var(--udg-navy-700); outline-offset: 1px; }
+  .campo__textarea[aria-invalid='true'] { border-color: var(--udg-err-fg); }
+  .campo__resumen {
+    margin-top: var(--sp-1);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-700);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--lh-normal);
+  }
+  .campo__ayuda {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-500);
+    line-height: var(--lh-normal);
+  }
+  .campo__error {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--udg-err-fg);
+  }
+
+  @media print {
+    /* En papel el campo no se desplaza: se imprime a la altura que le dan sus
+       filas (siete) y como mucho doce líneas, para que los datos capturados
+       queden a la vista sin comerse la hoja. */
+    .campo__textarea {
+      height: auto;
+      min-height: 0;
+      max-height: 17em;
+      overflow: hidden;
+      resize: none;
+      background: transparent;
+    }
+  }
+</style>

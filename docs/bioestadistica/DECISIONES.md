@@ -167,3 +167,168 @@ comprobados contra PubMed y Crossref.
 («dependen de la prevalencia; no válidos en casos y controles») va en el párrafo de
 interpretación `predictivos`, no como aviso amarillo siempre visible.
 
+
+## H2 · Patrón confirmado: asociación 2×2, pareadas y columnas pegadas (17 de septiembre de 2026)
+
+**Entregado.** Seis calculadoras bilingües con el circuito completo YAML → módulo puro →
+casos → fixture de R → prueba: grupo «Asociación y efecto en tablas 2×2» completo
+(`efecto-2x2` B1: RR de Katz, OR de Woolf, RRA de Newcombe método 10 o Wald, RRR y NNT
+de Altman con selectores de diseño, método de la RRA y Haldane-Anscombe;
+`chi-cuadrada-fisher` B2: χ² de Pearson, Yates acotada como R, variante N−1 de Campbell,
+Fisher exacto «minlike», OR condicional de `fisher.test` con su IC, φ con signo y regla
+de Cochran; `mcnemar` B3: χ² sin y con corrección de Edwards, p exacto binomial, δ pareada
+Wald/Agresti-Min y OR pareado) y tres del grupo «Concordancia y descriptivos» (`ic-media`
+D4, `media-desde-mediana` D5 con Luo 2018, Wan 2014 y Hozo 2005, y `descriptivos` D6 con
+la primera columna pegada: momentos, cuantiles tipo 7, G₁/G₂ de Joanes y Gill, Shapiro-
+Wilk AS R94 portado, cercas de Tukey, media geométrica, histograma de Sturges con curva
+normal y caja). Infraestructura nueva: `nucleo/pegado.ts` + `PegarColumna.astro` + rama
+`columna` del controlador; `nucleo/avisos.ts` (interpolación de avisos compartida por
+SSR y navegador); vectores y `NA` en `nucleo/codigoR.ts`; renderizadores `barras` e
+`histograma-boxplot` en `nucleo/svg.ts`; métodos `efecto`, `independencia`, `pareadas`,
+`medias`, `resumenes`, `descriptivos` y `shapiro` en `metodos/`; 33 referencias
+verificadas contra PubMed y Crossref; ocho cadenas `bio.ui.*` nuevas.
+
+**Desviaciones respecto a los diseños, con motivo.**
+
+- Columnas pegadas SIN `rScript`: MOTOR §3.1 decía que «los vectores exigen rScript»,
+  pero `codigoR.ts` interpola ahora un `number[]` como `c(...)` (líneas de ≤ 72
+  caracteres con sangría de dos espacios) y `NaN` como `NA`. Motivo: el snippet copiable
+  de una columna debe llevar los datos, que es lo que quien lo pega en RStudio necesita,
+  y así el YAML sigue siendo la única fuente del R (mismo hash, mismo generador de
+  fixtures, mismas pruebas). `rScript` queda para los modelos con `datos.csv` (H5).
+- `NA_real_` en los snippets, nunca `NA` a secas para un escalar: `correr_casos.R`
+  reserializa la salida con `fromJSON`/`toJSON` y un `NA` lógico escalar da la vuelta
+  como `{}`, que el comparador rechaza; `NA_real_` viaja como la cadena `"NA"`. Un vector
+  `c(NA, NA, NA)` sí viaja como `[null, null, null]`.
+- `PropCIs::diffscoreci` NO es el método 10 de Newcombe (es un intervalo score tipo
+  Miettinen-Nurminen resuelto por bisección a 1e-7): B1 escribe el método 10 a mano con
+  los límites de Wilson, en el mismo orden de operaciones que `icWilson`, y deja
+  `diffscoreci` como línea comentada. El snippet no carga `binom` ni `PropCIs`.
+- B1: p₁, p₀, RRA y NNT se calculan SIN corrección; Haldane-Anscombe afecta solo a RR,
+  OR y, por derivación, a la RRR. El IC del NNT se guarda siempre como
+  `sort(1/|IC de la RRA|)` (igual en R); cuando la RRA cruza 0 la presentación lo escribe
+  con la notación de Altman «NNTB x a ∞ a NNTH y» (patrón `etiquetas.nnt_altman`), sin
+  cambiar los números almacenados. En «casos y controles» RR, RRA, RRR y NNT se muestran
+  como «—» con la nota «no aplica» y R los calcula igual: el diseño solo cambia el texto.
+  En «transversal» el RR se lee como razón de prevalencias (etiqueta estática y párrafo
+  propio). Una columna en 0 (nadie con el desenlace) se admite y deja RR/OR en 0, ∞ o
+  «no definido» con aviso; una fila en 0 se rechaza (`err_fila_vacia`).
+- B2: un margen en 0 se rechaza en `validar()` (`err_fila_vacia`/`err_columna_vacia`)
+  en vez de mostrar χ² y φ como 0/0 (la especificación admitía un mensaje; la validación
+  es ese mensaje). No hay p unilateral de Fisher. El OR condicional replica `fisher.test`
+  (`dnhyper`, `mnhyper`, `pnhyper`, `mle`, `ncp.L`, `ncp.U`, con los mismos corchetes y
+  la transformación 1/t) y resuelve las raíces con una traducción literal de `R_zeroin2`
+  (el `uniroot` de R) a su tolerancia por omisión (2⁻¹³ ≈ 1.22e-4), como función privada
+  de `independencia.ts`: `brent` de las primitivas (zbrent de Numerical Recipes) no
+  sigue los mismos iterados y, con esa tolerancia, paraba hasta 1.3e-3 lejos del oráculo
+  (tabla 2/50/30/3), por encima del perfil `fisher_or`; con la traducción, la diferencia
+  máxima frente a R es 1.5e-14. Se reproduce R y no la raíz exacta (de la que el
+  `uniroot` de R se aparta hasta 1.8 % en esa tabla) para que «Verificar con R» coincida;
+  el perfil `fisher_or` (5e-4) se conserva por si otra versión de R cambia `zeroin`.
+  `p_fisher` puede rebasar 1 en un ulp (0/3/2/5 → 1.0000000000000002), igual que
+  `fisher.test`, y no se recorta porque la biblioteca no redondea. Yates como R
+  (`min(0.5, |O − E|)`; el aviso `yates_cero` se decide con |ad − bc| < n/2 en enteros,
+  porque el estadístico deja un residuo de ~1e-29 en R y en TS cuando las cuatro |O − E|
+  difieren en un ulp). La prueba recomendada sigue a Cochran (n < 20 o alguna E < 5 →
+  Fisher; con n < 20 la esperada mínima nunca llega a 5, porque E_min ≤ n/4); Yates se
+  muestra pero no se recomienda (Campbell 2007). `e_min` es una salida.
+- B3: la corrección de Edwards se aplica solo si b ≠ c, como `mcnemar.test` (con b = c
+  el estadístico corregido de R es 0); `p_exacta` replica la regla bilateral de
+  `binom.test` (`relErr = 1 + 1e-7`); el intervalo de Agresti-Min va centrado en
+  (b − c)/(n + 2) y recortado a [−1, 1] mientras el punto reportado sigue siendo
+  (b − c)/n; el de Wald no se recorta; el OR pareado b/c lleva el intervalo derivado del
+  de Clopper-Pearson de b/(b + c) (0 e ∞ en los bordes). b + c = 0 se admite con celdas
+  «no definido» y párrafo alternativo; `pocos_discordantes` solo si 0 < b + c < 25.
+- D4 solo con resumen (media, DE, n): la columna pegada vive en `descriptivos`, que ya
+  entrega el IC t de la media. Evita un control de doble modo (campos o columna) y la
+  ambigüedad de qué manda cuando hay ambos. Gráfica: bosque con «Media ± 1 DE» y
+  «Media ± 2 DE» como filas para contrastar el intervalo con la dispersión.
+- D5: selector explícito de escenario (s1/s2/s3); los cuartiles o extremos que el
+  escenario no usa se rellenan con `NaN` en `derivar()` y llegan a R como `NA`. Los
+  casos JSON llevan siempre los cinco números (JSON no admite `NaN`) y la ruta con `NA`
+  se prueba aparte comprobando que el snippet relleno dice `q1 <- NA` y que R devuelve lo
+  mismo. En s2 la caja de la gráfica usa Q₁ y Q₃ como extremos; en s1, la mediana como
+  Q₁ y Q₃. Para s3 la banda de asimetría toma el cociente (rango o IQR) más alejado de 1
+  en escala logarítmica; un resumen degenerado (0/0) se lee como compatible.
+- D6: Shapiro-Wilk portado desde el listado Fortran publicado de AS R94 (StatLib) y de
+  Royston 1992/1995, no desde `swilk.c` de R (GPL); se usan 6/π y arcsen√¾ exactos y el
+  `qnorm` AS 241 en vez del `PPND` AS 111; los datos se dividen entre el rango sin
+  restar el mínimo, como R. Precisión frente a R 4.5.2: 9.4e-16 en W y 7.5e-14 en p sobre
+  30 columnas con n de 3 a 5000 (la tolerancia `shapiro` de 1e-8 queda holgada a
+  propósito). Cuantiles tipo 7 con la expresión de R `(1 − h)·x[lo] + h·x[hi]`; media con
+  la segunda pasada de `mean`; G₁/G₂ `NA` si n < 3 / n < 4 o varianza 0; el IC t va
+  escrito a mano en el snippet porque `t.test` falla con datos constantes; W y p `NA` si
+  n < 3, n > 5000 o rango 0; media geométrica `NA` con algún valor ≤ 0. Histograma: k de
+  Sturges con paso «bonito» cuyo número de clases queda más cerca de k (el ejemplo da 9;
+  `pretty` de R da 10). Ejemplo = `set.seed(1190); round(rnorm(40, 150, 45))`, que trae
+  tres atípicos de Tukey y deja el aviso `atipicos` activo por omisión.
+- Avisos con parámetros en SSR: `Avisos.astro` recibía solo los códigos activos y
+  publicaba «{n_atipicos} valores…» hasta que el navegador repintaba (defecto latente
+  desde H1, que ninguna calculadora anterior activaba en su ejemplo). `nucleo/avisos.ts`
+  (`interpolar`, `paramsDeAvisos`) es ahora la única implementación, usada por la página
+  y por el controlador.
+- `parsearPegado` devuelve `{ valores, faltantes, ignorados, encabezado, variasColumnas }`
+  (ARQUITECTURA §6.4 decía `{ columnas, filas, avisos }`): la calculadora recibe solo
+  `number[]` y el recuento de lo omitido se muestra bajo el campo (`resumenPegado`, en
+  `aria-describedby` y con `aria-live="off"`), no como aviso de la calculadora. Reglas:
+  separador tabulador > `;` > coma, y la coma solo separa si alguna línea con coma no
+  cumple el patrón de coma decimal `^[+\-−]?\d+,\d+$`; una sola línea con separador es
+  una serie horizontal; varias líneas con separador toman la primera columna y avisan;
+  la primera celda no numérica es el encabezado; faltantes = vacío, NA, NaN, N/A, #N/A,
+  #¡N/A, #N/D, null, `.` y los guiones; las líneas vacías de en medio cuentan como
+  faltantes. En una entrada `columna`, `min` es el número mínimo de valores
+  (`err_n_min`), y `err_sin_datos` aparece cuando hay texto sin ningún número. La columna
+  se registra siempre en las entradas (también `[]`) para que «Ejemplo cargado» y la URL
+  comparen lo mismo que hay en pantalla.
+- SVG: en `barras` las series secundarias se rellenan con una trama definida en
+  `<defs>` (`fill` por atributo, color por CSS: legible en blanco y negro), la leyenda
+  dibuja rectángulos (`leyendaSvg` ampliada con `muestra`/`relleno`), las marcas de los
+  ejes de conteo son enteras (`ticksEnteros`) y los rótulos de categoría van a 13. En
+  `histograma-boxplot` los paneles miden 170 (histograma) / 110 (solo curva normal) / 64
+  (caja); con tres o más marcadores sus nombres pasan a la leyenda; el dominio x no se
+  amplía a la curva normal (una DE grande se comería el histograma).
+- Bibliografía: `publisher = {Oliver \& Boyd}` porque el parser parte `publisher` por
+  « and »; `author = {Student}` con una sola llave (con dos, `authorsText` imprimía
+  «undefined»); Yates 1934 conserva el nombre histórico de la revista; Pearson 1900 lleva
+  «Series 5» en `journal`; los editores del Cochrane Handbook van en `author` porque el
+  cargador no lee `editor`. Trece artículos de revistas de estadística no están en PubMed
+  (sin `pmid`) y los cuatro libros no tienen DOI.
+- `bandas.ts`: `bandaAsimetria(G₁)` (|G₁| < 0.5 simétrica; cola derecha/izquierda) y
+  `bandaAsimetriaResumen` (cociente entre 0.5 y 2 compatible; ±∞ marcada; 0/0
+  compatible).
+- φ se atribuye a Yule 1912 (la especificación listaba además «Pearson 1904,
+  Drapers' Company Research Memoirs [verificar]», sin datos bibliográficos confirmables):
+  queda Yule como origen citable y Pearson 1900 para la χ².
+- Diferencias de proporciones (RRA de B1 y δ pareada de B3) se presentan en puntos
+  porcentuales (×100, un decimal, sin signo «%») en celda, resumen e interpretación, con
+  la unidad en la etiqueta: con «%» se confundían con la RRR, que sí es un porcentaje.
+- Métodos de B1 depende del diseño (`metodos_diseno.cohorte|transversal|casos_controles`
+  → `{frase_medidas}`): en casos y controles solo declara la razón de momios; en
+  transversal habla de razón de prevalencias. En transversal no se emite el párrafo del
+  NNT y los párrafos del RR hablan de prevalencia, no de riesgo ni de «tratar».
+- D5: el Cochrane Handbook (§6.5.2.5 y §6.5.2.6) respalda la conversión desde el IQR
+  (Wan 2014) y desaconseja estimar la DE desde el rango; NO cita a Luo 2018. Los textos
+  lo dicen así y advierten que el escenario S1 debe leerse con más cautela. Con n grande
+  solo S1 tiende a la mediana; S2 y S3 convergen a 0.70·(Q₁ + Q₃)/2 + 0.30·mediana.
+- D4: el intervalo χ² de la DE se describe como el intervalo clásico basado en
+  (n − 1)s²/σ² ~ χ²_{n−1}, sin atribuirlo a un manual concreto.
+- Pruebas añadidas tras la revisión: `contenido.test.ts` escribe cada aviso activo (del
+  ejemplo y de todos los casos del fixture) con sus `params` y exige que ningún
+  marcador quede sin parámetro (la red que faltaba al arreglo de los avisos en SSR), y
+  falla si un módulo exporta `rScript` mientras el generador de fixtures solo conozca
+  `r.codigo`; `bandas.test.ts` fija los cortes de las bandas de asimetría;
+  `chi-cuadrada-fisher.test.ts` acumula la diferencia relativa máxima del OR
+  condicional frente a R (< 1e-12) y sustituye dos aserciones tautológicas por fórmulas
+  independientes; `descriptivos.test.ts` une `parsearPegado` con `validar`/`calcular`;
+  casos nuevos de fixture: mediana igual a un cuartil (±∞ y 0 en el cociente de
+  asimetría), S2 con n = 4 e `ic-media` con n = 3.
+
+**Pendiente conocido.** (1) Cuando la columna pegada no cabe en la URL (tope de 1,500
+caracteres) el enlace se comparte sin los datos y no hay aviso visible. (2) No se
+implementaron la p unilateral de Fisher ni el mid-p de McNemar, ni las opciones de D6
+(cuantil tipo 6, clases de Freedman-Diaconis, Shapiro-Wilk desactivable) ni la DE de Shi
+2020 para S3 de D5: son opcionales en la especificación y ningún texto promete lo que no
+hace. (3) El camino SSR de los avisos (`Avisos.astro` + `CalculadoraPage`) y el repintado
+del controlador (`pintarAvisos`) no tienen prueba de DOM: solo los cubren la prueba de
+interpolación de `contenido.test.ts` y el `build` (H3 puede abrir un arnés de DOM
+mínimo). (4) `docs/performance/baseline.json` sigue sin actualizar (ajeno a la sección).

@@ -1,0 +1,163 @@
+# Calculadora D4 · Intervalo de confianza de una media (t) y de la DE (χ²).
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: acuerdo
+orden: 2
+estado: activa
+motor: ts
+entradas:
+  - { id: media, tipo: decimal }
+  - { id: de, tipo: decimal, min: 0 }
+  - { id: n, tipo: entero, min: 2 }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+ejemplo: { media: 95, de: 40, n: 50, nivel: 0.95 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Confidence interval for a mean (t) and for the SD (chi-squared) - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    media <- {media}; de <- {de}; n <- {n}; nivel <- {nivel}
+
+    # Two-sided Student t quantile with n - 1 degrees of freedom, and the standard error of the mean
+    tcrit <- qt(1 - (1 - nivel)/2, n - 1)
+    eem <- de/sqrt(n)
+    media_ic <- c(media, media - tcrit*eem, media + tcrit*eem)
+
+    # CI for the population SD from the chi-squared distribution of (n - 1)s^2/sigma^2 (equal tails)
+    de_ic <- c(de, de*sqrt((n - 1)/qchisq(1 - (1 - nivel)/2, n - 1)), de*sqrt((n - 1)/qchisq((1 - nivel)/2, n - 1)))
+
+    res <- list(media = media_ic, eem = eem, de = de_ic, t_crit = tcrit)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio with raw data: t.test(x, conf.level = nivel)$conf.int; DescTools::MeanCI(x)
+referencias:
+  - { key: student1908, rol: original }
+  - { key: gardner1986, rol: didactica }
+  - { key: altman2000, rol: didactica }
+  - { key: altman1991, rol: didactica }
+grafica: ic-forest
+es:
+  titulo: "Intervalo de confianza de una media: t de Student e intervalo de la desviación estándar"
+  titulo_corto: "IC de una media"
+  meta: "Calcula el intervalo de confianza de una media con la distribución t de Student a partir de la media, la desviación estándar y el tamaño de la muestra, más el intervalo de la desviación estándar por χ², y muestra el código R equivalente. Los datos no salen del navegador."
+  intro: "Captura la media, la desviación estándar y el número de observaciones para obtener el intervalo de confianza de la media (t de Student), el error estándar, el intervalo de la desviación estándar y la interpretación en lenguaje llano, con el código de R equivalente."
+  explicacion:
+    - "El intervalo de confianza de una media responde a una pregunta muy concreta: ¿qué medias poblacionales son compatibles con lo que observé? No dice dónde caen los pacientes individuales. Confundir ambas cosas es el error más frecuente al leer un artículo: un intervalo estrecho con una desviación estándar grande significa que la media está bien estimada, no que los valores se parezcan entre sí."
+    - "El multiplicador no es 1.96 sino el cuantil de la distribución t de Student con n − 1 grados de libertad, porque la desviación estándar también se estimó a partir de los mismos datos. Con muestras pequeñas ese multiplicador crece bastante (con n = 5 vale 2.78) y el intervalo se ensancha. La convergencia hacia 1.96 es lenta: con n = 30 el multiplicador todavía vale 2.045, con n = 100 vale 1.984 y hacen falta unas 240 observaciones para que la diferencia baje de 0.01."
+    - "La desviación estándar también es una estimación y también tiene incertidumbre. Su intervalo se obtiene de la distribución χ² de (n − 1)s²/σ², es marcadamente asimétrico y, con n pequeño, sorprendentemente ancho: es una buena forma de ver por qué no conviene comparar desviaciones estándar de estudios pequeños como si fueran cifras exactas."
+    - "Ambos intervalos suponen que los datos proceden de una distribución aproximadamente normal. El de la media es robusto gracias al teorema del límite central en cuanto la muestra crece; el de la desviación estándar no lo es, y con distribuciones muy asimétricas conviene reportar mediana y rango intercuartílico en vez de media y desviación estándar."
+  ecuaciones:
+    - id: ic_media
+      tex: '\bar x \pm t_{n-1,\,1-\alpha/2}\,\frac{s}{\sqrt{n}}'
+      simbolos:
+        - { s: '\bar x', def: "media observada" }
+        - { s: 's', def: "desviación estándar muestral (denominador n − 1)" }
+        - { s: 'n', def: "número de observaciones" }
+        - { s: 't_{n-1,\,1-\alpha/2}', def: "cuantil bilateral de la t de Student con n − 1 grados de libertad" }
+      nota: "Intervalo de confianza de la media (Student 1908). Es el mismo que devuelve t.test() a partir de los datos crudos."
+    - id: ic_de
+      tex: '\begin{gathered} \frac{(n-1)\,s^2}{\sigma^2} \sim \chi^2_{n-1} \\ \left[\ s\sqrt{\frac{n-1}{\chi^2_{n-1,\,1-\alpha/2}}},\ \ s\sqrt{\frac{n-1}{\chi^2_{n-1,\,\alpha/2}}}\ \right] \end{gathered}'
+      simbolos:
+        - { s: '\chi^2_{n-1,\,q}', def: "cuantil q de la distribución ji cuadrada con n − 1 grados de libertad" }
+        - { s: '\sigma', def: "desviación estándar de la población, que es lo que se estima" }
+      nota: "Intervalo de colas iguales para σ, derivado de que (n − 1)s²/σ² sigue una χ² con n − 1 grados de libertad. Es asimétrico: el límite superior queda más lejos de s que el inferior."
+    - id: eem
+      tex: '\se(\bar x) = \frac{s}{\sqrt{n}}'
+      simbolos:
+        - { s: '\se(\bar x)', def: "error estándar de la media: cuánto varía la media de muestra a muestra" }
+      nota: "El error estándar describe la precisión de la media; la desviación estándar describe la dispersión de los datos. Solo el primero se reduce al aumentar n."
+  etiquetas:
+    media: "Media"
+    de: "Desviación estándar (DE)"
+    n: "Número de observaciones (n)"
+    nivel: "Nivel de confianza"
+    eem: "Error estándar de la media (EEM)"
+    t_crit: "Multiplicador t de Student"
+    nota_t: "t de Student, n − 1 gl"
+    nota_chi2: "distribución χ²"
+    nota_eem: "DE dividida entre la raíz de n"
+    nota_gl: "Grados de libertad"
+    grafica_de1: "Media ± 1 DE"
+    grafica_de2: "Media ± 2 DE"
+  ayudas:
+    media: "Media aritmética de la variable, tal como se reporta en el artículo o en la salida del programa."
+    de: "Desviación estándar muestral (la que usa n − 1 en el denominador). Si el artículo reporta el error estándar, multiplícalo por la raíz de n."
+    n: "Número de observaciones con dato válido (entero de 2 o más)."
+    nivel: "Habitualmente 95 %; también 90 % o 99 %."
+  interpretacion:
+    resumen: "La media fue {media} (DE {de}) en {n} observaciones; el intervalo de confianza al {nivel} ({media_ic}) indica el rango de medias poblacionales compatibles con los datos."
+    contraste: "Ese intervalo no describe la dispersión individual: para eso sirve media ± 2 DE, que aquí abarca aproximadamente de {lim_inf} a {lim_sup}."
+    de: "La desviación estándar de la población es compatible con valores de {de_ic}; con muestras pequeñas ese intervalo es mucho más ancho de lo que suele suponerse."
+    t: "Con n = {n} el multiplicador es t = {t_crit} en vez del 1.96 de la distribución normal, y el error estándar de la media vale {eem}."
+    n.pequeno: "Con n = {n} (menos de 30) el intervalo de la media supone que los datos son aproximadamente normales; si la distribución es muy asimétrica, reporta mediana y rango intercuartílico."
+    n.adecuado: "Con n = {n} (30 o más) el teorema del límite central hace robusto el intervalo de la media aunque los datos no sean normales; el de la desviación estándar, en cambio, sí depende de ese supuesto."
+  avisos:
+    n_pequeno: "n menor que 30: el intervalo de la media supone normalidad aproximada de los datos."
+    n_muy_pequeno: "n menor que 5: la estimación de la desviación estándar es muy inestable y el intervalo, muy ancho. Interpreta con cautela."
+    de_cero: "La desviación estándar es 0: todos los valores son iguales, el intervalo colapsa a un punto y no es informativo."
+  metodos: "La media ({media}; DE {de}; n = {n}) se acompañó de su intervalo de confianza al {nivel} basado en la distribución t de Student con n − 1 grados de libertad [{ref:student1908},{ref:gardner1986}]: {media_ic}. El intervalo de la desviación estándar se obtuvo de la distribución χ² de (n − 1)s²/σ², con colas iguales: {de_ic}. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: recuento de plaquetas en 50 pacientes febriles, media 95 ×10³/µL y desviación estándar 40 ×10³/µL (datos ficticios)."
+  grafica_titulo: "La media con su intervalo frente a la dispersión de los datos"
+en:
+  titulo: "Confidence interval for a mean: Student's t and the interval for the standard deviation"
+  titulo_corto: "CI for a mean"
+  meta: "Compute the confidence interval for a mean with Student's t distribution from the mean, the standard deviation and the sample size, plus the chi-squared interval for the standard deviation, and see the equivalent R code. Data never leave the browser."
+  intro: "Enter the mean, the standard deviation and the number of observations to get the confidence interval for the mean (Student's t), the standard error, the interval for the standard deviation and a plain-language interpretation, with the equivalent R code."
+  explicacion:
+    - "A confidence interval for a mean answers one specific question: which population means are compatible with what I observed? It says nothing about where individual patients fall. Confusing the two is the most common mistake when reading a paper: a narrow interval alongside a large standard deviation means the mean is well estimated, not that the values resemble each other."
+    - "The multiplier is not 1.96 but the quantile of Student's t distribution with n − 1 degrees of freedom, because the standard deviation was estimated from the same data. With small samples that multiplier grows noticeably (with n = 5 it is 2.78) and the interval widens. Convergence towards 1.96 is slow: with n = 30 the multiplier is still 2.045, with n = 100 it is 1.984, and about 240 observations are needed for the difference to fall below 0.01."
+    - "The standard deviation is also an estimate and also carries uncertainty. Its interval comes from the chi-squared distribution of (n − 1)s²/σ², is markedly asymmetric and, with small n, surprisingly wide: a good way to see why standard deviations from small studies should not be compared as if they were exact figures."
+    - "Both intervals assume the data come from an approximately normal distribution. The one for the mean is robust thanks to the central limit theorem as soon as the sample grows; the one for the standard deviation is not, and with strongly skewed distributions it is better to report the median and the interquartile range instead of the mean and the standard deviation."
+  ecuaciones:
+    - id: ic_media
+      tex: '\bar x \pm t_{n-1,\,1-\alpha/2}\,\frac{s}{\sqrt{n}}'
+      simbolos:
+        - { s: '\bar x', def: "observed mean" }
+        - { s: 's', def: "sample standard deviation (n − 1 denominator)" }
+        - { s: 'n', def: "number of observations" }
+        - { s: 't_{n-1,\,1-\alpha/2}', def: "two-sided quantile of Student's t distribution with n − 1 degrees of freedom" }
+      nota: "Confidence interval for the mean (Student 1908). It is the same interval t.test() returns from the raw data."
+    - id: ic_de
+      tex: '\begin{gathered} \frac{(n-1)\,s^2}{\sigma^2} \sim \chi^2_{n-1} \\ \left[\ s\sqrt{\frac{n-1}{\chi^2_{n-1,\,1-\alpha/2}}},\ \ s\sqrt{\frac{n-1}{\chi^2_{n-1,\,\alpha/2}}}\ \right] \end{gathered}'
+      simbolos:
+        - { s: '\chi^2_{n-1,\,q}', def: "quantile q of the chi-squared distribution with n − 1 degrees of freedom" }
+        - { s: '\sigma', def: "population standard deviation, the quantity being estimated" }
+      nota: "Equal-tailed interval for σ, derived from the fact that (n − 1)s²/σ² follows a chi-squared distribution with n − 1 degrees of freedom. It is asymmetric: the upper limit sits farther from s than the lower one."
+    - id: eem
+      tex: '\se(\bar x) = \frac{s}{\sqrt{n}}'
+      simbolos:
+        - { s: '\se(\bar x)', def: "standard error of the mean: how much the mean varies from sample to sample" }
+      nota: "The standard error describes the precision of the mean; the standard deviation describes the spread of the data. Only the former shrinks as n grows."
+  etiquetas:
+    media: "Mean"
+    de: "Standard deviation (SD)"
+    n: "Number of observations (n)"
+    nivel: "Confidence level"
+    eem: "Standard error of the mean (SEM)"
+    t_crit: "Student's t multiplier"
+    nota_t: "Student's t, n − 1 df"
+    nota_chi2: "chi-squared distribution"
+    nota_eem: "SD divided by the square root of n"
+    nota_gl: "Degrees of freedom"
+    grafica_de1: "Mean ± 1 SD"
+    grafica_de2: "Mean ± 2 SD"
+  ayudas:
+    media: "Arithmetic mean of the variable, as reported in the paper or in the software output."
+    de: "Sample standard deviation (the one with n − 1 in the denominator). If the paper reports the standard error, multiply it by the square root of n."
+    n: "Number of observations with valid data (integer of 2 or more)."
+    nivel: "Usually 95%; 90% or 99% are also common."
+  interpretacion:
+    resumen: "The mean was {media} (SD {de}) in {n} observations; the {nivel} confidence interval ({media_ic}) gives the range of population means compatible with the data."
+    contraste: "That interval does not describe individual spread: for that, use mean ± 2 SD, which here covers roughly {lim_inf} to {lim_sup}."
+    de: "The population standard deviation is compatible with values from {de_ic}; with small samples that interval is far wider than usually assumed."
+    t: "With n = {n} the multiplier is t = {t_crit} rather than the 1.96 of the normal distribution, and the standard error of the mean is {eem}."
+    n.pequeno: "With n = {n} (fewer than 30) the interval for the mean assumes the data are approximately normal; if the distribution is strongly skewed, report the median and the interquartile range."
+    n.adecuado: "With n = {n} (30 or more) the central limit theorem makes the interval for the mean robust even if the data are not normal; the interval for the standard deviation, by contrast, does depend on that assumption."
+  avisos:
+    n_pequeno: "n below 30: the interval for the mean assumes the data are approximately normal."
+    n_muy_pequeno: "n below 5: the estimate of the standard deviation is very unstable and its interval very wide. Interpret with caution."
+    de_cero: "The standard deviation is 0: every value is identical, the interval collapses to a point and is not informative."
+  metodos: "The mean ({media}; SD {de}; n = {n}) is reported with its {nivel} confidence interval based on Student's t distribution with n − 1 degrees of freedom [{ref:student1908},{ref:gardner1986}]: {media_ic}. The interval for the standard deviation was obtained from the chi-squared distribution of (n − 1)s²/σ², with equal tails: {de_ic}. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: platelet count in 50 febrile patients, mean 95 ×10³/µL and standard deviation 40 ×10³/µL (fictitious data)."
+  grafica_titulo: "The mean with its interval against the spread of the data"

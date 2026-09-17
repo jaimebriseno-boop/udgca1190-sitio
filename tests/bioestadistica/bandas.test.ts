@@ -8,10 +8,13 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  BANDAS_ASIMETRIA,
   BANDAS_COHEN,
   BANDAS_ICC,
   BANDAS_KAPPA,
   BANDAS_LR,
+  bandaAsimetria,
+  bandaAsimetriaResumen,
   bandaCohen,
   bandaIcc,
   bandaKappa,
@@ -199,4 +202,31 @@ test('decisionP admite otro alfa y trata NaN como «no rechaza»', () => {
   assert.equal(decisionP(0.02, 0.1), 'rechaza');
   assert.equal(decisionP(Number.NaN), 'no_rechaza');
   assert.equal(decisionP(Number.NaN, 0.5), 'no_rechaza');
+});
+
+// ---------------------------------------------------------------------------
+// Asimetría (descriptivos y media desde mediana)
+// ---------------------------------------------------------------------------
+
+test('bandaAsimetria: el corte 0.5 cae en la cola y NaN se lee como simétrica', () => {
+  assert.deepEqual([...BANDAS_ASIMETRIA], ['simetrica', 'derecha', 'izquierda']);
+  assert.equal(bandaAsimetria(0), 'simetrica');
+  assert.equal(bandaAsimetria(0.4999), 'simetrica');
+  assert.equal(bandaAsimetria(-0.4999), 'simetrica');
+  assert.equal(bandaAsimetria(0.5), 'derecha');
+  assert.equal(bandaAsimetria(-0.5), 'izquierda');
+  assert.equal(bandaAsimetria(3), 'derecha');
+  assert.equal(bandaAsimetria(Number.POSITIVE_INFINITY), 'derecha');
+  assert.equal(bandaAsimetria(Number.NEGATIVE_INFINITY), 'izquierda');
+  // n < 3 o columna constante: G₁ no existe y no hay evidencia de asimetría.
+  assert.equal(bandaAsimetria(Number.NaN), 'simetrica');
+});
+
+test('bandaAsimetriaResumen: 0.5 y 2 son compatibles; 0, ±∞ y fuera del tramo, marcadas; 0/0, compatible', () => {
+  for (const c of [0.5, 1, 2]) assert.equal(bandaAsimetriaResumen(c), 'compatible', String(c));
+  for (const c of [0, 0.4999, 2.0001, 9, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY]) {
+    assert.equal(bandaAsimetriaResumen(c), 'marcada', String(c));
+  }
+  // Los tres valores iguales (mín = mediana = máx): 0/0, sin evidencia.
+  assert.equal(bandaAsimetriaResumen(Number.NaN), 'compatible');
 });

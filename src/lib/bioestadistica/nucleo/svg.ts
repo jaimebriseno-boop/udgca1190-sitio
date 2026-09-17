@@ -14,10 +14,11 @@
  * punteado): la gráfica tiene que leerse igual impresa en blanco y negro.
  *
  * Las primitivas de escala y de ejes son genéricas (lineal y logarítmica). Con
- * ellas se dibujan las tres gráficas declaradas: `ic-forest` (uno o varios
- * paneles, cada uno con su escala y su eje), `fagan` (nomograma de 1975) y
- * `curvas`. Las que faltan (barras, histograma-boxplot, km, potencia) caen en
- * el `default` de `renderGrafica`.
+ * ellas se dibujan las gráficas declaradas: `ic-forest` (uno o varios paneles,
+ * cada uno con su escala y su eje), `fagan` (nomograma de 1975), `curvas`,
+ * `barras` (agrupadas, con trama de relleno) e `histograma-boxplot` (dos
+ * paneles sobre un mismo eje x). Las que faltan (km, potencia) caen en el
+ * `default` de `renderGrafica`.
  */
 import type {
   Curva,
@@ -25,9 +26,11 @@ import type {
   EjeGrafica,
   FilaIC,
   Formateador,
+  GraficaBarras,
   GraficaCurvas,
   GraficaFagan,
   GraficaForest,
+  GraficaHistogramaBoxplot,
   PanelIC,
   Pista,
 } from './tipos.ts';
@@ -124,6 +127,10 @@ const LIENZO = {
   leyendaSep: 20,
   /** Tamaño de letra de la leyenda. */
   fuenteLeyenda: 13,
+  /** Ancho de la muestra cuando es un rectángulo relleno (barras) y no un segmento. */
+  leyendaMuestraAncho: 18,
+  /** Alto de esa muestra rectangular. */
+  leyendaMuestraAlto: 12,
 
   // Curvas
   /** Alto del área de trazado. */
@@ -132,6 +139,44 @@ const LIENZO = {
   tituloEjeAlto: 20,
   /** Banda sobre el área de trazado para el rótulo del marcador. */
   marcadorAlto: 16,
+
+  // Barras agrupadas
+  /** Alto del área de trazado de las barras. */
+  barrasAlto: 220,
+  /** Fracción del ancho de una categoría que ocupa su grupo de barras. */
+  barrasGrupo: 0.72,
+  /** Canal entre dos barras del mismo grupo. */
+  barrasCanal: 3,
+  /** Banda del área reservada al valor escrito sobre la barra más alta. */
+  barrasValorAlto: 16,
+  /** Ancho mínimo de barra para que quepa su valor encima sin invadir la vecina. */
+  barrasAnchoValor: 22,
+  /** Ancho máximo de una barra: con dos categorías, el reparto solo daría dos bloques enormes. */
+  barrasAnchoMax: 72,
+  /** Separación entre las dos líneas del rótulo de una categoría. */
+  barrasEtiquetaLinea: 15,
+  /** Lado del mosaico de las tramas de relleno (diagonales y puntos). */
+  tramaPaso: 6,
+
+  // Histograma + diagrama de caja
+  /** Alto del panel del histograma (con eje de frecuencias). */
+  histAlto: 170,
+  /** Alto del panel cuando solo se dibuja la curva normal, sin histograma. */
+  histAltoNormal: 110,
+  /** Alto del panel del diagrama de caja. */
+  cajaAlto: 64,
+  /** Alto del rectángulo de la caja (q1 a q3). */
+  cajaGrosor: 26,
+  /** Media altura de la línea de la mediana: sobresale de la caja. */
+  cajaMediana: 16,
+  /** Media altura de los topes verticales de los bigotes. */
+  cajaTope: 8,
+  /** Radio de un punto atípico. */
+  cajaAtipico: 3.5,
+  /** Puntos en los que se evalúa la curva normal a lo ancho del dominio. */
+  normalPuntos: 120,
+  /** Número máximo de marcadores con rótulo junto a la línea (por encima, van a la leyenda). */
+  marcadoresEnSitio: 2,
 } as const;
 
 /** Ancho aproximado de un texto en unidades de usuario. */
@@ -230,6 +275,18 @@ export function ticksLineales(d0: number, d1: number, objetivo = 5): number[] {
   return salida;
 }
 
+/**
+ * Marcas de un eje de CONTEOS, desde cero. El paso se redondea al entero
+ * superior porque con la pista `int` una marca en 2.5 se rotularía «3» sobre la
+ * posición de 2.5: el número diría una cosa y el eje otra.
+ */
+export function ticksEnteros(top: number, objetivo = 4): number[] {
+  const paso = Math.max(1, Math.ceil(pasoNice(top, objetivo)));
+  const salida: number[] = [];
+  for (let v = 0; v <= top + 1e-9 && salida.length < 200; v += paso) salida.push(v);
+  return salida;
+}
+
 /** Marcas de un eje logarítmico: décadas, con 2 y 5 cuando el recorrido es corto. */
 export function ticksLog(d0: number, d1: number): number[] {
   const lo = Math.max(d0, Number.MIN_VALUE);
@@ -299,9 +356,17 @@ function claseSerie(base: string, destacada: boolean | undefined, indiceSecundar
 }
 
 interface EntradaLeyenda {
-  /** Clase del segmento de muestra (la misma serie que la curva o la recta). */
+  /** Clase de la muestra (la misma serie que la curva, la recta o la barra). */
   clase: string;
   texto: string;
+  /**
+   * Forma de la muestra. Una barra no se reconoce por un segmento de línea: lo
+   * que la identifica es el relleno (navy sólido o trama), así que su muestra
+   * es un rectángulo pequeño con el mismo relleno que la barra.
+   */
+  muestra?: 'linea' | 'rect';
+  /** Valor del atributo `fill` de la muestra rectangular (p. ej. `url(#…-trama)`). */
+  relleno?: string;
 }
 
 /** Ancho que ocupa una entrada de la leyenda, sin la separación que la sigue. */
@@ -330,9 +395,17 @@ function leyendaSvg(
       x = 0;
     }
     const cy = y0 + fila * LIENZO.leyendaAlto + LIENZO.leyendaAlto / 2;
-    partes.push(
-      `<line class="${e.clase}" x1="${co(x)}" y1="${co(cy)}" x2="${co(x + LIENZO.leyendaTrazo)}" y2="${co(cy)}" />`,
-    );
+    if (e.muestra === 'rect') {
+      const alto = LIENZO.leyendaMuestraAlto;
+      partes.push(
+        `<rect class="${e.clase}"${e.relleno === undefined ? '' : ` fill="${e.relleno}"`}` +
+          ` x="${co(x)}" y="${co(cy - alto / 2)}" width="${co(LIENZO.leyendaMuestraAncho)}" height="${co(alto)}" />`,
+      );
+    } else {
+      partes.push(
+        `<line class="${e.clase}" x1="${co(x)}" y1="${co(cy)}" x2="${co(x + LIENZO.leyendaTrazo)}" y2="${co(cy)}" />`,
+      );
+    }
     partes.push(
       `<text class="${claseTexto}" font-size="${LIENZO.fuenteLeyenda}"` +
         ` x="${co(x + LIENZO.leyendaTrazo + LIENZO.leyendaCanal)}" y="${co(cy)}" dominant-baseline="middle">` +
@@ -833,6 +906,432 @@ function curvas(g: GraficaCurvas, op: OpcionesGrafica): string {
   return lienzoSvg(id, g.titulo, g.resumen, ancho, alto, cuerpo.join(''), defs);
 }
 
+// ---------------------------------------------------------------------------
+// barras
+// ---------------------------------------------------------------------------
+
+/**
+ * Tramas de relleno de las series secundarias, declaradas una sola vez en
+ * `<defs>`. El relleno viaja como ATRIBUTO (`fill="url(#…)"`) porque una
+ * referencia a un patrón no es un color y no tiene sitio en los tokens; el
+ * color de los trazos de la trama sí sale del CSS, por su clase.
+ *
+ * El mosaico de diagonales se completa con dos medios trazos en las esquinas
+ * para que las rayas continúen de un mosaico al siguiente sin escalones.
+ */
+function tramasSvg(id: string): string {
+  const p = LIENZO.tramaPaso;
+  return (
+    `<pattern id="${esc(id)}-trama" patternUnits="userSpaceOnUse" width="${co(p)}" height="${co(p)}">` +
+    `<line class="bio-svg__trama" x1="0" y1="${co(p)}" x2="${co(p)}" y2="0" />` +
+    `<line class="bio-svg__trama" x1="${co(-p / 4)}" y1="${co(p / 4)}" x2="${co(p / 4)}" y2="${co(-p / 4)}" />` +
+    `<line class="bio-svg__trama" x1="${co((3 * p) / 4)}" y1="${co((5 * p) / 4)}" x2="${co((5 * p) / 4)}" y2="${co((3 * p) / 4)}" />` +
+    '</pattern>' +
+    `<pattern id="${esc(id)}-trama-2" patternUnits="userSpaceOnUse" width="${co(p)}" height="${co(p)}">` +
+    `<circle class="bio-svg__trama-punto" cx="${co(p / 2)}" cy="${co(p / 2)}" r="1.2" />` +
+    '</pattern>'
+  );
+}
+
+/**
+ * Dominio del eje de frecuencias: de CERO al mayor valor dibujable. El origen
+ * no se negocia —una barra que no arranca en cero exagera las diferencias— y el
+ * extremo superior es el declarado por la calculadora, ampliado si algún valor
+ * o la referencia lo superan.
+ */
+function dominioBarras(g: GraficaBarras): [number, number] {
+  let top = Number.NEGATIVE_INFINITY;
+  const considerar = (v: number | undefined): void => {
+    if (typeof v === 'number' && Number.isFinite(v) && v > top) top = v;
+  };
+  if (g.ejeY.dominio) {
+    considerar(g.ejeY.dominio[0]);
+    considerar(g.ejeY.dominio[1]);
+  }
+  for (const c of g.categorias) {
+    for (const v of c.valores ?? []) considerar(v);
+  }
+  considerar(g.referencia?.valor);
+  return [0, Number.isFinite(top) && top > 0 ? top : 1];
+}
+
+/**
+ * Barras agrupadas: una categoría por celda o por grupo y una barra por serie
+ * dentro de cada categoría (observadas frente a esperadas, o los pares
+ * discordantes b y c con el esperado bajo H0 como línea de referencia).
+ *
+ * La serie destacada va en navy sólido y las demás con trama (diagonales,
+ * puntos): impresa en blanco y negro la gráfica se sigue leyendo igual. El
+ * rótulo de cada categoría va debajo del eje en el cuerpo de las marcas
+ * (13 unidades), no en el de las etiquetas del bosque (15): con cuatro celdas
+ * el ancho por categoría ronda las 115 unidades y a 15 apenas caben trece
+ * caracteres por línea.
+ */
+function barras(g: GraficaBarras, op: OpcionesGrafica): string {
+  const ancho = op.ancho ?? ANCHO_POR_DEFECTO;
+  const id = op.id ?? 'bio-grafica';
+  const fmt = op.fmt;
+  const pista: Pista = g.ejeY.pista ?? 'int';
+  const dy = dominioBarras(g);
+  const marcasY = pista === 'int' ? ticksEnteros(dy[1], 4) : ticksLineales(dy[0], dy[1], 4);
+  const rotulosY = marcasY.map((v) => fmt.num(v, pista));
+  const anchoY = Math.max(...rotulosY.map((t) => anchoTexto(t, LIENZO.fuenteTick)), 0);
+  const x0 = Math.round(anchoY + LIENZO.canal);
+  const x1 = ancho - LIENZO.margenDer;
+
+  // La muestra de la leyenda lleva la MISMA clase que la barra, para que el
+  // relleno salga de la misma regla de CSS; por eso hay que contar las barras
+  // de la leyenda aparte de las del área de trazado.
+  let secundarias = 0;
+  const series = g.series.map((s) => {
+    const clase = claseSerie('bio-svg__barra', s.destacada, secundarias);
+    const relleno = s.destacada
+      ? undefined
+      : `url(#${esc(id)}-trama${secundarias % 2 === 0 ? '' : '-2'})`;
+    if (!s.destacada) secundarias += 1;
+    return { serie: s, clase, relleno };
+  });
+
+  const yTitulo = LIENZO.fuenteTick + 2;
+  const y0Leyenda = yTitulo + 6;
+  // Con una sola serie la leyenda repetiría el título del eje: se omite.
+  const leyenda =
+    series.length > 1
+      ? leyendaSvg(
+          series.map((s) => ({
+            clase: s.clase,
+            texto: s.serie.etiqueta,
+            muestra: 'rect' as const,
+            relleno: s.relleno,
+          })),
+          ancho,
+          y0Leyenda,
+          'bio-svg__leyenda-texto',
+        )
+      : { svg: '', alto: 0 };
+  const arriba = y0Leyenda + leyenda.alto + 8;
+  const abajo = arriba + LIENZO.barrasAlto;
+  // El techo del área no es el de la escala: se reserva una banda para el valor
+  // escrito sobre la barra más alta.
+  const ey = crearEscala(dy, [abajo, arriba + LIENZO.barrasValorAlto]);
+
+  const nCat = Math.max(1, g.categorias.length);
+  const nSer = Math.max(1, series.length);
+  const anchoCat = (x1 - x0) / nCat;
+  const anchoBarra = Math.min(
+    LIENZO.barrasAnchoMax,
+    Math.max(1, (anchoCat * LIENZO.barrasGrupo - (nSer - 1) * LIENZO.barrasCanal) / nSer),
+  );
+  const anchoGrupo = nSer * anchoBarra + (nSer - 1) * LIENZO.barrasCanal;
+  const maxCaracteres = Math.max(6, Math.floor(anchoCat / (LIENZO.fuenteTick * LIENZO.anchoCaracter)));
+  const lineasCat = g.categorias.map((c) => envolver(c.etiqueta, maxCaracteres));
+  const maxLineas = Math.max(1, ...lineasCat.map((l) => l.length));
+
+  const cuerpo: string[] = [
+    `<text class="bio-svg__eje-titulo" font-size="${LIENZO.fuenteTick}" x="0" y="${co(yTitulo)}">${esc(g.ejeY.etiqueta)}</text>`,
+    leyenda.svg,
+    `<line class="bio-svg__eje" x1="${co(x0)}" y1="${co(arriba)}" x2="${co(x0)}" y2="${co(abajo)}" />`,
+    `<line class="bio-svg__eje" x1="${co(x0)}" y1="${co(abajo)}" x2="${co(x1)}" y2="${co(abajo)}" />`,
+  ];
+  marcasY.forEach((v, i) => {
+    const cy = ey.mapear(v);
+    cuerpo.push(
+      `<line class="bio-svg__tick" x1="${co(x0 - LIENZO.tickLargo)}" y1="${co(cy)}" x2="${co(x0)}" y2="${co(cy)}" />`,
+      `<text class="bio-svg__tick-texto" font-size="${LIENZO.fuenteTick}" x="${co(x0 - LIENZO.tickLargo - 4)}" y="${co(cy)}" text-anchor="end" dominant-baseline="middle">${esc(rotulosY[i])}</text>`,
+    );
+  });
+
+  const valores: string[] = [];
+  g.categorias.forEach((c, i) => {
+    const cx = x0 + (i + 0.5) * anchoCat;
+    const izq = cx - anchoGrupo / 2;
+    series.forEach((s, j) => {
+      const v = c.valores?.[j];
+      // Un valor no finito o negativo no tiene barra posible: se omite sin
+      // romper la gráfica, y la categoría conserva su rótulo.
+      if (typeof v !== 'number' || !Number.isFinite(v) || v < 0) return;
+      const xb = izq + j * (anchoBarra + LIENZO.barrasCanal);
+      const yb = ey.mapear(v);
+      const alto = Math.max(0, abajo - yb);
+      cuerpo.push(
+        `<rect class="${s.clase}"${s.relleno === undefined ? '' : ` fill="${s.relleno}"`}` +
+          ` x="${co(xb)}" y="${co(yb)}" width="${co(anchoBarra)}" height="${co(alto)}" />`,
+      );
+      if (anchoBarra >= LIENZO.barrasAnchoValor) {
+        valores.push(
+          `<text class="bio-svg__valor" font-size="${LIENZO.fuenteTick}" x="${co(xb + anchoBarra / 2)}" y="${co(yb - 5)}" text-anchor="middle">${esc(fmt.num(v, pista))}</text>`,
+        );
+      }
+    });
+    cuerpo.push(
+      `<text class="bio-svg__etiqueta" font-size="${LIENZO.fuenteTick}" text-anchor="middle">` +
+        lineasCat[i]
+          .map(
+            (linea, k) =>
+              `<tspan x="${co(cx)}" y="${co(abajo + LIENZO.tickTexto + k * LIENZO.barrasEtiquetaLinea)}">${esc(linea)}</tspan>`,
+          )
+          .join('') +
+        '</text>',
+    );
+  });
+
+  // La referencia se dibuja SOBRE las barras (el esperado bajo H0 hay que poder
+  // seguirlo de un extremo a otro), y los valores encima de todo.
+  if (g.referencia && Number.isFinite(g.referencia.valor)) {
+    const yr = ey.mapear(g.referencia.valor);
+    cuerpo.push(`<line class="bio-svg__ref" x1="${co(x0)}" y1="${co(yr)}" x2="${co(x1)}" y2="${co(yr)}" />`);
+    if (g.referencia.etiqueta) {
+      cuerpo.push(
+        `<text class="bio-svg__marcador-texto" font-size="${LIENZO.fuenteTick}" x="${co(x1)}" y="${co(yr - 4)}" text-anchor="end">${esc(g.referencia.etiqueta)}</text>`,
+      );
+    }
+  }
+  cuerpo.push(...valores);
+
+  const alto = abajo + LIENZO.tickTexto + (maxLineas - 1) * LIENZO.barrasEtiquetaLinea + 6;
+  const defs = series.some((s) => s.relleno !== undefined) ? tramasSvg(id) : '';
+  return lienzoSvg(id, g.titulo, g.resumen, ancho, alto, cuerpo.join(''), defs);
+}
+
+// ---------------------------------------------------------------------------
+// histograma-boxplot
+// ---------------------------------------------------------------------------
+
+/** Densidad normal estándar. Se escribe aquí para no acoplar el dibujo a `primitivas/`. */
+function densidadNormal(x: number, media: number, de: number): number {
+  const z = (x - media) / de;
+  return Math.exp(-0.5 * z * z) / (de * Math.sqrt(2 * Math.PI));
+}
+
+/**
+ * Dominio del eje x compartido: el declarado por la calculadora, AMPLIADO a las
+ * clases del histograma, al resumen de cinco números con sus bigotes, a los
+ * atípicos y a los marcadores. Un atípico fuera del dominio declarado es justo
+ * lo que hay que ver.
+ *
+ * La curva normal no lo amplía: con una DE grande se comería el histograma. Si
+ * una calculadora la quiere entera, declara su dominio.
+ */
+function dominioHistograma(g: GraficaHistogramaBoxplot): [number, number] {
+  let d0 = Number.POSITIVE_INFINITY;
+  let d1 = Number.NEGATIVE_INFINITY;
+  const considerar = (v: number | undefined): void => {
+    if (typeof v === 'number' && Number.isFinite(v)) {
+      if (v < d0) d0 = v;
+      if (v > d1) d1 = v;
+    }
+  };
+  if (g.ejeX.dominio) {
+    considerar(g.ejeX.dominio[0]);
+    considerar(g.ejeX.dominio[1]);
+  }
+  for (const b of g.bins ?? []) {
+    considerar(b.desde);
+    considerar(b.hasta);
+  }
+  const c = g.caja;
+  if (c) {
+    considerar(c.min);
+    considerar(c.q1);
+    considerar(c.mediana);
+    considerar(c.q3);
+    considerar(c.max);
+    considerar(c.bigoteInf);
+    considerar(c.bigoteSup);
+    for (const a of c.atipicos ?? []) considerar(a);
+  }
+  for (const m of g.marcadores ?? []) considerar(m.x);
+  if (!Number.isFinite(d0) || !Number.isFinite(d1)) return [0, 1];
+  if (d0 === d1) {
+    const holgura = Math.abs(d0) || 1;
+    return [d0 - holgura / 2, d1 + holgura / 2];
+  }
+  return [d0, d1];
+}
+
+/**
+ * Histograma con curva normal encima y diagrama de caja debajo, los dos sobre el
+ * MISMO eje x: la forma de la distribución y el resumen de cinco números se leen
+ * en la misma vertical, que es de lo que trata la comparación.
+ *
+ * Sin `bins` el panel superior se queda solo con la curva normal como densidad
+ * (el caso de «media y DE desde la mediana», donde no hay datos crudos); sin
+ * `bins` ni `normal` no hay panel superior y la caja ocupa la gráfica entera.
+ *
+ * Los marcadores (media, o la media estimada por cada método) cruzan los dos
+ * paneles. Con uno o dos, su rótulo va junto a la línea, alternando lado y
+ * banda; con tres o más, los rótulos se pisarían y pasan a la leyenda.
+ */
+function histogramaBoxplot(g: GraficaHistogramaBoxplot, op: OpcionesGrafica): string {
+  const ancho = op.ancho ?? ANCHO_POR_DEFECTO;
+  const id = op.id ?? 'bio-grafica';
+  const fmt = op.fmt;
+
+  const bins = (g.bins ?? []).filter(
+    (b) => Number.isFinite(b.desde) && Number.isFinite(b.hasta) && b.hasta > b.desde && Number.isFinite(b.n) && b.n >= 0,
+  );
+  const hayHist = bins.length > 0;
+  const normal =
+    g.normal && Number.isFinite(g.normal.media) && Number.isFinite(g.normal.de) && g.normal.de > 0 ? g.normal : undefined;
+  const marcadores = (g.marcadores ?? []).filter((m) => Number.isFinite(m.x));
+  const rotulosEnSitio = marcadores.length <= LIENZO.marcadoresEnSitio;
+
+  const dx = dominioHistograma(g);
+  const marcasX = ticksLineales(dx[0], dx[1], 5);
+
+  // Escala vertical del panel superior: frecuencias si hay histograma (la curva
+  // normal se escala a ellas con N·w·φ), densidad si solo hay curva.
+  const n = bins.reduce((a, b) => a + b.n, 0);
+  const escalaNormal = hayHist ? n * (bins[0].hasta - bins[0].desde) : 1;
+  let topY = hayHist ? Math.max(...bins.map((b) => b.n)) : 0;
+  if (normal) topY = Math.max(topY, escalaNormal * densidadNormal(normal.media, normal.media, normal.de));
+  if (!Number.isFinite(topY) || topY <= 0) topY = 1;
+
+  const marcasY = hayHist ? ticksEnteros(topY, 4) : [];
+  const rotulosY = marcasY.map((v) => fmt.num(v, 'int'));
+  const anchoY = Math.max(...rotulosY.map((t) => anchoTexto(t, LIENZO.fuenteTick)), 0);
+  // Sin eje de frecuencias el margen izquierdo solo tiene que dejar sitio a la
+  // mitad del primer rótulo del eje x.
+  const x0 = hayHist ? Math.round(anchoY + LIENZO.canal) : LIENZO.margenDer;
+  const x1 = ancho - LIENZO.margenDer;
+
+  const entradas: EntradaLeyenda[] = [];
+  if (normal && normal.etiqueta) entradas.push({ clase: 'bio-svg__normal', texto: normal.etiqueta });
+  if (!rotulosEnSitio) {
+    for (const m of marcadores) {
+      entradas.push({ clase: m.destacada ? 'bio-svg__leyenda is-marcador is-destacada' : 'bio-svg__leyenda is-marcador', texto: m.etiqueta });
+    }
+  }
+  const leyenda = leyendaSvg(entradas, ancho, 0, 'bio-svg__leyenda-texto');
+
+  const bandas = rotulosEnSitio ? Math.min(2, marcadores.length) : 0;
+  // Bandas apiladas de arriba abajo: leyenda, título del eje de frecuencias,
+  // rótulos de los marcadores y, por fin, el panel superior.
+  const tituloFrec = hayHist && g.etiquetaFrecuencia ? g.etiquetaFrecuencia : undefined;
+  const yTituloFrec = leyenda.alto + (leyenda.alto > 0 ? 6 : 0) + LIENZO.fuenteTick;
+  const yMarcadores = tituloFrec === undefined ? yTituloFrec - LIENZO.fuenteTick : yTituloFrec + 4;
+  const arribaSup = yMarcadores + bandas * LIENZO.marcadorAlto + 4;
+  const altoSup = hayHist ? LIENZO.histAlto : normal ? LIENZO.histAltoNormal : 0;
+  const abajoSup = arribaSup + altoSup;
+  const arribaCaja = abajoSup;
+  const yEje = arribaCaja + LIENZO.cajaAlto;
+  const alto = yEje + LIENZO.ejeAlto + LIENZO.tituloEjeAlto;
+
+  const ex = crearEscala(dx, [x0, x1]);
+  const ey = crearEscala([0, topY], [abajoSup, arribaSup]);
+
+  const cuerpo: string[] = [leyenda.svg];
+  const recortado: string[] = [];
+
+  if (hayHist) {
+    cuerpo.push(`<line class="bio-svg__eje" x1="${co(x0)}" y1="${co(arribaSup)}" x2="${co(x0)}" y2="${co(abajoSup)}" />`);
+    if (tituloFrec !== undefined) {
+      cuerpo.push(
+        `<text class="bio-svg__eje-titulo" font-size="${LIENZO.fuenteTick}" x="0" y="${co(yTituloFrec)}">${esc(tituloFrec)}</text>`,
+      );
+    }
+    marcasY.forEach((v, i) => {
+      const cy = ey.mapear(v);
+      cuerpo.push(
+        `<line class="bio-svg__tick" x1="${co(x0 - LIENZO.tickLargo)}" y1="${co(cy)}" x2="${co(x0)}" y2="${co(cy)}" />`,
+        `<text class="bio-svg__tick-texto" font-size="${LIENZO.fuenteTick}" x="${co(x0 - LIENZO.tickLargo - 4)}" y="${co(cy)}" text-anchor="end" dominant-baseline="middle">${esc(rotulosY[i])}</text>`,
+      );
+    });
+    for (const b of bins) {
+      const xa = ex.mapear(b.desde);
+      const xb = ex.mapear(b.hasta);
+      const y = ey.mapear(b.n);
+      cuerpo.push(
+        `<rect class="bio-svg__hist-barra" x="${co(xa)}" y="${co(y)}" width="${co(Math.max(0, xb - xa))}" height="${co(Math.max(0, abajoSup - y))}" />`,
+      );
+    }
+  }
+
+  if (normal && altoSup > 0) {
+    const puntos: string[] = [];
+    const paso = (dx[1] - dx[0]) / (LIENZO.normalPuntos - 1);
+    for (let i = 0; i < LIENZO.normalPuntos; i++) {
+      const xv = dx[0] + i * paso;
+      puntos.push(`${co(ex.mapear(xv))},${co(ey.mapear(escalaNormal * densidadNormal(xv, normal.media, normal.de)))}`);
+    }
+    recortado.push(`<polyline class="bio-svg__normal" points="${puntos.join(' ')}" />`);
+  }
+
+  // Diagrama de caja: cada pieza se dibuja solo si sus números son finitos, así
+  // que un resumen incompleto no rompe el resto.
+  const c = g.caja;
+  const yc = arribaCaja + LIENZO.cajaAlto / 2;
+  const finito = (v: number | undefined): v is number => typeof v === 'number' && Number.isFinite(v);
+  if (c) {
+    for (const [desde, hasta] of [
+      [c.q1, c.bigoteInf],
+      [c.q3, c.bigoteSup],
+    ] as const) {
+      if (!finito(desde) || !finito(hasta)) continue;
+      const xa = ex.mapear(desde);
+      const xb = ex.mapear(hasta);
+      cuerpo.push(
+        `<line class="bio-svg__bigote" x1="${co(xa)}" y1="${co(yc)}" x2="${co(xb)}" y2="${co(yc)}" />`,
+        `<line class="bio-svg__bigote" x1="${co(xb)}" y1="${co(yc - LIENZO.cajaTope)}" x2="${co(xb)}" y2="${co(yc + LIENZO.cajaTope)}" />`,
+      );
+    }
+    if (finito(c.q1) && finito(c.q3)) {
+      const xa = Math.min(ex.mapear(c.q1), ex.mapear(c.q3));
+      const xb = Math.max(ex.mapear(c.q1), ex.mapear(c.q3));
+      cuerpo.push(
+        `<rect class="bio-svg__caja" x="${co(xa)}" y="${co(yc - LIENZO.cajaGrosor / 2)}" width="${co(xb - xa)}" height="${co(LIENZO.cajaGrosor)}" />`,
+      );
+    }
+    if (finito(c.mediana)) {
+      const xm = ex.mapear(c.mediana);
+      cuerpo.push(
+        `<line class="bio-svg__mediana" x1="${co(xm)}" y1="${co(yc - LIENZO.cajaMediana)}" x2="${co(xm)}" y2="${co(yc + LIENZO.cajaMediana)}" />`,
+      );
+    }
+    for (const a of c.atipicos ?? []) {
+      if (!finito(a)) continue;
+      cuerpo.push(`<circle class="bio-svg__atipico" cx="${co(ex.mapear(a))}" cy="${co(yc)}" r="${LIENZO.cajaAtipico}" />`);
+    }
+  }
+
+  // Eje x compartido, con su título centrado bajo las marcas.
+  cuerpo.push(`<line class="bio-svg__eje" x1="${co(x0)}" y1="${co(yEje)}" x2="${co(x1)}" y2="${co(yEje)}" />`);
+  for (const v of marcasX) {
+    const cx = ex.mapear(v);
+    cuerpo.push(
+      `<line class="bio-svg__tick" x1="${co(cx)}" y1="${co(yEje)}" x2="${co(cx)}" y2="${co(yEje + LIENZO.tickLargo)}" />`,
+      `<text class="bio-svg__tick-texto" font-size="${LIENZO.fuenteTick}" x="${co(cx)}" y="${co(yEje + LIENZO.tickTexto)}" text-anchor="middle">${esc(fmt.num(v, g.ejeX.pista))}</text>`,
+    );
+  }
+  cuerpo.push(
+    `<text class="bio-svg__eje-titulo" font-size="${LIENZO.fuenteTick}" x="${co((x0 + x1) / 2)}" y="${co(alto - 4)}" text-anchor="middle">${esc(g.ejeX.etiqueta)}</text>`,
+  );
+
+  marcadores.forEach((m, i) => {
+    const cx = ex.mapear(m.x);
+    const clase = m.destacada ? 'bio-svg__marcador is-destacada' : 'bio-svg__marcador';
+    cuerpo.push(`<line class="${clase}" x1="${co(cx)}" y1="${co(arribaSup)}" x2="${co(cx)}" y2="${co(yEje)}" />`);
+    if (!rotulosEnSitio || !m.etiqueta) return;
+    // Lado: el texto se va hacia dentro del lienzo; banda: alterna para que dos
+    // marcadores cercanos no se pisen.
+    const derecha = cx > (x0 + x1) / 2;
+    const y = yMarcadores + (i % 2) * LIENZO.marcadorAlto + LIENZO.fuenteTick;
+    cuerpo.push(
+      `<text class="bio-svg__marcador-texto${m.destacada ? ' is-destacada' : ''}" font-size="${LIENZO.fuenteTick}"` +
+        ` x="${co(derecha ? cx - 5 : cx + 5)}" y="${co(y)}"${derecha ? ' text-anchor="end"' : ''}>${esc(m.etiqueta)}</text>`,
+    );
+  });
+
+  let defs = '';
+  if (recortado.length > 0) {
+    const recorte = `${id}-hist-rec`;
+    defs = `<clipPath id="${esc(recorte)}"><rect x="${co(x0)}" y="${co(arribaSup - 5)}" width="${co(x1 - x0)}" height="${co(altoSup + 5)}" /></clipPath>`;
+    cuerpo.push(`<g clip-path="url(#${esc(recorte)})">${recortado.join('')}</g>`);
+  }
+
+  return lienzoSvg(id, g.titulo, g.resumen, ancho, alto, cuerpo.join(''), defs);
+}
+
 /** Convierte la descripción declarativa de una gráfica en SVG. */
 export function renderGrafica(g: DatosGrafica, op: OpcionesGrafica): string {
   switch (g.tipo) {
@@ -842,6 +1341,10 @@ export function renderGrafica(g: DatosGrafica, op: OpcionesGrafica): string {
       return fagan(g, op);
     case 'curvas':
       return curvas(g, op);
+    case 'barras':
+      return barras(g, op);
+    case 'histograma-boxplot':
+      return histogramaBoxplot(g, op);
     default:
       throw new Error(`svg: tipo de gráfica no soportado «${String((g as { tipo: string }).tipo)}»`);
   }

@@ -1,0 +1,75 @@
+{
+  "calculadora": "chi-cuadrada-fisher",
+  "casos": [
+    {
+      "id": "esperados_bajos",
+      "entradas": { "a": 3, "b": 7, "c": 9, "d": 1, "nivel": 0.95 },
+      "nota": "Ejemplo secundario de la especificacion: esperada minima 4 (< 5) y n = 20, asi que Cochran recomienda Fisher; el OR condicional se resuelve por la rama 1/uniroot."
+    },
+    {
+      "id": "yates_cero",
+      "entradas": { "a": 5, "b": 5, "c": 5, "d": 6, "nivel": 0.95 },
+      "nota": "|ad - bc| = 5 < n/2 = 10.5: la correccion de Yates acotada deja el estadistico en 0 y su p en 1, mientras Pearson vale 0.0434."
+    },
+    {
+      "id": "phi_menos_uno",
+      "entradas": { "a": 0, "b": 10, "c": 10, "d": 0, "nivel": 0.95 },
+      "nota": "Asociacion perfecta negativa: phi = -1, a en el borde inferior del soporte, OR condicional 0 con limite inferior 0."
+    },
+    {
+      "id": "phi_uno",
+      "entradas": { "a": 10, "b": 0, "c": 0, "d": 10, "nivel": 0.95 },
+      "nota": "Asociacion perfecta positiva: phi = 1, a en el borde superior del soporte, OR condicional Inf con limite superior Inf."
+    },
+    {
+      "id": "empates_fisher",
+      "entradas": { "a": 4, "b": 6, "c": 6, "d": 4, "nivel": 0.95 },
+      "nota": "Tabla simetrica: la distribucion hipergeometrica tiene empates exactos y la tolerancia relativa 1 + 1e-7 de fisher.test decide que tablas entran en el p bilateral."
+    },
+    {
+      "id": "minimo",
+      "entradas": { "a": 1, "b": 1, "c": 1, "d": 1, "nivel": 0.95 },
+      "nota": "La tabla mas pequena posible sin margenes vacios: chi2 = 0, p = 1, phi = 0, OR condicional 1 con un intervalo enorme."
+    },
+    {
+      "id": "grande",
+      "entradas": { "a": 100, "b": 900, "c": 120, "d": 880, "nivel": 0.95 },
+      "nota": "n = 2000: soporte largo en el p de Fisher y OR condicional que ya se parece al OR de Woolf ad/bc."
+    },
+    {
+      "id": "nivel_090",
+      "entradas": { "a": 12, "b": 88, "c": 30, "d": 70, "nivel": 0.9 },
+      "nota": "Ejemplo al 90 %: solo cambia el intervalo del OR condicional; los cuatro valores p son identicos a los del ejemplo."
+    },
+    {
+      "id": "nivel_099",
+      "entradas": { "a": 12, "b": 88, "c": 30, "d": 70, "nivel": 0.99 },
+      "nota": "Ejemplo al 99 %: intervalo del OR condicional mas ancho, mismos valores p."
+    },
+    {
+      "id": "a_cero",
+      "entradas": { "a": 0, "b": 5, "c": 5, "d": 5, "nivel": 0.95 },
+      "nota": "Celda a en 0 y en el borde inferior del soporte (lo = 0): OR condicional 0 con limite inferior 0; chi2 y phi siguen definidos."
+    },
+    {
+      "id": "d_cero",
+      "entradas": { "a": 5, "b": 5, "c": 5, "d": 0, "nivel": 0.95 },
+      "nota": "Misma tabla que a_cero con filas y columnas intercambiadas: comprueba que R y TS dan los mismos numeros y que a = lo tambien ocurre con d = 0."
+    },
+    {
+      "id": "equilibrada",
+      "entradas": { "a": 20, "b": 5, "c": 5, "d": 20, "nivel": 0.95 },
+      "nota": "Asociacion fuerte positiva (phi = 0.6) con margenes equilibrados: OR condicional grande resuelto por la rama 1/uniroot en los dos limites."
+    },
+    {
+      "id": "desequilibrada",
+      "entradas": { "a": 2, "b": 50, "c": 30, "d": 3, "nivel": 0.95 },
+      "nota": "Tabla muy desequilibrada (phi = -0.876, p de Fisher ~ 2.9e-17): el OR condicional es 0.0048 y su limite inferior es donde el uniroot de R con tolerancia 1.2e-4 es menos preciso; obliga a reproducir zeroin tal cual."
+    },
+    {
+      "id": "n_diecinueve",
+      "entradas": { "a": 4, "b": 5, "c": 5, "d": 5, "nivel": 0.95 },
+      "nota": "n = 19: Fisher por las dos condiciones de Cochran a la vez, porque con n < 20 la esperada minima (4.26 aqui) nunca llega a 5; E_min <= n/4. Ademas la correccion de Yates vuelve a dar 0."
+    }
+  ]
+}

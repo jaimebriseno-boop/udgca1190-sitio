@@ -1,0 +1,367 @@
+{
+  "generado_por": "scripts/bio-fixtures.mjs",
+  "meta": {
+    "calculadora": "media-desde-mediana",
+    "generado": "2026-09-17T15:32:51.113Z",
+    "R": "R version 4.5.2 (2025-10-31)",
+    "plataforma": "aarch64-apple-darwin20",
+    "paquetes": {
+      "jsonlite": "2.0.0"
+    },
+    "plantilla_sha256": "46dd2d42abc8fef89d84b7a20d9236824931c1c81de287f9f818261945396026"
+  },
+  "casos": [
+    {
+      "id": "ejemplo",
+      "entradas": {
+        "escenario": "s3",
+        "n": 45,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 6.92379036508935,
+        "media_wan": 7.625,
+        "media_hozo": 6,
+        "de_wan": 4.07105714345849,
+        "de_hozo": 4.75,
+        "asim_rango": 3.75,
+        "asim_iqr": 1.5
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "s1_n10",
+      "entradas": {
+        "escenario": "s1",
+        "n": 10,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 8.28609116371974,
+        "media_wan": 8.75,
+        "media_hozo": 8.75,
+        "de_wan": 6.14236606113697,
+        "de_hozo": 5.71000583770863,
+        "asim_rango": 3.75,
+        "asim_iqr": "NA"
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "s2_n200",
+      "entradas": {
+        "escenario": "s2",
+        "n": 200,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 6.350975,
+        "media_wan": 6.33333333333333,
+        "media_hozo": "NA",
+        "de_wan": 3.73364472657393,
+        "de_hozo": "NA",
+        "asim_rango": "NA",
+        "asim_iqr": 1.5
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "hozo_25",
+      "entradas": {
+        "escenario": "s1",
+        "n": 25,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 7.44924291307318,
+        "media_wan": 8.75,
+        "media_hozo": 8.75,
+        "de_wan": 4.83653321624887,
+        "de_hozo": 4.75,
+        "asim_rango": 3.75,
+        "asim_iqr": "NA"
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "hozo_26",
+      "entradas": {
+        "escenario": "s1",
+        "n": 26,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 7.41806482321894,
+        "media_wan": 8.75,
+        "media_hozo": 6,
+        "de_wan": 4.79615726633989,
+        "de_hozo": 4.75,
+        "asim_rango": 3.75,
+        "asim_iqr": "NA"
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "hozo_15",
+      "entradas": {
+        "escenario": "s1",
+        "n": 15,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 7.89296305419252,
+        "media_wan": 8.75,
+        "media_hozo": 8.75,
+        "de_wan": 5.46170319087215,
+        "de_hozo": 5.71000583770863,
+        "asim_rango": 3.75,
+        "asim_iqr": "NA"
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "hozo_16",
+      "entradas": {
+        "escenario": "s1",
+        "n": 16,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 7.83333333333333,
+        "media_wan": 8.75,
+        "media_hozo": 8.75,
+        "de_wan": 5.37079688105033,
+        "de_hozo": 4.75,
+        "asim_rango": 3.75,
+        "asim_iqr": "NA"
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "hozo_70",
+      "entradas": {
+        "escenario": "s1",
+        "n": 70,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 6.78012925885628,
+        "media_wan": 8.75,
+        "media_hozo": 6,
+        "de_wan": 4.00863246950016,
+        "de_hozo": 4.75,
+        "asim_rango": 3.75,
+        "asim_iqr": "NA"
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "hozo_71",
+      "entradas": {
+        "escenario": "s1",
+        "n": 71,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 6.77303417226612,
+        "media_wan": 8.75,
+        "media_hozo": 6,
+        "de_wan": 3.99981965580334,
+        "de_hozo": 3.16666666666667,
+        "asim_rango": 3.75,
+        "asim_iqr": "NA"
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "asimetrico",
+      "entradas": {
+        "escenario": "s3",
+        "n": 30,
+        "min": 2,
+        "q1": 3,
+        "mediana": 4,
+        "q3": 10,
+        "max": 40
+      },
+      "esperado": {
+        "media_luo": 7.96300378706264,
+        "media_wan": 9.5,
+        "media_hozo": 4,
+        "de_wan": 7.3806914043081,
+        "de_hozo": 9.5,
+        "asim_rango": 18,
+        "asim_iqr": 6
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "s3_n4",
+      "entradas": {
+        "escenario": "s3",
+        "n": 4,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 8.58837311514012,
+        "media_wan": 7.625,
+        "media_hozo": 8.75,
+        "de_wan": 7.25769518037273,
+        "de_hozo": 5.71000583770863,
+        "asim_rango": 3.75,
+        "asim_iqr": 1.5
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "rango_cero",
+      "entradas": {
+        "escenario": "s1",
+        "n": 12,
+        "min": 5,
+        "q1": 5,
+        "mediana": 5,
+        "q3": 5,
+        "max": 5
+      },
+      "esperado": {
+        "media_luo": 5,
+        "media_wan": 5,
+        "media_hozo": 5,
+        "de_wan": 0,
+        "de_hozo": 0,
+        "asim_rango": "NaN",
+        "asim_iqr": "NA"
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "simetrico",
+      "entradas": {
+        "escenario": "s3",
+        "n": 100,
+        "min": 10,
+        "q1": 20,
+        "mediana": 30,
+        "q3": 40,
+        "max": 50
+      },
+      "esperado": {
+        "media_luo": 30,
+        "media_wan": 30,
+        "media_hozo": 30,
+        "de_wan": 11.5243056771695,
+        "de_hozo": 6.66666666666667,
+        "asim_rango": 1,
+        "asim_iqr": 1
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "mediana_igual_q1",
+      "entradas": {
+        "escenario": "s3",
+        "n": 30,
+        "min": 2,
+        "q1": 6,
+        "mediana": 6,
+        "q3": 12,
+        "max": 20
+      },
+      "esperado": {
+        "media_luo": 8.49973668672213,
+        "media_wan": 8.75,
+        "media_hozo": 6,
+        "de_wan": 4.54083885357066,
+        "de_hozo": 4.5,
+        "asim_rango": 3.5,
+        "asim_iqr": "Inf"
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "mediana_igual_q3",
+      "entradas": {
+        "escenario": "s2",
+        "n": 30,
+        "min": 2,
+        "q1": 2,
+        "mediana": 6,
+        "q3": 6,
+        "max": 20
+      },
+      "esperado": {
+        "media_luo": 4.574,
+        "media_wan": 4.66666666666667,
+        "media_hozo": "NA",
+        "de_wan": 3.11368087514817,
+        "de_hozo": "NA",
+        "asim_rango": "NA",
+        "asim_iqr": 0
+      },
+      "tol": "media-desde-mediana"
+    },
+    {
+      "id": "s2_n4",
+      "entradas": {
+        "escenario": "s2",
+        "n": 4,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "esperado": {
+        "media_luo": 6.39875,
+        "media_wan": 6.33333333333333,
+        "media_hozo": "NA",
+        "de_wan": 5.46028056378728,
+        "de_hozo": "NA",
+        "asim_rango": "NA",
+        "asim_iqr": 1.5
+      },
+      "tol": "media-desde-mediana"
+    }
+  ]
+}

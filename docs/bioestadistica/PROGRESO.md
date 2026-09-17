@@ -1,6 +1,6 @@
 # Progreso — Bioestadística abierta
 
-Actualizado: 17 de septiembre de 2026 (madrugada). Leer después [HANDOFF.md](HANDOFF.md).
+Actualizado: 17 de septiembre de 2026 (cierre de H2). Leer después [HANDOFF.md](HANDOFF.md).
 
 ## Estado del corte
 
@@ -13,13 +13,64 @@ publica con el visto bueno del dueño sobre las páginas reales y el merge a `ma
 | Hito | Estado | Commit |
 |---|---|---|
 | H0 · Cimientos + calculadora «IC de una proporción» | Terminado y verificado | `e69d80b` |
-| H1 · Vertical completa: prueba diagnóstica 2×2, posprueba (Fagan), valores predictivos | **Terminado y verificado; pendiente del visto bueno del dueño y del merge** | ver `git log` (commit `BIOESTADISTICA: H1 …`) |
-| H2 · Asociación 2×2 (RR/OR/RRA/NNT, χ²/Fisher, McNemar) + columnas pegadas (descriptivos, IC media, Hozo) | Pendiente (siguiente) | — |
+| H1 · Vertical completa: prueba diagnóstica 2×2, posprueba (Fagan), valores predictivos | Terminado y verificado; pendiente del visto bueno del dueño y del merge | `2c37184` (+ `033f464`) |
+| H2 · Asociación 2×2 (RR/OR/RRA/NNT, χ²/Fisher, McNemar) + columnas pegadas (descriptivos, IC media, media desde mediana) | **Terminado y verificado; pendiente del visto bueno del dueño y del merge (junto con H1)** | ver `git log --oneline -3` (commit `BIOESTADISTICA: H2 …`) |
 | H3 · Tamaño de muestra (C1–C7), kappa, Kaplan-Meier (opcional ROC) | Pendiente | — |
 | H4 · webR («Verificar con R», consentimiento, ClientRouter, política de hosts) | Pendiente | — |
 | H5 · Modelos (logística, Cox, lineal, ICC) con webR | Pendiente | — |
 | H6 · Enlace con Propedéutica (`?signo=`) | Pendiente | — |
 | H7 · Documentación (README, COMO_AÑADIR, CHANGELOG de fixtures) | Pendiente | — |
+
+## Hecho en H2
+
+- Seis calculadoras bilingües con YAML + módulo puro + casos + fixture de R + prueba. Grupo
+  «Asociación y efecto en tablas 2×2» completo: `efecto-2x2` (RR de Katz, OR de Woolf, RRA de Newcombe
+  método 10 o Wald, RRR, NNT de Altman; selectores de diseño cohorte/casos-controles/transversal, método
+  de la RRA y Haldane-Anscombe; bosque de tres paneles), `chi-cuadrada-fisher` (χ² de Pearson, Yates
+  acotada como R, variante N−1 de Campbell, Fisher exacto «minlike», OR condicional de `fisher.test` con
+  su IC, φ con signo, regla de Cochran; barras observado/esperado) y `mcnemar` (χ² sin y con corrección
+  de Edwards, p exacto binomial, δ pareada Wald/Agresti-Min, OR pareado; barras de discordantes con el
+  esperado bajo H0). Grupo «Concordancia y descriptivos»: `ic-media` (IC t de la media, IC χ² de la DE),
+  `media-desde-mediana` (Luo 2018, Wan 2014, Hozo 2005 en tres escenarios; cuartiles ausentes viajan a
+  R como `NA`) y `descriptivos` (primera calculadora con columna pegada: momentos, cuantiles tipo 7,
+  G₁/G₂, Shapiro-Wilk AS R94 portado con diferencia máxima frente a R de 9.4e-16 en W y 7.5e-14 en p,
+  cercas de Tukey, media geométrica; histograma de Sturges con curva normal y caja).
+- Métodos nuevos en `src/lib/bioestadistica/metodos/`: `efecto`, `independencia`, `pareadas`, `medias`,
+  `resumenes`, `descriptivos`, `shapiro`.
+- Infraestructura: `nucleo/pegado.ts` (`parsearPegado`, `resumenPegado`) + `PegarColumna.astro` + rama
+  `columna` del controlador (`err_sin_datos`, `err_n_min`); `nucleo/avisos.ts` (los avisos con
+  parámetros se interpolan igual en build y en el navegador: defecto latente desde H1 corregido);
+  `codigoR.ts` interpola `number[]` como `c(...)` multilínea y `NaN` como `NA` (sin `rScript`);
+  renderizadores `barras` (trama para blanco y negro) e `histograma-boxplot` en `nucleo/svg.ts`; tipos
+  `GraficaBarras`/`GraficaHistogramaBoxplot`; perfiles `efecto-2x2`, `chi-cuadrada-fisher`, `mcnemar`,
+  `ic-media`, `media-desde-mediana`, `descriptivos` y `shapiro` en `tolerancias.ts`; `bandaAsimetria` y
+  `bandaAsimetriaResumen`; 33 referencias nuevas verificadas contra PubMed y Crossref (58 en total); ocho
+  claves `bio.ui.*` nuevas.
+- Pruebas nuevas: `efecto-2x2` (52), `chi-cuadrada-fisher` (45), `mcnemar` (44), `ic-media` (35),
+  `media-desde-mediana` (50), `descriptivos` (52), `shapiro` (8), `pegado` (33), `avisos` (8), `svg` (+26),
+  `bandas` (+2), `codigoR` (vectores y `NA`), `contenido.test.ts` (gráficas nuevas, avisos interpolados
+  con parámetros en el ejemplo y en todos los casos del fixture, veto a `rScript`); 88 casos de fixture
+  nuevos (142 en total, 10 calculadoras).
+- Docs: DECISIONES (sección H2), PROGRESO, HANDOFF (plan de H3 y trampas nuevas), ARQUITECTURA §6.4.
+
+## Verificación conservada (H2)
+
+`npm run build` 55 páginas (22 de la sección: índice + 10 calculadoras × 2 idiomas) · `npm run check` 0
+errores / 0 advertencias (124 hints preexistentes) · `npm run test` 4 + 994 pruebas en verde ·
+`npm run fixtures:bio:check` sin deriva (10 calculadoras, 142 casos) · `npm run audit:performance` en
+verde (sin recursos externos ni faltantes; el único `false` es el de `signos.json`, pendiente ajeno) ·
+capturas de las seis páginas nuevas en ES y EN a 1280 px, dos a 400 px e impresión (PDF) revisadas, más
+el índice, el controlador de `descriptivos` leyendo una columna desde la URL y los estados de
+casos-controles y transversal de `efecto-2x2` por URL tras la revisión · revisión de código
+independiente (agente `code-reviewer`, que entregó dos sub-revisiones: pruebas y fixtures —con la
+medición del uso de cada tolerancia por campo, máximo 2.9 % del presupuesto, y del OR condicional
+frente a R, 8.9e-15— y textos y bibliografía —fórmulas `tex` contra el código, paridad es/en, `{ref:}`
+de Métodos, 14 PMID y 28 DOI recomprobados—): ninguna tolerancia aflojada ni defecto numérico; dos
+hallazgos altos de texto (atribución al Cochrane Handbook; Métodos de B1 sin depender del diseño), dos
+altos de cobertura (prueba tautológica del arreglo de avisos; mediana igual a un cuartil sin caso de R),
+ocho medios y dieciséis bajos, todos corregidos antes del commit (detalle en DECISIONES «H2»). Además,
+cada agente constructor contrastó su calculadora con R en sus propios casos límite (p. ej. 30 columnas
+de n 3 a 5,000 para Shapiro-Wilk).
 
 ## Hecho en H1
 
@@ -61,8 +112,8 @@ Pendiente ajeno a la sección: `audit:performance -- --check-data-baseline` sigu
 ## Siguiente paso
 
 1. Mostrar al dueño las páginas reales (vista previa de Vercel de la rama o `npm run preview -- --host
-   127.0.0.1 --port 4321` → `/herramientas/bioestadistica/`) y recoger correcciones de texto o de
-   interpretación.
-2. Con su visto bueno: merge a `main` (publica en udgca1190.com.mx) y anotar en
-   `docs/performance/REVIEW.md` la secuencia de verificación de la sección.
-3. Empezar H2 leyendo [HANDOFF.md](HANDOFF.md) (sección «H2 · siguiente») y [DECISIONES.md](DECISIONES.md).
+   127.0.0.1 --port 4321` → `/herramientas/bioestadistica/`, ahora con 10 calculadoras) y recoger
+   correcciones de texto o de interpretación.
+2. Con su visto bueno explícito: merge de la rama a `main` (publica H1 y H2 en udgca1190.com.mx) y anotar
+   en `docs/performance/REVIEW.md` la secuencia de verificación de la sección.
+3. Empezar H3 leyendo [HANDOFF.md](HANDOFF.md) (sección «H3 · Por patrón») y [DECISIONES.md](DECISIONES.md).

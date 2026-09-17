@@ -18,11 +18,13 @@ import { fileURLToPath } from 'node:url';
 import katex from 'katex';
 import { loadBib } from '../../src/content-loaders/bibtex.mjs';
 import { tPrefijo } from '../../src/i18n.mjs';
+import { interpolar, paramsDeAvisos } from '../../src/lib/bioestadistica/nucleo/avisos.ts';
 import { MARCADOR, rellenarR } from '../../src/lib/bioestadistica/nucleo/codigoR.ts';
 import { crearFormateador } from '../../src/lib/bioestadistica/nucleo/formato.ts';
 import { MACROS } from '../../src/lib/bioestadistica/nucleo/macros.ts';
 import { marcadores, referencias as citasDe } from '../../src/lib/bioestadistica/nucleo/plantillas.ts';
 import type {
+  Aviso,
   ContenidoLang,
   Contexto,
   DatosGrafica,
@@ -31,6 +33,7 @@ import type {
   Lang,
   Presentacion,
 } from '../../src/lib/bioestadistica/nucleo/tipos.ts';
+import { leerFixture } from './util.ts';
 
 /** Raíz del repositorio (este archivo vive en `tests/bioestadistica/`). */
 const RAIZ = fileURLToPath(new URL('../../', import.meta.url));
@@ -198,6 +201,28 @@ function conDerivadas(def: Definicion, ejemplo: Entradas): Entradas {
   return entradas;
 }
 
+/**
+ * Cada aviso activo, escrito como lo publica la página en build y como lo
+ * repinta el controlador: la plantilla del YAML con sus `params` puestos por
+ * `nucleo/avisos.ts`. Un marcador que ningún parámetro cubre es el defecto que
+ * `descriptivos` destapó en H2 («{n_atipicos} valores…» en el HTML servido).
+ */
+function comprobarAvisos(avisos: readonly Aviso[], textos: ContenidoLang, lang: Lang, donde: string): void {
+  const params = paramsDeAvisos(avisos);
+  for (const aviso of avisos) {
+    const plantilla = textos.avisos[aviso.codigo];
+    assert.ok(plantilla !== undefined, `${donde} · ${lang}.avisos: falta el texto de ${aviso.codigo}`);
+    const sinValor = marcadores(plantilla).filter((k) => !(k in (params[aviso.codigo] ?? {})));
+    assert.deepEqual(
+      sinValor,
+      [],
+      `${donde} · ${lang}.avisos.${aviso.codigo}: marcadores sin parámetro → ${sinValor.join(', ')}`,
+    );
+    const texto = interpolar(plantilla, params[aviso.codigo]);
+    assert.ok(!texto.includes('{'), `${donde} · ${lang}.avisos.${aviso.codigo}: marcador sin resolver en «${texto}»`);
+  }
+}
+
 /** Contexto real de presentación: formateador del idioma, textos del YAML, numeración de referencias y cadenas de interfaz. */
 function crearContexto(slug: string, yml: CalculadoraYaml, textos: ContenidoLang, nivel: number, lang: Lang): Contexto {
   return {
@@ -242,6 +267,18 @@ function textosDeGrafica(g: DatosGrafica): string[] {
       out.push(g.ejeX.etiqueta, g.ejeY.etiqueta);
       for (const curva of g.curvas) out.push(curva.etiqueta);
       if (g.marcador?.etiqueta !== undefined) out.push(g.marcador.etiqueta);
+      break;
+    case 'barras':
+      out.push(g.ejeY.etiqueta);
+      for (const serie of g.series) out.push(serie.etiqueta);
+      for (const categoria of g.categorias) out.push(categoria.etiqueta);
+      if (g.referencia?.etiqueta !== undefined) out.push(g.referencia.etiqueta);
+      break;
+    case 'histograma-boxplot':
+      out.push(g.ejeX.etiqueta);
+      if (g.etiquetaFrecuencia !== undefined) out.push(g.etiquetaFrecuencia);
+      if (g.normal !== undefined) out.push(g.normal.etiqueta);
+      for (const marcador of g.marcadores ?? []) out.push(marcador.etiqueta);
       break;
   }
   return out;
@@ -510,7 +547,34 @@ for (const slug of SLUGS) {
         for (const aviso of presentacion.avisos) {
           assert.ok(aviso in contenido[lang].avisos, `${lang}.avisos: falta el texto de ${aviso}`);
         }
+        comprobarAvisos(resultado.avisos, contenido[lang], lang, 'ejemplo');
       }
+    });
+
+    test('los avisos de cada caso del fixture se escriben completos con sus parámetros', async () => {
+      const def = await cargarDefinicion(slug);
+      if (!def.calcular) return;
+      // Los casos curados activan los avisos que el ejemplo no activa (celdas
+      // en 0, n pequeño, atípicos…): ahí es donde un `{param}` sin valor se
+      // colaría en el HTML servido y en el repintado del navegador.
+      const fixture = leerFixture(slug);
+      assert.ok(fixture.casos.length > 0, `fixtures/${slug}.json sin casos`);
+      for (const caso of fixture.casos) {
+        const entradas = conDerivadas(def, caso.entradas);
+        const nivelCaso = typeof entradas.nivel === 'number' ? entradas.nivel : nivel;
+        const resultado = def.calcular(entradas, nivelCaso);
+        for (const lang of IDIOMAS) comprobarAvisos(resultado.avisos, contenido[lang], lang, caso.id);
+      }
+    });
+
+    test('ninguna calculadora exporta rScript mientras el generador de fixtures solo conozca r.codigo', async () => {
+      // `Definicion.rScript` anularía la plantilla en la página y en webR, pero
+      // `scripts/bio-fixtures.mjs` seguiría validando `r.codigo` y el
+      // `plantilla_sha256` no lo detectaría: el R que se ve dejaría de ser el R
+      // que valida. Las columnas pegadas van como `c(...)` en la plantilla
+      // (DECISIONES H2); `rScript` queda para los modelos con datos.csv (H5).
+      const def = await cargarDefinicion(slug);
+      assert.equal(def.rScript, undefined, `${slug}: rScript no está soportado por el generador de fixtures`);
     });
 
     test('la gráfica declarada en el YAML se produce con datos', async () => {
@@ -548,6 +612,35 @@ for (const slug of SLUGS) {
             assert.ok(datos.curvas.length > 0, `${lang}: la gráfica no tiene curvas`);
             for (const curva of datos.curvas) assert.ok(curva.puntos.length > 1, `${lang}: curva «${curva.id}» con menos de dos puntos`);
             break;
+          case 'barras':
+            assert.ok(datos.series.length > 0, `${lang}: la gráfica no tiene series`);
+            assert.ok(datos.categorias.length > 0, `${lang}: la gráfica no tiene categorías`);
+            for (const categoria of datos.categorias) {
+              assert.equal(
+                categoria.valores.length,
+                datos.series.length,
+                `${lang}: la categoría «${categoria.id}» no trae un valor por serie`,
+              );
+            }
+            break;
+          case 'histograma-boxplot': {
+            const caja = datos.caja;
+            // El resumen puede tener piezas «no definidas» (una columna vacía),
+            // pero si están, tienen que venir ordenadas.
+            if ([caja.q1, caja.mediana, caja.q3].every((v) => Number.isFinite(v))) {
+              assert.ok(
+                caja.q1 <= caja.mediana && caja.mediana <= caja.q3,
+                `${lang}: el resumen de cinco números no está ordenado (${caja.q1}, ${caja.mediana}, ${caja.q3})`,
+              );
+            }
+            if (datos.bins) {
+              assert.ok(datos.bins.length > 0, `${lang}: el histograma declara bins pero está vacío`);
+              for (const bin of datos.bins) {
+                assert.ok(bin.n >= 0, `${lang}: la clase [${bin.desde}, ${bin.hasta}) tiene frecuencia negativa`);
+              }
+            }
+            break;
+          }
         }
         for (const texto of textosDeGrafica(datos)) {
           assert.ok(texto.trim().length > 0, `${lang}: la gráfica tiene un texto vacío (etiqueta, eje o rótulo)`);

@@ -1,0 +1,254 @@
+# Calculadora D5 · Media y DE estimadas a partir de mediana, rango o IQR.
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: acuerdo
+orden: 3
+estado: activa
+motor: ts
+entradas:
+  - { id: escenario, tipo: opcion, opciones: [s1, s2, s3] }
+  - { id: n, tipo: entero, min: 2 }
+  - { id: min, tipo: decimal, requerido: false }
+  - { id: q1, tipo: decimal, requerido: false }
+  - { id: mediana, tipo: decimal }
+  - { id: q3, tipo: decimal, requerido: false }
+  - { id: max, tipo: decimal, requerido: false }
+ejemplo: { escenario: s3, n: 45, min: 2, q1: 4, mediana: 6, q3: 9, max: 21 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Mean and SD from median, range or IQR (Luo 2018, Wan 2014, Hozo 2005) - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    escenario <- {escenario}   # "s1" = min, median, max; "s2" = Q1, median, Q3; "s3" = the five numbers
+    n <- {n}
+    a <- {min}; q1 <- {q1}; m <- {mediana}; q3 <- {q3}; b <- {max}   # NA where the scenario does not use them
+
+    # Mean - Luo et al. 2018, with the optimal weights of each scenario
+    if (escenario == "s1") {
+      w1 <- 4/(4 + n^0.75)
+      media_luo <- w1*(a + b)/2 + (1 - w1)*m
+    } else if (escenario == "s2") {
+      w2 <- 0.70 + 0.39/n
+      media_luo <- w2*(q1 + q3)/2 + (1 - w2)*m
+    } else {
+      w3 <- 2.2/(2.2 + n^0.75)
+      w4 <- 0.70 - 0.72/n^0.55
+      media_luo <- w3*(a + b)/2 + w4*(q1 + q3)/2 + (1 - w3 - w4)*m
+    }
+
+    # Mean - Wan et al. 2014
+    media_wan <- switch(escenario,
+                        s1 = (a + 2*m + b)/4,
+                        s2 = (q1 + m + q3)/3,
+                        s3 = (a + 2*q1 + 2*m + 2*q3 + b)/8)
+
+    # SD - Wan et al. 2014: expected range xi(n) and expected IQR eta(n) of n standard normal values
+    xi  <- 2*qnorm((n - 0.375)/(n + 0.25))
+    eta <- 2*qnorm((0.75*n - 0.125)/(n + 0.25))
+    de_wan <- switch(escenario,
+                     s1 = (b - a)/xi,
+                     s2 = (q3 - q1)/eta,
+                     s3 = ((b - a)/xi + (q3 - q1)/eta)/2)
+
+    # Hozo et al. 2005, by ranges of n; it needs the minimum and the maximum, so it does not apply to S2
+    if (escenario == "s2") {
+      media_hozo <- NA_real_
+      de_hozo <- NA_real_
+    } else {
+      media_hozo <- if (n <= 25) (a + 2*m + b)/4 else m
+      de_hozo <- if (n <= 15) sqrt(((a - 2*m + b)^2/4 + (b - a)^2)/12) else if (n <= 70) (b - a)/4 else (b - a)/6
+    }
+
+    # Skewness of the reported summary itself: 1 means a symmetric summary
+    asim_rango <- if (escenario == "s2") NA_real_ else (b - m)/(m - a)
+    asim_iqr   <- if (escenario == "s1") NA_real_ else (q3 - m)/(m - q1)
+
+    res <- list(media_luo = media_luo, media_wan = media_wan, media_hozo = media_hozo,
+                de_wan = de_wan, de_hozo = de_hozo, asim_rango = asim_rango, asim_iqr = asim_iqr)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # No CRAN package on the browser list implements these; estmeansd::qe.mean.sd is an alternative in RStudio
+referencias:
+  - { key: hozo2005, rol: original }
+  - { key: wan2014, rol: original }
+  - { key: luo2018, rol: original }
+  - { key: higgins2019, rol: didactica }
+  - { key: altman1991, rol: didactica }
+grafica: histograma-boxplot
+es:
+  titulo: "Media y desviación estándar a partir de la mediana, el rango o el rango intercuartílico"
+  titulo_corto: "Media y DE desde la mediana"
+  meta: "Estima la media y la desviación estándar de un estudio que solo reportó mediana, rango o rango intercuartílico, con los métodos de Luo (2018), Wan (2014) y Hozo (2005), y muestra el código R equivalente. Los datos no salen del navegador."
+  intro: "Elige qué estadísticos reportó el estudio, captúralos junto con el número de participantes y obtén la media y la desviación estándar estimadas por los tres métodos publicados, con el aviso de asimetría, la interpretación en lenguaje llano y el código de R equivalente."
+  explicacion:
+    - "Muchos estudios describen sus variables continuas con la mediana y el rango intercuartílico, que es lo correcto cuando la distribución es asimétrica. El problema aparece al hacer un metaanálisis: la mayoría de los métodos de síntesis necesitan media y desviación estándar. Estas fórmulas convierten un resumen en el otro sin tener los datos crudos."
+    - "Las tres propuestas suponen que los datos proceden de una distribución aproximadamente normal y usan el tamaño de la muestra para calibrar la conversión. Hozo et al. (2005) fue la primera y funciona por tramos de n, con saltos bruscos en n = 15, 25 y 70. Wan et al. (2014) corrigió esos saltos dividiendo el rango observado entre el rango que cabría esperar de una normal del mismo tamaño. Luo et al. (2018) afinó la media con pesos óptimos que dependen del escenario: solo en S1 la estimación tiende a la propia mediana al crecer n; en S2 y S3 los pesos convergen a 0.70 y la estimación se queda cerca del punto medio del rango intercuartílico."
+    - "Por eso la calculadora muestra los tres a la vez. Si coinciden, la conversión es estable y cualquiera sirve; si difieren mucho, esa diferencia es incertidumbre real que conviene explorar en un análisis de sensibilidad. La práctica habitual en síntesis de evidencia es usar la media de Luo y la desviación estándar de Wan, y reservar Hozo como comparación histórica; el Cochrane Handbook (§6.5.2.5) respalda la conversión desde el rango intercuartílico y (§6.5.2.6) desaconseja hacerla desde el rango, así que el escenario S1, con solo mínimo y máximo, debe leerse con más cautela que S2 y S3."
+    - "El cociente de asimetría del propio resumen es el control de calidad: si (máx − mediana)/(mediana − mín) o (Q₃ − mediana)/(mediana − Q₁) se alejan mucho de 1, la distribución no parece simétrica y la conversión puede sesgar la media y, sobre todo, la desviación estándar. En ese caso vale la pena reportar el resultado como aproximado o buscar los datos originales."
+  ecuaciones:
+    - id: luo
+      tex: '\begin{aligned} \text{S1:}\ \ \bar x &\approx w_1\,\frac{a+b}{2} + (1-w_1)\,m, \qquad w_1 = \frac{4}{4+n^{0.75}} \\ \text{S2:}\ \ \bar x &\approx w_2\,\frac{q_1+q_3}{2} + (1-w_2)\,m, \qquad w_2 = 0.70 + \frac{0.39}{n} \\ \text{S3:}\ \ \bar x &\approx w_3\,\frac{a+b}{2} + w_4\,\frac{q_1+q_3}{2} + (1-w_3-w_4)\,m \\ &\qquad w_3 = \frac{2.2}{2.2+n^{0.75}}, \qquad w_4 = 0.70 - \frac{0.72}{n^{0.55}} \end{aligned}'
+      simbolos:
+        - { s: 'a', def: "valor mínimo reportado" }
+        - { s: 'm', def: "mediana reportada" }
+        - { s: 'b', def: "valor máximo reportado" }
+        - { s: 'q_1,\ q_3', def: "primer y tercer cuartiles reportados" }
+        - { s: 'n', def: "número de participantes del estudio" }
+      nota: "Media estimada por Luo et al. (2018). Los pesos se obtuvieron minimizando el error cuadrático medio bajo normalidad. Al crecer n, w₁ y w₃ tienden a 0 y la media de S1 se acerca a la mediana; w₂ y w₄, en cambio, tienden a 0.70, así que S2 y S3 convergen a 0.70·(q₁+q₃)/2 + 0.30·m."
+    - id: wan_media
+      tex: '\bar x \approx \begin{cases} \dfrac{a+2m+b}{4} & \text{S1} \\ \dfrac{q_1+m+q_3}{3} & \text{S2} \\ \dfrac{a+2q_1+2m+2q_3+b}{8} & \text{S3} \end{cases}'
+      simbolos: []
+      nota: "Media estimada por Wan et al. (2014): promedios ponderados de los estadísticos reportados, sin dependencia de n."
+    - id: wan_de
+      tex: '\begin{gathered} s \approx \begin{cases} \dfrac{b-a}{\xi(n)} & \text{S1} \\ \dfrac{q_3-q_1}{\eta(n)} & \text{S2} \\ \dfrac{1}{2}\left[\dfrac{b-a}{\xi(n)} + \dfrac{q_3-q_1}{\eta(n)}\right] & \text{S3} \end{cases} \\ \xi(n) = 2\,\Phi^{-1}\!\left(\frac{n-0.375}{n+0.25}\right), \qquad \eta(n) = 2\,\Phi^{-1}\!\left(\frac{0.75n-0.125}{n+0.25}\right) \end{gathered}'
+      simbolos:
+        - { s: '\xi(n)', def: "rango esperado de n valores de una normal estándar" }
+        - { s: '\eta(n)', def: "rango intercuartílico esperado de n valores de una normal estándar" }
+        - { s: '\Phi^{-1}', def: "cuantil de la distribución normal estándar" }
+      nota: "Desviación estándar estimada por Wan et al. (2014): el rango (o el intercuartílico) observado dividido entre el que cabría esperar de una normal del mismo tamaño."
+    - id: hozo
+      tex: '\begin{gathered} \bar x \approx \begin{cases} \dfrac{a+2m+b}{4} & n \le 25 \\ m & n > 25 \end{cases} \\ s \approx \begin{cases} \sqrt{\dfrac{1}{12}\left[\dfrac{(a-2m+b)^2}{4} + (b-a)^2\right]} & n \le 15 \\ \dfrac{b-a}{4} & 15 < n \le 70 \\ \dfrac{b-a}{6} & n > 70 \end{cases} \end{gathered}'
+      simbolos: []
+      nota: "Hozo et al. (2005), la propuesta original: funciona por tramos de n y solo con el mínimo y el máximo. Los saltos entre tramos son discontinuos, que es justo lo que corrigió Wan et al. (2014)."
+  etiquetas:
+    escenario: "Estadísticos reportados"
+    escenario.s1: "Mínimo, mediana y máximo"
+    escenario.s2: "Q₁, mediana y Q₃"
+    escenario.s3: "Los cinco números (mín, Q₁, mediana, Q₃, máx)"
+    n: "Número de participantes (n)"
+    min: "Mínimo"
+    q1: "Primer cuartil (Q₁)"
+    mediana: "Mediana"
+    q3: "Tercer cuartil (Q₃)"
+    max: "Máximo"
+    media_luo: "Media estimada (Luo 2018)"
+    media_wan: "Media estimada (Wan 2014)"
+    media_hozo: "Media estimada (Hozo 2005)"
+    de_wan: "DE estimada (Wan 2014)"
+    de_hozo: "DE estimada (Hozo 2005)"
+    asim_rango: "Cociente de asimetría del rango"
+    asim_iqr: "Cociente de asimetría del intercuartílico"
+    no_aplica: "no aplica"
+    nota_asimetria: "1 = resumen simétrico"
+    nota_hozo: "requiere mínimo y máximo"
+    eje_x: "Valor de la variable"
+    grafica_normal: "Distribución normal implícita"
+    grafica_media_luo: "Media (Luo)"
+    grafica_media_wan: "Media (Wan)"
+    grafica_media_hozo: "Media (Hozo)"
+  ayudas:
+    escenario: "Elige qué estadísticos trae el artículo: solo el rango, solo el rango intercuartílico, o los cinco números."
+    n: "Número de participantes con dato válido en esa variable (entero de 2 o más; los cuartiles necesitan al menos 4)."
+    min: "Valor más bajo reportado."
+    q1: "Percentil 25 reportado."
+    mediana: "Percentil 50 reportado."
+    q3: "Percentil 75 reportado."
+    max: "Valor más alto reportado."
+  interpretacion:
+    resumen.s1: "A partir de una mediana de {mediana} con un rango de {min} a {max} en {n} participantes, la media estimada es {media_luo} (Luo 2018) y la desviación estándar {de_wan} (Wan 2014)."
+    resumen.s2: "A partir de una mediana de {mediana} con un rango intercuartílico de {q1} a {q3} en {n} participantes, la media estimada es {media_luo} (Luo 2018) y la desviación estándar {de_wan} (Wan 2014)."
+    resumen.s3: "A partir de una mediana de {mediana}, un rango intercuartílico de {q1} a {q3} y un rango de {min} a {max} en {n} participantes, la media estimada es {media_luo} (Luo 2018) y la desviación estándar {de_wan} (Wan 2014)."
+    comparacion: "Los tres métodos estiman medias de {media_luo} (Luo), {media_wan} (Wan) y {media_hozo} (Hozo), y las desviaciones estándar son {de_wan} (Wan) y {de_hozo} (Hozo). Cuanto más se separen entre sí, más incertidumbre añade la propia conversión."
+    uso: "Use estas cifras solo para metaanálisis o comparaciones aproximadas: son estimaciones derivadas de un resumen publicado, no los estadísticos originales del estudio, y conviene declararlo en los métodos."
+    asimetria.compatible: "Los cocientes de asimetría del resumen ({asim_rango} para el rango y {asim_iqr} para el intercuartílico) se mantienen cerca de 1, compatibles con la distribución aproximadamente simétrica que suponen las tres fórmulas."
+    asimetria.marcada: "Los cocientes de asimetría del resumen ({asim_rango} para el rango y {asim_iqr} para el intercuartílico) se alejan de 1: la distribución parece asimétrica y las fórmulas, que suponen normalidad, pueden sesgar la media y sobre todo la desviación estándar."
+    metodos_resumen.s1: "la mediana y el rango"
+    metodos_resumen.s2: "la mediana y el rango intercuartílico"
+    metodos_resumen.s3: "la mediana, el rango intercuartílico y el rango"
+  avisos:
+    asimetria_marcada: "El resumen reportado es claramente asimétrico: las fórmulas suponen normalidad y el resultado puede sesgarse (Cochrane Handbook §6.5.2.5 y §6.5.2.6)."
+    n_pequeno: "Con menos de 10 participantes la conversión es poco fiable: las tres fórmulas se calibraron con muestras mayores."
+    hozo_no_aplica: "El método de Hozo (2005) necesita el mínimo y el máximo, así que no se calcula con este escenario."
+    rango_cero: "Todos los valores reportados son iguales: la desviación estándar estimada es 0 y los cocientes de asimetría no están definidos."
+  metodos: "La media y la desviación estándar no reportadas se estimaron a partir de {resumen_frase} en {n} participantes con los métodos de Luo et al. [{ref:luo2018}] y Wan et al. [{ref:wan2014}] (y de Hozo et al. [{ref:hozo2005}] como comparación); el Cochrane Handbook [{ref:higgins2019}] recoge la conversión a partir del rango intercuartílico (§6.5.2.5) y desaconseja estimar la DE a partir del rango (§6.5.2.6). La media estimada fue {media_luo} y la desviación estándar {de_wan}. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: días de fiebre en 45 pacientes, mediana 6 (rango intercuartílico 4 a 9) y rango de 2 a 21 (datos ficticios)."
+  grafica_titulo: "Resumen reportado, medias estimadas y distribución normal implícita"
+en:
+  titulo: "Mean and standard deviation from the median, the range or the interquartile range"
+  titulo_corto: "Mean and SD from the median"
+  meta: "Estimate the mean and the standard deviation of a study that only reported the median, the range or the interquartile range, with the methods of Luo (2018), Wan (2014) and Hozo (2005), and see the equivalent R code. Data never leave the browser."
+  intro: "Choose which statistics the study reported, enter them together with the number of participants and get the mean and standard deviation estimated by the three published methods, with the skewness warning, a plain-language interpretation and the equivalent R code."
+  explicacion:
+    - "Many studies describe their continuous variables with the median and the interquartile range, which is the right choice when the distribution is skewed. The problem shows up in a meta-analysis: most synthesis methods need a mean and a standard deviation. These formulas convert one summary into the other without access to the raw data."
+    - "All three proposals assume the data come from an approximately normal distribution and use the sample size to calibrate the conversion. Hozo et al. (2005) came first and works in ranges of n, with abrupt jumps at n = 15, 25 and 70. Wan et al. (2014) fixed those jumps by dividing the observed range by the range expected from a normal sample of the same size. Luo et al. (2018) refined the mean with optimal weights that depend on the scenario: only in S1 does the estimate tend to the median itself as n grows; in S2 and S3 the weights converge to 0.70 and the estimate stays close to the midpoint of the interquartile range."
+    - "That is why the calculator shows all three at once. If they agree, the conversion is stable and any of them will do; if they differ widely, that difference is real uncertainty worth exploring in a sensitivity analysis. Common practice in evidence synthesis is to use Luo's mean and Wan's standard deviation, and to keep Hozo as a historical comparison; the Cochrane Handbook (§6.5.2.5) supports the conversion from the interquartile range and (§6.5.2.6) advises against doing it from the range, so scenario S1, with only a minimum and a maximum, should be read with more caution than S2 and S3."
+    - "The skewness ratio of the summary itself is the quality check: if (max − median)/(median − min) or (Q₃ − median)/(median − Q₁) stray far from 1, the distribution does not look symmetric and the conversion may bias the mean and, above all, the standard deviation. In that case it is worth reporting the result as approximate or looking for the original data."
+  ecuaciones:
+    - id: luo
+      tex: '\begin{aligned} \text{S1:}\ \ \bar x &\approx w_1\,\frac{a+b}{2} + (1-w_1)\,m, \qquad w_1 = \frac{4}{4+n^{0.75}} \\ \text{S2:}\ \ \bar x &\approx w_2\,\frac{q_1+q_3}{2} + (1-w_2)\,m, \qquad w_2 = 0.70 + \frac{0.39}{n} \\ \text{S3:}\ \ \bar x &\approx w_3\,\frac{a+b}{2} + w_4\,\frac{q_1+q_3}{2} + (1-w_3-w_4)\,m \\ &\qquad w_3 = \frac{2.2}{2.2+n^{0.75}}, \qquad w_4 = 0.70 - \frac{0.72}{n^{0.55}} \end{aligned}'
+      simbolos:
+        - { s: 'a', def: "reported minimum" }
+        - { s: 'm', def: "reported median" }
+        - { s: 'b', def: "reported maximum" }
+        - { s: 'q_1,\ q_3', def: "reported first and third quartiles" }
+        - { s: 'n', def: "number of participants in the study" }
+      nota: "Mean estimated by Luo et al. (2018). The weights were obtained by minimising the mean squared error under normality. As n grows, w₁ and w₃ tend to 0 and the S1 mean approaches the median; w₂ and w₄, by contrast, tend to 0.70, so S2 and S3 converge to 0.70·(q₁+q₃)/2 + 0.30·m."
+    - id: wan_media
+      tex: '\bar x \approx \begin{cases} \dfrac{a+2m+b}{4} & \text{S1} \\ \dfrac{q_1+m+q_3}{3} & \text{S2} \\ \dfrac{a+2q_1+2m+2q_3+b}{8} & \text{S3} \end{cases}'
+      simbolos: []
+      nota: "Mean estimated by Wan et al. (2014): weighted averages of the reported statistics, with no dependence on n."
+    - id: wan_de
+      tex: '\begin{gathered} s \approx \begin{cases} \dfrac{b-a}{\xi(n)} & \text{S1} \\ \dfrac{q_3-q_1}{\eta(n)} & \text{S2} \\ \dfrac{1}{2}\left[\dfrac{b-a}{\xi(n)} + \dfrac{q_3-q_1}{\eta(n)}\right] & \text{S3} \end{cases} \\ \xi(n) = 2\,\Phi^{-1}\!\left(\frac{n-0.375}{n+0.25}\right), \qquad \eta(n) = 2\,\Phi^{-1}\!\left(\frac{0.75n-0.125}{n+0.25}\right) \end{gathered}'
+      simbolos:
+        - { s: '\xi(n)', def: "expected range of n standard normal values" }
+        - { s: '\eta(n)', def: "expected interquartile range of n standard normal values" }
+        - { s: '\Phi^{-1}', def: "quantile of the standard normal distribution" }
+      nota: "Standard deviation estimated by Wan et al. (2014): the observed range (or interquartile range) divided by the one expected from a normal sample of the same size."
+    - id: hozo
+      tex: '\begin{gathered} \bar x \approx \begin{cases} \dfrac{a+2m+b}{4} & n \le 25 \\ m & n > 25 \end{cases} \\ s \approx \begin{cases} \sqrt{\dfrac{1}{12}\left[\dfrac{(a-2m+b)^2}{4} + (b-a)^2\right]} & n \le 15 \\ \dfrac{b-a}{4} & 15 < n \le 70 \\ \dfrac{b-a}{6} & n > 70 \end{cases} \end{gathered}'
+      simbolos: []
+      nota: "Hozo et al. (2005), the original proposal: it works in ranges of n and only with the minimum and the maximum. The jumps between ranges are discontinuous, which is exactly what Wan et al. (2014) corrected."
+  etiquetas:
+    escenario: "Reported statistics"
+    escenario.s1: "Minimum, median and maximum"
+    escenario.s2: "Q₁, median and Q₃"
+    escenario.s3: "Five-number summary (min, Q₁, median, Q₃, max)"
+    n: "Number of participants (n)"
+    min: "Minimum"
+    q1: "First quartile (Q₁)"
+    mediana: "Median"
+    q3: "Third quartile (Q₃)"
+    max: "Maximum"
+    media_luo: "Estimated mean (Luo 2018)"
+    media_wan: "Estimated mean (Wan 2014)"
+    media_hozo: "Estimated mean (Hozo 2005)"
+    de_wan: "Estimated SD (Wan 2014)"
+    de_hozo: "Estimated SD (Hozo 2005)"
+    asim_rango: "Range skewness ratio"
+    asim_iqr: "Interquartile skewness ratio"
+    no_aplica: "not applicable"
+    nota_asimetria: "1 = symmetric summary"
+    nota_hozo: "needs the minimum and the maximum"
+    eje_x: "Value of the variable"
+    grafica_normal: "Implied normal distribution"
+    grafica_media_luo: "Mean (Luo)"
+    grafica_media_wan: "Mean (Wan)"
+    grafica_media_hozo: "Mean (Hozo)"
+  ayudas:
+    escenario: "Choose which statistics the paper reports: only the range, only the interquartile range, or the five-number summary."
+    n: "Number of participants with valid data for that variable (integer of 2 or more; quartiles need at least 4)."
+    min: "Lowest reported value."
+    q1: "Reported 25th percentile."
+    mediana: "Reported 50th percentile."
+    q3: "Reported 75th percentile."
+    max: "Highest reported value."
+  interpretacion:
+    resumen.s1: "From a median of {mediana} with a range of {min} to {max} in {n} participants, the estimated mean is {media_luo} (Luo 2018) and the standard deviation {de_wan} (Wan 2014)."
+    resumen.s2: "From a median of {mediana} with an interquartile range of {q1} to {q3} in {n} participants, the estimated mean is {media_luo} (Luo 2018) and the standard deviation {de_wan} (Wan 2014)."
+    resumen.s3: "From a median of {mediana}, an interquartile range of {q1} to {q3} and a range of {min} to {max} in {n} participants, the estimated mean is {media_luo} (Luo 2018) and the standard deviation {de_wan} (Wan 2014)."
+    comparacion: "The three methods estimate means of {media_luo} (Luo), {media_wan} (Wan) and {media_hozo} (Hozo), and the standard deviations are {de_wan} (Wan) and {de_hozo} (Hozo). The wider they spread, the more uncertainty the conversion itself adds."
+    uso: "Use these figures only for meta-analysis or approximate comparisons: they are estimates derived from a published summary, not the original statistics of the study, and that should be stated in the methods."
+    asimetria.compatible: "The skewness ratios of the summary ({asim_rango} for the range and {asim_iqr} for the interquartile range) stay close to 1, compatible with the approximately symmetric distribution the three formulas assume."
+    asimetria.marcada: "The skewness ratios of the summary ({asim_rango} for the range and {asim_iqr} for the interquartile range) stray from 1: the distribution looks skewed and the formulas, which assume normality, may bias the mean and above all the standard deviation."
+    metodos_resumen.s1: "the median and the range"
+    metodos_resumen.s2: "the median and the interquartile range"
+    metodos_resumen.s3: "the median, the interquartile range and the range"
+  avisos:
+    asimetria_marcada: "The reported summary is clearly skewed: the formulas assume normality and the result may be biased (Cochrane Handbook §6.5.2.5 and §6.5.2.6)."
+    n_pequeno: "With fewer than 10 participants the conversion is unreliable: all three formulas were calibrated on larger samples."
+    hozo_no_aplica: "The Hozo (2005) method needs the minimum and the maximum, so it is not computed for this scenario."
+    rango_cero: "Every reported value is identical: the estimated standard deviation is 0 and the skewness ratios are undefined."
+  metodos: "The unreported mean and standard deviation were estimated from {resumen_frase} in {n} participants with the methods of Luo et al. [{ref:luo2018}] and Wan et al. [{ref:wan2014}] (with Hozo et al. [{ref:hozo2005}] for comparison); the Cochrane Handbook [{ref:higgins2019}] covers the conversion from the interquartile range (§6.5.2.5) and advises against estimating the SD from the range (§6.5.2.6). The estimated mean was {media_luo} and the standard deviation {de_wan}. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: days of fever in 45 patients, median 6 (interquartile range 4 to 9) and range 2 to 21 (fictitious data)."
+  grafica_titulo: "Reported summary, estimated means and implied normal distribution"

@@ -1,0 +1,346 @@
+# Calculadora B1 · Medidas de asociación y efecto en una tabla 2×2 (RR, OR, RRA, RRR, NNT).
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: asociacion
+orden: 1
+estado: activa
+motor: ts
+entradas:
+  - { id: a, tipo: entero, min: 0 }
+  - { id: b, tipo: entero, min: 0 }
+  - { id: c, tipo: entero, min: 0 }
+  - { id: d, tipo: entero, min: 0 }
+  - { id: diseno, tipo: opcion, opciones: [cohorte, casos_controles, transversal] }
+  - { id: metodo_rra, tipo: opcion, opciones: [newcombe, wald] }
+  - { id: corr, tipo: decimal, opciones: ["0", "0.5"] }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+tabla2x2: { celdas: [a, b, c, d] }
+ejemplo: { a: 12, b: 88, c: 30, d: 70, diseno: cohorte, metodo_rra: newcombe, corr: 0, nivel: 0.95 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Measures of association and effect from a 2x2 table - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    # rows = exposure or treatment, columns = outcome:
+    #   a = exposed with the outcome, b = exposed without it, c = unexposed with it, d = unexposed without it
+    a <- {a}; b <- {b}; c <- {c}; d <- {d}
+    nivel      <- {nivel}
+    diseno     <- {diseno}       # "cohorte", "casos_controles" or "transversal": changes only how the results are read
+    metodo_rra <- {metodo_rra}   # CI for the absolute risk reduction: "newcombe" (hybrid score, method 10) or "wald"
+    corr       <- {corr}         # 0.5 = Haldane-Anscombe correction for the ratios; it never touches p1, p0, ARR or NNT
+    n <- a + b + c + d
+    z <- qnorm(1 - (1 - nivel) / 2)
+
+    # Risks with Wilson's (1927) score interval, written out to keep the same order of operations
+    # as binom::binom.confint(methods = "wilson"); the correction is not applied here on purpose.
+    n1 <- a + b; n0 <- c + d
+    ic_wilson <- function(x, m) {
+      p  <- x / m
+      w1 <- p + 0.5 * z^2 / m
+      w2 <- z * sqrt((p * (1 - p) + 0.25 * z^2 / m) / m)
+      w3 <- 1 + z^2 / m
+      c(p, (w1 - w2) / w3, (w1 + w2) / w3)
+    }
+    p1 <- ic_wilson(a, n1)   # risk in the exposed / treated
+    p0 <- ic_wilson(c, n0)   # risk in the unexposed / controls
+
+    # Ratios on the (possibly corrected) cells, with the log-method CI: exp(log(est) -/+ z * SE);
+    # undefined (NA) when log(est) or the SE is not finite, that is, when a cell of the table is 0.
+    ac <- a + corr; bc <- b + corr; cc <- c + corr; dc <- d + corr
+    n1c <- ac + bc; n0c <- cc + dc
+    ic_log <- function(est, ee) {
+      if (is.finite(log(est)) && is.finite(ee)) c(est, exp(log(est) - z * ee), exp(log(est) + z * ee)) else c(est, NA, NA)
+    }
+    rr <- ic_log((ac / n1c) / (cc / n0c), sqrt(1/ac - 1/n1c + 1/cc - 1/n0c))   # Katz 1978
+    or <- ic_log((ac * dc) / (bc * cc), sqrt(1/ac + 1/bc + 1/cc + 1/dc))       # Woolf 1955
+
+    # Absolute risk reduction: hybrid score interval (Newcombe 1998, method 10) or Wald
+    rra <- p1[1] - p0[1]
+    if (metodo_rra == "newcombe") {
+      rra_ic <- c(rra - sqrt((p1[1] - p1[2])^2 + (p0[3] - p0[1])^2),
+                  rra + sqrt((p1[3] - p1[1])^2 + (p0[1] - p0[2])^2))
+    } else {
+      rra_ee <- sqrt(p1[1] * (1 - p1[1]) / n1 + p0[1] * (1 - p0[1]) / n0)
+      rra_ic <- c(rra - z * rra_ee, rra + z * rra_ee)
+    }
+
+    # Relative risk reduction and number needed to treat (reciprocal of the ARR and of its limits)
+    rrr <- c(1 - rr[1], 1 - rr[3], 1 - rr[2])
+    nnt <- 1 / abs(rra); nnt_ic <- sort(1 / abs(rra_ic))   # Altman 1998; if the ARR CI crosses 0, read it as NNTB x to Inf to NNTH y
+
+    res <- list(n = n, p1 = p1, p0 = p0, rr = rr, or = or,
+                rra = c(rra, rra_ic[1], rra_ic[2]), rrr = rrr, nnt = c(nnt, nnt_ic[1], nnt_ic[2]))
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Alternative (score interval, Miettinen-Nurminen type): PropCIs::diffscoreci(a, n1, c, n0, nivel)
+    # Equivalent in RStudio (not run in the browser):
+    # epiR::epi.2by2(as.table(matrix(c(a, b, c, d), nrow = 2, byrow = TRUE)), method = "cohort.count", conf.level = nivel)
+referencias:
+  - { key: cornfield1951, rol: original }
+  - { key: woolf1955, rol: original }
+  - { key: katz1978, rol: original }
+  - { key: newcombe1998diff, rol: original }
+  - { key: laupacis1988, rol: original }
+  - { key: altman1998, rol: original }
+  - { key: cook1995, rol: complementaria }
+  - { key: haldane1956, rol: original }
+  - { key: anscombe1956, rol: original }
+  - { key: wilson1927, rol: complementaria }
+  - { key: altman1991, rol: didactica }
+  - { key: altman2000, rol: didactica }
+grafica: ic-forest
+es:
+  titulo: "Asociación y efecto en una tabla 2×2: riesgo relativo, razón de momios, RRA, RRR y NNT"
+  titulo_corto: "Asociación y efecto (tabla 2×2)"
+  meta: "Calcula el riesgo relativo (Katz), la razón de momios (Woolf), la reducción absoluta del riesgo (Newcombe método 10 o Wald), la reducción relativa y el número necesario a tratar (Altman) con intervalos de confianza a partir de una tabla 2×2, con interpretación, código R y referencias. Los datos no salen del navegador."
+  intro: "Captura los cuatro conteos de la tabla 2×2 (exposición o tratamiento frente al desenlace) y obtén los riesgos de cada grupo, el riesgo relativo, la razón de momios, la reducción absoluta y relativa del riesgo y el número necesario a tratar con sus intervalos de confianza, la interpretación en lenguaje llano y el código de R equivalente."
+  explicacion:
+    - "Una tabla 2×2 de asociación cruza una exposición o un tratamiento (filas) con un desenlace (columnas). De ella salen dos riesgos: el de los expuestos o tratados, p₁ = a/(a + b), y el de los no expuestos o controles, p₀ = c/(c + d). Todo lo demás son formas de comparar esos dos números: dividiéndolos (riesgo relativo), restándolos (reducción absoluta del riesgo) o comparando sus momios (razón de momios)."
+    - "El riesgo relativo dice cuántas veces más (o menos) frecuente es el desenlace en el grupo expuesto; la reducción absoluta dice cuántos eventos se evitan (o se producen) por cada 100 personas, y su recíproco es el número necesario a tratar: cuántas personas hay que tratar o exponer para que ocurra un evento de más o de menos. Una misma reducción relativa del 50 % puede significar un NNT de 10 o de 1,000 según lo frecuente que sea el desenlace: por eso las tres medidas se reportan juntas."
+    - "La razón de momios no es un riesgo relativo. Se parecen solo cuando el desenlace es infrecuente (riesgo en el grupo de referencia por debajo del 10 %); cuando el desenlace es común, la razón de momios se aleja de 1 mucho más que el riesgo relativo y exagera el efecto. El diseño también manda: en una cohorte o un ensayo clínico las cinco medidas son interpretables; en un estudio transversal el cociente de proporciones es una razón de prevalencias, no de incidencias; y en un estudio de casos y controles el muestreo fija cuántos casos y cuántos controles hay, así que los riesgos, el riesgo relativo, la reducción absoluta y el NNT no se pueden estimar y solo la razón de momios es válida."
+    - "Cuando una celda vale 0, el riesgo relativo y la razón de momios quedan en 0 o en infinito y su intervalo logarítmico no existe. La corrección de Haldane-Anscombe (sumar 0.5 a las cuatro celdas) devuelve una estimación finita y debe declararse en Métodos; aquí es una opción explícita y solo afecta al riesgo relativo, a la razón de momios y a la reducción relativa, nunca a los riesgos, a la diferencia absoluta ni al NNT. Si el intervalo de la diferencia absoluta incluye el 0, el NNT no tiene dos límites finitos del mismo signo y se reporta con la notación de Altman: «NNTB x a ∞ a NNTH y»."
+  ecuaciones:
+    - id: riesgos
+      tex: 'p_1=\frac{a}{n_1}=\frac{a}{a+b},\qquad p_0=\frac{c}{n_0}=\frac{c}{c+d},\qquad \IC_{\mathrm{Wilson}}=\frac{\hat p+\frac{z^2}{2m}\pm z\sqrt{\frac{\hat p\,(1-\hat p)}{m}+\frac{z^2}{4m^2}}}{1+\frac{z^2}{m}}'
+      simbolos:
+        - { s: 'a', def: "expuestos o tratados con el desenlace" }
+        - { s: 'b', def: "expuestos o tratados sin el desenlace" }
+        - { s: 'c', def: "no expuestos o controles con el desenlace" }
+        - { s: 'd', def: "no expuestos o controles sin el desenlace" }
+        - { s: 'n_1', def: "total de expuestos o tratados, a + b" }
+        - { s: 'n_0', def: "total de no expuestos o controles, c + d" }
+        - { s: '\hat p', def: "proporción observada, x/m (aquí p₁ o p₀)" }
+        - { s: 'm', def: "denominador de la proporción (n₁ o n₀)" }
+        - { s: 'z', def: "cuantil normal del nivel de confianza (1.96 al 95 %)" }
+      nota: "Riesgos de cada grupo con el intervalo de Wilson (1927), el recomendado por Newcombe. La corrección de Haldane-Anscombe no se aplica a los riesgos."
+    - id: rr
+      tex: '\RR=\frac{p_1}{p_0},\qquad \IC(\RR)=\exp\!\left[\ln \RR\pm z_{1-\alpha/2}\sqrt{\frac{1}{a}-\frac{1}{n_1}+\frac{1}{c}-\frac{1}{n_0}}\right]'
+      simbolos:
+        - { s: 'z_{1-\alpha/2}', def: "cuantil normal bilateral del nivel de confianza" }
+      nota: "Riesgo relativo con el intervalo logarítmico de Katz (1978). En un diseño transversal se lee como razón de prevalencias. Con la corrección de Haldane-Anscombe, a, b, c y d llevan 0.5 sumado."
+    - id: or
+      tex: '\OR=\frac{ad}{bc},\qquad \IC(\OR)=\exp\!\left[\ln \OR\pm z\sqrt{\frac{1}{a}+\frac{1}{b}+\frac{1}{c}+\frac{1}{d}}\right]'
+      simbolos: []
+      nota: "Razón de momios con el intervalo logarítmico de Woolf (1955); es la medida de Cornfield (1951) y la única válida en un estudio de casos y controles."
+    - id: rra
+      tex: '\RRA=p_1-p_0,\qquad \IC_{\mathrm{Newcombe}}(\RRA)=\left[\RRA-\sqrt{(p_1-l_1)^2+(u_0-p_0)^2},\ \ \RRA+\sqrt{(u_1-p_1)^2+(p_0-l_0)^2}\right]'
+      simbolos:
+        - { s: 'l_1,\ u_1', def: "límites de Wilson de p₁" }
+        - { s: 'l_0,\ u_0', def: "límites de Wilson de p₀" }
+      nota: "Reducción absoluta del riesgo con el intervalo híbrido de Newcombe (1998), método 10, construido a partir de los límites de Wilson de cada riesgo."
+    - id: rra_wald
+      tex: '\IC_{\mathrm{Wald}}(\RRA)=\RRA\pm z\sqrt{\frac{p_1(1-p_1)}{n_1}+\frac{p_0(1-p_0)}{n_0}}'
+      simbolos: []
+      nota: "Alternativa asintótica para la reducción absoluta del riesgo; es la que ofrece el selector junto al método de Newcombe."
+    - id: rrr_nnt
+      tex: '\RRR=1-\RR,\quad \IC(\RRR)=\left[1-\RR_{\mathrm{sup}},\ 1-\RR_{\mathrm{inf}}\right];\qquad \NNT=\frac{1}{\lvert \RRA\rvert},\quad \IC(\NNT)=\mathrm{ordenar}\left[\frac{1}{\lvert \RRA_{\mathrm{inf}}\rvert},\ \frac{1}{\lvert \RRA_{\mathrm{sup}}\rvert}\right]'
+      simbolos:
+        - { s: '\RR_{\mathrm{inf}},\ \RR_{\mathrm{sup}}', def: "límites del intervalo del riesgo relativo" }
+        - { s: '\RRA_{\mathrm{inf}},\ \RRA_{\mathrm{sup}}', def: "límites del intervalo de la reducción absoluta del riesgo" }
+      nota: "Reducción relativa del riesgo (intervalo invertido del RR) y número necesario a tratar como recíproco de la RRA y de sus límites (Altman 1998; Laupacis 1988; Cook y Sackett 1995)."
+  etiquetas:
+    a: "Expuestos / tratados con el desenlace (a)"
+    b: "Expuestos / tratados sin el desenlace (b)"
+    c: "No expuestos / controles con el desenlace (c)"
+    d: "No expuestos / controles sin el desenlace (d)"
+    diseno: "Diseño del estudio"
+    "diseno.cohorte": "Cohorte o ensayo clínico"
+    "diseno.casos_controles": "Casos y controles"
+    "diseno.transversal": "Transversal"
+    metodo_rra: "Método del IC de la RRA"
+    "metodo_rra.newcombe": "Newcombe híbrido (método 10)"
+    "metodo_rra.wald": "Wald (asintótico)"
+    corr: "Corrección de Haldane-Anscombe (RR y OR)"
+    "corr.0": "Sin corrección"
+    "corr.0.5": "Sumar 0.5 a cada celda"
+    nivel: "Nivel de confianza"
+    "tabla.filas": "Exposición o tratamiento"
+    "tabla.columnas": "Desenlace"
+    "tabla.fila1": "Expuestos / tratados"
+    "tabla.fila2": "No expuestos / controles"
+    "tabla.col1": "Con el desenlace"
+    "tabla.col2": "Sin el desenlace"
+    "tabla.total": "Total"
+    n: "Total de participantes (n)"
+    p1: "Riesgo en expuestos / tratados (p₁)"
+    p0: "Riesgo en no expuestos / controles (p₀)"
+    rr: "Riesgo relativo (RR) / razón de prevalencias en diseño transversal"
+    or: "Razón de momios (OR)"
+    rra: "Reducción absoluta del riesgo (RRA, puntos porcentuales)"
+    rrr: "Reducción relativa del riesgo (RRR)"
+    nnt: "Número necesario a tratar (NNT)"
+    nota_wilson: "método de Wilson"
+    nota_katz: "método logarítmico de Katz"
+    nota_woolf: "método logarítmico de Woolf"
+    nota_altman: "recíproco de los límites de la RRA (Altman)"
+    no_aplica: "No interpretable en un diseño de casos y controles"
+    nntb: "NNTB"
+    nnth: "NNTH"
+    nnt_altman: "{nntb} a ∞ a {nnth}"
+    grafica_rr: "Riesgo relativo (RR)"
+    grafica_rra: "Reducción absoluta del riesgo (RRA)"
+    grafica_razones: "Razones (escala logarítmica; referencia en 1)"
+    grafica_diferencia: "Diferencia de riesgos (referencia en 0)"
+  ayudas:
+    diseno: "En una cohorte o un ensayo se interpretan las cinco medidas. En un estudio transversal el RR es una razón de prevalencias. En casos y controles solo la razón de momios es válida."
+    metodo_rra: "Newcombe (método 10) combina los intervalos de Wilson de los dos riesgos y se comporta mejor con muestras pequeñas o riesgos extremos; Wald es la aproximación clásica."
+    corr: "Úsala cuando una celda vale 0: suma 0.5 a las cuatro celdas antes de calcular el RR y la OR (no afecta a los riesgos, a la RRA ni al NNT)."
+  interpretacion:
+    "resumen.cohorte": "De {n1} personas expuestas o tratadas, {a} presentaron el desenlace ({p1}; IC {nivel}: {p1_ic}); de {n0} no expuestas o controles, lo presentaron {c} ({p0}; IC {nivel}: {p0_ic}). La diferencia absoluta de riesgos es {rra} puntos porcentuales (IC {nivel}: {rra_ic}) y el cambio relativo del riesgo (RRR = 1 − RR), {rrr} ({rrr_ic})."
+    "resumen.transversal": "En un diseño transversal se estiman prevalencias, no incidencias: {a} de {n1} expuestos presentaban el desenlace ({p1}; IC {nivel}: {p1_ic}) frente a {c} de {n0} no expuestos ({p0}; IC {nivel}: {p0_ic}). El cociente {rr} se lee como razón de prevalencias y la diferencia absoluta de prevalencias es {rra} puntos porcentuales (IC {nivel}: {rra_ic}); como la exposición y el desenlace se midieron a la vez, la asociación no indica cuál precedió a cuál."
+    "resumen.casos_controles": "En un diseño de casos y controles el muestreo fija cuántos casos y cuántos controles se estudian, así que {p1} y {p0} no son riesgos de la población: el riesgo relativo, la reducción absoluta, la reducción relativa y el NNT no son interpretables y solo la razón de momios lo es. Se analizaron {n1} expuestos y {n0} no expuestos ({n} participantes en total)."
+    "rr.excluye": "RR = {rr} ({rr_ic}): el riesgo del grupo expuesto o tratado es {rr} veces el del grupo de referencia y el intervalo no incluye el 1, de modo que los datos son poco compatibles con la ausencia de asociación."
+    "rr.cruza": "RR = {rr} ({rr_ic}): el intervalo del riesgo relativo no excluye el 1 (o no está definido), así que los datos no permiten descartar ni una reducción ni un aumento del riesgo."
+    "rr.transversal.excluye": "RP = {rr} ({rr_ic}): la prevalencia del desenlace en el grupo expuesto es {rr} veces la del grupo de referencia y el intervalo no incluye el 1, de modo que los datos son poco compatibles con la ausencia de asociación."
+    "rr.transversal.cruza": "RP = {rr} ({rr_ic}): el intervalo de la razón de prevalencias no excluye el 1 (o no está definido), así que los datos no permiten descartar ni una prevalencia menor ni una mayor en el grupo expuesto."
+    or: "OR = {or} ({or_ic}). La razón de momios compara los momios del desenlace entre el grupo expuesto o tratado y el de referencia: se aproxima al riesgo relativo solo cuando el desenlace es infrecuente y, con desenlaces comunes, se aleja más de 1 y exagera el efecto. Con una celda en 0 queda en 0 o en infinito y sin intervalo, salvo que se aplique la corrección de Haldane-Anscombe."
+    "nnt.beneficio.excluye": "Hay que tratar o exponer a {nnt} personas para evitar un evento adicional (NNTB; valor exacto {nnt_exacto}; IC {nivel}: {nnt_ic})."
+    "nnt.dano.excluye": "Basta con exponer a {nnt} personas para producir un evento adicional (NNTH; valor exacto {nnt_exacto}; IC {nivel}: {nnt_ic})."
+    "nnt.cruza": "La estimación puntual es {nnt} personas ({nnt_exacto}), pero el intervalo de la diferencia absoluta de riesgos incluye el 0 y el NNT no tiene dos límites finitos del mismo signo: se reporta con la notación de Altman, {nnt_ic}, donde NNTB es el número necesario para evitar un evento y NNTH el necesario para producirlo."
+    "nnt.nulo": "Los dos grupos tuvieron el mismo riesgo ({p1} frente a {p0}): la diferencia absoluta es 0 y el número necesario a tratar no está definido ({nnt}); el intervalo, {nnt_ic}, abarca desde el beneficio hasta el daño."
+    "nnt.transversal": "El recíproco de la diferencia de prevalencias es {nnt_exacto} ({nnt_ic}). En un diseño transversal esa cifra describe la asociación observada, no el efecto de intervenir: la exposición y el desenlace se midieron a la vez, así que no se puede leer como «personas que hay que tratar»."
+    "metodos_rra.newcombe": "IC híbrido de Newcombe, método 10 [{ref:newcombe1998diff}]"
+    "metodos_rra.wald": "IC de Wald"
+    "metodos_diseno.cohorte": "Se estimaron el riesgo relativo (IC {nivel} por el método de Katz) [{ref:katz1978}], la razón de momios (método de Woolf) [{ref:woolf1955}], la reducción absoluta del riesgo ({metodo_rra_frase}) y el número necesario a tratar (recíproco de la RRA y de sus límites [{ref:laupacis1988},{ref:altman1998}])."
+    "metodos_diseno.transversal": "Se estimaron la razón de prevalencias (IC {nivel} por el método de Katz) [{ref:katz1978}], la razón de momios (método de Woolf) [{ref:woolf1955}], la diferencia absoluta de prevalencias ({metodo_rra_frase}) y su recíproco [{ref:laupacis1988},{ref:altman1998}]."
+    "metodos_diseno.casos_controles": "Se estimó la razón de momios (IC {nivel} por el método de Woolf) [{ref:woolf1955}]; por el diseño de casos y controles no se estimaron riesgos, riesgo relativo, reducción absoluta ni número necesario a tratar."
+    metodos_haldane: "El riesgo relativo y la razón de momios se calcularon tras sumar 0.5 a cada celda de la tabla (corrección de Haldane-Anscombe) [{ref:haldane1956},{ref:anscombe1956}]."
+  avisos:
+    celda_cero: "Hay una celda con 0: el riesgo relativo o la razón de momios quedan en 0 o en infinito y sin intervalo. Puedes aplicar la corrección de Haldane-Anscombe (sumar 0.5 a cada celda) en el selector; repórtala si la usas. Los riesgos, la reducción absoluta y el NNT no cambian."
+    haldane_aplicado: "Corrección de Haldane-Anscombe aplicada: el riesgo relativo, la razón de momios y la reducción relativa se calcularon con 0.5 sumado a cada celda. Los riesgos, la reducción absoluta y el NNT no cambian. Repórtala en Métodos."
+    p0_cero: "Nadie presentó el desenlace en el grupo de referencia (p₀ = 0): el riesgo relativo se va a infinito y queda sin intervalo; si tampoco hubo eventos entre los expuestos, es 0/0 y no está definido. La diferencia absoluta de riesgos y su intervalo siguen siendo válidos."
+    or_no_aproxima_rr: "El riesgo del grupo de referencia supera el 10 %: la razón de momios se aleja del riesgo relativo y exagera el efecto. La OR se aproxima al RR solo si el desenlace es infrecuente; reporta el riesgo relativo como medida principal."
+    n_pequeno: "Grupos pequeños ({expuestos} expuestos o tratados, {no_expuestos} no expuestos o controles): con menos de 10 por grupo los intervalos son muy amplios y las estimaciones, inestables."
+    casos_controles: "Diseño de casos y controles: solo la razón de momios es interpretable. El riesgo relativo, la reducción absoluta, la reducción relativa y el número necesario a tratar no se muestran porque el muestreo fija la proporción de casos."
+    rra_cruza_cero: "El intervalo de la diferencia absoluta de riesgos incluye el 0: el número necesario a tratar se reporta con la notación de Altman (NNTB a ∞ a NNTH), porque el intervalo abarca desde el beneficio hasta el daño."
+  metodos: "{frase_medidas}{nota_corr} Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: hidratación intravenosa temprana frente a tardía en 200 pacientes con dengue con signos de alarma; desenlace, dengue grave. De 100 con hidratación temprana, 12 evolucionaron a dengue grave; de 100 con hidratación tardía, 30 (datos ficticios)."
+  grafica_titulo: "Estimaciones con su intervalo de confianza: riesgos de cada grupo (arriba), razones en escala logarítmica y diferencia de riesgos (abajo)"
+en:
+  titulo: "Association and effect in a 2×2 table: relative risk, odds ratio, ARR, RRR and NNT"
+  titulo_corto: "Association and effect (2×2 table)"
+  meta: "Compute the relative risk (Katz), the odds ratio (Woolf), the absolute risk reduction (Newcombe method 10 or Wald), the relative risk reduction and the number needed to treat (Altman) with confidence intervals from a 2×2 table, with interpretation, R code and references. Data never leave the browser."
+  intro: "Enter the four counts of the 2×2 table (exposure or treatment versus outcome) and get the risk in each group, the relative risk, the odds ratio, the absolute and relative risk reduction and the number needed to treat with their confidence intervals, a plain-language interpretation and the equivalent R code."
+  explicacion:
+    - "An association 2×2 table crosses an exposure or treatment (rows) with an outcome (columns). It yields two risks: that of the exposed or treated, p₁ = a/(a + b), and that of the unexposed or controls, p₀ = c/(c + d). Everything else is a way of comparing those two numbers: dividing them (relative risk), subtracting them (absolute risk reduction) or comparing their odds (odds ratio)."
+    - "The relative risk says how many times more (or less) frequent the outcome is in the exposed group; the absolute reduction says how many events are avoided (or caused) per 100 people, and its reciprocal is the number needed to treat: how many people must be treated or exposed for one extra event to happen or be prevented. The same 50% relative reduction can mean an NNT of 10 or of 1,000 depending on how common the outcome is: that is why the three measures are reported together."
+    - "The odds ratio is not a relative risk. They agree only when the outcome is rare (risk in the reference group below 10%); when the outcome is common the odds ratio moves away from 1 much more than the relative risk and exaggerates the effect. Design matters too: in a cohort or a clinical trial all five measures are interpretable; in a cross-sectional study the ratio of proportions is a prevalence ratio, not an incidence ratio; and in a case-control study the sampling fixes how many cases and how many controls there are, so risks, relative risk, absolute reduction and NNT cannot be estimated and only the odds ratio is valid."
+    - "When a cell is 0, the relative risk and the odds ratio become 0 or infinite and their logarithmic interval does not exist. The Haldane-Anscombe correction (adding 0.5 to the four cells) yields a finite estimate and must be declared in Methods; here it is an explicit option and affects only the relative risk, the odds ratio and the relative risk reduction, never the risks, the absolute difference or the NNT. If the interval of the absolute difference includes 0, the NNT has no two finite limits of the same sign and is reported with Altman's notation: \"NNTB x to ∞ to NNTH y\"."
+  ecuaciones:
+    - id: riesgos
+      tex: 'p_1=\frac{a}{n_1}=\frac{a}{a+b},\qquad p_0=\frac{c}{n_0}=\frac{c}{c+d},\qquad \CI_{\mathrm{Wilson}}=\frac{\hat p+\frac{z^2}{2m}\pm z\sqrt{\frac{\hat p\,(1-\hat p)}{m}+\frac{z^2}{4m^2}}}{1+\frac{z^2}{m}}'
+      simbolos:
+        - { s: 'a', def: "exposed or treated with the outcome" }
+        - { s: 'b', def: "exposed or treated without the outcome" }
+        - { s: 'c', def: "unexposed or controls with the outcome" }
+        - { s: 'd', def: "unexposed or controls without the outcome" }
+        - { s: 'n_1', def: "total exposed or treated, a + b" }
+        - { s: 'n_0', def: "total unexposed or controls, c + d" }
+        - { s: '\hat p', def: "observed proportion, x/m (here p₁ or p₀)" }
+        - { s: 'm', def: "denominator of the proportion (n₁ or n₀)" }
+        - { s: 'z', def: "normal quantile for the confidence level (1.96 at 95%)" }
+      nota: "Risk in each group with the Wilson (1927) interval, the one recommended by Newcombe. The Haldane-Anscombe correction is not applied to the risks."
+    - id: rr
+      tex: '\RR=\frac{p_1}{p_0},\qquad \CI(\RR)=\exp\!\left[\ln \RR\pm z_{1-\alpha/2}\sqrt{\frac{1}{a}-\frac{1}{n_1}+\frac{1}{c}-\frac{1}{n_0}}\right]'
+      simbolos:
+        - { s: 'z_{1-\alpha/2}', def: "two-sided normal quantile for the confidence level" }
+      nota: "Relative risk with Katz's (1978) logarithmic interval. In a cross-sectional design it reads as a prevalence ratio. With the Haldane-Anscombe correction, a, b, c and d carry 0.5 added."
+    - id: or
+      tex: '\OR=\frac{ad}{bc},\qquad \CI(\OR)=\exp\!\left[\ln \OR\pm z\sqrt{\frac{1}{a}+\frac{1}{b}+\frac{1}{c}+\frac{1}{d}}\right]'
+      simbolos: []
+      nota: "Odds ratio with Woolf's (1955) logarithmic interval; it is Cornfield's (1951) measure and the only valid one in a case-control study."
+    - id: rra
+      tex: '\RRA=p_1-p_0,\qquad \CI_{\mathrm{Newcombe}}(\RRA)=\left[\RRA-\sqrt{(p_1-l_1)^2+(u_0-p_0)^2},\ \ \RRA+\sqrt{(u_1-p_1)^2+(p_0-l_0)^2}\right]'
+      simbolos:
+        - { s: 'l_1,\ u_1', def: "Wilson limits of p₁" }
+        - { s: 'l_0,\ u_0', def: "Wilson limits of p₀" }
+      nota: "Absolute risk reduction with Newcombe's (1998) hybrid score interval, method 10, built from the Wilson limits of each risk."
+    - id: rra_wald
+      tex: '\CI_{\mathrm{Wald}}(\RRA)=\RRA\pm z\sqrt{\frac{p_1(1-p_1)}{n_1}+\frac{p_0(1-p_0)}{n_0}}'
+      simbolos: []
+      nota: "Asymptotic alternative for the absolute risk reduction; it is the one the selector offers next to Newcombe's method."
+    - id: rrr_nnt
+      tex: '\RRR=1-\RR,\quad \CI(\RRR)=\left[1-\RR_{\mathrm{upper}},\ 1-\RR_{\mathrm{lower}}\right];\qquad \NNT=\frac{1}{\lvert \RRA\rvert},\quad \CI(\NNT)=\mathrm{sort}\left[\frac{1}{\lvert \RRA_{\mathrm{lower}}\rvert},\ \frac{1}{\lvert \RRA_{\mathrm{upper}}\rvert}\right]'
+      simbolos:
+        - { s: '\RR_{\mathrm{lower}},\ \RR_{\mathrm{upper}}', def: "limits of the relative risk interval" }
+        - { s: '\RRA_{\mathrm{lower}},\ \RRA_{\mathrm{upper}}', def: "limits of the absolute risk reduction interval" }
+      nota: "Relative risk reduction (inverted RR interval) and number needed to treat as the reciprocal of the ARR and of its limits (Altman 1998; Laupacis 1988; Cook and Sackett 1995)."
+  etiquetas:
+    a: "Exposed / treated with the outcome (a)"
+    b: "Exposed / treated without the outcome (b)"
+    c: "Unexposed / controls with the outcome (c)"
+    d: "Unexposed / controls without the outcome (d)"
+    diseno: "Study design"
+    "diseno.cohorte": "Cohort or clinical trial"
+    "diseno.casos_controles": "Case-control"
+    "diseno.transversal": "Cross-sectional"
+    metodo_rra: "CI method for the ARR"
+    "metodo_rra.newcombe": "Newcombe hybrid (method 10)"
+    "metodo_rra.wald": "Wald (asymptotic)"
+    corr: "Haldane-Anscombe correction (RR and OR)"
+    "corr.0": "No correction"
+    "corr.0.5": "Add 0.5 to each cell"
+    nivel: "Confidence level"
+    "tabla.filas": "Exposure or treatment"
+    "tabla.columnas": "Outcome"
+    "tabla.fila1": "Exposed / treated"
+    "tabla.fila2": "Unexposed / controls"
+    "tabla.col1": "With the outcome"
+    "tabla.col2": "Without the outcome"
+    "tabla.total": "Total"
+    n: "Total participants (n)"
+    p1: "Risk in the exposed / treated (p₁)"
+    p0: "Risk in the unexposed / controls (p₀)"
+    rr: "Relative risk (RR) / prevalence ratio in a cross-sectional design"
+    or: "Odds ratio (OR)"
+    rra: "Absolute risk reduction (ARR, percentage points)"
+    rrr: "Relative risk reduction (RRR)"
+    nnt: "Number needed to treat (NNT)"
+    nota_wilson: "Wilson's method"
+    nota_katz: "Katz's log method"
+    nota_woolf: "Woolf's log method"
+    nota_altman: "reciprocal of the ARR limits (Altman)"
+    no_aplica: "Not interpretable in a case-control design"
+    nntb: "NNTB"
+    nnth: "NNTH"
+    nnt_altman: "{nntb} to ∞ to {nnth}"
+    grafica_rr: "Relative risk (RR)"
+    grafica_rra: "Absolute risk reduction (ARR)"
+    grafica_razones: "Ratios (log scale; reference at 1)"
+    grafica_diferencia: "Risk difference (reference at 0)"
+  ayudas:
+    diseno: "In a cohort or a trial all five measures are interpretable. In a cross-sectional study the RR is a prevalence ratio. In a case-control study only the odds ratio is valid."
+    metodo_rra: "Newcombe (method 10) combines the Wilson intervals of both risks and behaves better with small samples or extreme risks; Wald is the classical approximation."
+    corr: "Use it when a cell is 0: it adds 0.5 to the four cells before computing the RR and the OR (it does not affect the risks, the ARR or the NNT)."
+  interpretacion:
+    "resumen.cohorte": "Of {n1} exposed or treated people, {a} had the outcome ({p1}; {nivel} CI: {p1_ic}); of {n0} unexposed or controls, {c} had it ({p0}; {nivel} CI: {p0_ic}). The absolute risk difference is {rra} percentage points ({nivel} CI: {rra_ic}) and the relative change in risk (RRR = 1 − RR) is {rrr} ({rrr_ic})."
+    "resumen.transversal": "A cross-sectional design estimates prevalences, not incidences: {a} of {n1} exposed had the outcome ({p1}; {nivel} CI: {p1_ic}) versus {c} of {n0} unexposed ({p0}; {nivel} CI: {p0_ic}). The ratio {rr} reads as a prevalence ratio and the absolute difference in prevalence is {rra} percentage points ({nivel} CI: {rra_ic}); because exposure and outcome were measured at the same time, the association does not tell which came first."
+    "resumen.casos_controles": "In a case-control design the sampling fixes how many cases and how many controls are studied, so {p1} and {p0} are not population risks: the relative risk, the absolute reduction, the relative reduction and the NNT are not interpretable and only the odds ratio is. {n1} exposed and {n0} unexposed participants were analysed ({n} in total)."
+    "rr.excluye": "RR = {rr} ({rr_ic}): the risk in the exposed or treated group is {rr} times that of the reference group and the interval excludes 1, so the data are hardly compatible with no association."
+    "rr.cruza": "RR = {rr} ({rr_ic}): the relative risk interval does not exclude 1 (or is undefined), so the data rule out neither a reduction nor an increase in risk."
+    "rr.transversal.excluye": "PR = {rr} ({rr_ic}): the prevalence of the outcome in the exposed group is {rr} times that of the reference group and the interval excludes 1, so the data are hardly compatible with no association."
+    "rr.transversal.cruza": "PR = {rr} ({rr_ic}): the prevalence ratio interval does not exclude 1 (or is undefined), so the data rule out neither a lower nor a higher prevalence in the exposed group."
+    or: "OR = {or} ({or_ic}). The odds ratio compares the odds of the outcome between the exposed or treated group and the reference group: it approximates the relative risk only when the outcome is rare and, with common outcomes, it moves further from 1 and exaggerates the effect. With a cell at 0 it becomes 0 or infinite and has no interval, unless the Haldane-Anscombe correction is applied."
+    "nnt.beneficio.excluye": "{nnt} people have to be treated or exposed to avoid one additional event (NNTB; exact value {nnt_exacto}; {nivel} CI: {nnt_ic})."
+    "nnt.dano.excluye": "Exposing {nnt} people is enough to cause one additional event (NNTH; exact value {nnt_exacto}; {nivel} CI: {nnt_ic})."
+    "nnt.cruza": "The point estimate is {nnt} people ({nnt_exacto}), but the interval of the absolute risk difference includes 0 and the NNT has no two finite limits of the same sign: it is reported with Altman's notation, {nnt_ic}, where NNTB is the number needed to avoid one event and NNTH the number needed to cause one."
+    "nnt.nulo": "Both groups had the same risk ({p1} versus {p0}): the absolute difference is 0 and the number needed to treat is undefined ({nnt}); the interval, {nnt_ic}, spans from benefit to harm."
+    "nnt.transversal": "The reciprocal of the prevalence difference is {nnt_exacto} ({nnt_ic}). In a cross-sectional design that figure describes the observed association, not the effect of intervening: exposure and outcome were measured at the same time, so it cannot be read as \"people who need to be treated\"."
+    "metodos_rra.newcombe": "Newcombe's hybrid score interval, method 10 [{ref:newcombe1998diff}]"
+    "metodos_rra.wald": "Wald interval"
+    "metodos_diseno.cohorte": "The relative risk ({nivel} CI by Katz's method) [{ref:katz1978}], the odds ratio (Woolf's method) [{ref:woolf1955}], the absolute risk reduction ({metodo_rra_frase}) and the number needed to treat (reciprocal of the ARR and of its limits [{ref:laupacis1988},{ref:altman1998}]) were estimated."
+    "metodos_diseno.transversal": "The prevalence ratio ({nivel} CI by Katz's method) [{ref:katz1978}], the odds ratio (Woolf's method) [{ref:woolf1955}], the absolute difference in prevalence ({metodo_rra_frase}) and its reciprocal [{ref:laupacis1988},{ref:altman1998}] were estimated."
+    "metodos_diseno.casos_controles": "The odds ratio ({nivel} CI by Woolf's method) [{ref:woolf1955}] was estimated; because of the case-control design, risks, relative risk, absolute reduction and number needed to treat were not estimated."
+    metodos_haldane: "The relative risk and the odds ratio were computed after adding 0.5 to each cell of the table (Haldane-Anscombe correction) [{ref:haldane1956},{ref:anscombe1956}]."
+  avisos:
+    celda_cero: "One cell is 0: the relative risk or the odds ratio become 0 or infinite and have no interval. You can apply the Haldane-Anscombe correction (add 0.5 to each cell) in the selector; report it if you use it. The risks, the absolute reduction and the NNT do not change."
+    haldane_aplicado: "Haldane-Anscombe correction applied: the relative risk, the odds ratio and the relative risk reduction were computed with 0.5 added to each cell. The risks, the absolute reduction and the NNT do not change. Report it in Methods."
+    p0_cero: "Nobody had the outcome in the reference group (p₀ = 0): the relative risk goes to infinity and has no interval; if there were no events among the exposed either, it is 0/0 and undefined. The absolute risk difference and its interval remain valid."
+    or_no_aproxima_rr: "The risk in the reference group is above 10%: the odds ratio moves away from the relative risk and exaggerates the effect. The OR approximates the RR only when the outcome is rare; report the relative risk as the main measure."
+    n_pequeno: "Small groups ({expuestos} exposed or treated, {no_expuestos} unexposed or controls): with fewer than 10 per group the intervals are very wide and the estimates unstable."
+    casos_controles: "Case-control design: only the odds ratio is interpretable. The relative risk, the absolute reduction, the relative reduction and the number needed to treat are not shown because the sampling fixes the proportion of cases."
+    rra_cruza_cero: "The interval of the absolute risk difference includes 0: the number needed to treat is reported with Altman's notation (NNTB to ∞ to NNTH), because the interval spans from benefit to harm."
+  metodos: "{frase_medidas}{nota_corr} Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: early versus late intravenous hydration in 200 patients with dengue with warning signs; outcome, severe dengue. Of 100 with early hydration, 12 progressed to severe dengue; of 100 with late hydration, 30 (fictitious data)."
+  grafica_titulo: "Estimates with their confidence interval: risk in each group (top), ratios on a log scale and risk difference (bottom)"

@@ -85,14 +85,32 @@ test('rellenarR no acepta una entrada heredada del prototipo', () => {
   assert.throws(() => rellenarR(`x <- {x}\n${CONTRATO}`, entradas), /marcador \{x\} sin entrada/);
 });
 
-test('rellenarR propaga el RangeError de una entrada no finita', () => {
-  assert.throws(() => rellenarR(`x <- {x}\n${CONTRATO}`, { x: Number.NaN }), RangeError);
+test('rellenarR propaga el RangeError de una entrada infinita y escribe NA para una no capturada', () => {
   assert.throws(() => rellenarR(`x <- {x}\n${CONTRATO}`, { x: Number.POSITIVE_INFINITY }), RangeError);
+  assert.throws(() => rellenarR(`x <- {x}\n${CONTRATO}`, { x: Number.NEGATIVE_INFINITY }), RangeError);
+  // NaN es «no capturado» (p. ej. un cuartil en el escenario mínimo-máximo): en R es NA.
+  assert.match(rellenarR(`q1 <- {q1}\n${CONTRATO}`, { q1: Number.NaN }), /^q1 <- NA$/m);
 });
 
-test('rellenarR exige rScript para los vectores', () => {
-  assert.throws(() => rellenarR(`v <- {v}\n${CONTRATO}`, { v: [1, 2, 3] }), TypeError);
-  assert.throws(() => rellenarR(`v <- {v}\n${CONTRATO}`, { v: [1, 2, 3] }), /rScript/);
+test('rellenarR interpola una columna pegada como c(...) y la parte en líneas legibles', () => {
+  assert.match(rellenarR(`v <- {v}\n${CONTRATO}`, { v: [1, 2.5, -3] }), /^v <- c\(1, 2\.5, -3\)$/m);
+  assert.match(rellenarR(`v <- {v}\n${CONTRATO}`, { v: [] }), /^v <- c\(\)$/m);
+  const larga = Array.from({ length: 60 }, (_, i) => i * 1.5);
+  const salida = rellenarR(`x <- {x}\n${CONTRATO}`, { x: larga });
+  const lineas = salida.split('\n');
+  assert.ok(lineas.length > 3, 'una columna de 60 valores debería ocupar varias líneas');
+  assert.ok(lineas.every((l) => l.length <= 80), `alguna línea supera 80 caracteres: ${lineas.find((l) => l.length > 80)}`);
+  // Las líneas de continuación van sangradas y ninguna termina en coma suelta al cerrar.
+  assert.ok(lineas.slice(1, -3).every((l) => l.startsWith('  ')), 'las continuaciones llevan dos espacios');
+  assert.ok(salida.includes('88.5)'), 'el último valor cierra el vector');
+  // R lo lee de vuelta con los mismos valores: los literales son `num(x)`.
+  const dentro = /c\(([\s\S]*?)\)/.exec(salida)?.[1] ?? '';
+  assert.deepEqual(dentro.split(',').map((s) => Number(s.trim())), larga);
+});
+
+test('rellenarR rechaza un vector con un elemento no finito', () => {
+  assert.throws(() => rellenarR(`v <- {v}\n${CONTRATO}`, { v: [1, Number.NaN] }), RangeError);
+  assert.throws(() => rellenarR(`v <- {v}\n${CONTRATO}`, { v: [1, Number.POSITIVE_INFINITY] }), RangeError);
 });
 
 test('rellenarR rechaza un snippet que no cumple el contrato', () => {

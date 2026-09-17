@@ -9,10 +9,12 @@
  * El HTML que produce Astro ya trae el ejemplo resuelto en el servidor; aquí
  * solo se repinta lo que cambia, siempre sobre los mismos ganchos `data-*`.
  */
+import { interpolar } from '../lib/bioestadistica/nucleo/avisos.ts';
 import { codigoR } from '../lib/bioestadistica/nucleo/codigoR.ts';
 import { parsearNumero, validarEntrada } from '../lib/bioestadistica/nucleo/entrada.ts';
 import { aCSV, aMarkdown } from '../lib/bioestadistica/nucleo/exportar.ts';
 import { crearFormateador } from '../lib/bioestadistica/nucleo/formato.ts';
+import { parsearPegado, resumenPegado } from '../lib/bioestadistica/nucleo/pegado.ts';
 import { renderGrafica } from '../lib/bioestadistica/nucleo/svg.ts';
 import type {
   Aviso,
@@ -54,17 +56,12 @@ export interface DatosPagina {
   url: string;
 }
 
+/** Un `<textarea>` es el control de una columna pegada; los demás tipos, `<input>` o `<select>`. */
+type Control = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+
 interface Campo {
   def: EntradaDef;
-  el: HTMLInputElement | HTMLSelectElement;
-}
-
-/** Sustituye `{clave}` por los parámetros que existan; deja intacto lo demás. */
-function interpolar(texto: string, params: Record<string, number | string> | undefined): string {
-  if (!params) return texto;
-  let s = texto;
-  for (const [k, v] of Object.entries(params)) s = s.split(`{${k}}`).join(String(v));
-  return s;
+  el: Control;
 }
 
 /**
@@ -99,7 +96,7 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
   const derivadas: ReadonlySet<string> = new Set(defs.filter((d) => d.derivado).map((d) => d.id));
   const campos: Campo[] = [];
   for (const d of defs) {
-    const el = $<HTMLInputElement | HTMLSelectElement>(`[data-entrada="${d.id}"]`);
+    const el = $<Control>(`[data-entrada="${d.id}"]`);
     if (el) campos.push({ def: d, el });
   }
 
@@ -137,6 +134,25 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
         entradas[d.id] = v;
         continue;
       }
+      if (d.tipo === 'columna') {
+        const r = parsearPegado(bruto);
+        const resumen = $<HTMLElement>(`[data-pegado-resumen="${d.id}"]`);
+        if (resumen) resumen.textContent = resumenPegado(r, ui, fmt);
+        // La columna se registra siempre, aunque venga vacía: así la píldora
+        // «Ejemplo cargado» y la URL comparan lo mismo que hay en pantalla.
+        entradas[d.id] = r.valores;
+        if (r.valores.length === 0) {
+          // Un campo en blanco no es un pegado que no se entendió: el primero
+          // solo se reclama si la columna es obligatoria; el segundo, siempre.
+          if (bruto.trim() === '') {
+            if (d.requerido) errores[d.id] = 'err_requerido';
+          } else errores[d.id] = 'err_sin_datos';
+        } else if (d.min !== undefined && r.valores.length < d.min) {
+          // En una columna, `min` es el número mínimo de valores.
+          errores[d.id] = 'err_n_min';
+        }
+        continue;
+      }
       const codigo = validarEntrada(bruto, d);
       if (codigo) {
         errores[d.id] = codigo;
@@ -164,7 +180,8 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
   /** Valor de `min`/`max` en el mensaje de error, con el formato del tipo de campo. */
   function limite(d: EntradaDef, v: number): string {
     if (d.tipo === 'proporcion') return fmt.nivel(v);
-    if (d.tipo === 'entero') return fmt.entero(v);
+    // El `min` de una columna cuenta valores, no mide la variable.
+    if (d.tipo === 'entero' || d.tipo === 'columna') return fmt.entero(v);
     return fmt.num(v, 'dec3');
   }
 
@@ -413,7 +430,7 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
   /** Rótulo de una opción añadida al vuelo a un `<select>` (p. ej. un nivel de confianza inusual). */
   function rotuloOpcion(d: EntradaDef, v: number): string {
     if (d.tipo === 'proporcion') return fmt.nivel(v);
-    if (d.tipo === 'entero') return fmt.entero(v);
+    if (d.tipo === 'entero' || d.tipo === 'columna') return fmt.entero(v);
     return fmt.num(v, 'dec3');
   }
 

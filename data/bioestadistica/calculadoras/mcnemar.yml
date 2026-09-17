@@ -1,0 +1,301 @@
+# Calculadora B3 · Proporciones pareadas: prueba de McNemar.
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: asociacion
+orden: 3
+estado: activa
+motor: ts
+entradas:
+  - { id: a, tipo: entero, min: 0 }
+  - { id: b, tipo: entero, min: 0 }
+  - { id: c, tipo: entero, min: 0 }
+  - { id: d, tipo: entero, min: 0 }
+  - { id: metodo_delta, tipo: opcion, opciones: [wald, agresti-min] }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+tabla2x2: { celdas: [a, b, c, d] }
+ejemplo: { a: 40, b: 15, c: 5, d: 90, metodo_delta: wald, nivel: 0.95 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # McNemar test for paired proportions - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    # Rows = first measurement (test A, or "before"), columns = second one (test B, or "after").
+    # a = (+,+) and d = (-,-) are the concordant pairs; b = (+,-) and c = (-,+), the discordant ones.
+    a <- {a}; b <- {b}; c <- {c}; d <- {d}
+    metodo_delta <- {metodo_delta}   # CI for the paired difference: "wald" or "agresti-min"
+    nivel <- {nivel}
+    x <- matrix(c(a, b, c, d), nrow = 2, byrow = TRUE)
+    n <- a + b + c + d
+    n_disc <- b + c        # only the discordant pairs carry information about change
+    z <- qnorm(1 - (1 - nivel) / 2)
+
+    p_a <- (a + b) / n     # proportion positive with the first measurement
+    p_b <- (a + c) / n     # proportion positive with the second one
+
+    # McNemar's chi-squared with 1 df, without and with Edwards' (1948) continuity
+    # correction. Note that mcnemar.test() skips the correction when b == c, and
+    # that both statistics (and their p values) are NaN when b + c = 0.
+    mc  <- mcnemar.test(x, correct = FALSE)
+    mce <- mcnemar.test(x, correct = TRUE)
+
+    # Exact two-sided binomial test on the discordant pairs (exact McNemar)
+    p_exacta <- if (n_disc > 0) binom.test(b, n_disc, p = 0.5)$p.value else NA_real_
+
+    # Paired difference. The point estimate is always (b - c)/n; only the interval
+    # changes with `metodo_delta`.
+    est <- (b - c) / n
+    if (metodo_delta == "agresti-min") {
+      # Agresti & Min (2005): interval centred on the adjusted estimator (b - c)/(n + 2)
+      # and clipped to [-1, 1], as in PropCIs::diffpropci.mp (which reports (c - b)/n).
+      est_am <- (b - c) / (n + 2)
+      se_am <- sqrt((b + c + 1) - (b - c)^2 / (n + 2)) / (n + 2)
+      ll <- max(-1, est_am - z * se_am)
+      ul <- min(1, est_am + z * se_am)
+      delta <- c(est, ll, ul)
+    } else {
+      se <- sqrt((b + c) - (b - c)^2 / n) / n
+      delta <- c(est, est - z * se, est + z * se)
+    }
+
+    # Paired odds ratio b/c: the Clopper-Pearson interval for b/(b + c) carried to
+    # the odds scale, p/(1 - p). Undefined (NA) without discordant pairs.
+    or_pareado <- if (n_disc > 0) {
+      alpha <- 1 - nivel
+      pl <- if (b == 0) 0 else qbeta(alpha / 2, b, c + 1)
+      pu <- if (c == 0) 1 else qbeta(1 - alpha / 2, b + 1, c)
+      c(b / c, pl / (1 - pl), pu / (1 - pu))
+    } else c(NA, NA, NA)
+
+    res <- list(n = n, n_disc = n_disc, p_a = p_a, p_b = p_b,
+                chi2 = unname(mc$statistic), p_chi2 = mc$p.value,
+                chi2_edwards = unname(mce$statistic), p_edwards = mce$p.value,
+                p_exacta = p_exacta, delta = delta, or_pareado = or_pareado)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio (not run in the browser):
+    # exact2x2::mcnemar.exact(x)
+    # PropCIs::diffpropci.Wald.mp(b, c, n, nivel)   # note: PropCIs reports (c - b)/n
+referencias:
+  - { key: mcnemar1947, rol: original }
+  - { key: edwards1948, rol: original }
+  - { key: agresti2005, rol: original }
+  - { key: newcombe1998paired, rol: complementaria }
+  - { key: clopper1934, rol: complementaria }
+  - { key: fleiss2003, rol: didactica }
+  - { key: altman1991, rol: didactica }
+grafica: barras
+es:
+  titulo: "Proporciones pareadas: prueba de McNemar, diferencia pareada y OR pareado"
+  titulo_corto: "Prueba de McNemar (pareadas)"
+  meta: "Compara dos proporciones medidas en los mismos sujetos con la prueba de McNemar (χ² sin corrección, con corrección de Edwards y binomial exacta), la diferencia pareada con IC de Wald o de Agresti-Min y el OR pareado, con interpretación, código R y referencias. Los datos no salen del navegador."
+  intro: "Captura las cuatro celdas de la tabla 2×2 pareada (dos pruebas o dos momentos en los mismos sujetos) y obtén la prueba de McNemar en sus tres versiones, la diferencia de proporciones pareadas con su intervalo de confianza y el OR pareado, con interpretación en lenguaje llano y el código de R equivalente."
+  explicacion:
+    - "Cuando las dos proporciones que se comparan provienen de los mismos sujetos (dos pruebas aplicadas al mismo paciente, o la misma medición antes y después), las observaciones vienen en pares y no son independientes. La tabla 2×2 ya no cuenta personas por grupo: cuenta pares. En las casillas a y d están los pares en que ambas mediciones coincidieron (concordantes) y en b y c, aquellos en que discreparon (discordantes)."
+    - "La prueba de McNemar (1947) solo mira los pares discordantes: si las dos mediciones fueran equivalentes, un cambio en una dirección sería tan probable como el contrario, es decir, b y c serían dos mitades de b + c. Los concordantes no aportan información sobre el cambio y por eso no entran en el estadístico; añadir cien pares concordantes no modifica ni χ² ni el valor p. La versión clásica compara (b − c)²/(b + c) con una χ² de un grado de libertad; la corrección de continuidad de Edwards (1948) le resta 1 a |b − c| antes de elevar al cuadrado, y la versión exacta calcula directamente la probabilidad binomial de observar un reparto al menos tan extremo. Con menos de 25 pares discordantes se reporta la exacta; a partir de 25, la χ² corregida."
+    - "El valor p dice si el cambio es distinguible del azar, no cuánto cambió. La magnitud está en la diferencia de proporciones pareadas, δ = (b − c)/n, que se lee en puntos porcentuales sobre el total de pares. Su intervalo de Wald es el habitual y funciona bien con muchos pares; con pocos, o cuando δ se acerca a ±1, el intervalo de Agresti y Min (2005) —equivalente a sumar media observación a cada celda y recortar el resultado a [−1, 1]— tiene mejor cobertura. La estimación puntual que se reporta es siempre (b − c)/n; lo que cambia con el selector es el intervalo."
+    - "El OR pareado b/c resume la asimetría del cambio en escala de razón: cuántas veces más frecuentes fueron los cambios en una dirección que en la contraria. Su intervalo se obtiene llevando el intervalo de Clopper-Pearson de la proporción b/(b + c) a la escala de momios. Cuando b o c valen 0 la razón queda en 0 o en infinito y deja de leerse como «tantas veces más»; cuando no hay ningún par discordante, ni la prueba ni el OR están definidos."
+  ecuaciones:
+    - id: chi2
+      tex: '\chi^2=\frac{(b-c)^2}{b+c}\ \sim\ \chi^2_{1}'
+      simbolos:
+        - { s: 'b', def: "pares positivos en la primera medición y negativos en la segunda, (+,−)" }
+        - { s: 'c', def: "pares negativos en la primera y positivos en la segunda, (−,+)" }
+        - { s: 'b+c', def: "pares discordantes; los concordantes a y d no entran" }
+      nota: "Estadístico de McNemar (1947) sin corrección, con un grado de libertad."
+    - id: edwards
+      tex: '\chi^2_{c}=\frac{(\lvert b-c\rvert-1)^2}{b+c}'
+      simbolos: []
+      nota: "Corrección de continuidad de Edwards (1948). Como en `mcnemar.test(correct = TRUE)`, no se aplica cuando b = c (el estadístico queda en 0); con b + c = 0 no está definida."
+    - id: exacta
+      tex: 'p_{\mathrm{exacta}}=\min\!\left(1,\ 2\sum_{k=0}^{\min(b,\,c)}\binom{b+c}{k}\left(\frac{1}{2}\right)^{b+c}\right)'
+      simbolos:
+        - { s: 'k', def: "número de cambios en una dirección bajo la hipótesis nula" }
+      nota: "Prueba binomial bilateral sobre los pares discordantes, con p = 1/2 bajo la hipótesis nula."
+    - id: delta
+      tex: '\hat\delta=\frac{b-c}{n},\qquad \se(\hat\delta)=\frac{\sqrt{(b+c)-(b-c)^2/n}}{n}'
+      simbolos:
+        - { s: '\hat\delta', def: "diferencia de proporciones pareadas" }
+        - { s: 'n', def: "total de pares, a + b + c + d" }
+      nota: "Diferencia pareada con su error estándar de Wald; el intervalo es δ ± z·SE(δ)."
+    - id: agresti_min
+      tex: '\tilde\delta=\frac{b-c}{n+2},\qquad \se(\tilde\delta)=\frac{\sqrt{(b+c+1)-(b-c)^2/(n+2)}}{n+2}'
+      simbolos:
+        - { s: '\tilde\delta', def: "estimador ajustado que centra el intervalo (media observación por celda)" }
+      nota: "Intervalo de Agresti y Min (2005): δ̃ ± z·SE(δ̃), recortado a [−1, 1]. El valor reportado sigue siendo (b − c)/n."
+    - id: or_pareado
+      tex: '\OR_{\mathrm{pareado}}=\frac{b}{c},\qquad \IC=\left[\frac{\pi_{L}}{1-\pi_{L}},\ \frac{\pi_{U}}{1-\pi_{U}}\right]'
+      simbolos:
+        - { s: '\pi_{L},\ \pi_{U}', def: "límites de Clopper-Pearson de la proporción b/(b + c)" }
+      nota: "Razón de momios pareada y su intervalo llevado de la escala de proporción a la de momios."
+  etiquetas:
+    a: "Positivo en ambas (a)"
+    b: "Positivo en A, negativo en B (b)"
+    c: "Negativo en A, positivo en B (c)"
+    d: "Negativo en ambas (d)"
+    metodo_delta: "Método del IC de la diferencia pareada"
+    "metodo_delta.wald": "Wald"
+    "metodo_delta.agresti-min": "Agresti-Min (2005)"
+    nivel: "Nivel de confianza"
+    "tabla.filas": "Prueba A (o antes)"
+    "tabla.fila1": "Positivo"
+    "tabla.fila2": "Negativo"
+    "tabla.columnas": "Prueba B (o después)"
+    "tabla.col1": "Positivo"
+    "tabla.col2": "Negativo"
+    "tabla.total": "Total"
+    n: "Pares analizados (n)"
+    n_disc: "Pares discordantes (b + c)"
+    p_a: "Positivos con la prueba A"
+    p_b: "Positivos con la prueba B"
+    chi2: "χ² de McNemar (sin corrección)"
+    p_chi2: "p de la χ² sin corrección"
+    chi2_edwards: "χ² con corrección de Edwards"
+    p_edwards: "p de la χ² con corrección de Edwards"
+    p_exacta: "p de la prueba exacta (binomial)"
+    delta: "Diferencia pareada (b − c)/n, en puntos porcentuales"
+    or_pareado: "OR pareado (b/c)"
+    "prueba.exacta": "la prueba exacta binomial"
+    "prueba.edwards": "la χ² con corrección de continuidad de Edwards"
+    nota_discordantes: "los únicos que entran en la prueba"
+    nota_chi2: "1 grado de libertad · sin corrección"
+    nota_edwards: "1 grado de libertad · corrección de Edwards"
+    nota_exacta: "binomial bilateral sobre b + c"
+    nota_or: "derivado de Clopper-Pearson"
+    grafica_serie: "Pares discordantes"
+    grafica_b: "A+ / B− (b)"
+    grafica_c: "A− / B+ (c)"
+    grafica_h0: "Esperado bajo H₀: (b + c)/2"
+    eje_frecuencia: "Número de pares"
+  ayudas:
+    b: "Pares en los que la primera medición fue positiva y la segunda, negativa."
+    c: "Pares en los que la primera medición fue negativa y la segunda, positiva."
+    metodo_delta: "Wald es el intervalo habitual. Agresti-Min (2005) tiene mejor cobertura con pocos pares o cuando la diferencia se acerca a ±1."
+    nivel: "Entre 80 % y 99.9 %; por convención, 95 %."
+  interpretacion:
+    resumen: "Entre los {n} pares, {b} cambiaron en una dirección y {c} en la otra: la prueba A fue positiva en {p_a} y la B en {p_b} (diferencia {delta} puntos porcentuales, IC {nivel}: {delta_ic})."
+    "prueba.exacta": "Prueba de McNemar exacta (binomial bilateral sobre los {n_disc} pares discordantes): p = {p}."
+    "prueba.edwards": "Prueba de McNemar con corrección de continuidad de Edwards (χ² = {chi2_edwards}, 1 grado de libertad): p = {p}."
+    "decision.rechaza": "p = {p}; con α = 0.05 se rechaza la hipótesis nula de que las dos mediciones dan la misma proporción de positivos. La magnitud del cambio ({delta} puntos porcentuales, IC {nivel}: {delta_ic}) importa más que el valor p."
+    "decision.no_rechaza": "p = {p}; con α = 0.05 no se rechaza la hipótesis nula de que las dos mediciones dan la misma proporción de positivos. No rechazar no demuestra que sean iguales: el intervalo de la diferencia ({delta_ic} puntos porcentuales) marca qué cambios siguen siendo compatibles con estos datos."
+    sin_discordantes: "Ninguno de los {n} pares fue discordante: {a} resultaron positivos en las dos mediciones y {d}, negativos en las dos. Sin pares discordantes la prueba de McNemar no está definida (el estadístico y su valor p quedan sin definir) y la diferencia pareada es exactamente 0."
+    or_pareado: "OR pareado b/c = {or} ({or_ic}): los cambios en una dirección ({b} pares) fueron {or} veces más frecuentes que los contrarios ({c} pares)."
+    "or_pareado.indefinido": "OR pareado b/c = {or}: con {b} y {c} pares discordantes la razón queda en 0, en infinito o sin definir, así que no se lee como «tantas veces más frecuente». Intervalo derivado de Clopper-Pearson: {or_ic}."
+    comparacion: "Las tres versiones de la prueba sobre los mismos {n_disc} pares discordantes: χ² sin corrección = {chi2} (p = {p_chi2}); χ² con corrección de Edwards = {chi2_edwards} (p = {p_edwards}); binomial exacta, p = {p_exacta}. Aquí se reporta {prueba_nombre}."
+    "metodos_delta.wald": "de Wald"
+    "metodos_delta.agresti-min": "de Agresti-Min [{ref:agresti2005}]"
+  avisos:
+    sin_discordantes: "No hay pares discordantes (b + c = 0): la prueba de McNemar no está definida y las celdas correspondientes aparecen como «no definido». La diferencia pareada es 0."
+    pocos_discordantes: "Solo hay {n_disc} pares discordantes (menos de 25): se reporta la prueba exacta binomial como principal, porque con tan pocos la aproximación χ² es poco fiable."
+    solo_discordantes: "La prueba usa solo los pares discordantes ({n_disc}): los pares en los que ambas mediciones coincidieron no aportan información sobre el cambio."
+    agresti_min_recortado: "El intervalo de Agresti-Min tocó el tope de −1 o de 1 y se recortó ahí: con estos datos el método no distingue más allá del límite."
+  metodos: "Las proporciones pareadas se compararon con la prueba de McNemar [{ref:mcnemar1947}] (versión exacta binomial cuando hubo menos de 25 pares discordantes; en caso contrario, χ² con corrección de continuidad de Edwards [{ref:edwards1948}]); en estos datos se reporta {prueba_nombre}. La diferencia de proporciones pareadas se acompañó de su IC {nivel} {metodo_delta_frase} y el OR pareado, del intervalo derivado del de Clopper-Pearson [{ref:clopper1934}] de b/(b + c). Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R (stats)."
+  ejemplo_descripcion: "Ejemplo ilustrativo: dos pruebas rápidas aplicadas a los mismos 150 pacientes; 40 pares salieron positivos con ambas, 15 solo con la prueba A, 5 solo con la B y 90 negativos con ambas (datos ficticios)."
+  grafica_titulo: "Pares discordantes en cada dirección, con la línea del reparto esperado bajo la hipótesis nula"
+en:
+  titulo: "Paired proportions: McNemar's test, paired difference and paired odds ratio"
+  titulo_corto: "McNemar's test (paired)"
+  meta: "Compare two proportions measured on the same subjects with McNemar's test (chi-squared without correction, with Edwards' correction and the exact binomial version), the paired difference with a Wald or Agresti-Min CI and the paired odds ratio, with interpretation, R code and references. Data never leave the browser."
+  intro: "Enter the four cells of the paired 2×2 table (two tests or two time points on the same subjects) and get McNemar's test in its three versions, the paired difference of proportions with its confidence interval and the paired odds ratio, with a plain-language interpretation and the equivalent R code."
+  explicacion:
+    - "When the two proportions being compared come from the same subjects (two tests on the same patient, or the same measurement before and after), the observations come in pairs and are not independent. The 2×2 table no longer counts people per group: it counts pairs. Cells a and d hold the pairs where both measurements agreed (concordant) and cells b and c the pairs where they disagreed (discordant)."
+    - "McNemar's test (1947) looks only at the discordant pairs: if the two measurements were equivalent, a change in one direction would be as likely as the opposite one, that is, b and c would be two halves of b + c. Concordant pairs carry no information about change and so do not enter the statistic; adding a hundred concordant pairs changes neither the chi-squared nor the p value. The classic version compares (b − c)²/(b + c) with a chi-squared distribution on one degree of freedom; Edwards' continuity correction (1948) subtracts 1 from |b − c| before squaring, and the exact version computes the binomial probability of a split at least as extreme. With fewer than 25 discordant pairs the exact test is reported; from 25 upwards, the corrected chi-squared."
+    - "The p value says whether the change can be told apart from chance, not how large it is. The magnitude lives in the paired difference of proportions, δ = (b − c)/n, read as percentage points of the total number of pairs. Its Wald interval is the usual one and works well with many pairs; with few pairs, or when δ approaches ±1, the interval of Agresti and Min (2005) —equivalent to adding half an observation to each cell and clipping the result to [−1, 1]— has better coverage. The reported point estimate is always (b − c)/n; the selector changes only the interval."
+    - "The paired odds ratio b/c summarises the asymmetry of the change on a ratio scale: how many times more frequent changes in one direction were than in the other. Its interval comes from carrying the Clopper-Pearson interval of the proportion b/(b + c) to the odds scale. When b or c is 0 the ratio becomes 0 or infinite and stops reading as \"so many times more\"; when there are no discordant pairs at all, neither the test nor the odds ratio is defined."
+  ecuaciones:
+    - id: chi2
+      tex: '\chi^2=\frac{(b-c)^2}{b+c}\ \sim\ \chi^2_{1}'
+      simbolos:
+        - { s: 'b', def: "pairs positive on the first measurement and negative on the second, (+,−)" }
+        - { s: 'c', def: "pairs negative on the first and positive on the second, (−,+)" }
+        - { s: 'b+c', def: "discordant pairs; the concordant ones, a and d, do not enter" }
+      nota: "McNemar's (1947) statistic without correction, on one degree of freedom."
+    - id: edwards
+      tex: '\chi^2_{c}=\frac{(\lvert b-c\rvert-1)^2}{b+c}'
+      simbolos: []
+      nota: "Edwards' (1948) continuity correction. As in `mcnemar.test(correct = TRUE)`, it is not applied when b = c (the statistic stays at 0); with b + c = 0 it is undefined."
+    - id: exacta
+      tex: 'p_{\mathrm{exact}}=\min\!\left(1,\ 2\sum_{k=0}^{\min(b,\,c)}\binom{b+c}{k}\left(\frac{1}{2}\right)^{b+c}\right)'
+      simbolos:
+        - { s: 'k', def: "number of changes in one direction under the null hypothesis" }
+      nota: "Two-sided binomial test on the discordant pairs, with p = 1/2 under the null hypothesis."
+    - id: delta
+      tex: '\hat\delta=\frac{b-c}{n},\qquad \se(\hat\delta)=\frac{\sqrt{(b+c)-(b-c)^2/n}}{n}'
+      simbolos:
+        - { s: '\hat\delta', def: "difference of paired proportions" }
+        - { s: 'n', def: "total number of pairs, a + b + c + d" }
+      nota: "Paired difference with its Wald standard error; the interval is δ ± z·SE(δ)."
+    - id: agresti_min
+      tex: '\tilde\delta=\frac{b-c}{n+2},\qquad \se(\tilde\delta)=\frac{\sqrt{(b+c+1)-(b-c)^2/(n+2)}}{n+2}'
+      simbolos:
+        - { s: '\tilde\delta', def: "adjusted estimator that centres the interval (half an observation per cell)" }
+      nota: "Agresti and Min (2005) interval: δ̃ ± z·SE(δ̃), clipped to [−1, 1]. The reported value is still (b − c)/n."
+    - id: or_pareado
+      tex: '\OR_{\mathrm{paired}}=\frac{b}{c},\qquad \CI=\left[\frac{\pi_{L}}{1-\pi_{L}},\ \frac{\pi_{U}}{1-\pi_{U}}\right]'
+      simbolos:
+        - { s: '\pi_{L},\ \pi_{U}', def: "Clopper-Pearson limits of the proportion b/(b + c)" }
+      nota: "Paired odds ratio and its interval carried from the proportion scale to the odds scale."
+  etiquetas:
+    a: "Positive on both (a)"
+    b: "Positive on A, negative on B (b)"
+    c: "Negative on A, positive on B (c)"
+    d: "Negative on both (d)"
+    metodo_delta: "CI method for the paired difference"
+    "metodo_delta.wald": "Wald"
+    "metodo_delta.agresti-min": "Agresti-Min (2005)"
+    nivel: "Confidence level"
+    "tabla.filas": "Test A (or before)"
+    "tabla.fila1": "Positive"
+    "tabla.fila2": "Negative"
+    "tabla.columnas": "Test B (or after)"
+    "tabla.col1": "Positive"
+    "tabla.col2": "Negative"
+    "tabla.total": "Total"
+    n: "Pairs analysed (n)"
+    n_disc: "Discordant pairs (b + c)"
+    p_a: "Positive with test A"
+    p_b: "Positive with test B"
+    chi2: "McNemar's chi-squared (uncorrected)"
+    p_chi2: "p of the uncorrected chi-squared"
+    chi2_edwards: "Chi-squared with Edwards' correction"
+    p_edwards: "p of the chi-squared with Edwards' correction"
+    p_exacta: "p of the exact (binomial) test"
+    delta: "Paired difference (b − c)/n, percentage points"
+    or_pareado: "Paired odds ratio (b/c)"
+    "prueba.exacta": "the exact binomial test"
+    "prueba.edwards": "the chi-squared with Edwards' continuity correction"
+    nota_discordantes: "the only ones that enter the test"
+    nota_chi2: "1 degree of freedom · no correction"
+    nota_edwards: "1 degree of freedom · Edwards' correction"
+    nota_exacta: "two-sided binomial on b + c"
+    nota_or: "derived from Clopper-Pearson"
+    grafica_serie: "Discordant pairs"
+    grafica_b: "A+ / B− (b)"
+    grafica_c: "A− / B+ (c)"
+    grafica_h0: "Expected under H₀: (b + c)/2"
+    eje_frecuencia: "Number of pairs"
+  ayudas:
+    b: "Pairs in which the first measurement was positive and the second negative."
+    c: "Pairs in which the first measurement was negative and the second positive."
+    metodo_delta: "Wald is the usual interval. Agresti-Min (2005) has better coverage with few pairs or when the difference approaches ±1."
+    nivel: "Between 80% and 99.9%; by convention, 95%."
+  interpretacion:
+    resumen: "Among the {n} pairs, {b} changed in one direction and {c} in the other: test A was positive in {p_a} and test B in {p_b} (difference {delta} percentage points, {nivel} CI: {delta_ic})."
+    "prueba.exacta": "Exact McNemar test (two-sided binomial on the {n_disc} discordant pairs): p = {p}."
+    "prueba.edwards": "McNemar's test with Edwards' continuity correction (chi-squared = {chi2_edwards}, 1 degree of freedom): p = {p}."
+    "decision.rechaza": "p = {p}; at α = 0.05 the null hypothesis that both measurements give the same proportion of positives is rejected. The size of the change ({delta} percentage points, {nivel} CI: {delta_ic}) matters more than the p value."
+    "decision.no_rechaza": "p = {p}; at α = 0.05 the null hypothesis that both measurements give the same proportion of positives is not rejected. Not rejecting does not prove that they are equal: the interval of the difference ({delta_ic} percentage points) shows which changes are still compatible with these data."
+    sin_discordantes: "None of the {n} pairs was discordant: {a} were positive on both measurements and {d} negative on both. Without discordant pairs McNemar's test is undefined (the statistic and its p value are left undefined) and the paired difference is exactly 0."
+    or_pareado: "Paired odds ratio b/c = {or} ({or_ic}): changes in one direction ({b} pairs) were {or} times more frequent than the opposite ones ({c} pairs)."
+    "or_pareado.indefinido": "Paired odds ratio b/c = {or}: with {b} and {c} discordant pairs the ratio becomes 0, infinite or undefined, so it cannot be read as \"so many times more frequent\". Interval derived from Clopper-Pearson: {or_ic}."
+    comparacion: "The three versions of the test on the same {n_disc} discordant pairs: uncorrected chi-squared = {chi2} (p = {p_chi2}); chi-squared with Edwards' correction = {chi2_edwards} (p = {p_edwards}); exact binomial, p = {p_exacta}. Reported here: {prueba_nombre}."
+    "metodos_delta.wald": "by the Wald method"
+    "metodos_delta.agresti-min": "by the Agresti-Min method [{ref:agresti2005}]"
+  avisos:
+    sin_discordantes: "There are no discordant pairs (b + c = 0): McNemar's test is undefined and the corresponding cells read \"undefined\". The paired difference is 0."
+    pocos_discordantes: "There are only {n_disc} discordant pairs (fewer than 25): the exact binomial test is reported as the main one, because with so few the chi-squared approximation is unreliable."
+    solo_discordantes: "The test uses only the discordant pairs ({n_disc}): pairs where both measurements agreed carry no information about change."
+    agresti_min_recortado: "The Agresti-Min interval hit the −1 or 1 bound and was clipped there: with these data the method cannot resolve anything beyond that limit."
+  metodos: "Paired proportions were compared with McNemar's test [{ref:mcnemar1947}] (the exact binomial version when there were fewer than 25 discordant pairs; otherwise the chi-squared with Edwards' continuity correction [{ref:edwards1948}]); for these data we report {prueba_nombre}. The difference of paired proportions is reported with its {nivel} CI {metodo_delta_frase}, and the paired odds ratio with the interval derived from the Clopper-Pearson interval [{ref:clopper1934}] of b/(b + c). Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R (stats)."
+  ejemplo_descripcion: "Illustrative example: two rapid tests applied to the same 150 patients; 40 pairs were positive on both, 15 only on test A, 5 only on test B and 90 negative on both (fictitious data)."
+  grafica_titulo: "Discordant pairs in each direction, with the line of the split expected under the null hypothesis"

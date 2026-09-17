@@ -18,6 +18,7 @@
  * | `fisher_or`  | 5e-4  | 1e-6  | OR condicional de `fisher.test`: R resuelve con `uniroot` a tol ≈ 1.2e-4. |
  * | `potencia`   | 1e-6  | 1e-8  | `power.*.test` y `pwr::*`: iterativos en ambos lados.         |
  * | `modelo`     | 1e-6  | 1e-8  | glm, coxph y lm: `epsilon` de IRLS en R.                      |
+ * | `shapiro`    | 1e-8  | 1e-8  | W de Shapiro-Wilk y su p: port de AS R94 (Royston 1995) con los polinomios publicados; el C de R suma en otro orden. |
  */
 import type { PerfilTolerancia, Tolerancia } from '../../src/lib/bioestadistica/nucleo/comparar.ts';
 
@@ -39,6 +40,9 @@ export const potencia: Tolerancia = { rel: 1e-6, abs: 1e-8 };
 /** Coeficientes de modelos ajustados por IRLS o Newton-Raphson. */
 export const modelo: Tolerancia = { rel: 1e-6, abs: 1e-8 };
 
+/** Estadístico W de Shapiro-Wilk y su valor p (AS R94 portado desde la publicación, no desde el C de R). */
+export const shapiro: Tolerancia = { rel: 1e-8, abs: 1e-8 };
+
 /** Proporciones de una tabla 2×2 (Sn, Sp, VPP, VPN, prevalencia, exactitud). */
 const PROPORCIONES_2X2 = ['sn', 'sp', 'vpp', 'vpn', 'prev', 'exactitud'] as const;
 
@@ -59,6 +63,28 @@ const PROPORCIONES_2X2 = ['sn', 'sp', 'vpp', 'vpn', 'prev', 'exactitud'] as cons
  *
  * `probabilidad-posprueba` y `valores-predictivos`: aritmética de momios, logit
  * y `exp`/`log` con un único `qnorm`: forma cerrada.
+ *
+ * `efecto-2x2`: RR de Katz, OR de Woolf, RRA de Newcombe (método 10, límites
+ * de Wilson) o de Wald, RRR y NNT de Altman: todo forma cerrada con un `qnorm`.
+ *
+ * `chi-cuadrada-fisher`: los estadísticos χ² y φ son forma cerrada; sus valores
+ * p pasan por `pchisq` (`cuantil`); el p de Fisher es una suma de `dhyper` en
+ * escala logarítmica (`exacto`); el OR condicional y su intervalo los resuelve
+ * R con `uniroot` a tolerancia ≈ 1.2e-4 (`fisher_or`).
+ *
+ * `mcnemar`: χ² sin y con corrección de Edwards y la diferencia pareada (Wald,
+ * Agresti-Min) son forma cerrada; los p de χ² pasan por `pchisq`; el p exacto
+ * es una suma binomial (`exacto`); el OR pareado b/c lleva el intervalo
+ * derivado de Clopper-Pearson (`qbeta`, `cuantil`).
+ *
+ * `ic-media`: intervalos por `qt` y `qchisq` (`cuantil`); el EEM es una división.
+ *
+ * `media-desde-mediana`: Luo 2018, Wan 2014 y Hozo 2005 son forma cerrada; las
+ * de Wan usan `qnorm` (≤ 3 ulp respecto a R).
+ *
+ * `descriptivos`: momentos, cuantiles tipo 7, cercas de Tukey y media
+ * geométrica son forma cerrada; el IC de la media pasa por `qt`; W y p de
+ * Shapiro-Wilk usan el perfil `shapiro`.
  */
 export const TOL: Record<string, PerfilTolerancia> = {
   'ic-proporcion': {
@@ -78,4 +104,16 @@ export const TOL: Record<string, PerfilTolerancia> = {
   },
   'probabilidad-posprueba': { defecto: cerrado },
   'valores-predictivos': { defecto: cerrado },
+  'efecto-2x2': { defecto: cerrado },
+  'chi-cuadrada-fisher': {
+    defecto: cerrado,
+    campos: { p_chi2: cuantil, p_yates: cuantil, p_n1: cuantil, p_fisher: exacto, or_cond: fisher_or },
+  },
+  mcnemar: {
+    defecto: cerrado,
+    campos: { p_chi2: cuantil, p_edwards: cuantil, p_exacta: exacto, or_pareado: cuantil },
+  },
+  'ic-media': { defecto: cuantil, campos: { eem: cerrado } },
+  'media-desde-mediana': { defecto: cerrado },
+  descriptivos: { defecto: cerrado, campos: { media: cuantil, sw_w: shapiro, sw_p: shapiro } },
 };

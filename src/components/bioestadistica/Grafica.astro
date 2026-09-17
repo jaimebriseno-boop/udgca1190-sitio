@@ -158,13 +158,104 @@ const { svg, titulo } = Astro.props;
     font-weight: 600;
   }
 
-  /* Curvas: marcador vertical sobre la variable capturada. */
+  /* Curvas e histograma: marcador vertical sobre la variable capturada. El
+     destacado (la media observada frente a las estimadas) va en navy, nunca en
+     rojo: en este componente el rojo no convive con el navy. */
   .bio-svg__marcador {
     stroke: var(--udg-gray-500);
     stroke-width: 1;
     stroke-dasharray: 4 3;
   }
+  .bio-svg__marcador.is-destacada {
+    stroke: var(--udg-navy-700);
+    stroke-width: 1.5;
+  }
   .bio-svg__marcador-texto {
+    fill: var(--udg-gray-700);
+    /* En barras este rótulo nombra la línea de referencia y cae sobre el área de
+       trazado, a veces encima de una barra en navy: un filete del color del
+       fondo de la figura lo despega, como en las marcas del nomograma. Sobre
+       blanco es invisible. */
+    paint-order: stroke;
+    stroke: #fff;
+    stroke-width: 4;
+    stroke-linejoin: round;
+  }
+  .bio-svg__marcador-texto.is-destacada {
+    fill: var(--udg-navy-900);
+    font-weight: 600;
+  }
+  /* Muestra del marcador en la leyenda: la misma línea discontinua que cruza los
+     paneles, para que se reconozca sin leer la posición. Va después de
+     `.is-destacada` genérico y con una clase más, así que gana. */
+  .bio-svg__leyenda.is-marcador {
+    stroke: var(--udg-gray-500);
+    stroke-width: 1;
+    stroke-dasharray: 4 3;
+  }
+  .bio-svg__leyenda.is-marcador.is-destacada {
+    stroke: var(--udg-navy-700);
+    stroke-width: 1.5;
+  }
+
+  /* Barras agrupadas (χ² y McNemar). La serie destacada se rellena en navy
+     sólido; las demás, con una trama —diagonales o puntos— definida en el
+     `<defs>` del propio SVG: impresa en blanco y negro la gráfica se sigue
+     leyendo, que es la regla de la sección. El contorno gris delimita la barra
+     cuando la trama la deja casi vacía. */
+  .bio-svg__barra.is-destacada {
+    fill: var(--udg-navy-700);
+  }
+  .bio-svg__barra.is-secundaria {
+    stroke: var(--udg-gray-500);
+    stroke-width: 1;
+  }
+  .bio-svg__trama {
+    stroke: var(--udg-gray-500);
+    stroke-width: 1;
+  }
+  .bio-svg__trama-punto {
     fill: var(--udg-gray-500);
+  }
+  /* Valor escrito sobre cada barra: con cifras tabulares las decenas y las
+     unidades quedan alineadas entre barras vecinas. */
+  .bio-svg__valor {
+    fill: var(--udg-gray-700);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Histograma con curva normal y diagrama de caja debajo. Las clases del
+     histograma llevan un filete blanco entre barras contiguas (no hay canal: las
+     clases son contiguas por definición) y la curva normal va en navy, que es la
+     lectura que se superpone a los datos. */
+  .bio-svg__hist-barra {
+    fill: var(--udg-gray-300);
+    stroke: #fff;
+    stroke-width: 1;
+  }
+  .bio-svg__normal {
+    fill: none;
+    stroke: var(--udg-navy-700);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .bio-svg__caja {
+    fill: var(--udg-gray-100);
+    stroke: var(--udg-gray-700);
+    stroke-width: 1.5;
+  }
+  .bio-svg__mediana {
+    stroke: var(--udg-navy-700);
+    stroke-width: 2.5;
+  }
+  .bio-svg__bigote {
+    stroke: var(--udg-gray-700);
+    stroke-width: 1.5;
+  }
+  .bio-svg__atipico {
+    fill: none;
+    stroke: var(--udg-gray-700);
+    stroke-width: 1.5;
   }
 </style>

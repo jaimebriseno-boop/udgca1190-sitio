@@ -4,23 +4,36 @@
 // se construye en el navegador a partir de cadenas sueltas. La lista no es una
 // región viva por sí misma: la página envuelve interpretación y avisos en una
 // sola región `aria-live="polite"` para no anunciar dos veces cada cambio.
+import { interpolar } from '../../lib/bioestadistica/nucleo/avisos.ts';
+import type { ParamsAviso } from '../../lib/bioestadistica/nucleo/avisos.ts';
+
 interface Props {
   /** código de aviso → texto en el idioma de la página. */
   avisos: Record<string, string>;
   /** Códigos activos para las entradas que se están mostrando. */
   activos: string[];
+  /** código → parámetros del aviso activo, con el mismo `interpolar` que usa el navegador. */
+  params?: Record<string, ParamsAviso>;
   etiqueta: string;
 }
-const { avisos, activos, etiqueta } = Astro.props;
+const { avisos, activos, params = {}, etiqueta } = Astro.props;
 const codigos = Object.keys(avisos);
+// Un aviso inactivo se sirve vacío: su plantilla lleva marcadores `{n}` que no
+// se pueden resolver sin resultado, y el controlador escribe el texto completo
+// en el momento de mostrarlo.
+const items = codigos.map((codigo) => ({
+  codigo,
+  activo: activos.includes(codigo),
+  texto: activos.includes(codigo) ? interpolar(avisos[codigo], params[codigo]) : '',
+}));
 ---
 
 {
   codigos.length > 0 && (
     <ul class="avisos" aria-label={etiqueta}>
-      {codigos.map((codigo) => (
-        <li class="avisos__item" data-aviso={codigo} hidden={!activos.includes(codigo)}>
-          {avisos[codigo]}
+      {items.map((item) => (
+        <li class="avisos__item" data-aviso={item.codigo} hidden={!item.activo}>
+          {item.texto}
         </li>
       ))}
     </ul>

@@ -1,0 +1,268 @@
+# Calculadora D6 · Descriptivos de una variable a partir de una columna pegada.
+# Primera calculadora con entrada de tipo `columna`: el vector viaja entero al
+# snippet de R (`x <- c(...)`) para que lo que se copia a RStudio traiga los datos.
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: acuerdo
+orden: 4
+estado: activa
+motor: ts
+entradas:
+  - { id: x, tipo: columna, min: 2 }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+ejemplo:
+  x: [47, 165, 97, 138, 202, 156, 166, 141, 96, 132, 177, 51, 150, 117, 210, 178, 208, 138, 171, 50,
+      162, 139, 134, 126, 160, 147, 196, 75, 166, 204, 226, 148, 99, 123, 160, 147, 153, 148, 79, 122]
+  nivel: 0.95
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Descriptive statistics for one pasted column - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    # The pasted column, one numeric value per row:
+    x <- {x}
+    nivel <- {nivel}
+    n <- length(x)
+
+    media <- mean(x); de <- sd(x); eem <- de/sqrt(n)   # sd() uses the n - 1 denominator
+
+    # t interval for the mean, written out because t.test() stops with constant data;
+    # otherwise identical to t.test(x, conf.level = nivel)$conf.int
+    tcrit <- qt(1 - (1 - nivel)/2, n - 1)
+    media_ic <- c(media, media - tcrit*eem, media + tcrit*eem)
+
+    q <- quantile(x, c(0.25, 0.5, 0.75), type = 7, names = FALSE)   # type 7 = R's default (Hyndman & Fan 1996)
+    iqr <- q[3] - q[1]
+    cv <- de/media
+
+    # Sample skewness G1 and excess kurtosis G2 (Joanes & Gill 1998, "type 2": the SPSS/SAS pair)
+    m <- function(k) mean((x - media)^k)
+    g1 <- if (n >= 3 && m(2) > 0) m(3)/m(2)^1.5 * sqrt(n*(n - 1))/(n - 2) else NA_real_
+    g2 <- if (n >= 4 && m(2) > 0) ((n + 1)*(m(4)/m(2)^2 - 3) + 6)*(n - 1)/((n - 2)*(n - 3)) else NA_real_
+
+    media_geom <- if (all(x > 0)) exp(mean(log(x))) else NA_real_   # undefined with zero or negative values
+
+    # Shapiro-Wilk (Royston 1995, AS R94): needs 3 <= n <= 5000 and a non-zero range
+    sw <- if (n >= 3 && n <= 5000 && diff(range(x)) > 0) shapiro.test(x) else NULL
+    sw_w <- if (is.null(sw)) NA_real_ else unname(sw$statistic)
+    sw_p <- if (is.null(sw)) NA_real_ else sw$p.value
+
+    n_atipicos <- sum(x < q[1] - 1.5*iqr | x > q[3] + 1.5*iqr)   # Tukey's fences
+
+    res <- list(n = n, media = media_ic, de = de, eem = eem,
+                mediana = q[2], q1 = q[1], q3 = q[3], iqr = iqr,
+                min = min(x), max = max(x), rango = diff(range(x)), cv = cv,
+                g1 = g1, g2 = g2, media_geom = media_geom,
+                sw_w = sw_w, sw_p = sw_p, n_atipicos = n_atipicos)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio (not run in the browser):
+    # DescTools::Skew(x, method = 2); DescTools::Kurt(x, method = 2); e1071::skewness(x, type = 2)
+referencias:
+  - { key: tukey1977, rol: original }
+  - { key: shapiro1965, rol: original }
+  - { key: royston1995, rol: original }
+  - { key: royston1992, rol: complementaria }
+  - { key: hyndman1996, rol: original }
+  - { key: joanes1998, rol: original }
+  - { key: sturges1926, rol: original }
+  - { key: student1908, rol: complementaria }
+  - { key: altman1991, rol: didactica }
+grafica: histograma-boxplot
+es:
+  titulo: "Descriptivos de una variable: media, DE, intervalo de confianza, cuartiles, asimetría, curtosis y prueba de Shapiro-Wilk"
+  titulo_corto: "Descriptivos de una variable"
+  meta: "Pega una columna de valores y obtén n, media con su intervalo de confianza, desviación estándar, error estándar, mediana y cuartiles (tipo 7), rango intercuartílico, coeficiente de variación, asimetría G1, curtosis G2, media geométrica, prueba de normalidad de Shapiro-Wilk y valores atípicos de Tukey, con histograma, diagrama de caja, interpretación, código R y referencias. Los datos no salen del navegador."
+  intro: "Pega una columna desde tu hoja de cálculo y obtén el resumen completo de esa variable: media con intervalo de confianza, desviación estándar, mediana y cuartiles, asimetría y curtosis, prueba de normalidad de Shapiro-Wilk y valores atípicos, con el histograma y el diagrama de caja que hay que mirar antes de decidir qué reportar."
+  explicacion:
+    - "Antes de comparar nada hay que describir. La pregunta práctica es qué par de números resume mejor a la variable: la media con su desviación estándar, que solo se lee bien cuando la distribución es aproximadamente simétrica, o la mediana con el rango intercuartílico, que aguanta las colas largas y los valores extremos. Esta calculadora da los dos y añade el intervalo de confianza de la media, que es lo que responde «¿dónde está la media de la población?» y no debe confundirse con la desviación estándar, que describe la dispersión de los individuos."
+    - "La asimetría G1 y la curtosis G2 ponen número a la forma. G1 vale 0 en una distribución simétrica, es positiva cuando hay cola a la derecha (unos pocos valores altos, como en los tiempos de estancia o las cargas virales) y negativa cuando la cola está a la izquierda. G2 se mide en exceso sobre la normal: 0 es la normal, por encima hay colas más pesadas y un pico más agudo, por debajo la distribución es más plana. Se calculan con los estimadores G1 y G2 de Joanes y Gill (1998), los mismos que reportan SPSS y SAS; como cortes prácticos, |G1| por debajo de 0.5 se lee como aproximadamente simétrica."
+    - "La prueba de Shapiro-Wilk compara los datos ordenados con lo que cabría esperar de una normal: W cercana a 1 indica buen ajuste y el valor p es la probabilidad de ver un W tan bajo si la variable fuera normal. Tiene dos límites que conviene tener presentes. Con muestras pequeñas casi nunca rechaza, aunque la distribución esté lejos de ser normal; con muestras grandes rechaza por desviaciones mínimas que no cambian ninguna decisión clínica. Por eso el resultado se lee junto al histograma y no en lugar de él, y por eso la prueba no se calcula con menos de 3 ni con más de 5,000 valores."
+    - "Las cercas de Tukey marcan como atípico todo valor que quede a más de 1.5 veces el rango intercuartílico por debajo del primer cuartil o por encima del tercero. Es una regla de exploración, no un criterio de exclusión: un valor atípico puede ser un error de captura, una unidad equivocada o el paciente más interesante del estudio. El histograma usa la regla de Sturges (1926) para elegir el número de clases y el diagrama de caja dibuja esos valores como puntos sueltos, fuera de los bigotes."
+  ecuaciones:
+    - id: media_de
+      tex: '\bar x=\frac{1}{n}\sum_{i=1}^{n}x_i,\qquad s=\sqrt{\frac{\sum_{i=1}^{n}(x_i-\bar x)^2}{n-1}},\qquad \se(\bar x)=\frac{s}{\sqrt{n}}'
+      simbolos:
+        - { s: 'n', def: "número de valores de la columna" }
+        - { s: 'x_i', def: "valor i-ésimo" }
+        - { s: 's', def: "desviación estándar muestral (denominador n − 1)" }
+      nota: "La desviación estándar describe a los individuos; el error estándar de la media describe la precisión con que se estimó la media."
+    - id: ic_t
+      tex: '\IC_{1-\alpha}(\bar x)=\bar x\pm t_{1-\alpha/2,\;n-1}\cdot\frac{s}{\sqrt{n}}'
+      simbolos:
+        - { s: 't_{1-\alpha/2,\;n-1}', def: "cuantil de la t de Student con n − 1 grados de libertad" }
+      nota: "Intervalo de confianza de la media (Student 1908); es el que devuelve t.test() en R."
+    - id: cuantil7
+      tex: 'Q(p)=x_{(\lfloor h\rfloor)}+\left(h-\lfloor h\rfloor\right)\left(x_{(\lceil h\rceil)}-x_{(\lfloor h\rfloor)}\right),\qquad h=1+(n-1)\,p'
+      simbolos:
+        - { s: 'x_{(i)}', def: "i-ésimo valor de la columna ordenada" }
+        - { s: 'p', def: "0.25 (Q₁), 0.5 (mediana) o 0.75 (Q₃)" }
+      nota: "Cuantil del tipo 7 de Hyndman y Fan (1996), el que usa R por omisión."
+    - id: momentos
+      tex: 'G_1=\frac{m_3}{m_2^{3/2}}\cdot\frac{\sqrt{n(n-1)}}{n-2},\qquad G_2=\frac{n-1}{(n-2)(n-3)}\left[(n+1)\left(\frac{m_4}{m_2^{2}}-3\right)+6\right],\qquad m_k=\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar x)^k'
+      simbolos:
+        - { s: 'm_k', def: "momento central muestral de orden k" }
+      nota: "Estimadores G1 y G2 de Joanes y Gill (1998), «tipo 2»: los de SPSS y SAS. G1 necesita n ≥ 3 y G2, n ≥ 4."
+    - id: shapiro
+      tex: 'W=\frac{\left(\sum_{i=1}^{n}a_i\,x_{(i)}\right)^{2}}{\sum_{i=1}^{n}(x_i-\bar x)^{2}}'
+      simbolos:
+        - { s: 'a_i', def: "coeficientes normalizados, derivados de los cuantiles esperados de la normal" }
+      nota: "Estadístico de Shapiro y Wilk (1965) con los coeficientes y el valor p del algoritmo AS R94 de Royston (1995), el que ejecuta shapiro.test en R."
+    - id: tukey
+      tex: '\mathrm{IQR}=Q_3-Q_1,\qquad \left[\,Q_1-1.5\cdot \mathrm{IQR},\;\; Q_3+1.5\cdot \mathrm{IQR}\,\right]'
+      simbolos:
+        - { s: '\mathrm{IQR}', def: "rango intercuartílico, Q₃ − Q₁" }
+      nota: "Cercas de Tukey (1977): se marca como atípico todo valor fuera de ese intervalo."
+  etiquetas:
+    x: "Columna de valores (una variable)"
+    nivel: "Nivel de confianza"
+    n: "Valores (n)"
+    media: "Media"
+    de: "Desviación estándar (DE)"
+    eem: "Error estándar de la media (EEM)"
+    mediana: "Mediana"
+    q1: "Primer cuartil (Q₁)"
+    q3: "Tercer cuartil (Q₃)"
+    iqr: "Rango intercuartílico (IQR)"
+    min: "Mínimo"
+    max: "Máximo"
+    rango: "Rango"
+    cv: "Coeficiente de variación (CV)"
+    g1: "Asimetría (G1)"
+    g2: "Curtosis (G2)"
+    media_geom: "Media geométrica"
+    sw_w: "Shapiro-Wilk (W)"
+    sw_p: "Shapiro-Wilk (p)"
+    n_atipicos: "Valores atípicos (Tukey)"
+    nota_t: "distribución t"
+    nota_cuantil: "cuantil tipo 7"
+    nota_joanes: "Joanes y Gill, tipo 2"
+    nota_shapiro: "AS R94 (Royston 1995)"
+    nota_tukey: "cercas de 1.5 × IQR"
+    eje_x: "Valor de la variable"
+    eje_frecuencia: "Frecuencia"
+    grafica_normal: "Curva normal ajustada"
+    grafica_media: "Media"
+  ayudas:
+    x: "Copia la columna en tu hoja de cálculo (Excel, Google Sheets, Numbers) y pégala aquí: un valor por renglón. También se admiten valores separados por tabuladores, comas o punto y coma, y se reconoce la coma decimal. El encabezado y los textos que no son números se descartan con aviso."
+    nivel: "Nivel de confianza del intervalo de la media (95 % por omisión). No cambia el resto de los descriptivos."
+  interpretacion:
+    resumen: "Se describieron {n} valores: media {media} (DE {de}; IC {nivel} de la media {media_ic}), mediana {mediana} (IQR {q1} a {q3}), rango {min} a {max}. El error estándar de la media es {eem} y el coeficiente de variación, {cv}."
+    "asimetria.simetrica": "Asimetría G1 = {g1}: la distribución es aproximadamente simétrica; curtosis G2 = {g2}, donde 0 corresponde a la normal, los valores positivos a colas más pesadas y los negativos a una forma más plana."
+    "asimetria.derecha": "Asimetría G1 = {g1}: la distribución tiene cola a la derecha, es decir unos pocos valores altos que estiran la media ({media}) por encima de la mediana ({mediana}); curtosis G2 = {g2}, donde 0 corresponde a la normal."
+    "asimetria.izquierda": "Asimetría G1 = {g1}: la distribución tiene cola a la izquierda, es decir unos pocos valores bajos que estiran la media ({media}) por debajo de la mediana ({mediana}); curtosis G2 = {g2}, donde 0 corresponde a la normal."
+    "normalidad.sin_evidencia": "Shapiro-Wilk: W = {sw_w}, p = {sw_p}: no hay evidencia contra la normalidad en estos {n} valores. La prueba no demuestra que la variable sea normal, solo que estos datos no bastan para descartarlo; con n grande, p pequeños no implican desviaciones relevantes."
+    "normalidad.evidencia": "Shapiro-Wilk: W = {sw_w}, p = {sw_p}: hay evidencia contra la normalidad en estos {n} valores. Mire el histograma antes de concluir: con n grande, p pequeños no implican desviaciones relevantes, y lo que importa es si la forma cambia la decisión de reportar media o mediana."
+    "normalidad.no_aplica": "La prueba de Shapiro-Wilk no se calculó: necesita entre 3 y 5,000 valores y una columna que no sea constante; con estos datos no se cumple alguna de las dos condiciones (n = {n}). Con n grande, además, p pequeños no implican desviaciones relevantes: quédese con el histograma y el diagrama de caja."
+    resumen_recomendado: "Para el manuscrito: reporte media (DE) cuando la distribución sea aproximadamente simétrica y sin atípicos, es decir {media} ({de}); reporte mediana (IQR) cuando no lo sea, es decir {mediana} ({q1} a {q3}). Media geométrica, útil cuando la variable es multiplicativa (títulos, cargas virales, diluciones): {media_geom}."
+    "atipicos.con": "{n_atipicos} valores quedan fuera de las cercas de Tukey (por debajo de {cerca_inf} o por encima de {cerca_sup}, es decir a más de {k} veces el IQR de la caja). Un valor atípico no es un error por sí mismo: compruebe la captura y las unidades antes de excluirlo, y si lo excluye, dígalo."
+    "atipicos.sin": "Ningún valor queda fuera de las cercas de Tukey (por debajo de {cerca_inf} o por encima de {cerca_sup}, es decir a más de {k} veces el IQR de la caja)."
+  avisos:
+    n_pequeno: "Solo hay {n} valores: por debajo de 3 no se calculan la asimetría G1 ni la prueba de Shapiro-Wilk, y por debajo de 4 tampoco la curtosis G2. Con tan pocos datos el intervalo de la media es muy ancho."
+    constante: "Todos los valores son iguales: la desviación estándar es 0 y la asimetría, la curtosis y la prueba de Shapiro-Wilk no están definidas."
+    no_positivos: "Hay valores menores o iguales que 0: la media geométrica no está definida."
+    atipicos: "{n_atipicos} valores quedan fuera de las cercas de Tukey (a más de {k} veces el IQR por debajo de Q₁ o por encima de Q₃). Compruebe si son errores de captura o de unidades antes de excluirlos."
+    sw_n_grande: "Más de 5,000 valores: la prueba de Shapiro-Wilk no se calcula, porque el algoritmo AS R94 está calibrado hasta n = 5,000. Use el histograma y el diagrama de caja."
+    n_grande: "Con {n} valores la prueba de Shapiro-Wilk detecta desviaciones de la normalidad que no tienen importancia práctica: mire la forma de la distribución antes de decidir."
+  metodos: "Las variables continuas se resumieron como media (desviación estándar) o mediana (rango intercuartílico) según su distribución, evaluada con la prueba de Shapiro-Wilk [{ref:shapiro1965},{ref:royston1995}] y la inspección gráfica del histograma y del diagrama de caja [{ref:tukey1977}]; los cuartiles se calcularon con el tipo 7 de Hyndman y Fan [{ref:hyndman1996}], la asimetría y la curtosis con los estimadores G1 y G2 [{ref:joanes1998}] y el intervalo de confianza al {nivel} de la media con la distribución t de Student [{ref:student1908}]. Se describieron {n} valores. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R (mean, sd, quantile con type = 7 y shapiro.test)."
+  ejemplo_descripcion: "Ejemplo ilustrativo: recuento de plaquetas (×10³/µL) de 40 pacientes febriles, simulado en R con set.seed(1190) y round(rnorm(40, 150, 45)) (datos ficticios, no reales)."
+  grafica_titulo: "Histograma con la curva normal superpuesta y diagrama de caja de la misma columna"
+en:
+  titulo: "Descriptive statistics for one variable: mean, SD, confidence interval, quartiles, skewness, kurtosis and the Shapiro-Wilk test"
+  titulo_corto: "Descriptive statistics for one variable"
+  meta: "Paste a column of values and get n, the mean with its confidence interval, standard deviation, standard error, median and quartiles (type 7), interquartile range, coefficient of variation, skewness G1, kurtosis G2, geometric mean, the Shapiro-Wilk normality test and Tukey outliers, with a histogram, a box plot, an interpretation, R code and references. Data never leave the browser."
+  intro: "Paste a column from your spreadsheet and get the full summary of that variable: mean with confidence interval, standard deviation, median and quartiles, skewness and kurtosis, the Shapiro-Wilk normality test and outliers, together with the histogram and box plot you should look at before deciding what to report."
+  explicacion:
+    - "Description comes before comparison. The practical question is which pair of numbers summarises the variable best: the mean with its standard deviation, which only reads well when the distribution is roughly symmetric, or the median with the interquartile range, which survives long tails and extreme values. This calculator gives both and adds the confidence interval of the mean, which answers \"where is the population mean?\" and must not be confused with the standard deviation, which describes how individuals are spread out."
+    - "Skewness G1 and kurtosis G2 put a number on the shape. G1 is 0 for a symmetric distribution, positive when there is a right tail (a few high values, as in length of stay or viral load) and negative when the tail is on the left. G2 is measured as an excess over the normal: 0 is the normal, above it the tails are heavier and the peak sharper, below it the distribution is flatter. Both use the G1 and G2 estimators of Joanes and Gill (1998), the ones reported by SPSS and SAS; as a practical cut-off, |G1| below 0.5 reads as roughly symmetric."
+    - "The Shapiro-Wilk test compares the ordered data with what a normal distribution would produce: W close to 1 means a good fit, and the p value is the probability of seeing a W that low if the variable were normal. It has two limits worth keeping in mind. With small samples it almost never rejects, even when the distribution is far from normal; with large samples it rejects because of minimal departures that change no clinical decision. That is why the result is read alongside the histogram and not instead of it, and why the test is not computed with fewer than 3 or more than 5,000 values."
+    - "Tukey's fences flag as an outlier every value more than 1.5 interquartile ranges below the first quartile or above the third. It is an exploratory rule, not an exclusion criterion: an outlier may be a data entry error, a wrong unit, or the most interesting patient in the study. The histogram uses Sturges' rule (1926) to choose the number of classes and the box plot draws those values as separate points, beyond the whiskers."
+  ecuaciones:
+    - id: media_de
+      tex: '\bar x=\frac{1}{n}\sum_{i=1}^{n}x_i,\qquad s=\sqrt{\frac{\sum_{i=1}^{n}(x_i-\bar x)^2}{n-1}},\qquad \se(\bar x)=\frac{s}{\sqrt{n}}'
+      simbolos:
+        - { s: 'n', def: "number of values in the column" }
+        - { s: 'x_i', def: "i-th value" }
+        - { s: 's', def: "sample standard deviation (n − 1 denominator)" }
+      nota: "The standard deviation describes individuals; the standard error of the mean describes how precisely the mean was estimated."
+    - id: ic_t
+      tex: '\CI_{1-\alpha}(\bar x)=\bar x\pm t_{1-\alpha/2,\;n-1}\cdot\frac{s}{\sqrt{n}}'
+      simbolos:
+        - { s: 't_{1-\alpha/2,\;n-1}', def: "Student's t quantile with n − 1 degrees of freedom" }
+      nota: "Confidence interval of the mean (Student 1908); the one returned by t.test() in R."
+    - id: cuantil7
+      tex: 'Q(p)=x_{(\lfloor h\rfloor)}+\left(h-\lfloor h\rfloor\right)\left(x_{(\lceil h\rceil)}-x_{(\lfloor h\rfloor)}\right),\qquad h=1+(n-1)\,p'
+      simbolos:
+        - { s: 'x_{(i)}', def: "i-th value of the sorted column" }
+        - { s: 'p', def: "0.25 (Q₁), 0.5 (median) or 0.75 (Q₃)" }
+      nota: "Type 7 quantile of Hyndman and Fan (1996), R's default."
+    - id: momentos
+      tex: 'G_1=\frac{m_3}{m_2^{3/2}}\cdot\frac{\sqrt{n(n-1)}}{n-2},\qquad G_2=\frac{n-1}{(n-2)(n-3)}\left[(n+1)\left(\frac{m_4}{m_2^{2}}-3\right)+6\right],\qquad m_k=\frac{1}{n}\sum_{i=1}^{n}(x_i-\bar x)^k'
+      simbolos:
+        - { s: 'm_k', def: "k-th sample central moment" }
+      nota: "The G1 and G2 estimators of Joanes and Gill (1998), \"type 2\": the SPSS and SAS pair. G1 needs n ≥ 3 and G2 needs n ≥ 4."
+    - id: shapiro
+      tex: 'W=\frac{\left(\sum_{i=1}^{n}a_i\,x_{(i)}\right)^{2}}{\sum_{i=1}^{n}(x_i-\bar x)^{2}}'
+      simbolos:
+        - { s: 'a_i', def: "normalised coefficients derived from the expected normal order statistics" }
+      nota: "The statistic of Shapiro and Wilk (1965) with the coefficients and p value of Royston's AS R94 algorithm (1995), the one shapiro.test runs in R."
+    - id: tukey
+      tex: '\mathrm{IQR}=Q_3-Q_1,\qquad \left[\,Q_1-1.5\cdot \mathrm{IQR},\;\; Q_3+1.5\cdot \mathrm{IQR}\,\right]'
+      simbolos:
+        - { s: '\mathrm{IQR}', def: "interquartile range, Q₃ − Q₁" }
+      nota: "Tukey's fences (1977): every value outside that interval is flagged as an outlier."
+  etiquetas:
+    x: "Column of values (one variable)"
+    nivel: "Confidence level"
+    n: "Values (n)"
+    media: "Mean"
+    de: "Standard deviation (SD)"
+    eem: "Standard error of the mean (SEM)"
+    mediana: "Median"
+    q1: "First quartile (Q₁)"
+    q3: "Third quartile (Q₃)"
+    iqr: "Interquartile range (IQR)"
+    min: "Minimum"
+    max: "Maximum"
+    rango: "Range"
+    cv: "Coefficient of variation (CV)"
+    g1: "Skewness (G1)"
+    g2: "Kurtosis (G2)"
+    media_geom: "Geometric mean"
+    sw_w: "Shapiro-Wilk (W)"
+    sw_p: "Shapiro-Wilk (p)"
+    n_atipicos: "Outliers (Tukey)"
+    nota_t: "t distribution"
+    nota_cuantil: "type 7 quantile"
+    nota_joanes: "Joanes and Gill, type 2"
+    nota_shapiro: "AS R94 (Royston 1995)"
+    nota_tukey: "1.5 × IQR fences"
+    eje_x: "Value of the variable"
+    eje_frecuencia: "Frequency"
+    grafica_normal: "Fitted normal curve"
+    grafica_media: "Mean"
+  ayudas:
+    x: "Copy the column in your spreadsheet (Excel, Google Sheets, Numbers) and paste it here: one value per row. Values separated by tabs, commas or semicolons also work, and the decimal comma is recognised. A header row and any non-numeric text are dropped with a notice."
+    nivel: "Confidence level of the interval for the mean (95% by default). It does not change the other descriptive statistics."
+  interpretacion:
+    resumen: "{n} values were described: mean {media} (SD {de}; {nivel} CI for the mean {media_ic}), median {mediana} (IQR {q1} to {q3}), range {min} to {max}. The standard error of the mean is {eem} and the coefficient of variation {cv}."
+    "asimetria.simetrica": "Skewness G1 = {g1}: the distribution is roughly symmetric; kurtosis G2 = {g2}, where 0 corresponds to the normal, positive values to heavier tails and negative values to a flatter shape."
+    "asimetria.derecha": "Skewness G1 = {g1}: the distribution has a right tail, that is, a few high values pulling the mean ({media}) above the median ({mediana}); kurtosis G2 = {g2}, where 0 corresponds to the normal."
+    "asimetria.izquierda": "Skewness G1 = {g1}: the distribution has a left tail, that is, a few low values pulling the mean ({media}) below the median ({mediana}); kurtosis G2 = {g2}, where 0 corresponds to the normal."
+    "normalidad.sin_evidencia": "Shapiro-Wilk: W = {sw_w}, p = {sw_p}: there is no evidence against normality in these {n} values. The test does not prove that the variable is normal, only that these data are not enough to rule it out; with large n, small p values do not imply relevant departures."
+    "normalidad.evidencia": "Shapiro-Wilk: W = {sw_w}, p = {sw_p}: there is evidence against normality in these {n} values. Look at the histogram before concluding: with large n, small p values do not imply relevant departures, and what matters is whether the shape changes the decision to report the mean or the median."
+    "normalidad.no_aplica": "The Shapiro-Wilk test was not computed: it needs between 3 and 5,000 values and a column that is not constant; these data fail one of the two conditions (n = {n}). With large n, small p values do not imply relevant departures either: stay with the histogram and the box plot."
+    resumen_recomendado: "For the manuscript: report mean (SD) when the distribution is roughly symmetric and free of outliers, that is {media} ({de}); report median (IQR) when it is not, that is {mediana} ({q1} to {q3}). Geometric mean, useful when the variable is multiplicative (titres, viral loads, dilutions): {media_geom}."
+    "atipicos.con": "{n_atipicos} values fall outside Tukey's fences (below {cerca_inf} or above {cerca_sup}, that is, more than {k} interquartile ranges away from the box). An outlier is not an error in itself: check the data entry and the units before excluding it, and if you do exclude it, say so."
+    "atipicos.sin": "No value falls outside Tukey's fences (below {cerca_inf} or above {cerca_sup}, that is, more than {k} interquartile ranges away from the box)."
+  avisos:
+    n_pequeno: "Only {n} values: below 3 neither skewness G1 nor the Shapiro-Wilk test is computed, and below 4 kurtosis G2 is not computed either. With so few data the interval for the mean is very wide."
+    constante: "All values are identical: the standard deviation is 0, and skewness, kurtosis and the Shapiro-Wilk test are undefined."
+    no_positivos: "There are values at or below 0: the geometric mean is undefined."
+    atipicos: "{n_atipicos} values fall outside Tukey's fences (more than {k} interquartile ranges below Q₁ or above Q₃). Check for data entry or unit errors before excluding them."
+    sw_n_grande: "More than 5,000 values: the Shapiro-Wilk test is not computed, because the AS R94 algorithm is calibrated up to n = 5,000. Use the histogram and the box plot."
+    n_grande: "With {n} values the Shapiro-Wilk test detects departures from normality of no practical importance: look at the shape of the distribution before deciding."
+  metodos: "Continuous variables were summarised as mean (standard deviation) or median (interquartile range) according to their distribution, assessed with the Shapiro-Wilk test [{ref:shapiro1965},{ref:royston1995}] and visual inspection of the histogram and box plot [{ref:tukey1977}]; quartiles were computed with type 7 of Hyndman and Fan [{ref:hyndman1996}], skewness and kurtosis with the G1 and G2 estimators [{ref:joanes1998}] and the {nivel} confidence interval of the mean with Student's t distribution [{ref:student1908}]. {n} values were described. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R (mean, sd, quantile with type = 7 and shapiro.test)."
+  ejemplo_descripcion: "Illustrative example: platelet count (×10³/µL) in 40 febrile patients, simulated in R with set.seed(1190) and round(rnorm(40, 150, 45)) (fictitious data, not real)."
+  grafica_titulo: "Histogram with the fitted normal curve and box plot of the same column"

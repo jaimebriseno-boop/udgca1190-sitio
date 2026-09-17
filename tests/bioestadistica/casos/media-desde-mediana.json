@@ -1,0 +1,200 @@
+{
+  "calculadora": "media-desde-mediana",
+  "casos": [
+    {
+      "id": "s1_n10",
+      "entradas": {
+        "escenario": "s1",
+        "n": 10,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "nota": "Escenario S1 (minimo, mediana y maximo): Luo con w1, Wan (a + 2m + b)/4 y Hozo en sus tramos n <= 25 y n <= 15. Los cuartiles llegan con valor pero el escenario no los usa, asi que asim_iqr es NA (casos/*.json es JSON estricto y no admite NaN; la ruta q1 <- NA la cubre la prueba del snippet)."
+    },
+    {
+      "id": "s2_n200",
+      "entradas": {
+        "escenario": "s2",
+        "n": 200,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "nota": "Escenario S2 (cuartiles) con n grande: w2 = 0.70 + 0.39/n y DE por eta(n). Hozo no aplica: media_hozo, de_hozo y asim_rango deben venir NA."
+    },
+    {
+      "id": "hozo_25",
+      "entradas": {
+        "escenario": "s1",
+        "n": 25,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "nota": "Frontera de la media de Hozo por abajo: con n = 25 sigue siendo (a + 2m + b)/4."
+    },
+    {
+      "id": "hozo_26",
+      "entradas": {
+        "escenario": "s1",
+        "n": 26,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "nota": "Frontera de la media de Hozo por arriba: con n = 26 pasa a ser la mediana; el salto entre este caso y el anterior es la discontinuidad que critico Wan 2014."
+    },
+    {
+      "id": "hozo_15",
+      "entradas": {
+        "escenario": "s1",
+        "n": 15,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "nota": "Frontera de la DE de Hozo: con n = 15 se usa la formula cerrada con la raiz."
+    },
+    {
+      "id": "hozo_16",
+      "entradas": {
+        "escenario": "s1",
+        "n": 16,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "nota": "Frontera de la DE de Hozo: con n = 16 se pasa a (b - a)/4."
+    },
+    {
+      "id": "hozo_70",
+      "entradas": {
+        "escenario": "s1",
+        "n": 70,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "nota": "Frontera de la DE de Hozo: con n = 70 sigue siendo (b - a)/4."
+    },
+    {
+      "id": "hozo_71",
+      "entradas": {
+        "escenario": "s1",
+        "n": 71,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "nota": "Frontera de la DE de Hozo: con n = 71 pasa a (b - a)/6."
+    },
+    {
+      "id": "asimetrico",
+      "entradas": {
+        "escenario": "s3",
+        "n": 30,
+        "min": 2,
+        "q1": 3,
+        "mediana": 4,
+        "q3": 10,
+        "max": 40
+      },
+      "nota": "Resumen con cola larga a la derecha: los dos cocientes de asimetria se salen de [0.5, 2] y la banda debe ser marcada."
+    },
+    {
+      "id": "s3_n4",
+      "entradas": {
+        "escenario": "s3",
+        "n": 4,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "nota": "n minimo de S3: eta(n) con 0.75n - 0.125 = 2.875 sobre 4.25, la region donde qnorm trabaja mas lejos de 0.5."
+    },
+    {
+      "id": "rango_cero",
+      "entradas": {
+        "escenario": "s1",
+        "n": 12,
+        "min": 5,
+        "q1": 5,
+        "mediana": 5,
+        "q3": 5,
+        "max": 5
+      },
+      "nota": "Todos los valores reportados iguales: las tres medias valen 5, las dos DE valen 0 y asim_rango es 0/0, que R imprime como NaN."
+    },
+    {
+      "id": "simetrico",
+      "entradas": {
+        "escenario": "s3",
+        "n": 100,
+        "min": 10,
+        "q1": 20,
+        "mediana": 30,
+        "q3": 40,
+        "max": 50
+      },
+      "nota": "Resumen perfectamente simetrico: los tres metodos deben devolver exactamente la mediana (30) y los dos cocientes de asimetria deben valer 1."
+    },
+    {
+      "id": "mediana_igual_q1",
+      "entradas": {
+        "escenario": "s3",
+        "n": 30,
+        "min": 2,
+        "q1": 6,
+        "mediana": 6,
+        "q3": 12,
+        "max": 20
+      },
+      "nota": "Mediana pegada al primer cuartil: entrada legal (q1 <= m <= q3) que hace asim_iqr = 6/0 = Inf. R lo imprime como la cadena \"Inf\" y normalizarR lo resuelve; la banda de asimetria debe ser marcada."
+    },
+    {
+      "id": "mediana_igual_q3",
+      "entradas": {
+        "escenario": "s2",
+        "n": 30,
+        "min": 2,
+        "q1": 2,
+        "mediana": 6,
+        "q3": 6,
+        "max": 20
+      },
+      "nota": "Caso espejo del anterior en S2: la mediana coincide con el tercer cuartil y asim_iqr vale 0, tambien banda marcada. El minimo y el maximo viajan por coherencia del JSON; S2 no los usa."
+    },
+    {
+      "id": "s2_n4",
+      "entradas": {
+        "escenario": "s2",
+        "n": 4,
+        "min": 2,
+        "q1": 4,
+        "mediana": 6,
+        "q3": 9,
+        "max": 21
+      },
+      "nota": "n minimo de S2: eta(4) = 2*qnorm(2.875/4.25) = 0.9157, el divisor mas pequeno de toda la tabla de Wan."
+    }
+  ]
+}

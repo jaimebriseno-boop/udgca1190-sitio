@@ -1,0 +1,105 @@
+{
+  "calculadora": "ic-media",
+  "casos": [
+    {
+      "id": "n2",
+      "entradas": {
+        "media": 10,
+        "de": 3,
+        "n": 2,
+        "nivel": 0.95
+      },
+      "nota": "n minimo admitido: un solo grado de libertad, t = 12.706 y un IC de la DE enorme (chi2 con 1 gl)."
+    },
+    {
+      "id": "de_cero",
+      "entradas": {
+        "media": 95,
+        "de": 0,
+        "n": 50,
+        "nivel": 0.95
+      },
+      "nota": "DE = 0: los dos intervalos colapsan a un punto; comprueba que R y TS dan exactamente 0 sin recortes."
+    },
+    {
+      "id": "nivel_090",
+      "entradas": {
+        "media": 95,
+        "de": 40,
+        "n": 50,
+        "nivel": 0.9
+      },
+      "nota": "Ejemplo de la interfaz al 90 %: alfa = 0.1 exacta en qt y en las dos colas de qchisq."
+    },
+    {
+      "id": "nivel_099",
+      "entradas": {
+        "media": 95,
+        "de": 40,
+        "n": 50,
+        "nivel": 0.99
+      },
+      "nota": "Ejemplo al 99 %: colas de 0.005, donde qt y qchisq pierden mas cifras."
+    },
+    {
+      "id": "n_grande",
+      "entradas": {
+        "media": 95,
+        "de": 40,
+        "n": 10000,
+        "nivel": 0.95
+      },
+      "nota": "n = 10,000: t practicamente igual a z (1.9602) y qchisq con 9,999 gl, lejos de la region donde la inversion es facil."
+    },
+    {
+      "id": "negativa",
+      "entradas": {
+        "media": -2.5,
+        "de": 1.2,
+        "n": 12,
+        "nivel": 0.95
+      },
+      "nota": "Media negativa (p. ej. un cambio respecto al basal): el IC debe cruzar el cero y conservar el signo."
+    },
+    {
+      "id": "n5",
+      "entradas": {
+        "media": 95,
+        "de": 40,
+        "n": 5,
+        "nivel": 0.95
+      },
+      "nota": "Frontera del aviso n_muy_pequeno: t con 4 gl = 2.7764 y un IC de la DE de amplitud mayor que la propia DE."
+    },
+    {
+      "id": "n30",
+      "entradas": {
+        "media": 95,
+        "de": 40,
+        "n": 30,
+        "nivel": 0.95
+      },
+      "nota": "Frontera de la banda de normalidad: con n = 30 la banda pasa a adecuado y ya no se emite n_pequeno."
+    },
+    {
+      "id": "decimales",
+      "entradas": {
+        "media": 0.123456,
+        "de": 0.0789,
+        "n": 17,
+        "nivel": 0.95
+      },
+      "nota": "Entradas con decimales arbitrarios y magnitud pequena: comprueba la reconstruccion del doble en R."
+    },
+    {
+      "id": "n3",
+      "entradas": {
+        "media": 95,
+        "de": 40,
+        "n": 3,
+        "nivel": 0.95
+      },
+      "nota": "n = 3: dos grados de libertad, t = 4.3027 y un IC de la DE que se extiende hasta mas de seis veces la DE observada."
+    }
+  ]
+}

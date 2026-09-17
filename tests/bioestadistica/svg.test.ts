@@ -20,9 +20,11 @@ import {
 import type {
   DatosGrafica,
   FilaIC,
+  GraficaBarras,
   GraficaCurvas,
   GraficaFagan,
   GraficaForest,
+  GraficaHistogramaBoxplot,
 } from '../../src/lib/bioestadistica/nucleo/tipos.ts';
 
 const fmt = crearFormateador('es');
@@ -498,6 +500,472 @@ test('el texto de las curvas se escapa', () => {
     { fmt },
   );
   assert.ok(svg.includes('p &lt; 0.05 &amp; «x»'));
+});
+
+// ---------------------------------------------------------------------------
+// barras
+// ---------------------------------------------------------------------------
+
+/** Caso real de `chi-cuadrada-fisher`: observadas frente a esperadas en las cuatro celdas. */
+function barras(extra: Partial<GraficaBarras> = {}): GraficaBarras {
+  return {
+    tipo: 'barras',
+    titulo: 'Frecuencias observadas y esperadas por celda',
+    resumen: 'χ² de Pearson 12.3 con 1 grado de libertad (p = 0.000)',
+    series: [
+      { id: 'obs', etiqueta: 'Observadas', destacada: true },
+      { id: 'esp', etiqueta: 'Esperadas' },
+    ],
+    categorias: [
+      { id: 'a', etiqueta: 'Expuestos con desenlace', valores: [68, 54] },
+      { id: 'b', etiqueta: 'Expuestos sin desenlace', valores: [6, 20] },
+      { id: 'c', etiqueta: 'No expuestos, desenlace', valores: [12, 26] },
+      { id: 'd', etiqueta: 'No expuestos, sin desenlace', valores: [114, 100] },
+    ],
+    ejeY: { etiqueta: 'Frecuencia', dominio: [0, 120], pista: 'int' },
+    ...extra,
+  };
+}
+
+/**
+ * Rectángulos de barra del área de trazado. Las muestras de la leyenda llevan la
+ * misma clase (comparten la regla de relleno del CSS) y se dibujan antes, así
+ * que se descartan por posición: `enLeyenda` es el número de series rotuladas.
+ */
+function barrasDibujadas(svg: string, enLeyenda = 0): RegExpMatchArray[] {
+  return [...svg.matchAll(/<rect class="(bio-svg__barra[^"]*)"[^>]*height="([\d.]+)"/g)].slice(enLeyenda);
+}
+
+test('barras: el SVG lleva título, descripción y viewBox con el alto real', () => {
+  const svg = renderGrafica(barras(), { fmt });
+  assert.match(svg, /<svg class="bio-svg" role="img" aria-labelledby="bio-grafica-t bio-grafica-d"/);
+  assert.match(svg, /<title id="bio-grafica-t">Frecuencias observadas y esperadas por celda<\/title>/);
+  assert.match(svg, /<desc id="bio-grafica-d">χ² de Pearson 12\.3 con 1 grado de libertad \(p = 0\.000\)<\/desc>/);
+  assert.match(svg, new RegExp(`viewBox="0 0 ${ANCHO_POR_DEFECTO} \\d+(\\.\\d+)?"`));
+  // Leyenda + 220 del área + eje + dos líneas de rótulo: entre 300 y 400.
+  const alto = altoDe(svg);
+  assert.ok(alto > 300 && alto < 400, `alto inesperado: ${alto}`);
+});
+
+test('barras: hay una barra por serie y categoría, más la muestra de cada serie en la leyenda', () => {
+  const svg = renderGrafica(barras(), { fmt });
+  // 4 categorías × 2 series + 2 muestras: la muestra lleva la misma clase que la
+  // barra para que el relleno salga de la misma regla de CSS.
+  assert.equal(svg.match(/class="bio-svg__barra/g)?.length, 10);
+  assert.equal(barrasDibujadas(svg, 2).length, 8);
+  assert.equal(svg.match(/class="bio-svg__barra is-destacada"/g)?.length, 5);
+  assert.equal(svg.match(/class="bio-svg__barra is-secundaria"/g)?.length, 5);
+  // Un rótulo por categoría, partido en dos líneas cuando no cabe.
+  assert.equal(svg.match(/class="bio-svg__etiqueta"/g)?.length, 4);
+  assert.ok(svg.includes('>Expuestos con</tspan>'));
+});
+
+test('barras: la serie secundaria se rellena con una trama declarada en defs', () => {
+  const svg = renderGrafica(barras(), { fmt });
+  assert.match(svg, /<pattern id="bio-grafica-trama" patternUnits="userSpaceOnUse" width="6" height="6">/);
+  assert.equal(svg.match(/class="bio-svg__trama"/g)?.length, 3);
+  // Cuatro barras secundarias y su muestra en la leyenda.
+  assert.equal(svg.match(/fill="url\(#bio-grafica-trama\)"/g)?.length, 5);
+  // La destacada va en navy sólido: sin atributo de relleno, lo pone el CSS.
+  assert.ok(!/class="bio-svg__barra is-destacada" fill=/.test(svg));
+  // Sin series secundarias no hace falta definir ninguna trama.
+  const sola = renderGrafica(
+    barras({
+      series: [{ id: 'obs', etiqueta: 'Observadas', destacada: true }],
+      categorias: [{ id: 'a', etiqueta: 'Discordantes b', valores: [18] }],
+    }),
+    { fmt },
+  );
+  assert.equal(sola.match(/<pattern /g), null);
+});
+
+test('barras: una segunda serie secundaria estrena su propia trama', () => {
+  const svg = renderGrafica(
+    barras({
+      series: [
+        { id: 'obs', etiqueta: 'Observadas', destacada: true },
+        { id: 'esp', etiqueta: 'Esperadas' },
+        { id: 'ajus', etiqueta: 'Ajustadas' },
+      ],
+      categorias: [{ id: 'a', etiqueta: 'Celda a', valores: [68, 54, 60] }],
+    }),
+    { fmt },
+  );
+  assert.match(svg, /<pattern id="bio-grafica-trama-2"/);
+  assert.equal(svg.match(/fill="url\(#bio-grafica-trama\)"/g)?.length, 2);
+  assert.equal(svg.match(/fill="url\(#bio-grafica-trama-2\)"/g)?.length, 2);
+  assert.equal(svg.match(/class="bio-svg__barra is-secundaria is-trazo-2"/g)?.length, 2);
+});
+
+test('barras: la leyenda solo aparece con más de una serie', () => {
+  const svg = renderGrafica(barras(), { fmt });
+  assert.equal(svg.match(/class="bio-svg__leyenda-texto"/g)?.length, 2);
+  assert.ok(svg.includes('>Observadas</text>'));
+  assert.ok(svg.includes('>Esperadas</text>'));
+  const sola = renderGrafica(
+    barras({
+      series: [{ id: 'b', etiqueta: 'Pares discordantes', destacada: true }],
+      categorias: [
+        { id: 'b', etiqueta: 'b (positivo, luego negativo)', valores: [18] },
+        { id: 'c', etiqueta: 'c (negativo, luego positivo)', valores: [7] },
+      ],
+    }),
+    { fmt },
+  );
+  assert.equal(sola.match(/class="bio-svg__leyenda-texto"/g), null);
+  assert.equal(barrasDibujadas(sola).length, 2);
+});
+
+test('barras: el eje de frecuencias se rotula con la pista de la calculadora', () => {
+  const svg = renderGrafica(barras(), { fmt });
+  for (const v of [0, 50, 100]) {
+    assert.ok(svg.includes(`>${fmt.num(v, 'int')}</text>`), `falta la marca ${v}`);
+  }
+  assert.ok(svg.includes('>Frecuencia</text>'));
+  // Sin pista declarada se cuentan enteros, no decimales.
+  const sinPista = renderGrafica(barras({ ejeY: { etiqueta: 'Frecuencia', dominio: [0, 120] } }), { fmt });
+  assert.ok(sinPista.includes(`>${fmt.num(100, 'int')}</text>`));
+  assert.ok(!sinPista.includes('>100.000</text>'));
+});
+
+test('barras: con pocos conteos las marcas del eje siguen siendo enteras', () => {
+  // Con un máximo de 9, el paso «bonito» sería 2.5 y la pista `int` rotularía
+  // «3» sobre la posición de 2.5: el eje de conteos usa paso entero.
+  const svg = renderGrafica(
+    barras({
+      ejeY: { etiqueta: 'Pares discordantes', dominio: [0, 0], pista: 'int' },
+      series: [{ id: 'obs', etiqueta: 'Observados', destacada: true }],
+      categorias: [
+        { id: 'b', etiqueta: 'b', valores: [9] },
+        { id: 'c', etiqueta: 'c', valores: [4] },
+      ],
+    }),
+    { fmt },
+  );
+  const marcas = [...svg.matchAll(/class="bio-svg__tick-texto"[^>]*text-anchor="end"[^>]*>([^<]+)</g)].map((m) => m[1]);
+  assert.deepEqual(marcas, [0, 3, 6, 9].map((v) => fmt.num(v, 'int')));
+});
+
+test('barras: el valor va encima de cada barra y se calla cuando la barra es estrecha', () => {
+  const svg = renderGrafica(barras(), { fmt });
+  assert.equal(svg.match(/class="bio-svg__valor"/g)?.length, 8);
+  assert.ok(svg.includes(`>${fmt.num(114, 'int')}</text>`));
+  // Ocho categorías × dos series dejan barras de menos de 22 unidades: el número
+  // se pisaría con el de la barra vecina y se omite.
+  const apretada = renderGrafica(
+    barras({
+      categorias: Array.from({ length: 8 }, (_, i) => ({ id: `c${i}`, etiqueta: `Celda ${i}`, valores: [10 + i, 12] })),
+    }),
+    { fmt },
+  );
+  assert.equal(apretada.match(/class="bio-svg__valor"/g), null);
+  assert.equal(barrasDibujadas(apretada, 2).length, 16);
+});
+
+test('barras: la referencia se dibuja solo cuando se declara, con su etiqueta', () => {
+  assert.equal(renderGrafica(barras(), { fmt }).match(/class="bio-svg__ref"/g), null);
+  const conRef = renderGrafica(
+    barras({ referencia: { valor: 12.5, etiqueta: 'Esperado bajo H₀' } }),
+    { fmt },
+  );
+  assert.equal(conRef.match(/class="bio-svg__ref"/g)?.length, 1);
+  assert.match(conRef, /class="bio-svg__marcador-texto"[^>]*text-anchor="end">Esperado bajo H₀<\/text>/);
+  // Sin etiqueta la línea existe igual, pero nadie escribe encima del área.
+  const sinEtiqueta = renderGrafica(barras({ referencia: { valor: 12.5 } }), { fmt });
+  assert.equal(sinEtiqueta.match(/class="bio-svg__ref"/g)?.length, 1);
+  assert.equal(sinEtiqueta.match(/class="bio-svg__marcador-texto"/g), null);
+});
+
+test('barras: el dominio se amplía al mayor valor y a la referencia', () => {
+  // Declarado hasta 10, pero la celda d vale 114 y la referencia 150.
+  const svg = renderGrafica(
+    barras({ ejeY: { etiqueta: 'Frecuencia', dominio: [0, 10], pista: 'int' }, referencia: { valor: 150 } }),
+    { fmt },
+  );
+  assert.ok(svg.includes(`>${fmt.num(150, 'int')}</text>`) || svg.includes(`>${fmt.num(100, 'int')}</text>`));
+  // Ninguna barra puede salirse por arriba del área de trazado.
+  for (const m of barrasDibujadas(svg, 2)) {
+    const y = Number(/y="([\d.]+)"/.exec(m[0])?.[1]);
+    assert.ok(y > 0, `una barra empieza fuera del lienzo: ${y}`);
+  }
+});
+
+test('barras: un valor no finito o negativo omite la barra y conserva la categoría', () => {
+  const svg = renderGrafica(
+    barras({
+      categorias: [
+        { id: 'a', etiqueta: 'Celda válida', valores: [68, 54] },
+        { id: 'b', etiqueta: 'Sin esperada', valores: [6, NaN] },
+        { id: 'c', etiqueta: 'Infinita', valores: [Infinity, 26] },
+        { id: 'd', etiqueta: 'Negativa', valores: [-3, 100] },
+      ],
+    }),
+    { fmt },
+  );
+  // 8 posibles − 3 imposibles = 5 barras dibujadas (+ 2 muestras de leyenda).
+  assert.equal(barrasDibujadas(svg, 2).length, 5);
+  assert.ok(!svg.includes('NaN'));
+  assert.ok(!svg.includes('Infinity'));
+  for (const etiqueta of ['Sin esperada', 'Infinita', 'Negativa']) {
+    assert.ok(svg.includes(`>${etiqueta}</tspan>`), `falta el rótulo ${etiqueta}`);
+  }
+});
+
+test('barras: el texto del contenido se escapa y el prefijo de identificadores es configurable', () => {
+  const svg = renderGrafica(
+    barras({
+      titulo: 'χ² <script>alert(1)</script>',
+      categorias: [{ id: 'a', etiqueta: 'a & b', valores: [68, 54] }],
+      referencia: { valor: 50, etiqueta: 'p < 0.05' },
+    }),
+    { fmt, id: 'g2' },
+  );
+  assert.ok(!svg.includes('<script>'));
+  assert.ok(svg.includes('χ² &lt;script&gt;alert(1)&lt;/script&gt;'));
+  assert.ok(svg.includes('a &amp; b'));
+  assert.ok(svg.includes('p &lt; 0.05'));
+  assert.match(svg, /aria-labelledby="g2-t g2-d"/);
+  assert.match(svg, /<pattern id="g2-trama"/);
+  assert.equal(svg.match(/fill="url\(#g2-trama\)"/g)?.length, 2);
+});
+
+// ---------------------------------------------------------------------------
+// histograma-boxplot
+// ---------------------------------------------------------------------------
+
+/** Caso real de `descriptivos`: 40 observaciones resumidas en cuatro clases. */
+function hist(extra: Partial<GraficaHistogramaBoxplot> = {}): GraficaHistogramaBoxplot {
+  return {
+    tipo: 'histograma-boxplot',
+    titulo: 'Distribución de la variable',
+    resumen: 'n = 40; mediana 12.4 (RIC 9.8 a 15.1)',
+    ejeX: { etiqueta: 'Concentración (mg/L)', dominio: [4, 20], pista: 'dec1' },
+    bins: [
+      { desde: 4, hasta: 8, n: 4 },
+      { desde: 8, hasta: 12, n: 14 },
+      { desde: 12, hasta: 16, n: 13 },
+      { desde: 16, hasta: 20, n: 9 },
+    ],
+    etiquetaFrecuencia: 'Frecuencia',
+    caja: { min: 4.2, q1: 9.8, mediana: 12.4, q3: 15.1, max: 19.6, bigoteInf: 4.2, bigoteSup: 19.6, atipicos: [] },
+    normal: { media: 12.3, de: 3.8, etiqueta: 'Normal ajustada' },
+    marcadores: [{ id: 'media', etiqueta: 'Media', x: 12.3, destacada: true }],
+    ...extra,
+  };
+}
+
+test('histograma: el SVG lleva título, descripción y viewBox con la suma real de las bandas', () => {
+  const svg = renderGrafica(hist(), { fmt });
+  assert.match(svg, /<title id="bio-grafica-t">Distribución de la variable<\/title>/);
+  assert.match(svg, /<desc id="bio-grafica-d">n = 40; mediana 12\.4 \(RIC 9\.8 a 15\.1\)<\/desc>/);
+  assert.match(svg, new RegExp(`viewBox="0 0 ${ANCHO_POR_DEFECTO} \\d+(\\.\\d+)?"`));
+  // 170 del histograma + 64 de la caja + eje + título del eje, más las bandas de
+  // arriba: por encima de 300 y por debajo de 400.
+  const alto = altoDe(svg);
+  assert.ok(alto > 300 && alto < 400, `alto inesperado: ${alto}`);
+});
+
+test('histograma: hay una barra por clase y la curva normal se dibuja recortada al panel', () => {
+  const svg = renderGrafica(hist(), { fmt });
+  assert.equal(svg.match(/class="bio-svg__hist-barra"/g)?.length, 4);
+  assert.equal(svg.match(/<polyline class="bio-svg__normal"/g)?.length, 1);
+  assert.match(svg, /<clipPath id="bio-grafica-hist-rec">/);
+  assert.match(svg, /<g clip-path="url\(#bio-grafica-hist-rec\)">/);
+  // La polilínea se evalúa en 120 puntos del dominio.
+  const puntos = /<polyline class="bio-svg__normal" points="([^"]+)"/.exec(svg)?.[1] ?? '';
+  assert.equal(puntos.split(' ').length, 120);
+  assert.ok(!puntos.includes('NaN'));
+  // Sin curva normal declarada no hay polilínea ni recorte.
+  const sinNormal = renderGrafica(hist({ normal: undefined }), { fmt });
+  assert.equal(sinNormal.match(/class="bio-svg__normal"/g), null);
+  assert.equal(sinNormal.match(/<clipPath/g), null);
+  assert.equal(sinNormal.match(/class="bio-svg__hist-barra"/g)?.length, 4);
+});
+
+test('histograma: una DE no utilizable deja el panel sin curva, pero con sus barras', () => {
+  for (const de of [0, -1, NaN, Infinity]) {
+    const svg = renderGrafica(hist({ normal: { media: 12.3, de, etiqueta: 'Normal' } }), { fmt });
+    assert.equal(svg.match(/class="bio-svg__normal"/g), null, `de = ${de}`);
+    assert.equal(svg.match(/class="bio-svg__hist-barra"/g)?.length, 4);
+  }
+});
+
+test('histograma: el eje de frecuencias lleva su título y marcas enteras', () => {
+  const svg = renderGrafica(hist(), { fmt });
+  assert.ok(svg.includes('>Frecuencia</text>'));
+  for (const v of [0, 5, 10, 15]) {
+    assert.ok(svg.includes(`>${fmt.num(v, 'int')}</text>`), `falta la marca de frecuencia ${v}`);
+  }
+  // Una frecuencia es un conteo: el eje nunca se rotula con un paso de 2.5.
+  const pocas = renderGrafica(
+    hist({
+      bins: [
+        { desde: 4, hasta: 8, n: 2 },
+        { desde: 8, hasta: 12, n: 9 },
+        { desde: 12, hasta: 16, n: 5 },
+      ],
+      normal: undefined,
+    }),
+    { fmt },
+  );
+  const marcas = [...pocas.matchAll(/class="bio-svg__tick-texto"[^>]*text-anchor="end"[^>]*>([^<]+)</g)].map((m) => m[1]);
+  assert.deepEqual(marcas, [0, 3, 6, 9].map((v) => fmt.num(v, 'int')));
+});
+
+test('histograma: el eje x es único y se rotula con la pista de la variable', () => {
+  const svg = renderGrafica(hist(), { fmt });
+  assert.ok(svg.includes('>Concentración (mg/L)</text>'));
+  for (const v of [5, 10, 15, 20]) {
+    assert.ok(svg.includes(`>${fmt.num(v, 'dec1')}</text>`), `falta la marca ${v}`);
+  }
+});
+
+test('histograma: la caja dibuja el resumen de cinco números con bigotes y atípicos', () => {
+  const svg = renderGrafica(hist({ caja: { ...hist().caja, bigoteInf: 5.4, bigoteSup: 18.2, atipicos: [4.2, 19.6, 21.4] } }), { fmt });
+  assert.equal(svg.match(/class="bio-svg__caja"/g)?.length, 1);
+  assert.equal(svg.match(/class="bio-svg__mediana"/g)?.length, 1);
+  // Dos bigotes, cada uno con su línea y su tope vertical.
+  assert.equal(svg.match(/class="bio-svg__bigote"/g)?.length, 4);
+  assert.equal(svg.match(/class="bio-svg__atipico"/g)?.length, 3);
+  // La caja va de q1 a q3, siempre con ancho positivo.
+  const caja = /<rect class="bio-svg__caja" x="([\d.]+)"[^>]*width="([\d.]+)"/.exec(svg);
+  assert.ok(caja, 'no se encontró el rectángulo de la caja');
+  assert.ok(Number(caja[2]) > 0, `la caja no tiene ancho: ${caja[2]}`);
+});
+
+test('histograma: un número no finito omite su pieza de la caja sin romper el resto', () => {
+  const svg = renderGrafica(
+    hist({
+      caja: { min: NaN, q1: NaN, mediana: NaN, q3: 15.1, max: 19.6, bigoteInf: NaN, bigoteSup: 19.6, atipicos: [NaN, 18.5] },
+    }),
+    { fmt },
+  );
+  assert.equal(svg.match(/class="bio-svg__caja"/g), null);
+  assert.equal(svg.match(/class="bio-svg__mediana"/g), null);
+  // Solo el bigote superior: línea y tope.
+  assert.equal(svg.match(/class="bio-svg__bigote"/g)?.length, 2);
+  assert.equal(svg.match(/class="bio-svg__atipico"/g)?.length, 1);
+  assert.ok(!svg.includes('NaN'));
+});
+
+test('histograma: el marcador cruza los dos paneles y lleva su rótulo', () => {
+  const svg = renderGrafica(hist(), { fmt });
+  assert.equal(svg.match(/class="bio-svg__marcador is-destacada"/g)?.length, 1);
+  assert.match(svg, /class="bio-svg__marcador-texto is-destacada"[^>]*>Media<\/text>/);
+  // La línea empieza en el panel del histograma y termina en el eje x.
+  const linea = /class="bio-svg__marcador is-destacada" x1="([\d.]+)" y1="([\d.]+)" x2="[\d.]+" y2="([\d.]+)"/.exec(svg);
+  assert.ok(linea, 'no se encontró la línea del marcador');
+  assert.ok(Number(linea[3]) - Number(linea[2]) > 200, 'el marcador no cruza los dos paneles');
+});
+
+test('histograma: dos marcadores reparten sus rótulos en dos bandas y lados opuestos', () => {
+  const svg = renderGrafica(
+    hist({
+      marcadores: [
+        { id: 'media', etiqueta: 'Media', x: 6, destacada: true },
+        { id: 'mediana', etiqueta: 'Mediana', x: 18 },
+      ],
+    }),
+    { fmt },
+  );
+  const textos = [...svg.matchAll(/class="bio-svg__marcador-texto[^"]*"[^>]*y="([\d.]+)"([^>]*)>([^<]+)</g)];
+  assert.equal(textos.length, 2);
+  assert.notEqual(textos[0][1], textos[1][1], 'los dos rótulos quedaron en la misma banda');
+  // El de la izquierda escribe hacia la derecha y el de la derecha, al revés.
+  assert.ok(!textos[0][2].includes('text-anchor="end"'), 'el marcador izquierdo debería escribir hacia la derecha');
+  assert.ok(textos[1][2].includes('text-anchor="end"'), 'el marcador derecho debería escribir hacia la izquierda');
+});
+
+test('histograma: con tres o más marcadores los nombres pasan a la leyenda', () => {
+  const svg = renderGrafica(
+    hist({
+      bins: undefined,
+      normal: undefined,
+      marcadores: [
+        { id: 'luo', etiqueta: 'Luo 2018', x: 11.8, destacada: true },
+        { id: 'wan', etiqueta: 'Wan 2014', x: 12.1 },
+        { id: 'hozo', etiqueta: 'Hozo 2005', x: 12.6 },
+      ],
+    }),
+    { fmt },
+  );
+  assert.equal(svg.match(/class="bio-svg__marcador[ "]/g)?.length, 3);
+  assert.equal(svg.match(/class="bio-svg__marcador is-destacada"/g)?.length, 1);
+  assert.equal(svg.match(/class="bio-svg__marcador-texto/g), null);
+  assert.equal(svg.match(/class="bio-svg__leyenda is-marcador/g)?.length, 3);
+  assert.equal(svg.match(/class="bio-svg__leyenda-texto"/g)?.length, 3);
+  for (const etiqueta of ['Luo 2018', 'Wan 2014', 'Hozo 2005']) {
+    assert.ok(svg.includes(`>${etiqueta}</text>`), `falta ${etiqueta} en la leyenda`);
+  }
+});
+
+test('histograma: sin bins el panel superior se queda con la curva normal, y sin ella desaparece', () => {
+  const soloNormal = renderGrafica(hist({ bins: undefined }), { fmt });
+  assert.equal(soloNormal.match(/class="bio-svg__hist-barra"/g), null);
+  assert.equal(soloNormal.match(/<polyline class="bio-svg__normal"/g)?.length, 1);
+  assert.equal(soloNormal.match(/class="bio-svg__caja"/g)?.length, 1);
+  // Sin histograma no hay eje de frecuencias ni su título.
+  assert.ok(!soloNormal.includes('>Frecuencia</text>'));
+  assert.equal(soloNormal.match(/class="bio-svg__leyenda-texto"/g)?.length, 1);
+  assert.ok(soloNormal.includes('>Normal ajustada</text>'));
+
+  const soloCaja = renderGrafica(hist({ bins: undefined, normal: undefined }), { fmt });
+  assert.equal(soloCaja.match(/class="bio-svg__normal"/g), null);
+  assert.equal(soloCaja.match(/class="bio-svg__caja"/g)?.length, 1);
+  assert.equal(soloCaja.match(/class="bio-svg__mediana"/g)?.length, 1);
+
+  // Cada variante ocupa menos alto que la anterior: el viewBox suma bandas reales.
+  assert.ok(altoDe(soloCaja) < altoDe(soloNormal), 'la variante sin panel superior debería ser más baja');
+  assert.ok(altoDe(soloNormal) < altoDe(renderGrafica(hist(), { fmt })), 'el histograma completo debería ser el más alto');
+});
+
+test('histograma: el dominio declarado se amplía a un atípico que se sale', () => {
+  const svg = renderGrafica(
+    hist({ caja: { ...hist().caja, atipicos: [28] } }),
+    { fmt },
+  );
+  const cx = Number(/class="bio-svg__atipico" cx="([\d.]+)"/.exec(svg)?.[1]);
+  // 28 es el extremo del dominio efectivo: cae justo en el borde derecho del área.
+  assert.ok(Math.abs(cx - (ANCHO_POR_DEFECTO - 20)) < 1e-6, `el atípico quedó en ${cx}`);
+  // Y el eje llega hasta él: hay una marca por encima del dominio declarado.
+  const marcas = [...svg.matchAll(/class="bio-svg__tick-texto" font-size="\d+" x="[\d.]+"[^>]*>([^<]+)</g)].map((m) => m[1]);
+  assert.ok(marcas.includes(fmt.num(25, 'dec1')), `las marcas del eje x no llegan a 25: ${marcas.join(', ')}`);
+});
+
+test('histograma: los bins imposibles se descartan sin romper el panel', () => {
+  const svg = renderGrafica(
+    hist({
+      bins: [
+        { desde: 4, hasta: 8, n: 4 },
+        { desde: 8, hasta: 8, n: 14 },
+        { desde: 12, hasta: 10, n: 13 },
+        { desde: 16, hasta: 20, n: NaN },
+        { desde: 16, hasta: 20, n: 9 },
+      ],
+    }),
+    { fmt },
+  );
+  assert.equal(svg.match(/class="bio-svg__hist-barra"/g)?.length, 2);
+  assert.ok(!svg.includes('NaN'));
+});
+
+test('histograma: el texto se escapa y el prefijo de identificadores es configurable', () => {
+  const svg = renderGrafica(
+    hist({
+      titulo: 'Descriptivos <b>',
+      ejeX: { etiqueta: 'x < 5 & «y»', dominio: [4, 20], pista: 'dec1' },
+      etiquetaFrecuencia: 'n & %',
+      marcadores: [{ id: 'm', etiqueta: 'Media "x"', x: 12.3 }],
+    }),
+    { fmt, id: 'g3' },
+  );
+  assert.ok(!svg.includes('<b>'));
+  assert.ok(svg.includes('Descriptivos &lt;b&gt;'));
+  assert.ok(svg.includes('x &lt; 5 &amp; «y»'));
+  assert.ok(svg.includes('n &amp; %'));
+  assert.ok(svg.includes('Media &quot;x&quot;'));
+  assert.match(svg, /aria-labelledby="g3-t g3-d"/);
+  assert.match(svg, /<clipPath id="g3-hist-rec">/);
 });
 
 test('un tipo de gráfica no implementado se detiene con un mensaje claro', () => {

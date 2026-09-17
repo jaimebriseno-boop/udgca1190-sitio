@@ -1,0 +1,292 @@
+# Calculadora B2 · Pruebas de independencia en una tabla 2×2 (χ², Yates, N−1, Fisher, φ).
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: asociacion
+orden: 2
+estado: activa
+motor: ts
+entradas:
+  - { id: a, tipo: entero, min: 0 }
+  - { id: b, tipo: entero, min: 0 }
+  - { id: c, tipo: entero, min: 0 }
+  - { id: d, tipo: entero, min: 0 }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+tabla2x2: { celdas: [a, b, c, d] }
+ejemplo: { a: 12, b: 88, c: 30, d: 70, nivel: 0.95 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # 2x2 tests of independence: chi-squared (Pearson, Yates, N-1), Fisher's exact test and phi
+    # Bioestadistica abierta, UDG-CA-1190. Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    a <- {a}; b <- {b}; c <- {c}; d <- {d}   # rows = group or exposure (1, 2), columns = outcome (yes, no)
+    nivel <- {nivel}                        # confidence level of the conditional odds ratio interval
+
+    m <- matrix(c(a, b, c, d), nrow = 2, byrow = TRUE)
+    n <- sum(m)
+    esperados <- outer(rowSums(m), colSums(m)) / n   # E_ij = (row i total) * (column j total) / n
+
+    chi   <- suppressWarnings(chisq.test(m, correct = FALSE))   # Pearson's chi-squared, 1 df
+    yates <- suppressWarnings(chisq.test(m, correct = TRUE))    # Yates' correction, bounded to min(0.5, |O - E|) as R does
+
+    # "N - 1" chi-squared (Campbell 2007): Pearson's statistic times (n - 1)/n
+    chi2_n1 <- unname(chi$statistic) * (n - 1) / n
+    p_n1 <- pchisq(chi2_n1, 1, lower.tail = FALSE)
+
+    # Two-sided "minlike" p (sum of the tables no more likely than the observed one) and the
+    # conditional maximum likelihood odds ratio with its interval (solved by uniroot, tol ~ 1.2e-4)
+    fisher <- fisher.test(m, conf.level = nivel)
+
+    phi <- (a * d - b * c) / sqrt(prod(rowSums(m)) * prod(colSums(m)))   # signed phi coefficient
+
+    res <- list(n = n,
+                e_a = esperados[1, 1], e_b = esperados[1, 2], e_c = esperados[2, 1], e_d = esperados[2, 2],
+                e_min = min(esperados),
+                chi2 = unname(chi$statistic), p_chi2 = chi$p.value,
+                chi2_yates = unname(yates$statistic), p_yates = yates$p.value,
+                chi2_n1 = chi2_n1, p_n1 = p_n1,
+                p_fisher = fisher$p.value,
+                or_cond = c(unname(fisher$estimate), fisher$conf.int[1], fisher$conf.int[2]),
+                phi = phi)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio (not run in the browser):
+    # exact2x2::exact2x2(m, tsmethod = "minlike")   # same p as fisher.test
+    # DescTools::Phi(m)
+referencias:
+  - { key: pearson1900, rol: original }
+  - { key: yates1934, rol: original }
+  - { key: fisher1934, rol: original }
+  - { key: fisher1935, rol: original }
+  - { key: cochran1954, rol: original }
+  - { key: campbell2007, rol: complementaria }
+  - { key: yule1912, rol: original }
+  - { key: cohen1988, rol: didactica }
+  - { key: altman1991, rol: didactica }
+grafica: barras
+es:
+  titulo: "Pruebas de independencia en una tabla 2×2: ji cuadrada de Pearson, corrección de Yates, variante N−1, prueba exacta de Fisher y coeficiente φ"
+  titulo_corto: "Independencia en 2×2 (χ² y Fisher)"
+  meta: "Contrasta la independencia de una tabla 2×2 con la ji cuadrada de Pearson, la corrección de Yates tal como la aplica R, la variante N−1 de Campbell y la prueba exacta de Fisher bilateral, con el coeficiente φ, la razón de momios condicional con intervalo de confianza, la recomendación de prueba según la regla de Cochran, interpretación, código R y referencias. Los datos no salen del navegador."
+  intro: "Captura los cuatro conteos de la tabla 2×2 y obtén las frecuencias esperadas, la ji cuadrada de Pearson con y sin corrección de Yates, la variante N−1, la prueba exacta de Fisher bilateral, el coeficiente φ con signo y la razón de momios condicional con su intervalo, además de la prueba que recomienda la regla de Cochran para estos conteos."
+  explicacion:
+    - "Una tabla 2×2 cruza dos variables dicotómicas: aquí, el grupo o la exposición (filas) y el desenlace (columnas). Estas pruebas responden si las dos proporciones observadas son compatibles con la independencia entre ambas variables, es decir, con que el desenlace ocurra con la misma frecuencia en los dos grupos. Bajo esa hipótesis nula cada celda tendría la frecuencia esperada E = (total de su fila) × (total de su columna) / n, y la ji cuadrada de Pearson (1900) mide cuánto se alejan las frecuencias observadas de esas esperadas."
+    - "La distribución ji cuadrada es una aproximación y deja de ser fiable con conteos pequeños. La regla de Cochran (1954) pide que todas las frecuencias esperadas lleguen a 5 y que el total sea de al menos 20; por debajo se prefiere la prueba exacta de Fisher, que no aproxima nada: enumera todas las tablas con los mismos totales marginales, calcula la probabilidad hipergeométrica de cada una y suma las que no son más probables que la observada. (Con n menor de 20 la esperada más pequeña nunca llega a 5, porque no puede pasar de n/4: las dos condiciones se enuncian por separado, pero exigir que todas las esperadas lleguen a 5 ya obliga a que n sea al menos 20.)"
+    - "La corrección de continuidad de Yates (1934) se pensó para acercar la aproximación al resultado exacto, pero es conservadora: produce valores p demasiado grandes. Se muestra aquí porque muchos programas la aplican por omisión, no porque se recomiende. La variante N−1 de Campbell (2007) multiplica la ji cuadrada por (n−1)/n y se acerca mejor al tamaño nominal que las otras dos cuando la esperada mínima está entre 1 y 5. En esta calculadora la corrección de Yates se calcula exactamente como en R, que la acota a min(0.5, |O − E|): si |ad − bc| es menor que n/2, el estadístico corregido queda en 0 en vez de volverse negativo."
+    - "Un valor p no mide la fuerza de la asociación; el coeficiente φ (Yule 1912) sí. Es la correlación entre dos variables dicotómicas, va de −1 a +1 y su signo indica la dirección. En una tabla 2×2, |φ| = √(χ²/n), y se lee con la convención de Cohen (1988): 0.1 pequeño, 0.3 mediano, 0.5 grande, siempre con la advertencia de que son cortes convencionales. La razón de momios que acompaña a la prueba de Fisher es la condicional: la que maximiza la verosimilitud de la hipergeométrica no central con los totales marginales fijos, con el intervalo formado por los valores del parámetro que dejan α/2 de probabilidad en cada cola. No es la razón de momios ad/bc de la calculadora «Asociación y efecto (tabla 2×2)», que es la estimación no condicional con el intervalo logarítmico de Woolf; las dos se parecen con conteos grandes y difieren con conteos pequeños."
+  ecuaciones:
+    - id: chi2
+      tex: '\chi^2=\sum_{i,j}\frac{(O_{ij}-E_{ij})^2}{E_{ij}}=\frac{n\,(ad-bc)^2}{n_1\,n_0\,m_1\,m_0},\qquad E_{ij}=\frac{n_i\,m_j}{n}'
+      simbolos:
+        - { s: 'O_{ij}', def: "frecuencia observada de la celda" }
+        - { s: 'E_{ij}', def: "frecuencia esperada de la celda bajo independencia" }
+        - { s: 'n_1,\,n_0', def: "totales de la fila 1 (a + b) y de la fila 2 (c + d)" }
+        - { s: 'm_1,\,m_0', def: "totales de la columna 1 (a + c) y de la columna 2 (b + d)" }
+        - { s: 'n', def: "total, a + b + c + d" }
+      nota: "Ji cuadrada de Pearson (1900) con 1 grado de libertad; en una tabla 2×2 las dos formas son idénticas."
+    - id: yates
+      tex: '\chi^2_{c,\text{clásica}}=\frac{n\left(\left|ad-bc\right|-\frac{n}{2}\right)^2}{n_1\,n_0\,m_1\,m_0}\qquad\text{frente a}\qquad \chi^2_{c,\mathrm{R}}=\sum_{i,j}\frac{\left(\left|O_{ij}-E_{ij}\right|-k\right)^2}{E_{ij}}'
+      simbolos:
+        - { s: 'k=\min\left(0.5,\ \left|O_{11}-E_{11}\right|\right)', def: "corrección de continuidad acotada, tal como la aplica R" }
+      nota: "La fórmula clásica (izquierda) resta n/2 a |ad − bc| y puede dar un cuadrado de un número negativo; R resta a cada |O − E| la cantidad k = min(0.5, |O − E|), de modo que si |ad − bc| es menor que n/2 el estadístico corregido vale 0. Esta calculadora reproduce lo que hace R."
+    - id: n1
+      tex: '\chi^2_{N-1}=\chi^2\cdot\frac{n-1}{n}'
+      simbolos: []
+      nota: "Variante N−1 (Campbell 2007), equivalente a la prueba de dos proporciones con la varianza estimada bajo la hipótesis nula."
+    - id: phi
+      tex: '\phi=\frac{ad-bc}{\sqrt{n_1\,n_0\,m_1\,m_0}},\qquad \left|\phi\right|=\sqrt{\frac{\chi^2}{n}}'
+      simbolos: []
+      nota: "Coeficiente φ (Yule 1912): correlación entre dos variables dicotómicas, entre −1 y +1; el signo da la dirección de la asociación."
+    - id: hipergeometrica
+      tex: "P(a')=\\frac{\\binom{m_1}{a'}\\binom{m_0}{n_1-a'}}{\\binom{n}{n_1}}"
+      simbolos:
+        - { s: "a'", def: "valor posible de la celda a con los mismos totales marginales" }
+      nota: "Probabilidad hipergeométrica de una tabla 2×2 con los cuatro márgenes fijos."
+    - id: fisher
+      tex: "p=\\sum_{a'\\,:\\,P(a')\\le P(a)}P(a')"
+      simbolos: []
+      nota: "Prueba exacta de Fisher bilateral, versión «minlike»: la suma de las tablas que no son más probables que la observada. Los empates se resuelven con la tolerancia relativa 1 + 10⁻⁷, igual que fisher.test."
+  etiquetas:
+    a: "Grupo 1 con el desenlace (a)"
+    b: "Grupo 1 sin el desenlace (b)"
+    c: "Grupo 2 con el desenlace (c)"
+    d: "Grupo 2 sin el desenlace (d)"
+    nivel: "Nivel de confianza"
+    "tabla.filas": "Grupo o exposición"
+    "tabla.fila1": "Grupo 1 (expuestos)"
+    "tabla.fila2": "Grupo 2 (no expuestos)"
+    "tabla.columnas": "Desenlace"
+    "tabla.col1": "Sí"
+    "tabla.col2": "No"
+    "tabla.total": "Total"
+    n: "Total de participantes (n)"
+    e_a: "Esperada en a"
+    e_b: "Esperada en b"
+    e_c: "Esperada en c"
+    e_d: "Esperada en d"
+    e_min: "Frecuencia esperada mínima"
+    chi2: "χ² de Pearson"
+    p_chi2: "p (χ² de Pearson)"
+    chi2_yates: "χ² con corrección de Yates"
+    p_yates: "p (corrección de Yates)"
+    chi2_n1: "χ² «N−1» (Campbell)"
+    p_n1: "p (variante N−1)"
+    p_fisher: "p (prueba exacta de Fisher, bilateral)"
+    or_cond: "Razón de momios condicional (Fisher)"
+    phi: "Coeficiente φ"
+    nombre_pearson: "la prueba χ² de Pearson sin corrección"
+    nombre_fisher: "la prueba exacta de Fisher bilateral"
+    nota_esperado: "bajo independencia"
+    nota_esperado_min: "regla de Cochran: al menos 5"
+    nota_pearson: "1 gl, sin corrección"
+    nota_yates: "1 gl, corrección acotada como en R"
+    nota_n1: "1 gl, χ² × (n − 1)/n"
+    nota_fisher: "bilateral «minlike», como fisher.test"
+    nota_or_cond: "máxima verosimilitud condicional"
+    nota_phi: "con signo; |φ| = √(χ²/n)"
+    observado: "Observado"
+    esperado: "Esperado bajo independencia"
+    eje_frecuencia: "Frecuencia (número de participantes)"
+    "celda.a": "G1 · Sí"
+    "celda.b": "G1 · No"
+    "celda.c": "G2 · Sí"
+    "celda.d": "G2 · No"
+    "sentido.positiva": "positiva (el desenlace es más frecuente en el grupo 1)"
+    "sentido.negativa": "negativa (el desenlace es menos frecuente en el grupo 1)"
+    "sentido.nula": "sin dirección (las dos proporciones son iguales)"
+  ayudas:
+    nivel: "Nivel del intervalo de confianza de la razón de momios condicional. No cambia ningún valor p."
+    a: "Los cuatro conteos son personas, no porcentajes. Cada fila y cada columna debe sumar al menos 1."
+  interpretacion:
+    resumen: "La proporción con el desenlace fue {p1} en el grupo 1 frente a {p0} en el grupo 2 (n = {n})."
+    "prueba.pearson": "Prueba recomendada: la prueba χ² de Pearson sin corrección, p = {p}. Todas las frecuencias esperadas llegan a 5 y el total es de al menos 20, así que la aproximación χ² es adecuada (regla de Cochran)."
+    "prueba.fisher": "Prueba recomendada: la prueba exacta de Fisher bilateral, p = {p}. Alguna frecuencia esperada no llega a 5 o el total es menor de 20, y con esos conteos la aproximación χ² es dudosa (regla de Cochran)."
+    "decision.rechaza": "p = {p}; con α = 0.05 se rechaza la hipótesis nula de independencia entre el grupo y el desenlace. La magnitud de la asociación y su intervalo de confianza importan más que el valor p."
+    "decision.no_rechaza": "p = {p}; con α = 0.05 no se rechaza la hipótesis nula de independencia entre el grupo y el desenlace: los datos son compatibles con que no haya asociación, lo que no equivale a demostrar que no la hay. La magnitud de la asociación y su intervalo de confianza importan más que el valor p."
+    "phi.trivial": "φ = {phi}: asociación de magnitud trivial y {sentido}, según la convención de Cohen (|φ| menor que 0.1). Son cortes convencionales, no derivados de la teoría."
+    "phi.pequeno": "φ = {phi}: asociación de magnitud pequeña y {sentido}, según la convención de Cohen (|φ| entre 0.1 y 0.3). Son cortes convencionales, no derivados de la teoría."
+    "phi.mediano": "φ = {phi}: asociación de magnitud mediana y {sentido}, según la convención de Cohen (|φ| entre 0.3 y 0.5). Son cortes convencionales, no derivados de la teoría."
+    "phi.grande": "φ = {phi}: asociación de magnitud grande y {sentido}, según la convención de Cohen (|φ| de 0.5 o más). Son cortes convencionales, no derivados de la teoría."
+    or_cond: "Razón de momios condicional: {or_cond} (IC {nivel}: {or_cond_ic}). Es la estimación de máxima verosimilitud que acompaña a la prueba exacta de Fisher, la coherente con su valor p. Para la razón de momios habitual (ad/bc) con el intervalo de Woolf, usa la calculadora «Asociación y efecto (tabla 2×2)»."
+    comparacion: "Las tres versiones de la prueba χ² dan: Pearson sin corrección χ² = {chi2} (p = {p_chi2}); con la corrección de Yates χ² = {chi2_yates} (p = {p_yates}); variante N−1 χ² = {chi2_n1} (p = {p_n1}). La corrección de Yates es conservadora: baja el estadístico y sube el valor p más de lo necesario, por lo que no se recomienda de forma sistemática. Con frecuencias esperadas pequeñas conviene la prueba exacta de Fisher y, si se prefiere una aproximación, la variante N−1 de Campbell (2007) se acerca mejor al tamaño nominal."
+  avisos:
+    esperados_bajos: "La frecuencia esperada más pequeña es {e_min}, menor de 5: la aproximación χ² es dudosa y se reporta la prueba exacta de Fisher (regla de Cochran)."
+    n_pequeno: "El total es de {n} participantes, menos de 20: usa la prueba exacta de Fisher; la aproximación χ² no es fiable con tan pocos datos."
+    yates_cero: "|ad − bc| es menor que n/2: la corrección de Yates, acotada como en R, deja el estadístico corregido en 0 y su valor p en 1. No es un error, es el comportamiento de chisq.test."
+    or_cond_borde: "La celda a está en un extremo del soporte de la hipergeométrica (hay al menos un cero relevante): la razón de momios condicional es 0 o infinito y uno de los límites del intervalo no es finito. El valor p de Fisher y el coeficiente φ siguen siendo válidos."
+  metodos: "La asociación entre las dos variables de la tabla 2×2 ({factor} y {desenlace}) se evaluó con la prueba χ² de Pearson [{ref:pearson1900}] (se reportan también la corrección de continuidad de Yates [{ref:yates1934}] y la variante N−1 [{ref:campbell2007}]) o con la prueba exacta de Fisher bilateral [{ref:fisher1934},{ref:fisher1935}] cuando alguna frecuencia esperada fue menor de 5 o el total fue menor de 20 (regla de Cochran [{ref:cochran1954}]); en estos datos se recomienda {prueba_nombre}. La fuerza de la asociación se resumió con el coeficiente φ [{ref:yule1912}], leído con la convención de Cohen [{ref:cohen1988}], y con la razón de momios condicional de la prueba de Fisher y su intervalo de confianza al {nivel} [{ref:fisher1935}]. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R (chisq.test, fisher.test)."
+  ejemplo_descripcion: "Ejemplo ilustrativo: hidratación temprana frente a tardía en 200 pacientes con dengue; 12 de 100 con hidratación temprana y 30 de 100 con hidratación tardía evolucionaron a dengue grave (datos ficticios)."
+  grafica_titulo: "Frecuencias observadas y esperadas bajo independencia, celda por celda"
+en:
+  titulo: "2×2 tests of independence: Pearson's chi-squared, Yates' correction, the N−1 variant, Fisher's exact test and the phi coefficient"
+  titulo_corto: "2×2 independence (chi-squared and Fisher)"
+  meta: "Test the independence of a 2×2 table with Pearson's chi-squared, Yates' correction exactly as R applies it, Campbell's N−1 variant and Fisher's two-sided exact test, together with the phi coefficient, the conditional odds ratio with a confidence interval, the test recommended by Cochran's rule, an interpretation, R code and references. Data never leave the browser."
+  intro: "Enter the four counts of the 2×2 table and get the expected frequencies, Pearson's chi-squared with and without Yates' correction, the N−1 variant, Fisher's two-sided exact test, the signed phi coefficient and the conditional odds ratio with its interval, plus the test that Cochran's rule recommends for these counts."
+  explicacion:
+    - "A 2×2 table crosses two dichotomous variables: here, the group or exposure (rows) and the outcome (columns). These tests ask whether the two observed proportions are compatible with independence between the variables, that is, with the outcome occurring equally often in both groups. Under that null hypothesis each cell would have the expected frequency E = (its row total) × (its column total) / n, and Pearson's chi-squared (1900) measures how far the observed frequencies fall from those expected ones."
+    - "The chi-squared distribution is an approximation and stops being reliable with small counts. Cochran's rule (1954) asks that every expected frequency reach 5 and that the total be at least 20; below that, Fisher's exact test is preferred, because it approximates nothing: it enumerates every table with the same marginal totals, computes the hypergeometric probability of each and adds up those no more likely than the observed one. (With n below 20 the smallest expected frequency can never reach 5, because it cannot exceed n/4: the two conditions are stated separately, but requiring every expected frequency to reach 5 already forces n to be at least 20.)"
+    - "Yates' continuity correction (1934) was meant to bring the approximation closer to the exact result, but it is conservative: it produces p values that are too large. It is shown here because many programs apply it by default, not because it is recommended. Campbell's N−1 variant (2007) multiplies chi-squared by (n−1)/n and matches the nominal size better than either of the others when the smallest expected frequency lies between 1 and 5. This calculator computes Yates' correction exactly as R does, bounding it to min(0.5, |O − E|): if |ad − bc| is smaller than n/2, the corrected statistic stays at 0 instead of turning negative."
+    - "A p value does not measure the strength of the association; the phi coefficient (Yule 1912) does. It is the correlation between two dichotomous variables, runs from −1 to +1 and its sign gives the direction. In a 2×2 table, |φ| = √(χ²/n), and it is read with Cohen's convention (1988): 0.1 small, 0.3 medium, 0.5 large, always with the caveat that these are conventional cut-offs. The odds ratio that accompanies Fisher's test is the conditional one: the value that maximises the likelihood of the non-central hypergeometric distribution with the marginal totals fixed, with the interval formed by the parameter values leaving α/2 of probability in each tail. It is not the ad/bc odds ratio of the \"Association and effect (2×2 table)\" calculator, which is the unconditional estimate with Woolf's logarithmic interval; the two are close with large counts and differ with small ones."
+  ecuaciones:
+    - id: chi2
+      tex: '\chi^2=\sum_{i,j}\frac{(O_{ij}-E_{ij})^2}{E_{ij}}=\frac{n\,(ad-bc)^2}{n_1\,n_0\,m_1\,m_0},\qquad E_{ij}=\frac{n_i\,m_j}{n}'
+      simbolos:
+        - { s: 'O_{ij}', def: "observed frequency of the cell" }
+        - { s: 'E_{ij}', def: "expected frequency of the cell under independence" }
+        - { s: 'n_1,\,n_0', def: "row 1 total (a + b) and row 2 total (c + d)" }
+        - { s: 'm_1,\,m_0', def: "column 1 total (a + c) and column 2 total (b + d)" }
+        - { s: 'n', def: "total, a + b + c + d" }
+      nota: "Pearson's chi-squared (1900) with 1 degree of freedom; in a 2×2 table both forms are identical."
+    - id: yates
+      tex: '\chi^2_{c,\text{classic}}=\frac{n\left(\left|ad-bc\right|-\frac{n}{2}\right)^2}{n_1\,n_0\,m_1\,m_0}\qquad\text{versus}\qquad \chi^2_{c,\mathrm{R}}=\sum_{i,j}\frac{\left(\left|O_{ij}-E_{ij}\right|-k\right)^2}{E_{ij}}'
+      simbolos:
+        - { s: 'k=\min\left(0.5,\ \left|O_{11}-E_{11}\right|\right)', def: "bounded continuity correction, exactly as R applies it" }
+      nota: "The classic formula (left) subtracts n/2 from |ad − bc| and may square a negative number; R subtracts from each |O − E| the amount k = min(0.5, |O − E|), so that when |ad − bc| is smaller than n/2 the corrected statistic is 0. This calculator reproduces what R does."
+    - id: n1
+      tex: '\chi^2_{N-1}=\chi^2\cdot\frac{n-1}{n}'
+      simbolos: []
+      nota: "The N−1 variant (Campbell 2007), equivalent to the two-proportion test with the variance estimated under the null hypothesis."
+    - id: phi
+      tex: '\phi=\frac{ad-bc}{\sqrt{n_1\,n_0\,m_1\,m_0}},\qquad \left|\phi\right|=\sqrt{\frac{\chi^2}{n}}'
+      simbolos: []
+      nota: "The phi coefficient (Yule 1912): the correlation between two dichotomous variables, between −1 and +1; the sign gives the direction of the association."
+    - id: hipergeometrica
+      tex: "P(a')=\\frac{\\binom{m_1}{a'}\\binom{m_0}{n_1-a'}}{\\binom{n}{n_1}}"
+      simbolos:
+        - { s: "a'", def: "possible value of cell a with the same marginal totals" }
+      nota: "Hypergeometric probability of a 2×2 table with all four margins fixed."
+    - id: fisher
+      tex: "p=\\sum_{a'\\,:\\,P(a')\\le P(a)}P(a')"
+      simbolos: []
+      nota: "Fisher's two-sided exact test, \"minlike\" version: the sum of the tables that are no more likely than the observed one. Ties are resolved with a relative tolerance of 1 + 10⁻⁷, just as fisher.test does."
+  etiquetas:
+    a: "Group 1 with the outcome (a)"
+    b: "Group 1 without the outcome (b)"
+    c: "Group 2 with the outcome (c)"
+    d: "Group 2 without the outcome (d)"
+    nivel: "Confidence level"
+    "tabla.filas": "Group or exposure"
+    "tabla.fila1": "Group 1 (exposed)"
+    "tabla.fila2": "Group 2 (unexposed)"
+    "tabla.columnas": "Outcome"
+    "tabla.col1": "Yes"
+    "tabla.col2": "No"
+    "tabla.total": "Total"
+    n: "Total participants (n)"
+    e_a: "Expected in a"
+    e_b: "Expected in b"
+    e_c: "Expected in c"
+    e_d: "Expected in d"
+    e_min: "Smallest expected frequency"
+    chi2: "Pearson's χ²"
+    p_chi2: "p (Pearson's χ²)"
+    chi2_yates: "χ² with Yates' correction"
+    p_yates: "p (Yates' correction)"
+    chi2_n1: "χ² \"N−1\" (Campbell)"
+    p_n1: "p (N−1 variant)"
+    p_fisher: "p (Fisher's exact test, two-sided)"
+    or_cond: "Conditional odds ratio (Fisher)"
+    phi: "Phi coefficient"
+    nombre_pearson: "Pearson's chi-squared test without correction"
+    nombre_fisher: "Fisher's two-sided exact test"
+    nota_esperado: "under independence"
+    nota_esperado_min: "Cochran's rule: at least 5"
+    nota_pearson: "1 df, no correction"
+    nota_yates: "1 df, correction bounded as in R"
+    nota_n1: "1 df, χ² × (n − 1)/n"
+    nota_fisher: "two-sided \"minlike\", as fisher.test"
+    nota_or_cond: "conditional maximum likelihood"
+    nota_phi: "signed; |φ| = √(χ²/n)"
+    observado: "Observed"
+    esperado: "Expected under independence"
+    eje_frecuencia: "Frequency (number of participants)"
+    "celda.a": "G1 · Yes"
+    "celda.b": "G1 · No"
+    "celda.c": "G2 · Yes"
+    "celda.d": "G2 · No"
+    "sentido.positiva": "positive (the outcome is more frequent in group 1)"
+    "sentido.negativa": "negative (the outcome is less frequent in group 1)"
+    "sentido.nula": "with no direction (the two proportions are equal)"
+  ayudas:
+    nivel: "Level of the confidence interval for the conditional odds ratio. It changes no p value."
+    a: "The four counts are people, not percentages. Every row and every column must add up to at least 1."
+  interpretacion:
+    resumen: "The proportion with the outcome was {p1} in group 1 versus {p0} in group 2 (n = {n})."
+    "prueba.pearson": "Recommended test: Pearson's chi-squared without correction, p = {p}. Every expected frequency reaches 5 and the total is at least 20, so the chi-squared approximation is adequate (Cochran's rule)."
+    "prueba.fisher": "Recommended test: Fisher's two-sided exact test, p = {p}. Some expected frequency falls below 5 or the total is under 20, and with such counts the chi-squared approximation is doubtful (Cochran's rule)."
+    "decision.rechaza": "p = {p}; at α = 0.05 the null hypothesis of independence between group and outcome is rejected. The size of the association and its confidence interval matter more than the p value."
+    "decision.no_rechaza": "p = {p}; at α = 0.05 the null hypothesis of independence between group and outcome is not rejected: the data are compatible with no association, which is not the same as showing there is none. The size of the association and its confidence interval matter more than the p value."
+    "phi.trivial": "φ = {phi}: a trivial association, {sentido}, by Cohen's convention (|φ| below 0.1). These are conventional cut-offs, not results derived from theory."
+    "phi.pequeno": "φ = {phi}: a small association, {sentido}, by Cohen's convention (|φ| between 0.1 and 0.3). These are conventional cut-offs, not results derived from theory."
+    "phi.mediano": "φ = {phi}: a medium association, {sentido}, by Cohen's convention (|φ| between 0.3 and 0.5). These are conventional cut-offs, not results derived from theory."
+    "phi.grande": "φ = {phi}: a large association, {sentido}, by Cohen's convention (|φ| of 0.5 or more). These are conventional cut-offs, not results derived from theory."
+    or_cond: "Conditional odds ratio: {or_cond} ({nivel} CI: {or_cond_ic}). It is the maximum likelihood estimate that accompanies Fisher's exact test, the one coherent with its p value. For the usual odds ratio (ad/bc) with Woolf's interval, use the \"Association and effect (2×2 table)\" calculator."
+    comparacion: "The three versions of the chi-squared test give: Pearson without correction χ² = {chi2} (p = {p_chi2}); with Yates' correction χ² = {chi2_yates} (p = {p_yates}); the N−1 variant χ² = {chi2_n1} (p = {p_n1}). Yates' correction is conservative: it lowers the statistic and raises the p value more than necessary, so it is not recommended as a matter of routine. With small expected frequencies Fisher's exact test is preferable and, if an approximation is wanted, Campbell's N−1 variant (2007) matches the nominal size better."
+  avisos:
+    esperados_bajos: "The smallest expected frequency is {e_min}, below 5: the chi-squared approximation is doubtful and Fisher's exact test is reported instead (Cochran's rule)."
+    n_pequeno: "The total is {n} participants, fewer than 20: use Fisher's exact test; the chi-squared approximation is not reliable with so few data."
+    yates_cero: "|ad − bc| is smaller than n/2: Yates' correction, bounded as in R, leaves the corrected statistic at 0 and its p value at 1. This is not an error, it is what chisq.test does."
+    or_cond_borde: "Cell a sits at an end of the hypergeometric support (there is at least one relevant zero): the conditional odds ratio is 0 or infinite and one limit of the interval is not finite. Fisher's p value and the phi coefficient remain valid."
+  metodos: "The association between the two variables of the 2×2 table ({factor} and {desenlace}) was assessed with Pearson's chi-squared test [{ref:pearson1900}] (Yates' continuity correction [{ref:yates1934}] and the N−1 variant [{ref:campbell2007}] are also reported) or with Fisher's two-sided exact test [{ref:fisher1934},{ref:fisher1935}] when any expected frequency was below 5 or the total was below 20 (Cochran's rule [{ref:cochran1954}]); for these data {prueba_nombre} is recommended. The strength of the association was summarised with the phi coefficient [{ref:yule1912}], read with Cohen's convention [{ref:cohen1988}], and with the conditional odds ratio of Fisher's test and its {nivel} confidence interval [{ref:fisher1935}]. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R (chisq.test, fisher.test)."
+  ejemplo_descripcion: "Illustrative example: early versus late hydration in 200 patients with dengue; 12 of 100 with early hydration and 30 of 100 with late hydration progressed to severe dengue (fictitious data)."
+  grafica_titulo: "Observed and expected frequencies under independence, cell by cell"
