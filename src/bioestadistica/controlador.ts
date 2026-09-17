@@ -12,7 +12,7 @@
 import { interpolar } from '../lib/bioestadistica/nucleo/avisos.ts';
 import { codigoR } from '../lib/bioestadistica/nucleo/codigoR.ts';
 import { parsearNumero, validarEntrada } from '../lib/bioestadistica/nucleo/entrada.ts';
-import { aCSV, aMarkdown } from '../lib/bioestadistica/nucleo/exportar.ts';
+import { aCSV, aMarkdown, columnasOmitidas } from '../lib/bioestadistica/nucleo/exportar.ts';
 import { crearFormateador } from '../lib/bioestadistica/nucleo/formato.ts';
 import { parsearPegado, resumenPegado } from '../lib/bioestadistica/nucleo/pegado.ts';
 import { renderGrafica } from '../lib/bioestadistica/nucleo/svg.ts';
@@ -371,8 +371,12 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
 
     if (Object.keys(errores).length > 0) {
       // Lo que queda en pantalla se atenúa y deja de exportarse: nunca se
-      // entregan números que no correspondan a lo que está capturado.
+      // entregan números que no correspondan a lo que está capturado. La
+      // píldora «Ejemplo cargado» también se retira: lo capturado ya no es el
+      // ejemplo aunque los números atenuados sigan siendo los suyos.
       marcarObsoleto(true);
+      pintarPildoraEjemplo(entradas);
+      pintarUrlImpresion(entradas);
       ultima = null;
       return;
     }
@@ -557,11 +561,18 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
     return '';
   }
 
+  /** Texto del botón tras copiar el enlace: distinto si la columna pegada no cupo en la URL. */
+  function avisoEnlace(): string | undefined {
+    const entradas = ultima?.entradas ?? datos.ejemplo;
+    if (columnasOmitidas(entradas, defs)) return ui.enlace_sin_columna ?? ui.enlace_copiado ?? ui.copiado;
+    return ui.enlace_copiado ?? ui.copiado;
+  }
+
   async function copiar(boton: HTMLElement, que: string): Promise<void> {
     const texto = textoParaCopiar(que);
     if (!texto) return;
     const ok = await copiarAlPortapapeles(texto);
-    const aviso = que === 'enlace' ? (ui.enlace_copiado ?? ui.copiado) : ui.copiado;
+    const aviso = que === 'enlace' ? avisoEnlace() : ui.copiado;
     if (ok && aviso) avisarEnBoton(boton, aviso);
   }
 

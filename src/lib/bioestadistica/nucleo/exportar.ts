@@ -33,26 +33,41 @@ function aTexto(v: ValorEntrada): string {
  *
  * Si el resultado excede `TOPE_URL`, se reintenta sin las columnas de datos.
  */
-export function codificarEstado(entradas: Entradas, defs: EntradaDef[]): string {
-  const construir = (conColumnas: boolean): string => {
-    const p = new URLSearchParams();
-    for (const def of defs) {
-      if (def.derivado) continue;
-      const v = entradas[def.id];
-      if (v === undefined || v === null) continue;
-      if (Array.isArray(v)) {
-        if (!conColumnas || v.length === 0) continue;
-        p.set(def.id, aTexto(v));
-        continue;
-      }
-      if (typeof v === 'string' && v.trim() === '') continue;
-      if (typeof v === 'number' && !Number.isFinite(v)) continue;
+function construirEstado(entradas: Entradas, defs: EntradaDef[], conColumnas: boolean): string {
+  const p = new URLSearchParams();
+  for (const def of defs) {
+    if (def.derivado) continue;
+    const v = entradas[def.id];
+    if (v === undefined || v === null) continue;
+    if (Array.isArray(v)) {
+      if (!conColumnas || v.length === 0) continue;
       p.set(def.id, aTexto(v));
+      continue;
     }
-    return p.toString();
-  };
-  const completo = construir(true);
-  return completo.length <= TOPE_URL ? completo : construir(false);
+    if (typeof v === 'string' && v.trim() === '') continue;
+    if (typeof v === 'number' && !Number.isFinite(v)) continue;
+    p.set(def.id, aTexto(v));
+  }
+  return p.toString();
+}
+
+export function codificarEstado(entradas: Entradas, defs: EntradaDef[]): string {
+  return columnasOmitidas(entradas, defs) ? construirEstado(entradas, defs, false) : construirEstado(entradas, defs, true);
+}
+
+/**
+ * ¿El enlace con estado tiene que soltar la columna pegada por superar
+ * `TOPE_URL`? Es exactamente la condición con la que `codificarEstado`
+ * reintenta sin columnas; la interfaz la consulta para avisar en el botón
+ * «Compartir enlace», porque quien lo pulsa debe saber que comparte la
+ * calculadora, no sus datos.
+ */
+export function columnasOmitidas(entradas: Entradas, defs: EntradaDef[]): boolean {
+  const hayColumna = defs.some((def) => {
+    const v = entradas[def.id];
+    return !def.derivado && Array.isArray(v) && v.length > 0;
+  });
+  return hayColumna && construirEstado(entradas, defs, true).length > TOPE_URL;
 }
 
 /**

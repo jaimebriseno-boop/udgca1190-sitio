@@ -46,17 +46,18 @@ publica con el visto bueno del dueño sobre las páginas reales y el merge a `ma
   `ic-media`, `media-desde-mediana`, `descriptivos` y `shapiro` en `tolerancias.ts`; `bandaAsimetria` y
   `bandaAsimetriaResumen`; 33 referencias nuevas verificadas contra PubMed y Crossref (58 en total); ocho
   claves `bio.ui.*` nuevas.
-- Pruebas nuevas: `efecto-2x2` (52), `chi-cuadrada-fisher` (45), `mcnemar` (44), `ic-media` (35),
-  `media-desde-mediana` (50), `descriptivos` (52), `shapiro` (8), `pegado` (33), `avisos` (8), `svg` (+26),
-  `bandas` (+2), `codigoR` (vectores y `NA`), `contenido.test.ts` (gráficas nuevas, avisos interpolados
-  con parámetros en el ejemplo y en todos los casos del fixture, veto a `rScript`); 88 casos de fixture
-  nuevos (142 en total, 10 calculadoras).
+- Pruebas nuevas: `efecto-2x2` (52), `chi-cuadrada-fisher` (45), `mcnemar` (45), `ic-media` (35),
+  `media-desde-mediana` (50), `descriptivos` (54), `shapiro` (8), `pegado` (36), `avisos` (8), `svg` (+26),
+  `bandas` (+2), `entrada` y `exportar` (convenios de miles, enlace sin columna), `codigoR` (vectores y
+  `NA`), `contenido.test.ts` (gráficas nuevas, avisos interpolados con parámetros en el ejemplo y en
+  todos los casos del fixture, orden exacto de las celdas, veto a `rScript`); 88 casos de fixture nuevos
+  (142 en total, 10 calculadoras).
 - Docs: DECISIONES (sección H2), PROGRESO, HANDOFF (plan de H3 y trampas nuevas), ARQUITECTURA §6.4.
 
 ## Verificación conservada (H2)
 
 `npm run build` 55 páginas (22 de la sección: índice + 10 calculadoras × 2 idiomas) · `npm run check` 0
-errores / 0 advertencias (124 hints preexistentes) · `npm run test` 4 + 994 pruebas en verde ·
+errores / 0 advertencias (124 hints preexistentes) · `npm run test` 4 + 1,002 pruebas en verde ·
 `npm run fixtures:bio:check` sin deriva (10 calculadoras, 142 casos) · `npm run audit:performance` en
 verde (sin recursos externos ni faltantes; el único `false` es el de `signos.json`, pendiente ajeno) ·
 capturas de las seis páginas nuevas en ES y EN a 1280 px, dos a 400 px e impresión (PDF) revisadas, más
@@ -68,9 +69,15 @@ frente a R, 8.9e-15— y textos y bibliografía —fórmulas `tex` contra el có
 de Métodos, 14 PMID y 28 DOI recomprobados—): ninguna tolerancia aflojada ni defecto numérico; dos
 hallazgos altos de texto (atribución al Cochrane Handbook; Métodos de B1 sin depender del diseño), dos
 altos de cobertura (prueba tautológica del arreglo de avisos; mediana igual a un cuartil sin caso de R),
-ocho medios y dieciséis bajos, todos corregidos antes del commit (detalle en DECISIONES «H2»). Además,
-cada agente constructor contrastó su calculadora con R en sus propios casos límite (p. ej. 30 columnas
-de n 3 a 5,000 para Shapiro-Wilk).
+ocho medios y dieciséis bajos, todos corregidos antes del commit `1772462` (detalle en DECISIONES «H2»).
+El revisor principal entregó después sus propios hallazgos sobre ese commit (252 casos límite nuevos
+TS-vs-R con 3,881 comparaciones y una sola discrepancia, la de la media compensada; barrido de 44,729
+combinaciones × 2 idiomas con 89,458 SVG): un alto (valores separados por espacios concatenados en
+silencio), cinco medios (coma de miles, CV con media ≤ 0, píldora y URL de impresión con errores de
+captura, enlace compartido sin la columna, orden de las celdas) y cuatro bajos, más el espejo «1.234,5»
+heredado de H0; todos corregidos en el commit de seguimiento y reverificados por el revisor con su
+barrido (0 problemas) y por la suite. Además, cada agente constructor contrastó su calculadora con R
+en sus propios casos límite (p. ej. 30 columnas de n 3 a 5,000 para Shapiro-Wilk).
 
 ## Hecho en H1
 

@@ -267,7 +267,8 @@ test('presentar() rellena todas las plantillas en ambos idiomas y la gráfica ll
     for (const e of entradas) {
       const ctx = contextoDePrueba(SLUG, lang, e.nivel);
       const p = presentar(calcular(e, e.nivel), e, ctx);
-      assert.deepEqual(Object.keys(p.celdas).sort(), [...definicion.salidas].sort());
+      // Sin ordenar: la página pinta las celdas en el orden del objeto.
+      assert.deepEqual(Object.keys(p.celdas), [...definicion.salidas]);
       const textos = [
         ...p.interpretacion,
         p.metodos,

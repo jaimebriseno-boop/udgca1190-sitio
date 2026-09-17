@@ -10,6 +10,7 @@ import {
   aCSV,
   aMarkdown,
   codificarEstado,
+  columnasOmitidas,
   decodificarEstado,
   hayEstado,
 } from '../../src/lib/bioestadistica/nucleo/exportar.ts';
@@ -79,6 +80,21 @@ test('las columnas se omiten si el enlace se pasa del tope de longitud', () => {
   assert.equal(s, 'x=1&n=2');
   // Una columna corta sí cabe.
   assert.match(codificarEstado({ x: 1, n: 2, datos: [1, 2, 3] }, conColumna), /datos=1%3B2%3B3/);
+});
+
+test('columnasOmitidas dice cuándo el enlace se compartiría sin la columna', () => {
+  const larga = Array.from({ length: 900 }, (_, i) => i + 0.5);
+  assert.equal(columnasOmitidas({ x: 1, n: 2, datos: larga }, conColumna), true);
+  assert.equal(columnasOmitidas({ x: 1, n: 2, datos: [1, 2, 3] }, conColumna), false);
+  // Sin columna (o vacía) no hay nada que omitir, por larga que sea la URL de los campos.
+  assert.equal(columnasOmitidas({ x: 1, n: 2, datos: [] }, conColumna), false);
+  assert.equal(columnasOmitidas({ x: 68, n: 80 }, defs), false);
+  // Coincide exactamente con la decisión de codificarEstado.
+  for (const n of [200, 240, 250, 300]) {
+    const entradas: Entradas = { x: 1, n: 2, datos: Array.from({ length: n }, (_, i) => 100 + (i % 900)) };
+    const omite = columnasOmitidas(entradas, conColumna);
+    assert.equal(codificarEstado(entradas, conColumna).includes('datos='), !omite, `n = ${n}`);
+  }
 });
 
 test('hayEstado distingue una URL con datos de una sin ellos', () => {

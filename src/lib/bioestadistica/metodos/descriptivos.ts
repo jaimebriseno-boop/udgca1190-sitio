@@ -7,14 +7,13 @@
  * `descriptivos`. Tres detalles de R que se reproducen aquí a propósito:
  *
  * - `mean()` no es una suma simple: R acumula, divide entre n y corrige con la
- *   media de los residuos (`s + Σ(xᵢ − s)/n`). Esa segunda pasada es la que
- *   deja la media exacta al último bit aunque la columna sea larga, y aquí se
- *   replica sobre sumas compensadas de Neumaier.
+ *   media de los residuos, `s + Σ(xᵢ − s)/n`. Esa segunda pasada recupera casi
+ *   toda la precisión de la primera, que R hace SIN compensar, y aquí se
+ *   reproduce tal cual, también sin compensar. Ver la nota de `media()`.
  * - `quantile(type = 7)` interpola sobre el índice 1 + (n − 1)p y deja el valor
  *   sin tocar cuando los dos vecinos coinciden (Hyndman y Fan 1996).
- * - `sd()` divide entre n − 1 y `var()` usa la media de una sola pasada; la
- *   diferencia con la media de dos pasadas es de segundo orden (la suma de
- *   cuadrados es estacionaria en la media) y no llega al doble.
+ * - `sd()` divide entre n − 1, y `var()` centra con su propia media de una sola
+ *   pasada, no con la de dos pasadas de `mean()`.
  *
  * Nada se redondea: `NaN` significa «no definido» (G₁ con n < 3 o columna
  * constante, G₂ con n < 4, media geométrica con algún valor ≤ 0, Shapiro-Wilk
@@ -64,45 +63,55 @@ export type ValoresDescriptivos = Record<SalidaDescriptivos, Estimacion>;
 // ---------------------------------------------------------------------------
 
 /**
- * Suma compensada de Neumaier: acumula en `suma` y guarda aparte los bits que
- * se perderían al sumar un término mucho menor (o mucho mayor) que el
- * acumulado. Con n grande el error se queda en un ulp en vez de crecer con n.
- */
-export function sumaNeumaier(x: readonly number[]): number {
-  let suma = 0;
-  let c = 0;
-  for (const v of x) {
-    const t = suma + v;
-    c += Math.abs(suma) >= Math.abs(v) ? suma - t + v : v - t + suma;
-    suma = t;
-  }
-  return suma + c;
-}
-
-/**
- * Media aritmética con la segunda pasada de `mean()` de R: s = Σx/n y luego
- * s + Σ(xᵢ − s)/n, que cancela el error acumulado en la primera suma.
+ * Media aritmética EXACTAMENTE como `mean()` de R: una primera pasada que
+ * acumula en doble sin compensar, s = Σx/n, y una segunda que corrige con la
+ * media de los residuos, s + Σ(xᵢ − s)/n.
+ *
+ * No se usa una suma compensada a propósito, aunque sería más exacta. El
+ * oráculo de esta calculadora es R, y el acumulador `LDOUBLE` de su código C es
+ * `long double`, que en arm64 (este equipo, y Apple Silicon en general) es el
+ * mismo doble de 64 bits. Compensar aquí separaría el resultado del oráculo en
+ * cuanto la columna mezclara magnitudes muy distintas: con
+ * [1e16, 1, 1, 1, −1e16, 2, 3, −2], R da 0.609375 y una suma de Neumaier daría
+ * otra cosa. La segunda pasada es la que recupera casi toda la precisión.
  */
 export function media(x: readonly number[]): number {
   const n = x.length;
-  const s = sumaNeumaier(x) / n;
+  let s = 0;
+  for (const v of x) s += v;
+  s /= n;
   if (!Number.isFinite(s)) return s;
-  return s + sumaNeumaier(x.map((v) => v - s)) / n;
+  let t = 0;
+  for (const v of x) t += v - s;
+  return s + t / n;
 }
 
-/** Momento central muestral mₖ = (1/n)·Σ(xᵢ − x̄)ᵏ. */
+/** Momento central muestral mₖ = (1/n)·Σ(xᵢ − x̄)ᵏ, con la media de R. */
 export function momentoCentral(x: readonly number[], k: number, m: number): number {
   return media(x.map((v) => (v - m) ** k));
 }
 
-/** Varianza muestral con denominador n − 1 (la de `var()` de R). */
-export function varianza(x: readonly number[], m = media(x)): number {
-  return sumaNeumaier(x.map((v) => (v - m) ** 2)) / (x.length - 1);
+/**
+ * Varianza muestral con denominador n − 1, como `var()` de R.
+ *
+ * Ojo al detalle: `var()` centra con su propia media de UNA pasada (Σx/n), no
+ * con la de dos pasadas de `mean()`. La diferencia es de segundo orden, porque
+ * la suma de cuadrados es estacionaria en la media, pero se reproduce igual
+ * para que TypeScript y R hagan las mismas operaciones en el mismo orden.
+ */
+export function varianza(x: readonly number[]): number {
+  const n = x.length;
+  let s = 0;
+  for (const v of x) s += v;
+  const m = s / n;
+  let ss = 0;
+  for (const v of x) ss += (v - m) ** 2;
+  return ss / (n - 1);
 }
 
 /** Desviación estándar muestral, √(Σ(xᵢ − x̄)²/(n − 1)). */
-export function desviacion(x: readonly number[], m = media(x)): number {
-  return Math.sqrt(varianza(x, m));
+export function desviacion(x: readonly number[]): number {
+  return Math.sqrt(varianza(x));
 }
 
 /**
@@ -339,7 +348,7 @@ export function descriptivos(x: readonly number[], op: OpcionesDescriptivos = {}
   const n = x.length;
 
   const m = media(x);
-  const de = desviacion(x, m);
+  const de = desviacion(x);
   const eem = de / Math.sqrt(n);
   const tcrit = qt(1 - (1 - nivel) / 2, n - 1);
 

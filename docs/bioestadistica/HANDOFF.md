@@ -223,6 +223,10 @@ en 418–441; MOTOR §1.6 para Kaplan-Meier en TS):
   con `derivar()` en la prueba, no con un caso del fixture.
 - `Avisos.astro` necesita los `params` del resultado para el SSR; sin ellos el HTML publica los
   marcadores en crudo hasta que carga el JavaScript.
+- `parsearNumero` quita los espacios de miles: cualquier analizador que le pase una celda con
+  espacios debe haber decidido antes si el espacio separa valores («150 160 170») o agrupa miles
+  («1 234»); `pegado.ts` lo resuelve con la regla de un solo hueco. Probar siempre el pegado de una
+  tabla de texto plano (PDF), no solo el de Excel.
 - `astro check` cubre también `tests/`: un `any` implícito en una prueba rompe el check; anotar tipos en
   los callbacks de `filter`/`map` cuando el estrechamiento se pierde en bucles anidados.
 - KaTeX con `strict: 'error'` y `output: 'mathml'` compila las ecuaciones en build; las letras griegas en

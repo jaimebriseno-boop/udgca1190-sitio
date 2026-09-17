@@ -368,6 +368,18 @@ test('las bandas y los avisos siguen los cortes documentados', () => {
   assert.ok(Number.isNaN(constante.valores.asim_rango.valor), 'el cociente publicado sigue siendo NaN');
   assert.equal(constante.valores.de_wan.valor, 0);
 
+  // Un campo capturado que el escenario no usa no desaparece en silencio.
+  const s1ConCuartiles = calcular(entradasDe('s1', 30, { min: 2, q1: 4, mediana: 6, q3: 9, max: 21 }));
+  assert.ok(s1ConCuartiles.avisos.some((a) => a.codigo === 'campos_ignorados'));
+  const s2ConExtremos = calcular(entradasDe('s2', 30, { min: 2, q1: 4, mediana: 6, q3: 9, max: 21 }));
+  assert.ok(s2ConExtremos.avisos.some((a) => a.codigo === 'campos_ignorados'));
+  // S3 los usa todos, y un campo vacío (NaN) no es un campo ignorado.
+  assert.ok(!calcular(EJEMPLO).avisos.some((a) => a.codigo === 'campos_ignorados'));
+  const s1Limpio = conDerivadas(definicion, { escenario: 's1', n: 30, min: 2, mediana: 6, max: 21 } as unknown as EntradasMediaDesdeMediana) as EntradasMediaDesdeMediana;
+  assert.ok(!calcular(s1Limpio).avisos.some((a) => a.codigo === 'campos_ignorados'));
+  // derivar() conserva el número capturado: el campo ignorado sigue viajando a R y a la URL.
+  assert.equal(definicion.derivar?.({ ...EJEMPLO, escenario: 's1' }).q1, 4);
+
   // En S3 manda el cociente más extremo de los dos: aquí el rango es simétrico
   // (1) pero el intercuartílico está muy torcido (9), y la banda debe verlo.
   const iqrTorcido = calcular(entradasDe('s3', 50, { min: 0, q1: 9, mediana: 10, q3: 19, max: 20 }));
@@ -410,7 +422,8 @@ test('presentar() rellena todas las plantillas en los tres escenarios y en ambos
     const ctx = contextoDePrueba(SLUG, lang);
     for (const e of entradas) {
       const p = presentar(calcular(e), e, ctx);
-      assert.deepEqual(Object.keys(p.celdas).sort(), [...definicion.salidas].sort());
+      // Sin ordenar: la página pinta las celdas en el orden del objeto.
+      assert.deepEqual(Object.keys(p.celdas), [...definicion.salidas]);
       const textos = [
         ...p.interpretacion,
         p.metodos,

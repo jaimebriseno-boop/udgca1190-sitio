@@ -138,7 +138,7 @@ es:
     grafica_media_wan: "Media (Wan)"
     grafica_media_hozo: "Media (Hozo)"
   ayudas:
-    escenario: "Elige qué estadísticos trae el artículo: solo el rango, solo el rango intercuartílico, o los cinco números."
+    escenario: "Elige qué estadísticos trae el artículo: solo el rango, solo el rango intercuartílico, o los cinco números. Los campos que el escenario no usa se ignoran en el cálculo, aunque los dejes escritos."
     n: "Número de participantes con dato válido en esa variable (entero de 2 o más; los cuartiles necesitan al menos 4)."
     min: "Valor más bajo reportado."
     q1: "Percentil 25 reportado."
@@ -160,6 +160,7 @@ es:
     asimetria_marcada: "El resumen reportado es claramente asimétrico: las fórmulas suponen normalidad y el resultado puede sesgarse (Cochrane Handbook §6.5.2.5 y §6.5.2.6)."
     n_pequeno: "Con menos de 10 participantes la conversión es poco fiable: las tres fórmulas se calibraron con muestras mayores."
     hozo_no_aplica: "El método de Hozo (2005) necesita el mínimo y el máximo, así que no se calcula con este escenario."
+    campos_ignorados: "El escenario elegido no usa todos los campos que capturaste: «mínimo, mediana y máximo» ignora los cuartiles, y «Q₁, mediana y Q₃» ignora el mínimo y el máximo. Cambia a «los cinco números» si quieres que cuenten."
     rango_cero: "Todos los valores reportados son iguales: la desviación estándar estimada es 0 y los cocientes de asimetría no están definidos."
   metodos: "La media y la desviación estándar no reportadas se estimaron a partir de {resumen_frase} en {n} participantes con los métodos de Luo et al. [{ref:luo2018}] y Wan et al. [{ref:wan2014}] (y de Hozo et al. [{ref:hozo2005}] como comparación); el Cochrane Handbook [{ref:higgins2019}] recoge la conversión a partir del rango intercuartílico (§6.5.2.5) y desaconseja estimar la DE a partir del rango (§6.5.2.6). La media estimada fue {media_luo} y la desviación estándar {de_wan}. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
   ejemplo_descripcion: "Ejemplo ilustrativo: días de fiebre en 45 pacientes, mediana 6 (rango intercuartílico 4 a 9) y rango de 2 a 21 (datos ficticios)."
@@ -226,7 +227,7 @@ en:
     grafica_media_wan: "Mean (Wan)"
     grafica_media_hozo: "Mean (Hozo)"
   ayudas:
-    escenario: "Choose which statistics the paper reports: only the range, only the interquartile range, or the five-number summary."
+    escenario: "Choose which statistics the paper reports: only the range, only the interquartile range, or the five-number summary. Fields the scenario does not use are ignored in the calculation, even if you leave them filled in."
     n: "Number of participants with valid data for that variable (integer of 2 or more; quartiles need at least 4)."
     min: "Lowest reported value."
     q1: "Reported 25th percentile."
@@ -248,6 +249,7 @@ en:
     asimetria_marcada: "The reported summary is clearly skewed: the formulas assume normality and the result may be biased (Cochrane Handbook §6.5.2.5 and §6.5.2.6)."
     n_pequeno: "With fewer than 10 participants the conversion is unreliable: all three formulas were calibrated on larger samples."
     hozo_no_aplica: "The Hozo (2005) method needs the minimum and the maximum, so it is not computed for this scenario."
+    campos_ignorados: "The chosen scenario does not use every value you entered: \"minimum, median and maximum\" ignores the quartiles, and \"Q₁, median and Q₃\" ignores the minimum and the maximum. Switch to the five-number summary if you want them to count."
     rango_cero: "Every reported value is identical: the estimated standard deviation is 0 and the skewness ratios are undefined."
   metodos: "The unreported mean and standard deviation were estimated from {resumen_frase} in {n} participants with the methods of Luo et al. [{ref:luo2018}] and Wan et al. [{ref:wan2014}] (with Hozo et al. [{ref:hozo2005}] for comparison); the Cochrane Handbook [{ref:higgins2019}] covers the conversion from the interquartile range (§6.5.2.5) and advises against estimating the SD from the range (§6.5.2.6). The estimated mean was {media_luo} and the standard deviation {de_wan}. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
   ejemplo_descripcion: "Illustrative example: days of fever in 45 patients, median 6 (interquartile range 4 to 9) and range 2 to 21 (fictitious data)."

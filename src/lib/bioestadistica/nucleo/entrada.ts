@@ -20,12 +20,26 @@ const ESPACIOS = /[\s   ]/g;
  * Normaliza el texto a la forma que entiende `Number`: quita espacios y el
  * signo `%`, convierte el menos tipográfico y resuelve la coma decimal.
  *
- * Con coma y punto a la vez («1,234.5») la coma es separador de miles; con solo
- * coma («0,95») es el separador decimal.
+ * Con coma y punto a la vez manda el signo que esté más a la derecha: en
+ * «1,234.5» el punto es decimal y la coma agrupa miles; en «1.234,5» (el
+ * convenio de buena parte del público hispanohablante) la coma es decimal y el
+ * punto agrupa miles. Con un solo tipo de signo: si aparece una sola vez es el
+ * decimal («0,95», «1.5»); si se repite («1.234.567», «1,234,567») agrupa miles.
  */
 function normalizar(texto: string): string {
-  let s = texto.replace(ESPACIOS, '').replace(/[−‒–—]/g, '-').replace(/%$/, '');
-  if (s.includes(',')) s = s.includes('.') ? s.replace(/,/g, '') : s.replace(',', '.');
+  const s = texto.replace(ESPACIOS, '').replace(/[−‒–—]/g, '-').replace(/%$/, '');
+  const comas = (s.match(/,/g) ?? []).length;
+  const puntos = (s.match(/\./g) ?? []).length;
+  if (comas > 0 && puntos > 0) {
+    // El signo de más a la derecha es el decimal; el otro debe agrupar de tres
+    // en tres, o el texto no es un número («1,23.4» se rechaza).
+    if (/^[+-]?\d{1,3}(?:,\d{3})+\.\d+$/.test(s)) return s.replace(/,/g, '');
+    if (/^[+-]?\d{1,3}(?:\.\d{3})+,\d+$/.test(s)) return s.replace(/\./g, '').replace(',', '.');
+    return s;
+  }
+  if (comas === 1) return s.replace(',', '.');
+  if (comas > 1) return /^[+-]?\d{1,3}(?:,\d{3})+$/.test(s) ? s.replace(/,/g, '') : s;
+  if (puntos > 1) return /^[+-]?\d{1,3}(?:\.\d{3})+$/.test(s) ? s.replace(/\./g, '') : s;
   return s;
 }
 

@@ -322,6 +322,45 @@ verificadas contra PubMed y Crossref; ocho cadenas `bio.ui.*` nuevas.
   independientes; `descriptivos.test.ts` une `parsearPegado` con `validar`/`calcular`;
   casos nuevos de fixture: mediana igual a un cuartil (±∞ y 0 en el cociente de
   asimetría), S2 con n = 4 e `ic-media` con n = 3.
+- Hallazgos del revisor principal sobre el commit de H2, corregidos en el commit de
+  seguimiento: (1) una columna pegada con valores separados por espacios se concatenaba
+  en silencio («1 2 3» → 123, porque `parsearNumero` quita los espacios de miles):
+  `detectarSeparador` toma ahora el espacio como separador salvo que TODAS las líneas con
+  espacio interno sean números con UN espacio de miles («1 234»); con dos o más huecos
+  («150 160 170») se lee una serie, aunque «1 234 567» pierda la lectura de millón, que en
+  una columna clínica es la menos probable; (2) «1,234.5» se leía como 1 (la coma pasaba
+  por separador): las comas de miles con punto decimal se reconocen como número; el orden
+  de detección queda tabulador > `;` > coma seguida de espacio > espacios > coma a secas;
+  (3) con un error de captura la píldora «Ejemplo cargado» seguía visible junto al
+  mensaje de error: el controlador la retira también en la rama de error (la URL de
+  impresión conserva el último estado válido); (4) el coeficiente de variación con media
+  ≤ 0 se mostraba como «−52.7 %» o «∞»: la celda pasa a «—» con nota, el párrafo no lo
+  cita y se emite el aviso `cv_no_aplica` (el valor numérico sigue calculándose como en R);
+  (5) «Compartir enlace» soltaba la columna pegada a partir de unos 245 valores (tope de
+  1,500 caracteres de la URL) sin decirlo: `columnasOmitidas()` en `exportar.ts` es la
+  misma condición con la que `codificarEstado` reintenta sin columnas y el botón avisa
+  «Enlace copiado SIN la columna…» (`bio.ui.enlace_sin_columna`); (6) `chi-cuadrada-fisher`
+  construía `celdas` agrupando estadísticos y valores p en vez de seguir `salidas`, y
+  `contenido.test.ts` ordenaba los dos lados antes de comparar: ahora exige el mismo orden;
+  (7) el comentario de la media de `descriptivos` prometía sumas compensadas «como R»
+  cuando R acumula en doble sin compensar (x = [1e16, 1, 1, 1, −1e16, 2, 3, −2] daba 0.9375
+  frente a 0.609375): se replica la aritmética de `mean()` de R (dos pasadas, sin
+  Neumaier); (8) el estimador y el EE de Agresti-Min se comparten entre el intervalo y su
+  aviso de recorte; (9) la banda `direccion` de McNemar se usa en la interpretación o se
+  retira; (10) `media-desde-mediana` avisa (`campos_ignorados`) cuando el escenario deja
+  fuera un campo capturado. Comprobado que los rótulos del nomograma de Fagan sí pasan por
+  `esc()` (línea 664 de `svg.ts`); (11) el espejo del hallazgo 2, heredado de H0: `parsearNumero`
+  leía «1.234,5» (punto de miles y coma decimal, el convenio de buena parte del público
+  hispanohablante) como 1.2345, en los campos y en el pegado. `normalizar` decide ahora por
+  posición: con coma y punto a la vez, el signo de más a la derecha es el decimal y el otro
+  debe agrupar de tres en tres («1,23.4» deja de ser un número); un signo repetido solo
+  agrupa miles si forma grupos de tres («1.2.3» sigue siendo inválido); un signo que aparece
+  una vez es el decimal («1,234» = 1.234, ambigüedad documentada y probada). `pegado.ts`
+  reconoce ambos convenios de miles antes de tomar la coma como separador de columnas. El
+  perfil `shapiro` se aprieta a 1e-10/1e-12 tras medir
+  6.7e-16 en W y 2.2e-13 en p. Evidencia del revisor sin hallazgos: 252 casos límite nuevos
+  TS-vs-R (3,881 comparaciones, 0 discrepancias reales) y 89,458 SVG renderizados sin
+  excepciones ni marcadores sin rellenar.
 
 **Pendiente conocido.** (1) Cuando la columna pegada no cabe en la URL (tope de 1,500
 caracteres) el enlace se comparte sin los datos y no hay aviso visible. (2) No se

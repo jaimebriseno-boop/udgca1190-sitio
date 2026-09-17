@@ -87,6 +87,8 @@ export function presentar(s: Resultado, e: EntradasIcMedia, ctx: Contexto): Pres
     url: ctx.url,
   };
 
+  // El orden de inserción es el de `SALIDAS`: la página pinta las celdas en el
+  // orden del objeto, y ese orden es el del JSON de R y el de las etiquetas.
   const celdas: Presentacion['celdas'] = {
     media: {
       valor: fmt.num(v.media.valor, PISTA_VALOR),

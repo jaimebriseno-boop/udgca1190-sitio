@@ -174,6 +174,9 @@ es:
     nivel: "Entre 80 % y 99.9 %; por convención, 95 %."
   interpretacion:
     resumen: "Entre los {n} pares, {b} cambiaron en una dirección y {c} en la otra: la prueba A fue positiva en {p_a} y la B en {p_b} (diferencia {delta} puntos porcentuales, IC {nivel}: {delta_ic})."
+    "direccion.a_mayor": "Los cambios fueron más frecuentes en la dirección A+ / B− ({b} pares frente a {c}): la prueba A resultó positiva con más frecuencia que la B."
+    "direccion.b_mayor": "Los cambios fueron más frecuentes en la dirección A− / B+ ({c} pares frente a {b}): la prueba B resultó positiva con más frecuencia que la A."
+    "direccion.igual": "Los cambios se repartieron por igual en las dos direcciones ({b} y {c} pares): las dos mediciones dieron la misma proporción de positivos."
     "prueba.exacta": "Prueba de McNemar exacta (binomial bilateral sobre los {n_disc} pares discordantes): p = {p}."
     "prueba.edwards": "Prueba de McNemar con corrección de continuidad de Edwards (χ² = {chi2_edwards}, 1 grado de libertad): p = {p}."
     "decision.rechaza": "p = {p}; con α = 0.05 se rechaza la hipótesis nula de que las dos mediciones dan la misma proporción de positivos. La magnitud del cambio ({delta} puntos porcentuales, IC {nivel}: {delta_ic}) importa más que el valor p."
@@ -281,6 +284,9 @@ en:
     nivel: "Between 80% and 99.9%; by convention, 95%."
   interpretacion:
     resumen: "Among the {n} pairs, {b} changed in one direction and {c} in the other: test A was positive in {p_a} and test B in {p_b} (difference {delta} percentage points, {nivel} CI: {delta_ic})."
+    "direccion.a_mayor": "Changes were more frequent in the A+ / B− direction ({b} pairs against {c}): test A was positive more often than test B."
+    "direccion.b_mayor": "Changes were more frequent in the A− / B+ direction ({c} pairs against {b}): test B was positive more often than test A."
+    "direccion.igual": "Changes split evenly between the two directions ({b} and {c} pairs): both measurements gave the same proportion of positives."
     "prueba.exacta": "Exact McNemar test (two-sided binomial on the {n_disc} discordant pairs): p = {p}."
     "prueba.edwards": "McNemar's test with Edwards' continuity correction (chi-squared = {chi2_edwards}, 1 degree of freedom): p = {p}."
     "decision.rechaza": "p = {p}; at α = 0.05 the null hypothesis that both measurements give the same proportion of positives is rejected. The size of the change ({delta} percentage points, {nivel} CI: {delta_ic}) matters more than the p value."

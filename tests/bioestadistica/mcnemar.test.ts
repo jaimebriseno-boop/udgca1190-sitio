@@ -348,7 +348,7 @@ test('presentar() rellena todas las plantillas en español e inglés, con ambos 
     for (const e of entradas) {
       const donde = `${lang} · ${e.a}/${e.b}/${e.c}/${e.d} ${String(e.metodo_delta)}`;
       const p = presentar(calcular(e, e.nivel), e, ctx);
-      assert.deepEqual(Object.keys(p.celdas).sort(), [...definicion.salidas].sort(), donde);
+      assert.deepEqual(Object.keys(p.celdas), [...definicion.salidas], donde);
       const textos = [
         ...p.interpretacion,
         p.metodos,
@@ -357,7 +357,7 @@ test('presentar() rellena todas las plantillas en español e inglés, con ambos 
       for (const texto of textos) {
         assert.ok(!texto.includes('{'), `${donde}: marcador sin rellenar en «${texto}»`);
       }
-      assert.equal(p.interpretacion.length, e.b + e.c === 0 ? 3 : 5, donde);
+      assert.equal(p.interpretacion.length, e.b + e.c === 0 ? 3 : 6, donde);
       assert.ok(p.grafica && p.grafica.tipo === 'barras', donde);
       assert.equal(p.grafica.tipo === 'barras' ? p.grafica.categorias.length : 0, 2, donde);
       assert.equal(p.resumen.length, definicion.salidas.length, donde);
@@ -382,8 +382,9 @@ test('la presentación del ejemplo dice lo que dice la comprobación manual', ()
   assert.equal(es.celdas.or_pareado.ic, '1.04 a 10.55');
   assert.ok(es.interpretacion[0].includes('36.7\u202f%') && es.interpretacion[0].includes('30.0\u202f%'), es.interpretacion[0]);
   assert.ok(es.interpretacion[0].includes('6.7 puntos porcentuales'), es.interpretacion[0]);
-  assert.ok(es.interpretacion[1].includes('0.041'), es.interpretacion[1]);
-  assert.ok(es.interpretacion[2].includes('se rechaza'), es.interpretacion[2]);
+  assert.ok(es.interpretacion[1].includes('15 pares frente a 5'), es.interpretacion[1]);
+  assert.ok(es.interpretacion[2].includes('0.041'), es.interpretacion[2]);
+  assert.ok(es.interpretacion[3].includes('se rechaza'), es.interpretacion[3]);
   assert.ok(es.metodos.includes('[1]') && es.metodos.includes('de Wald'), es.metodos);
 
   const en = presentar(calcular(EJEMPLO, 0.95), EJEMPLO, contextoDePrueba(SLUG, 'en'));
@@ -412,7 +413,20 @@ test('la presentación del ejemplo dice lo que dice la comprobación manual', ()
   const inf = presentar(calcular(cCero, 0.95), cCero, contextoDePrueba(SLUG, 'es'));
   assert.equal(inf.celdas.or_pareado.valor, '∞');
   assert.ok(inf.celdas.or_pareado.ic?.endsWith('∞'), inf.celdas.or_pareado.ic);
-  assert.ok(inf.interpretacion[3].includes('∞'), inf.interpretacion[3]);
+  assert.ok(inf.interpretacion[4].includes('∞'), inf.interpretacion[4]);
+});
+
+test('la banda de dirección elige el párrafo que dice en qué sentido hubo más cambios', () => {
+  const ctx = contextoDePrueba(SLUG, 'es');
+  const variantes: Array<[EntradasMcNemar, string]> = [
+    [EJEMPLO, 'la prueba A resultó positiva con más frecuencia'],
+    [{ ...EJEMPLO, b: 0, c: 7 }, 'la prueba B resultó positiva con más frecuencia'],
+    [{ ...EJEMPLO, b: 10, c: 10 }, 'se repartieron por igual'],
+  ];
+  for (const [e, frase] of variantes) {
+    const p = presentar(calcular(e, e.nivel), e, ctx);
+    assert.ok(p.interpretacion[1].includes(frase), `${e.b}/${e.c}: ${p.interpretacion[1]}`);
+  }
 });
 
 test('la gráfica de barras lleva los dos pares discordantes y la línea de H₀', () => {

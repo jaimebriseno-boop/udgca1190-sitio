@@ -11,6 +11,7 @@ import type {
   DatosGrafica,
   Definicion,
   Entradas,
+  Pista,
   Presentacion,
   Resultado,
 } from '../nucleo/tipos.ts';
@@ -37,12 +38,30 @@ export interface EntradasChi2Fisher extends Entradas {
 export const SALIDAS = SALIDAS_INDEPENDENCIA;
 export const CELDAS = ['a', 'b', 'c', 'd'] as const;
 
-/** Frecuencias esperadas: celdas con dos decimales y sin intervalo. */
-const ESPERADAS = ['e_a', 'e_b', 'e_c', 'e_d', 'e_min'] as const;
 /** Estadísticos χ² (Pearson, Yates, N−1). */
 const ESTADISTICOS = ['chi2', 'chi2_yates', 'chi2_n1'] as const;
 /** Valores p de las cuatro pruebas. */
 const VALORES_P = ['p_chi2', 'p_yates', 'p_n1', 'p_fisher'] as const;
+
+/**
+ * Pista de formato de cada salida escalar. `n` (entero) y `or_cond` (razón con
+ * intervalo) tienen su propia rama en `presentar()`.
+ */
+const PISTA: Record<string, Pista> = {
+  e_a: 'dec2',
+  e_b: 'dec2',
+  e_c: 'dec2',
+  e_d: 'dec2',
+  e_min: 'dec2',
+  chi2: 'dec3',
+  p_chi2: 'p',
+  chi2_yates: 'dec3',
+  p_yates: 'p',
+  chi2_n1: 'dec3',
+  p_n1: 'p',
+  p_fisher: 'p',
+  phi: 'dec3',
+};
 
 /** Nota de método de cada celda (clave de `etiquetas` del YAML). */
 const NOTA: Record<string, string> = {
@@ -131,17 +150,28 @@ export function presentar(s: Resultado, e: EntradasChi2Fisher, ctx: Contexto): P
     return clave === undefined ? undefined : textos.etiquetas[clave];
   };
 
-  const celdas: Presentacion['celdas'] = { n: { valor: fmt.entero(s.valores.n.valor) } };
-  for (const k of ESPERADAS) celdas[k] = { valor: fmt.num(s.valores[k].valor, 'dec2'), nota: nota(k) };
-  for (const k of ESTADISTICOS) celdas[k] = { valor: fmt.num(s.valores[k].valor, 'dec3'), nota: nota(k) };
-  for (const k of VALORES_P) celdas[k] = { valor: fmt.num(s.valores[k].valor, 'p'), nota: nota(k) };
-  celdas.or_cond = {
-    valor: fmt.num(s.valores.or_cond.valor, 'lr'),
-    ic: fmt.ic(s.valores.or_cond.ic, 'lr'),
-    nota: `${icNivel} · ${textos.etiquetas.nota_or_cond}`,
-  };
-  celdas.phi = { valor: fmt.num(s.valores.phi.valor, 'dec3'), nota: nota('phi'), clase: 'destacada' };
-  // La celda destacada es la del valor p de la prueba que recomienda Cochran.
+  // Un solo recorrido de `SALIDAS`: `Presentacion.celdas` debe quedar en ese
+  // orden de inserción, que es el que pinta la tabla de resultados.
+  const celdas: Presentacion['celdas'] = {};
+  for (const k of SALIDAS) {
+    if (k === 'n') {
+      celdas[k] = { valor: fmt.entero(s.valores.n.valor) };
+      continue;
+    }
+    if (k === 'or_cond') {
+      celdas[k] = {
+        valor: fmt.num(s.valores.or_cond.valor, 'lr'),
+        ic: fmt.ic(s.valores.or_cond.ic, 'lr'),
+        nota: `${icNivel} · ${textos.etiquetas.nota_or_cond}`,
+      };
+      continue;
+    }
+    const pista = PISTA[k];
+    if (pista === undefined) throw new Error(`chi-cuadrada-fisher: la salida ${k} no tiene pista de formato`);
+    celdas[k] = { valor: fmt.num(s.valores[k].valor, pista), nota: nota(k) };
+  }
+  celdas.phi.clase = 'destacada';
+  // La otra celda destacada es la del valor p de la prueba que recomienda Cochran.
   celdas[prueba === 'fisher' ? 'p_fisher' : 'p_chi2'].clase = 'destacada';
 
   const resumen: Presentacion['resumen'] = SALIDAS.map((k) => [

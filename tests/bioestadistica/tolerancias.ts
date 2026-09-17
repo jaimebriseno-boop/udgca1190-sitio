@@ -18,7 +18,7 @@
  * | `fisher_or`  | 5e-4  | 1e-6  | OR condicional de `fisher.test`: R resuelve con `uniroot` a tol ≈ 1.2e-4. |
  * | `potencia`   | 1e-6  | 1e-8  | `power.*.test` y `pwr::*`: iterativos en ambos lados.         |
  * | `modelo`     | 1e-6  | 1e-8  | glm, coxph y lm: `epsilon` de IRLS en R.                      |
- * | `shapiro`    | 1e-8  | 1e-8  | W de Shapiro-Wilk y su p: port de AS R94 (Royston 1995) con los polinomios publicados; el C de R suma en otro orden. |
+ * | `shapiro`    | 1e-10 | 1e-12 | W de Shapiro-Wilk y su p: port de AS R94 (Royston 1995) con los polinomios publicados; medido 6.7e-16 en W y 2.2e-13 en p sobre 44 columnas (n de 3 a 5,000). |
  */
 import type { PerfilTolerancia, Tolerancia } from '../../src/lib/bioestadistica/nucleo/comparar.ts';
 
@@ -40,8 +40,13 @@ export const potencia: Tolerancia = { rel: 1e-6, abs: 1e-8 };
 /** Coeficientes de modelos ajustados por IRLS o Newton-Raphson. */
 export const modelo: Tolerancia = { rel: 1e-6, abs: 1e-8 };
 
-/** Estadístico W de Shapiro-Wilk y su valor p (AS R94 portado desde la publicación, no desde el C de R). */
-export const shapiro: Tolerancia = { rel: 1e-8, abs: 1e-8 };
+/**
+ * Estadístico W de Shapiro-Wilk y su valor p (AS R94 portado desde la
+ * publicación, no desde el C de R). La especificación admitía 1e-8; el port
+ * coincide con R a 6.7e-16 (W) y 2.2e-13 (p) y el perfil se fija un orden de
+ * magnitud por encima de lo medido para que una regresión del port no pase.
+ */
+export const shapiro: Tolerancia = { rel: 1e-10, abs: 1e-12 };
 
 /** Proporciones de una tabla 2×2 (Sn, Sp, VPP, VPN, prevalencia, exactitud). */
 const PROPORCIONES_2X2 = ['sn', 'sp', 'vpp', 'vpn', 'prev', 'exactitud'] as const;

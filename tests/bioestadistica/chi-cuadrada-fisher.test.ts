@@ -409,7 +409,8 @@ test('presentar() rellena todas las plantillas en español e inglés, también e
     const ctx = contextoDePrueba(SLUG, lang);
     for (const e of entradas) {
       const p = presentar(calcular(e, e.nivel), e, ctx);
-      assert.deepEqual(Object.keys(p.celdas).sort(), [...definicion.salidas].sort());
+      // Sin ordenar: `tipos.ts` pide las celdas EN el orden de `salidas`.
+      assert.deepEqual(Object.keys(p.celdas), [...definicion.salidas]);
       for (const texto of [
         ...p.interpretacion,
         p.metodos,

@@ -39,6 +39,24 @@ test('con coma y punto a la vez, la coma son los miles', () => {
   assert.equal(parsearNumero('1 234', decimal), 1234);
 });
 
+test('con coma y punto a la vez manda el signo de más a la derecha; repetido, agrupa miles', () => {
+  // Convenio anglosajón: coma de miles, punto decimal.
+  assert.equal(parsearNumero('1,234.5', decimal), 1234.5);
+  assert.equal(parsearNumero('1,234,567.25', decimal), 1234567.25);
+  // Convenio hispano: punto de miles, coma decimal. Antes se leía 1.2345 (factor 1000).
+  assert.equal(parsearNumero('1.234,5', decimal), 1234.5);
+  assert.equal(parsearNumero('1.234.567,25', decimal), 1234567.25);
+  // Un solo signo repetido solo puede agrupar miles, y solo de tres en tres.
+  assert.equal(parsearNumero('1.234.567', decimal), 1234567);
+  assert.equal(parsearNumero('1,234,567', decimal), 1234567);
+  assert.equal(parsearNumero('1.2.3', decimal), null);
+  assert.equal(parsearNumero('1,23.4', decimal), null);
+  // Un solo signo una sola vez es el decimal (ambiguo a propósito, documentado).
+  assert.equal(parsearNumero('1,234', decimal), 1.234);
+  assert.equal(parsearNumero('1.234', decimal), 1.234);
+  assert.equal(parsearNumero('0,95', decimal), 0.95);
+});
+
 test('una proporción admite el porcentaje: «95», «95 %» y «0.95» valen 0.95', () => {
   assert.equal(parsearNumero('0.95', nivel), 0.95);
   assert.equal(parsearNumero('95', nivel), 0.95);

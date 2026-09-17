@@ -301,3 +301,38 @@ test('el diccionario real trae las cadenas del pegado con sus marcadores', async
     assert.ok(!resumen.includes('\n'));
   }
 });
+
+// ---------------------------------------------------------------------------
+// Espacios como separador y comas de miles (hallazgos de la revisión de H2)
+// ---------------------------------------------------------------------------
+
+test('los valores separados por espacios son valores, no un número concatenado', () => {
+  // Antes «1 2 3» se leía como 123 sin aviso: `parsearNumero` quita los espacios de miles.
+  assert.deepEqual(parsearPegado('150 160 170').valores, [150, 160, 170]);
+  assert.deepEqual(parsearPegado('1.5 2.5  3.5').valores, [1.5, 2.5, 3.5]);
+  assert.deepEqual(parsearPegado('1,5 2,5').valores, [1.5, 2.5]);
+  // Una tabla de texto plano (un PDF) tiene varias columnas: la primera, con aviso.
+  const tabla = parsearPegado('1 2 3\n4 5 6\n');
+  assert.deepEqual(tabla.valores, [1, 4]);
+  assert.equal(tabla.variasColumnas, true);
+});
+
+test('un solo espacio de miles sigue siendo un número; dos o más huecos, una serie', () => {
+  assert.deepEqual(parsearPegado('1 234\n2 345').valores, [1234, 2345]);
+  assert.deepEqual(parsearPegado('12 345,6').valores, [12345.6]);
+  assert.deepEqual(parsearPegado('1\u202f234\n5\u00a0678').valores, [1234, 5678]);
+  assert.deepEqual(parsearPegado('1 234 567').valores, [1, 234, 567]);
+});
+
+test('la coma de miles con punto decimal no se confunde con una columna', () => {
+  // Antes «1,234.5» se leía como 1: la coma pasaba por separador de columnas.
+  assert.deepEqual(parsearPegado('1,234.5\n2,345.6\n').valores, [1234.5, 2345.6]);
+  assert.deepEqual(parsearPegado('12,345\n6,789').valores, [12.345, 6.789]);
+  // «1, 2, 3» y «1,2,3» siguen siendo tres valores.
+  assert.deepEqual(parsearPegado('1, 2, 3').valores, [1, 2, 3]);
+  assert.deepEqual(parsearPegado('1,2,3').valores, [1, 2, 3]);
+  // El convenio hispano (punto de miles, coma decimal) tampoco se parte en columnas.
+  assert.deepEqual(parsearPegado('1.234,5\n2.345,6\n').valores, [1234.5, 2345.6]);
+  assert.equal(parsearPegado('1.234,5\n2.345,6\n').variasColumnas, false);
+});
+

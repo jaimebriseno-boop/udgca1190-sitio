@@ -96,10 +96,19 @@ export function calcular(e: EntradasMediaDesdeMediana): Resultado<'media-desde-m
   const asimetria = bandaAsimetriaResumen(cociente);
   const constante = escenario === 's1' ? degRango : escenario === 's2' ? degIqr : degRango && degIqr;
 
+  // La interfaz muestra los cinco campos siempre, así que un cuartil capturado
+  // en S1 (o un extremo en S2) no entra en ninguna fórmula y desaparecería sin
+  // decir nada. `derivar()` no lo borra: sigue viajando al snippet de R y a la
+  // URL; el aviso es lo que hace visible que no cuenta.
+  const ignorados = OPCIONALES.filter(
+    (campo) => !CAMPOS_ESCENARIO[escenario].includes(campo) && Number.isFinite(r[campo]),
+  );
+
   const avisos: Resultado['avisos'] = [];
   if (asimetria === 'marcada') avisos.push({ codigo: 'asimetria_marcada', severidad: 'aviso' });
   if (e.n < N_POCO_FIABLE) avisos.push({ codigo: 'n_pequeno', severidad: 'aviso', params: { n: e.n } });
   if (!conHozo) avisos.push({ codigo: 'hozo_no_aplica', severidad: 'info' });
+  if (ignorados.length > 0) avisos.push({ codigo: 'campos_ignorados', severidad: 'info' });
   if (constante) avisos.push({ codigo: 'rango_cero', severidad: 'info' });
 
   return {
@@ -143,6 +152,8 @@ export function presentar(s: Resultado, e: EntradasMediaDesdeMediana, ctx: Conte
   vars.resumen_frase = textos.interpretacion[`metodos_resumen.${s.bandas.escenario}`];
 
   const notaHozo = textos.etiquetas.nota_hozo;
+  // El orden de inserción es el de `SALIDAS`: la página pinta las celdas en el
+  // orden del objeto, y ese orden es el del JSON de R y el de las etiquetas.
   const celdas: Presentacion['celdas'] = {
     media_luo: { valor: cifra(v.media_luo.valor), nota: ui.recomendado, clase: 'destacada' },
     media_wan: { valor: cifra(v.media_wan.valor) },
@@ -273,7 +284,7 @@ export const definicion: Definicion<EntradasMediaDesdeMediana> = {
     'metodos_resumen.s2',
     'metodos_resumen.s3',
   ],
-  avisos: ['asimetria_marcada', 'n_pequeno', 'hozo_no_aplica', 'rango_cero'],
+  avisos: ['asimetria_marcada', 'n_pequeno', 'hozo_no_aplica', 'campos_ignorados', 'rango_cero'],
   salidas: SALIDAS,
   // Un extremo o un cuartil que el escenario no usa (y que el usuario no
   // capturó) vale `NaN`: así el snippet de R siempre tiene todos sus marcadores

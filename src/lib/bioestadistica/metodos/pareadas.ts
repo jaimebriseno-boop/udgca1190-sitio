@@ -145,20 +145,29 @@ export function deltaPareada(
   const z = zNivel(nivel);
   const est = (b - c) / n;
   if (metodo === 'agresti-min') {
-    const estAm = (b - c) / (n + 2);
-    const seAm = Math.sqrt(b + c + 1 - (b - c) ** 2 / (n + 2)) / (n + 2);
-    return { valor: est, ic: [Math.max(-1, estAm - z * seAm), Math.min(1, estAm + z * seAm)], nivel, metodo: 'agresti-min' };
+    const [lo, hi] = limitesAgrestiMin(b, c, n, z);
+    return { valor: est, ic: [Math.max(-1, lo), Math.min(1, hi)], nivel, metodo: 'agresti-min' };
   }
   const se = Math.sqrt(b + c - (b - c) ** 2 / n) / n;
   return { valor: est, ic: [est - z * se, est + z * se], nivel, metodo: 'wald' };
 }
 
+/**
+ * Límites de Agresti y Min (2005) ANTES de recortarlos a [−1, 1]: el estimador
+ * ajustado (b − c)/(n + 2) más o menos z veces su error estándar. Es el único
+ * sitio donde vive esa aritmética, para que el intervalo y el aviso de recorte
+ * no puedan desincronizarse.
+ */
+function limitesAgrestiMin(b: number, c: number, n: number, z: number): [number, number] {
+  const est = (b - c) / (n + 2);
+  const se = Math.sqrt(b + c + 1 - (b - c) ** 2 / (n + 2)) / (n + 2);
+  return [est - z * se, est + z * se];
+}
+
 /** ¿El intervalo de Agresti-Min tocó alguno de los topes −1 o 1? */
 export function agrestiMinRecortado(b: number, c: number, n: number, nivel = 0.95): boolean {
-  const z = zNivel(nivel);
-  const estAm = (b - c) / (n + 2);
-  const seAm = Math.sqrt(b + c + 1 - (b - c) ** 2 / (n + 2)) / (n + 2);
-  return estAm - z * seAm < -1 || estAm + z * seAm > 1;
+  const [lo, hi] = limitesAgrestiMin(b, c, n, zNivel(nivel));
+  return lo < -1 || hi > 1;
 }
 
 /**

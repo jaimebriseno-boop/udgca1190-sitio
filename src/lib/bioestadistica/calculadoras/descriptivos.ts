@@ -44,6 +44,9 @@ export const N_GRANDE = 1000;
 /** Medidas en las unidades de la variable: cuatro cifras significativas. */
 const EN_UNIDADES = ['media', 'de', 'eem', 'mediana', 'q1', 'q3', 'iqr', 'min', 'max', 'rango', 'media_geom'] as const;
 
+/** Celda de una medida que no procede calcular (no es «no definido»: es que no aplica). */
+const SIN_VALOR = '—';
+
 /** ¿La entrada es una columna utilizable (al menos dos números finitos)? */
 function esColumna(v: unknown): v is number[] {
   return Array.isArray(v) && v.length >= N_MIN_COLUMNA && v.every((q) => typeof q === 'number' && Number.isFinite(q));
@@ -59,6 +62,11 @@ export function calcular(e: EntradasDescriptivos, nivel: number): Resultado<'des
   if (n < 4) avisos.push({ codigo: 'n_pequeno', severidad: 'aviso', params: { n } });
   if (v.de.valor === 0) avisos.push({ codigo: 'constante', severidad: 'aviso' });
   if (Number.isNaN(v.media_geom.valor)) avisos.push({ codigo: 'no_positivos', severidad: 'info' });
+  // El CV compara la dispersión con la media: con media 0 se va a infinito y
+  // con media negativa cambia de signo. El número se calcula igual que en R,
+  // pero no se publica como si se pudiera leer.
+  const cvAplica = v.media.valor > 0;
+  if (!cvAplica) avisos.push({ codigo: 'cv_no_aplica', severidad: 'aviso' });
   if (v.n_atipicos.valor > 0) {
     avisos.push({ codigo: 'atipicos', severidad: 'info', params: { n_atipicos: v.n_atipicos.valor, k: K_TUKEY } });
   }
@@ -75,6 +83,7 @@ export function calcular(e: EntradasDescriptivos, nivel: number): Resultado<'des
     entradas: { x, nivel },
     valores: { ...v },
     bandas: {
+      cv: cvAplica ? 'aplica' : 'no_aplica',
       asimetria: bandaAsimetria(v.g1.valor),
       normalidad: Number.isNaN(p) ? 'no_aplica' : p < 0.05 ? 'evidencia' : 'sin_evidencia',
       n: n >= N_GRANDE ? 'grande' : 'normal',
@@ -107,6 +116,8 @@ export function presentar(s: Resultado, e: EntradasDescriptivos, ctx: Contexto):
     url: ctx.url,
   };
   for (const k of EN_UNIDADES) vars[k] = fmt.num(v[k].valor, 'sig4');
+  const cvAplica = s.bandas.cv !== 'no_aplica';
+  vars.cv_frase = rellenar(textos.interpretacion[cvAplica ? 'cv.aplica' : 'cv.no_aplica'], vars);
 
   const celdas: Presentacion['celdas'] = {
     n: { valor: fmt.entero(v.n.valor) },
@@ -125,7 +136,9 @@ export function presentar(s: Resultado, e: EntradasDescriptivos, ctx: Contexto):
     min: { valor: fmt.num(v.min.valor, 'sig4') },
     max: { valor: fmt.num(v.max.valor, 'sig4') },
     rango: { valor: fmt.num(v.rango.valor, 'sig4') },
-    cv: { valor: fmt.num(v.cv.valor, 'pct1') },
+    cv: cvAplica
+      ? { valor: fmt.num(v.cv.valor, 'pct1') }
+      : { valor: SIN_VALOR, nota: textos.etiquetas.nota_cv_no_aplica },
     g1: { valor: fmt.num(v.g1.valor, 'dec2'), nota: textos.etiquetas.nota_joanes },
     g2: { valor: fmt.num(v.g2.valor, 'dec2'), nota: textos.etiquetas.nota_joanes },
     media_geom: { valor: fmt.num(v.media_geom.valor, 'sig4') },
@@ -193,6 +206,8 @@ export const definicion: Definicion<EntradasDescriptivos> = {
   motor: 'ts',
   claves: [
     'resumen',
+    'cv.aplica',
+    'cv.no_aplica',
     'asimetria.simetrica',
     'asimetria.derecha',
     'asimetria.izquierda',
@@ -203,7 +218,7 @@ export const definicion: Definicion<EntradasDescriptivos> = {
     'atipicos.con',
     'atipicos.sin',
   ],
-  avisos: ['n_pequeno', 'constante', 'no_positivos', 'atipicos', 'sw_n_grande', 'n_grande'],
+  avisos: ['n_pequeno', 'constante', 'no_positivos', 'cv_no_aplica', 'atipicos', 'sw_n_grande', 'n_grande'],
   salidas: SALIDAS,
   validar(e) {
     const err: Record<string, string> = {};

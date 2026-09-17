@@ -529,10 +529,13 @@ for (const slug of SLUGS) {
         // presentar() rellena cada plantilla: un {var} sin valor lanzaría aquí.
         const presentacion = def.presentar(resultado, entradas, ctx);
 
+        // Mismo conjunto Y mismo orden: `Presentacion.celdas` va «en el orden
+        // de `Definicion.salidas`» (tipos.ts) y es lo que recorren el CSV y el
+        // Markdown; ordenar antes de comparar dejaba pasar un orden distinto.
         assert.deepEqual(
-          ordenado(Object.keys(presentacion.celdas)),
-          ordenado(def.salidas),
-          `${lang}: las celdas no coinciden con definicion.salidas`,
+          Object.keys(presentacion.celdas),
+          [...def.salidas],
+          `${lang}: las celdas no siguen el orden de definicion.salidas`,
         );
         assert.ok(presentacion.interpretacion.length > 0, `${lang}: interpretación vacía`);
         assert.ok(presentacion.resumen.length > 0, `${lang}: resumen vacío`);

@@ -41,6 +41,25 @@ const FALTANTES = new Set(['', 'NA', 'NAN', 'N/A', '#N/A', '#¡N/A', '#N/D', 'NU
  */
 const COMA_DECIMAL = /^[+\-−]?\d+,\d+$/;
 
+/**
+ * Un número con la coma de miles y, si acaso, punto decimal (`1,234`,
+ * `12,345.6`) o con el punto de miles y coma decimal (`1.234,5`): en ninguno
+ * de los dos la coma separa columnas.
+ */
+const MILES_COMA = /^[+\-−]?\d{1,3}(?:,\d{3})+(?:\.\d+)?$|^[+\-−]?\d{1,3}(?:\.\d{3})+(?:,\d+)?$/;
+
+/**
+ * Un número con UN espacio de miles (`1 234`, `12 345,6`), incluido el fino y
+ * el duro: la única forma en que un espacio dentro de una celda no separa
+ * valores. `parsearNumero` lo quita al leer. Con dos o más huecos («150 160
+ * 170», «1 234 567») el espacio se lee como separador: en una columna pegada es
+ * mucho más probable una serie de valores que un millón escrito con espacios.
+ */
+const MILES_ESPACIO = /^[+\-−]?\d{1,3}\s\d{3}(?:[.,]\d+)?$/;
+
+/** Separador de columnas: un carácter o, para el espacio, una expresión regular. */
+type Separador = string | RegExp;
+
 /** Comillas con las que una hoja de cálculo envuelve una celda. */
 const COMILLAS: Array<[string, string]> = [
   ['"', '"'],
@@ -95,18 +114,39 @@ function esFaltante(celda: string): boolean {
 }
 
 /**
- * Separador de columnas por prioridad: tabulador > `;` > coma. La coma es la
- * dudosa, porque en español es el separador decimal: solo cuenta como
- * separador si alguna línea con coma no es un número con coma decimal
- * (`1, 2, 3` y `1,2,3` sí lo son; `1,5` y `2,5` no).
+ * Separador de columnas por prioridad: tabulador > `;` > coma seguida de
+ * espacio (`1, 2, 3`) > espacios > coma a secas.
+ *
+ * Los dos dudosos son el espacio y la coma. El espacio separa valores
+ * («150 160 170», una tabla de un PDF) salvo que TODAS las líneas con espacio
+ * interno sean números con espacios de miles («1 234»): sin esta regla,
+ * `parsearNumero` los quitaba y «1 2 3» se leía como 123 sin ningún aviso. La
+ * coma es en español el separador decimal: solo cuenta como separador si
+ * alguna línea con coma no es un número con coma decimal («1,5») ni con coma
+ * de miles («1,234.5»).
  */
-function detectarSeparador(lineas: string[]): string | null {
+function detectarSeparador(lineas: string[]): Separador | null {
   const conContenido = lineas.filter((l) => l.trim() !== '');
   if (conContenido.some((l) => l.includes('\t'))) return '\t';
   if (conContenido.some((l) => l.includes(';'))) return ';';
+  if (conContenido.some((l) => /,\s/.test(l.trim()))) return ',';
+  const conEspacio = conContenido.filter((l) => /\S\s+\S/.test(l.trim()));
+  if (conEspacio.length > 0 && !conEspacio.every((l) => MILES_ESPACIO.test(limpiarCelda(l)))) return /\s+/;
   const conComa = conContenido.filter((l) => l.includes(','));
   if (conComa.length === 0) return null;
-  return conComa.every((l) => COMA_DECIMAL.test(limpiarCelda(l))) ? null : ',';
+  // Aquí toda línea con espacio interno es ya un número con espacio de miles
+  // (si no, el paso anterior habría elegido el espacio): se retira antes de
+  // mirar la coma, para que «12 345,6» siga siendo un solo valor.
+  const esNumero = (l: string): boolean => {
+    const celda = limpiarCelda(l).replace(/\s+/g, '');
+    return COMA_DECIMAL.test(celda) || MILES_COMA.test(celda);
+  };
+  return conComa.every(esNumero) ? null : ',';
+}
+
+/** Parte una línea por el separador; con espacios, sin contar los de los extremos. */
+function partir(linea: string, sep: Separador): string[] {
+  return (sep instanceof RegExp ? linea.trim() : linea).split(sep);
 }
 
 /** Quita las celdas vacías del final de un pegado horizontal (`1;2;3;`). */
@@ -134,12 +174,12 @@ export function parsearPegado(texto: string): ResultadoPegado {
   } else if (lineas.length === 1) {
     // Pegado horizontal («1, 2, 3»): cada celda es un valor de la serie, no
     // una columna distinta, así que no se avisa de varias columnas.
-    celdas = sinColaVacia(lineas[0].split(sep).map(limpiarCelda));
+    celdas = sinColaVacia(partir(lineas[0], sep).map(limpiarCelda));
   } else {
     // Varias líneas con separador: es una tabla y se usa su primera columna.
     celdas = [];
     for (const linea of lineas) {
-      const partes = linea.split(sep).map(limpiarCelda);
+      const partes = partir(linea, sep).map(limpiarCelda);
       celdas.push(partes[0] ?? '');
       // Un tabulador suelto al final de la línea no es una segunda columna.
       if (partes.slice(1).some((p) => p !== '')) resultado.variasColumnas = true;

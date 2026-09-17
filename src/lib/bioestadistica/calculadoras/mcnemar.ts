@@ -170,6 +170,7 @@ export function presentar(s: Resultado, e: EntradasMcNemar, ctx: Contexto): Pres
     interpretacion.push(rellenar(textos.interpretacion.sin_discordantes, vars));
     interpretacion.push(rellenar(textos.interpretacion['or_pareado.indefinido'], vars));
   } else {
+    interpretacion.push(rellenar(textos.interpretacion[`direccion.${s.bandas.direccion}`], vars));
     interpretacion.push(rellenar(textos.interpretacion[`prueba.${principal}`], vars));
     interpretacion.push(rellenar(textos.interpretacion[`decision.${s.bandas.decision}`], vars));
     interpretacion.push(rellenar(textos.interpretacion[orDefinido ? 'or_pareado' : 'or_pareado.indefinido'], vars));
@@ -208,6 +209,9 @@ export const definicion: Definicion<EntradasMcNemar> = {
   motor: 'ts',
   claves: [
     'resumen',
+    'direccion.a_mayor',
+    'direccion.b_mayor',
+    'direccion.igual',
     'prueba.exacta',
     'prueba.edwards',
     'decision.rechaza',

@@ -35,7 +35,6 @@ import {
   desviacion,
   media,
   mediaGeometrica,
-  sumaNeumaier,
 } from '../../src/lib/bioestadistica/metodos/descriptivos.ts';
 import { parsearPegado } from '../../src/lib/bioestadistica/nucleo/pegado.ts';
 import { calcular, definicion, presentar } from '../../src/lib/bioestadistica/calculadoras/descriptivos.ts';
@@ -177,15 +176,26 @@ test('la media y la DE coinciden con las fórmulas ingenuas', () => {
     const deIngenua = Math.sqrt(x.reduce((s: number, v: number) => s + (v - mediaIngenua) ** 2, 0) / (n - 1));
     const de = desviacion(x);
     assert.ok(Math.abs(de - deIngenua) <= 1e-12 * Math.max(1, de), `${id}: DE ${de} vs ${deIngenua}`);
-    // La suma compensada no cambia el resultado de una columna corta y benigna.
-    assert.ok(Math.abs(sumaNeumaier(x) - x.reduce((s: number, v: number) => s + v, 0)) <= 1e-9 * Math.max(1, Math.abs(sumaNeumaier(x))));
   }
 });
 
-test('la suma compensada sobrevive a términos de magnitudes muy distintas', () => {
-  const x = [1e16, 1, -1e16, 1];
-  assert.equal(sumaNeumaier(x), 2);
-  assert.notEqual(x.reduce((s: number, v: number) => s + v, 0), 2); // la suma ingenua pierde los unos
+test('la media reproduce a `mean()` de R, incluida su primera pasada sin compensar', () => {
+  // Valores de R 4.5.2 en arm64, donde `LDOUBLE` es el mismo doble de 64 bits.
+  // Una suma compensada daría otro número en los dos casos: la segunda pasada
+  // de R recupera precisión, pero no toda, y el oráculo es R.
+  const mezclado = [1e16, 1, 1, 1, -1e16, 2, 3, -2];
+  assert.equal(media(mezclado), 0.609375, 'Rscript -e "mean(c(1e16,1,1,1,-1e16,2,3,-2))" da 0.609375');
+  assert.notEqual(
+    media(mezclado),
+    mezclado.reduce((s: number, v: number) => s + v, 0) / mezclado.length,
+    'la media de una sola pasada daría 0.375',
+  );
+  const otro = [1e10, 1, -1e10, 2, 3];
+  assert.equal(media(otro), 1.1999995422363281, 'R da 1.1999995422363281, no 1.2');
+  assert.equal(desviacion(otro), 7071067811.8654757, 'R da sd = 7071067811.8654757');
+  // Con datos corrientes la segunda pasada deja la media exacta al último bit.
+  assert.equal(media([1, 2, 3, 4]), 2.5);
+  assert.equal(media(COLUMNA_EJEMPLO), 142.6);
 });
 
 test('el cuantil del tipo 7 reproduce la interpolación de R', () => {
@@ -334,7 +344,7 @@ test('validar() rechaza columnas cortas, valores no finitos y niveles fuera de r
 
 test('bandas y avisos del ejemplo y de los casos límite', () => {
   const ej = calcular(EJEMPLO, 0.95);
-  assert.deepEqual(ej.bandas, { asimetria: 'simetrica', normalidad: 'sin_evidencia', n: 'normal' });
+  assert.deepEqual(ej.bandas, { cv: 'aplica', asimetria: 'simetrica', normalidad: 'sin_evidencia', n: 'normal' });
   assert.deepEqual(ej.avisos.map((a) => a.codigo), ['atipicos']);
   assert.deepEqual(ej.avisos[0]?.params, { n_atipicos: 3, k: 1.5 });
 
@@ -349,7 +359,9 @@ test('bandas y avisos del ejemplo y de los casos límite', () => {
   assert.equal(plana.bandas.asimetria, 'simetrica');
 
   const conCero = calcular({ x: [-3, 0, 2, 5, 8], nivel: 0.95 }, 0.95);
+  // Media 2.4 > 0: la media geométrica no existe, pero el CV sí se puede leer.
   assert.deepEqual(conCero.avisos.map((a) => a.codigo), ['no_positivos']);
+  assert.equal(conCero.bandas.cv, 'aplica');
 
   // Cola derecha marcada: banda de asimetría y evidencia contra la normalidad.
   const sesgada = fixture.casos.find((c) => c.id === 'sesgada');
@@ -381,6 +393,54 @@ test('bandas y avisos del ejemplo y de los casos límite', () => {
   assert.ok(!limite.avisos.some((a) => a.codigo === 'sw_n_grande'));
 });
 
+test('con media no positiva el CV se retira de la celda y de la interpretación, pero el número no cambia', () => {
+  // Media negativa: el CV saldría como «−52.7 %», que se lee al revés.
+  // Media 0: el CV es infinito. En ninguno de los dos casos es interpretable.
+  const columnas: Array<[string, number[]]> = [
+    ['media_negativa', [-10, -8, -6, -4, -2]],
+    ['media_cero', [-3, -1, 0, 1, 3]],
+  ];
+  for (const [id, x] of columnas) {
+    const e: EntradasDescriptivos = { x, nivel: 0.95 };
+    const s = calcular(e, 0.95);
+    assert.ok(s.valores.media.valor <= 0, `${id}: la media debería ser ≤ 0`);
+    assert.equal(s.bandas.cv, 'no_aplica', id);
+    assert.ok(s.avisos.some((a) => a.codigo === 'cv_no_aplica'), `${id}: falta el aviso cv_no_aplica`);
+    // El valor crudo sigue siendo el de R: lo que cambia es cómo se publica.
+    assert.equal(s.valores.cv.valor, s.valores.de.valor / s.valores.media.valor, id);
+    for (const lang of IDIOMAS) {
+      const p = presentar(s, e, contextoDePrueba(SLUG, lang));
+      assert.equal(p.celdas.cv.valor, '—', `${lang}/${id}: la celda del CV debería ser una raya`);
+      assert.ok((p.celdas.cv.nota ?? '').length > 0, `${lang}/${id}: falta la nota «no aplica»`);
+      assert.equal(p.celdas.cv.ic, undefined);
+      const texto = p.interpretacion.join(' ');
+      assert.ok(!texto.includes('∞'), `${lang}/${id}: el infinito no debería llegar a la interpretación`);
+      assert.ok(!texto.includes('52.7'), `${lang}/${id}: el CV no debería imprimirse`);
+      assert.ok(!texto.includes('{'), `${lang}/${id}: marcador sin rellenar`);
+      // La fila de exportación tampoco publica el número.
+      assert.deepEqual(p.resumen.find((f) => f[0] === contextoDePrueba(SLUG, lang).textos.etiquetas.cv)?.[1], '—');
+    }
+  }
+  // Con media positiva no cambia nada: el CV se sigue publicando como antes.
+  const ej = calcular(EJEMPLO, 0.95);
+  assert.equal(ej.bandas.cv, 'aplica');
+  assert.ok(!ej.avisos.some((a) => a.codigo === 'cv_no_aplica'));
+  const es = presentar(ej, EJEMPLO, contextoDePrueba(SLUG, 'es'));
+  assert.ok(es.celdas.cv.valor.startsWith('30.8'));
+  assert.ok(es.interpretacion[0]?.includes('30.8'));
+});
+
+test('el caso `negativos` del fixture conserva el CV crudo de R pese a la nueva presentación', () => {
+  const caso = fixture.casos.find((c) => c.id === 'negativos');
+  assert.ok(caso);
+  const esperado = normalizarR(caso.esperado) as Record<string, number>;
+  const s = calcular(entradasDe(caso), 0.95);
+  assert.ok(esperado.cv < 0, 'el oráculo debería traer un CV negativo');
+  assert.ok(Math.abs(s.valores.cv.valor - (esperado.cv as number)) <= 1e-12 * Math.abs(esperado.cv as number));
+  assert.equal(s.bandas.cv, 'no_aplica');
+  assert.equal(presentar(s, entradasDe(caso), contextoDePrueba(SLUG, 'es')).celdas.cv.valor, '—');
+});
+
 test('una columna pegada tal cual sale del parser alimenta la calculadora', () => {
   // Encabezado, coma decimal, faltante y texto: el parser los resuelve y lo que
   // entrega es exactamente lo que `validar()` y `calcular()` esperan.
@@ -409,7 +469,10 @@ test('presentar() rellena todas las plantillas en español e inglés, también e
     const ctx = contextoDePrueba(SLUG, lang);
     for (const e of entradas) {
       const p = presentar(calcular(e, e.nivel), e, ctx);
-      assert.deepEqual(Object.keys(p.celdas).sort(), [...definicion.salidas].sort());
+      // En orden, no solo el mismo juego de claves: la tabla, el CSV y el
+      // Markdown recorren `celdas` tal como `presentar()` las construyó.
+      assert.deepEqual(Object.keys(p.celdas), [...definicion.salidas]);
+      assert.deepEqual(p.resumen.map((f) => f[0]), definicion.salidas.map((k) => ctx.textos.etiquetas[k]));
       const textos = [
         ...p.interpretacion,
         p.metodos,
