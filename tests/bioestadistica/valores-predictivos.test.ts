@@ -226,7 +226,10 @@ test('presentar() rellena todas las plantillas en ambos idiomas y la gráfica ll
   const sinN = { ...EJEMPLO, n_d: 0, n_nd: 0 };
   const s = presentar(calcular(sinN, 0.95), sinN, contextoDePrueba(SLUG, 'es'));
   assert.ok(s.metodos.includes('No se calcularon intervalos'), s.metodos);
-  assert.equal(s.celdas.vpp.ic, '');
+  // Sin intervalo la celda no lleva `ic` (ni siquiera vacío): la página oculta
+  // la línea y el barrido de presentación no admite cadenas vacías visibles.
+  assert.equal(s.celdas.vpp.ic, undefined);
+  assert.equal(s.celdas.vpn.ic, undefined);
   const en = presentar(calcular(EJEMPLO, 0.95), EJEMPLO, contextoDePrueba(SLUG, 'en'));
   assert.equal(en.celdas.vpp.valor, '87.9%');
   assert.ok(en.interpretacion[0].includes('255 true positives'), en.interpretacion[0]);

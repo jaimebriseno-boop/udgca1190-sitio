@@ -363,7 +363,11 @@ verificadas contra PubMed y Crossref; ocho cadenas `bio.ui.*` nuevas.
   perfil `shapiro` se aprieta a 1e-10/1e-12 tras medir
   6.7e-16 en W y 2.2e-13 en p. Evidencia del revisor sin hallazgos: 252 casos límite nuevos
   TS-vs-R (3,881 comparaciones, 0 discrepancias reales) y 89,458 SVG renderizados sin
-  excepciones ni marcadores sin rellenar.
+  excepciones ni marcadores sin rellenar. Ese barrido queda en el repositorio como
+  `npm run barrido:bio` (`scripts/bio-barrido.mjs`), ampliado a las diez calculadoras
+  (60,646 combinaciones × 2 idiomas); al ampliarlo destapó que `valores-predictivos` (H1)
+  entregaba `ic: ''` en VPP y VPN sin tamaños de validación en vez de omitir el intervalo,
+  y se corrigió a la convención de A1 (sin `ic`).
 
 **Pendiente conocido.** (1) Cuando la columna pegada no cabe en la URL (tope de 1,500
 caracteres) el enlace se comparte sin los datos y no hay aviso visible. (2) No se

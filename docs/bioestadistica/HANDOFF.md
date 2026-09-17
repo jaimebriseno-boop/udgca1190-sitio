@@ -129,6 +129,7 @@ npm run check            # 0 errores / 0 advertencias (124 hints preexistentes)
 npm run test             # performance + bio (4 + 961 al cierre de H2; ver PROGRESO para la cifra vigente)
 npm run fixtures:bio     # regenera fixtures con Rscript (solo si cambian plantillas o casos)
 npm run fixtures:bio:check
+npm run barrido:bio      # presentar()/grafica() de las 10 calculadoras sobre ~60k combinaciones × 2 idiomas (~3–4 min); compuerta de cierre de hito, sale con 1 si hay problemas
 npm run audit:performance          # sin --check-data-baseline (ver pendiente ajeno); restaurar luego docs/performance/after.json
 npm run preview -- --host 127.0.0.1 --port 4321
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars \
@@ -223,6 +224,11 @@ en 418–441; MOTOR §1.6 para Kaplan-Meier en TS):
   con `derivar()` en la prueba, no con un caso del fixture.
 - `Avisos.astro` necesita los `params` del resultado para el SSR; sin ellos el HTML publica los
   marcadores en crudo hasta que carga el JavaScript.
+- `npm run test` comprueba el ejemplo y los casos de fixture; una clave de aviso o de interpretación
+  que solo se activa en otra combinación (p. ej. `direccion.*` de McNemar a medio escribir entre módulo
+  y YAML) solo la ve `npm run barrido:bio` (`scripts/bio-barrido.mjs`, del revisor de H2). Pasarlo
+  después del último retoque y antes del commit de cierre de cada hito; al añadir una calculadora,
+  añadirle su bloque de combinaciones.
 - `parsearNumero` quita los espacios de miles: cualquier analizador que le pase una celda con
   espacios debe haber decidido antes si el espacio separa valores («150 160 170») o agrupa miles
   («1 234»); `pegado.ts` lo resuelve con la regla de un solo hueco. Probar siempre el pegado de una

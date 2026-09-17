@@ -78,7 +78,9 @@ captura, enlace compartido sin la columna, orden de las celdas) y cuatro bajos, 
 heredado de H0; todos corregidos en el commit de seguimiento y reverificados por el revisor con su
 barrido (0 problemas) y por la suite. Su reverificación destapó una regresión del propio arreglo de la
 media (la varianza centrada con la media de una pasada se apartaba 4.7e-3 de `var()` de R en una
-columna mal condicionada), corregida con el caso de fixture `mal_condicionado` en un tercer commit. Además, cada agente constructor contrastó su calculadora con R
+columna mal condicionada), corregida con el caso de fixture `mal_condicionado` en un tercer commit. Su
+barrido queda en el repositorio como `npm run barrido:bio` (`scripts/bio-barrido.mjs`), ampliado a las
+diez calculadoras, y forma parte de la secuencia de cierre de hito. Además, cada agente constructor contrastó su calculadora con R
 en sus propios casos límite (p. ej. 30 columnas de n 3 a 5,000 para Shapiro-Wilk).
 
 ## Hecho en H1

@@ -92,8 +92,10 @@ export function presentar(s: Resultado, e: EntradasPredictivos, ctx: Contexto): 
     ? `${icNivel} · ${textos.etiquetas[v.vpp.metodo === 'logit-mercaldo-ajustado' ? 'nota_logit_ajustado' : 'nota_logit']}`
     : textos.etiquetas.nota_sin_ic;
   const celdas: Presentacion['celdas'] = {
-    vpp: { valor: fmt.num(v.vpp.valor, 'pct1'), ic: fmt.ic(v.vpp.ic, 'pct1'), nota: notaIc, clase: 'destacada' },
-    vpn: { valor: fmt.num(v.vpn.valor, 'pct1'), ic: fmt.ic(v.vpn.ic, 'pct1'), nota: notaIc, clase: 'destacada' },
+    // Sin tamaños de validación no hay intervalo: la celda va sin `ic`, no con
+    // una cadena vacía (la misma convención que las razones con celda 0 en A1).
+    vpp: { valor: fmt.num(v.vpp.valor, 'pct1'), ...(v.vpp.ic ? { ic: fmt.ic(v.vpp.ic, 'pct1') } : {}), nota: notaIc, clase: 'destacada' },
+    vpn: { valor: fmt.num(v.vpn.valor, 'pct1'), ...(v.vpn.ic ? { ic: fmt.ic(v.vpn.ic, 'pct1') } : {}), nota: notaIc, clase: 'destacada' },
     lr_pos: { valor: fmt.num(v.lr_pos.valor, 'lr') },
     lr_neg: { valor: fmt.num(v.lr_neg.valor, 'lr') },
   };
