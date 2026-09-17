@@ -345,7 +345,10 @@ verificadas contra PubMed y Crossref; ocho cadenas `bio.ui.*` nuevas.
   (7) el comentario de la media de `descriptivos` prometía sumas compensadas «como R»
   cuando R acumula en doble sin compensar (x = [1e16, 1, 1, 1, −1e16, 2, 3, −2] daba 0.9375
   frente a 0.609375): se replica la aritmética de `mean()` de R (dos pasadas, sin
-  Neumaier); (8) el estimador y el EE de Agresti-Min se comparten entre el intervalo y su
+  Neumaier); al hacerlo, `varianza()` pasó a centrarse con la media de una pasada y el
+  revisor lo detectó con un lote adversario (x = 1e9 + i·1e-6: 4.7e-3 de desviación
+  frente a `var()`): `var()` de R centra con la misma media de dos pasadas, que es lo que
+  se hace ahora, con el caso `mal_condicionado` en el fixture para que quede fijado; (8) el estimador y el EE de Agresti-Min se comparten entre el intervalo y su
   aviso de recorte; (9) la banda `direccion` de McNemar se usa en la interpretación o se
   retira; (10) `media-desde-mediana` avisa (`campos_ignorados`) cuando el escenario deja
   fuera un campo capturado. Comprobado que los rótulos del nomograma de Fagan sí pasan por

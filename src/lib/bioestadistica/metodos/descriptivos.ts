@@ -94,19 +94,15 @@ export function momentoCentral(x: readonly number[], k: number, m: number): numb
 /**
  * Varianza muestral con denominador n − 1, como `var()` de R.
  *
- * Ojo al detalle: `var()` centra con su propia media de UNA pasada (Σx/n), no
- * con la de dos pasadas de `mean()`. La diferencia es de segundo orden, porque
- * la suma de cuadrados es estacionaria en la media, pero se reproduce igual
- * para que TypeScript y R hagan las mismas operaciones en el mismo orden.
+ * `var()` centra con la MISMA media de dos pasadas que `mean()` (comprobado
+ * contra R 4.5.2 en columnas mal condicionadas: con x = 1e9 + i·1e-6 centrar
+ * con Σx/n se aparta 4.7e-3 en términos relativos, y con la media de dos
+ * pasadas coincide exactamente). La suma de cuadrados es ingenua, como en R.
  */
-export function varianza(x: readonly number[]): number {
-  const n = x.length;
-  let s = 0;
-  for (const v of x) s += v;
-  const m = s / n;
+export function varianza(x: readonly number[], m: number = media(x)): number {
   let ss = 0;
   for (const v of x) ss += (v - m) ** 2;
-  return ss / (n - 1);
+  return ss / (x.length - 1);
 }
 
 /** Desviación estándar muestral, √(Σ(xᵢ − x̄)²/(n − 1)). */

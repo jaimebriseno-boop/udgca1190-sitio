@@ -47,18 +47,18 @@ publica con el visto bueno del dueño sobre las páginas reales y el merge a `ma
   `bandaAsimetriaResumen`; 33 referencias nuevas verificadas contra PubMed y Crossref (58 en total); ocho
   claves `bio.ui.*` nuevas.
 - Pruebas nuevas: `efecto-2x2` (52), `chi-cuadrada-fisher` (45), `mcnemar` (45), `ic-media` (35),
-  `media-desde-mediana` (50), `descriptivos` (54), `shapiro` (8), `pegado` (36), `avisos` (8), `svg` (+26),
+  `media-desde-mediana` (50), `descriptivos` (56), `shapiro` (8), `pegado` (36), `avisos` (8), `svg` (+26),
   `bandas` (+2), `entrada` y `exportar` (convenios de miles, enlace sin columna), `codigoR` (vectores y
   `NA`), `contenido.test.ts` (gráficas nuevas, avisos interpolados con parámetros en el ejemplo y en
-  todos los casos del fixture, orden exacto de las celdas, veto a `rScript`); 88 casos de fixture nuevos
-  (142 en total, 10 calculadoras).
+  todos los casos del fixture, orden exacto de las celdas, veto a `rScript`); 89 casos de fixture nuevos
+  (143 en total, 10 calculadoras).
 - Docs: DECISIONES (sección H2), PROGRESO, HANDOFF (plan de H3 y trampas nuevas), ARQUITECTURA §6.4.
 
 ## Verificación conservada (H2)
 
 `npm run build` 55 páginas (22 de la sección: índice + 10 calculadoras × 2 idiomas) · `npm run check` 0
-errores / 0 advertencias (124 hints preexistentes) · `npm run test` 4 + 1,002 pruebas en verde ·
-`npm run fixtures:bio:check` sin deriva (10 calculadoras, 142 casos) · `npm run audit:performance` en
+errores / 0 advertencias (124 hints preexistentes) · `npm run test` 4 + 1,004 pruebas en verde ·
+`npm run fixtures:bio:check` sin deriva (10 calculadoras, 143 casos) · `npm run audit:performance` en
 verde (sin recursos externos ni faltantes; el único `false` es el de `signos.json`, pendiente ajeno) ·
 capturas de las seis páginas nuevas en ES y EN a 1280 px, dos a 400 px e impresión (PDF) revisadas, más
 el índice, el controlador de `descriptivos` leyendo una columna desde la URL y los estados de
@@ -76,7 +76,9 @@ combinaciones × 2 idiomas con 89,458 SVG): un alto (valores separados por espac
 silencio), cinco medios (coma de miles, CV con media ≤ 0, píldora y URL de impresión con errores de
 captura, enlace compartido sin la columna, orden de las celdas) y cuatro bajos, más el espejo «1.234,5»
 heredado de H0; todos corregidos en el commit de seguimiento y reverificados por el revisor con su
-barrido (0 problemas) y por la suite. Además, cada agente constructor contrastó su calculadora con R
+barrido (0 problemas) y por la suite. Su reverificación destapó una regresión del propio arreglo de la
+media (la varianza centrada con la media de una pasada se apartaba 4.7e-3 de `var()` de R en una
+columna mal condicionada), corregida con el caso de fixture `mal_condicionado` en un tercer commit. Además, cada agente constructor contrastó su calculadora con R
 en sus propios casos límite (p. ej. 30 columnas de n 3 a 5,000 para Shapiro-Wilk).
 
 ## Hecho en H1

@@ -79,7 +79,7 @@ test('el fixture trae el ejemplo primero y cubre exactamente los casos curados',
     ['ejemplo', ...curados.casos.map((c) => c.id)],
     `casos/${SLUG}.json cambió sin regenerar`,
   );
-  assert.equal(fixture.casos.length, 16);
+  assert.equal(fixture.casos.length, 17);
   for (const curado of curados.casos) {
     assert.deepEqual(fixture.casos.find((c) => c.id === curado.id)?.entradas, curado.entradas);
     assert.ok(curado.nota.length > 0, `${curado.id}: falta la nota`);
