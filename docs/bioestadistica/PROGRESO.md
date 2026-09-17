@@ -53,7 +53,7 @@ errores / 0 advertencias (124 hints preexistentes) · `npm run test` 4 + 471 pru
 `npm run fixtures:bio:check` sin deriva (4 calculadoras, 54 casos: 13 + 17 + 10 + 14; 0 discrepancias
 TS/R en ningún campo, incluidos ∞, `NA` y las certezas) · `npm run audit:performance` sin recursos
 externos ni faltantes · capturas de las tres páginas en ES y EN a 1280 px, 400 px e impresión (PDF)
-revisadas · revisión de código independiente (agente `code-reviewer`) con sus hallazgos corregidos.
+revisadas · revisión de código independiente (agente `code-reviewer`): seis hallazgos reales (dos medios: el recorte del nomograma sacaba el punto del LR de su recta; el párrafo de Métodos atribuía la corrección de Haldane a una celda en 0 que no siempre existía), todos corregidos antes del commit; además cruzó TypeScript contra R en 44 casos límite fuera de los fixtures (niveles 0.8 y 0.999, Sn/Sp en 0 y 1, prevalencias 0 y 1, celdas en 0 con cada método de IC, n de 1.8 millones, LR de 1e12 y 1e-300) con coincidencia total, barrió unas 200 mil combinaciones de `presentar()` y `renderGrafica()` en los dos idiomas sin excepciones ni marcadores sin rellenar, y sondeó el escapado del SVG con inyecciones en todos los huecos de texto.
 
 Pendiente ajeno a la sección: `audit:performance -- --check-data-baseline` sigue fallando porque
 `signos.json` de propedéutica cambió en `main` y `docs/performance/baseline.json` no se actualizó.
