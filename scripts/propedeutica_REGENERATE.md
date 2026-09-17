@@ -21,6 +21,11 @@ El enriquecimiento de `scripts/propedeutica_evidencia.py` incorpora:
 - `propedeutica_sustitucion/revision_textos_wiki.json`: datos revisados en las
   extracciones de artículos, conteos 2×2, correcciones de correspondencia y
   trazabilidad (PMID, UID, ruta, SHA-256, líneas).
+- `propedeutica_sustitucion/revision_continuacion.json`: cotejo posterior de
+  39 fichas, fuentes accesibles, localizadores y registro de intentos sin datos
+  utilizables. Se aplica por UID después de crear las variantes; un cambio de
+  identificador o un UID no encontrado interrumpe la generación. Las copias
+  temporales de artículos no son dependencias de ejecución.
 - `propedeutica_sustitucion/articulos.json`: metadatos bibliográficos recuperados
   con PubMed efetch para los 298 PMID de los registros externos.
 - `docs/propedeutica/REVISION_2026-09-16.md`: cobertura, limitaciones y validación.
@@ -35,6 +40,7 @@ python3 scripts/propedeutica_generar_signos.py \
   --salida public/herramientas/propedeutica-basada-en-evidencia/app/data/signos.json \
   --fecha 2026-09-16
 python3 -m unittest discover -s scripts -p 'test_propedeutica.py'
+python3 scripts/propedeutica_inventario.py
 node --check public/herramientas/propedeutica-basada-en-evidencia/app/js/app.js
 npm run check
 npm run build
@@ -44,6 +50,11 @@ Python solo requiere la biblioteca estándar. El generador mantiene los
 identificadores `i` ya publicados y agrega al final los desenlaces adicionales.
 Comprobar en navegador las fichas, búsqueda, calculadora, rangos, cero, infinito
  y los idiomas español e inglés antes de publicar.
+
+`propedeutica_inventario.py` regenera `docs/propedeutica/faltantes.csv` desde
+el JSON publicado, con las seis métricas, PMID y motivos conservadores para
+revisar cada ausencia. «No recuperado» no demuestra que el artículo no lo
+publique, ni convierte automáticamente el campo en «no aplicable».
 
 ## Interpretación de los campos
 

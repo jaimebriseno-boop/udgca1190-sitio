@@ -10,6 +10,7 @@ from pathlib import Path
 
 from propedeutica_evidencia import Evidencia, completar_lr, normalizar
 from propedeutica_generar_signos import vp_escenarios, veredicto
+from propedeutica_inventario import inventario
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / 'public/herramientas/propedeutica-basada-en-evidencia/app/data/signos.json'
@@ -246,7 +247,9 @@ class Catalogo(unittest.TestCase):
         self.assertNotIn('ciclo respiratorio', r['mn'])
 
     def test_citas_uci_y_valores_predictivos_pupilares(self):
-        self.assertFalse(self.rows[681].get('refs'))  # No atribuir el rango MEWS a su creador.
+        self.assertEqual({r['pmid'] for r in self.rows[681]['refs']},
+                         {'19540542', '19033494', '19220521', '18843068'})
+        self.assertEqual(self.rows[681]['lp'], 3.7)  # No transferir la síntesis posterior de 4,7.
         self.assertTrue(all(self.rows[i].get('refs') for i in range(682, 692)))
         self.assertEqual((self.rows[690]['vpp'], self.rows[690]['vpn']), (86, 70))
         self.assertEqual((self.rows[116]['vpp'], self.rows[116]['vpn']), (70, 87))
@@ -254,6 +257,82 @@ class Catalogo(unittest.TestCase):
             self.assertEqual(sum(self.rows[i]['tabla2x2'].values()), 115)
         self.assertIn('espiración', self.rows[687]['mn'])
         self.assertEqual([r['pmid'] for r in self.rows[515]['refs']], ['11303155'])
+
+    def test_continuacion_trazable_y_aplicada_al_uid_correcto(self):
+        review = json.loads((ROOT / 'scripts/propedeutica_sustitucion/revision_continuacion.json').read_text())
+        self.assertEqual(len(review['revisiones']), len({r['uid'] for r in review['revisiones']}))
+        for item in review['revisiones']:
+            self.assertEqual(self.by_uid[item['uid']]['i'], item['i'])
+            self.assertRegex(item['sha256'], r'^[a-f0-9]{64}$')
+            self.assertTrue(item['url'].startswith('https://'))
+            self.assertTrue(item['localizador'])
+        e = Evidencia.__new__(Evidencia)
+        e.continuacion = {'x': {'i': 5, 'valores': {'sn': 20}}}
+        with self.assertRaises(ValueError):
+            e.completar_revision({'uid': 'x', 'i': 6})
+
+    def test_codo_y_soplos_conservan_denominadores_evaluables(self):
+        for i, n in ((365, 367), (366, 367), (912, 1736), (913, 778)):
+            self.assertEqual(sum(self.rows[i]['tabla2x2'].values()), n)
+        self.assertEqual((self.rows[913]['vpp'], self.rows[913]['vpn']), (42.8, 95.8))
+        self.assertAlmostEqual(self.rows[912]['ln'], .06)
+
+    def test_celulitis_no_mezcla_tablas_ni_poblaciones(self):
+        r = self.rows[979]
+        self.assertEqual((r['sn'], r['sp'], r['n']), (93.5, 38.4, 204))
+        self.assertAlmostEqual(r['ln'], .169)
+        self.assertEqual((self.rows[978]['n'], self.rows[981]['n']), (175, 175))
+        self.assertEqual((self.rows[981]['vpp'], self.rows[981]['vpn']), (64.7, 87.5))
+
+    def test_categorias_park_y_predictivos_observados(self):
+        for i, ppv in ((558, 92.6), (559, 73.6), (560, 38.3)):
+            r = self.rows[i]
+            self.assertIn('brazo caído', r['s'])
+            self.assertTrue(r['ordinal'])
+            self.assertEqual(r['vpp'], ppv)
+            self.assertNotIn('ln', r)
+            self.assertNotIn('vpn', r)
+        self.assertEqual((self.rows[1044]['sn'], self.rows[1044]['sp']), (79, 50))
+        self.assertNotIn('vpp', self.rows[1044])  # 61/70 de la revisión usan prevalencia supuesta.
+        self.assertNotIn('vpn', self.rows[1044])
+
+    def test_polaridad_apendicitis_y_arbol_neumonia(self):
+        self.assertIn('>6750', self.rows[892]['s'])
+        self.assertEqual((self.rows[892]['sn'], self.rows[892]['sp']), (97, 51))
+        r = self.rows[960]
+        self.assertEqual(r['tabla2x2'], {'vp': 15, 'fp': 330, 'fn': 1, 'vn': 3635})
+        self.assertEqual(sum(r['tabla2x2'].values()), 3981)
+        self.assertEqual(r['ln'], .07)
+        self.assertEqual(r['vpn'], 100)  # Redondeado; existe un falso negativo.
+
+    def test_palidez_complemento_y_umbral_original(self):
+        presente, ausente = self.rows[1011], self.rows[1012]
+        self.assertEqual((presente['sn'], presente['sp']), (50, 92))
+        self.assertEqual((ausente['sn'], ausente['sp']), (50, 8))
+        self.assertAlmostEqual(presente['lp'], ausente['ln'])
+        self.assertAlmostEqual(presente['ln'], ausente['lp'])
+        self.assertIn('7', presente['c'])
+
+    def test_patito_feo_consenso_y_monofilamento_desenlace(self):
+        r = self.rows[970]
+        self.assertIn('2/3', r['s'])
+        self.assertEqual(r['tabla2x2'], {'vp': 5, 'fp': 3, 'fn': 0, 'vn': 137})
+        self.assertEqual((r['sn'], r['vpp']), (100, 62.5))
+        r = self.rows[1082]
+        self.assertEqual((r['sn'], r['sp']), (80, 86))
+        self.assertIn('insensible', r['c'])
+        self.assertNotIn('úlcera', r['c'])
+
+    def test_inventario_no_confunde_cero_y_datos_ausentes(self):
+        entries = {r['i']: r for r in inventario(self.rows)}
+        for r in self.rows:
+            missing = [k for k in ('sn', 'sp', 'lp', 'ln', 'vpp', 'vpn') if r.get(k) is None]
+            if missing:
+                self.assertEqual(entries[r['i']]['metricas_no_recuperadas'], ';'.join(missing))
+            else:
+                self.assertNotIn(r['i'], entries)
+        self.assertNotIn(970, entries)
+        self.assertEqual(entries[558]['tipo'], 'ordinal')
 
 
 if __name__ == '__main__':
