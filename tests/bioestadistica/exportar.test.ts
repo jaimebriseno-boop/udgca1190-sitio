@@ -27,6 +27,7 @@ const conColumna: EntradaDef[] = [
   ...defs,
   { id: 'datos', tipo: 'columna', requerido: false, derivado: false },
   { id: 'cola', tipo: 'opcion', opciones: ['dos', 'una'], requerido: false, derivado: false },
+  { id: 'corr', tipo: 'decimal', opciones: ['0', '0.5'], requerido: true, derivado: false },
 ];
 
 // ---------------------------------------------------------------------------
@@ -57,6 +58,9 @@ test('los parámetros desconocidos o mal formados se ignoran sin romper la pági
   assert.deepEqual(decodificarEstado('?x=68&n=abc&utm_source=x&nivel=', defs), { x: 68 });
   assert.deepEqual(decodificarEstado('?total=99', defs), {});
   assert.deepEqual(decodificarEstado('?cola=tres', conColumna), {});
+  // Un selector numérico solo admite sus opciones: «3» no entra, «0.5» sí (como número).
+  assert.deepEqual(decodificarEstado('?corr=3', conColumna), {});
+  assert.deepEqual(decodificarEstado('?corr=0.5', conColumna), { corr: 0.5 });
   assert.deepEqual(decodificarEstado('', defs), {});
 });
 

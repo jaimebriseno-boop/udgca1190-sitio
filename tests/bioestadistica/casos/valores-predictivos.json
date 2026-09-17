@@ -1,0 +1,70 @@
+{
+  "calculadora": "valores-predictivos",
+  "casos": [
+    {
+      "id": "sin_n",
+      "entradas": { "sn": 0.85, "sp": 0.95, "prev": 0.3, "n_d": 0, "n_nd": 0, "nivel": 0.95 },
+      "nota": "Sin tamanos del estudio de validacion: VPP y VPN viajan como escalares (sin IC)."
+    },
+    {
+      "id": "solo_nd",
+      "entradas": { "sn": 0.85, "sp": 0.95, "prev": 0.3, "n_d": 80, "n_nd": 0, "nivel": 0.95 },
+      "nota": "Solo uno de los dos tamanos: tampoco hay IC (aviso sin_n)."
+    },
+    {
+      "id": "prev_0001",
+      "entradas": { "sn": 0.85, "sp": 0.95, "prev": 0.001, "n_d": 80, "n_nd": 120, "nivel": 0.95 },
+      "nota": "Prevalencia del 0.1 %: VPP muy bajo (1.7 %) con Sp alta; el logit trabaja lejos de 0.5."
+    },
+    {
+      "id": "sn1_ajustado",
+      "entradas": { "sn": 1, "sp": 0.95, "prev": 0.3, "n_d": 80, "n_nd": 120, "nivel": 0.95 },
+      "nota": "Sn = 1: el EE del logit no existe y se usa el logit ajustado (0.5 en cada celda, n + 1)."
+    },
+    {
+      "id": "sp1_ajustado",
+      "entradas": { "sn": 0.85, "sp": 1, "prev": 0.3, "n_d": 80, "n_nd": 120, "nivel": 0.95 },
+      "nota": "Sp = 1: LR+ = Inf (viaja como cadena) y logit ajustado para los IC."
+    },
+    {
+      "id": "sn0_ajustado",
+      "entradas": { "sn": 0, "sp": 0.95, "prev": 0.3, "n_d": 80, "n_nd": 120, "nivel": 0.95 },
+      "nota": "Sn = 0: VPP = 0 (logit -Inf) con IC ajustado; LR+ = 0."
+    },
+    {
+      "id": "perfecta",
+      "entradas": { "sn": 1, "sp": 1, "prev": 0.3, "n_d": 80, "n_nd": 120, "nivel": 0.95 },
+      "nota": "Prueba perfecta: VPP = VPN = 1, LR+ Inf y LR- 0; IC ajustado finito."
+    },
+    {
+      "id": "prev1",
+      "entradas": { "sn": 0.85, "sp": 0.95, "prev": 1, "n_d": 80, "n_nd": 120, "nivel": 0.95 },
+      "nota": "Prevalencia 1: VPP = 1 (logit Inf -> expit 1) y VPN = 0 (logit -Inf -> expit 0); frecuencias sin sanos."
+    },
+    {
+      "id": "prev0",
+      "entradas": { "sn": 0.85, "sp": 0.95, "prev": 0, "n_d": 80, "n_nd": 120, "nivel": 0.95 },
+      "nota": "Prevalencia 0: VPP = 0 y VPN = 1 con IC degenerados [0, 0] y [1, 1]."
+    },
+    {
+      "id": "nivel_090",
+      "entradas": { "sn": 0.85, "sp": 0.95, "prev": 0.3, "n_d": 80, "n_nd": 120, "nivel": 0.9 },
+      "nota": "Ejemplo al 90 %."
+    },
+    {
+      "id": "nivel_099",
+      "entradas": { "sn": 0.85, "sp": 0.95, "prev": 0.3, "n_d": 80, "n_nd": 120, "nivel": 0.99 },
+      "nota": "Ejemplo al 99 %."
+    },
+    {
+      "id": "n_pequeno",
+      "entradas": { "sn": 0.85, "sp": 0.95, "prev": 0.3, "n_d": 5, "n_nd": 5, "nivel": 0.95 },
+      "nota": "Estudio de validacion minusculo: IC muy amplios; Sn * n_d no es entero (4.25) y la formula debe aceptarlo."
+    },
+    {
+      "id": "decimales",
+      "entradas": { "sn": 0.912, "sp": 0.877, "prev": 0.157, "n_d": 137, "n_nd": 291, "nivel": 0.95 },
+      "nota": "Entradas con decimales arbitrarios y tamanos impares: comprueba la reconstruccion del doble en R."
+    }
+  ]
+}

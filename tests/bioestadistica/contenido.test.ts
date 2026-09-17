@@ -25,6 +25,7 @@ import { marcadores, referencias as citasDe } from '../../src/lib/bioestadistica
 import type {
   ContenidoLang,
   Contexto,
+  DatosGrafica,
   Definicion,
   Entradas,
   Lang,
@@ -131,9 +132,13 @@ interface CalculadoraYaml {
   r: { paquetes?: string[]; codigo: string };
   referencias: ReferenciaYaml[];
   grafica?: string;
+  tabla2x2?: { celdas: string[] };
   es: ContenidoYaml;
   en: ContenidoYaml;
 }
+
+/** Rótulos que exige una tabla 2×2 en `etiquetas` (ver Tabla2x2Input.astro). */
+const ETIQUETAS_TABLA = ['tabla.filas', 'tabla.columnas', 'tabla.fila1', 'tabla.fila2', 'tabla.col1', 'tabla.col2', 'tabla.total'];
 
 /** Completa los valores por omisión del esquema para poder usar el contenido como `ContenidoLang`. */
 function normalizar(c: ContenidoYaml): ContenidoLang {
@@ -215,9 +220,29 @@ function cadenasDe(p: Presentacion): string[] {
     if (celda.nota !== undefined) out.push(celda.nota);
   }
   for (const fila of p.resumen) out.push(...fila);
-  if (p.grafica) {
-    out.push(p.grafica.titulo, p.grafica.resumen);
-    for (const fila of p.grafica.filas) out.push(fila.etiqueta);
+  if (p.grafica) out.push(...textosDeGrafica(p.grafica));
+  return out;
+}
+
+/** Todos los textos visibles o accesibles de una gráfica, sea del tipo que sea. */
+function textosDeGrafica(g: DatosGrafica): string[] {
+  const out: string[] = [g.titulo, g.resumen];
+  switch (g.tipo) {
+    case 'ic-forest':
+      for (const panel of [g, ...(g.paneles ?? [])]) {
+        if (panel.rotulo !== undefined) out.push(panel.rotulo);
+        for (const fila of panel.filas) out.push(fila.etiqueta);
+      }
+      break;
+    case 'fagan':
+      out.push(g.ejes.pre, g.ejes.lr, g.ejes.post);
+      for (const linea of g.lineas) out.push(linea.etiqueta);
+      break;
+    case 'curvas':
+      out.push(g.ejeX.etiqueta, g.ejeY.etiqueta);
+      for (const curva of g.curvas) out.push(curva.etiqueta);
+      if (g.marcador?.etiqueta !== undefined) out.push(g.marcador.etiqueta);
+      break;
   }
   return out;
 }
@@ -506,11 +531,70 @@ for (const slug of SLUGS) {
         const datos = def.grafica(resultado, entradas, ctx);
         assert.ok(datos, `${lang}: grafica() devolvió null`);
         assert.equal(datos.tipo, tipoYaml, `${lang}: el tipo de gráfica no coincide con el YAML`);
-        assert.ok(datos.filas.length > 0, `${lang}: la gráfica no tiene filas`);
         assert.ok(datos.resumen.trim().length > 0, `${lang}: la gráfica no tiene texto alternativo`);
-        for (const fila of datos.filas) {
-          assert.ok(fila.etiqueta.trim().length > 0, `${lang}: fila «${fila.id}» sin etiqueta`);
+        switch (datos.tipo) {
+          case 'ic-forest':
+            assert.ok(datos.filas.length > 0, `${lang}: la gráfica no tiene filas`);
+            for (const panel of datos.paneles ?? []) {
+              assert.ok(panel.filas.length > 0, `${lang}: un panel secundario no tiene filas`);
+            }
+            break;
+          case 'fagan':
+            assert.ok(datos.lineas.length > 0, `${lang}: el nomograma no tiene rectas`);
+            assert.ok(Number.isFinite(datos.pre), `${lang}: preprueba no finita`);
+            for (const linea of datos.lineas) assert.ok(Number.isFinite(linea.lr) && Number.isFinite(linea.post), `${lang}: recta «${linea.id}» sin números`);
+            break;
+          case 'curvas':
+            assert.ok(datos.curvas.length > 0, `${lang}: la gráfica no tiene curvas`);
+            for (const curva of datos.curvas) assert.ok(curva.puntos.length > 1, `${lang}: curva «${curva.id}» con menos de dos puntos`);
+            break;
         }
+        for (const texto of textosDeGrafica(datos)) {
+          assert.ok(texto.trim().length > 0, `${lang}: la gráfica tiene un texto vacío (etiqueta, eje o rótulo)`);
+        }
+      }
+    });
+
+    // -----------------------------------------------------------------------
+    // Disposición de tabla 2×2 y entradas con opciones
+    // -----------------------------------------------------------------------
+
+    test('la tabla 2×2, si se declara, nombra cuatro enteros y trae sus rótulos en ambos idiomas', () => {
+      if (!yml.tabla2x2) return;
+      assert.equal(yml.tabla2x2.celdas.length, 4);
+      for (const id of yml.tabla2x2.celdas) {
+        const entrada = yml.entradas.find((e) => e.id === id);
+        assert.ok(entrada && entrada.tipo === 'entero' && !entrada.derivado, `tabla2x2: «${id}» no es una entrada entera declarada`);
+      }
+      for (const lang of IDIOMAS) {
+        const faltan = ETIQUETAS_TABLA.filter((k) => !(k in contenido[lang].etiquetas));
+        assert.deepEqual(faltan, [], `${lang}.etiquetas: faltan los rótulos de la tabla → ${faltan.join(', ')}`);
+      }
+    });
+
+    test('cada opción de un selector tiene rótulo en ambos idiomas y el ejemplo elige una de ellas', () => {
+      for (const entrada of yml.entradas) {
+        const opciones: string[] | undefined = entrada.opciones;
+        if (!opciones) continue;
+        assert.ok(opciones.length >= 2, `${entrada.id}: un selector necesita al menos dos opciones`);
+        for (const lang of IDIOMAS) {
+          const faltan: string[] = opciones.filter((op: string) => !(`${entrada.id}.${op}` in contenido[lang].etiquetas));
+          assert.deepEqual(faltan, [], `${lang}.etiquetas: faltan los rótulos ${faltan.map((op: string) => `${entrada.id}.${op}`).join(', ')}`);
+        }
+        const valor = yml.ejemplo[entrada.id];
+        if (valor !== undefined) {
+          assert.ok(opciones.includes(String(valor)), `ejemplo.${entrada.id} = ${String(valor)} no es una de las opciones`);
+        }
+      }
+    });
+
+    test('el YAML no trae claves de interpretación que el módulo no use', async () => {
+      const def = await cargarDefinicion(slug);
+      for (const lang of IDIOMAS) {
+        const huerfanas = Object.keys(contenido[lang].interpretacion).filter((k) => !def.claves.includes(k));
+        assert.deepEqual(huerfanas, [], `${lang}.interpretacion: claves que ningún módulo rellena → ${huerfanas.join(', ')}`);
+        const avisosHuerfanos = Object.keys(contenido[lang].avisos).filter((k) => !def.avisos.includes(k));
+        assert.deepEqual(avisosHuerfanos, [], `${lang}.avisos: códigos que el módulo nunca activa → ${avisosHuerfanos.join(', ')}`);
       }
     });
   });

@@ -9,7 +9,9 @@
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
-import type { Entradas } from '../../src/lib/bioestadistica/nucleo/tipos.ts';
+import { tPrefijo } from '../../src/i18n.mjs';
+import { crearFormateador } from '../../src/lib/bioestadistica/nucleo/formato.ts';
+import type { ContenidoLang, Contexto, Definicion, Entradas, Lang } from '../../src/lib/bioestadistica/nucleo/tipos.ts';
 
 /** js-yaml 4 es CommonJS y no publica tipos; se carga con `require` y se acota aquí. */
 interface ModuloYaml {
@@ -97,4 +99,72 @@ export interface Fixture {
 /** Lee `fixtures/<slug>.json` (salida de R commiteada; no requiere tener R instalado). */
 export function leerFixture(slug: string): Fixture {
   return JSON.parse(readFileSync(`${DIR_PRUEBAS}fixtures/${slug}.json`, 'utf8')) as Fixture;
+}
+
+// ---------------------------------------------------------------------------
+// Contenido completo y contexto de presentación (para probar `presentar()` de
+// una calculadora con sus textos reales en los dos idiomas).
+// ---------------------------------------------------------------------------
+
+/** Contenido de un idioma tal como se lee del disco (los valores por omisión de Zod no están puestos). */
+interface ContenidoYamlCrudo extends Omit<ContenidoLang, 'ayudas' | 'avisos' | 'ecuaciones'> {
+  ayudas?: Record<string, string>;
+  avisos?: Record<string, string>;
+  ecuaciones: Array<{ id: string; tex: string; simbolos?: { s: string; def: string }[]; nota?: string }>;
+}
+
+export interface YamlCompleto extends YamlCalculadora {
+  referencias: Array<{ key: string; rol: string }>;
+  entradas: Array<{ id: string; tipo: string; opciones?: string[]; requerido?: boolean; derivado?: boolean }>;
+  tabla2x2?: { celdas: string[] };
+  grafica?: string;
+  es: ContenidoLang;
+  en: ContenidoLang;
+}
+
+function completar(c: ContenidoYamlCrudo): ContenidoLang {
+  return {
+    ...c,
+    ayudas: c.ayudas ?? {},
+    avisos: c.avisos ?? {},
+    ecuaciones: c.ecuaciones.map((e) => ({ ...e, simbolos: e.simbolos ?? [] })),
+  };
+}
+
+/** Lee el YAML entero de una calculadora, con los bloques `es` y `en` completados como `ContenidoLang`. */
+export function leerYamlCompleto(slug: string): YamlCompleto {
+  const doc = exigeObjeto(yaml.load(readFileSync(rutaYaml(slug), 'utf8')), `${slug}.yml`) as unknown as Omit<
+    YamlCompleto,
+    'es' | 'en'
+  > & { es: ContenidoYamlCrudo; en: ContenidoYamlCrudo };
+  return { ...doc, es: completar(doc.es), en: completar(doc.en) };
+}
+
+/**
+ * Contexto real de presentación: formateador del idioma, textos del YAML,
+ * numeración de referencias en el orden del YAML y cadenas `bio.ui.*`.
+ * `src/i18n.mjs` lee `data/sitio.yml` desde `process.cwd()`: la prueba debe
+ * haber hecho `process.chdir(RAIZ)`.
+ */
+export function contextoDePrueba(slug: string, lang: Lang, nivel = 0.95): Contexto {
+  const yml = leerYamlCompleto(slug);
+  return {
+    lang,
+    nivel,
+    textos: yml[lang],
+    fmt: crearFormateador(lang),
+    refs: Object.fromEntries(yml.referencias.map((r, i) => [r.key, i + 1])),
+    url: `https://udgca1190.com.mx/herramientas/bioestadistica/${slug}`,
+    ui: (tPrefijo as (l: string, p: string) => Record<string, string>)(lang, 'bio.ui.'),
+  };
+}
+
+/** Primer paso del ciclo del controlador: leer → derivar. Un derivado indefinido no entra. */
+export function conDerivadas(def: Definicion, entradas: Entradas): Entradas {
+  const salida: Entradas = { ...entradas };
+  if (!def.derivar) return salida;
+  for (const [clave, valor] of Object.entries(def.derivar(salida))) {
+    if (valor !== undefined) salida[clave] = valor;
+  }
+  return salida;
 }

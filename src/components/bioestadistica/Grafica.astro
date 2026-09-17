@@ -70,4 +70,101 @@ const { svg, titulo } = Astro.props;
     stroke-width: 1;
     stroke-dasharray: 4 3;
   }
+  /* Rótulo de un panel adicional del bosque (p. ej. «Razones de verosimilitud»). */
+  .bio-svg__panel-titulo {
+    fill: var(--udg-navy-900);
+    font-weight: 600;
+  }
+
+  /* Series (curvas, rectas del nomograma y sus muestras en la leyenda).
+     La destacada va sólida y en navy; las demás, en gris y con un patrón de
+     trazo distinto cada una: la gráfica tiene que leerse igual impresa en
+     blanco y negro. Nunca rojo junto al navy en el mismo componente. */
+  .bio-svg__curva,
+  .bio-svg__leyenda,
+  .bio-svg__fagan-linea {
+    fill: none;
+    stroke: var(--udg-gray-700);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .bio-svg__curva.is-destacada,
+  .bio-svg__leyenda.is-destacada,
+  .bio-svg__fagan-linea.is-destacada {
+    stroke: var(--udg-navy-700);
+    stroke-width: 2.5;
+  }
+  .bio-svg__curva.is-secundaria,
+  .bio-svg__leyenda.is-secundaria,
+  .bio-svg__fagan-linea.is-secundaria {
+    stroke: var(--udg-gray-700);
+    stroke-dasharray: 7 4;
+  }
+  .bio-svg__curva.is-trazo-2,
+  .bio-svg__leyenda.is-trazo-2,
+  .bio-svg__fagan-linea.is-trazo-2 {
+    stroke: var(--udg-gray-500);
+    stroke-dasharray: 1 5;
+  }
+  .bio-svg__curva.is-trazo-3,
+  .bio-svg__leyenda.is-trazo-3,
+  .bio-svg__fagan-linea.is-trazo-3 {
+    stroke: var(--udg-gray-500);
+    stroke-dasharray: 12 4 1 4;
+  }
+  .bio-svg__fagan-punto,
+  .bio-svg__marcador-punto {
+    fill: var(--udg-gray-700);
+  }
+  .bio-svg__fagan-punto.is-destacada,
+  .bio-svg__marcador-punto.is-destacada {
+    fill: var(--udg-navy-700);
+  }
+  .bio-svg__fagan-punto.is-trazo-2,
+  .bio-svg__fagan-punto.is-trazo-3,
+  .bio-svg__marcador-punto.is-trazo-2,
+  .bio-svg__marcador-punto.is-trazo-3 {
+    fill: var(--udg-gray-500);
+  }
+  .bio-svg__leyenda-texto,
+  .bio-svg__fagan-rotulo {
+    fill: var(--udg-gray-700);
+  }
+
+  /* Nomograma de Fagan. */
+  .bio-svg__fagan-eje {
+    stroke: var(--udg-gray-300);
+    stroke-width: 1.2;
+  }
+  .bio-svg__fagan-tick {
+    stroke: var(--udg-gray-300);
+    stroke-width: 1;
+  }
+  .bio-svg__fagan-tick-texto {
+    fill: var(--udg-gray-500);
+    font-variant-numeric: tabular-nums;
+    /* Las rectas cruzan el eje central justo por donde van sus números: un
+       filete del color del fondo de la figura (blanco, igual que `.grafica`)
+       los despega sin taparlas. Sobre fondo blanco es invisible. */
+    paint-order: stroke;
+    stroke: #fff;
+    stroke-width: 3;
+    stroke-linejoin: round;
+  }
+  .bio-svg__fagan-titulo,
+  .bio-svg__eje-titulo {
+    fill: var(--udg-navy-900);
+    font-weight: 600;
+  }
+
+  /* Curvas: marcador vertical sobre la variable capturada. */
+  .bio-svg__marcador {
+    stroke: var(--udg-gray-500);
+    stroke-width: 1;
+    stroke-dasharray: 4 3;
+  }
+  .bio-svg__marcador-texto {
+    fill: var(--udg-gray-500);
+  }
 </style>

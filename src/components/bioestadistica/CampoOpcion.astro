@@ -1,0 +1,81 @@
+---
+// Campo de una entrada con lista cerrada de valores: el método del intervalo,
+// la corrección de continuidad, el nivel de confianza. Un `<select>` y no un
+// grupo de radios porque son listas cortas dentro de una columna estrecha y el
+// controlador ya sabe leer y escribir `<select>` (`asignarSelect`).
+//
+// Los rótulos llegan resueltos desde la página (`textos.etiquetas` con la
+// convención `<id>.<opcion>`, o el formato del nivel de confianza): aquí no se
+// traduce nada.
+interface Props {
+  id: string;
+  etiqueta: string;
+  /** Valores admitidos, en el orden en que se ofrecen. */
+  opciones: string[];
+  /** opción → texto que se lee; sin rótulo se muestra el propio valor. */
+  rotulos: Record<string, string>;
+  /** Opción seleccionada al cargar la página. */
+  valor?: string;
+  ayuda?: string;
+}
+const { id, etiqueta, opciones, rotulos, valor, ayuda } = Astro.props;
+const idCampo = `campo-${id}`;
+const idAyuda = `ayuda-${id}`;
+const idError = `error-${id}`;
+const describedby = [ayuda ? idAyuda : null, idError].filter(Boolean).join(' ');
+---
+
+<div class="campo">
+  <label class="campo__label" for={idCampo}>{etiqueta}</label>
+  <select class="campo__select" id={idCampo} data-entrada={id} aria-describedby={describedby}>
+    {
+      opciones.map((op) => (
+        <option value={op} selected={op === valor}>
+          {rotulos[op] ?? op}
+        </option>
+      ))
+    }
+  </select>
+  {ayuda && <p class="campo__ayuda" id={idAyuda}>{ayuda}</p>}
+  <p class="campo__error" id={idError} data-error-for={id} hidden></p>
+</div>
+
+<style>
+  /* Una sola columna que puede encogerse (`minmax(0, …)`): sin ella, el ancho
+     mínimo del `<select>` es el de su opción más larga y empuja la columna de
+     entradas fuera de la pantalla en un teléfono. */
+  .campo { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .campo + :global(.campo) { margin-top: var(--sp-3); }
+  .campo__label {
+    display: block;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--udg-gray-900);
+    margin-bottom: var(--sp-1);
+  }
+  .campo__select {
+    width: 100%;
+    height: 40px;
+    padding: 0 var(--sp-2);
+    border: 1px solid var(--udg-gray-300);
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--udg-gray-900);
+    font-family: var(--font-sans);
+    font-size: var(--fs-base);
+  }
+  .campo__select:focus-visible { outline: 2px solid var(--udg-navy-700); outline-offset: 1px; }
+  .campo__select[aria-invalid='true'] { border-color: var(--udg-err-fg); }
+  .campo__ayuda {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-500);
+    line-height: var(--lh-normal);
+  }
+  .campo__error {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--udg-err-fg);
+  }
+</style>

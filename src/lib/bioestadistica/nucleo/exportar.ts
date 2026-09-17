@@ -83,6 +83,9 @@ export function decodificarEstado(search: string, defs: EntradaDef[]): Partial<E
       if (numeros.length > 0) salida[def.id] = numeros;
       continue;
     }
+    // Un selector numérico (p. ej. `corr` con opciones «0» y «0.5») solo admite
+    // sus opciones: un valor ajeno se ignora, no se añade al desplegable.
+    if (def.opciones && !def.opciones.includes(bruto.trim())) continue;
     const n = parsearNumero(bruto, def);
     if (n !== null) salida[def.id] = n;
   }

@@ -1,0 +1,307 @@
+# Calculadora A1 · Rendimiento de una prueba diagnóstica a partir de una tabla 2×2.
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: diagnostico
+orden: 1
+estado: activa
+motor: ts
+entradas:
+  - { id: vp, tipo: entero, min: 0 }
+  - { id: fp, tipo: entero, min: 0 }
+  - { id: fn, tipo: entero, min: 0 }
+  - { id: vn, tipo: entero, min: 0 }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+  - { id: metodo, tipo: opcion, opciones: [wilson, clopper-pearson, agresti-coull, jeffreys, wald] }
+  - { id: corr, tipo: decimal, opciones: ["0", "0.5"] }
+tabla2x2: { celdas: [vp, fp, fn, vn] }
+ejemplo: { vp: 68, fp: 6, fn: 12, vn: 114, nivel: 0.95, metodo: wilson, corr: 0 }
+r:
+  paquetes: [binom, jsonlite]
+  codigo: |
+    # Diagnostic test accuracy from a 2x2 table - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(binom)      # CIs for proportions: "wilson" (default), "exact" (Clopper-Pearson), "agresti-coull", "asymptotic" (Wald)
+    library(jsonlite)
+
+    vp <- {vp}; fp <- {fp}; fn <- {fn}; vn <- {vn}   # rows = test result (+, -), columns = reference standard (diseased, not diseased)
+    nivel  <- {nivel}
+    metodo <- {metodo}   # CI method for proportions: "wilson", "clopper-pearson", "agresti-coull", "jeffreys" or "wald"
+    corr   <- {corr}     # 0.5 = Haldane-Anscombe correction for the ratios (LR, DOR) when a cell is 0; 0 = none
+    n <- vp + fp + fn + vn
+    z <- qnorm(1 - (1 - nivel) / 2)
+
+    # Proportion with CI -> c(estimate, lower, upper); Jeffreys is the equal-tailed interval (Brown, Cai & DasGupta 2001)
+    ic_prop <- function(x, m) {
+      if (metodo == "jeffreys") {
+        lo <- if (x == 0) 0 else qbeta((1 - nivel) / 2, x + 0.5, m - x + 0.5)
+        hi <- if (x == m) 1 else qbeta(1 - (1 - nivel) / 2, x + 0.5, m - x + 0.5)
+        return(c(x / m, lo, hi))
+      }
+      m_binom <- switch(metodo, wilson = "wilson", "clopper-pearson" = "exact", "agresti-coull" = "agresti-coull", wald = "asymptotic")
+      ci <- binom.confint(x, m, conf.level = nivel, methods = m_binom)
+      c(x / m, ci$lower, ci$upper)
+    }
+    sn   <- ic_prop(vp, vp + fn)    # sensitivity
+    sp   <- ic_prop(vn, vn + fp)    # specificity
+    vpp  <- ic_prop(vp, vp + fp)    # positive predictive value (at this sample's prevalence)
+    vpn  <- ic_prop(vn, vn + fn)    # negative predictive value
+    prev <- ic_prop(vp + fn, n)     # prevalence in the sample
+    exactitud <- ic_prop(vp + vn, n)   # accuracy
+
+    # Youden's J = Sn + Sp - 1 with a delta-method (Wald) CI
+    j    <- sn[1] + sp[1] - 1
+    j_ee <- sqrt(sn[1] * (1 - sn[1]) / (vp + fn) + sp[1] * (1 - sp[1]) / (vn + fp))
+    youden <- c(j, j - z * j_ee, j + z * j_ee)
+
+    # Ratios with the log-method CI: exp(log(est) -/+ z * SE); undefined (NA) when a cell of the (corrected) table is 0
+    a <- vp + corr; b <- fp + corr; c <- fn + corr; d <- vn + corr
+    ic_log <- function(est, ee) {
+      if (is.finite(log(est)) && is.finite(ee)) c(est, exp(log(est) - z * ee), exp(log(est) + z * ee)) else c(est, NA, NA)
+    }
+    ee_lr <- function(x1, n1, x2, n2) sqrt((1 - x1 / n1) / x1 + (1 - x2 / n2) / x2)   # Simel, Samsa & Matchar 1991
+    lr_pos <- ic_log(a / (a + c) / (b / (b + d)), ee_lr(a, a + c, b, b + d))
+    lr_neg <- ic_log(c / (a + c) / (d / (b + d)), ee_lr(c, a + c, d, b + d))
+    dor    <- ic_log((a * d) / (b * c), sqrt(1 / a + 1 / b + 1 / c + 1 / d))         # Woolf 1955
+
+    res <- list(n = n, sn = sn, sp = sp, vpp = vpp, vpn = vpn, prev = prev, exactitud = exactitud,
+                youden = youden, lr_pos = lr_pos, lr_neg = lr_neg, dor = dor)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio (not run in the browser):
+    # epiR::epi.tests(as.table(matrix(c(vp, fp, fn, vn), nrow = 2, byrow = TRUE)), method = "wilson", conf.level = nivel)
+referencias:
+  - { key: yerushalmy1947, rol: original }
+  - { key: youden1950, rol: original }
+  - { key: simel1991, rol: original }
+  - { key: woolf1955, rol: original }
+  - { key: glas2003, rol: complementaria }
+  - { key: wilson1927, rol: original }
+  - { key: newcombe1998, rol: original }
+  - { key: clopper1934, rol: complementaria }
+  - { key: agresti1998, rol: complementaria }
+  - { key: brown2001, rol: complementaria }
+  - { key: altman2000, rol: complementaria }
+  - { key: haldane1956, rol: original }
+  - { key: anscombe1956, rol: original }
+  - { key: jaeschke1994, rol: didactica }
+  - { key: altman1994sn, rol: didactica }
+  - { key: vecchio1966, rol: didactica }
+  - { key: deeks2004, rol: didactica }
+grafica: ic-forest
+es:
+  titulo: "Prueba diagnóstica (tabla 2×2): sensibilidad, especificidad, valores predictivos, razones de verosimilitud y DOR"
+  titulo_corto: "Prueba diagnóstica (tabla 2×2)"
+  meta: "Calcula sensibilidad, especificidad, valores predictivos, exactitud, índice de Youden, razones de verosimilitud (LR+ y LR−) y razón de momios diagnóstica con intervalos de confianza a partir de una tabla 2×2, con interpretación, código R y referencias. Los datos no salen del navegador."
+  intro: "Captura los cuatro conteos de la tabla 2×2 (prueba frente al estándar de referencia) y obtén Sn, Sp, VPP, VPN, prevalencia, exactitud, índice de Youden, LR+, LR− y DOR con sus intervalos de confianza, la interpretación en lenguaje llano y el código de R equivalente."
+  explicacion:
+    - "Una prueba diagnóstica se evalúa comparándola con un estándar de referencia en la misma población. La tabla 2×2 cruza el resultado de la prueba (positivo o negativo) con el estado real (enfermo o sano): verdaderos positivos (VP), falsos positivos (FP), falsos negativos (FN) y verdaderos negativos (VN)."
+    - "La sensibilidad es la proporción de enfermos con prueba positiva y la especificidad, la de sanos con prueba negativa (Yerushalmy 1947). Ambas describen la prueba y no dependen de la prevalencia. Los valores predictivos responden a la pregunta clínica (¿qué probabilidad hay de estar enfermo con un resultado positivo?), pero cambian con la prevalencia (Vecchio 1966): los que se muestran aquí valen para la prevalencia de esta muestra."
+    - "Las razones de verosimilitud (LR+ y LR−) resumen ambas propiedades en un solo número por resultado y son las que se trasladan a la probabilidad posprueba con el teorema de Bayes (nomograma de Fagan). La razón de momios diagnóstica (DOR) condensa la capacidad discriminativa global en una sola cifra, útil para comparar pruebas, no para decidir sobre un paciente."
+    - "Cada proporción lleva el intervalo de confianza del método elegido (Wilson por defecto, el recomendado por Newcombe 1998); las razones llevan el intervalo logarítmico de Simel (1991) y de Woolf (1955). Cuando una celda vale 0, una razón queda en 0 o en infinito y sin intervalo; la corrección de Haldane-Anscombe (sumar 0.5 a cada celda) devuelve una estimación finita y debe reportarse."
+  ecuaciones:
+    - id: proporciones
+      tex: '\mathrm{Sn}=\frac{a}{a+c},\qquad \mathrm{Sp}=\frac{d}{b+d},\qquad \mathrm{VPP}=\frac{a}{a+b},\qquad \mathrm{VPN}=\frac{d}{c+d},\qquad \mathrm{Exactitud}=\frac{a+d}{n}'
+      simbolos:
+        - { s: 'a', def: "verdaderos positivos (VP)" }
+        - { s: 'b', def: "falsos positivos (FP)" }
+        - { s: 'c', def: "falsos negativos (FN)" }
+        - { s: 'd', def: "verdaderos negativos (VN)" }
+        - { s: 'n', def: "total, a + b + c + d" }
+      nota: "Sensibilidad y especificidad (Yerushalmy 1947); valores predictivos con la prevalencia de la muestra, (a + c)/n."
+    - id: razones
+      tex: '\mathrm{LR}^{+}=\frac{\mathrm{Sn}}{1-\mathrm{Sp}},\qquad \mathrm{LR}^{-}=\frac{1-\mathrm{Sn}}{\mathrm{Sp}},\qquad \mathrm{DOR}=\frac{ad}{bc}=\frac{\mathrm{LR}^{+}}{\mathrm{LR}^{-}}'
+      simbolos: []
+      nota: "Razones de verosimilitud y razón de momios diagnóstica (Glas 2003)."
+    - id: ic_lr
+      tex: '\mathrm{IC}(\mathrm{LR}^{+})=\exp\!\left[\ln \mathrm{LR}^{+}\pm z_{1-\alpha/2}\sqrt{\frac{1}{a}-\frac{1}{a+c}+\frac{1}{b}-\frac{1}{b+d}}\right],\qquad \mathrm{IC}(\mathrm{LR}^{-})=\exp\!\left[\ln \mathrm{LR}^{-}\pm z\sqrt{\frac{1}{c}-\frac{1}{a+c}+\frac{1}{d}-\frac{1}{b+d}}\right]'
+      simbolos:
+        - { s: 'z_{1-\alpha/2}', def: "cuantil normal del nivel de confianza (1.96 al 95 %)" }
+      nota: "Intervalos logarítmicos de Simel, Samsa y Matchar (1991). Con la corrección de Haldane-Anscombe, a, b, c y d llevan 0.5 sumado."
+    - id: ic_dor
+      tex: '\mathrm{IC}(\mathrm{DOR})=\exp\!\left[\ln \mathrm{DOR}\pm z\sqrt{\frac{1}{a}+\frac{1}{b}+\frac{1}{c}+\frac{1}{d}}\right]'
+      simbolos: []
+      nota: "Intervalo logarítmico de Woolf (1955)."
+    - id: youden
+      tex: 'J=\mathrm{Sn}+\mathrm{Sp}-1,\qquad \mathrm{IC}(J)=J\pm z\sqrt{\frac{\mathrm{Sn}\,(1-\mathrm{Sn})}{a+c}+\frac{\mathrm{Sp}\,(1-\mathrm{Sp})}{b+d}}'
+      simbolos: []
+      nota: "Índice de Youden (1950) con intervalo de Wald por el método delta."
+    - id: wilson
+      tex: '\frac{\hat p+\frac{z^2}{2m}\pm z\sqrt{\frac{\hat p\,(1-\hat p)}{m}+\frac{z^2}{4m^2}}}{1+\frac{z^2}{m}}'
+      simbolos:
+        - { s: '\hat p', def: "proporción observada, x/m" }
+        - { s: 'm', def: "denominador de la proporción (a + c, b + d, a + b, c + d o n)" }
+      nota: "Intervalo de Wilson (1927), el método por defecto para cada proporción; el selector ofrece Clopper-Pearson, Agresti-Coull, Jeffreys y Wald (ver la calculadora «IC de una proporción»)."
+  etiquetas:
+    vp: "Verdaderos positivos (VP)"
+    fp: "Falsos positivos (FP)"
+    fn: "Falsos negativos (FN)"
+    vn: "Verdaderos negativos (VN)"
+    nivel: "Nivel de confianza"
+    metodo: "Método del IC de las proporciones"
+    "metodo.wilson": "Wilson (score)"
+    "metodo.clopper-pearson": "Clopper-Pearson (exacto)"
+    "metodo.agresti-coull": "Agresti-Coull"
+    "metodo.jeffreys": "Jeffreys"
+    "metodo.wald": "Wald (asintótico)"
+    corr: "Corrección de Haldane-Anscombe (razones)"
+    "corr.0": "Sin corrección"
+    "corr.0.5": "Sumar 0.5 a cada celda"
+    "tabla.filas": "Resultado de la prueba"
+    "tabla.columnas": "Estándar de referencia"
+    "tabla.fila1": "Positivo"
+    "tabla.fila2": "Negativo"
+    "tabla.col1": "Enfermo"
+    "tabla.col2": "Sano"
+    "tabla.total": "Total"
+    n: "Total de participantes (n)"
+    sn: "Sensibilidad (Sn)"
+    sp: "Especificidad (Sp)"
+    vpp: "Valor predictivo positivo (VPP)"
+    vpn: "Valor predictivo negativo (VPN)"
+    prev: "Prevalencia en la muestra"
+    exactitud: "Exactitud"
+    youden: "Índice de Youden (J)"
+    lr_pos: "LR+"
+    lr_neg: "LR−"
+    dor: "Razón de momios diagnóstica (DOR)"
+    nota_lr: "método logarítmico de Simel"
+    nota_dor: "método logarítmico de Woolf"
+    nota_youden: "método delta"
+    grafica_razones: "Razones (escala logarítmica; referencia en 1)"
+  ayudas:
+    metodo: "Wilson es el método recomendado (Newcombe 1998). Wald solo con fines didácticos."
+    corr: "Úsala cuando una celda vale 0: suma 0.5 a las cuatro celdas antes de calcular LR+, LR− y DOR (no afecta a Sn, Sp ni a los valores predictivos)."
+  interpretacion:
+    resumen: "De {n} participantes, {vp} + {fn} tenían la enfermedad y {fp} + {vn} no la tenían (prevalencia en la muestra: {prev}). La prueba detecta al {sn} de las personas con la enfermedad (sensibilidad; IC {nivel}: {sn_ic}) y descarta correctamente al {sp} de las que no la tienen (especificidad; IC {nivel}: {sp_ic}). Exactitud global: {exactitud} (IC {nivel}: {exactitud_ic})."
+    "lr_pos.grande": "LR+ = {lr_pos} ({lr_pos_ic}): un resultado positivo multiplica los momios preprueba por {lr_pos}, un cambio grande y a menudo concluyente de la probabilidad de enfermedad (Jaeschke 1994)."
+    "lr_pos.moderado": "LR+ = {lr_pos} ({lr_pos_ic}): un resultado positivo multiplica los momios preprueba por {lr_pos}, un cambio moderado de la probabilidad de enfermedad (Jaeschke 1994)."
+    "lr_pos.pequeno": "LR+ = {lr_pos} ({lr_pos_ic}): un resultado positivo multiplica los momios preprueba por {lr_pos}, un cambio pequeño de la probabilidad, aunque a veces importante (Jaeschke 1994)."
+    "lr_pos.minimo": "LR+ = {lr_pos} ({lr_pos_ic}): un resultado positivo apenas modifica la probabilidad de enfermedad (cambio rara vez importante, Jaeschke 1994)."
+    "lr_pos.nulo": "LR+ = {lr_pos} ({lr_pos_ic}): un resultado positivo no aumenta la probabilidad de enfermedad; con este valor la prueba no discrimina (o la tabla está invertida)."
+    "lr_neg.grande": "LR− = {lr_neg} ({lr_neg_ic}): un resultado negativo divide los momios preprueba entre {lr_neg}, es decir, reduce mucho la probabilidad de enfermedad; suele bastar para descartarla en probabilidades preprueba moderadas (Jaeschke 1994)."
+    "lr_neg.moderado": "LR− = {lr_neg} ({lr_neg_ic}): un resultado negativo reduce de forma moderada la probabilidad de enfermedad (Jaeschke 1994)."
+    "lr_neg.pequeno": "LR− = {lr_neg} ({lr_neg_ic}): un resultado negativo reduce poco la probabilidad de enfermedad, aunque a veces de forma relevante (Jaeschke 1994)."
+    "lr_neg.minimo": "LR− = {lr_neg} ({lr_neg_ic}): un resultado negativo apenas reduce la probabilidad de enfermedad; no sirve para descartarla (Jaeschke 1994)."
+    "lr_neg.nulo": "LR− = {lr_neg} ({lr_neg_ic}): un resultado negativo no reduce la probabilidad de enfermedad; con este valor la prueba no discrimina (o la tabla está invertida)."
+    predictivos: "En esta muestra, {vpp} de los positivos tenían la enfermedad (VPP; IC {nivel}: {vpp_ic}) y {vpn} de los negativos no la tenían (VPN; IC {nivel}: {vpn_ic}). Ambas cifras dependen de la prevalencia ({prev}) y no se trasladan a otra población; en un diseño de casos y controles no son válidas. Para otra prevalencia usa la calculadora «Valores predictivos»."
+    dor: "DOR = {dor} ({dor_ic}): los momios de un resultado positivo son {dor} veces mayores en las personas con la enfermedad que en las que no la tienen. Índice de Youden J = {youden} (IC {nivel}: {youden_ic}); J = 1 sería una prueba perfecta y J = 0, una prueba sin valor."
+    "dor.indefinido": "DOR = {dor}: con una celda en 0 la razón de momios diagnóstica no está definida (0 o infinito) y no tiene intervalo; aplica la corrección de Haldane-Anscombe para obtener una estimación finita. Índice de Youden J = {youden} (IC {nivel}: {youden_ic})."
+    metodos_haldane: "Las razones de verosimilitud y la razón de momios diagnóstica se calcularon tras sumar 0.5 a cada celda de la tabla (corrección de Haldane-Anscombe) [{ref:haldane1956},{ref:anscombe1956}]."
+  avisos:
+    celda_cero: "Hay una celda con 0: LR+, LR− o DOR quedan en 0 o en infinito y sin intervalo. Puedes aplicar la corrección de Haldane-Anscombe (sumar 0.5 a cada celda) en el selector; repórtala si la usas."
+    haldane_aplicado: "Corrección de Haldane-Anscombe aplicada: LR+, LR− y DOR se calcularon con 0.5 sumado a cada celda. Sn, Sp, valores predictivos y J no cambian. Repórtala en Métodos."
+    n_pequeno: "Grupos pequeños ({enfermos} con la enfermedad, {sanos} sin ella): con menos de 10 por grupo los intervalos son muy amplios y las estimaciones, inestables."
+    prev_extrema: "La prevalencia en la muestra es menor del 5 % o mayor del 95 %: los valores predictivos son poco informativos y el grupo minoritario aporta pocos datos."
+    wald_no_recomendado: "Alguna celda tiene menos de 5 observaciones: el intervalo de Wald puede salirse de [0, 1] y no debe reportarse; prefiere Wilson o Jeffreys."
+    tabla_invertida: "LR+ menor que 1 o LR− mayor que 1: un resultado positivo reduce la probabilidad de enfermedad. Comprueba la orientación de la tabla (filas = prueba, columnas = estándar de referencia)."
+  metodos: "Se calcularon la sensibilidad, la especificidad, los valores predictivos, la exactitud, el índice de Youden, las razones de verosimilitud (LR+ y LR−) y la razón de momios diagnóstica (DOR) a partir de la tabla 2×2 frente al estándar de referencia [{ref:yerushalmy1947},{ref:youden1950}]. Los intervalos de confianza al {nivel} de las proporciones se obtuvieron con el método de {metodo_nombre} {metodo_refs}; los de las razones de verosimilitud, con el método logarítmico de Simel et al. [{ref:simel1991}]; el de la DOR, con el método de Woolf [{ref:woolf1955},{ref:glas2003}], y el del índice de Youden, por el método delta.{nota_corr} Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R (paquete binom)."
+  ejemplo_descripcion: "Ejemplo ilustrativo: prueba rápida de antígeno NS1 frente a RT-PCR para dengue en 200 pacientes febriles: 68 verdaderos positivos, 6 falsos positivos, 12 falsos negativos y 114 verdaderos negativos (datos ficticios)."
+  grafica_titulo: "Estimaciones con su intervalo de confianza: proporciones (arriba) y razones en escala logarítmica (abajo)"
+en:
+  titulo: "Diagnostic test (2×2 table): sensitivity, specificity, predictive values, likelihood ratios and DOR"
+  titulo_corto: "Diagnostic test (2×2 table)"
+  meta: "Compute sensitivity, specificity, predictive values, accuracy, Youden's index, likelihood ratios (LR+ and LR−) and the diagnostic odds ratio with confidence intervals from a 2×2 table, with interpretation, R code and references. Data never leave the browser."
+  intro: "Enter the four counts of the 2×2 table (test versus reference standard) and get Sn, Sp, PPV, NPV, prevalence, accuracy, Youden's index, LR+, LR− and DOR with their confidence intervals, a plain-language interpretation and the equivalent R code."
+  explicacion:
+    - "A diagnostic test is evaluated against a reference standard in the same population. The 2×2 table crosses the test result (positive or negative) with the true state (diseased or not): true positives (TP), false positives (FP), false negatives (FN) and true negatives (TN)."
+    - "Sensitivity is the proportion of diseased people with a positive test and specificity the proportion of non-diseased people with a negative test (Yerushalmy 1947). Both describe the test and do not depend on prevalence. Predictive values answer the clinical question (how likely is disease given a positive result?) but change with prevalence (Vecchio 1966): the ones shown here hold for this sample's prevalence."
+    - "Likelihood ratios (LR+ and LR−) summarise both properties in a single number per result and are what carries over to the post-test probability through Bayes' theorem (Fagan's nomogram). The diagnostic odds ratio (DOR) condenses overall discrimination into one figure, useful for comparing tests, not for deciding about a patient."
+    - "Each proportion carries the confidence interval of the chosen method (Wilson by default, as recommended by Newcombe 1998); the ratios carry the logarithmic intervals of Simel (1991) and Woolf (1955). When a cell is 0 a ratio becomes 0 or infinite and has no interval; the Haldane-Anscombe correction (adding 0.5 to each cell) yields a finite estimate and must be reported."
+  ecuaciones:
+    - id: proporciones
+      tex: '\mathrm{Sn}=\frac{a}{a+c},\qquad \mathrm{Sp}=\frac{d}{b+d},\qquad \mathrm{PPV}=\frac{a}{a+b},\qquad \mathrm{NPV}=\frac{d}{c+d},\qquad \mathrm{Accuracy}=\frac{a+d}{n}'
+      simbolos:
+        - { s: 'a', def: "true positives (TP)" }
+        - { s: 'b', def: "false positives (FP)" }
+        - { s: 'c', def: "false negatives (FN)" }
+        - { s: 'd', def: "true negatives (TN)" }
+        - { s: 'n', def: "total, a + b + c + d" }
+      nota: "Sensitivity and specificity (Yerushalmy 1947); predictive values at the sample prevalence, (a + c)/n."
+    - id: razones
+      tex: '\mathrm{LR}^{+}=\frac{\mathrm{Sn}}{1-\mathrm{Sp}},\qquad \mathrm{LR}^{-}=\frac{1-\mathrm{Sn}}{\mathrm{Sp}},\qquad \mathrm{DOR}=\frac{ad}{bc}=\frac{\mathrm{LR}^{+}}{\mathrm{LR}^{-}}'
+      simbolos: []
+      nota: "Likelihood ratios and diagnostic odds ratio (Glas 2003)."
+    - id: ic_lr
+      tex: '\mathrm{CI}(\mathrm{LR}^{+})=\exp\!\left[\ln \mathrm{LR}^{+}\pm z_{1-\alpha/2}\sqrt{\frac{1}{a}-\frac{1}{a+c}+\frac{1}{b}-\frac{1}{b+d}}\right],\qquad \mathrm{CI}(\mathrm{LR}^{-})=\exp\!\left[\ln \mathrm{LR}^{-}\pm z\sqrt{\frac{1}{c}-\frac{1}{a+c}+\frac{1}{d}-\frac{1}{b+d}}\right]'
+      simbolos:
+        - { s: 'z_{1-\alpha/2}', def: "normal quantile for the confidence level (1.96 at 95%)" }
+      nota: "Logarithmic intervals of Simel, Samsa and Matchar (1991). With the Haldane-Anscombe correction, a, b, c and d carry 0.5 added."
+    - id: ic_dor
+      tex: '\mathrm{CI}(\mathrm{DOR})=\exp\!\left[\ln \mathrm{DOR}\pm z\sqrt{\frac{1}{a}+\frac{1}{b}+\frac{1}{c}+\frac{1}{d}}\right]'
+      simbolos: []
+      nota: "Woolf's (1955) logarithmic interval."
+    - id: youden
+      tex: 'J=\mathrm{Sn}+\mathrm{Sp}-1,\qquad \mathrm{CI}(J)=J\pm z\sqrt{\frac{\mathrm{Sn}\,(1-\mathrm{Sn})}{a+c}+\frac{\mathrm{Sp}\,(1-\mathrm{Sp})}{b+d}}'
+      simbolos: []
+      nota: "Youden's index (1950) with a delta-method Wald interval."
+    - id: wilson
+      tex: '\frac{\hat p+\frac{z^2}{2m}\pm z\sqrt{\frac{\hat p\,(1-\hat p)}{m}+\frac{z^2}{4m^2}}}{1+\frac{z^2}{m}}'
+      simbolos:
+        - { s: '\hat p', def: "observed proportion, x/m" }
+        - { s: 'm', def: "denominator of the proportion (a + c, b + d, a + b, c + d or n)" }
+      nota: "Wilson (1927) interval, the default for every proportion; the selector offers Clopper-Pearson, Agresti-Coull, Jeffreys and Wald (see the \"CI for a proportion\" calculator)."
+  etiquetas:
+    vp: "True positives (TP)"
+    fp: "False positives (FP)"
+    fn: "False negatives (FN)"
+    vn: "True negatives (TN)"
+    nivel: "Confidence level"
+    metodo: "CI method for proportions"
+    "metodo.wilson": "Wilson (score)"
+    "metodo.clopper-pearson": "Clopper-Pearson (exact)"
+    "metodo.agresti-coull": "Agresti-Coull"
+    "metodo.jeffreys": "Jeffreys"
+    "metodo.wald": "Wald (asymptotic)"
+    corr: "Haldane-Anscombe correction (ratios)"
+    "corr.0": "No correction"
+    "corr.0.5": "Add 0.5 to each cell"
+    "tabla.filas": "Test result"
+    "tabla.columnas": "Reference standard"
+    "tabla.fila1": "Positive"
+    "tabla.fila2": "Negative"
+    "tabla.col1": "Diseased"
+    "tabla.col2": "Not diseased"
+    "tabla.total": "Total"
+    n: "Total participants (n)"
+    sn: "Sensitivity (Sn)"
+    sp: "Specificity (Sp)"
+    vpp: "Positive predictive value (PPV)"
+    vpn: "Negative predictive value (NPV)"
+    prev: "Sample prevalence"
+    exactitud: "Accuracy"
+    youden: "Youden's index (J)"
+    lr_pos: "LR+"
+    lr_neg: "LR−"
+    dor: "Diagnostic odds ratio (DOR)"
+    nota_lr: "Simel's log method"
+    nota_dor: "Woolf's log method"
+    nota_youden: "delta method"
+    grafica_razones: "Ratios (log scale; reference at 1)"
+  ayudas:
+    metodo: "Wilson is the recommended method (Newcombe 1998). Wald is for teaching purposes only."
+    corr: "Use it when a cell is 0: adds 0.5 to the four cells before computing LR+, LR− and DOR (it does not affect Sn, Sp or the predictive values)."
+  interpretacion:
+    resumen: "Of {n} participants, {vp} + {fn} had the disease and {fp} + {vn} did not (sample prevalence: {prev}). The test detects {sn} of the people with the disease (sensitivity; {nivel} CI: {sn_ic}) and correctly rules out {sp} of those without it (specificity; {nivel} CI: {sp_ic}). Overall accuracy: {exactitud} ({nivel} CI: {exactitud_ic})."
+    "lr_pos.grande": "LR+ = {lr_pos} ({lr_pos_ic}): a positive result multiplies the pre-test odds by {lr_pos}, a large and often conclusive change in the probability of disease (Jaeschke 1994)."
+    "lr_pos.moderado": "LR+ = {lr_pos} ({lr_pos_ic}): a positive result multiplies the pre-test odds by {lr_pos}, a moderate change in the probability of disease (Jaeschke 1994)."
+    "lr_pos.pequeno": "LR+ = {lr_pos} ({lr_pos_ic}): a positive result multiplies the pre-test odds by {lr_pos}, a small but sometimes important change in probability (Jaeschke 1994)."
+    "lr_pos.minimo": "LR+ = {lr_pos} ({lr_pos_ic}): a positive result barely changes the probability of disease (rarely important, Jaeschke 1994)."
+    "lr_pos.nulo": "LR+ = {lr_pos} ({lr_pos_ic}): a positive result does not increase the probability of disease; at this value the test does not discriminate (or the table is inverted)."
+    "lr_neg.grande": "LR− = {lr_neg} ({lr_neg_ic}): a negative result divides the pre-test odds by {lr_neg}, that is, it greatly lowers the probability of disease and is often enough to rule it out at moderate pre-test probabilities (Jaeschke 1994)."
+    "lr_neg.moderado": "LR− = {lr_neg} ({lr_neg_ic}): a negative result moderately lowers the probability of disease (Jaeschke 1994)."
+    "lr_neg.pequeno": "LR− = {lr_neg} ({lr_neg_ic}): a negative result lowers the probability of disease only slightly, though sometimes meaningfully (Jaeschke 1994)."
+    "lr_neg.minimo": "LR− = {lr_neg} ({lr_neg_ic}): a negative result barely lowers the probability of disease; it cannot rule it out (Jaeschke 1994)."
+    "lr_neg.nulo": "LR− = {lr_neg} ({lr_neg_ic}): a negative result does not lower the probability of disease; at this value the test does not discriminate (or the table is inverted)."
+    predictivos: "In this sample, {vpp} of positives had the disease (PPV; {nivel} CI: {vpp_ic}) and {vpn} of negatives did not (NPV; {nivel} CI: {vpn_ic}). Both figures depend on prevalence ({prev}) and do not transfer to other populations; in a case-control design they are not valid. For another prevalence use the \"Predictive values\" calculator."
+    dor: "DOR = {dor} ({dor_ic}): the odds of a positive result are {dor} times higher in people with the disease than in those without it. Youden's index J = {youden} ({nivel} CI: {youden_ic}); J = 1 would be a perfect test and J = 0 a worthless one."
+    "dor.indefinido": "DOR = {dor}: with a cell at 0 the diagnostic odds ratio is undefined (0 or infinite) and has no interval; apply the Haldane-Anscombe correction to obtain a finite estimate. Youden's index J = {youden} ({nivel} CI: {youden_ic})."
+    metodos_haldane: "Likelihood ratios and the diagnostic odds ratio were computed after adding 0.5 to each cell of the table (Haldane-Anscombe correction) [{ref:haldane1956},{ref:anscombe1956}]."
+  avisos:
+    celda_cero: "One cell is 0: LR+, LR− or DOR become 0 or infinite and have no interval. You can apply the Haldane-Anscombe correction (add 0.5 to each cell) in the selector; report it if you use it."
+    haldane_aplicado: "Haldane-Anscombe correction applied: LR+, LR− and DOR were computed with 0.5 added to each cell. Sn, Sp, predictive values and J do not change. Report it in Methods."
+    n_pequeno: "Small groups ({enfermos} with the disease, {sanos} without it): with fewer than 10 per group the intervals are very wide and the estimates unstable."
+    prev_extrema: "Sample prevalence is below 5% or above 95%: predictive values are uninformative and the minority group contributes few data."
+    wald_no_recomendado: "A cell has fewer than 5 observations: the Wald interval may fall outside [0, 1] and should not be reported; prefer Wilson or Jeffreys."
+    tabla_invertida: "LR+ below 1 or LR− above 1: a positive result lowers the probability of disease. Check the orientation of the table (rows = test, columns = reference standard)."
+  metodos: "Sensitivity, specificity, predictive values, accuracy, Youden's index, likelihood ratios (LR+ and LR−) and the diagnostic odds ratio (DOR) were computed from the 2×2 table against the reference standard [{ref:yerushalmy1947},{ref:youden1950}]. The {nivel} confidence intervals of the proportions were obtained with the {metodo_nombre} method {metodo_refs}; those of the likelihood ratios with the logarithmic method of Simel et al. [{ref:simel1991}]; that of the DOR with Woolf's method [{ref:woolf1955},{ref:glas2003}], and that of Youden's index by the delta method.{nota_corr} Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R (binom package)."
+  ejemplo_descripcion: "Illustrative example: rapid NS1 antigen test versus RT-PCR for dengue in 200 febrile patients: 68 true positives, 6 false positives, 12 false negatives and 114 true negatives (fictitious data)."
+  grafica_titulo: "Estimates with their confidence interval: proportions (top) and ratios on a log scale (bottom)"

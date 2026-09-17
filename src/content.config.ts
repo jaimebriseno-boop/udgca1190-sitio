@@ -160,13 +160,44 @@ const calculadoras = defineCollection({
       // lo que ejecuta Rscript para los fixtures. Marcadores {id} en minúsculas.
       r: z.object({ paquetes: z.array(Texto).default([]), codigo: Texto }),
       referencias: z.array(ReferenciaBio).min(1),
-      grafica: z.enum(['ninguna', 'ic-forest', 'fagan', 'barras', 'histograma-boxplot', 'km', 'potencia']).default('ninguna'),
+      grafica: z.enum(['ninguna', 'ic-forest', 'fagan', 'curvas', 'barras', 'histograma-boxplot', 'km', 'potencia']).default('ninguna'),
+      // Disposición de cuatro entradas enteras como tabla 2×2 (filas = primera
+      // variable, columnas = segunda): celdas en el orden fila1·col1, fila1·col2,
+      // fila2·col1, fila2·col2. Los rótulos de la tabla salen de `etiquetas`
+      // (`tabla.filas`, `tabla.columnas`, `tabla.fila1`, `tabla.fila2`, `tabla.col1`,
+      // `tabla.col2`, `tabla.total`). Ver Tabla2x2Input.astro.
+      tabla2x2: z.object({ celdas: z.array(z.string()).length(4) }).optional(),
       es: ContenidoBio,
       en: ContenidoBio,
     })
     .refine((c) => c.referencias.some((r) => r.rol === 'original'), {
       message: 'Falta la referencia original del método (rol: original)',
-    }),
+    })
+    .refine(
+      (c) =>
+        !c.tabla2x2 ||
+        c.tabla2x2.celdas.every((id) => c.entradas.some((e) => e.id === id && e.tipo === 'entero' && !e.derivado)),
+      { message: 'tabla2x2.celdas debe nombrar cuatro entradas declaradas de tipo entero' },
+    )
+    .refine(
+      (c) =>
+        !c.tabla2x2 ||
+        (['es', 'en'] as const).every((lang) =>
+          ['tabla.filas', 'tabla.columnas', 'tabla.fila1', 'tabla.fila2', 'tabla.col1', 'tabla.col2', 'tabla.total'].every(
+            (k) => typeof c[lang].etiquetas[k] === 'string',
+          ),
+        ),
+      { message: 'tabla2x2 requiere las etiquetas tabla.filas, tabla.columnas, tabla.fila1, tabla.fila2, tabla.col1, tabla.col2 y tabla.total en es y en' },
+    )
+    .refine(
+      (c) =>
+        c.entradas.every(
+          (e) =>
+            !e.opciones ||
+            (['es', 'en'] as const).every((lang) => e.opciones!.every((op) => typeof c[lang].etiquetas[`${e.id}.${op}`] === 'string')),
+        ),
+      { message: 'cada opción de una entrada con `opciones` necesita su etiqueta `<id>.<opcion>` en es y en' },
+    ),
 });
 
 export const collections = { integrantes, lineas, herramientas, actividades, estudios, calculadoras };

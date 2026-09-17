@@ -1,0 +1,195 @@
+{
+  "generado_por": "scripts/bio-fixtures.mjs",
+  "meta": {
+    "calculadora": "probabilidad-posprueba",
+    "generado": "2026-09-17T02:19:18.635Z",
+    "R": "R version 4.5.2 (2025-10-31)",
+    "plataforma": "aarch64-apple-darwin20",
+    "paquetes": {
+      "jsonlite": "2.0.0"
+    },
+    "plantilla_sha256": "9ce4a16548638164170c9fc5cd6efa769aa17ae9949857b5005765ca0cdb40e8"
+  },
+  "casos": [
+    {
+      "id": "ejemplo",
+      "entradas": {
+        "pre": 0.3,
+        "lr_pos": 17,
+        "lr_neg": 0.158
+      },
+      "esperado": {
+        "post_pos": 0.879310344827586,
+        "post_neg": 0.0634198554990634,
+        "ganancia_pos": 0.579310344827586,
+        "ganancia_neg": 0.236580144500937,
+        "momios_pre": 0.428571428571429,
+        "momios_post_pos": 7.28571428571429,
+        "momios_post_neg": 0.0677142857142857
+      },
+      "tol": "probabilidad-posprueba"
+    },
+    {
+      "id": "p001_lr_neg_01",
+      "entradas": {
+        "pre": 0.01,
+        "lr_pos": 5,
+        "lr_neg": 0.1
+      },
+      "esperado": {
+        "post_pos": 0.0480769230769231,
+        "post_neg": 0.00100908173562059,
+        "ganancia_pos": 0.0380769230769231,
+        "ganancia_neg": 0.00899091826437941,
+        "momios_pre": 0.0101010101010101,
+        "momios_post_pos": 0.0505050505050505,
+        "momios_post_neg": 0.00101010101010101
+      },
+      "tol": "probabilidad-posprueba"
+    },
+    {
+      "id": "p0999_lr100",
+      "entradas": {
+        "pre": 0.999,
+        "lr_pos": 100,
+        "lr_neg": 0.5
+      },
+      "esperado": {
+        "post_pos": 0.999989990090189,
+        "post_neg": 0.998001998001998,
+        "ganancia_pos": 0.000989990090189297,
+        "ganancia_neg": 0.00099800199800204,
+        "momios_pre": 998.999999999999,
+        "momios_post_pos": 99899.9999999999,
+        "momios_post_neg": 499.5
+      },
+      "tol": "probabilidad-posprueba"
+    },
+    {
+      "id": "lr_uno",
+      "entradas": {
+        "pre": 0.3,
+        "lr_pos": 1,
+        "lr_neg": 1
+      },
+      "esperado": {
+        "post_pos": 0.3,
+        "post_neg": 0.3,
+        "ganancia_pos": 0,
+        "ganancia_neg": 0,
+        "momios_pre": 0.428571428571429,
+        "momios_post_pos": 0.428571428571429,
+        "momios_post_neg": 0.428571428571429
+      },
+      "tol": "probabilidad-posprueba"
+    },
+    {
+      "id": "p0",
+      "entradas": {
+        "pre": 0,
+        "lr_pos": 17,
+        "lr_neg": 0.158
+      },
+      "esperado": {
+        "post_pos": 0,
+        "post_neg": 0,
+        "ganancia_pos": 0,
+        "ganancia_neg": 0,
+        "momios_pre": 0,
+        "momios_post_pos": 0,
+        "momios_post_neg": 0
+      },
+      "tol": "probabilidad-posprueba"
+    },
+    {
+      "id": "p1",
+      "entradas": {
+        "pre": 1,
+        "lr_pos": 17,
+        "lr_neg": 0.158
+      },
+      "esperado": {
+        "post_pos": 1,
+        "post_neg": 1,
+        "ganancia_pos": 0,
+        "ganancia_neg": 0,
+        "momios_pre": "Inf",
+        "momios_post_pos": "Inf",
+        "momios_post_neg": "Inf"
+      },
+      "tol": "probabilidad-posprueba"
+    },
+    {
+      "id": "invertido",
+      "entradas": {
+        "pre": 0.5,
+        "lr_pos": 0.5,
+        "lr_neg": 2
+      },
+      "esperado": {
+        "post_pos": 0.333333333333333,
+        "post_neg": 0.666666666666667,
+        "ganancia_pos": -0.166666666666667,
+        "ganancia_neg": -0.166666666666667,
+        "momios_pre": 1,
+        "momios_post_pos": 0.5,
+        "momios_post_neg": 2
+      },
+      "tol": "probabilidad-posprueba"
+    },
+    {
+      "id": "lr_neg_cero",
+      "entradas": {
+        "pre": 0.3,
+        "lr_pos": 17,
+        "lr_neg": 0
+      },
+      "esperado": {
+        "post_pos": 0.879310344827586,
+        "post_neg": 0,
+        "ganancia_pos": 0.579310344827586,
+        "ganancia_neg": 0.3,
+        "momios_pre": 0.428571428571429,
+        "momios_post_pos": 7.28571428571429,
+        "momios_post_neg": 0
+      },
+      "tol": "probabilidad-posprueba"
+    },
+    {
+      "id": "p05_moderado",
+      "entradas": {
+        "pre": 0.5,
+        "lr_pos": 3,
+        "lr_neg": 0.3
+      },
+      "esperado": {
+        "post_pos": 0.75,
+        "post_neg": 0.230769230769231,
+        "ganancia_pos": 0.25,
+        "ganancia_neg": 0.269230769230769,
+        "momios_pre": 1,
+        "momios_post_pos": 3,
+        "momios_post_neg": 0.3
+      },
+      "tol": "probabilidad-posprueba"
+    },
+    {
+      "id": "decimales",
+      "entradas": {
+        "pre": 0.123,
+        "lr_pos": 2.75,
+        "lr_neg": 0.42
+      },
+      "esperado": {
+        "post_pos": 0.27833779057807,
+        "post_neg": 0.0556285400469494,
+        "ganancia_pos": 0.15533779057807,
+        "ganancia_neg": 0.0673714599530506,
+        "momios_pre": 0.140250855188141,
+        "momios_post_pos": 0.385689851767389,
+        "momios_post_neg": 0.0589053591790194
+      },
+      "tol": "probabilidad-posprueba"
+    }
+  ]
+}

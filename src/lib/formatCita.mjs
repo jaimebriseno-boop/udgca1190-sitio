@@ -75,7 +75,7 @@ export function formatCita(p, lang = 'es') {
 
   return [
     autores && `<span class="cita__autores">${autores}.</span>`,
-    titulo && `<span class="cita__titulo">${titulo}.</span>`,
+    titulo && `<span class="cita__titulo">${titulo}${/[.?!]$/.test(titulo) ? '' : '.'}</span>`,
     fuente && `<span class="cita__fuente">${fuente}</span>`,
   ]
     .filter(Boolean)

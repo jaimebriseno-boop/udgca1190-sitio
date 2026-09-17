@@ -39,6 +39,9 @@ export const potencia: Tolerancia = { rel: 1e-6, abs: 1e-8 };
 /** Coeficientes de modelos ajustados por IRLS o Newton-Raphson. */
 export const modelo: Tolerancia = { rel: 1e-6, abs: 1e-8 };
 
+/** Proporciones de una tabla 2×2 (Sn, Sp, VPP, VPN, prevalencia, exactitud). */
+const PROPORCIONES_2X2 = ['sn', 'sp', 'vpp', 'vpn', 'prev', 'exactitud'] as const;
+
 /**
  * Perfil por calculadora. La clave es el valor de `tol` en cada caso del fixture
  * (por omisión, el slug de la calculadora).
@@ -47,6 +50,15 @@ export const modelo: Tolerancia = { rel: 1e-6, abs: 1e-8 };
  * Wald son forma cerrada a partir de un único `qnorm`, y la proporción puntual es
  * una división; Clopper-Pearson y Jeffreys invierten la beta incompleta con
  * `qbeta`, así que se quedan en el perfil `cuantil` por omisión.
+ *
+ * `prueba-diagnostica-2x2`: todo es forma cerrada (Wilson, Agresti-Coull o Wald
+ * para las proporciones; log-Wald de Simel y Woolf para las razones; delta para
+ * Youden). Los casos que eligen Clopper-Pearson o Jeffreys usan el perfil
+ * `prueba-diagnostica-2x2-beta`, donde solo las seis proporciones pasan a
+ * `cuantil`; las razones y el índice de Youden siguen en `cerrado`.
+ *
+ * `probabilidad-posprueba` y `valores-predictivos`: aritmética de momios, logit
+ * y `exp`/`log` con un único `qnorm`: forma cerrada.
  */
 export const TOL: Record<string, PerfilTolerancia> = {
   'ic-proporcion': {
@@ -59,4 +71,11 @@ export const TOL: Record<string, PerfilTolerancia> = {
       wald: cerrado,
     },
   },
+  'prueba-diagnostica-2x2': { defecto: cerrado },
+  'prueba-diagnostica-2x2-beta': {
+    defecto: cerrado,
+    campos: Object.fromEntries(PROPORCIONES_2X2.map((campo) => [campo, cuantil])),
+  },
+  'probabilidad-posprueba': { defecto: cerrado },
+  'valores-predictivos': { defecto: cerrado },
 };

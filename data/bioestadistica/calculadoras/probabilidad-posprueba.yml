@@ -1,0 +1,185 @@
+# Calculadora A2 · Probabilidad posprueba (teorema de Bayes en forma de momios, nomograma de Fagan).
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: diagnostico
+orden: 2
+estado: activa
+motor: ts
+entradas:
+  - { id: pre, tipo: proporcion, min: 0, max: 1 }
+  - { id: lr_pos, tipo: decimal, min: 0 }
+  - { id: lr_neg, tipo: decimal, min: 0 }
+ejemplo: { pre: 0.3, lr_pos: 17, lr_neg: 0.158 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Post-test probability by Bayes' theorem in odds form (Fagan 1975) - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    pre <- {pre}; lr_pos <- {lr_pos}; lr_neg <- {lr_neg}   # pre-test probability (0-1) and likelihood ratios
+
+    momios <- function(p) p / (1 - p)     # probability -> odds
+    post <- function(p, lr) {             # post-test probability; certainties (0 and 1) stay fixed
+      if (p <= 0) return(0)
+      if (p >= 1) return(1)
+      o <- p / (1 - p) * lr
+      o / (1 + o)
+    }
+    momios_pre <- momios(pre)
+    momios_post_pos <- momios_pre * lr_pos
+    momios_post_neg <- momios_pre * lr_neg
+    post_pos <- post(pre, lr_pos)         # after a positive result
+    post_neg <- post(pre, lr_neg)         # after a negative result
+
+    res <- list(post_pos = post_pos, post_neg = post_neg,
+                ganancia_pos = post_pos - pre, ganancia_neg = pre - post_neg,
+                momios_pre = momios_pre, momios_post_pos = momios_post_pos, momios_post_neg = momios_post_neg)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+referencias:
+  - { key: bayes1763, rol: original }
+  - { key: fagan1975, rol: original }
+  - { key: jaeschke1994, rol: original }
+  - { key: mcgee2002, rol: complementaria }
+  - { key: deeks2004, rol: didactica }
+  - { key: straus2019, rol: didactica }
+grafica: fagan
+es:
+  titulo: "Probabilidad posprueba: teorema de Bayes y nomograma de Fagan"
+  titulo_corto: "Probabilidad posprueba (Fagan)"
+  meta: "Calcula la probabilidad posprueba a partir de la probabilidad preprueba y las razones de verosimilitud (LR+ y LR−) con el teorema de Bayes en forma de momios, dibuja el nomograma de Fagan y muestra el código R. Los datos no salen del navegador."
+  intro: "Captura la probabilidad preprueba y las razones de verosimilitud de la prueba (LR+ y LR−) y obtén la probabilidad posprueba para un resultado positivo y para uno negativo, el cambio en puntos porcentuales, el nomograma de Fagan, la interpretación y el código de R equivalente."
+  explicacion:
+    - "Antes de pedir una prueba, el clínico ya tiene una estimación de la probabilidad de la enfermedad (probabilidad preprueba: la prevalencia en ese contexto o la impresión clínica). La prueba no crea certezas: mueve esa probabilidad hacia arriba si es positiva y hacia abajo si es negativa. Cuánto la mueve lo dicen las razones de verosimilitud."
+    - "El cálculo es el teorema de Bayes (1763) escrito con momios: los momios posprueba son los momios preprueba multiplicados por la razón de verosimilitud del resultado obtenido. Los momios son la probabilidad dividida entre su complemento (30 % equivale a 0.43, es decir, 3 a 7) y se convierten de vuelta en probabilidad al final."
+    - "El nomograma de Fagan (1975) hace el cálculo con una regla: se une la probabilidad preprueba (eje izquierdo) con la razón de verosimilitud (eje central) y la recta corta el eje derecho en la probabilidad posprueba. Aquí se dibuja una recta por cada resultado, positivo y negativo."
+    - "Jaeschke, Guyatt y Sackett (1994) propusieron cortes orientativos para leer un LR: mayor de 10 (o menor de 0.1) produce cambios grandes y a menudo concluyentes; de 5 a 10 (0.1 a 0.2), moderados; de 2 a 5 (0.2 a 0.5), pequeños pero a veces importantes; entre 1 y 2 (0.5 a 1), rara vez importantes. Son convenciones, no umbrales de decisión: el umbral de tratamiento lo fija la situación clínica."
+  ecuaciones:
+    - id: momios
+      tex: 'O_{\mathrm{pre}}=\frac{P}{1-P},\qquad O_{\mathrm{post}}=O_{\mathrm{pre}}\times \mathrm{LR},\qquad P_{\mathrm{post}}=\frac{O_{\mathrm{post}}}{1+O_{\mathrm{post}}}'
+      simbolos:
+        - { s: 'P', def: "probabilidad preprueba" }
+        - { s: 'O_{\mathrm{pre}},\ O_{\mathrm{post}}', def: "momios (odds) preprueba y posprueba" }
+        - { s: '\mathrm{LR}', def: "razón de verosimilitud del resultado obtenido (LR+ si positivo, LR− si negativo)" }
+      nota: "Teorema de Bayes en forma de momios: es exactamente lo que resuelve el nomograma de Fagan (1975)."
+    - id: bayes
+      tex: 'P(D\mid T^{+})=\frac{P(T^{+}\mid D)\,P(D)}{P(T^{+}\mid D)\,P(D)+P(T^{+}\mid \bar D)\,P(\bar D)}'
+      simbolos:
+        - { s: 'D,\ \bar D', def: "enfermedad presente y ausente" }
+        - { s: 'T^{+}', def: "resultado positivo de la prueba" }
+      nota: "Forma clásica del teorema de Bayes (1763); P(T⁺ | D) es la sensibilidad y P(T⁺ | D̄), 1 − especificidad."
+    - id: lr
+      tex: '\LRp=\frac{\Sn}{1-\Sp},\qquad \LRn=\frac{1-\Sn}{\Sp}'
+      simbolos: []
+      nota: "Las razones de verosimilitud salen de la sensibilidad y la especificidad (calculadora «Prueba diagnóstica (tabla 2×2)»)."
+  etiquetas:
+    pre: "Probabilidad preprueba"
+    lr_pos: "LR+"
+    lr_neg: "LR−"
+    post_pos: "Probabilidad posprueba si el resultado es positivo"
+    post_neg: "Probabilidad posprueba si el resultado es negativo"
+    ganancia_pos: "Cambio con un resultado positivo"
+    ganancia_neg: "Cambio con un resultado negativo"
+    momios_pre: "Momios preprueba"
+    momios_post_pos: "Momios posprueba (positivo)"
+    momios_post_neg: "Momios posprueba (negativo)"
+    puntos: "puntos porcentuales"
+    linea_pos: "Resultado positivo"
+    linea_neg: "Resultado negativo"
+    eje_pre: "Preprueba (%)"
+    eje_lr: "LR"
+    eje_post: "Posprueba (%)"
+  ayudas:
+    pre: "Prevalencia en el contexto de uso o estimación clínica, de 0 a 1 o en porcentaje (30 = 30 %)."
+    lr_pos: "Razón de verosimilitud de un resultado positivo (mayor que 1 si la prueba es útil). Tómala de la calculadora de la tabla 2×2 o de la literatura."
+    lr_neg: "Razón de verosimilitud de un resultado negativo (entre 0 y 1 si la prueba es útil)."
+  interpretacion:
+    resumen: "Partiendo de una probabilidad preprueba de {pre} (momios {momios_pre}), un resultado positivo la eleva a {post_pos} ({ganancia_pos} puntos porcentuales; momios {momios_post_pos}) y uno negativo la reduce a {post_neg} ({ganancia_neg} puntos; momios {momios_post_neg})."
+    "lr_pos.grande": "LR+ = {lr_pos}: un resultado positivo produce un cambio grande y a menudo concluyente de la probabilidad (Jaeschke 1994)."
+    "lr_pos.moderado": "LR+ = {lr_pos}: un resultado positivo produce un cambio moderado de la probabilidad (Jaeschke 1994)."
+    "lr_pos.pequeno": "LR+ = {lr_pos}: un resultado positivo produce un cambio pequeño de la probabilidad, aunque a veces importante (Jaeschke 1994)."
+    "lr_pos.minimo": "LR+ = {lr_pos}: un resultado positivo apenas modifica la probabilidad; el cambio rara vez es importante (Jaeschke 1994)."
+    "lr_pos.nulo": "LR+ = {lr_pos}: un resultado positivo no aumenta la probabilidad de enfermedad; con este valor la prueba no aporta información a favor."
+    "lr_neg.grande": "LR− = {lr_neg}: un resultado negativo produce un cambio grande y a menudo concluyente hacia abajo (Jaeschke 1994)."
+    "lr_neg.moderado": "LR− = {lr_neg}: un resultado negativo reduce la probabilidad de forma moderada (Jaeschke 1994)."
+    "lr_neg.pequeno": "LR− = {lr_neg}: un resultado negativo reduce poco la probabilidad, aunque a veces de forma relevante (Jaeschke 1994)."
+    "lr_neg.minimo": "LR− = {lr_neg}: un resultado negativo apenas reduce la probabilidad; no sirve para descartar la enfermedad (Jaeschke 1994)."
+    "lr_neg.nulo": "LR− = {lr_neg}: un resultado negativo no reduce la probabilidad de enfermedad; con este valor la prueba no aporta información en contra."
+    umbral: "Decidir si la probabilidad posprueba cruza el umbral de tratamiento o el de pedir otra prueba corresponde al clínico: depende de la gravedad de la enfermedad, del riesgo y el beneficio del tratamiento y de las alternativas diagnósticas (Straus 2019). Los cortes de Jaeschke son orientativos, no umbrales de decisión."
+  avisos:
+    certeza: "La probabilidad preprueba es 0 % o 100 %: la evidencia no cambia certezas y la posprueba queda fija."
+    extremo: "Probabilidad preprueba del 1 % o menor, o del 99 % o mayor: la escala del nomograma queda comprimida en ese extremo y una recta puede salirse de los ejes; los números siguen siendo válidos."
+    lr_nulo: "Una razón de verosimilitud vale 1: ese resultado no cambia la probabilidad; la prueba no aporta información."
+    lr_invertido: "LR+ menor que 1 o LR− mayor que 1: un resultado positivo reduce la probabilidad y uno negativo la aumenta. Comprueba que no estén intercambiadas."
+  metodos: "La probabilidad posprueba se calculó con el teorema de Bayes en forma de momios (momios posprueba = momios preprueba × razón de verosimilitud) [{ref:bayes1763}] y se representó con el nomograma de Fagan [{ref:fagan1975}]; la magnitud del cambio se interpretó según los cortes orientativos de Jaeschke et al. [{ref:jaeschke1994}]. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: paciente febril en temporada de dengue con probabilidad preprueba del 30 %; prueba rápida de antígeno NS1 con LR+ = 17 y LR− = 0.158 (de la calculadora de la tabla 2×2; datos ficticios)."
+  grafica_titulo: "Nomograma de Fagan: de la probabilidad preprueba (izquierda) a la posprueba (derecha) pasando por la razón de verosimilitud de cada resultado"
+en:
+  titulo: "Post-test probability: Bayes' theorem and Fagan's nomogram"
+  titulo_corto: "Post-test probability (Fagan)"
+  meta: "Compute the post-test probability from the pre-test probability and the likelihood ratios (LR+ and LR−) with Bayes' theorem in odds form, draw Fagan's nomogram and see the R code. Data never leave the browser."
+  intro: "Enter the pre-test probability and the likelihood ratios of the test (LR+ and LR−) and get the post-test probability after a positive and after a negative result, the change in percentage points, Fagan's nomogram, the interpretation and the equivalent R code."
+  explicacion:
+    - "Before ordering a test the clinician already has an estimate of the probability of disease (pre-test probability: the prevalence in that setting or the clinical impression). The test does not create certainty: it moves that probability up if positive and down if negative. How far it moves it is what the likelihood ratios tell."
+    - "The calculation is Bayes' theorem (1763) written with odds: the post-test odds are the pre-test odds multiplied by the likelihood ratio of the result obtained. Odds are the probability divided by its complement (30% equals 0.43, that is, 3 to 7) and are converted back to a probability at the end."
+    - "Fagan's nomogram (1975) does the calculation with a ruler: join the pre-test probability (left axis) with the likelihood ratio (centre axis) and the straight line crosses the right axis at the post-test probability. Here one line is drawn per result, positive and negative."
+    - "Jaeschke, Guyatt and Sackett (1994) proposed guiding cut-offs to read an LR: above 10 (or below 0.1) produces large, often conclusive changes; 5 to 10 (0.1 to 0.2), moderate; 2 to 5 (0.2 to 0.5), small but sometimes important; between 1 and 2 (0.5 to 1), rarely important. They are conventions, not decision thresholds: the treatment threshold is set by the clinical situation."
+  ecuaciones:
+    - id: momios
+      tex: 'O_{\mathrm{pre}}=\frac{P}{1-P},\qquad O_{\mathrm{post}}=O_{\mathrm{pre}}\times \mathrm{LR},\qquad P_{\mathrm{post}}=\frac{O_{\mathrm{post}}}{1+O_{\mathrm{post}}}'
+      simbolos:
+        - { s: 'P', def: "pre-test probability" }
+        - { s: 'O_{\mathrm{pre}},\ O_{\mathrm{post}}', def: "pre-test and post-test odds" }
+        - { s: '\mathrm{LR}', def: "likelihood ratio of the result obtained (LR+ if positive, LR− if negative)" }
+      nota: "Bayes' theorem in odds form: exactly what Fagan's nomogram (1975) solves."
+    - id: bayes
+      tex: 'P(D\mid T^{+})=\frac{P(T^{+}\mid D)\,P(D)}{P(T^{+}\mid D)\,P(D)+P(T^{+}\mid \bar D)\,P(\bar D)}'
+      simbolos:
+        - { s: 'D,\ \bar D', def: "disease present and absent" }
+        - { s: 'T^{+}', def: "positive test result" }
+      nota: "Classic form of Bayes' theorem (1763); P(T⁺ | D) is the sensitivity and P(T⁺ | D̄) is 1 − specificity."
+    - id: lr
+      tex: '\LRp=\frac{\Sn}{1-\Sp},\qquad \LRn=\frac{1-\Sn}{\Sp}'
+      simbolos: []
+      nota: "Likelihood ratios come from sensitivity and specificity (\"Diagnostic test (2×2 table)\" calculator)."
+  etiquetas:
+    pre: "Pre-test probability"
+    lr_pos: "LR+"
+    lr_neg: "LR−"
+    post_pos: "Post-test probability after a positive result"
+    post_neg: "Post-test probability after a negative result"
+    ganancia_pos: "Change with a positive result"
+    ganancia_neg: "Change with a negative result"
+    momios_pre: "Pre-test odds"
+    momios_post_pos: "Post-test odds (positive)"
+    momios_post_neg: "Post-test odds (negative)"
+    puntos: "percentage points"
+    linea_pos: "Positive result"
+    linea_neg: "Negative result"
+    eje_pre: "Pre-test (%)"
+    eje_lr: "LR"
+    eje_post: "Post-test (%)"
+  ayudas:
+    pre: "Prevalence in the setting of use or clinical estimate, from 0 to 1 or as a percentage (30 = 30%)."
+    lr_pos: "Likelihood ratio of a positive result (above 1 if the test is useful). Take it from the 2×2 table calculator or from the literature."
+    lr_neg: "Likelihood ratio of a negative result (between 0 and 1 if the test is useful)."
+  interpretacion:
+    resumen: "Starting from a pre-test probability of {pre} (odds {momios_pre}), a positive result raises it to {post_pos} ({ganancia_pos} percentage points; odds {momios_post_pos}) and a negative result lowers it to {post_neg} ({ganancia_neg} points; odds {momios_post_neg})."
+    "lr_pos.grande": "LR+ = {lr_pos}: a positive result produces a large and often conclusive change in probability (Jaeschke 1994)."
+    "lr_pos.moderado": "LR+ = {lr_pos}: a positive result produces a moderate change in probability (Jaeschke 1994)."
+    "lr_pos.pequeno": "LR+ = {lr_pos}: a positive result produces a small but sometimes important change in probability (Jaeschke 1994)."
+    "lr_pos.minimo": "LR+ = {lr_pos}: a positive result barely changes the probability; the change is rarely important (Jaeschke 1994)."
+    "lr_pos.nulo": "LR+ = {lr_pos}: a positive result does not raise the probability of disease; at this value the test provides no evidence in favour."
+    "lr_neg.grande": "LR− = {lr_neg}: a negative result produces a large and often conclusive change downwards (Jaeschke 1994)."
+    "lr_neg.moderado": "LR− = {lr_neg}: a negative result lowers the probability moderately (Jaeschke 1994)."
+    "lr_neg.pequeno": "LR− = {lr_neg}: a negative result lowers the probability only slightly, though sometimes meaningfully (Jaeschke 1994)."
+    "lr_neg.minimo": "LR− = {lr_neg}: a negative result barely lowers the probability; it cannot rule the disease out (Jaeschke 1994)."
+    "lr_neg.nulo": "LR− = {lr_neg}: a negative result does not lower the probability of disease; at this value the test provides no evidence against."
+    umbral: "Deciding whether the post-test probability crosses the treatment threshold or the threshold for further testing is up to the clinician: it depends on the severity of the disease, the risk and benefit of treatment and the diagnostic alternatives (Straus 2019). Jaeschke's cut-offs are guidance, not decision thresholds."
+  avisos:
+    certeza: "The pre-test probability is 0% or 100%: evidence does not change certainties and the post-test probability stays fixed."
+    extremo: "Pre-test probability of 1% or less, or 99% or more: the nomogram scale is compressed at that end and a line may run off the axes; the numbers remain valid."
+    lr_nulo: "A likelihood ratio equals 1: that result does not change the probability; the test provides no information."
+    lr_invertido: "LR+ below 1 or LR− above 1: a positive result lowers the probability and a negative one raises it. Check that they are not swapped."
+  metodos: "The post-test probability was computed with Bayes' theorem in odds form (post-test odds = pre-test odds × likelihood ratio) [{ref:bayes1763}] and displayed with Fagan's nomogram [{ref:fagan1975}]; the magnitude of the change was interpreted with the guiding cut-offs of Jaeschke et al. [{ref:jaeschke1994}]. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: febrile patient in dengue season with a 30% pre-test probability; rapid NS1 antigen test with LR+ = 17 and LR− = 0.158 (from the 2×2 table calculator; fictitious data)."
+  grafica_titulo: "Fagan's nomogram: from the pre-test probability (left) to the post-test probability (right) through the likelihood ratio of each result"

@@ -50,3 +50,10 @@ test('las comillas dobles se escapan dentro de los atributos', () => {
   assert.equal(html.includes('"b'), false);
   assert.equal(html.includes('&quot;b'), true);
 });
+
+test('un título que termina en signo de interrogación no recibe un punto añadido', () => {
+  const pregunta: Publicacion = { ...articulo, title: 'What are the results and will they help me?' };
+  assert.ok(texto(formatCita(pregunta)).includes('help me? Statistics in Medicine.'));
+  assert.ok(!texto(formatCita(pregunta)).includes('me?.'));
+  assert.ok(texto(formatCita(articulo)).includes('intervals. Statistics in Medicine.'));
+});

@@ -1,0 +1,212 @@
+# Calculadora A3 · Valores predictivos a partir de sensibilidad, especificidad y prevalencia.
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: diagnostico
+orden: 3
+estado: activa
+motor: ts
+entradas:
+  - { id: sn, tipo: proporcion, min: 0, max: 1 }
+  - { id: sp, tipo: proporcion, min: 0, max: 1 }
+  - { id: prev, tipo: proporcion, min: 0, max: 1 }
+  - { id: n_d, tipo: entero, min: 0, requerido: false }
+  - { id: n_nd, tipo: entero, min: 0, requerido: false }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+ejemplo: { sn: 0.85, sp: 0.95, prev: 0.3, n_d: 80, n_nd: 120, nivel: 0.95 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Predictive values from sensitivity, specificity and prevalence - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    sn <- {sn}; sp <- {sp}; prev <- {prev}   # sensitivity, specificity and prevalence where the test will be used (0-1)
+    n_d <- {n_d}; n_nd <- {n_nd}             # diseased and non-diseased in the validation study; 0 = unknown (no CI)
+    nivel <- {nivel}
+    z <- qnorm(1 - (1 - nivel) / 2)
+
+    vpp_punto <- sn * prev / (sn * prev + (1 - sp) * (1 - prev))         # Bayes' theorem
+    vpn_punto <- sp * (1 - prev) / (sp * (1 - prev) + (1 - sn) * prev)
+    lr_pos <- sn / (1 - sp)
+    lr_neg <- (1 - sn) / sp
+
+    # Logit confidence interval of Mercaldo, Lau & Zhou (2007); with Sn or Sp at 0 or 1 the standard
+    # error is undefined and the adjusted logit is used (0.5 added to each cell of the validation study)
+    logit <- function(p) log(p / (1 - p))
+    expit <- function(x) 1 / (1 + exp(-x))
+    ic_logit <- function(s, e, d, nd) {      # s = Sn, e = Sp, d = diseased, nd = non-diseased
+      vpp <- s * prev / (s * prev + (1 - e) * (1 - prev))
+      vpn <- e * (1 - prev) / (e * (1 - prev) + (1 - s) * prev)
+      ee_vpp <- sqrt((1 - s) / (s * d) + e / ((1 - e) * nd))
+      ee_vpn <- sqrt((1 - e) / (e * nd) + s / ((1 - s) * d))
+      list(vpp = c(expit(logit(vpp) - z * ee_vpp), expit(logit(vpp) + z * ee_vpp)),
+           vpn = c(expit(logit(vpn) - z * ee_vpn), expit(logit(vpn) + z * ee_vpn)))
+    }
+    if (n_d > 0 && n_nd > 0) {
+      ajustado <- sn %in% c(0, 1) || sp %in% c(0, 1)
+      ic <- if (ajustado) ic_logit((sn * n_d + 0.5) / (n_d + 1), (sp * n_nd + 0.5) / (n_nd + 1), n_d + 1, n_nd + 1) else ic_logit(sn, sp, n_d, n_nd)
+      vpp <- c(vpp_punto, ic$vpp); vpn <- c(vpn_punto, ic$vpn)
+    } else {
+      vpp <- vpp_punto; vpn <- vpn_punto     # without the study sizes there is no interval
+    }
+
+    # Natural frequencies per 1,000 people tested (Gigerenzer & Edwards 2003)
+    vp_mil <- 1000 * prev * sn;       fn_mil <- 1000 * prev * (1 - sn)
+    fp_mil <- 1000 * (1 - prev) * (1 - sp); vn_mil <- 1000 * (1 - prev) * sp
+
+    res <- list(vpp = vpp, vpn = vpn, lr_pos = lr_pos, lr_neg = lr_neg,
+                vp_mil = vp_mil, fp_mil = fp_mil, fn_mil = fn_mil, vn_mil = vn_mil)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+referencias:
+  - { key: vecchio1966, rol: original }
+  - { key: mercaldo2007, rol: original }
+  - { key: gigerenzer2003, rol: original }
+  - { key: bayes1763, rol: original }
+  - { key: altman1994vp, rol: didactica }
+  - { key: fletcher2014, rol: didactica }
+grafica: curvas
+es:
+  titulo: "Valores predictivos a partir de sensibilidad, especificidad y prevalencia (con IC de Mercaldo y frecuencias naturales)"
+  titulo_corto: "Valores predictivos"
+  meta: "Calcula el valor predictivo positivo y negativo para cualquier prevalencia a partir de la sensibilidad y la especificidad, con intervalo de confianza logit (Mercaldo 2007), razones de verosimilitud, frecuencias naturales por 1,000 personas y curvas frente a la prevalencia. Los datos no salen del navegador."
+  intro: "Captura la sensibilidad, la especificidad y la prevalencia donde se usará la prueba (y, si los conoces, los tamaños del estudio de validación) y obtén el VPP y el VPN con su intervalo de confianza, las razones de verosimilitud, las frecuencias naturales por 1,000 personas, la curva de ambos valores frente a la prevalencia, la interpretación y el código de R equivalente."
+  explicacion:
+    - "La sensibilidad y la especificidad describen la prueba, pero la pregunta del clínico es otra: si el resultado es positivo, ¿qué probabilidad hay de que la persona esté enferma? Ese es el valor predictivo positivo (VPP); el negativo (VPN) es la probabilidad de estar sana con un resultado negativo. Ambos dependen de la prevalencia (Vecchio 1966): con la misma prueba, el VPP cae cuando la enfermedad es rara y el VPN cae cuando es frecuente."
+    - "Por eso los valores predictivos del estudio de validación no se trasladan a la consulta: hay que recalcularlos con la prevalencia de la población donde se aplicará la prueba (o con la probabilidad preprueba del paciente). Esta calculadora hace ese cálculo con el teorema de Bayes."
+    - "Las frecuencias naturales (Gigerenzer y Edwards 2003) lo explican sin fórmulas: de cada 1,000 personas evaluadas, cuántas tendrán la enfermedad y darán positivo, cuántas darán positivo sin tenerla, y así con los negativos. El VPP es simplemente la fracción de positivos que sí están enfermos."
+    - "Si se conocen los tamaños del estudio de validación (enfermos y sanos con los que se estimaron Sn y Sp), el intervalo de confianza de cada valor predictivo se calcula por el método logit de Mercaldo, Lau y Zhou (2007), que propaga la incertidumbre de Sn y Sp tomando la prevalencia como fija. Cuando Sn o Sp valen 0 o 1 se usa su variante ajustada (0.5 sumado a cada celda)."
+  ecuaciones:
+    - id: valores_predictivos
+      tex: '\mathrm{VPP}=\frac{\Sn\cdot P}{\Sn\cdot P+(1-\Sp)(1-P)},\qquad \mathrm{VPN}=\frac{\Sp\,(1-P)}{\Sp\,(1-P)+(1-\Sn)\,P}'
+      simbolos:
+        - { s: '\Sn,\ \Sp', def: "sensibilidad y especificidad" }
+        - { s: 'P', def: "prevalencia (probabilidad preprueba) donde se usará la prueba" }
+      nota: "Teorema de Bayes (1763) aplicado a un resultado positivo y a uno negativo."
+    - id: logit
+      tex: '\se[\logit \mathrm{VPP}]=\sqrt{\frac{1-\Sn}{\Sn\,n_D}+\frac{\Sp}{(1-\Sp)\,n_{\bar D}}},\qquad \se[\logit \mathrm{VPN}]=\sqrt{\frac{1-\Sp}{\Sp\,n_{\bar D}}+\frac{\Sn}{(1-\Sn)\,n_D}}'
+      simbolos:
+        - { s: 'n_D,\ n_{\bar D}', def: "enfermos y sanos del estudio de validación" }
+        - { s: '\logit p=\ln\frac{p}{1-p}', def: "escala logit; el intervalo se construye en esa escala y se devuelve a probabilidad con expit(x) = 1/(1 + e^{−x})" }
+      nota: "Intervalo logit de Mercaldo, Lau y Zhou (2007): IC = expit(logit VPP ± z·EE). Variante ajustada: Sn y Sp se reemplazan por (Sn·n_D + 0.5)/(n_D + 1) y (Sp·n_D̄ + 0.5)/(n_D̄ + 1), con n + 1 en cada grupo."
+    - id: frecuencias
+      tex: '\mathrm{VP}=1000\,P\,\Sn,\qquad \mathrm{FN}=1000\,P\,(1-\Sn),\qquad \mathrm{FP}=1000\,(1-P)(1-\Sp),\qquad \mathrm{VN}=1000\,(1-P)\,\Sp'
+      simbolos: []
+      nota: "Frecuencias naturales por cada 1,000 personas evaluadas (Gigerenzer y Edwards 2003); VPP = VP/(VP + FP) y VPN = VN/(VN + FN)."
+  etiquetas:
+    sn: "Sensibilidad (Sn)"
+    sp: "Especificidad (Sp)"
+    prev: "Prevalencia donde se usará la prueba"
+    n_d: "Enfermos en el estudio de validación (opcional)"
+    n_nd: "Sanos en el estudio de validación (opcional)"
+    nivel: "Nivel de confianza"
+    vpp: "Valor predictivo positivo (VPP)"
+    vpn: "Valor predictivo negativo (VPN)"
+    lr_pos: "LR+"
+    lr_neg: "LR−"
+    vp_mil: "Verdaderos positivos por 1,000"
+    fp_mil: "Falsos positivos por 1,000"
+    fn_mil: "Falsos negativos por 1,000"
+    vn_mil: "Verdaderos negativos por 1,000"
+    por_mil: "de cada 1,000 personas evaluadas"
+    nota_logit: "logit de Mercaldo"
+    nota_logit_ajustado: "logit ajustado de Mercaldo (+0.5)"
+    nota_sin_ic: "Sin IC: captura los tamaños del estudio de validación"
+    eje_prev: "Prevalencia"
+    eje_valor: "Valor predictivo"
+  ayudas:
+    sn: "Del estudio de validación o de la literatura; de 0 a 1 o en porcentaje (85 = 85 %)."
+    sp: "De 0 a 1 o en porcentaje."
+    prev: "La de la población donde se aplicará la prueba, o la probabilidad preprueba del paciente; no la del estudio de validación."
+    n_d: "Personas con la enfermedad en el estudio del que salen Sn y Sp. Con ambos tamaños se calcula el IC (Mercaldo 2007); déjalo vacío o en 0 si no lo conoces."
+    n_nd: "Personas sin la enfermedad en ese mismo estudio."
+    nivel: "Habitualmente 95 %; también 90 % o 99 %."
+  interpretacion:
+    resumen: "Si la prueba (Sn {sn}, Sp {sp}) se aplica a 1,000 personas con una prevalencia de {prev}, se esperan {vp_mil} verdaderos positivos y {fp_mil} falsos positivos: {vpp} de los resultados positivos corresponderán a personas con la enfermedad (VPP). Habrá {fn_mil} falsos negativos y {vn_mil} verdaderos negativos: {vpn} de los resultados negativos corresponderán a personas sin la enfermedad (VPN)."
+    "ic.con": "Con {n_d} enfermos y {n_nd} sanos en el estudio de validación, el IC {nivel} del VPP es {vpp_ic} y el del VPN, {vpn_ic} (método logit de Mercaldo 2007, con la prevalencia tomada como fija)."
+    "ic.sin": "Sin los tamaños del estudio de validación no se calcula intervalo de confianza: Sn y Sp se toman como valores fijos. Si los conoces, captúralos para obtener el IC (Mercaldo 2007)."
+    "ic.ajustado": "Como Sn o Sp valen 0 o 1, el error estándar del logit no existe; el IC {nivel} se calculó con el logit ajustado de Mercaldo (0.5 sumado a cada celda del estudio de validación): VPP {vpp_ic}, VPN {vpn_ic}."
+    lr: "LR+ = {lr_pos} y LR− = {lr_neg}: estas dos cifras no dependen de la prevalencia y son las que se trasladan a cualquier probabilidad preprueba con la calculadora «Probabilidad posprueba»."
+    prevalencia: "La prevalencia debe ser la de la población donde se usará la prueba (o la probabilidad preprueba del paciente), no la del estudio de validación: con la misma Sn y Sp, el VPP cae cuando la enfermedad es rara y el VPN cae cuando es frecuente (Vecchio 1966). La gráfica muestra ambos valores para cualquier prevalencia."
+    "metodos_ic.con": "Los intervalos de confianza al {nivel} se calcularon con el método logit de Mercaldo et al. [{ref:mercaldo2007}] a partir de los tamaños del estudio de validación ({n_d} con la enfermedad y {n_nd} sin ella), con la prevalencia tomada como fija."
+    "metodos_ic.ajustado": "Los intervalos de confianza al {nivel} se calcularon con el método logit ajustado de Mercaldo et al. [{ref:mercaldo2007}] (0.5 sumado a cada celda del estudio de validación, {n_d} con la enfermedad y {n_nd} sin ella), con la prevalencia tomada como fija."
+    "metodos_ic.sin": "No se calcularon intervalos de confianza por no disponerse de los tamaños del estudio de validación (método logit de Mercaldo et al. [{ref:mercaldo2007}])."
+  avisos:
+    sin_n: "Solo se indicó uno de los dos tamaños del estudio de validación: se necesitan ambos (enfermos y sanos) para calcular el intervalo de confianza."
+    logit_ajustado: "Sn o Sp valen 0 o 1: el intervalo se calculó con el logit ajustado de Mercaldo (0.5 sumado a cada celda del estudio de validación)."
+    certeza: "Prevalencia de 0 % o 100 %: no hay incertidumbre que la prueba pueda cambiar y los valores predictivos son triviales."
+    prueba_perfecta: "Sn = Sp = 100 %: prueba perfecta; LR+ queda en infinito y LR− en 0."
+  metodos: "Los valores predictivos se derivaron de la sensibilidad, la especificidad y la prevalencia supuesta mediante el teorema de Bayes [{ref:bayes1763},{ref:vecchio1966}]. {metodos_ic} Los resultados se expresaron también como frecuencias naturales por cada 1,000 personas [{ref:gigerenzer2003}]. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: prueba rápida de antígeno NS1 con sensibilidad 85 % y especificidad 95 % (estimadas en 80 enfermos y 120 sanos), aplicada donde la prevalencia de dengue entre los febriles es del 30 % (datos ficticios)."
+  grafica_titulo: "VPP y VPN frente a la prevalencia, con la prevalencia capturada marcada"
+en:
+  titulo: "Predictive values from sensitivity, specificity and prevalence (with Mercaldo CIs and natural frequencies)"
+  titulo_corto: "Predictive values"
+  meta: "Compute the positive and negative predictive values for any prevalence from sensitivity and specificity, with a logit confidence interval (Mercaldo 2007), likelihood ratios, natural frequencies per 1,000 people and curves against prevalence. Data never leave the browser."
+  intro: "Enter sensitivity, specificity and the prevalence where the test will be used (and, if you know them, the sizes of the validation study) and get PPV and NPV with their confidence interval, the likelihood ratios, natural frequencies per 1,000 people, the curve of both values against prevalence, the interpretation and the equivalent R code."
+  explicacion:
+    - "Sensitivity and specificity describe the test, but the clinician's question is different: if the result is positive, how likely is it that the person has the disease? That is the positive predictive value (PPV); the negative one (NPV) is the probability of being disease-free given a negative result. Both depend on prevalence (Vecchio 1966): with the same test, PPV falls when the disease is rare and NPV falls when it is common."
+    - "That is why the predictive values of the validation study do not carry over to the clinic: they must be recomputed with the prevalence of the population where the test will be used (or with the patient's pre-test probability). This calculator does that with Bayes' theorem."
+    - "Natural frequencies (Gigerenzer and Edwards 2003) explain it without formulas: out of every 1,000 people tested, how many have the disease and test positive, how many test positive without it, and likewise for the negatives. The PPV is simply the fraction of positives who really have the disease."
+    - "If the sizes of the validation study are known (diseased and non-diseased people from whom Sn and Sp were estimated), the confidence interval of each predictive value is computed with the logit method of Mercaldo, Lau and Zhou (2007), which propagates the uncertainty of Sn and Sp while holding prevalence fixed. When Sn or Sp equal 0 or 1 its adjusted variant is used (0.5 added to each cell)."
+  ecuaciones:
+    - id: valores_predictivos
+      tex: '\mathrm{PPV}=\frac{\Sn\cdot P}{\Sn\cdot P+(1-\Sp)(1-P)},\qquad \mathrm{NPV}=\frac{\Sp\,(1-P)}{\Sp\,(1-P)+(1-\Sn)\,P}'
+      simbolos:
+        - { s: '\Sn,\ \Sp', def: "sensitivity and specificity" }
+        - { s: 'P', def: "prevalence (pre-test probability) where the test will be used" }
+      nota: "Bayes' theorem (1763) applied to a positive and to a negative result."
+    - id: logit
+      tex: '\se[\logit \mathrm{PPV}]=\sqrt{\frac{1-\Sn}{\Sn\,n_D}+\frac{\Sp}{(1-\Sp)\,n_{\bar D}}},\qquad \se[\logit \mathrm{NPV}]=\sqrt{\frac{1-\Sp}{\Sp\,n_{\bar D}}+\frac{\Sn}{(1-\Sn)\,n_D}}'
+      simbolos:
+        - { s: 'n_D,\ n_{\bar D}', def: "diseased and non-diseased in the validation study" }
+        - { s: '\logit p=\ln\frac{p}{1-p}', def: "logit scale; the interval is built on that scale and mapped back with expit(x) = 1/(1 + e^{−x})" }
+      nota: "Logit interval of Mercaldo, Lau and Zhou (2007): CI = expit(logit PPV ± z·SE). Adjusted variant: Sn and Sp are replaced by (Sn·n_D + 0.5)/(n_D + 1) and (Sp·n_D̄ + 0.5)/(n_D̄ + 1), with n + 1 in each group."
+    - id: frecuencias
+      tex: '\mathrm{TP}=1000\,P\,\Sn,\qquad \mathrm{FN}=1000\,P\,(1-\Sn),\qquad \mathrm{FP}=1000\,(1-P)(1-\Sp),\qquad \mathrm{TN}=1000\,(1-P)\,\Sp'
+      simbolos: []
+      nota: "Natural frequencies per 1,000 people tested (Gigerenzer and Edwards 2003); PPV = TP/(TP + FP) and NPV = TN/(TN + FN)."
+  etiquetas:
+    sn: "Sensitivity (Sn)"
+    sp: "Specificity (Sp)"
+    prev: "Prevalence where the test will be used"
+    n_d: "Diseased in the validation study (optional)"
+    n_nd: "Non-diseased in the validation study (optional)"
+    nivel: "Confidence level"
+    vpp: "Positive predictive value (PPV)"
+    vpn: "Negative predictive value (NPV)"
+    lr_pos: "LR+"
+    lr_neg: "LR−"
+    vp_mil: "True positives per 1,000"
+    fp_mil: "False positives per 1,000"
+    fn_mil: "False negatives per 1,000"
+    vn_mil: "True negatives per 1,000"
+    por_mil: "out of every 1,000 people tested"
+    nota_logit: "Mercaldo logit"
+    nota_logit_ajustado: "Mercaldo adjusted logit (+0.5)"
+    nota_sin_ic: "No CI: enter the validation study sizes"
+    eje_prev: "Prevalence"
+    eje_valor: "Predictive value"
+  ayudas:
+    sn: "From the validation study or the literature; from 0 to 1 or as a percentage (85 = 85%)."
+    sp: "From 0 to 1 or as a percentage."
+    prev: "That of the population where the test will be applied, or the patient's pre-test probability; not that of the validation study."
+    n_d: "People with the disease in the study from which Sn and Sp come. With both sizes the CI is computed (Mercaldo 2007); leave it empty or at 0 if unknown."
+    n_nd: "People without the disease in that same study."
+    nivel: "Usually 95%; 90% or 99% are also common."
+  interpretacion:
+    resumen: "If the test (Sn {sn}, Sp {sp}) is applied to 1,000 people with a prevalence of {prev}, {vp_mil} true positives and {fp_mil} false positives are expected: {vpp} of the positive results will belong to people with the disease (PPV). There will be {fn_mil} false negatives and {vn_mil} true negatives: {vpn} of the negative results will belong to people without the disease (NPV)."
+    "ic.con": "With {n_d} diseased and {n_nd} non-diseased people in the validation study, the {nivel} CI of the PPV is {vpp_ic} and that of the NPV is {vpn_ic} (Mercaldo 2007 logit method, with prevalence held fixed)."
+    "ic.sin": "Without the validation study sizes no confidence interval is computed: Sn and Sp are taken as fixed values. If you know them, enter them to obtain the CI (Mercaldo 2007)."
+    "ic.ajustado": "Because Sn or Sp equal 0 or 1, the standard error of the logit does not exist; the {nivel} CI was computed with Mercaldo's adjusted logit (0.5 added to each cell of the validation study): PPV {vpp_ic}, NPV {vpn_ic}."
+    lr: "LR+ = {lr_pos} and LR− = {lr_neg}: these two figures do not depend on prevalence and are the ones carried over to any pre-test probability with the \"Post-test probability\" calculator."
+    prevalencia: "The prevalence must be that of the population where the test will be used (or the patient's pre-test probability), not that of the validation study: with the same Sn and Sp, PPV falls when the disease is rare and NPV falls when it is common (Vecchio 1966). The chart shows both values for any prevalence."
+    "metodos_ic.con": "The {nivel} confidence intervals were computed with the logit method of Mercaldo et al. [{ref:mercaldo2007}] from the sizes of the validation study ({n_d} with the disease and {n_nd} without it), with prevalence held fixed."
+    "metodos_ic.ajustado": "The {nivel} confidence intervals were computed with the adjusted logit method of Mercaldo et al. [{ref:mercaldo2007}] (0.5 added to each cell of the validation study, {n_d} with the disease and {n_nd} without it), with prevalence held fixed."
+    "metodos_ic.sin": "No confidence intervals were computed because the sizes of the validation study were not available (logit method of Mercaldo et al. [{ref:mercaldo2007}])."
+  avisos:
+    sin_n: "Only one of the two validation study sizes was given: both (diseased and non-diseased) are needed to compute the confidence interval."
+    logit_ajustado: "Sn or Sp equal 0 or 1: the interval was computed with Mercaldo's adjusted logit (0.5 added to each cell of the validation study)."
+    certeza: "Prevalence of 0% or 100%: there is no uncertainty for the test to change and the predictive values are trivial."
+    prueba_perfecta: "Sn = Sp = 100%: perfect test; LR+ is infinite and LR− is 0."
+  metodos: "Predictive values were derived from sensitivity, specificity and the assumed prevalence with Bayes' theorem [{ref:bayes1763},{ref:vecchio1966}]. {metodos_ic} Results were also expressed as natural frequencies per 1,000 people [{ref:gigerenzer2003}]. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: rapid NS1 antigen test with 85% sensitivity and 95% specificity (estimated in 80 diseased and 120 non-diseased people), applied where the prevalence of dengue among febrile patients is 30% (fictitious data)."
+  grafica_titulo: "PPV and NPV against prevalence, with the entered prevalence marked"

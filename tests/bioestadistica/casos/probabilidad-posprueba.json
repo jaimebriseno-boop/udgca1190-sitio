@@ -1,0 +1,50 @@
+{
+  "calculadora": "probabilidad-posprueba",
+  "casos": [
+    {
+      "id": "p001_lr_neg_01",
+      "entradas": { "pre": 0.01, "lr_pos": 5, "lr_neg": 0.1 },
+      "nota": "Preprueba del 1 % (extremo del nomograma): LR+ 5 apenas la lleva al 4.8 %; LR- 0.1 la deja en 0.1 %."
+    },
+    {
+      "id": "p0999_lr100",
+      "entradas": { "pre": 0.999, "lr_pos": 100, "lr_neg": 0.5 },
+      "nota": "Preprueba del 99.9 % con momios 999: comprueba la conversion de vuelta a probabilidad cerca de 1."
+    },
+    {
+      "id": "lr_uno",
+      "entradas": { "pre": 0.3, "lr_pos": 1, "lr_neg": 1 },
+      "nota": "LR = 1 en ambos: la posprueba es identica a la preprueba y las ganancias valen exactamente 0."
+    },
+    {
+      "id": "p0",
+      "entradas": { "pre": 0, "lr_pos": 17, "lr_neg": 0.158 },
+      "nota": "Certeza de ausencia: momios 0, posprueba 0 fija; sin division 0/0."
+    },
+    {
+      "id": "p1",
+      "entradas": { "pre": 1, "lr_pos": 17, "lr_neg": 0.158 },
+      "nota": "Certeza de presencia: momios Inf (viaja como cadena), posprueba 1 fija por la guarda del snippet."
+    },
+    {
+      "id": "invertido",
+      "entradas": { "pre": 0.5, "lr_pos": 0.5, "lr_neg": 2 },
+      "nota": "LR intercambiados: el positivo baja la probabilidad y el negativo la sube (aviso lr_invertido)."
+    },
+    {
+      "id": "lr_neg_cero",
+      "entradas": { "pre": 0.3, "lr_pos": 17, "lr_neg": 0 },
+      "nota": "LR- = 0 (prueba sin falsos negativos): posprueba negativa exactamente 0."
+    },
+    {
+      "id": "p05_moderado",
+      "entradas": { "pre": 0.5, "lr_pos": 3, "lr_neg": 0.3 },
+      "nota": "Momios preprueba 1: la posprueba positiva es 3/4 y la negativa 0.3/1.3; bandas pequeno/pequeno."
+    },
+    {
+      "id": "decimales",
+      "entradas": { "pre": 0.123, "lr_pos": 2.75, "lr_neg": 0.42 },
+      "nota": "Entradas con decimales arbitrarios: el literal de R debe reconstruir el mismo doble que String(x)."
+    }
+  ]
+}

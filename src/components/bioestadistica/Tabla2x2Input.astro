@@ -1,0 +1,271 @@
+---
+// Captura de cuatro enteros con la disposición con la que se leen: una tabla
+// 2×2, filas = primera variable (p. ej. el resultado de la prueba), columnas =
+// segunda (p. ej. el estándar de referencia). Cuatro campos sueltos obligarían
+// a recordar de memoria cuál casilla es cuál.
+//
+// Los totales por fila, por columna y el gran total se resuelven AQUÍ, en
+// build, con los mismos valores del ejemplo que resuelve la página: quien llega
+// sin JavaScript o imprime la página ve la tabla completa. El controlador los
+// repinta con `pintarTotales` sobre los mismos ganchos `data-total`.
+import { crearFormateador } from '../../lib/bioestadistica/nucleo/formato.ts';
+import type { Lang } from '../../lib/bioestadistica/nucleo/tipos.ts';
+
+interface Props {
+  /** Ids de las cuatro celdas, en orden fila1·col1, fila1·col2, fila2·col1, fila2·col2. */
+  celdas: [string, string, string, string];
+  /** Todo `textos.etiquetas`: el rótulo de cada celda y los `tabla.*` de la tabla. */
+  etiquetas: Record<string, string>;
+  /** Valor inicial de cada celda como cadena; '' cuando el ejemplo no lo trae. */
+  valores: Record<string, string>;
+  /** Todo `textos.ayudas`; solo se usan las de las cuatro celdas. */
+  ayudas?: Record<string, string>;
+  lang?: Lang;
+}
+const { celdas, etiquetas, valores, ayudas, lang = 'es' } = Astro.props;
+const [c11, c12, c21, c22] = celdas;
+const fmt = crearFormateador(lang);
+
+/** Total que no se puede sumar: ni «0» ni un hueco, que se leerían como una cuenta. */
+const SIN_DATO = '–';
+
+/**
+ * Valor inicial de una celda como número. Los valores llegan de `ejemplo` del
+ * YAML, ya convertidos a cadena con `String`, así que `Number` basta: la
+ * tolerancia de la captura (coma decimal, espacios de miles) es cosa del
+ * navegador, no de este renderizado.
+ */
+function numero(id: string): number | null {
+  const bruto = (valores[id] ?? '').trim();
+  if (bruto === '') return null;
+  const n = Number(bruto);
+  return Number.isFinite(n) ? n : null;
+}
+
+/** Suma de un grupo de celdas; basta que falte una para no poder mostrarlo. */
+function sumar(ids: string[]): string {
+  let suma = 0;
+  for (const id of ids) {
+    const n = numero(id);
+    if (n === null) return SIN_DATO;
+    suma += n;
+  }
+  return fmt.entero(suma);
+}
+
+const rotulo = (clave: string): string => etiquetas[clave] ?? clave;
+const describedby = (id: string): string =>
+  [ayudas?.[id] ? `ayuda-${id}` : null, `error-${id}`].filter(Boolean).join(' ');
+/** Ordinal 1–4 que enlaza cada casilla con su entrada de la leyenda. */
+const marca = (id: string): number => celdas.indexOf(id) + 1;
+const campos = (ids: string[]): string => ids.map((id) => `campo-${id}`).join(' ');
+
+const filas = [
+  { rotulo: 'tabla.fila1', ids: [c11, c12], total: [c11, c12] },
+  { rotulo: 'tabla.fila2', ids: [c21, c22], total: [c21, c22] },
+];
+/** Totales del pie: por columna y el gran total. */
+const pie = [[c11, c21], [c12, c22], [c11, c12, c21, c22]];
+---
+
+<div class="campo">
+  <table class="t2x2">
+    <colgroup>
+      <col class="t2x2__col-rotulo" />
+      <col />
+      <col />
+      <col class="t2x2__col-total" />
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="t2x2__esquina" scope="col" rowspan="2">{rotulo('tabla.filas')}</th>
+        <th class="t2x2__grupo" scope="colgroup" colspan="2">{rotulo('tabla.columnas')}</th>
+        <th class="t2x2__cabecera" scope="col" rowspan="2">{rotulo('tabla.total')}</th>
+      </tr>
+      <tr>
+        <th class="t2x2__cabecera" scope="col">{rotulo('tabla.col1')}</th>
+        <th class="t2x2__cabecera" scope="col">{rotulo('tabla.col2')}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        filas.map((fila) => (
+          <tr>
+            <th class="t2x2__cabecera t2x2__cabecera--fila" scope="row">{rotulo(fila.rotulo)}</th>
+            {fila.ids.map((id) => (
+              <td class="t2x2__celda">
+                <span class="t2x2__marca" aria-hidden="true">{marca(id)}</span>
+                <input
+                  class="t2x2__input"
+                  id={`campo-${id}`}
+                  type="text"
+                  inputmode="decimal"
+                  value={valores[id] ?? ''}
+                  data-entrada={id}
+                  autocomplete="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  aria-label={rotulo(id)}
+                  aria-describedby={describedby(id)}
+                />
+              </td>
+            ))}
+            <td class="t2x2__celda t2x2__celda--total">
+              {/* Los totales no son una región viva: cambian con cada tecla y la
+                  única de la página es la interpretación. */}
+              <output class="t2x2__total" data-total={fila.total.join(' ')} for={campos(fila.total)} aria-live="off">
+                {sumar(fila.total)}
+              </output>
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+    <tfoot>
+      <tr>
+        <th class="t2x2__cabecera t2x2__cabecera--fila" scope="row">{rotulo('tabla.total')}</th>
+        {
+          pie.map((ids) => (
+            <td class="t2x2__celda t2x2__celda--total">
+              <output class="t2x2__total" data-total={ids.join(' ')} for={campos(ids)} aria-live="off">
+                {sumar(ids)}
+              </output>
+            </td>
+          ))
+        }
+      </tr>
+    </tfoot>
+  </table>
+
+  <div class="t2x2__errores">
+    {celdas.map((id) => <p class="campo__error" id={`error-${id}`} data-error-for={id} hidden />)}
+  </div>
+
+  <ol class="t2x2__leyenda">
+    {
+      celdas.map((id) => (
+        <li class="t2x2__leyenda-item">
+          <span class="t2x2__marca" aria-hidden="true">{marca(id)}</span>
+          <span>
+            {rotulo(id)}
+            {ayudas?.[id] && <span class="t2x2__leyenda-ayuda" id={`ayuda-${id}`}>{ayudas[id]}</span>}
+          </span>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  /* Mismo ritmo vertical que `CampoNumero`: cada control se separa del anterior,
+     venga del componente que venga. */
+  .campo { display: block; }
+  .campo + :global(.campo) { margin-top: var(--sp-3); }
+
+  .t2x2 {
+    width: 100%;
+    border-collapse: collapse;
+    /* Anchos fijos: a 400 px las casillas se encogen en vez de desbordar. */
+    table-layout: fixed;
+  }
+  /* Reparto pensado para el caso más estrecho, que no es el teléfono sino la
+     impresión: ahí la columna de entradas mide unos 250 px. */
+  .t2x2__col-rotulo { width: 28%; }
+  .t2x2__col-total { width: 24%; }
+  .t2x2 th,
+  .t2x2 td {
+    border: 1px solid var(--udg-gray-200);
+    /* Medio paso de sangrado a los lados: con el paso entero, «Enfermo» no cabe
+       en su casilla al imprimir. */
+    padding: var(--sp-1) calc(var(--sp-1) / 2);
+    text-align: center;
+    vertical-align: middle;
+    /* Red de seguridad: un rótulo largo se parte antes que salirse de su casilla. */
+    overflow-wrap: break-word;
+  }
+
+  /* Esquina y grupo de columnas: nombran las dos variables, no sus niveles. */
+  .t2x2__esquina,
+  .t2x2__grupo {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-normal);
+    color: var(--udg-gray-500);
+    background: var(--udg-gray-100);
+  }
+  .t2x2__esquina { text-align: start; }
+
+  /* Los niveles de cada variable van un paso por debajo de los números: en
+     cuatro columnas, `--fs-sm` no cabe al imprimir y el rótulo se desborda. */
+  .t2x2__cabecera {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-snug);
+    color: var(--udg-gray-900);
+    background: var(--udg-gray-100);
+  }
+  .t2x2__cabecera--fila { text-align: start; }
+
+  .t2x2__celda--total { background: var(--udg-gray-100); }
+
+  .t2x2__marca {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    line-height: var(--lh-snug);
+    color: var(--udg-gray-500);
+  }
+  .t2x2__celda .t2x2__marca { display: block; text-align: start; }
+
+  /* Mismo control que `CampoNumero`: `type="number"` pelea con la coma decimal. */
+  .t2x2__input {
+    width: 100%;
+    height: 40px;
+    /* Sin sangrado lateral: el número va centrado y la casilla es estrecha. */
+    padding: 0;
+    border: 1px solid var(--udg-gray-300);
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--udg-gray-900);
+    font-family: var(--font-mono);
+    font-size: var(--fs-base);
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+  .t2x2__input:focus-visible { outline: 2px solid var(--udg-navy-700); outline-offset: 1px; }
+  .t2x2__input[aria-invalid='true'] { border-color: var(--udg-err-fg); }
+
+  .t2x2__total {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
+    font-variant-numeric: tabular-nums;
+    color: var(--udg-gray-700);
+  }
+
+  .campo__error {
+    margin-top: var(--sp-1);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-medium);
+    color: var(--udg-err-fg);
+  }
+
+  .t2x2__leyenda {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: var(--sp-1) var(--sp-2);
+    margin: var(--sp-2) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--fs-xs);
+    line-height: var(--lh-normal);
+    color: var(--udg-gray-500);
+  }
+  .t2x2__leyenda-item { display: flex; gap: var(--sp-1); }
+  .t2x2__leyenda-ayuda { display: block; }
+
+  @media print {
+    .t2x2 { break-inside: avoid; }
+    /* Los fondos no se imprimen: el borde es lo que sostiene la rejilla. */
+    .t2x2 th, .t2x2 td { border-color: var(--udg-gray-500); }
+  }
+</style>

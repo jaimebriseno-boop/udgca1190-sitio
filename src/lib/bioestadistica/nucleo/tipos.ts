@@ -31,6 +31,7 @@ export type MetodoId =
   | 'newcombe-hibrido'
   | 'agresti-min'
   | 'logit-mercaldo'
+  | 'logit-mercaldo-ajustado'
   | 'delta'
   // Pruebas 2×2 y pareadas
   | 'sin-correccion'
@@ -144,7 +145,7 @@ export interface EntradaDef {
 
 export type Grupo = 'diagnostico' | 'asociacion' | 'muestra' | 'acuerdo' | 'modelos';
 export type Motor = 'ts' | 'webr';
-export type TipoGrafica = 'ninguna' | 'ic-forest' | 'fagan' | 'barras' | 'histograma-boxplot' | 'km' | 'potencia';
+export type TipoGrafica = 'ninguna' | 'ic-forest' | 'fagan' | 'curvas' | 'barras' | 'histograma-boxplot' | 'km' | 'potencia';
 
 // ---------------------------------------------------------------------------
 // Formato y presentación
@@ -197,19 +198,91 @@ export interface FilaIC {
   destacada?: boolean;
 }
 
-/** Descripción declarativa de la gráfica; `nucleo/svg.ts` la convierte en SVG (cadena, sin DOM). */
-export type DatosGrafica = {
-  tipo: 'ic-forest';
-  titulo: string;
-  /** Texto alternativo para lectores de pantalla. */
-  resumen: string;
+/**
+ * Un panel de bosque: filas con su escala, dominio, referencia y pista de
+ * formato. `GraficaForest` es un panel (el principal) que puede llevar otros
+ * debajo (`paneles`), p. ej. las proporciones en escala lineal y las razones
+ * en escala logarítmica con la referencia en 1.
+ */
+export interface PanelIC {
+  /** Rótulo corto del panel, dibujado sobre sus filas (`titulo` es el de la gráfica entera). */
+  rotulo?: string;
   filas: FilaIC[];
   dominio?: [number, number];
   escala?: 'lineal' | 'log';
   /** Valor nulo de referencia (p. ej. 1 para razones); se dibuja como línea. */
   referencia?: number;
   pista?: Pista;
-};
+}
+
+interface GraficaBase {
+  titulo: string;
+  /** Texto alternativo para lectores de pantalla. */
+  resumen: string;
+}
+
+/** Bosque de estimaciones con intervalo (una fila por medida o por método). */
+export interface GraficaForest extends GraficaBase, PanelIC {
+  tipo: 'ic-forest';
+  /** Paneles adicionales, dibujados debajo del principal, cada uno con su eje. */
+  paneles?: PanelIC[];
+}
+
+/** Una recta del nomograma de Fagan: preprueba → LR → posprueba. */
+export interface LineaFagan {
+  id: string;
+  etiqueta: string;
+  /** Razón de verosimilitud (> 0). */
+  lr: number;
+  /** Probabilidad posprueba (0–1). */
+  post: number;
+  destacada?: boolean;
+}
+
+/**
+ * Nomograma de Fagan (1975): tres ejes verticales (preprueba en escala logit
+ * creciente hacia abajo, LR en escala log, posprueba en logit creciente hacia
+ * arriba) y una recta por resultado de la prueba.
+ */
+export interface GraficaFagan extends GraficaBase {
+  tipo: 'fagan';
+  /** Probabilidad preprueba (0–1). */
+  pre: number;
+  lineas: LineaFagan[];
+  /** Rótulos de los tres ejes en el idioma de la página. */
+  ejes: { pre: string; lr: string; post: string };
+}
+
+/** Una curva (polilínea) en coordenadas de datos. */
+export interface Curva {
+  id: string;
+  etiqueta: string;
+  puntos: Array<[number, number]>;
+  destacada?: boolean;
+}
+
+export interface EjeGrafica {
+  etiqueta: string;
+  dominio: [number, number];
+  pista?: Pista;
+}
+
+/** Curvas frente a una variable continua (p. ej. VPP y VPN frente a la prevalencia), con marcador opcional en x. */
+export interface GraficaCurvas extends GraficaBase {
+  tipo: 'curvas';
+  curvas: Curva[];
+  ejeX: EjeGrafica;
+  ejeY: EjeGrafica;
+  /**
+   * Línea vertical en x (p. ej. la prevalencia capturada) con un punto sobre
+   * cada curva; `valores` da la y exacta por id de curva (si falta, se
+   * interpola sobre la polilínea).
+   */
+  marcador?: { x: number; etiqueta?: string; valores?: Record<string, number> };
+}
+
+/** Descripción declarativa de la gráfica; `nucleo/svg.ts` la convierte en SVG (cadena, sin DOM). */
+export type DatosGrafica = GraficaForest | GraficaFagan | GraficaCurvas;
 
 /**
  * Contexto que la página entrega a `presentar()`. El código R relleno NO forma

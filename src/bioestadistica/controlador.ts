@@ -36,6 +36,9 @@ const RETARDO_URL = 300;
 /** Nivel de confianza cuando la calculadora no declara la entrada `nivel`. */
 const NIVEL_POR_DEFECTO = 0.95;
 
+/** Total que no se puede sumar: ni «0» ni un hueco, que se leerían como una cuenta. */
+const SIN_DATO = '–';
+
 /** Datos que la página inyecta en `<script type="application/json" id="bio-datos">`. */
 export interface DatosPagina {
   slug: string;
@@ -195,6 +198,31 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
     }
   }
 
+  /**
+   * Totales de una tabla 2×2. Cada `<output data-total="id1 id2 …">` suma las
+   * entradas que nombra; basta que falte una o que no sea un número para
+   * escribir «–»: un total a medias se leería como una cuenta real.
+   *
+   * Se repinta aunque la captura tenga errores, con lo que se haya podido leer:
+   * los totales son parte de lo capturado, no del resultado.
+   */
+  function pintarTotales(entradas: Entradas): void {
+    for (const salida of $$<HTMLElement>('[data-total]')) {
+      const ids = (salida.dataset.total ?? '').split(' ').filter((s) => s !== '');
+      let suma = 0;
+      let completo = ids.length > 0;
+      for (const id of ids) {
+        const v = entradas[id];
+        if (typeof v !== 'number' || !Number.isFinite(v)) {
+          completo = false;
+          break;
+        }
+        suma += v;
+      }
+      salida.textContent = completo ? fmt.entero(suma) : SIN_DATO;
+    }
+  }
+
   function pintarCeldas(p: Presentacion): void {
     for (const [id, celda] of Object.entries(p.celdas)) {
       const cont = $<HTMLElement>(`[data-celda="${id}"]`);
@@ -318,6 +346,7 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
 
   function recalcular(opciones: { escribirUrl: boolean }): void {
     const { entradas, errores } = leer();
+    pintarTotales(entradas);
     const nivel = resolverNivel(entradas);
     if (def.derivar && Object.keys(errores).length === 0) Object.assign(entradas, def.derivar(entradas));
     if (Object.keys(errores).length === 0) Object.assign(errores, def.validar(entradas) ?? {});
@@ -462,6 +491,14 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
       const v = entradas[d.id];
       if (v === undefined) continue;
       const rotulo = datos.textos.etiquetas[d.id] ?? d.id;
+      // Una entrada con lista cerrada se lee por su rótulo, no por el valor
+      // interno: en el resumen debe decir «Wilson», no «wilson». La clave es la
+      // misma cadena con la que el valor viaja en la URL.
+      if (d.opciones) {
+        const texto = aTextoCampo(v);
+        pares.push([rotulo, datos.textos.etiquetas[`${d.id}.${texto}`] ?? texto]);
+        continue;
+      }
       if (typeof v !== 'number') {
         pares.push([rotulo, Array.isArray(v) ? v.join(', ') : String(v)]);
         continue;

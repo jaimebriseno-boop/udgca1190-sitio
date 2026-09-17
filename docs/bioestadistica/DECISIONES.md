@@ -87,3 +87,83 @@ commit deliberado, como pide `docs/performance/REVIEW.md`.
 **Siguiente hito.** H1: `prueba-diagnostica-2x2` (componente `Tabla2x2Input`, gráfica
 `ic-forest` de Sn/Sp/VPP/VPN/LR), `probabilidad-posprueba` (nomograma de Fagan en
 `svg.ts`) y `valores-predictivos`; revisión del dueño sobre la página real; merge a `main`.
+
+## H1 · Vertical completa: pruebas diagnósticas (17 de septiembre de 2026)
+
+**Entregado.** Tres calculadoras del grupo «Pruebas diagnósticas», bilingües y con el
+circuito completo YAML → módulo puro → casos → fixture de R → prueba:
+`prueba-diagnostica-2x2` (A1: Sn, Sp, VPP, VPN, prevalencia, exactitud, índice de Youden,
+LR±, DOR; selector del método de IC de proporciones y corrección de Haldane-Anscombe),
+`probabilidad-posprueba` (A2: Bayes en forma de momios con nomograma de Fagan) y
+`valores-predictivos` (A3: VPP/VPN para cualquier prevalencia, IC logit de Mercaldo,
+frecuencias naturales por 1,000 y curvas frente a la prevalencia). Métodos nuevos en
+`metodos/` (`razones.ts`, `diagnostico.ts`, `bayes.ts`, `predictivos.ts`); tres tipos de
+gráfica en `nucleo/svg.ts` (bosque con paneles, `fagan`, `curvas`); componentes
+`Tabla2x2Input` y `CampoOpcion`; 19 referencias nuevas en `referencias.bib` con PMID y DOI
+comprobados contra PubMed y Crossref.
+
+**Desviaciones respecto a los diseños, con motivo.**
+
+- Ids de salida de A1: `sn` (como el PLAN), no `se` (como ESPECIFICACION/MOTOR): la sigla
+  en español es Sn y el id viaja a etiquetas, JSON de R y fixtures.
+- Selector de método de IC (`metodo`, tipo `opcion`) y corrección (`corr`, tipo `decimal`
+  con `opciones: ["0", "0.5"]`): un `<select>` cuyo valor el controlador lee con el
+  mismo `parsearNumero` de cualquier campo, así `{corr}` llega al snippet de R como número
+  (`corr <- 0.5`) y no como cadena. Los rótulos de cada opción viven en `etiquetas` con la
+  convención `<id>.<opcion>`; Zod exige que existan en los dos idiomas.
+- Razones con celda en 0 (sin corrección): la estimación queda en 0 o ∞ y el intervalo en
+  «no definido» (`[NaN, NaN]` en TS, `NA` en R) mediante una regla explícita en el snippet
+  (`ic_log`: solo si ln(est) y EE son finitos) en vez de dejar que exp(∞ − ∞) produzca
+  `NaN`/`Inf` de forma incidental. La corrección de Haldane-Anscombe afecta SOLO a LR± y
+  DOR, nunca a las proporciones ni al índice de Youden, y el párrafo de Métodos la
+  declara y cita cuando se aplica (`{nota_corr}` rellenado desde `interpretacion.metodos_haldane`).
+- Jeffreys en el snippet de A1 no pasa por `binom` (su `"bayes"` es HPD): se escribe con
+  `qbeta` de colas iguales, igual que en `ic-proporcion`.
+- Denominadores vacíos (una fila o una columna de la tabla en 0) se rechazan en
+  `validar()` con `err_fila_vacia`/`err_columna_vacia` sobre las dos celdas implicadas, en
+  vez de mostrar `NaN`: `binom.confint(0, 0)` devuelve `NaN` sin error y no hay proporción
+  que estimar.
+- A3: los tamaños del estudio de validación son opcionales y «vacío» vale 0 (`derivar()`
+  los rellena), de modo que el snippet de R siempre tiene sus marcadores y R decide con
+  `n_d > 0 && n_nd > 0`; con un solo tamaño no hay IC y se avisa (`sin_n`). Sin tamaños,
+  VPP y VPN viajan como escalares en el JSON (sin `ic` en TS). El párrafo de Métodos elige
+  entre tres frases (`metodos_ic.con|ajustado|sin`) según haya intervalo y de qué variante.
+- Logit ajustado de Mercaldo solo cuando Sn o Sp valen 0 o 1 (EE infinito), con aviso; la
+  estimación puntual reportada sigue siendo la no ajustada y el intervalo es el del
+  logit ajustado (Sn·n_D + 0.5)/(n_D + 1), n + 1 por grupo.
+- A2 sin IC de la posprueba (la especificación lo dejaba como opcional): entradas solo P,
+  LR+ y LR−. Las certezas (P = 0 o 1) se fijan explícitamente en el snippet y en TS
+  (`post()` devuelve 0 o 1) para evitar el 0/0 de momios infinitos.
+- Gráfica de A1: un solo SVG con dos paneles (`GraficaForest.paneles`): proporciones en
+  escala lineal y razones en escala logarítmica con referencia en 1. `DatosGrafica` pasó a
+  unión discriminada (`ic-forest` | `fagan` | `curvas`); el rótulo de panel se llama
+  `rotulo` porque `titulo` es el de la gráfica entera. Las filas no dibujables en escala
+  log (0, ∞, `NaN`) se omiten sin romper el dibujo y el dominio log se redondea a décadas.
+- Nomograma de Fagan: leyenda bajo los ejes (etiqueta, LR, posprueba) en vez de rótulos
+  junto al punto, que chocaban entre sí y con las marcas del eje derecho; los rótulos del
+  eje central alternan lado y llevan un filete blanco (`#fff` literal: no hay token de
+  blanco puro; es el fondo de `.grafica`). Geometría portada de `dibujarFagan` de
+  propedéutica (preprueba en logit creciente hacia abajo, posprueba hacia arriba).
+- Curvas de A3: el marcador lleva los valores exactos de VPP y VPN (`marcador.valores`),
+  no una interpolación sobre la polilínea.
+- Perfiles de tolerancia: `prueba-diagnostica-2x2` (todo `cerrado`) y
+  `prueba-diagnostica-2x2-beta` (las seis proporciones en `cuantil`) para los casos con
+  Clopper-Pearson o Jeffreys; A2 y A3 en `cerrado`. Ninguna tolerancia se aflojó.
+- Interfaz de la tabla 2×2 (`Tabla2x2Input`): cada casilla lleva un ordinal 1–4 en gris que la
+  leyenda de debajo repite con el rótulo completo (`etiquetas.vp`…), para no meter siglas en español
+  en la página inglesa; los totales son `<output aria-live="off">` (el elemento es región viva por
+  omisión y la página solo debe tener una) y el controlador los repinta con «–» si falta una celda;
+  al imprimir se reduce el canal de la retícula para que la tabla quepa en una línea.
+- El selector de nivel de confianza pasó a `CampoOpcion` (mismo `<select id="campo-nivel">` con
+  las tres opciones y el nivel del ejemplo); `CampoOpcion` usa una rejilla de una columna encogible
+  porque el ancho mínimo de un `<select>` es el de su opción más larga y empujaba la columna.
+- `formatCita` ya no añade punto tras un título que termina en «?», «!» o «.» (Jaeschke
+  1994).
+- Pruebas de contenido nuevas: la gráfica se comprueba por tipo; la tabla 2×2 y los
+  selectores exigen sus rótulos; ninguna clave de `interpretacion`/`avisos` del YAML puede
+  quedar huérfana (sin uso en el módulo).
+
+**Pendiente conocido.** El aviso permanente que la especificación pedía para VPP/VPN de A1
+(«dependen de la prevalencia; no válidos en casos y controles») va en el párrafo de
+interpretación `predictivos`, no como aviso amarillo siempre visible.
+

@@ -1,0 +1,419 @@
+{
+  "generado_por": "scripts/bio-fixtures.mjs",
+  "meta": {
+    "calculadora": "valores-predictivos",
+    "generado": "2026-09-17T02:19:18.823Z",
+    "R": "R version 4.5.2 (2025-10-31)",
+    "plataforma": "aarch64-apple-darwin20",
+    "paquetes": {
+      "jsonlite": "2.0.0"
+    },
+    "plantilla_sha256": "af16f4445ce27ce0de5aae6fbfb34cdf4cadfef604540437bad8d9b022d182a7"
+  },
+  "casos": [
+    {
+      "id": "ejemplo",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "n_d": 80,
+        "n_nd": 120,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": [
+          0.879310344827586,
+          0.768633271879733,
+          0.941100704370905
+        ],
+        "vpn": [
+          0.936619718309859,
+          0.897511636845508,
+          0.961445767672715
+        ],
+        "lr_pos": 17,
+        "lr_neg": 0.157894736842105,
+        "vp_mil": 255,
+        "fp_mil": 35,
+        "fn_mil": 45,
+        "vn_mil": 665
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "sin_n",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "n_d": 0,
+        "n_nd": 0,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": 0.879310344827586,
+        "vpn": 0.936619718309859,
+        "lr_pos": 17,
+        "lr_neg": 0.157894736842105,
+        "vp_mil": 255,
+        "fp_mil": 35,
+        "fn_mil": 45,
+        "vn_mil": 665
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "solo_nd",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "n_d": 80,
+        "n_nd": 0,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": 0.879310344827586,
+        "vpn": 0.936619718309859,
+        "lr_pos": 17,
+        "lr_neg": 0.157894736842105,
+        "vp_mil": 255,
+        "fp_mil": 35,
+        "fn_mil": 45,
+        "vn_mil": 665
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "prev_0001",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.001,
+        "n_d": 80,
+        "n_nd": 120,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": [
+          0.0167322834645669,
+          0.00769968047701361,
+          0.0359769795402673
+        ],
+        "vpn": [
+          0.999841972187105,
+          0.999733357146109,
+          0.999906347820115
+        ],
+        "lr_pos": 17,
+        "lr_neg": 0.157894736842105,
+        "vp_mil": 0.85,
+        "fp_mil": 49.95,
+        "fn_mil": 0.15,
+        "vn_mil": 949.05
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "sn1_ajustado",
+      "entradas": {
+        "sn": 1,
+        "sp": 0.95,
+        "prev": 0.3,
+        "n_d": 80,
+        "n_nd": 120,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": [
+          0.895522388059701,
+          0.789593029008796,
+          0.943668604779092
+        ],
+        "vpn": [
+          1,
+          0.957552516350588,
+          0.999823717072425
+        ],
+        "lr_pos": 20,
+        "lr_neg": 0,
+        "vp_mil": 300,
+        "fp_mil": 35,
+        "fn_mil": 0,
+        "vn_mil": 665
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "sp1_ajustado",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 1,
+        "prev": 0.3,
+        "n_d": 80,
+        "n_nd": 120,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": [
+          1,
+          0.846366904208556,
+          0.999284392755375
+        ],
+        "vpn": [
+          0.939597315436242,
+          0.900424758670385,
+          0.961646535833709
+        ],
+        "lr_pos": "Inf",
+        "lr_neg": 0.15,
+        "vp_mil": 255,
+        "fp_mil": 0,
+        "fn_mil": 45,
+        "vn_mil": 700
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "sn0_ajustado",
+      "entradas": {
+        "sn": 0,
+        "sp": 0.95,
+        "prev": 0.3,
+        "n_d": 80,
+        "n_nd": 120,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": [
+          0,
+          0.00280497661611456,
+          0.463002621860187
+        ],
+        "vpn": [
+          0.689119170984456,
+          0.679719474042903,
+          0.699320723027988
+        ],
+        "lr_pos": 0,
+        "lr_neg": 1.05263157894737,
+        "vp_mil": 0,
+        "fp_mil": 35,
+        "fn_mil": 300,
+        "vn_mil": 665
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "perfecta",
+      "entradas": {
+        "sn": 1,
+        "sp": 1,
+        "prev": 0.3,
+        "n_d": 80,
+        "n_nd": 120,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": [
+          1,
+          0.866379553567128,
+          0.999390082033222
+        ],
+        "vpn": [
+          1,
+          0.959592376646301,
+          0.999832442545707
+        ],
+        "lr_pos": "Inf",
+        "lr_neg": 0,
+        "vp_mil": 300,
+        "fp_mil": 0,
+        "fn_mil": 0,
+        "vn_mil": 700
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "prev1",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 1,
+        "n_d": 80,
+        "n_nd": 120,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": [
+          1,
+          1,
+          1
+        ],
+        "vpn": [
+          0,
+          0,
+          0
+        ],
+        "lr_pos": 17,
+        "lr_neg": 0.157894736842105,
+        "vp_mil": 850,
+        "fp_mil": 0,
+        "fn_mil": 150,
+        "vn_mil": 0
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "prev0",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0,
+        "n_d": 80,
+        "n_nd": 120,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": [
+          0,
+          0,
+          0
+        ],
+        "vpn": [
+          1,
+          1,
+          1
+        ],
+        "lr_pos": 17,
+        "lr_neg": 0.157894736842105,
+        "vp_mil": 0,
+        "fp_mil": 50,
+        "fn_mil": 0,
+        "vn_mil": 950
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "nivel_090",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "n_d": 80,
+        "n_nd": 120,
+        "nivel": 0.9
+      },
+      "esperado": {
+        "vpp": [
+          0.879310344827586,
+          0.790321811927031,
+          0.93369996132481
+        ],
+        "vpn": [
+          0.936619718309859,
+          0.904995113408123,
+          0.958203512518077
+        ],
+        "lr_pos": 17,
+        "lr_neg": 0.157894736842105,
+        "vp_mil": 255,
+        "fp_mil": 35,
+        "fn_mil": 45,
+        "vn_mil": 665
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "nivel_099",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "n_d": 80,
+        "n_nd": 120,
+        "nivel": 0.99
+      },
+      "esperado": {
+        "vpp": [
+          0.879310344827586,
+          0.721888596502393,
+          0.953379909900455
+        ],
+        "vpn": [
+          0.936619718309859,
+          0.881369201489138,
+          0.967098707687951
+        ],
+        "lr_pos": 17,
+        "lr_neg": 0.157894736842105,
+        "vp_mil": 255,
+        "fp_mil": 35,
+        "fn_mil": 45,
+        "vn_mil": 665
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "n_pequeno",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "n_d": 5,
+        "n_nd": 5,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": [
+          0.879310344827586,
+          0.135584353019513,
+          0.997053806430894
+        ],
+        "vpn": [
+          0.936619718309859,
+          0.644950449143845,
+          0.991750614535087
+        ],
+        "lr_pos": 17,
+        "lr_neg": 0.157894736842105,
+        "vp_mil": 255,
+        "fp_mil": 35,
+        "fn_mil": 45,
+        "vn_mil": 665
+      },
+      "tol": "valores-predictivos"
+    },
+    {
+      "id": "decimales",
+      "entradas": {
+        "sn": 0.912,
+        "sp": 0.877,
+        "prev": 0.157,
+        "n_d": 137,
+        "n_nd": 291,
+        "nivel": 0.95
+      },
+      "esperado": {
+        "vpp": [
+          0.579990521442199,
+          0.5028901864836,
+          0.653375080694336
+        ],
+        "vpn": [
+          0.981655152451048,
+          0.968904664028234,
+          0.989235452501654
+        ],
+        "lr_pos": 7.41463414634146,
+        "lr_neg": 0.100342075256556,
+        "vp_mil": 143.184,
+        "fp_mil": 103.689,
+        "fn_mil": 13.816,
+        "vn_mil": 739.311
+      },
+      "tol": "valores-predictivos"
+    }
+  ]
+}
