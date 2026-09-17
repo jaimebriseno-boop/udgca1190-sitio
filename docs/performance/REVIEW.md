@@ -89,6 +89,34 @@ o capturar una nueva base documentada. El auditor escribe `after.json`.
 `public/fonts/` y `src/styles/fonts.css` se generan automáticamente antes de
 `dev`, `build` y `check`; no deben editarse manualmente.
 
+## Sección «Bioestadística abierta» (17 de septiembre de 2026)
+
+Publicada con el visto bueno del dueño sobre las páginas reales tras los hitos H0–H2
+(diez calculadoras, 22 páginas de la sección, 55 en total). Su secuencia de
+verificación, distinta de la de esta revisión porque su código no toca Plotly ni
+los datos de las otras herramientas, queda registrada en
+`docs/bioestadistica/PROGRESO.md` («Verificación conservada») y se resume aquí:
+
+- `npm run build` 55 páginas; `npm run check` 0 errores y 0 advertencias (124 hints
+  preexistentes); `npm run test` 4 + 1,004 pruebas (`tests/bioestadistica/*.test.ts`,
+  con `node --test` sobre TypeScript sin transpilar).
+- `npm run fixtures:bio:check`: los 143 casos de las diez calculadoras coinciden con
+  la salida de R 4.5.2 sin deriva de plantilla ni de versión de paquete.
+- `npm run barrido:bio`: 60,646 combinaciones de entradas × 2 idiomas y 121,292 SVG
+  sin excepciones, marcadores sin rellenar ni atributos geométricos no finitos.
+- `npm run audit:performance` (sin `--check-data-baseline`): ningún recurso externo
+  declarado en HTML o CSS y ninguno local faltante; el único `false` sigue siendo el de
+  `signos.json`, ajeno a esta sección (ver arriba).
+- Chrome headless: capturas de escritorio (1280 px), móvil (400 px) e impresión de las
+  diez calculadoras en ES y EN; DOM comprobado tras ejecutar el JavaScript (columna
+  pegada por URL, estados de diseño de la tabla 2×2, avisos interpolados).
+- Revisión de código independiente en H0, H1 y H2 con todos los hallazgos corregidos
+  antes de cada commit (detalle en `docs/bioestadistica/DECISIONES.md`).
+
+La sección no carga recursos externos: webR (R en el navegador) llegará en H4 solo por
+`import()` dinámico tras consentimiento explícito, sin declararse en HTML ni CSS, para
+que esta auditoría siga en verde.
+
 ## Siguientes prioridades
 
 1. **Medir en el alojamiento real.** Tras una publicación autorizada, verificar

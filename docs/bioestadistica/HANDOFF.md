@@ -53,9 +53,11 @@ Decisiones cerradas (no volver a preguntarlas):
 
 - Rama `jaimebriseno-boop/Bioestadistica-abierta`; H0 = `e69d80b`; `origin/main` fusionado en `b9e00e6`;
   H1 = `2c37184` (+ `033f464`, registro de su verificación); H2 = commit `BIOESTADISTICA: H2 …` (ver
-  `git log --oneline -3`). Empujada a `origin` (vista previa de Vercel de la rama; no toca producción).
-  NO fusionada en `main`: la sección sigue sin publicar; el dueño no ha dado aún el visto bueno sobre las
-  páginas reales (lo pidió «continuar con los siguientes pasos», no «publicar»).
+  `git log --oneline -3`; H2 = `1772462`, `e02aa46`, `08a3d94`, `35bffcb`). El 17-sep-2026 el dueño
+  dio el visto bueno («quedó excelente», «publicar») y la rama se lleva a `main` por fast-forward
+  (`git push origin jaimebriseno-boop/Bioestadistica-abierta:main`): H0–H2 PUBLICADOS en
+  udgca1190.com.mx. El checkout principal (`/Volumes/Bioinformatics/Programacion/UDG-CA-1190`, en
+  `main`) puede quedar atrasado: `git pull` allí cuando haga falta; el trabajo sigue en este worktree.
 - Remoto `https://github.com/jaimebriseno-boop/udgca1190-sitio.git`; `main` despliega en Vercel.
 - Antes de cambiar nada: `git status --short --branch`, `git log --oneline -3`, y comprobar que `main`
   no avanzó (`git fetch && git log --oneline HEAD..origin/main`); si avanzó, `git merge origin/main`
@@ -188,9 +190,9 @@ en 418–441; MOTOR §1.6 para Kaplan-Meier en TS):
    decir, `parsearTabla` de MOTOR §5.1 y un control multicolumna con selección de roles; gráfica `km`
    nueva; casos obligatorios de MOTOR §1.6; mediana con la regla de `quantile.survfit`; IC log-log
    explícito. Opcional `curva-roc` (AUC de Mann-Whitney + IC de DeLong).
-4. Cierre como H1/H2: verificación completa, capturas ES/EN, revisión independiente, commit
-   `BIOESTADISTICA: H3 …`, vista previa para el dueño. Antes de H3 conviene cerrar el merge de H1 + H2
-   con el visto bueno del dueño, para que la vista previa de Vercel de `main` refleje la sección.
+4. Cierre como H1/H2: verificación completa (incluido `npm run barrido:bio` con los bloques de las
+   calculadoras nuevas), capturas ES/EN, revisión independiente, commit `BIOESTADISTICA: H3 …`, vista
+   previa para el dueño y, con su visto bueno, fast-forward de la rama a `main`.
 
 ## Flujo de trabajo que funcionó (H0–H2) y trampas
 
