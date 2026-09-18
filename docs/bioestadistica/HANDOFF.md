@@ -1,6 +1,6 @@
 # Handoff — Bioestadística abierta
 
-Fecha: 17 de septiembre de 2026 (cierre de H3, pendiente de visto bueno y publicación). Para continuar en un contexto nuevo, en ESTA carpeta:
+Fecha: 17 de septiembre de 2026 (H3 publicado; siguiente H4). Para continuar en un contexto nuevo, en ESTA carpeta:
 `/Users/judithcita/orca/workspaces/UDG-CA-1190/Bioestadistica-abierta` (worktree de Orca; no hacer
 `cd` al checkout principal `/Volumes/Bioinformatics/Programacion/UDG-CA-1190`, que está en `main`).
 
@@ -62,8 +62,8 @@ Decisiones cerradas (no volver a preguntarlas):
   (`git push origin jaimebriseno-boop/Bioestadistica-abierta:main`): H0–H2 PUBLICADOS en
   udgca1190.com.mx. El checkout principal (`/Volumes/Bioinformatics/Programacion/UDG-CA-1190`, en
   `main`) puede quedar atrasado: `git pull` allí cuando haga falta; el trabajo sigue en este worktree.
-  H3 = `f04f4dd` (más el commit de registro que le sigue), en la rama y en `origin`, PENDIENTE de visto
-  bueno del dueño y del fast-forward a `main` (`git push origin jaimebriseno-boop/Bioestadistica-abierta:main`).
+  H3 = `f04f4dd` + `c1ff89f`, PUBLICADOS el 17-sep-2026 con el visto bueno del dueño («publicalo»):
+  `main` avanzó por fast-forward de `ef95363` a `c1ff89f` y Vercel desplegó las 19 calculadoras.
 - Remoto `https://github.com/jaimebriseno-boop/udgca1190-sitio.git`; `main` despliega en Vercel.
 - Antes de cambiar nada: `git status --short --branch`, `git log --oneline -3`, y comprobar que `main`
   no avanzó (`git fetch && git log --oneline HEAD..origin/main`); si avanzó, `git merge origin/main`
@@ -185,7 +185,7 @@ npm run preview -- --host 127.0.0.1 --port 4321
   de todos) y `\a`, `\b`, `\e`, `\f`, `\v`, `\0` se convierten en caracteres de control sin aviso;
   `contenido.test.ts` rechaza cualquier carácter de control en los textos.
 
-## H3 · Por patrón (hecho; pendiente de visto bueno y publicación)
+## H3 · Por patrón (hecho y publicado el 17-sep-2026)
 
 Diecinueve calculadoras en total. Lo entregado en H3, con sus desviaciones motivadas en DECISIONES «H3»:
 

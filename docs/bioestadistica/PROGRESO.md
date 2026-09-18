@@ -1,6 +1,6 @@
 # Progreso — Bioestadística abierta
 
-Actualizado: 17 de septiembre de 2026 (cierre de H3, pendiente de visto bueno y publicación). Leer después [HANDOFF.md](HANDOFF.md).
+Actualizado: 17 de septiembre de 2026 (H3 publicado). Leer después [HANDOFF.md](HANDOFF.md).
 
 ## Estado del corte
 
@@ -8,15 +8,17 @@ Carpeta de trabajo: worktree de Orca `/Users/judithcita/orca/workspaces/UDG-CA-1
 rama `jaimebriseno-boop/Bioestadistica-abierta` (sigue a `origin/jaimebriseno-boop/Bioestadistica-abierta`).
 El 17 de septiembre de 2026 el dueño revisó las páginas reales («quedó excelente») y pidió publicar:
 la rama se lleva a `main` por avance rápido (fast-forward; `main` no había avanzado desde `b9e00e6`),
-con lo que H0, H1 y H2 quedan publicados en udgca1190.com.mx vía Vercel. Los hitos siguientes se
-construyen igual en esta rama y se publican con cada visto bueno.
+con lo que H0, H1 y H2 quedan publicados en udgca1190.com.mx vía Vercel. H3 siguió el mismo camino el
+mismo día: el dueño pidió «publicalo» tras el resumen de la verificación y `main` avanzó de `ef95363` a
+`c1ff89f` (19 calculadoras publicadas). Los hitos siguientes se construyen igual en esta rama y se
+publican con cada visto bueno.
 
 | Hito | Estado | Commit |
 |---|---|---|
 | H0 · Cimientos + calculadora «IC de una proporción» | Terminado y verificado | `e69d80b` |
 | H1 · Vertical completa: prueba diagnóstica 2×2, posprueba (Fagan), valores predictivos | Terminado, verificado y **publicado** (17-sep-2026) | `2c37184` (+ `033f464`) |
 | H2 · Asociación 2×2 (RR/OR/RRA/NNT, χ²/Fisher, McNemar) + columnas pegadas (descriptivos, IC media, media desde mediana) | Terminado, verificado y **publicado** (17-sep-2026) | `1772462`, `e02aa46`, `08a3d94`, `35bffcb` |
-| H3 · Tamaño de muestra (C1–C7), kappa, Kaplan-Meier | Terminado y verificado; **pendiente de visto bueno y publicación** (ROC opcional queda para después) | `f04f4dd` (+ registro) |
+| H3 · Tamaño de muestra (C1–C7), kappa, Kaplan-Meier | Terminado, verificado y **publicado** (17-sep-2026; ROC opcional queda para después) | `f04f4dd`, `c1ff89f` |
 | H4 · webR («Verificar con R», consentimiento, ClientRouter, política de hosts) | **Siguiente** | — |
 | H5 · Modelos (logística, Cox, lineal, ICC) con webR | Pendiente | — |
 | H6 · Enlace con Propedéutica (`?signo=`) | Pendiente | — |
