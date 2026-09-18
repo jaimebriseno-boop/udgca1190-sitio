@@ -62,8 +62,8 @@ Decisiones cerradas (no volver a preguntarlas):
   (`git push origin jaimebriseno-boop/Bioestadistica-abierta:main`): H0–H2 PUBLICADOS en
   udgca1190.com.mx. El checkout principal (`/Volumes/Bioinformatics/Programacion/UDG-CA-1190`, en
   `main`) puede quedar atrasado: `git pull` allí cuando haga falta; el trabajo sigue en este worktree.
-  H3 = commit `BIOESTADISTICA: H3 …` (ver `git log --oneline -3`), en la rama y en `origin`, PENDIENTE de
-  visto bueno del dueño y del fast-forward a `main`.
+  H3 = `f04f4dd` (más el commit de registro que le sigue), en la rama y en `origin`, PENDIENTE de visto
+  bueno del dueño y del fast-forward a `main` (`git push origin jaimebriseno-boop/Bioestadistica-abierta:main`).
 - Remoto `https://github.com/jaimebriseno-boop/udgca1190-sitio.git`; `main` despliega en Vercel.
 - Antes de cambiar nada: `git status --short --branch`, `git log --oneline -3`, y comprobar que `main`
   no avanzó (`git fetch && git log --oneline HEAD..origin/main`); si avanzó, `git merge origin/main`

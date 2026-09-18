@@ -16,7 +16,7 @@ construyen igual en esta rama y se publican con cada visto bueno.
 | H0 · Cimientos + calculadora «IC de una proporción» | Terminado y verificado | `e69d80b` |
 | H1 · Vertical completa: prueba diagnóstica 2×2, posprueba (Fagan), valores predictivos | Terminado, verificado y **publicado** (17-sep-2026) | `2c37184` (+ `033f464`) |
 | H2 · Asociación 2×2 (RR/OR/RRA/NNT, χ²/Fisher, McNemar) + columnas pegadas (descriptivos, IC media, media desde mediana) | Terminado, verificado y **publicado** (17-sep-2026) | `1772462`, `e02aa46`, `08a3d94`, `35bffcb` |
-| H3 · Tamaño de muestra (C1–C7), kappa, Kaplan-Meier | Terminado y verificado; **pendiente de visto bueno y publicación** (ROC opcional queda para después) | commit `BIOESTADISTICA: H3 …` (ver `git log --oneline -3`) |
+| H3 · Tamaño de muestra (C1–C7), kappa, Kaplan-Meier | Terminado y verificado; **pendiente de visto bueno y publicación** (ROC opcional queda para después) | `f04f4dd` (+ registro) |
 | H4 · webR («Verificar con R», consentimiento, ClientRouter, política de hosts) | **Siguiente** | — |
 | H5 · Modelos (logística, Cox, lineal, ICC) con webR | Pendiente | — |
 | H6 · Enlace con Propedéutica (`?signo=`) | Pendiente | — |
