@@ -1,0 +1,415 @@
+{
+  "generado_por": "scripts/bio-fixtures.mjs",
+  "meta": {
+    "calculadora": "muestra-una-media",
+    "generado": "2026-09-18T02:33:19.652Z",
+    "R": "R version 4.5.2 (2025-10-31)",
+    "plataforma": "aarch64-apple-darwin20",
+    "paquetes": {
+      "jsonlite": "2.0.0"
+    },
+    "plantilla_sha256": "02a70eead8fcb4c5ce691b383d95ce3a786aa2a89606218e2cc07a728d64c904"
+  },
+  "casos": [
+    {
+      "id": "ejemplo",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 138.292517544988,
+        "n_t": 141,
+        "n": 138.292517544988,
+        "n_ajustado": 153.658352827765,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "sin_perdidas",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 138.292517544988,
+        "n_t": 141,
+        "n": 138.292517544988,
+        "n_ajustado": 138.292517544988,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "n_pequeno",
+      "entradas": {
+        "sigma": 10,
+        "d": 5,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 15.3658352827765,
+        "n_t": 18,
+        "n": 15.3658352827765,
+        "n_ajustado": 15.3658352827765,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "n_muy_pequeno",
+      "entradas": {
+        "sigma": 1,
+        "d": 1,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 3.84145882069412,
+        "n_t": 7,
+        "n": 3.84145882069412,
+        "n_ajustado": 3.84145882069412,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "gl_minimo",
+      "entradas": {
+        "sigma": 1,
+        "d": 2,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 0.960364705173531,
+        "n_t": 4,
+        "n": 0.960364705173531,
+        "n_ajustado": 0.960364705173531,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "ciclo_periodo_2",
+      "entradas": {
+        "sigma": 1,
+        "d": 0.36,
+        "nivel": 0.8,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.2815515655446,
+        "n_z": 12.6726420922054,
+        "n_t": 15,
+        "n": 12.6726420922054,
+        "n_ajustado": 12.6726420922054,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "cpf",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 300,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 138.292517544988,
+        "n_t": 141,
+        "n": 94.8741485365761,
+        "n_ajustado": 94.8741485365761,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "cpf_holgada",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 5000,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 138.292517544988,
+        "n_t": 141,
+        "n": 134.596693757158,
+        "n_ajustado": 134.596693757158,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "poblacion_uno",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 1,
+        "perdidas": 0,
+        "n_dado": 1
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 138.292517544988,
+        "n_t": 141,
+        "n": 138.292517544988,
+        "n_ajustado": 138.292517544988,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "nivel_090",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.9,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.64485362695147,
+        "n_z": 97.3995643474348,
+        "n_t": 100,
+        "n": 97.3995643474348,
+        "n_ajustado": 108.221738163816,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "nivel_099",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.99,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 2.5758293035489,
+        "n_z": 238.856277636764,
+        "n_t": 243,
+        "n": 238.856277636764,
+        "n_ajustado": 265.395864040848,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "nivel_0999",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.999,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 3.29052673149192,
+        "n_z": 389.792382143865,
+        "n_t": 396,
+        "n": 389.792382143865,
+        "n_ajustado": 433.102646826517,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "decimales",
+      "entradas": {
+        "sigma": 0.35,
+        "d": 0.07,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 96.036470517353,
+        "n_t": 99,
+        "n": 96.036470517353,
+        "n_ajustado": 96.036470517353,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "grande",
+      "entradas": {
+        "sigma": 60,
+        "d": 1,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 13829.2517544988,
+        "n_t": 13832,
+        "n": 13829.2517544988,
+        "n_ajustado": 13829.2517544988,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 138.292517544988,
+        "n_t": 141,
+        "n": 138.292517544988,
+        "n_ajustado": 276.585035089977,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "supera_poblacion",
+      "entradas": {
+        "sigma": 60,
+        "d": 1,
+        "nivel": 0.95,
+        "poblacion": 10,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 13829.2517544988,
+        "n_t": 13832,
+        "n": 9.99349628828868,
+        "n_ajustado": 19.9869925765774,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "con_n_dado",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 50
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 138.292517544988,
+        "n_t": 141,
+        "n": 138.292517544988,
+        "n_ajustado": 153.658352827765,
+        "d_dado": 16.6308458921961
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "n_dado_cpf",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 300,
+        "perdidas": 0,
+        "n_dado": 100
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 138.292517544988,
+        "n_t": 141,
+        "n": 94.8741485365761,
+        "n_ajustado": 94.8741485365761,
+        "d_dado": 9.61786651068643
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "n_dado_censo",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 300,
+        "perdidas": 0,
+        "n_dado": 300
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_z": 138.292517544988,
+        "n_t": 141,
+        "n": 94.8741485365761,
+        "n_ajustado": 94.8741485365761,
+        "d_dado": 0
+      },
+      "tol": "muestra-una-media"
+    },
+    {
+      "id": "n_diminuto",
+      "entradas": {
+        "sigma": 0.000001,
+        "d": 0.1,
+        "nivel": 0.8,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.2815515655446,
+        "n_z": 1.64237441514982e-10,
+        "n_t": 2,
+        "n": 1.64237441514982e-10,
+        "n_ajustado": 1.82486046127757e-10,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-media"
+    }
+  ]
+}

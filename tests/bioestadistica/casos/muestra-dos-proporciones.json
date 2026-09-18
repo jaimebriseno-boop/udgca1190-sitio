@@ -1,0 +1,95 @@
+{
+  "calculadora": "muestra-dos-proporciones",
+  "casos": [
+    {
+      "id": "sin_correccion",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 1, "correccion": "no", "perdidas": 0.1, "n_dado": 0 },
+      "nota": "El ejemplo con el selector en 'no': n1 y n2 deben pasar a ser los de Fleiss sin corregir y coincidir con power.prop.test; n1_cc y n2_cc siguen calculandose para la comparacion."
+    },
+    {
+      "id": "unilateral",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.05, "lateralidad": "unilateral", "poder": 0.8, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Prueba unilateral: z_alfa pasa de qnorm(1 - alfa/2) a qnorm(1 - alfa) y el tamano baja. En R, alternative = 'one.sided' en power.prop.test y 'greater' en pwr (que no admite 'one.sided')."
+    },
+    {
+      "id": "r_2",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 2, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Dos participantes del grupo 2 por cada uno del grupo 1: p barra deja de ser el promedio simple y n_ppt y n_pwr_h deben venir NA porque ambas funciones suponen grupos iguales."
+    },
+    {
+      "id": "r_05",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 0.5, "correccion": "no", "perdidas": 0, "n_dado": 0 },
+      "nota": "Razon de asignacion menor que 1 (el grupo 2 es la mitad del 1) y sin correccion de continuidad: cubre el otro lado del reparto desigual."
+    },
+    {
+      "id": "poder_090",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.9, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Poder de 0.90: z_beta sube a 1.2816 y el tamano crece respecto al ejemplo."
+    },
+    {
+      "id": "poder_095",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.95, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Poder de 0.95, el maximo habitual en estudios de confirmacion."
+    },
+    {
+      "id": "alfa_001",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.001, "lateralidad": "bilateral", "poder": 0.8, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Alfa en el minimo admitido (0.001): z_alfa = 3.2905 y el tamano se dispara."
+    },
+    {
+      "id": "alfa_020",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.2, "lateralidad": "bilateral", "poder": 0.8, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Alfa en el maximo admitido (0.20): el otro extremo del rango de la especificacion."
+    },
+    {
+      "id": "diferencia_pequena",
+      "entradas": { "p1": 0.5, "p2": 0.52, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Diferencia de dos puntos porcentuales cerca de 0.5, donde la varianza es maxima: miles de participantes por grupo. Todavia no dispara el aviso de diferencia minima (el corte es 0.01)."
+    },
+    {
+      "id": "diferencia_minima",
+      "entradas": { "p1": 0.5, "p2": 0.505, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Medio punto porcentual de diferencia: activa el aviso 'diferencia_minima' y deja n del orden de 2.6e5 por grupo, aun dentro del corchete [1, 1e7] de power.prop.test."
+    },
+    {
+      "id": "diferencia_minuscula",
+      "entradas": { "p1": 0.5, "p2": 0.5001, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Una diezmilesima de diferencia: n ronda 3.92e8 y se sale del corchete [1, 1e7] de power.prop.test, asi que R lo resuelve gracias a extendInt = 'upX'. Es el caso que destapo el fallo: TypeScript devolvia NaN donde R da un numero. pwr si lo resuelve porque su corchete llega a 1e9."
+    },
+    {
+      "id": "extension_por_debajo",
+      "entradas": { "p1": 0.001, "p2": 0.998, "alfa": 0.2, "lateralidad": "bilateral", "poder": 0.5, "r": 1, "correccion": "no", "perdidas": 0, "n_dado": 0 },
+      "nota": "El otro extremo del extendInt: con un efecto descomunal la raiz cae POR DEBAJO del corchete [1, 1e7] y R extiende hacia abajo hasta n_ppt = 0.826135765758877, menos de un participante por grupo. TypeScript devolvia NaN aqui. De paso pwr no resuelve (su corchete empieza en 2), asi que tambien ejercita comparacion.sin_solucion."
+    },
+    {
+      "id": "pwr_fuera_de_rango",
+      "entradas": { "p1": 0.5, "p2": 0.50001, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.9, "r": 1, "correccion": "no", "perdidas": 0, "n_dado": 0 },
+      "nota": "El otro lado del mismo problema: n ronda 5.25e10. power.prop.test lo alcanza extendiendo el corchete, pero pwr.2p.test no, porque el suyo se detiene en 1e9 y no extiende. Con grupos iguales y n_pwr_h en NA se ejercita la variante 'comparacion.sin_solucion'."
+    },
+    {
+      "id": "proporciones_extremas",
+      "entradas": { "p1": 0.02, "p2": 0.08, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Desenlaces infrecuentes: con el n calculado se esperan menos de cinco eventos en el grupo 1, asi que activa el aviso 'aproximacion_dudosa'."
+    },
+    {
+      "id": "simetricas",
+      "entradas": { "p1": 0.4, "p2": 0.6, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 0 },
+      "nota": "Proporciones simetricas alrededor de 0.5: p barra = 0.5 y p1*q1 = p2*q2, el caso mas sencillo de comprobar a mano."
+    },
+    {
+      "id": "con_n_dado",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 1, "correccion": "si", "perdidas": 0, "n_dado": 100 },
+      "nota": "Modo inverso con grupos iguales: 100 participantes por grupo quedan por debajo de los 121 de Fleiss sin corregir, asi que poder_dado debe salir por debajo de 0.80."
+    },
+    {
+      "id": "n_dado_r2",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 2, "correccion": "si", "perdidas": 0, "n_dado": 60 },
+      "nota": "Modo inverso con reparto desigual: 60 en el grupo 1 y 120 en el 2. Comprueba que poder_dado usa r en la formula y no el promedio simple."
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": { "p1": 0.7, "p2": 0.85, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "r": 1, "correccion": "si", "perdidas": 0.5, "n_dado": 0 },
+      "nota": "Perdidas en el maximo admitido (50 %): n_ajustado duplica exactamente el total calculado."
+    }
+  ]
+}

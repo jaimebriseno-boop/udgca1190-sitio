@@ -420,6 +420,25 @@ export function qt(p: number, df: number, lower = true): number {
   if (p === 0.5) return 0;
   if (p > 0.5) return -qt(1 - p, df, true);
 
+  // Grados de libertad grandes. Por encima de 1e20 R devuelve directamente el
+  // cuantil normal (qt.c); entre 1e5 y 1e20 se usa la expansión de Cornish-
+  // Fisher de la t en potencias de 1/ν (Fisher 1925; Abramowitz y Stegun
+  // 26.7.5; Hill 1970) con cuatro términos, cuyo error de truncamiento es
+  // ~1e-16 relativo en todo ese rango. Invertir pt() con Brent ahí no sirve:
+  // la cola de pt() pierde resolución cuando t²/(ν + t²) se acerca al epsilon
+  // de máquina y el cuantil se apartaba de R en 3.5e-9 con ν = 1e9 y en 7 % con
+  // ν = 1e16 (hallazgo de la revisión de H3, alcanzable desde C2 con d ≪ σ).
+  if (df > 1e20) return qnormEstandar(p, true);
+  if (df >= 1e5) {
+    const z = qnormEstandar(p, true);
+    const z2 = z * z;
+    const g1 = ((z2 + 1) * z) / 4;
+    const g2 = (((5 * z2 + 16) * z2 + 3) * z) / 96;
+    const g3 = ((((3 * z2 + 19) * z2 + 17) * z2 - 15) * z) / 384;
+    const g4 = (((((79 * z2 + 776) * z2 + 1482) * z2 - 1920) * z2 - 945) * z) / 92160;
+    return z + g1 / df + g2 / (df * df) + g3 / (df * df * df) + g4 / (df * df * df * df);
+  }
+
   // Semilla: cola de la t o, si esa forma no aplica, la normal reescalada.
   let semilla = -1;
   const logX = (2 / df) * (Math.log(p) + Math.log(df) + lbeta(df / 2, 0.5));

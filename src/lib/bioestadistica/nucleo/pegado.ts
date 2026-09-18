@@ -12,8 +12,9 @@
  * pega vea de inmediato cuántos valores se leyeron y qué se quedó fuera.
  *
  * Lo que este módulo NO hace: analizar CSV completo (comillas con separadores
- * dentro, escapes), reordenar columnas ni imputar faltantes. Un pegado con
- * varias columnas se resuelve tomando la primera y avisando.
+ * dentro, escapes), reordenar columnas ni imputar faltantes. En una columna, un
+ * pegado con varias columnas se resuelve tomando la primera y avisando; una
+ * tabla de conteos entera se lee con `parsearTablaPegada`, al final del archivo.
  */
 import { parsearNumero } from './entrada.ts';
 import type { EntradaDef } from './tipos.ts';
@@ -257,4 +258,179 @@ export function resumenPegado(
   if (r.encabezado !== undefined) piezas.push(texto('pegado_encabezado', { h: recortar(r.encabezado) }));
   if (r.variasColumnas) piezas.push(texto('pegado_varias_columnas'));
   return piezas.join(' · ');
+}
+
+// ---------------------------------------------------------------------------
+// Tabla k×k pegada
+// ---------------------------------------------------------------------------
+
+/**
+ * Una tabla de conteos copiada de una hoja de cálculo: varias columnas por
+ * línea, a diferencia de `parsearPegado`, que se queda con la primera. Lo usa
+ * una calculadora de concordancia (kappa), donde la tabla es cuadrada y las
+ * categorías van en el mismo orden en filas y columnas.
+ *
+ * Aquí una fila es la unidad: si una celda está vacía, marcada como faltante o
+ * no es un número, la fila entera se descarta y se cuenta. En una columna suelta
+ * un hueco se puede omitir sin más; en una tabla de conteos, una fila a la que
+ * le falta una celda ya no dice de cuántos casos habla, y rellenarla con un 0
+ * sería inventar datos.
+ *
+ * La cuadratura NO se comprueba aquí: este módulo lee lo que hay y la
+ * calculadora decide si le sirve (`err_tabla_cuadrada`). Nunca lanza.
+ */
+export interface ResultadoTabla {
+  /** Filas de números leídas (cada fila una lista); una celda faltante o no numérica descarta la fila entera. */
+  filas: number[][];
+  /** Número de filas descartadas por traer una celda vacía, faltante o no numérica. */
+  filasDescartadas: number;
+  /** Rótulos retirados: la fila de encabezado si la hubo; si no, los de la primera columna. */
+  encabezado?: string[];
+  /** true si las filas leídas no tienen todas el mismo número de columnas. */
+  irregular: boolean;
+}
+
+/** ¿La celda es un rótulo? (texto que no es un número ni una marca de hueco). */
+function esRotulo(celda: string): boolean {
+  return !esFaltante(celda) && parsearNumero(celda, DEF_CELDA) === null;
+}
+
+/**
+ * ¿La fila es de encabezados? Ninguna de sus celdas es un número y al menos una
+ * es texto de verdad. La segunda condición evita que una primera fila de huecos
+ * («NA NA NA») pase por encabezado en vez de contarse como fila descartada.
+ */
+function esFilaDeRotulos(fila: string[]): boolean {
+  return fila.every((c) => parsearNumero(c, DEF_CELDA) === null) && fila.some(esRotulo);
+}
+
+/**
+ * Quita las columnas vacías del final que tienen TODAS las filas: un tabulador
+ * o un «;» de más al final de cada línea es un resto del copiado, no una
+ * columna. Si la celda vacía está solo en algunas filas se conserva, porque
+ * entonces sí es un dato que falta.
+ */
+function sinColaVaciaComun(matriz: string[][]): string[][] {
+  let m = matriz;
+  while (m.length > 0 && m.every((f) => f.length > 1 && f[f.length - 1] === '')) {
+    m = m.map((f) => f.slice(0, -1));
+  }
+  return m;
+}
+
+/**
+ * Texto pegado → filas de números, filas descartadas, rótulos e indicación de
+ * filas de distinta longitud. Un texto vacío devuelve la tabla vacía.
+ *
+ * El separador se decide con la misma regla que en una columna (tabulador >
+ * «;» > coma seguida de espacio > espacios > coma), de modo que el pegado de
+ * Excel, el de un `.csv` y el de una tabla de un PDF se leen igual. Las líneas
+ * en blanco se saltan: en una tabla son separación, no una fila sin datos.
+ */
+export function parsearTablaPegada(texto: string): ResultadoTabla {
+  const resultado: ResultadoTabla = { filas: [], filasDescartadas: 0, irregular: false };
+  const lineas = enLineas(texto).filter((l) => l.trim() !== '');
+  if (lineas.length === 0) return resultado;
+
+  let sep = detectarSeparador(lineas);
+  // En una tabla de CONTEOS «10,2» no es el decimal 10.2 sino dos casillas: si
+  // nada más separa y toda coma parte enteros no negativos, la coma separa. En
+  // una columna rige la regla contraria (coma decimal) y sigue en `parsearPegado`.
+  if (sep === null && lineas.some((l) => l.includes(','))) {
+    const enteras = lineas.every((l) => l.split(',').every((c) => /^\d+$/.test(limpiarCelda(c).trim())));
+    if (enteras) sep = ',';
+  }
+  let matriz = sinColaVaciaComun(
+    lineas.map((l) => (sep === null ? [limpiarCelda(l)] : partir(l, sep).map(limpiarCelda))),
+  );
+
+  // Fila de encabezado: solo si debajo queda algo que leer.
+  let encabezado: string[] | undefined;
+  if (matriz.length > 1 && esFilaDeRotulos(matriz[0])) {
+    encabezado = matriz[0];
+    matriz = matriz.slice(1);
+  }
+
+  // Columna de rótulos: la primera celda de TODAS las filas es texto. Basta que
+  // una traiga un número para no retirar nada, que es lo prudente.
+  const anchoConRotulos = matriz[0]?.length ?? 0;
+  if (matriz.length > 0 && matriz.every((f) => f.length > 1 && esRotulo(f[0]))) {
+    const rotulos = matriz.map((f) => f[0]);
+    matriz = matriz.map((f) => f.slice(1));
+    // Con encabezado y rótulos a la vez, la primera celda del encabezado es la
+    // esquina de la tabla (casi siempre vacía) y sobra; si el encabezado ya
+    // venía sin ella, se deja como está.
+    if (encabezado === undefined) encabezado = rotulos;
+    else if (encabezado.length === anchoConRotulos) encabezado = encabezado.slice(1);
+  }
+  if (encabezado !== undefined) resultado.encabezado = encabezado;
+
+  for (const fila of matriz) {
+    const numeros: number[] = [];
+    let completa = fila.length > 0;
+    for (const celda of fila) {
+      const n = esFaltante(celda) ? null : parsearNumero(celda, DEF_CELDA);
+      if (n === null) {
+        completa = false;
+        break;
+      }
+      numeros.push(n);
+    }
+    if (completa) resultado.filas.push(numeros);
+    else resultado.filasDescartadas += 1;
+  }
+
+  const ancho = resultado.filas[0]?.length ?? 0;
+  resultado.irregular = resultado.filas.some((f) => f.length !== ancho);
+  return resultado;
+}
+
+/**
+ * Resumen de una línea de la tabla leída: «Tabla de 3 × 3 leída · 1 filas
+ * descartadas · encabezado omitido · filas de distinta longitud».
+ *
+ * Como en una columna, el tamaño va siempre, aunque sea 0 × 0: quien pega
+ * necesita ver de inmediato qué entendió la calculadora. Con filas de distinta
+ * longitud, el número de columnas es el de la fila más ancha.
+ */
+/**
+ * ¿Las filas leídas forman una tabla cuadrada (k filas de k celdas)? El
+ * controlador lo comprueba ANTES de aplanar: una fila de cuatro celdas (1 × 4)
+ * o una tabla de 2 × 8 tienen un número cuadrado de celdas y, aplanadas,
+ * pasarían por 2 × 2 o 4 × 4 sin que nadie lo note.
+ */
+export function esCuadrada(filas: readonly (readonly number[])[]): boolean {
+  return filas.length > 0 && filas.every((f) => f.length === filas.length);
+}
+
+export function resumenTabla(
+  r: ResultadoTabla,
+  ui: Record<string, string>,
+  fmt: { entero(x: number): string },
+): string {
+  const texto = (clave: string, params: Record<string, string> = {}): string =>
+    interpolar(ui[clave] ?? clave, params);
+
+  const columnas = r.filas.reduce((max, f) => Math.max(max, f.length), 0);
+  const piezas: string[] = [texto('tabla_leida', { f: fmt.entero(r.filas.length), c: fmt.entero(columnas) })];
+  if (r.filasDescartadas > 0) piezas.push(texto('tabla_descartadas', { k: fmt.entero(r.filasDescartadas) }));
+  if (r.encabezado !== undefined) piezas.push(texto('tabla_encabezado'));
+  if (r.irregular) piezas.push(texto('tabla_irregular'));
+  return piezas.join(' · ');
+}
+
+/**
+ * Lista plana de una tabla → texto del campo, para escribir el ejemplo o lo que
+ * trae la URL: k filas de k celdas separadas por tabulador si la lista es
+ * cuadrada; si no, una celda por línea, que al volver a leerse devuelve los
+ * mismos números en el mismo orden.
+ */
+export function textoDeTabla(valores: readonly number[]): string {
+  const k = Math.round(Math.sqrt(valores.length));
+  if (k >= 2 && k * k === valores.length) {
+    const filas: string[] = [];
+    for (let i = 0; i < k; i += 1) filas.push(valores.slice(i * k, (i + 1) * k).join('\t'));
+    return filas.join('\n');
+  }
+  return valores.join('\n');
 }

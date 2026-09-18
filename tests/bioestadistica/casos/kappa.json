@@ -1,0 +1,123 @@
+{
+  "calculadora": "kappa",
+  "casos": [
+    {
+      "id": "lineal",
+      "entradas": { "x": [40, 8, 2, 6, 25, 4, 1, 3, 11], "k": 3, "ponderacion": "lineal", "nivel": 0.95 },
+      "nota": "La tabla del ejemplo con pesos lineales: kappa 0.6489 y EE 0.0663 segun la comprobacion de la especificacion. Los desacuerdos entre categorias vecinas cuentan como acuerdo parcial."
+    },
+    {
+      "id": "cuadratica",
+      "entradas": { "x": [40, 8, 2, 6, 25, 4, 1, 3, 11], "k": 3, "ponderacion": "cuadratica", "nivel": 0.95 },
+      "nota": "La misma tabla con pesos cuadraticos: kappa 0.6944 y EE 0.0715. Es el unico esquema en que el EE sube al ponderar."
+    },
+    {
+      "id": "k2",
+      "entradas": { "x": [40, 10, 5, 45], "k": 2, "ponderacion": "ninguna", "nivel": 0.95 },
+      "nota": "Tabla 2x2 corriente: aparecen PABAK y los indices de prevalencia y de sesgo de Byrt, que con mas categorias son NA."
+    },
+    {
+      "id": "k2_paradoja",
+      "entradas": { "x": [90, 5, 5, 0], "k": 2, "ponderacion": "ninguna", "nivel": 0.95 },
+      "nota": "Paradoja de kappa: acuerdo observado 0.90 y kappa negativa porque una categoria concentra casi todos los casos. PABAK = 0.80 y el indice de prevalencia es alto."
+    },
+    {
+      "id": "perfecto",
+      "entradas": { "x": [30, 0, 0, 0, 40, 0, 0, 0, 30], "k": 3, "ponderacion": "ninguna", "nivel": 0.95 },
+      "nota": "Acuerdo perfecto: kappa = 1, EE = 0 e IC [1, 1]. El radicando del EE es 0 salvo por el redondeo, que absorbe max(0, .)."
+    },
+    {
+      "id": "perfecto_cuadratica",
+      "entradas": { "x": [30, 0, 0, 0, 40, 0, 0, 0, 30], "k": 3, "ponderacion": "cuadratica", "nivel": 0.95 },
+      "nota": "El mismo acuerdo perfecto con pesos cuadraticos: kappa sigue valiendo 1 y el EE, 0, aunque pe cambie."
+    },
+    {
+      "id": "negativo",
+      "entradas": { "x": [0, 10, 10, 0], "k": 2, "ponderacion": "ninguna", "nivel": 0.95 },
+      "nota": "Desacuerdo total: kappa = -1, el limite inferior del IC de Wald se trunca a -1 y PABAK = -1."
+    },
+    {
+      "id": "k4",
+      "entradas": { "x": [12, 3, 1, 0, 4, 20, 5, 1, 1, 6, 15, 4, 0, 1, 5, 12], "k": 4, "ponderacion": "lineal", "nivel": 0.95 },
+      "nota": "Cuatro categorias ordinales con celdas variadas y pesos lineales: comprueba los pesos fuera de la diagonal y las medias ponderadas de fila y columna."
+    },
+    {
+      "id": "k4_cuadratica",
+      "entradas": { "x": [12, 3, 1, 0, 4, 20, 5, 1, 1, 6, 15, 4, 0, 1, 5, 12], "k": 4, "ponderacion": "cuadratica", "nivel": 0.95 },
+      "nota": "La misma tabla 4x4 con pesos cuadraticos: los desacuerdos a dos y tres categorias de distancia pesan mucho menos que en el esquema lineal."
+    },
+    {
+      "id": "categoria_vacia",
+      "entradas": { "x": [30, 0, 6, 0, 0, 0, 4, 0, 20], "k": 3, "ponderacion": "ninguna", "nivel": 0.95 },
+      "nota": "La segunda categoria no tiene observaciones ni en su fila ni en su columna: se elimina y la tabla queda de 2x2, asi que aparecen PABAK y los indices de Byrt."
+    },
+    {
+      "id": "categoria_vacia_lineal",
+      "entradas": { "x": [30, 0, 6, 0, 0, 0, 4, 0, 20], "k": 3, "ponderacion": "lineal", "nivel": 0.95 },
+      "nota": "La misma tabla con pesos lineales: al quedar k = 2 los pesos vuelven a ser la identidad, de modo que el resultado coincide con el caso sin ponderar."
+    },
+    {
+      "id": "nivel_090",
+      "entradas": { "x": [40, 8, 2, 6, 25, 4, 1, 3, 11], "k": 3, "ponderacion": "ninguna", "nivel": 0.9 },
+      "nota": "Nivel 90 %: solo cambia el cuantil normal del IC de Wald; la estimacion, el EE, z y p siguen iguales."
+    },
+    {
+      "id": "nivel_099",
+      "entradas": { "x": [40, 8, 2, 6, 25, 4, 1, 3, 11], "k": 3, "ponderacion": "ninguna", "nivel": 0.99 },
+      "nota": "Nivel 99 %: el IC se ensancha y sigue sin tocar el 0."
+    },
+    {
+      "id": "n_pequeno",
+      "entradas": { "x": [5, 1, 2, 4], "k": 2, "ponderacion": "ninguna", "nivel": 0.95 },
+      "nota": "Doce casos: el EE asintotico deja un IC muy ancho y el aviso n_pequeno se activa; kappa = 0.5 exacta."
+    },
+    {
+      "id": "pe_casi_uno_k2",
+      "entradas": { "x": [9998, 1, 1, 0], "k": 2, "ponderacion": "ninguna", "nivel": 0.95 },
+      "nota": "Acuerdo esperado casi 1 (pe = 0.9998): κ divide entre 1 - pe, asi que un ulp en pe se amplifica ocho ordenes de magnitud. Fija que z_h0 se calcule con la agrupacion de irr::kappa2 (conteos, division tardia) y no con la del snippet (p = x/n). Paradoja extrema: acuerdo observado 0.9998 y κ negativa."
+    },
+    {
+      "id": "pe_casi_uno",
+      "entradas": { "x": [998, 1, 0, 1, 0, 0, 0, 0, 0], "k": 3, "ponderacion": "ninguna", "nivel": 0.95 },
+      "nota": "La misma cancelacion con una categoria vacia de por medio: la tercera no tiene observaciones y se elimina, la tabla queda de 2x2 y pe = 0.9980. Activa a la vez los avisos categoria_vacia y paradoja."
+    },
+    {
+      "id": "k10",
+      "entradas": {
+        "x": [18, 3, 1, 0, 0, 0, 0, 0, 0, 0,
+              2, 20, 4, 1, 0, 0, 0, 0, 0, 0,
+              0, 3, 22, 3, 1, 0, 0, 0, 0, 0,
+              0, 1, 4, 19, 2, 1, 0, 0, 0, 0,
+              0, 0, 1, 3, 25, 4, 1, 0, 0, 0,
+              0, 0, 0, 1, 2, 21, 3, 1, 0, 0,
+              0, 0, 0, 0, 1, 4, 17, 2, 1, 0,
+              0, 0, 0, 0, 0, 1, 3, 23, 3, 1,
+              0, 0, 0, 0, 0, 0, 1, 2, 20, 4,
+              0, 0, 0, 0, 0, 0, 0, 1, 3, 16],
+        "k": 10,
+        "ponderacion": "ninguna",
+        "nivel": 0.95
+      },
+      "nota": "El limite superior de k: diez categorias con diagonal dominante. Sin ponderar, permutar los niveles no cambiaria nada, asi que sirve de control del caso k10_lineal."
+    },
+    {
+      "id": "k10_lineal",
+      "entradas": {
+        "x": [18, 3, 1, 0, 0, 0, 0, 0, 0, 0,
+              2, 20, 4, 1, 0, 0, 0, 0, 0, 0,
+              0, 3, 22, 3, 1, 0, 0, 0, 0, 0,
+              0, 1, 4, 19, 2, 1, 0, 0, 0, 0,
+              0, 0, 1, 3, 25, 4, 1, 0, 0, 0,
+              0, 0, 0, 1, 2, 21, 3, 1, 0, 0,
+              0, 0, 0, 0, 1, 4, 17, 2, 1, 0,
+              0, 0, 0, 0, 0, 1, 3, 23, 3, 1,
+              0, 0, 0, 0, 0, 0, 1, 2, 20, 4,
+              0, 0, 0, 0, 0, 0, 0, 1, 3, 16],
+        "k": 10,
+        "ponderacion": "lineal",
+        "nivel": 0.95
+      },
+      "nota": "Diez categorias con pesos lineales: es el caso que obliga a numerar las categorias desde 11 en el snippet, porque irr::kappa2 ordena sus niveles como texto y con 1 a 10 leeria 1, 10, 2 y desplazaria los pesos."
+    }
+  ]
+}

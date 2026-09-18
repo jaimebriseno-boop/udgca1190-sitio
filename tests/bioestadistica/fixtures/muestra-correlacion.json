@@ -1,0 +1,331 @@
+{
+  "generado_por": "scripts/bio-fixtures.mjs",
+  "meta": {
+    "calculadora": "muestra-correlacion",
+    "generado": "2026-09-17T23:29:17.131Z",
+    "R": "R version 4.5.2 (2025-10-31)",
+    "plataforma": "aarch64-apple-darwin20",
+    "paquetes": {
+      "jsonlite": "2.0.0",
+      "pwr": "1.3-0"
+    },
+    "plantilla_sha256": "3980e8aa4231e6e444a4408aa7db34b3e593a70c71cfc17909bc5cb81bac0c0f"
+  },
+  "casos": [
+    {
+      "id": "ejemplo",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "c_fisher": 0.309519604203112,
+        "n_clasico": 84.9278111157752,
+        "n_pwr": 84.0736397822877,
+        "n_ajustado": 94.3642345730836,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "r_negativa",
+      "entradas": {
+        "r": -0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "c_fisher": -0.309519604203112,
+        "n_clasico": 84.9278111157752,
+        "n_pwr": 84.0736397822877,
+        "n_ajustado": 84.9278111157752,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "unilateral",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "unilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.64485362695147,
+        "z_beta": 0.841621233572914,
+        "c_fisher": 0.309519604203112,
+        "n_clasico": 67.534481131197,
+        "n_pwr": 66.5546279341088,
+        "n_ajustado": 67.534481131197,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "unilateral_negativa",
+      "entradas": {
+        "r": -0.3,
+        "alfa": 0.05,
+        "lateralidad": "unilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.64485362695147,
+        "z_beta": 0.841621233572914,
+        "c_fisher": -0.309519604203112,
+        "n_clasico": 67.534481131197,
+        "n_pwr": 66.5546279341088,
+        "n_ajustado": 67.534481131197,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "r_pequena",
+      "entradas": {
+        "r": 0.04,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "c_fisher": 0.0400213538367682,
+        "n_clasico": 4903.31640958368,
+        "n_pwr": 4902.40335831722,
+        "n_ajustado": 4903.31640958368,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "r_grande",
+      "entradas": {
+        "r": 0.8,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.9,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 1.2815515655446,
+        "c_fisher": 1.09861228866811,
+        "n_clasico": 11.7057724912961,
+        "n_pwr": 11.1623778909444,
+        "n_ajustado": 11.7057724912961,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "r_extrema",
+      "entradas": {
+        "r": 0.98,
+        "alfa": 0.01,
+        "lateralidad": "bilateral",
+        "poder": 0.95,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 2.5758293035489,
+        "z_beta": 1.64485362695147,
+        "c_fisher": 2.29755992506729,
+        "n_clasico": 6.37467349823988,
+        "n_pwr": 6.33010741695298,
+        "n_ajustado": 6.37467349823988,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "pwr_sin_solucion",
+      "entradas": {
+        "r": 0.98,
+        "alfa": 0.05,
+        "lateralidad": "unilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.64485362695147,
+        "z_beta": 0.841621233572914,
+        "c_fisher": 2.29755992506729,
+        "n_clasico": 4.17120913302352,
+        "n_pwr": "NA",
+        "n_ajustado": 4.17120913302352,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "poder_090",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.9,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 1.2815515655446,
+        "c_fisher": 0.309519604203112,
+        "n_clasico": 112.678094330316,
+        "n_pwr": 111.806835450343,
+        "n_ajustado": 112.678094330316,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "poder_095",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.95,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 1.64485362695147,
+        "c_fisher": 0.309519604203112,
+        "n_clasico": 138.640777207741,
+        "n_pwr": 137.758675702606,
+        "n_ajustado": 138.640777207741,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "alfa_001",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.01,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 2.5758293035489,
+        "z_beta": 0.841621233572914,
+        "c_fisher": 0.309519604203112,
+        "n_clasico": 124.906861991086,
+        "n_pwr": 124.405017504428,
+        "n_ajustado": 124.906861991086,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "con_n_dado",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 50
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "c_fisher": 0.309519604203112,
+        "n_clasico": 84.9278111157752,
+        "n_pwr": 84.0736397822877,
+        "n_ajustado": 84.9278111157752,
+        "poder_dado": 0.564345306712012
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "n_dado_corto",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 2
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "c_fisher": 0.309519604203112,
+        "n_clasico": 84.9278111157752,
+        "n_pwr": 84.0736397822877,
+        "n_ajustado": 84.9278111157752,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "n_dado_minimo",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 4
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "c_fisher": 0.309519604203112,
+        "n_clasico": 84.9278111157752,
+        "n_pwr": 84.0736397822877,
+        "n_ajustado": 84.9278111157752,
+        "poder_dado": 0.0494260401700244
+      },
+      "tol": "muestra-correlacion"
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "c_fisher": 0.309519604203112,
+        "n_clasico": 84.9278111157752,
+        "n_pwr": 84.0736397822877,
+        "n_ajustado": 169.85562223155,
+        "poder_dado": "NA"
+      },
+      "tol": "muestra-correlacion"
+    }
+  ]
+}

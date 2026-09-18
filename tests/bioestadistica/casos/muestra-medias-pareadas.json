@@ -1,0 +1,65 @@
+{
+  "calculadora": "muestra-medias-pareadas",
+  "casos": [
+    {
+      "id": "desde_rho",
+      "entradas": { "delta": 0.5, "de_dif": 0, "sigma": 1.5, "rho": 0.5, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "perdidas": 0, "n_dado": 0 },
+      "nota": "Ruta derivada: sin DE de las diferencias, el snippet aplica de_dif <- sigma*sqrt(2*(1-rho)). Con rho = 0.5 el factor vale 1 y de_dif coincide con sigma, asi que n debe salir igual que en el ejemplo (salvo el ajuste por perdidas)."
+    },
+    {
+      "id": "rho_alta",
+      "entradas": { "delta": 0.5, "de_dif": 0, "sigma": 1.5, "rho": 0.9, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "perdidas": 0, "n_dado": 0 },
+      "nota": "Correlacion alta entre mediciones: de_dif baja a 1.5*sqrt(0.2) = 0.6708 y el numero de pares se desploma. Es la ventaja del diseno pareado llevada al extremo admitido."
+    },
+    {
+      "id": "rho_cero",
+      "entradas": { "delta": 0.5, "de_dif": 0, "sigma": 1.5, "rho": 0, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "perdidas": 0, "n_dado": 0 },
+      "nota": "Correlacion nula: de_dif = sigma*sqrt(2) = 2.121 y el pareo no aporta nada. Comprueba que rho = 0 es un valor legitimo y no se confunde con «no capturado»."
+    },
+    {
+      "id": "unilateral",
+      "entradas": { "delta": 0.5, "de_dif": 1.5, "sigma": 0, "rho": 0, "alfa": 0.05, "lateralidad": "unilateral", "poder": 0.8, "perdidas": 0, "n_dado": 0 },
+      "nota": "Contraste unilateral: tside pasa de 2 a 1 y la lateralidad debe viajar igual a qt(), a qnorm() y a power.t.test(alternative = \"one.sided\"). Con de_dif capturada, sigma = 0 y rho = 0 quedan sin usar."
+    },
+    {
+      "id": "poder_090",
+      "entradas": { "delta": 0.5, "de_dif": 1.5, "sigma": 0, "rho": 0, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.9, "perdidas": 0, "n_dado": 0 },
+      "nota": "Poder 0.90: z_beta sube de 0.842 a 1.282 y los pares crecen respecto al ejemplo."
+    },
+    {
+      "id": "alfa_001",
+      "entradas": { "delta": 0.5, "de_dif": 1.5, "sigma": 0, "rho": 0, "alfa": 0.01, "lateralidad": "bilateral", "poder": 0.8, "perdidas": 0, "n_dado": 0 },
+      "nota": "Alfa 0.01: z_alfa sube a 2.576, el valor critico de qt se aleja y hacen falta mas pares."
+    },
+    {
+      "id": "efecto_grande",
+      "entradas": { "delta": 1.5, "de_dif": 1.5, "sigma": 0, "rho": 0, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "perdidas": 0, "n_dado": 0 },
+      "nota": "d de Cohen = 1: n ronda 9 pares, por debajo de 10, y dispara el aviso n_pequeno. Con nu bajo la t no central y la normal se separan al maximo."
+    },
+    {
+      "id": "efecto_pequeno",
+      "entradas": { "delta": 0.1, "de_dif": 1, "sigma": 0, "rho": 0, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "perdidas": 0, "n_dado": 0 },
+      "nota": "d de Cohen = 0.1: hacen falta cerca de 787 pares. Con n grande la t no central se acerca a la normal y las dos filas casi coinciden."
+    },
+    {
+      "id": "delta_negativa",
+      "entradas": { "delta": -0.5, "de_dif": 1.5, "sigma": 0, "rho": 0, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "perdidas": 0.1, "n_dado": 0 },
+      "nota": "Cambio medio negativo (un descenso): el signo no debe cambiar nada porque el parametro de no centralidad entra como |delta|. Todas las salidas deben coincidir con las del ejemplo."
+    },
+    {
+      "id": "con_n_dado",
+      "entradas": { "delta": 0.5, "de_dif": 1.5, "sigma": 0, "rho": 0, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "perdidas": 0, "n_dado": 50 },
+      "nota": "Modo inverso con 50 pares, por debajo de los 73 que exige el poder 0.80: poder_dado debe quedar claramente bajo 0.80 y por debajo del poder_dado_normal."
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": { "delta": 0.5, "de_dif": 1.5, "sigma": 0, "rho": 0, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "perdidas": 0.5, "n_dado": 0 },
+      "nota": "Perdidas en el maximo admitido (50 %): el total ajustado duplica al numero exacto de pares. Frontera superior de validarComun."
+    },
+    {
+      "id": "n_pequeno",
+      "entradas": { "delta": 3, "de_dif": 1.5, "sigma": 0, "rho": 0, "alfa": 0.05, "lateralidad": "bilateral", "poder": 0.8, "perdidas": 0, "n_dado": 0 },
+      "nota": "d de Cohen = 2: n ronda 5 pares. Es el limite del aviso delta_grande (que exige d > 2) y el caso donde la aproximacion normal mas se aleja de la solucion exacta."
+    }
+  ]
+}

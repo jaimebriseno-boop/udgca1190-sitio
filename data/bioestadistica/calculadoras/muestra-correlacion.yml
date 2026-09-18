@@ -1,0 +1,236 @@
+# Calculadora C7 · Tamaño de muestra para detectar una correlación (z de Fisher).
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: muestra
+orden: 7
+estado: activa
+motor: ts
+entradas:
+  - { id: r, tipo: decimal, min: -0.98, max: 0.98 }
+  - { id: alfa, tipo: decimal, min: 0.001, max: 0.2 }
+  - { id: lateralidad, tipo: opcion, opciones: [bilateral, unilateral] }
+  - { id: poder, tipo: proporcion, min: 0.5, max: 0.99 }
+  - { id: perdidas, tipo: proporcion, min: 0, max: 0.5, requerido: false }
+  - { id: n_dado, tipo: entero, min: 0, requerido: false }
+ejemplo: { r: 0.3, alfa: 0.05, lateralidad: bilateral, poder: 0.8, perdidas: 0.1, n_dado: 0 }
+r:
+  paquetes: [jsonlite, pwr]
+  codigo: |
+    # Sample size to detect a correlation (Fisher's z transformation) - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+    library(pwr)
+
+    r <- {r}                      # correlation worth detecting (not 0, |r| <= 0.98)
+    alfa <- {alfa}                # significance level
+    lateralidad <- {lateralidad}  # "bilateral" or "unilateral"
+    poder <- {poder}              # target power
+    perdidas <- {perdidas}        # expected losses (0-0.5)
+    n_dado <- {n_dado}            # pairs already available (inverse mode); 0 = not given
+
+    tside <- if (lateralidad == "bilateral") 2 else 1
+    z_alfa <- qnorm(alfa / tside, lower.tail = FALSE)
+    z_beta <- qnorm(poder)
+
+    # Fisher (1915, 1921): atanh(r) is nearly normal with standard error 1/sqrt(n - 3)
+    c_fisher <- atanh(r)                               # 0.5 * log((1 + r) / (1 - r))
+    n_clasico <- ((z_alfa + z_beta) / c_fisher)^2 + 3
+    n_ajustado <- n_clasico / (1 - perdidas)           # Lwanga & Lemeshow (1991)
+
+    # pwr adds the bias correction r/(2*(n - 1)) and uses the t quantile instead of
+    # the normal one, so it lands one or two subjects below the classic formula.
+    # With a very large r and a modest power its uniroot finds no sign change (the
+    # four pairs of the lower bound already exceed the power) and it stops: that
+    # combination is reported as NA instead of aborting the whole script.
+    alternativa <- if (tside == 2) "two.sided" else if (r > 0) "greater" else "less"
+    n_pwr <- tryCatch(pwr.r.test(r = r, sig.level = alfa, power = poder, alternative = alternativa)$n,
+                      error = function(e) NA_real_)
+
+    # Inverse mode: power reached with the pairs already available.
+    poder_dado <- if (n_dado >= 4) pnorm(abs(c_fisher) * sqrt(n_dado - 3) - z_alfa) else NA_real_
+
+    # Values travel WITHOUT rounding: the interface takes the ceiling once, at the end.
+    res <- list(z_alfa = z_alfa, z_beta = z_beta, c_fisher = c_fisher, n_clasico = n_clasico,
+                n_pwr = n_pwr, n_ajustado = n_ajustado, poder_dado = poder_dado)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio: presize::prec_cor(r = r, conf.width = 0.2, conf.level = 1 - alfa, method = "fisher")
+referencias:
+  - { key: fisher1915, rol: original }
+  - { key: fisher1921, rol: original }
+  - { key: cohen1988, rol: complementaria }
+  - { key: champely2020, rol: complementaria }
+  - { key: hulley2013, rol: didactica }
+  - { key: altman1991, rol: didactica }
+grafica: curvas
+es:
+  titulo: "Tamaño de muestra para detectar una correlación (transformación z de Fisher)"
+  titulo_corto: "Muestra para una correlación"
+  meta: "Calcula cuántos pares de observaciones hacen falta para detectar una correlación de Pearson de una magnitud dada, con la transformación z de Fisher, ajuste por pérdidas, modo inverso (poder con el n disponible) y comparación con pwr::pwr.r.test. Los datos no salen del navegador."
+  intro: "Captura la correlación que quieres poder detectar, el nivel de significación y el poder deseado, y obtén cuántos pares de observaciones necesitas, el poder que alcanzarías con los que ya tienes, la interpretación y el código de R equivalente."
+  explicacion:
+    - "El coeficiente de correlación r no se reparte como una normal: su distribución se apelmaza contra 1 conforme la correlación crece. Fisher (1915, 1921) resolvió el problema con un cambio de escala, C = ½·ln((1 + r)/(1 − r)), que sí es casi normal y cuyo error estándar depende solo del tamaño de muestra: 1/√(n − 3)."
+    - "Con esa escala, el cálculo del tamaño de muestra es el de siempre: se pide que la distancia entre el valor nulo (C = 0) y el valor que se quiere detectar cubra z de α más z del poder, en unidades de error estándar. De ahí sale n = ((z + z)/C)² + 3, la fórmula que aparece en los manuales de investigación clínica."
+    - "Lo que cuenta es la magnitud de la correlación, no su signo: detectar r = −0.30 cuesta exactamente lo mismo que detectar r = 0.30. Y el costo crece muy deprisa cuando la correlación es pequeña, porque C ≈ r para valores bajos y n va con 1/C²: pasar de r = 0.30 a r = 0.10 multiplica el tamaño por nueve."
+    - "El paquete `pwr` de R resuelve el mismo problema con dos refinamientos: corrige el sesgo de C y usa el cuantil de la t en vez del de la normal. Da uno o dos sujetos menos, y aquí aparece como comparación para que el resultado sea reproducible en cualquiera de las dos rutas. La calculadora informa cuándo las dos cifras difieren tras redondear."
+  ecuaciones:
+    - id: fisher_z
+      tex: 'C=\operatorname{artanh}(r)=\tfrac{1}{2}\ln\frac{1+r}{1-r},\qquad \se(C)=\frac{1}{\sqrt{n-3}}'
+      simbolos:
+        - { s: 'r', def: "correlación de Pearson que se quiere poder detectar" }
+        - { s: 'C', def: "transformación z de Fisher de r, casi normal" }
+        - { s: 'n', def: "número de pares de observaciones" }
+      nota: "Transformación z de Fisher (1915, 1921); exige pares independientes de una normal bivariada."
+    - id: n_clasico
+      tex: 'n=\left(\frac{z_{1-\alpha/k}+z_{1-\beta}}{C}\right)^{2}+3'
+      simbolos:
+        - { s: 'z_{1-\alpha/k}', def: "cuantil normal de α, en la cola que corresponda al contraste" }
+        - { s: 'k', def: "2 si el contraste es bilateral, 1 si es unilateral" }
+        - { s: 'z_{1-\beta}', def: "cuantil normal del poder" }
+      nota: "Fórmula clásica: el 3 devuelve los grados de libertad que gasta la transformación. Con hipótesis bilateral α se reparte entre las dos colas (k = 2) y con hipótesis unilateral se concentra en una sola (k = 1), que es lo que abarata el estudio."
+    - id: inverso
+      tex: '1-\beta=\Phi\left(|C|\sqrt{n-3}-z_{1-\alpha/k}\right),\qquad n_{aj}=\left\lceil\frac{n}{1-L}\right\rceil'
+      simbolos:
+        - { s: '\Phi', def: "función de distribución de la normal estándar" }
+        - { s: 'L', def: "pérdidas previstas, como proporción" }
+        - { s: '\lceil\;\rceil', def: "techo: el redondeo hacia arriba se aplica una sola vez, al final" }
+      nota: "Modo inverso (poder con el n disponible) y ajuste por pérdidas de Lwanga y Lemeshow (1991)."
+  etiquetas:
+    r: "Correlación que se quiere detectar (r)"
+    alfa: "Nivel de significación (α)"
+    lateralidad: "Hipótesis"
+    "lateralidad.bilateral": "Bilateral (de dos colas)"
+    "lateralidad.unilateral": "Unilateral (de una cola)"
+    "frase.bilateral": "bilateral"
+    "frase.unilateral": "unilateral"
+    poder: "Poder deseado (1 − β)"
+    perdidas: "Pérdidas previstas"
+    n_dado: "Pares ya disponibles (opcional)"
+    z_alfa: "Cuantil de α (z)"
+    z_beta: "Cuantil del poder (z)"
+    c_fisher: "z de Fisher de r (C)"
+    n_clasico: "Pares necesarios"
+    n_pwr: "Pares según pwr.r.test"
+    n_ajustado: "Pares con pérdidas previstas"
+    poder_dado: "Poder con los pares disponibles"
+    exacto: "valor exacto {valor}"
+    no_aplica: "sin n disponible"
+    nota_pwr: "comparación (corrección de sesgo y cuantil t)"
+    eje_n: "Pares de observaciones (n)"
+    eje_poder: "Poder"
+    curva_poder: "Poder por la fórmula clásica"
+    ref_poder: "Poder objetivo"
+    marcador_n: "Tamaño calculado"
+  ayudas:
+    r: "La correlación más pequeña que te parecería relevante detectar, de −0.98 a 0.98 y distinta de 0. El signo no cambia el tamaño de muestra."
+    alfa: "Probabilidad de concluir que hay correlación cuando no la hay; habitualmente 0.05."
+    lateralidad: "Bilateral salvo que la dirección de la correlación esté fijada de antemano por el diseño, no por los datos."
+    poder: "Probabilidad de detectar la correlación si realmente existe; habitualmente 0.80 o 0.90."
+    perdidas: "Proporción de pares que esperas perder o excluir (0.1 = 10 %); déjalo vacío si no prevés pérdidas."
+    n_dado: "Si ya tienes una muestra, captura su número de pares (4 o más) y verás el poder que alcanzas con ella; déjalo vacío para el cálculo directo."
+  interpretacion:
+    resumen: "Para detectar una correlación de al menos {r} con un poder de {poder} y α = {alfa} ({lateralidad}) se requieren {n_clasico_techo} pares de observaciones."
+    "comparacion.con": "La transformación z de Fisher da C = {c_fisher} y un tamaño exacto de {n_clasico_exacto} pares. El paquete pwr de R, que corrige el sesgo de C y usa el cuantil de la t, pide {n_pwr_techo}: las dos rutas responden a la misma pregunta y la diferencia es de redondeo, no de método."
+    "comparacion.sin": "La transformación z de Fisher da C = {c_fisher} y un tamaño exacto de {n_clasico_exacto} pares. El paquete pwr de R no puede resolver esta combinación: con los cuatro pares mínimos que admite la z de Fisher ya se supera el poder de {poder}, así que pwr.r.test se detiene y la comparación queda sin valor."
+    "perdidas.con": "Previendo un {perdidas} de pérdidas o exclusiones, hay que reclutar {n_ajustado_techo} pares para terminar con {n_clasico_techo} analizables."
+    "perdidas.sin": "El total no incluye pérdidas ni exclusiones: si esperas perder pares, captúralas como proporción y la cifra se ajusta a n/(1 − L)."
+    "inverso.con": "Con los {n_dado} pares que ya tienes, el poder para detectar una correlación de {r} es de {poder_dado}, frente al {poder} que buscabas."
+    "inverso.sin": "Si ya cuentas con una muestra, captura su número de pares y la calculadora te dirá qué poder alcanzas con ella para esta correlación."
+    "metodos_pwr.con": "El resultado se contrastó con la función pwr.r.test del paquete pwr [{ref:champely2020}], que da {n_pwr_techo} pares."
+    "metodos_pwr.sin": "La función pwr.r.test del paquete pwr [{ref:champely2020}] no resuelve esta combinación, porque el tamaño mínimo que admite la transformación ya supera el poder solicitado."
+    "metodos_perdidas.con": "Se añadió un {perdidas} por pérdidas o exclusiones previstas, con lo que el reclutamiento previsto asciende a {n_ajustado_techo} pares."
+    "metodos_perdidas.sin": "No se previeron pérdidas ni exclusiones."
+  avisos:
+    supuestos: "Las cifras dependen por entero de la correlación que se suponga: tómala de estudios previos o de un piloto y documenta su origen en el protocolo. La fórmula supone además pares independientes de una normal bivariada."
+    r_pequena: "Con una correlación menor que 0.05 el tamaño necesario se cuenta por miles: comprueba que una asociación tan pequeña sea clínicamente relevante antes de planear el estudio."
+    unilateral: "Con hipótesis unilateral el tamaño baja porque α se concentra en una sola cola: solo es admisible si la dirección estaba fijada por el diseño y se acepta no poder concluir nada en el sentido contrario."
+    n_dado_corto: "La muestra que capturaste tiene menos de {minimo} pares: la transformación z de Fisher no está definida por debajo de ese tamaño (su error estándar va con 1/√(n − 3)), así que el poder alcanzado queda sin valor. El cálculo directo del tamaño necesario no se ve afectado."
+    pwr_difiere: "El tamaño de la fórmula clásica y el de pwr.r.test difieren en {dif} tras redondear: pwr añade la corrección de sesgo de la z de Fisher y usa el cuantil de la t, así que esa diferencia es esperable."
+  metodos: "El tamaño de muestra se calculó para detectar una correlación de Pearson de {r} con un poder de {poder} y α = {alfa} ({lateralidad}), mediante la transformación z de Fisher [{ref:fisher1915},{ref:fisher1921}]: {n_clasico_techo} pares de observaciones. {metodos_perdidas} {metodos_pwr} Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: se planea un estudio para detectar una correlación de 0.30 entre el recuento de plaquetas y los días de fiebre, con α = 0.05 bilateral, poder del 80 % y 10 % de pérdidas previstas (datos ficticios)."
+  grafica_titulo: "Poder frente al número de pares, con el tamaño calculado y el poder objetivo marcados"
+en:
+  titulo: "Sample size to detect a correlation (Fisher's z transformation)"
+  titulo_corto: "Sample size for a correlation"
+  meta: "Compute how many pairs of observations are needed to detect a Pearson correlation of a given magnitude, using Fisher's z transformation, with adjustment for losses, inverse mode (power with the n you already have) and comparison against pwr::pwr.r.test. Data never leave the browser."
+  intro: "Enter the correlation you want to be able to detect, the significance level and the desired power, and get how many pairs of observations you need, the power you would reach with the ones you already have, the interpretation and the equivalent R code."
+  explicacion:
+    - "The correlation coefficient r is not normally distributed: its distribution piles up against 1 as the correlation grows. Fisher (1915, 1921) solved the problem with a change of scale, C = ½·ln((1 + r)/(1 − r)), which is nearly normal and whose standard error depends only on sample size: 1/√(n − 3)."
+    - "On that scale the sample size calculation is the usual one: the distance between the null value (C = 0) and the value worth detecting must cover z for α plus z for power, in standard error units. That gives n = ((z + z)/C)² + 3, the formula found in clinical research textbooks."
+    - "What matters is the magnitude of the correlation, not its sign: detecting r = −0.30 costs exactly the same as detecting r = 0.30. And the cost grows very fast when the correlation is small, because C ≈ r for low values and n goes with 1/C²: moving from r = 0.30 to r = 0.10 multiplies the size by nine."
+    - "R's `pwr` package solves the same problem with two refinements: it corrects the bias of C and uses the t quantile instead of the normal one. It lands one or two subjects lower, and it appears here as a comparison so that the result is reproducible along either route. The calculator reports when the two figures differ after rounding."
+  ecuaciones:
+    - id: fisher_z
+      tex: 'C=\operatorname{artanh}(r)=\tfrac{1}{2}\ln\frac{1+r}{1-r},\qquad \se(C)=\frac{1}{\sqrt{n-3}}'
+      simbolos:
+        - { s: 'r', def: "Pearson correlation worth detecting" }
+        - { s: 'C', def: "Fisher's z transformation of r, nearly normal" }
+        - { s: 'n', def: "number of pairs of observations" }
+      nota: "Fisher's z transformation (1915, 1921); it assumes independent pairs from a bivariate normal distribution."
+    - id: n_clasico
+      tex: 'n=\left(\frac{z_{1-\alpha/k}+z_{1-\beta}}{C}\right)^{2}+3'
+      simbolos:
+        - { s: 'z_{1-\alpha/k}', def: "normal quantile of α, in whichever tail the test uses" }
+        - { s: 'k', def: "2 if the test is two-sided, 1 if it is one-sided" }
+        - { s: 'z_{1-\beta}', def: "normal quantile of power" }
+      nota: "Classic formula: the 3 gives back the degrees of freedom spent by the transformation. With a two-sided hypothesis α is split between both tails (k = 2) and with a one-sided one it is concentrated in a single tail (k = 1), which is what makes the study cheaper."
+    - id: inverso
+      tex: '1-\beta=\Phi\left(|C|\sqrt{n-3}-z_{1-\alpha/k}\right),\qquad n_{aj}=\left\lceil\frac{n}{1-L}\right\rceil'
+      simbolos:
+        - { s: '\Phi', def: "cumulative distribution function of the standard normal" }
+        - { s: 'L', def: "expected losses, as a proportion" }
+        - { s: '\lceil\;\rceil', def: "ceiling: rounding up is applied only once, at the end" }
+      nota: "Inverse mode (power with the n available) and adjustment for losses from Lwanga and Lemeshow (1991)."
+  etiquetas:
+    r: "Correlation worth detecting (r)"
+    alfa: "Significance level (α)"
+    lateralidad: "Hypothesis"
+    "lateralidad.bilateral": "Two-sided"
+    "lateralidad.unilateral": "One-sided"
+    "frase.bilateral": "two-sided"
+    "frase.unilateral": "one-sided"
+    poder: "Desired power (1 − β)"
+    perdidas: "Expected losses"
+    n_dado: "Pairs already available (optional)"
+    z_alfa: "Quantile of α (z)"
+    z_beta: "Quantile of power (z)"
+    c_fisher: "Fisher's z of r (C)"
+    n_clasico: "Pairs needed"
+    n_pwr: "Pairs according to pwr.r.test"
+    n_ajustado: "Pairs with expected losses"
+    poder_dado: "Power with the pairs available"
+    exacto: "exact value {valor}"
+    no_aplica: "no n available"
+    nota_pwr: "comparison (bias correction and t quantile)"
+    eje_n: "Pairs of observations (n)"
+    eje_poder: "Power"
+    curva_poder: "Power from the classic formula"
+    ref_poder: "Target power"
+    marcador_n: "Computed size"
+  ayudas:
+    r: "The smallest correlation you would consider worth detecting, from −0.98 to 0.98 and different from 0. The sign does not change the sample size."
+    alfa: "Probability of concluding that there is a correlation when there is none; usually 0.05."
+    lateralidad: "Two-sided unless the direction of the correlation is fixed beforehand by the design, not by the data."
+    poder: "Probability of detecting the correlation if it really exists; usually 0.80 or 0.90."
+    perdidas: "Proportion of pairs you expect to lose or exclude (0.1 = 10%); leave it empty if you expect none."
+    n_dado: "If you already have a sample, enter its number of pairs (4 or more) and you will see the power it reaches; leave it empty for the forward calculation."
+  interpretacion:
+    resumen: "To detect a correlation of at least {r} with a power of {poder} and α = {alfa} ({lateralidad}), {n_clasico_techo} pairs of observations are required."
+    "comparacion.con": "Fisher's z transformation gives C = {c_fisher} and an exact size of {n_clasico_exacto} pairs. R's pwr package, which corrects the bias of C and uses the t quantile, asks for {n_pwr_techo}: both routes answer the same question and the difference is one of rounding, not of method."
+    "comparacion.sin": "Fisher's z transformation gives C = {c_fisher} and an exact size of {n_clasico_exacto} pairs. R's pwr package cannot solve this combination: with the four minimum pairs that Fisher's z admits, the power of {poder} is already exceeded, so pwr.r.test stops and the comparison is left without a value."
+    "perdidas.con": "Allowing for {perdidas} losses or exclusions, {n_ajustado_techo} pairs must be recruited in order to end with {n_clasico_techo} analysable ones."
+    "perdidas.sin": "The total does not include losses or exclusions: if you expect to lose pairs, enter them as a proportion and the figure is adjusted to n/(1 − L)."
+    "inverso.con": "With the {n_dado} pairs you already have, the power to detect a correlation of {r} is {poder_dado}, against the {poder} you were aiming for."
+    "inverso.sin": "If you already have a sample, enter its number of pairs and the calculator will tell you what power it reaches for this correlation."
+    "metodos_pwr.con": "The result was checked against the pwr.r.test function of the pwr package [{ref:champely2020}], which gives {n_pwr_techo} pairs."
+    "metodos_pwr.sin": "The pwr.r.test function of the pwr package [{ref:champely2020}] does not solve this combination, because the smallest size the transformation admits already exceeds the requested power."
+    "metodos_perdidas.con": "An additional {perdidas} was added for expected losses or exclusions, bringing planned recruitment to {n_ajustado_techo} pairs."
+    "metodos_perdidas.sin": "No losses or exclusions were anticipated."
+  avisos:
+    supuestos: "The figures depend entirely on the correlation that is assumed: take it from previous studies or a pilot and document its source in the protocol. The formula also assumes independent pairs from a bivariate normal distribution."
+    r_pequena: "With a correlation below 0.05 the required size runs into the thousands: check that an association that small is clinically relevant before planning the study."
+    unilateral: "With a one-sided hypothesis the size drops because α is concentrated in a single tail: this is acceptable only if the direction was fixed by the design and you accept being unable to conclude anything in the opposite direction."
+    n_dado_corto: "The sample you entered has fewer than {minimo} pairs: Fisher's z transformation is undefined below that size (its standard error goes with 1/√(n − 3)), so the power reached is left without a value. The forward calculation of the required size is unaffected."
+    pwr_difiere: "The size from the classic formula and the one from pwr.r.test differ by {dif} after rounding: pwr adds the bias correction of Fisher's z and uses the t quantile, so that difference is to be expected."
+  metodos: "The sample size was computed to detect a Pearson correlation of {r} with a power of {poder} and α = {alfa} ({lateralidad}), using Fisher's z transformation [{ref:fisher1915},{ref:fisher1921}]: {n_clasico_techo} pairs of observations. {metodos_perdidas} {metodos_pwr} Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: a study is planned to detect a correlation of 0.30 between platelet count and days of fever, with α = 0.05 two-sided, 80% power and 10% expected losses (fictitious data)."
+  grafica_titulo: "Power against the number of pairs, with the computed size and the target power marked"

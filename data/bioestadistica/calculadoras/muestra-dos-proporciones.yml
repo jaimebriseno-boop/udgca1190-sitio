@@ -1,0 +1,348 @@
+# Calculadora C3 · Tamaño de muestra para comparar dos proporciones independientes (Fleiss).
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: muestra
+orden: 3
+estado: activa
+motor: ts
+entradas:
+  - { id: p1, tipo: proporcion, min: 0, max: 1 }
+  - { id: p2, tipo: proporcion, min: 0, max: 1 }
+  - { id: alfa, tipo: decimal, min: 0.001, max: 0.2, paso: 0.001 }
+  - { id: lateralidad, tipo: opcion, opciones: [bilateral, unilateral] }
+  - { id: poder, tipo: proporcion, min: 0.5, max: 0.99 }
+  - { id: r, tipo: decimal, min: 0.1, max: 10, paso: 0.1 }
+  - { id: correccion, tipo: opcion, opciones: ["si", "no"] }
+  - { id: perdidas, tipo: proporcion, min: 0, max: 0.5, requerido: false }
+  - { id: n_dado, tipo: entero, min: 0, requerido: false }
+ejemplo: { p1: 0.7, p2: 0.85, alfa: 0.05, lateralidad: bilateral, poder: 0.8, r: 1, correccion: "si", perdidas: 0.1, n_dado: 0 }
+r:
+  paquetes: [jsonlite, pwr]
+  codigo: |
+    # Sample size for two independent proportions (Fleiss) - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+    library(pwr)
+
+    p1 <- {p1}; p2 <- {p2}       # proportions expected in group 1 and in group 2
+    alfa        <- {alfa}        # significance level
+    lateralidad <- {lateralidad} # "bilateral" or "unilateral"
+    poder       <- {poder}       # target power, 1 - beta
+    r           <- {r}           # allocation ratio n2/n1 (1 = equal groups)
+    correccion  <- {correccion}  # "si" = report the continuity-corrected n
+    perdidas    <- {perdidas}    # expected losses to follow-up, 0 to 0.5
+    n_dado      <- {n_dado}      # inverse mode: n1 already available; 0 = not used
+
+    alternative <- if (lateralidad == "bilateral") "two.sided" else "one.sided"
+    tside  <- if (lateralidad == "bilateral") 2 else 1
+    z_alfa <- qnorm(alfa / tside, lower.tail = FALSE)
+    z_beta <- qnorm(poder)
+
+    # Fleiss (1981; Fleiss, Levin & Paik 2003, section 4.2) written out by hand so that
+    # any allocation ratio is allowed: pooled variance under H0, separate variances under H1.
+    d    <- abs(p1 - p2)
+    q1   <- 1 - p1
+    q2   <- 1 - p2
+    pbar <- (p1 + r * p2) / (r + 1)
+    qbar <- 1 - pbar
+    n1_fleiss <- (z_alfa * sqrt((r + 1) * pbar * qbar) + z_beta * sqrt(r * p1 * q1 + p2 * q2))^2 / (r * d^2)
+    n2_fleiss <- r * n1_fleiss
+
+    # Continuity correction of Fleiss, Tytun & Ury (1980): the corrected n approximates
+    # Fisher's exact test, the uncorrected one approximates Pearson's chi-squared.
+    n1_cc <- n1_fleiss / 4 * (1 + sqrt(1 + 2 * (r + 1) / (r * n1_fleiss * d)))^2
+    n2_cc <- r * n1_cc
+
+    n1 <- if (correccion == "si") n1_cc else n1_fleiss
+    n2 <- r * n1
+    n_total    <- n1 + n2
+    n_ajustado <- n_total / (1 - perdidas)   # Lwanga & Lemeshow 1991; the interface takes the ceiling
+
+    # Same problem solved by base R. It assumes equal groups, so with r != 1 there is
+    # nothing to compare against; tryCatch keeps an unsolvable design from stopping the script.
+    n_ppt <- if (r == 1) {
+      tryCatch(power.prop.test(p1 = p1, p2 = p2, sig.level = alfa, power = poder,
+                               alternative = alternative, tol = 1e-10)$n,
+               error = function(e) NA_real_)
+    } else NA_real_
+
+    # Cohen's h (arcsine transformation) and the n that pwr derives from it. pwr has no
+    # "one.sided" level: the one-sided test is asked for with "greater" and h > 0, so the
+    # magnitude of h is what travels, exactly as pwr itself does with "two.sided".
+    h_cohen <- ES.h(p1, p2)
+    alt_pwr <- if (lateralidad == "bilateral") "two.sided" else "greater"
+    n_pwr_h <- if (r == 1) {
+      tryCatch(pwr.2p.test(h = abs(h_cohen), sig.level = alfa, power = poder,
+                           alternative = alt_pwr)$n,
+               error = function(e) NA_real_)
+    } else NA_real_
+
+    # Inverse mode: power attainable with n1 = n_dado and n2 = r * n_dado, by the same
+    # normal formula of Fleiss without the continuity correction.
+    poder_dado <- if (n_dado >= 2) {
+      pnorm((d * sqrt(r * n_dado) - z_alfa * sqrt((r + 1) * pbar * qbar)) / sqrt(r * p1 * q1 + p2 * q2))
+    } else NA_real_
+
+    res <- list(z_alfa = z_alfa, z_beta = z_beta,
+                n1_fleiss = n1_fleiss, n2_fleiss = n2_fleiss,
+                n1_cc = n1_cc, n2_cc = n2_cc,
+                n1 = n1, n2 = n2, n_total = n_total, n_ajustado = n_ajustado,
+                n_ppt = n_ppt, h_cohen = h_cohen, n_pwr_h = n_pwr_h,
+                poder_dado = poder_dado)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio (not run in the browser):
+    # epiR::epi.sscompb(treat = 0.85, control = 0.70, n = NA, power = 0.80, r = 1, conf.level = 0.95)
+referencias:
+  - { key: fleiss1980, rol: original }
+  - { key: fleiss2003, rol: original }
+  - { key: casagrande1978, rol: complementaria }
+  - { key: lachin1981, rol: complementaria }
+  - { key: cohen1988, rol: complementaria }
+  - { key: champely2020, rol: complementaria }
+  - { key: lwanga1991, rol: didactica }
+  - { key: hulley2013, rol: didactica }
+grafica: curvas
+es:
+  titulo: "Tamaño de muestra para comparar dos proporciones independientes (fórmula de Fleiss)"
+  titulo_corto: "Tamaño de muestra (dos proporciones)"
+  meta: "Calcula cuántos participantes hacen falta por grupo para comparar dos proporciones independientes con la fórmula de Fleiss, con y sin corrección de continuidad, con razón de asignación, ajuste por pérdidas y modo inverso (poder para un n dado), con código R y referencias. Los datos no salen del navegador."
+  intro: "Escribe las dos proporciones que esperas, el nivel de significación y el poder, y obtén cuántos participantes hacen falta en cada grupo, con y sin corrección de continuidad, ajustados por las pérdidas previstas, además de la curva de poder, la interpretación en lenguaje llano y el código de R equivalente."
+  explicacion:
+    - "Antes de un ensayo o de un estudio comparativo hay que decidir a cuánta gente se va a estudiar. La pregunta que responde esta calculadora es: si el desenlace ocurre en una proporción p₁ de un grupo y en una proporción p₂ del otro, ¿cuántos participantes necesito en cada grupo para que la prueba estadística detecte esa diferencia con la probabilidad que yo exijo? Esa probabilidad es el poder, y la probabilidad de declarar una diferencia que no existe es α."
+    - "La fórmula clásica es la de Fleiss: suma el error tolerado bajo la hipótesis nula (la varianza agrupada, con las dos proporciones mezcladas) y el que se tolera bajo la hipótesis alternativa (las dos varianzas por separado), y divide todo entre el cuadrado de la diferencia que se quiere detectar. Lo que manda es esa diferencia: pasar de 0.70 a 0.85 pide unos cientos de participantes; pasar de 0.70 a 0.72 pide decenas de miles."
+    - "La corrección de continuidad de Fleiss, Tytun y Ury añade un margen porque la variable real es discreta (se cuentan personas) y la fórmula usa una curva continua. El tamaño corregido aproxima lo que pedirá la prueba exacta de Fisher; el tamaño sin corregir, lo que pedirá la χ² de Pearson. Reporta el que corresponda a la prueba que vas a usar y dilo en Métodos; aquí se muestran los dos."
+    - "La razón de asignación r = n₂/n₁ permite grupos desiguales (por ejemplo dos controles por caso). Repartir por mitades siempre da el total más pequeño: cualquier otro reparto exige más participantes en total para el mismo poder. Las pérdidas previstas se cubren dividiendo entre 1 − L al final, y el redondeo hacia arriba se aplica una sola vez, por grupo, porque no se recluta a media persona."
+    - "Todas estas cifras dependen por completo de las proporciones que supongas. No son datos: son una apuesta informada que debe venir de estudios previos, de un piloto o de la diferencia mínima que consideres clínicamente importante. Documenta de dónde salieron; un tamaño de muestra sin esa justificación no es reproducible."
+  ecuaciones:
+    - id: fleiss
+      tex: 'n_1=\frac{\left[z_{1-\alpha/k}\sqrt{(r+1)\,\bar p\,\bar q}+z_{1-\beta}\sqrt{r\,p_1q_1+p_2q_2}\right]^2}{r\,(p_1-p_2)^2},\qquad \bar p=\frac{p_1+r\,p_2}{r+1},\qquad \bar q=1-\bar p,\qquad n_2=r\,n_1'
+      simbolos:
+        - { s: 'p_1,\ p_2', def: "proporciones esperadas en el grupo 1 y en el grupo 2" }
+        - { s: 'q_1=1-p_1', def: "complemento de p₁ (y q₂ = 1 − p₂)" }
+        - { s: 'r=n_2/n_1', def: "razón de asignación entre los dos grupos" }
+        - { s: '\bar p', def: "proporción agrupada bajo la hipótesis nula" }
+        - { s: 'z_{1-\alpha/k}', def: "cuantil normal del nivel de significación" }
+        - { s: 'k', def: "2 si el contraste es bilateral, 1 si es unilateral" }
+        - { s: 'z_{1-\beta}', def: "cuantil normal del poder" }
+      nota: "Fórmula de Fleiss sin corrección de continuidad, válida para cualquier razón de asignación. Con r = 1 es exactamente lo que resuelve power.prop.test de R, porque (p₁ + p₂)(1 − (p₁ + p₂)/2) = 2p̄q̄."
+    - id: correccion_continuidad
+      tex: "n_1'=\\frac{n_1}{4}\\left[1+\\sqrt{1+\\frac{2(r+1)}{r\\,n_1\\,\\lvert p_1-p_2\\rvert}}\\right]^2,\\qquad n_2'=r\\,n_1'"
+      simbolos:
+        - { s: 'n_1', def: "tamaño sin corregir que da la ecuación anterior" }
+      nota: "Corrección de continuidad de Fleiss, Tytun y Ury (1980). El tamaño corregido aproxima la prueba exacta de Fisher; el tamaño sin corregir, la χ² de Pearson."
+    - id: poder_inverso
+      tex: '1-\beta=\Phi\!\left(\frac{\lvert p_1-p_2\rvert\sqrt{r\,n_1}-z_{1-\alpha/k}\sqrt{(r+1)\,\bar p\,\bar q}}{\sqrt{r\,p_1q_1+p_2q_2}}\right)'
+      simbolos:
+        - { s: '\Phi', def: "función de distribución acumulada de la normal estándar" }
+        - { s: 'k', def: "2 si el contraste es bilateral, 1 si es unilateral" }
+      nota: "Modo inverso: poder alcanzable con un tamaño ya fijado. Es la misma ecuación despejada, sin corrección de continuidad; es también la curva que dibuja la gráfica."
+    - id: h_cohen
+      tex: 'h=2\arcsin\sqrt{p_1}-2\arcsin\sqrt{p_2},\qquad n=\frac{2\left(z_{1-\alpha/k}+z_{1-\beta}\right)^2}{h^2}'
+      simbolos:
+        - { s: 'h', def: "tamaño del efecto de Cohen para dos proporciones" }
+        - { s: 'k', def: "2 si el contraste es bilateral, 1 si es unilateral" }
+      nota: "Alternativa de Cohen (1988): la transformación arcoseno estabiliza la varianza, de modo que el tamaño depende solo de h. Es la vía de pwr::pwr.2p.test y da cifras muy parecidas, no idénticas, a las de Fleiss."
+    - id: ajuste_perdidas
+      tex: 'n_{\mathrm{aj}}=\left\lceil\frac{n_1}{1-L}\right\rceil+\left\lceil\frac{n_2}{1-L}\right\rceil'
+      simbolos:
+        - { s: 'L', def: "proporción de pérdidas previstas durante el seguimiento" }
+      nota: "Ajuste por pérdidas de Lwanga y Lemeshow (1991). El redondeo hacia arriba se aplica una sola vez y por grupo, al final, porque no se recluta a media persona: los totales que se muestran son la suma de los dos grupos ya redondeados, y el valor exacto sin redondear aparece en el detalle de cada celda."
+  etiquetas:
+    p1: "Proporción esperada en el grupo 1 (p₁)"
+    p2: "Proporción esperada en el grupo 2 (p₂)"
+    alfa: "Nivel de significación (α)"
+    lateralidad: "Lateralidad de la prueba"
+    "lateralidad.bilateral": "Bilateral (dos colas)"
+    "lateralidad.unilateral": "Unilateral (una cola)"
+    poder: "Poder (1 − β)"
+    r: "Razón de asignación (r = n₂/n₁)"
+    correccion: "Corrección de continuidad"
+    "correccion.si": "Aplicarla (aproxima la prueba de Fisher)"
+    "correccion.no": "No aplicarla (aproxima la χ² de Pearson)"
+    perdidas: "Pérdidas previstas"
+    n_dado: "Participantes disponibles en el grupo 1 (modo inverso)"
+    z_alfa: "z de α (z₁₋α/₂)"
+    z_beta: "z del poder (z₁₋β)"
+    n1_fleiss: "n₁ de Fleiss sin corrección"
+    n2_fleiss: "n₂ de Fleiss sin corrección"
+    n1_cc: "n₁ con corrección de continuidad"
+    n2_cc: "n₂ con corrección de continuidad"
+    n1: "Participantes en el grupo 1 (n₁)"
+    n2: "Participantes en el grupo 2 (n₂)"
+    n_total: "Total a estudiar"
+    n_ajustado: "Total a reclutar con las pérdidas previstas"
+    n_ppt: "Comparación: power.prop.test de R"
+    h_cohen: "h de Cohen (transformación arcoseno)"
+    n_pwr_h: "Comparación: pwr::pwr.2p.test a partir de h"
+    poder_dado: "Poder alcanzable con los participantes disponibles"
+    "frase_lateralidad.bilateral": "bilateral"
+    "frase_lateralidad.unilateral": "unilateral"
+    nota_exacto: "exacto {exacto}"
+    nota_fleiss: "fórmula de Fleiss"
+    nota_cc: "Fleiss, Tytun y Ury"
+    nota_elegido: "cifra reportada"
+    nota_suma: "suma de los dos grupos redondeados"
+    nota_comparacion: "solo con grupos iguales"
+    nota_sin_solucion: "fuera del rango que R resuelve"
+    nota_inverso: "sin corrección de continuidad"
+    no_aplica: "No aplica"
+    grafica_poder: "Poder de la prueba"
+    grafica_eje_x: "Participantes en el grupo 1 (n₁)"
+    grafica_eje_y: "Poder"
+    grafica_marcador: "n₁ requerido"
+    grafica_referencia: "poder objetivo"
+  ayudas:
+    p1: "Proporción del desenlace que esperas en el primer grupo (control o tratamiento habitual). Tómala de estudios previos o de un piloto."
+    p2: "Proporción que esperas en el segundo grupo. La diferencia entre p₁ y p₂ es lo que más pesa en el tamaño de muestra."
+    alfa: "Probabilidad de declarar una diferencia que no existe. Escríbelo como decimal (0.05, no 5)."
+    lateralidad: "Bilateral detecta diferencias en cualquier sentido y es lo habitual. La unilateral pide menos participantes, pero debe justificarse antes de ver los datos."
+    poder: "Probabilidad de detectar la diferencia si de verdad existe. Lo convencional es 0.80; 0.90 o 0.95 para estudios de confirmación."
+    r: "Participantes del grupo 2 por cada uno del grupo 1. Con 1 los grupos son iguales, que es el reparto más eficiente; con 2 hay el doble en el grupo 2."
+    perdidas: "Proporción de participantes que esperas perder durante el seguimiento. El total a reclutar se divide entre 1 menos esta cifra."
+    n_dado: "Modo inverso: si ya sabes a cuánta gente puedes estudiar en el grupo 1, escríbelo aquí y verás qué poder alcanzas. Déjalo en 0 para no usarlo."
+  interpretacion:
+    resumen: "Para detectar una proporción de {p1} frente a una de {p2} con un poder de {poder} y α = {alfa} ({lateralidad}) se requieren {n1_techo} participantes en el grupo 1 y {n2_techo} en el grupo 2, {n_total_techo} en total."
+    "correccion.si": "La cifra reportada lleva la corrección de continuidad de Fleiss, Tytun y Ury, que aproxima lo que pedirá la prueba exacta de Fisher: {n1_cc_techo} y {n2_cc_techo} participantes. Sin corregir, la fórmula de Fleiss —que aproxima la χ² de Pearson— pediría {n1_fleiss_techo} y {n2_fleiss_techo}. Reporta la que corresponda a la prueba que vas a usar."
+    "correccion.no": "La cifra reportada es la fórmula de Fleiss sin corregir, que aproxima lo que pedirá la χ² de Pearson: {n1_fleiss_techo} y {n2_fleiss_techo} participantes. Con la corrección de continuidad de Fleiss, Tytun y Ury, que aproxima la prueba exacta de Fisher, harían falta {n1_cc_techo} y {n2_cc_techo}. Reporta la que corresponda a la prueba que vas a usar."
+    comparacion: "Con grupos iguales, power.prop.test de R resuelve la misma ecuación sin corregir y devuelve {n_ppt} por grupo. La alternativa de Cohen parte de la transformación arcoseno: h = {h_cohen} y {n_pwr_h} por grupo. Son dos aproximaciones al mismo problema, así que una diferencia de unos pocos participantes es normal."
+    "comparacion.r": "Con una razón de asignación de {r} los grupos no son iguales, así que power.prop.test y pwr::pwr.2p.test no se calculan: ambas suponen n₁ = n₂. La cifra sale de la fórmula de Fleiss escrita a mano, que sí admite cualquier razón. La h de Cohen vale {h_cohen} y no depende del reparto."
+    "comparacion.sin_solucion": "Los grupos son iguales, pero al menos una de las dos comparaciones con R no aparece: power.prop.test y pwr::pwr.2p.test buscan la solución por iteración dentro de un intervalo acotado, y con un tamaño de muestra tan extremo la solución cae fuera de ese intervalo. No es un fallo del diseño ni cambia la cifra reportada, que sale de la fórmula de Fleiss en forma cerrada. La h de Cohen vale {h_cohen}."
+    "perdidas.con": "Previendo un {perdidas} de pérdidas durante el seguimiento, el objetivo de reclutamiento sube a {n_ajustado_techo} participantes en total, {n1_ajustado_techo} y {n2_ajustado_techo} por grupo."
+    "perdidas.sin": "No se previeron pérdidas de seguimiento, así que el total a reclutar es el total calculado: {n_total_techo} participantes."
+    "inverso.con": "Con los {n_dado} participantes disponibles en el grupo 1 y {n2_dado} en el grupo 2, el poder alcanzable para esa misma diferencia sería {poder_dado}, frente al objetivo de {poder}."
+    "inverso.sin": "Si ya sabes a cuánta gente puedes estudiar, escribe ese número en el campo de participantes disponibles y la calculadora dirá qué poder alcanzas con él."
+    "metodos_correccion.si": "la fórmula de Fleiss para dos proporciones independientes con la corrección de continuidad de Fleiss, Tytun y Ury [{ref:fleiss1980},{ref:fleiss2003}]"
+    "metodos_correccion.no": "la fórmula de Fleiss para dos proporciones independientes, sin corrección de continuidad [{ref:fleiss2003},{ref:casagrande1978}]"
+    "metodos_perdidas.con": "Se añadió un {perdidas} por pérdidas previstas [{ref:lwanga1991}], de modo que el objetivo de reclutamiento es de {n_ajustado_techo} participantes."
+    "metodos_perdidas.sin": "No se previeron pérdidas de seguimiento."
+  avisos:
+    supuestos: "Las cifras dependen por completo de las proporciones que supusiste: tómalas de estudios previos, de un piloto o de la diferencia mínima clínicamente importante, y documenta su origen en Métodos. Un cambio pequeño en la diferencia esperada cambia mucho el tamaño de muestra."
+    diferencia_minima: "La diferencia entre las dos proporciones es menor de un punto porcentual: el tamaño de muestra se dispara y suele volverse inviable. Comprueba que esa es de verdad la diferencia mínima que te interesa detectar."
+    aproximacion_dudosa: "Con el tamaño calculado, alguno de los grupos esperaría menos de cinco eventos o menos de cinco no eventos. La aproximación normal es dudosa en ese terreno: considera un método exacto, basado en la prueba de Fisher."
+    unilateral: "Elegiste una prueba unilateral: pide menos participantes, pero solo es admisible si la hipótesis es direccional y se declaró antes de ver los datos. Justifícala en el protocolo."
+    r_distinto: "Con una razón de asignación distinta de 1 no se muestran las comparaciones con power.prop.test ni con pwr::pwr.2p.test, porque ambas suponen grupos iguales; la cifra sale de la fórmula de Fleiss, que admite cualquier razón. Repartir de forma desigual siempre exige más participantes en total que repartir por mitades."
+  metodos: "El tamaño de muestra se calculó para comparar dos proporciones independientes ({p1} frente a {p2}, razón de asignación {r}), suponiendo que esas proporciones provienen de estudios previos o de un piloto, con α = {alfa} ({lateralidad}) y un poder de {poder}, mediante {frase_correccion}; se requieren {n1_techo} y {n2_techo} participantes por grupo, {n_total_techo} en total. {frase_perdidas} Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: ensayo clínico que compara dos tratamientos en pacientes con dengue con signos de alarma; se espera una curación del 70 % con el tratamiento habitual y del 85 % con el nuevo, con α = 0.05 bilateral, poder del 80 %, grupos iguales y un 10 % de pérdidas previstas (datos ficticios)."
+  grafica_titulo: "Poder de la prueba frente al número de participantes del grupo 1, con el tamaño requerido y el poder objetivo marcados"
+en:
+  titulo: "Sample size for comparing two independent proportions (Fleiss formula)"
+  titulo_corto: "Sample size (two proportions)"
+  meta: "Work out how many participants per group are needed to compare two independent proportions with the Fleiss formula, with and without continuity correction, with an allocation ratio, adjustment for losses to follow-up and an inverse mode (power for a given n), with R code and references. Data never leave the browser."
+  intro: "Enter the two proportions you expect, the significance level and the power, and get how many participants are needed in each group, with and without continuity correction, adjusted for expected losses, together with the power curve, a plain-language interpretation and the equivalent R code."
+  explicacion:
+    - "Before a trial or any comparative study you have to decide how many people to study. The question this calculator answers is: if the outcome occurs in a proportion p₁ of one group and a proportion p₂ of the other, how many participants do I need in each group for the statistical test to detect that difference with the probability I require? That probability is the power, and the probability of declaring a difference that does not exist is α."
+    - "The classical formula is Fleiss's: it adds the error tolerated under the null hypothesis (the pooled variance, with both proportions mixed together) to the error tolerated under the alternative (the two variances separately), and divides everything by the square of the difference to be detected. That difference is what dominates: going from 0.70 to 0.85 takes a few hundred participants; going from 0.70 to 0.72 takes tens of thousands."
+    - "The continuity correction of Fleiss, Tytun and Ury adds a margin because the real variable is discrete (people are counted) while the formula uses a continuous curve. The corrected size approximates what Fisher's exact test will require; the uncorrected size, what Pearson's chi-squared will require. Report the one that matches the test you will actually run and say so in Methods; both are shown here."
+    - "The allocation ratio r = n₂/n₁ allows unequal groups (two controls per case, for instance). Splitting in half always gives the smallest total: any other split demands more participants overall for the same power. Expected losses are covered by dividing by 1 − L at the end, and rounding up is applied once, per group, because you cannot recruit half a person."
+    - "All of these figures depend entirely on the proportions you assume. They are not data: they are an informed bet that must come from previous studies, from a pilot or from the smallest difference you consider clinically important. Document where they came from; a sample size without that justification is not reproducible."
+  ecuaciones:
+    - id: fleiss
+      tex: 'n_1=\frac{\left[z_{1-\alpha/k}\sqrt{(r+1)\,\bar p\,\bar q}+z_{1-\beta}\sqrt{r\,p_1q_1+p_2q_2}\right]^2}{r\,(p_1-p_2)^2},\qquad \bar p=\frac{p_1+r\,p_2}{r+1},\qquad \bar q=1-\bar p,\qquad n_2=r\,n_1'
+      simbolos:
+        - { s: 'p_1,\ p_2', def: "proportions expected in group 1 and in group 2" }
+        - { s: 'q_1=1-p_1', def: "complement of p₁ (and q₂ = 1 − p₂)" }
+        - { s: 'r=n_2/n_1', def: "allocation ratio between the two groups" }
+        - { s: '\bar p', def: "pooled proportion under the null hypothesis" }
+        - { s: 'z_{1-\alpha/k}', def: "normal quantile of the significance level" }
+        - { s: 'k', def: "2 if the test is two-sided, 1 if it is one-sided" }
+        - { s: 'z_{1-\beta}', def: "normal quantile of the power" }
+      nota: "Fleiss's formula without continuity correction, valid for any allocation ratio. With r = 1 it is exactly what R's power.prop.test solves, because (p₁ + p₂)(1 − (p₁ + p₂)/2) = 2p̄q̄."
+    - id: correccion_continuidad
+      tex: "n_1'=\\frac{n_1}{4}\\left[1+\\sqrt{1+\\frac{2(r+1)}{r\\,n_1\\,\\lvert p_1-p_2\\rvert}}\\right]^2,\\qquad n_2'=r\\,n_1'"
+      simbolos:
+        - { s: 'n_1', def: "uncorrected size given by the previous equation" }
+      nota: "Continuity correction of Fleiss, Tytun and Ury (1980). The corrected size approximates Fisher's exact test; the uncorrected size, Pearson's chi-squared."
+    - id: poder_inverso
+      tex: '1-\beta=\Phi\!\left(\frac{\lvert p_1-p_2\rvert\sqrt{r\,n_1}-z_{1-\alpha/k}\sqrt{(r+1)\,\bar p\,\bar q}}{\sqrt{r\,p_1q_1+p_2q_2}}\right)'
+      simbolos:
+        - { s: '\Phi', def: "cumulative distribution function of the standard normal" }
+        - { s: 'k', def: "2 if the test is two-sided, 1 if it is one-sided" }
+      nota: "Inverse mode: power attainable with a sample size that is already fixed. It is the same equation solved for the power, without continuity correction, and it is also the curve drawn in the plot."
+    - id: h_cohen
+      tex: 'h=2\arcsin\sqrt{p_1}-2\arcsin\sqrt{p_2},\qquad n=\frac{2\left(z_{1-\alpha/k}+z_{1-\beta}\right)^2}{h^2}'
+      simbolos:
+        - { s: 'h', def: "Cohen's effect size for two proportions" }
+        - { s: 'k', def: "2 if the test is two-sided, 1 if it is one-sided" }
+      nota: "Cohen's alternative (1988): the arcsine transformation stabilises the variance, so the sample size depends on h alone. This is the route taken by pwr::pwr.2p.test and it gives figures very close to, but not identical with, Fleiss's."
+    - id: ajuste_perdidas
+      tex: 'n_{\mathrm{aj}}=\left\lceil\frac{n_1}{1-L}\right\rceil+\left\lceil\frac{n_2}{1-L}\right\rceil'
+      simbolos:
+        - { s: 'L', def: "proportion of losses expected during follow-up" }
+      nota: "Adjustment for losses from Lwanga and Lemeshow (1991). Rounding up is applied once and per group, at the end, because you cannot recruit half a person: the totals shown are the sum of the two already rounded groups, and the exact unrounded value appears in the detail of each cell."
+  etiquetas:
+    p1: "Proportion expected in group 1 (p₁)"
+    p2: "Proportion expected in group 2 (p₂)"
+    alfa: "Significance level (α)"
+    lateralidad: "Sidedness of the test"
+    "lateralidad.bilateral": "Two-sided"
+    "lateralidad.unilateral": "One-sided"
+    poder: "Power (1 − β)"
+    r: "Allocation ratio (r = n₂/n₁)"
+    correccion: "Continuity correction"
+    "correccion.si": "Apply it (approximates Fisher's test)"
+    "correccion.no": "Do not apply it (approximates Pearson's chi-squared)"
+    perdidas: "Expected losses to follow-up"
+    n_dado: "Participants available in group 1 (inverse mode)"
+    z_alfa: "z for α (z₁₋α/₂)"
+    z_beta: "z for the power (z₁₋β)"
+    n1_fleiss: "n₁ from Fleiss without correction"
+    n2_fleiss: "n₂ from Fleiss without correction"
+    n1_cc: "n₁ with continuity correction"
+    n2_cc: "n₂ with continuity correction"
+    n1: "Participants in group 1 (n₁)"
+    n2: "Participants in group 2 (n₂)"
+    n_total: "Total to be studied"
+    n_ajustado: "Total to recruit given the expected losses"
+    n_ppt: "Comparison: R's power.prop.test"
+    h_cohen: "Cohen's h (arcsine transformation)"
+    n_pwr_h: "Comparison: pwr::pwr.2p.test from h"
+    poder_dado: "Power attainable with the available participants"
+    "frase_lateralidad.bilateral": "two-sided"
+    "frase_lateralidad.unilateral": "one-sided"
+    nota_exacto: "exact {exacto}"
+    nota_fleiss: "Fleiss formula"
+    nota_cc: "Fleiss, Tytun and Ury"
+    nota_elegido: "reported figure"
+    nota_suma: "sum of the two rounded groups"
+    nota_comparacion: "equal groups only"
+    nota_sin_solucion: "outside the range R solves"
+    nota_inverso: "without continuity correction"
+    no_aplica: "Not applicable"
+    grafica_poder: "Power of the test"
+    grafica_eje_x: "Participants in group 1 (n₁)"
+    grafica_eje_y: "Power"
+    grafica_marcador: "n₁ required"
+    grafica_referencia: "target power"
+  ayudas:
+    p1: "Proportion of the outcome you expect in the first group (control or usual care). Take it from previous studies or from a pilot."
+    p2: "Proportion you expect in the second group. The difference between p₁ and p₂ is what weighs most on the sample size."
+    alfa: "Probability of declaring a difference that does not exist. Write it as a decimal (0.05, not 5)."
+    lateralidad: "A two-sided test detects differences in either direction and is the usual choice. A one-sided test needs fewer participants but must be justified before seeing the data."
+    poder: "Probability of detecting the difference if it really exists. The conventional value is 0.80; 0.90 or 0.95 for confirmatory studies."
+    r: "Participants in group 2 for each one in group 1. With 1 the groups are equal, which is the most efficient split; with 2 there are twice as many in group 2."
+    perdidas: "Proportion of participants you expect to lose during follow-up. The total to recruit is divided by one minus this figure."
+    n_dado: "Inverse mode: if you already know how many people you can study in group 1, write it here to see the power you reach. Leave it at 0 to skip it."
+  interpretacion:
+    resumen: "To detect a proportion of {p1} versus one of {p2} with {poder} power and α = {alfa} ({lateralidad}), {n1_techo} participants are required in group 1 and {n2_techo} in group 2, {n_total_techo} in total."
+    "correccion.si": "The figure reported carries the continuity correction of Fleiss, Tytun and Ury, which approximates what Fisher's exact test will require: {n1_cc_techo} and {n2_cc_techo} participants. Uncorrected, Fleiss's formula — which approximates Pearson's chi-squared — would ask for {n1_fleiss_techo} and {n2_fleiss_techo}. Report whichever matches the test you will run."
+    "correccion.no": "The figure reported is Fleiss's formula without correction, which approximates what Pearson's chi-squared will require: {n1_fleiss_techo} and {n2_fleiss_techo} participants. With the continuity correction of Fleiss, Tytun and Ury, which approximates Fisher's exact test, {n1_cc_techo} and {n2_cc_techo} would be needed. Report whichever matches the test you will run."
+    comparacion: "With equal groups, R's power.prop.test solves the same uncorrected equation and returns {n_ppt} per group. Cohen's alternative starts from the arcsine transformation: h = {h_cohen} and {n_pwr_h} per group. They are two approximations to the same problem, so a difference of a few participants is expected."
+    "comparacion.r": "With an allocation ratio of {r} the groups are not equal, so power.prop.test and pwr::pwr.2p.test are not computed: both assume n₁ = n₂. The figure comes from Fleiss's formula written out by hand, which does allow any ratio. Cohen's h is {h_cohen} and does not depend on the split."
+    "comparacion.sin_solucion": "The groups are equal, but at least one of the two comparisons with R is missing: power.prop.test and pwr::pwr.2p.test search for the solution iteratively within a bounded interval, and with a sample size this extreme the solution falls outside that interval. This is not a flaw in the design and it does not change the figure reported, which comes from Fleiss's formula in closed form. Cohen's h is {h_cohen}."
+    "perdidas.con": "Anticipating {perdidas} losses during follow-up, the recruitment target rises to {n_ajustado_techo} participants in total, {n1_ajustado_techo} and {n2_ajustado_techo} per group."
+    "perdidas.sin": "No losses to follow-up were anticipated, so the total to recruit is the total computed: {n_total_techo} participants."
+    "inverso.con": "With the {n_dado} participants available in group 1 and {n2_dado} in group 2, the power attainable for that same difference would be {poder_dado}, against a target of {poder}."
+    "inverso.sin": "If you already know how many people you can study, write that number in the field for available participants and the calculator will report the power you reach with it."
+    "metodos_correccion.si": "the Fleiss formula for two independent proportions with the continuity correction of Fleiss, Tytun and Ury [{ref:fleiss1980},{ref:fleiss2003}]"
+    "metodos_correccion.no": "the Fleiss formula for two independent proportions, without continuity correction [{ref:fleiss2003},{ref:casagrande1978}]"
+    "metodos_perdidas.con": "A further {perdidas} was added for anticipated losses [{ref:lwanga1991}], so that the recruitment target is {n_ajustado_techo} participants."
+    "metodos_perdidas.sin": "No losses to follow-up were anticipated."
+  avisos:
+    supuestos: "These figures depend entirely on the proportions you assumed: take them from previous studies, from a pilot or from the smallest clinically important difference, and document their origin in Methods. A small change in the expected difference changes the sample size a great deal."
+    diferencia_minima: "The difference between the two proportions is smaller than one percentage point: the sample size explodes and usually becomes unfeasible. Check that this really is the smallest difference you care about detecting."
+    aproximacion_dudosa: "With the computed size, one of the groups would expect fewer than five events or fewer than five non-events. The normal approximation is doubtful there: consider an exact method based on Fisher's test."
+    unilateral: "You chose a one-sided test: it asks for fewer participants, but it is only admissible if the hypothesis is directional and was declared before seeing the data. Justify it in the protocol."
+    r_distinto: "With an allocation ratio other than 1 the comparisons with power.prop.test and pwr::pwr.2p.test are not shown, because both assume equal groups; the figure comes from Fleiss's formula, which allows any ratio. An unequal split always demands more participants in total than splitting in half."
+  metodos: "The sample size was computed to compare two independent proportions ({p1} versus {p2}, allocation ratio {r}), assuming those proportions come from previous studies or from a pilot, with α = {alfa} ({lateralidad}) and {poder} power, using {frase_correccion}; {n1_techo} and {n2_techo} participants per group are required, {n_total_techo} in total. {frase_perdidas} Calculations were carried out with the «{titulo_corto}» calculator from Open Biostatistics (Academic Body UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: a clinical trial comparing two treatments in patients with dengue with warning signs; cure is expected in 70 % with usual care and in 85 % with the new treatment, with α = 0.05 two-sided, 80 % power, equal groups and 10 % anticipated losses (fictitious data)."
+  grafica_titulo: "Power of the test against the number of participants in group 1, with the required size and the target power marked"

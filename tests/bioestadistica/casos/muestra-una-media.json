@@ -1,0 +1,233 @@
+{
+  "calculadora": "muestra-una-media",
+  "casos": [
+    {
+      "id": "sin_perdidas",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Las tres entradas opcionales en su valor \u00absin dato\u00bb (0): sin correccion por poblacion finita (n = n_z), sin perdidas (n_ajustado = n) y sin modo inverso (d_dado = NA). Es la rama que ve quien abre la calculadora y deja los campos vacios."
+    },
+    {
+      "id": "n_pequeno",
+      "entradas": {
+        "sigma": 10,
+        "d": 5,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "n_z = 15.37 < 30: se activa el aviso n_pequeno y la variante t importa de verdad (n_t = 17.81, dos sujetos mas tras el techo)."
+    },
+    {
+      "id": "n_muy_pequeno",
+      "entradas": {
+        "sigma": 1,
+        "d": 1,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "n_z = 3.84 y la t manda: el menor entero que cumple n >= (t_{n-1}*sigma/d)^2 es 7, casi el doble. Es el regimen donde el punto fijo, que publicaba 6, se quedaba mas corto."
+    },
+    {
+      "id": "gl_minimo",
+      "entradas": {
+        "sigma": 1,
+        "d": 2,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "n_z = 0.96: la busqueda arranca en max(2, ceiling(n_z)) = 2 y los grados de libertad entran por la guarda max(1, n - 1). El minimo es 4; el punto fijo publicaba 2, con el que la semiamplitud ni se acerca a d."
+    },
+    {
+      "id": "ciclo_periodo_2",
+      "entradas": {
+        "sigma": 1,
+        "d": 0.36,
+        "nivel": 0.8,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Caso que destapo la revision independiente: el punto fijo con el techo dentro del bucle entra en un ciclo de periodo 2 y publicaba n_t = 14, pero con 14 sujetos la semiamplitud alcanzada es 0.360848 y no baja de d = 0.36 hasta n = 15. La definicion vigente es el MENOR entero n >= 2 con n >= (t_{n-1}*sigma/d)^2, y aqui vale 15."
+    },
+    {
+      "id": "cpf",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 300,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Poblacion de 300 frente a n_z = 138.3: la correccion baja n a 94.9 y se activa cpf_importante (N < 10*n_z)."
+    },
+    {
+      "id": "cpf_holgada",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 5000,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Poblacion muy por encima de 10*n_z: la correccion apenas mueve n (134.6 frente a 138.3) y el aviso cpf_importante NO debe activarse."
+    },
+    {
+      "id": "poblacion_uno",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 1,
+        "perdidas": 0,
+        "n_dado": 1
+      },
+      "nota": "Frontera del convenio: 1 se trata igual que 0 (\u00absin dato\u00bb) en los dos lados, porque ni una poblacion ni una muestra de un individuo admiten correccion ni intervalo. n debe salir igual que n_z y d_dado debe ser NA."
+    },
+    {
+      "id": "nivel_090",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.9,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "nota": "El ejemplo al 90 %: z = 1.6449 y qt(0.95, gl); n baja porque z^2 es menor."
+    },
+    {
+      "id": "nivel_099",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.99,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "nota": "El ejemplo al 99 %: z = 2.5758; n sube con el cuadrado de z y la brecha con la variante t crece."
+    },
+    {
+      "id": "nivel_0999",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.999,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "nota": "Nivel maximo que admite la entrada: colas de 5e-4, donde qnorm y qt pierden mas cifras."
+    },
+    {
+      "id": "decimales",
+      "entradas": {
+        "sigma": 0.35,
+        "d": 0.07,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Magnitudes pequenas y no enteras (una razon, una densidad optica): n depende solo del cociente sigma/d, asi que n_z debe coincidir con el de sigma = 5, d = 1."
+    },
+    {
+      "id": "grande",
+      "entradas": {
+        "sigma": 60,
+        "d": 1,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Precision exigente (+-1 unidad): n_z = 13829.3. Con n grande la variante t solo anade dos sujetos, que es el limite (1 + z^2)/2."
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "nota": "Perdidas maximas admitidas (50 %): el reclutamiento se duplica, n_ajustado = 2n."
+    },
+    {
+      "id": "supera_poblacion",
+      "entradas": {
+        "sigma": 60,
+        "d": 1,
+        "nivel": 0.95,
+        "poblacion": 10,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "nota": "Poblacion diminuta y perdidas maximas: la correccion deja n = 9.99 de una poblacion de 10, pero el reclutamiento sube a 19.99, el doble de la gente que hay. La aritmetica es correcta y R da lo mismo; lo que falta es el aviso supera_poblacion, porque la correccion por poblacion finita acota n pero no n_ajustado."
+    },
+    {
+      "id": "con_n_dado",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 50
+      },
+      "nota": "Modo inverso sin poblacion declarada: la inversa de la correccion es la identidad y d_dado = z*60/sqrt(50) = 16.63, muy por encima de la precision objetivo de 10."
+    },
+    {
+      "id": "n_dado_cpf",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 300,
+        "perdidas": 0,
+        "n_dado": 100
+      },
+      "nota": "Modo inverso con poblacion finita: la inversa de la correccion lleva n = 100 a un n_z equivalente de 149.5, asi que la precision alcanzable (9.62) es mejor que la de 100 sujetos sin corregir (11.76), porque muestrear un tercio de la poblacion informa mas."
+    },
+    {
+      "id": "n_dado_censo",
+      "entradas": {
+        "sigma": 60,
+        "d": 10,
+        "nivel": 0.95,
+        "poblacion": 300,
+        "perdidas": 0,
+        "n_dado": 300
+      },
+      "nota": "Censo: n_dado = N. La inversa de la correccion divide entre (N - n_dado) = 0, asi que n_z(n) es Inf y la precision alcanzable es exactamente 0 en R y en TypeScript."
+    },
+    {
+      "id": "n_diminuto",
+      "entradas": {
+        "sigma": 1e-06,
+        "d": 0.1,
+        "nivel": 0.8,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "nota": "Regimen degenerado: sigma minuscula frente a d deja n_z = 1.64e-10. La presentacion tiene que dar 1 sujeto y no 0 (techo() de muestra-comun tolera 1e-9 absoluto y por si solo devolveria 0, lo que hacia que la grafica evaluara la precision en n = 0 y presentar() lanzara RangeError). La variante t no baja de 2, que es su minimo por definicion: una media sin dos observaciones no tiene intervalo."
+    }
+  ]
+}

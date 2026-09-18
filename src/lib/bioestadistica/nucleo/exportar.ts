@@ -156,6 +156,8 @@ export interface DatosMarkdown {
   titulo: string;
   /** URL canónica con el estado capturado. */
   url: string;
+  /** Aviso bajo la URL cuando los datos pegados no cupieron en ella (`bio.ui.url_sin_datos`). */
+  notaUrl?: string;
   /** Pares [rótulo, valor] de lo capturado. */
   entradas: Array<[string, string]>;
   /** Filas [medida, estimación, intervalo] de los resultados. */
@@ -203,7 +205,7 @@ export function aMarkdown(d: DatosMarkdown): string {
   }
   if (d.metodos) bloques.push([`## ${u('metodos')}`, '', d.metodos].join('\n\n'));
   if (d.codigoR) bloques.push([`## ${u('codigo_r')}`, '', '```r', d.codigoR.replace(/\s+$/, ''), '```'].join('\n'));
-  bloques.push([`## ${u('url_estado')}`, '', `<${d.url}>`].join('\n\n'));
+  bloques.push([`## ${u('url_estado')}`, '', `<${d.url}>`, ...(d.notaUrl ? ['', d.notaUrl] : [])].join('\n\n'));
   const pie = ['---', d.cita, u('generado_por')].filter((s) => s !== '');
   bloques.push(pie.join('\n\n'));
 

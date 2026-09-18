@@ -206,6 +206,20 @@ const calculadoras = defineCollection({
           (e) => e.tipo !== 'columna' || c.ejemplo[e.id] === undefined || Array.isArray(c.ejemplo[e.id]),
         ),
       { message: 'el ejemplo de una entrada de tipo `columna` debe ser una lista de números' },
+    )
+    // Una tabla k×k pegada (`tipo: tabla`) viaja como lista de números por filas
+    // (k² valores); el módulo deriva k. El ejemplo debe ser una lista cuadrada.
+    .refine(
+      (c) =>
+        c.entradas.every((e) => {
+          if (e.tipo !== 'tabla') return true;
+          const v = c.ejemplo[e.id];
+          if (v === undefined) return true;
+          if (!Array.isArray(v)) return false;
+          const k = Math.round(Math.sqrt(v.length));
+          return k >= 2 && k * k === v.length;
+        }),
+      { message: 'el ejemplo de una entrada de tipo `tabla` debe ser una lista cuadrada (k² números, k ≥ 2)' },
     ),
 });
 

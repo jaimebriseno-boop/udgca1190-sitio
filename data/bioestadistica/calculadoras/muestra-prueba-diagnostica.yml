@@ -1,0 +1,212 @@
+# Calculadora C6 · Tamaño de muestra para sensibilidad y especificidad (Buderer 1996).
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: muestra
+orden: 6
+estado: activa
+motor: ts
+entradas:
+  - { id: sn, tipo: proporcion, min: 0, max: 1 }
+  - { id: sp, tipo: proporcion, min: 0, max: 1 }
+  - { id: prev, tipo: proporcion, min: 0, max: 1 }
+  - { id: w, tipo: decimal, min: 0.005, max: 0.5 }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+  - { id: perdidas, tipo: proporcion, min: 0, max: 0.5, requerido: false }
+ejemplo: { sn: 0.85, sp: 0.95, prev: 0.3, w: 0.05, nivel: 0.95, perdidas: 0.1 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Sample size for sensitivity and specificity (Buderer 1996) - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    sn <- {sn}; sp <- {sp}     # expected sensitivity and specificity (strictly between 0 and 1)
+    prev <- {prev}             # expected prevalence where the test will be used
+    w <- {w}                   # half-width of the confidence interval (absolute precision)
+    nivel <- {nivel}           # confidence level
+    perdidas <- {perdidas}     # expected losses (0-0.5)
+
+    z <- qnorm(1 - (1 - nivel) / 2)
+
+    # Buderer (1996): each half of the design is a Wald interval for a proportion.
+    n_d  <- z^2 * sn * (1 - sn) / w^2   # diseased needed to estimate Sn with precision +-w
+    n_nd <- z^2 * sp * (1 - sp) / w^2   # non-diseased needed to estimate Sp with precision +-w
+
+    # In a consecutive series nobody recruits by disease status: the prevalence
+    # decides how many patients must be screened to reach each of those groups.
+    n_sn <- n_d / prev
+    n_sp <- n_nd / (1 - prev)
+
+    n_total <- max(n_sn, n_sp)               # the binding requirement of the two
+    n_ajustado <- n_total / (1 - perdidas)   # Lwanga & Lemeshow (1991)
+
+    # Values travel WITHOUT rounding: the interface takes the ceiling once, at the end.
+    res <- list(z = z, n_d = n_d, n_sn = n_sn, n_nd = n_nd, n_sp = n_sp,
+                n_total = n_total, n_ajustado = n_ajustado)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio: presize::prec_sens(sens = sn, prev = prev, conf.width = 2*w, conf.level = nivel, method = "wald"); presize::prec_spec(spec = sp, prev = prev, conf.width = 2*w, conf.level = nivel, method = "wald")
+referencias:
+  - { key: buderer1996, rol: original }
+  - { key: simel1991, rol: complementaria }
+  - { key: bujang2016, rol: didactica }
+  - { key: newcombe1998, rol: complementaria }
+  - { key: altman1991, rol: didactica }
+grafica: curvas
+es:
+  titulo: "Tamaño de muestra para estimar la sensibilidad y la especificidad de una prueba diagnóstica (Buderer 1996)"
+  titulo_corto: "Muestra para una prueba diagnóstica"
+  meta: "Calcula cuántos pacientes hay que reclutar para estimar la sensibilidad y la especificidad de una prueba con una precisión dada, teniendo en cuenta la prevalencia esperada (fórmula de Buderer 1996), con ajuste por pérdidas y la curva del tamaño frente a la prevalencia. Los datos no salen del navegador."
+  intro: "Captura la sensibilidad y la especificidad que esperas, la prevalencia de la enfermedad donde se usará la prueba y la precisión con la que quieres estimarlas, y obtén cuántos enfermos, cuántos sanos y cuántos pacientes consecutivos hacen falta, la interpretación y el código de R equivalente."
+  explicacion:
+    - "Un estudio de precisión diagnóstica estima dos proporciones distintas en dos grupos distintos: la sensibilidad se estima solo entre los enfermos y la especificidad solo entre los sanos. Por eso el tamaño de muestra no es un número, sino dos, y el estudio necesita el mayor de los dos."
+    - "El cálculo tiene dos pasos (Buderer 1996). Primero se pregunta cuántos enfermos hacen falta para que el intervalo de confianza de la sensibilidad tenga la semiamplitud deseada: es la fórmula clásica del intervalo de Wald para una proporción. Lo mismo, aparte, para la especificidad con los sanos."
+    - "Segundo: en una serie consecutiva nadie recluta por estado de enfermedad, sino que evalúa a todo el que llega. Si la prevalencia esperada es del 30 %, reunir 196 enfermos exige evaluar a unos 654 pacientes. La prevalencia es lo que convierte «enfermos necesarios» en «pacientes que hay que reclutar», y es la razón de que una enfermedad rara vuelva carísimo estimar bien la sensibilidad."
+    - "Las cifras dependen por completo de la sensibilidad, la especificidad y la prevalencia que se supongan: tómalas de un estudio previo, de un piloto o de la literatura, y decláralo en el protocolo. El intervalo que da esta fórmula es el de Wald; con valores cercanos a 1 conviene comprobar el resultado con un intervalo de Wilson o de Clopper-Pearson, que es lo que finalmente se reportará."
+  ecuaciones:
+    - id: buderer_sn
+      tex: 'n_D=\frac{z_{1-\alpha/2}^{2}\,\Sn\,(1-\Sn)}{w^{2}},\qquad N_{\Sn}=\frac{n_D}{P}'
+      simbolos:
+        - { s: 'n_D', def: "personas con la enfermedad que hacen falta para estimar la sensibilidad" }
+        - { s: 'N_{\Sn}', def: "pacientes consecutivos que hay que evaluar para reunir esos enfermos" }
+        - { s: 'z_{1-\alpha/2}', def: "cuantil normal del nivel de confianza (1.96 al 95 %)" }
+        - { s: 'w', def: "semiamplitud del intervalo de confianza (precisión absoluta)" }
+        - { s: 'P', def: "prevalencia esperada donde se aplicará la prueba" }
+      nota: "Buderer (1996): intervalo de Wald para la sensibilidad, estimada solo entre los enfermos."
+    - id: buderer_sp
+      tex: 'n_{\bar D}=\frac{z_{1-\alpha/2}^{2}\,\Sp\,(1-\Sp)}{w^{2}},\qquad N_{\Sp}=\frac{n_{\bar D}}{1-P}'
+      simbolos:
+        - { s: 'n_{\bar D}', def: "personas sin la enfermedad que hacen falta para estimar la especificidad" }
+        - { s: 'N_{\Sp}', def: "pacientes consecutivos que hay que evaluar para reunir esos sanos" }
+      nota: "La mitad del diseño que corresponde a la especificidad; el denominador es la proporción de sanos."
+    - id: total
+      tex: 'N=\max\left(N_{\Sn},\;N_{\Sp}\right),\qquad n_{aj}=\left\lceil\frac{N}{1-L}\right\rceil'
+      simbolos:
+        - { s: 'N', def: "tamaño del estudio: el mayor de los dos requisitos" }
+        - { s: 'L', def: "pérdidas previstas, como proporción" }
+        - { s: '\lceil\;\rceil', def: "techo: el redondeo hacia arriba se aplica una sola vez, al final" }
+      nota: "Ajuste por pérdidas de Lwanga y Lemeshow (1991)."
+  etiquetas:
+    sn: "Sensibilidad esperada (Sn)"
+    sp: "Especificidad esperada (Sp)"
+    prev: "Prevalencia esperada"
+    w: "Precisión: semiamplitud del IC (±w)"
+    nivel: "Nivel de confianza"
+    perdidas: "Pérdidas previstas"
+    z: "Cuantil normal (z)"
+    n_d: "Enfermos necesarios"
+    n_sn: "Pacientes a reclutar para la sensibilidad"
+    n_nd: "Sanos necesarios"
+    n_sp: "Pacientes a reclutar para la especificidad"
+    n_total: "Pacientes a reclutar (total)"
+    n_ajustado: "Total con pérdidas previstas"
+    exacto: "valor exacto {valor}"
+    personas: "personas"
+    eje_prev: "Prevalencia"
+    eje_n: "Pacientes a reclutar"
+    curva_sn: "Para la sensibilidad"
+    curva_sp: "Para la especificidad"
+    ref_total: "Total recomendado"
+    marcador_prev: "Prevalencia capturada"
+  ayudas:
+    sn: "La que esperas encontrar, de un estudio previo o de un piloto; de 0 a 1 o en porcentaje (85 = 85 %). No puede valer 0 ni 1."
+    sp: "Igual que la sensibilidad, entre 0 y 1 sin incluirlos."
+    prev: "La de la población donde se aplicará la prueba (entre los pacientes que se evaluarán), no la de la población general."
+    w: "La mitad del ancho del intervalo que quieres obtener: 0.05 significa «±5 puntos», es decir, un IC de 10 puntos de ancho."
+    nivel: "Habitualmente 95 %; también 90 % o 99 %."
+    perdidas: "Proporción de participantes que esperas perder o excluir (0.1 = 10 %); déjalo vacío si no prevés pérdidas."
+  interpretacion:
+    resumen: "Para estimar una sensibilidad cercana a {sn} con un IC {nivel} de ±{w} se necesitan {n_d_techo} pacientes con la enfermedad, es decir, {n_sn_techo} pacientes consecutivos si la prevalencia es de {prev}; para la especificidad hacen falta {n_nd_techo} personas sin la enfermedad ({n_sp_techo} pacientes). Se recomienda reclutar {n_total_techo}."
+    "manda.sn": "Manda la sensibilidad: reunir {n_d_techo} enfermos con una prevalencia de {prev} obliga a evaluar más pacientes ({n_sn_techo}) que los {n_sp_techo} que pide la especificidad. Con este diseño la especificidad quedará estimada con más precisión que ±{w}."
+    "manda.sp": "Manda la especificidad: reunir {n_nd_techo} personas sin la enfermedad obliga a evaluar más pacientes ({n_sp_techo}) que los {n_sn_techo} que pide la sensibilidad. Con este diseño la sensibilidad quedará estimada con más precisión que ±{w}."
+    "perdidas.con": "Previendo un {perdidas} de pérdidas o exclusiones, hay que reclutar {n_ajustado_techo} pacientes para terminar con {n_total_techo} evaluables."
+    "perdidas.sin": "El total no incluye pérdidas ni exclusiones: si esperas perder participantes, captúralas como proporción y la cifra se ajusta a N/(1 − L)."
+    "metodos_perdidas.con": "Se añadió un {perdidas} por pérdidas o exclusiones previstas, con lo que el reclutamiento previsto asciende a {n_ajustado_techo} pacientes."
+    "metodos_perdidas.sin": "No se previeron pérdidas ni exclusiones."
+  avisos:
+    supuestos: "Las cifras dependen por entero de la sensibilidad, la especificidad y la prevalencia que se supongan: tómalas de estudios previos o de un piloto y documenta su origen en el protocolo."
+    wald_subestima: "Con una sensibilidad o una especificidad de 95 % o más, el intervalo de Wald en el que se apoya esta fórmula es demasiado estrecho y el tamaño resultante se queda corto: comprueba el resultado con un intervalo de Wilson o de Clopper-Pearson."
+    prevalencia_baja: "Con una prevalencia por debajo del 5 %, reunir suficientes enfermos exige evaluar a muchísimos pacientes: considera un diseño que muestree por estado de enfermedad (casos y controles diagnósticos), asumiendo que así no se estimarán los valores predictivos."
+    prevalencia_alta: "Con una prevalencia por encima del 95 % son los sanos los que escasean y el número de pacientes que pide la especificidad se dispara: considera un diseño que muestree por estado de enfermedad."
+    w_grande: "Una semiamplitud de 0.15 o más produce un intervalo de al menos 30 puntos de ancho: el estudio sería pequeño, pero su resultado difícilmente permitiría concluir algo sobre la prueba."
+  metodos: "El tamaño de muestra se calculó para estimar la sensibilidad y la especificidad con una precisión absoluta de ±{w} y una confianza del {nivel}, suponiendo una sensibilidad de {sn}, una especificidad de {sp} y una prevalencia de {prev}, mediante la fórmula de Buderer [{ref:buderer1996}]: {n_d_techo} participantes con la enfermedad ({n_sn_techo} pacientes consecutivos) y {n_nd_techo} sin ella ({n_sp_techo} pacientes); se tomó el mayor de los dos requisitos, {n_total_techo} pacientes. {metodos_perdidas} Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: se planea validar una prueba rápida de antígeno NS1 que se espera con 85 % de sensibilidad y 95 % de especificidad, en pacientes febriles donde la prevalencia de dengue ronda el 30 %, estimando ambas con una precisión de ±5 puntos y previendo 10 % de pérdidas (datos ficticios)."
+  grafica_titulo: "Pacientes a reclutar frente a la prevalencia esperada, con la prevalencia capturada marcada"
+en:
+  titulo: "Sample size to estimate the sensitivity and specificity of a diagnostic test (Buderer 1996)"
+  titulo_corto: "Sample size for a diagnostic test"
+  meta: "Compute how many patients must be recruited to estimate the sensitivity and specificity of a test with a given precision, accounting for the expected prevalence (Buderer 1996 formula), with adjustment for losses and the curve of sample size against prevalence. Data never leave the browser."
+  intro: "Enter the sensitivity and specificity you expect, the prevalence of the disease where the test will be used and the precision with which you want to estimate them, and get how many diseased people, how many non-diseased people and how many consecutive patients are needed, the interpretation and the equivalent R code."
+  explicacion:
+    - "A diagnostic accuracy study estimates two different proportions in two different groups: sensitivity is estimated only among diseased people and specificity only among non-diseased people. That is why the sample size is not one number but two, and the study needs the larger of them."
+    - "The calculation has two steps (Buderer 1996). First it asks how many diseased people are needed for the confidence interval of sensitivity to have the desired half-width: that is the classic Wald interval for a proportion. The same, separately, for specificity among the non-diseased."
+    - "Second: in a consecutive series nobody recruits by disease status, everyone who arrives is assessed. If the expected prevalence is 30%, gathering 196 diseased people requires assessing about 654 patients. Prevalence is what turns \"diseased people needed\" into \"patients to be recruited\", and it is the reason why a rare disease makes estimating sensitivity well so expensive."
+    - "The figures depend entirely on the sensitivity, specificity and prevalence that are assumed: take them from a previous study, a pilot or the literature, and state them in the protocol. The interval behind this formula is Wald's; with values close to 1 it is worth checking the result with a Wilson or Clopper-Pearson interval, which is what will finally be reported."
+  ecuaciones:
+    - id: buderer_sn
+      tex: 'n_D=\frac{z_{1-\alpha/2}^{2}\,\Sn\,(1-\Sn)}{w^{2}},\qquad N_{\Sn}=\frac{n_D}{P}'
+      simbolos:
+        - { s: 'n_D', def: "people with the disease needed to estimate sensitivity" }
+        - { s: 'N_{\Sn}', def: "consecutive patients who must be assessed to gather those diseased people" }
+        - { s: 'z_{1-\alpha/2}', def: "normal quantile of the confidence level (1.96 at 95%)" }
+        - { s: 'w', def: "half-width of the confidence interval (absolute precision)" }
+        - { s: 'P', def: "expected prevalence where the test will be applied" }
+      nota: "Buderer (1996): Wald interval for sensitivity, estimated only among diseased people."
+    - id: buderer_sp
+      tex: 'n_{\bar D}=\frac{z_{1-\alpha/2}^{2}\,\Sp\,(1-\Sp)}{w^{2}},\qquad N_{\Sp}=\frac{n_{\bar D}}{1-P}'
+      simbolos:
+        - { s: 'n_{\bar D}', def: "people without the disease needed to estimate specificity" }
+        - { s: 'N_{\Sp}', def: "consecutive patients who must be assessed to gather those non-diseased people" }
+      nota: "The half of the design that corresponds to specificity; the denominator is the proportion of non-diseased people."
+    - id: total
+      tex: 'N=\max\left(N_{\Sn},\;N_{\Sp}\right),\qquad n_{aj}=\left\lceil\frac{N}{1-L}\right\rceil'
+      simbolos:
+        - { s: 'N', def: "study size: the larger of the two requirements" }
+        - { s: 'L', def: "expected losses, as a proportion" }
+        - { s: '\lceil\;\rceil', def: "ceiling: rounding up is applied only once, at the end" }
+      nota: "Adjustment for losses from Lwanga and Lemeshow (1991)."
+  etiquetas:
+    sn: "Expected sensitivity (Sn)"
+    sp: "Expected specificity (Sp)"
+    prev: "Expected prevalence"
+    w: "Precision: half-width of the CI (±w)"
+    nivel: "Confidence level"
+    perdidas: "Expected losses"
+    z: "Normal quantile (z)"
+    n_d: "Diseased people needed"
+    n_sn: "Patients to recruit for sensitivity"
+    n_nd: "Non-diseased people needed"
+    n_sp: "Patients to recruit for specificity"
+    n_total: "Patients to recruit (total)"
+    n_ajustado: "Total with expected losses"
+    exacto: "exact value {valor}"
+    personas: "people"
+    eje_prev: "Prevalence"
+    eje_n: "Patients to recruit"
+    curva_sn: "For sensitivity"
+    curva_sp: "For specificity"
+    ref_total: "Recommended total"
+    marcador_prev: "Entered prevalence"
+  ayudas:
+    sn: "The one you expect, from a previous study or a pilot; from 0 to 1 or as a percentage (85 = 85%). It cannot be 0 or 1."
+    sp: "Same as sensitivity, strictly between 0 and 1."
+    prev: "That of the population where the test will be applied (among the patients who will be assessed), not that of the general population."
+    w: "Half the width of the interval you want: 0.05 means \"±5 points\", that is, a CI 10 points wide."
+    nivel: "Usually 95%; 90% or 99% are also common."
+    perdidas: "Proportion of participants you expect to lose or exclude (0.1 = 10%); leave it empty if you expect none."
+  interpretacion:
+    resumen: "To estimate a sensitivity near {sn} with a {nivel} CI of ±{w}, {n_d_techo} patients with the disease are needed, that is, {n_sn_techo} consecutive patients if prevalence is {prev}; for specificity, {n_nd_techo} people without the disease are needed ({n_sp_techo} patients). Recruiting {n_total_techo} is recommended."
+    "manda.sn": "Sensitivity is the binding requirement: gathering {n_d_techo} diseased people with a prevalence of {prev} means assessing more patients ({n_sn_techo}) than the {n_sp_techo} that specificity asks for. With this design, specificity will be estimated more precisely than ±{w}."
+    "manda.sp": "Specificity is the binding requirement: gathering {n_nd_techo} people without the disease means assessing more patients ({n_sp_techo}) than the {n_sn_techo} that sensitivity asks for. With this design, sensitivity will be estimated more precisely than ±{w}."
+    "perdidas.con": "Allowing for {perdidas} losses or exclusions, {n_ajustado_techo} patients must be recruited in order to end with {n_total_techo} evaluable ones."
+    "perdidas.sin": "The total does not include losses or exclusions: if you expect to lose participants, enter them as a proportion and the figure is adjusted to N/(1 − L)."
+    "metodos_perdidas.con": "An additional {perdidas} was added for expected losses or exclusions, bringing planned recruitment to {n_ajustado_techo} patients."
+    "metodos_perdidas.sin": "No losses or exclusions were anticipated."
+  avisos:
+    supuestos: "The figures depend entirely on the sensitivity, specificity and prevalence that are assumed: take them from previous studies or a pilot and document their source in the protocol."
+    wald_subestima: "With a sensitivity or specificity of 95% or more, the Wald interval behind this formula is too narrow and the resulting size falls short: check the result with a Wilson or Clopper-Pearson interval."
+    prevalencia_baja: "With a prevalence below 5%, gathering enough diseased people requires assessing a great many patients: consider a design that samples by disease status (a diagnostic case-control), accepting that predictive values will then not be estimated."
+    prevalencia_alta: "With a prevalence above 95% it is the non-diseased who are scarce and the number of patients required by specificity soars: consider a design that samples by disease status."
+    w_grande: "A half-width of 0.15 or more produces an interval at least 30 points wide: the study would be small, but its result would hardly support any conclusion about the test."
+  metodos: "The sample size was computed to estimate sensitivity and specificity with an absolute precision of ±{w} and {nivel} confidence, assuming a sensitivity of {sn}, a specificity of {sp} and a prevalence of {prev}, using Buderer's formula [{ref:buderer1996}]: {n_d_techo} participants with the disease ({n_sn_techo} consecutive patients) and {n_nd_techo} without it ({n_sp_techo} patients); the larger of the two requirements was taken, {n_total_techo} patients. {metodos_perdidas} Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: a rapid NS1 antigen test expected to have 85% sensitivity and 95% specificity is to be validated in febrile patients where the prevalence of dengue is around 30%, estimating both with a precision of ±5 points and anticipating 10% losses (fictitious data)."
+  grafica_titulo: "Patients to recruit against the expected prevalence, with the entered prevalence marked"

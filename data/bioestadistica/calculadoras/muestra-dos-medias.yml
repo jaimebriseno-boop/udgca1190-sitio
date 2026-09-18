@@ -1,0 +1,297 @@
+# Calculadora C4 · Tamaño de muestra para comparar dos medias independientes (t no central).
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: muestra
+orden: 4
+estado: activa
+motor: ts
+entradas:
+  - { id: delta, tipo: decimal }
+  - { id: sigma, tipo: decimal, min: 0 }
+  - { id: alfa, tipo: decimal, min: 0.001, max: 0.2 }
+  - { id: lateralidad, tipo: opcion, opciones: [bilateral, unilateral] }
+  - { id: poder, tipo: proporcion, min: 0.5, max: 0.99 }
+  - { id: r, tipo: decimal, min: 0.1, max: 10 }
+  - { id: perdidas, tipo: proporcion, min: 0, max: 0.5, requerido: false }
+  - { id: n_dado, tipo: entero, min: 0, requerido: false }
+ejemplo: { delta: 1, sigma: 3, alfa: 0.05, lateralidad: bilateral, poder: 0.8, r: 1, perdidas: 0.1, n_dado: 0 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Sample size for two independent means, exact non-central t - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    delta       <- {delta}         # smallest difference between means that matters
+    sigma       <- {sigma}         # common standard deviation of the outcome
+    alfa        <- {alfa}
+    lateralidad <- {lateralidad}   # "bilateral" or "unilateral"
+    poder       <- {poder}         # target power (1 - beta)
+    r           <- {r}             # allocation ratio n2/n1
+    perdidas    <- {perdidas}      # expected losses, 0 to 0.5
+    n_dado      <- {n_dado}        # inverse mode: n1 already available; 0 = not given
+
+    tside   <- if (lateralidad == "bilateral") 2 else 1
+    z_alfa  <- qnorm(alfa/tside, lower.tail = FALSE)
+    z_beta  <- qnorm(poder)
+    d_cohen <- abs(delta)/sigma
+
+    # Exact power of Student's two-sample t test: under the alternative the statistic
+    # follows a NON-CENTRAL t with nu = n1 + n2 - 2 and ncp = |delta| / (sigma * sqrt(1/n1 + 1/n2)).
+    # This is the same function power.t.test evaluates, written for any allocation ratio r.
+    poder_de <- function(n1) {
+      nu  <- pmax(1e-07, n1 * (1 + r) - 2)
+      ncp <- abs(delta) / (sigma * sqrt(1/n1 + 1/(r * n1)))
+      pt(qt(alfa/tside, nu, lower.tail = FALSE), nu, ncp = ncp, lower.tail = FALSE)
+    }
+
+    # Smallest n1 reaching the target power, with the bracket and the tolerance of power.t.test.
+    # Two guards: fewer than 2 per group is not a sample size, and an effect so small that
+    # even 1e7 per group falls short is reported as "not defined" instead of a made-up number.
+    n1 <- if (poder_de(2) >= poder) 2 else
+          if (poder_de(1e7) < poder) NA_real_ else
+          uniroot(function(n1) poder_de(n1) - poder, c(2, 1e7), tol = 1e-10)$root
+    n2      <- r * n1
+    n_total <- n1 + n2
+
+    # power.t.test only covers equal groups; with r != 1 it does not apply and the equation above is the answer.
+    # It needs the SAME two guards as n1: power.t.test extends the bracket (extendInt = "upX") and
+    # would answer with a sample size below 2, or beyond the 1e7 where the equation above stops.
+    n_ptt <- if (r != 1) NA_real_ else
+             if (poder_de(2) >= poder) 2 else
+             if (poder_de(1e7) < poder) NA_real_ else
+             power.t.test(delta = abs(delta), sd = sigma, sig.level = alfa, power = poder,
+                          type = "two.sample",
+                          alternative = if (tside == 2) "two.sided" else "one.sided",
+                          tol = 1e-10)$n
+
+    # Classical normal approximation with Guenther's (1981) correction, shown as a teaching row
+    n1_normal <- (1 + 1/r) * (z_alfa + z_beta)^2 * sigma^2 / delta^2 + z_alfa^2/4
+    n2_normal <- r * n1_normal
+
+    n_ajustado <- n_total / (1 - perdidas)   # Lwanga & Lemeshow 1991; the interface takes the ceiling
+
+    # Inverse mode: power actually reached with n1 = n_dado and n2 = r * n_dado
+    poder_dado <- if (n_dado >= 2) poder_de(n_dado) else NA_real_
+    poder_dado_normal <- if (n_dado >= 2)
+      pnorm(abs(delta) / (sigma * sqrt(1/n_dado + 1/(r * n_dado))) - z_alfa) else NA_real_
+
+    res <- list(z_alfa = z_alfa, z_beta = z_beta, d_cohen = d_cohen,
+                n1 = n1, n2 = n2, n_total = n_total, n_ptt = n_ptt,
+                n1_normal = n1_normal, n2_normal = n2_normal, n_ajustado = n_ajustado,
+                poder_dado = poder_dado, poder_dado_normal = poder_dado_normal)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio (not run here): pwr::pwr.t.test(d = d_cohen, power = poder, type = "two.sample")
+    # and, for unequal groups, pwr::pwr.t2n.test(n1 = ..., n2 = ..., d = d_cohen)
+referencias:
+  - { key: student1908, rol: original }
+  - { key: guenther1981, rol: original }
+  - { key: neyman1933, rol: complementaria }
+  - { key: cohen1988, rol: complementaria }
+  - { key: lachin1981, rol: complementaria }
+  - { key: altman1991, rol: didactica }
+  - { key: hulley2013, rol: didactica }
+  - { key: chow2018, rol: complementaria }
+grafica: curvas
+es:
+  titulo: "Tamaño de muestra para comparar dos medias independientes"
+  titulo_corto: "Muestra para dos medias"
+  meta: "Calcula el tamaño de muestra necesario para comparar las medias de dos grupos independientes con el método exacto de la t no central, idéntico a power.t.test de R, con razón de asignación, pérdidas previstas y curva de poder. Los datos no salen del navegador."
+  intro: "Indica la diferencia de medias que quieres poder detectar, la desviación estándar esperada, el nivel de significación y el poder, y obtén cuántos participantes hacen falta en cada grupo, con la curva de poder, la interpretación en lenguaje llano y el código de R equivalente."
+  explicacion:
+    - "Planear el tamaño de muestra de un estudio que compara dos medias es responder a una pregunta concreta: si en la población existiera una diferencia de al menos Δ unidades, ¿cuántos participantes necesito para que mi prueba la detecte con una probabilidad razonable? Esa probabilidad es el poder. Lo habitual es pedir 80 % o 90 %, y fijar α en 0.05."
+    - "La cuenta necesita tres supuestos que no salen de esta calculadora, sino de la literatura o de un estudio piloto: la diferencia mínima que importa clínicamente, la desviación estándar del desenlace y la forma del contraste (bilateral o unilateral). La diferencia mínima no es la que uno espera encontrar, sino la más pequeña que cambiaría una decisión clínica; pedirle al estudio que detecte diferencias más chicas que eso encarece el reclutamiento sin ganar nada."
+    - "La fórmula clásica de los libros usa la distribución normal y subestima un poco, porque olvida que la desviación estándar también se estima a partir de los datos. La solución exacta reconoce ese detalle: bajo la hipótesis alternativa el estadístico t sigue una distribución t NO central, y el tamaño de muestra es el menor n que deja por encima del valor crítico la fracción de masa que pide el poder. Es exactamente lo que hace power.t.test en R, y es lo que esta calculadora reporta como resultado principal; la aproximación normal con la corrección de Guenther (1981) aparece al lado, como fila didáctica, y suele quedarse una o dos unidades por debajo."
+    - "La razón de asignación r = n₂/n₁ sirve cuando los grupos no van a ser del mismo tamaño: r = 2 significa dos controles por cada caso. Repartir desigualmente cuesta participantes en total (el total mínimo se consigue siempre con grupos iguales), pero a veces es lo único posible. Y como en cualquier estudio real habrá abandonos, el ajuste por pérdidas divide el total entre (1 − L): pedir 10 % de pérdidas no es pesimismo, es planeación."
+  ecuaciones:
+    - id: exacta
+      tex: '1-\beta \;=\; P\!\left(T''_{\nu,\lambda} > t_{\nu,\;1-\alpha/k}\right), \qquad \nu = n_1 + n_2 - 2, \qquad \lambda = \frac{|\delta|}{\sigma\sqrt{\dfrac{1}{n_1}+\dfrac{1}{n_2}}}'
+      simbolos:
+        - { s: '\delta', def: "diferencia de medias que se quiere detectar" }
+        - { s: '\sigma', def: "desviación estándar común del desenlace" }
+        - { s: '\nu', def: "grados de libertad de la prueba t" }
+        - { s: '\lambda', def: "parámetro de no centralidad" }
+        - { s: 'T''_{\nu,\lambda}', def: "distribución t no central" }
+        - { s: '1-\beta', def: "poder que se exige al estudio" }
+        - { s: 'k', def: "2 si el contraste es bilateral, 1 si es unilateral" }
+      nota: "Solución exacta: n₁ es el menor valor que cumple la igualdad, resuelto por búsqueda de raíces sobre la t no central. Con grupos iguales (r = 1) coincide con power.t.test(type = \"two.sample\") de R; con r ≠ 1 se resuelve la misma ecuación fijando n₂ = r·n₁."
+    - id: guenther
+      tex: 'n_1 \;=\; \frac{\left(1+\dfrac{1}{r}\right)\left(z_{1-\alpha/k}+z_{1-\beta}\right)^2\sigma^2}{\delta^2} \;+\; \frac{z_{1-\alpha/k}^2}{4}, \qquad n_2 = r\,n_1'
+      simbolos:
+        - { s: 'r', def: "razón de asignación n₂/n₁" }
+        - { s: 'z_{1-\alpha/k}', def: "cuantil normal del nivel de significación" }
+        - { s: 'z_{1-\beta}', def: "cuantil normal del poder" }
+        - { s: 'k', def: "2 si el contraste es bilateral, 1 si es unilateral" }
+      nota: "Aproximación normal clásica. El término final es la corrección de Guenther (1981), que compensa el haber tratado la desviación estándar como conocida; sin ella la fórmula se queda todavía más corta."
+    - id: inverso
+      tex: '1-\beta \;\approx\; \Phi\!\left(\frac{|\delta|}{\sigma\sqrt{\dfrac{1}{n_1}+\dfrac{1}{n_2}}} - z_{1-\alpha/k}\right), \qquad n_{aj} = \left\lceil\dfrac{n_1}{1-L}\right\rceil + \left\lceil\dfrac{n_2}{1-L}\right\rceil'
+      simbolos:
+        - { s: '\Phi', def: "función de distribución normal estándar" }
+        - { s: 'L', def: "proporción de pérdidas previstas" }
+        - { s: 'n_{aj}', def: "tamaño ajustado por pérdidas" }
+        - { s: 'k', def: "2 si el contraste es bilateral, 1 si es unilateral" }
+        - { s: '\lceil\;\rceil', def: "techo: el redondeo hacia arriba se aplica una sola vez, al final" }
+      nota: "Modo inverso: el poder que alcanzaría un tamaño ya disponible. La calculadora reporta también el poder exacto por la t no central, que es el que debe citarse. El ajuste por pérdidas es el de Lwanga y Lemeshow (1991) y se redondea POR GRUPO, igual que el tamaño: el titular suma los dos techos y el valor sin redondear queda en el detalle de la celda."
+  etiquetas:
+    delta: "Diferencia de medias que importa (Δ)"
+    sigma: "Desviación estándar común (σ)"
+    alfa: "Nivel de significación (α)"
+    lateralidad: "Contraste"
+    lateralidad.bilateral: "Bilateral"
+    lateralidad.unilateral: "Unilateral"
+    poder: "Poder (1 − β)"
+    r: "Razón de asignación (r = n₂/n₁)"
+    perdidas: "Pérdidas previstas"
+    n_dado: "Modo inverso: n₁ ya disponible"
+    z_alfa: "z del nivel de significación"
+    z_beta: "z del poder"
+    d_cohen: "d de Cohen (Δ/σ)"
+    n1: "n del grupo 1"
+    n2: "n del grupo 2"
+    n_total: "Total"
+    n_ptt: "Total por grupo según power.t.test"
+    n1_normal: "n del grupo 1 (aproximación normal)"
+    n2_normal: "n del grupo 2 (aproximación normal)"
+    n_ajustado: "Total ajustado por pérdidas"
+    poder_dado: "Poder con el n disponible"
+    poder_dado_normal: "Poder con el n disponible (aproximación normal)"
+    exacto: "sin redondear"
+    no_aplica: "no aplica"
+    solo_r1: "solo con grupos iguales"
+    nota_exacta: "t no central"
+    nota_normal: "normal con corrección de Guenther"
+    eje_n: "Participantes en el grupo 1"
+    eje_poder: "Poder"
+    curva_poder: "Poder exacto (t no central)"
+    marcador_n: "n elegido"
+    referencia_poder: "Poder objetivo"
+  ayudas:
+    delta: "La diferencia más pequeña entre las medias de los dos grupos que cambiaría una decisión clínica, en las unidades del desenlace. El signo no cambia el resultado."
+    sigma: "Desviación estándar del desenlace, supuesta igual en los dos grupos. Tómala de un estudio previo o de un piloto y declara de dónde salió."
+    alfa: "Probabilidad de concluir que hay diferencia cuando no la hay. Convencionalmente 0.05; admite de 0.001 a 0.20."
+    lateralidad: "Bilateral detecta diferencias en cualquier dirección y es lo habitual. Unilateral solo tiene sentido si una sola dirección es de interés y se decidió antes de ver los datos."
+    poder: "Probabilidad de detectar la diferencia si realmente existe. Convencionalmente 0.80 o 0.90; admite de 0.50 a 0.99."
+    r: "Cuántos participantes del grupo 2 por cada uno del grupo 1. Con 1 los grupos son iguales, que es lo más eficiente; con 2 hay el doble en el grupo 2."
+    perdidas: "Proporción de participantes que se espera perder durante el seguimiento. El total se divide entre (1 − pérdidas). Déjalo vacío si no quieres ajustar."
+    n_dado: "Opcional. Si ya sabes cuántos participantes puedes reclutar en el grupo 1, escríbelo aquí y la calculadora te dirá qué poder alcanzarías. Déjalo vacío (o en 0) para el cálculo normal."
+  interpretacion:
+    resumen: "Para detectar una diferencia de medias de {delta} (en las unidades del desenlace; d de Cohen = {d_cohen}) con poder {poder} y α = {alfa} ({lateralidad_texto}) se requieren {n1_techo} participantes en el grupo 1 y {n2_techo} en el grupo 2, es decir {n_total_techo} en total."
+    aproximacion: "La fórmula normal con la corrección de Guenther da {n1_normal_techo} por grupo; se reporta la solución exacta de la t no central, que es la que sostiene el cálculo."
+    comparacion.r1: "Con grupos iguales el resultado coincide con power.t.test(delta = {delta}, sd = {sigma}, sig.level = {alfa}, power = {poder_dec}, type = \"two.sample\") de R, que devuelve {n_ptt_techo} por grupo."
+    comparacion.r: "Con una razón de asignación de {r} los grupos no son iguales y power.t.test no aplica: se resuelve la misma ecuación de la t no central fijando n₂ = {r}·n₁, con el mismo buscador de raíces y la misma tolerancia."
+    perdidas.con: "Previendo {perdidas} de pérdidas, el objetivo de reclutamiento sube a {n_ajustado_techo} participantes en total, {n1_ajustado_techo} y {n2_ajustado_techo} por grupo, para terminar el estudio con los {n_total_techo} que exige el cálculo."
+    perdidas.sin: "El cálculo no prevé pérdidas: si esperas abandonos durante el seguimiento, captúralos para que el total incluya el reemplazo."
+    inverso.con: "Con los {n_dado} participantes del grupo 1 que ya tienes (y {n_dado_2} en el grupo 2), el poder real sería {poder_dado}; la aproximación normal daría {poder_dado_normal}."
+    inverso.sin: "Si ya sabes cuántos participantes puedes reclutar, escríbelo en «modo inverso» y verás qué poder alcanzarías con esa cifra."
+    metodos_perdidas.con: "Se añadió {perdidas} por pérdidas previstas, de modo que el total a reclutar asciende a {n_ajustado_techo}."
+    metodos_perdidas.sin: "No se previeron pérdidas durante el seguimiento."
+  avisos:
+    supuestos: "Las cifras dependen por completo de los supuestos que capturaste (la diferencia que importa y la desviación estándar): tómalos de estudios previos o de un piloto y declara su origen en el protocolo."
+    n_pequeno: "El cálculo pide menos de 10 participantes por grupo ({n1}): con muestras tan pequeñas la prueba t depende mucho del supuesto de normalidad y conviene revisar los supuestos antes de fijar el tamaño."
+    unilateral: "El contraste es unilateral: solo tiene sentido si una sola dirección del efecto es de interés y así se decidió antes de recoger los datos. Declararlo después de ver los resultados es una práctica cuestionable."
+    r_distinto: "La razón de asignación es {r}, así que los grupos no serán iguales. power.t.test no cubre ese caso: la calculadora resuelve la misma ecuación de la t no central con n₂ = r·n₁. Repartir desigualmente siempre exige más participantes en total que repartir por mitades."
+    delta_grande: "La diferencia que pides detectar supera dos desviaciones estándar: es un efecto enorme, poco frecuente en investigación clínica. Revisa que las unidades de la diferencia y de la desviación estándar sean las mismas."
+  metodos: "El tamaño de muestra se calculó para comparar las medias de dos grupos independientes, suponiendo una diferencia mínima de interés de {delta} en las unidades del desenlace y una desviación estándar común de {sigma} (d de Cohen = {d_cohen}), con α = {alfa} ({lateralidad_texto}) y un poder de {poder} [{ref:neyman1933}], mediante la solución exacta basada en la distribución t no central [{ref:student1908}], equivalente a power.t.test de R; la aproximación normal con la corrección de Guenther [{ref:guenther1981}] se reporta como comparación y la convención de tamaños del efecto sigue a Cohen [{ref:cohen1988}, {ref:lachin1981}]. Se requieren {n1_techo} y {n2_techo} participantes por grupo ({n_total_techo} en total). {perdidas_frase} El procedimiento sigue las recomendaciones habituales de diseño [{ref:altman1991}, {ref:hulley2013}, {ref:chow2018}]. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: detectar una diferencia de 1 día en la estancia hospitalaria media entre dos tratamientos, con una desviación estándar de 3 días, α = 0.05 bilateral, poder 0.80 y 10 % de pérdidas previstas (datos ficticios)."
+  grafica_titulo: "Poder frente al tamaño del grupo 1"
+en:
+  titulo: "Sample size for comparing two independent means"
+  titulo_corto: "Sample size for two means"
+  meta: "Compute the sample size needed to compare the means of two independent groups with the exact non-central t method, identical to R's power.t.test, with allocation ratio, expected losses and a power curve. Data never leave the browser."
+  intro: "Enter the difference in means you want to be able to detect, the expected standard deviation, the significance level and the power, and get how many participants each group needs, with the power curve, a plain-language interpretation and the equivalent R code."
+  explicacion:
+    - "Planning the sample size of a study that compares two means answers one concrete question: if a difference of at least Δ units existed in the population, how many participants would I need for my test to detect it with a reasonable probability? That probability is the power. The usual choices are 80% or 90%, with α set at 0.05."
+    - "The calculation needs three assumptions that do not come from this calculator but from the literature or from a pilot study: the smallest difference that matters clinically, the standard deviation of the outcome and the form of the test (two-sided or one-sided). The smallest meaningful difference is not the one you hope to find but the smallest one that would change a clinical decision; asking the study to detect anything smaller makes recruitment more expensive for no gain."
+    - "The textbook formula uses the normal distribution and underestimates slightly, because it forgets that the standard deviation is also estimated from the data. The exact solution acknowledges that detail: under the alternative hypothesis the t statistic follows a NON-central t distribution, and the sample size is the smallest n that leaves above the critical value the fraction of mass the power demands. This is exactly what power.t.test does in R, and it is what this calculator reports as the main result; the normal approximation with Guenther's (1981) correction appears next to it as a teaching row, and usually falls one or two units short."
+    - "The allocation ratio r = n₂/n₁ is for when the groups will not be the same size: r = 2 means two controls per case. Allocating unequally costs participants overall (the smallest total always comes from equal groups), but sometimes it is the only option. And since any real study will have dropouts, the adjustment for losses divides the total by (1 − L): asking for 10% losses is not pessimism, it is planning."
+  ecuaciones:
+    - id: exacta
+      tex: '1-\beta \;=\; P\!\left(T''_{\nu,\lambda} > t_{\nu,\;1-\alpha/k}\right), \qquad \nu = n_1 + n_2 - 2, \qquad \lambda = \frac{|\delta|}{\sigma\sqrt{\dfrac{1}{n_1}+\dfrac{1}{n_2}}}'
+      simbolos:
+        - { s: '\delta', def: "difference in means to be detected" }
+        - { s: '\sigma', def: "common standard deviation of the outcome" }
+        - { s: '\nu', def: "degrees of freedom of the t test" }
+        - { s: '\lambda', def: "non-centrality parameter" }
+        - { s: 'T''_{\nu,\lambda}', def: "non-central t distribution" }
+        - { s: '1-\beta', def: "power required of the study" }
+        - { s: 'k', def: "2 if the test is two-sided, 1 if it is one-sided" }
+      nota: "Exact solution: n₁ is the smallest value satisfying the equality, found by root finding on the non-central t. With equal groups (r = 1) it matches R's power.t.test(type = \"two.sample\"); with r ≠ 1 the same equation is solved with n₂ = r·n₁."
+    - id: guenther
+      tex: 'n_1 \;=\; \frac{\left(1+\dfrac{1}{r}\right)\left(z_{1-\alpha/k}+z_{1-\beta}\right)^2\sigma^2}{\delta^2} \;+\; \frac{z_{1-\alpha/k}^2}{4}, \qquad n_2 = r\,n_1'
+      simbolos:
+        - { s: 'r', def: "allocation ratio n₂/n₁" }
+        - { s: 'z_{1-\alpha/k}', def: "normal quantile of the significance level" }
+        - { s: 'z_{1-\beta}', def: "normal quantile of the power" }
+        - { s: 'k', def: "2 if the test is two-sided, 1 if it is one-sided" }
+      nota: "Classical normal approximation. The final term is Guenther's (1981) correction, which compensates for having treated the standard deviation as known; without it the formula falls even shorter."
+    - id: inverso
+      tex: '1-\beta \;\approx\; \Phi\!\left(\frac{|\delta|}{\sigma\sqrt{\dfrac{1}{n_1}+\dfrac{1}{n_2}}} - z_{1-\alpha/k}\right), \qquad n_{aj} = \left\lceil\dfrac{n_1}{1-L}\right\rceil + \left\lceil\dfrac{n_2}{1-L}\right\rceil'
+      simbolos:
+        - { s: '\Phi', def: "standard normal distribution function" }
+        - { s: 'L', def: "proportion of expected losses" }
+        - { s: 'n_{aj}', def: "sample size adjusted for losses" }
+        - { s: 'k', def: "2 if the test is two-sided, 1 if it is one-sided" }
+        - { s: '\lceil\;\rceil', def: "ceiling: rounding up is applied only once, at the end" }
+      nota: "Inverse mode: the power an already available sample size would reach. The calculator also reports the exact power from the non-central t, which is the one to quote. The adjustment for losses follows Lwanga and Lemeshow (1991) and is rounded PER GROUP, just like the sample size: the headline adds the two ceilings and the unrounded value stays in the cell detail."
+  etiquetas:
+    delta: "Difference in means that matters (Δ)"
+    sigma: "Common standard deviation (σ)"
+    alfa: "Significance level (α)"
+    lateralidad: "Test"
+    lateralidad.bilateral: "Two-sided"
+    lateralidad.unilateral: "One-sided"
+    poder: "Power (1 − β)"
+    r: "Allocation ratio (r = n₂/n₁)"
+    perdidas: "Expected losses"
+    n_dado: "Inverse mode: n₁ already available"
+    z_alfa: "z of the significance level"
+    z_beta: "z of the power"
+    d_cohen: "Cohen's d (Δ/σ)"
+    n1: "n in group 1"
+    n2: "n in group 2"
+    n_total: "Total"
+    n_ptt: "Per group according to power.t.test"
+    n1_normal: "n in group 1 (normal approximation)"
+    n2_normal: "n in group 2 (normal approximation)"
+    n_ajustado: "Total adjusted for losses"
+    poder_dado: "Power with the available n"
+    poder_dado_normal: "Power with the available n (normal approximation)"
+    exacto: "unrounded"
+    no_aplica: "not applicable"
+    solo_r1: "equal groups only"
+    nota_exacta: "non-central t"
+    nota_normal: "normal with Guenther's correction"
+    eje_n: "Participants in group 1"
+    eje_poder: "Power"
+    curva_poder: "Exact power (non-central t)"
+    marcador_n: "chosen n"
+    referencia_poder: "Target power"
+  ayudas:
+    delta: "The smallest difference between the two group means that would change a clinical decision, in the units of the outcome. The sign does not change the result."
+    sigma: "Standard deviation of the outcome, assumed equal in both groups. Take it from a previous study or a pilot and state where it came from."
+    alfa: "Probability of concluding there is a difference when there is none. Conventionally 0.05; values from 0.001 to 0.20 are allowed."
+    lateralidad: "Two-sided detects differences in either direction and is the usual choice. One-sided only makes sense if a single direction is of interest and that was decided before collecting the data."
+    poder: "Probability of detecting the difference if it really exists. Conventionally 0.80 or 0.90; values from 0.50 to 0.99 are allowed."
+    r: "How many group 2 participants per group 1 participant. With 1 the groups are equal, which is the most efficient; with 2 there are twice as many in group 2."
+    perdidas: "Proportion of participants expected to be lost during follow-up. The total is divided by (1 − losses). Leave it empty if you do not want the adjustment."
+    n_dado: "Optional. If you already know how many participants you can recruit into group 1, type it here and the calculator will tell you what power you would reach. Leave it empty (or 0) for the usual calculation."
+  interpretacion:
+    resumen: "To detect a mean difference of {delta} (in the units of the outcome; Cohen's d = {d_cohen}) with {poder} power and α = {alfa} ({lateralidad_texto}), {n1_techo} participants are required in group 1 and {n2_techo} in group 2, that is {n_total_techo} in total."
+    aproximacion: "The normal formula with Guenther's correction gives {n1_normal_techo} per group; the exact non-central t solution is the one reported, and the one the calculation rests on."
+    comparacion.r1: "With equal groups the result matches R's power.t.test(delta = {delta}, sd = {sigma}, sig.level = {alfa}, power = {poder_dec}, type = \"two.sample\"), which returns {n_ptt_techo} per group."
+    comparacion.r: "With an allocation ratio of {r} the groups are not equal and power.t.test does not apply: the same non-central t equation is solved with n₂ = {r}·n₁, using the same root finder and the same tolerance."
+    perdidas.con: "Allowing for {perdidas} losses, the recruitment target rises to {n_ajustado_techo} participants in total, {n1_ajustado_techo} and {n2_ajustado_techo} per group, to finish the study with the {n_total_techo} the calculation requires."
+    perdidas.sin: "The calculation assumes no losses: if you expect dropouts during follow-up, enter them so the total includes the replacements."
+    inverso.con: "With the {n_dado} group 1 participants you already have (and {n_dado_2} in group 2), the actual power would be {poder_dado}; the normal approximation would give {poder_dado_normal}."
+    inverso.sin: "If you already know how many participants you can recruit, type it into \"inverse mode\" and you will see what power that figure would reach."
+    metodos_perdidas.con: "A further {perdidas} was added for expected losses, bringing the total to recruit up to {n_ajustado_techo}."
+    metodos_perdidas.sin: "No losses to follow-up were anticipated."
+  avisos:
+    supuestos: "The figures depend entirely on the assumptions you entered (the difference that matters and the standard deviation): take them from previous studies or a pilot and state their origin in the protocol."
+    n_pequeno: "The calculation asks for fewer than 10 participants per group ({n1}): with samples that small the t test leans heavily on the normality assumption, and the assumptions deserve a second look before fixing the sample size."
+    unilateral: "The test is one-sided: this only makes sense if a single direction of effect is of interest and that was decided before collecting the data. Declaring it after seeing the results is a questionable practice."
+    r_distinto: "The allocation ratio is {r}, so the groups will not be equal. power.t.test does not cover that case: the calculator solves the same non-central t equation with n₂ = r·n₁. Unequal allocation always needs more participants in total than an even split."
+    delta_grande: "The difference you are asking to detect exceeds two standard deviations: that is an enormous effect, rarely seen in clinical research. Check that the difference and the standard deviation are in the same units."
+  metodos: "The sample size was computed to compare the means of two independent groups, assuming a minimum difference of interest of {delta} in the units of the outcome and a common standard deviation of {sigma} (Cohen's d = {d_cohen}), with α = {alfa} ({lateralidad_texto}) and {poder} power [{ref:neyman1933}], using the exact solution based on the non-central t distribution [{ref:student1908}], equivalent to R's power.t.test; the normal approximation with Guenther's correction [{ref:guenther1981}] is reported for comparison and the effect-size convention follows Cohen [{ref:cohen1988}, {ref:lachin1981}]. This requires {n1_techo} and {n2_techo} participants per group ({n_total_techo} in total). {perdidas_frase} The procedure follows standard design recommendations [{ref:altman1991}, {ref:hulley2013}, {ref:chow2018}]. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: detecting a 1-day difference in mean hospital stay between two treatments, with a standard deviation of 3 days, α = 0.05 two-sided, 80% power and 10% expected losses (fictitious data)."
+  grafica_titulo: "Power against the size of group 1"

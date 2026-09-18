@@ -16,9 +16,10 @@
  * Las primitivas de escala y de ejes son genéricas (lineal y logarítmica). Con
  * ellas se dibujan las gráficas declaradas: `ic-forest` (uno o varios paneles,
  * cada uno con su escala y su eje), `fagan` (nomograma de 1975), `curvas`,
- * `barras` (agrupadas, con trama de relleno) e `histograma-boxplot` (dos
- * paneles sobre un mismo eje x). Las que faltan (km, potencia) caen en el
- * `default` de `renderGrafica`.
+ * `barras` (agrupadas, con trama de relleno), `histograma-boxplot` (dos
+ * paneles sobre un mismo eje x) y `km` (curvas de Kaplan-Meier escalonadas con
+ * su tabla en riesgo). La que falta (potencia) cae en el `default` de
+ * `renderGrafica`.
  */
 import type {
   Curva,
@@ -31,7 +32,9 @@ import type {
   GraficaFagan,
   GraficaForest,
   GraficaHistogramaBoxplot,
+  GraficaKm,
   PanelIC,
+  PasoKm,
   Pista,
 } from './tipos.ts';
 
@@ -65,7 +68,11 @@ const LIENZO = {
   margenSup: 10,
   /** Separación entre la columna de etiquetas y el área de trazado. */
   canal: 12,
-  /** Margen derecho: deja sitio al radio del punto y a la última etiqueta del eje. */
+  /**
+   * Margen derecho: deja sitio al radio del punto y a la mitad del último
+   * rótulo del eje, que va centrado sobre su marca (de «100 %», 20.8 unidades
+   * a 13 px: asoma una fracción de píxel, dentro del bearing del «%»).
+   */
   margenDer: 20,
   /** Distancia entre la última fila y la línea del eje. */
   ejeSep: 8,
@@ -84,9 +91,10 @@ const LIENZO = {
   /** Tamaño de letra de los rótulos del eje. */
   fuenteTick: 13,
   /**
-   * Ancho medio de carácter como fracción del tamaño de letra. Sirve para
-   * repartir el lienzo sin medir texto (no hay DOM en este módulo); es
-   * deliberadamente holgado para Inter en minúsculas con acentos.
+   * Ancho de carácter por omisión, como fracción del tamaño de letra: prosa en
+   * minúsculas con acentos (Inter mide 0.45 a 0.50; 0.55 deja holgura). Los
+   * dígitos, el signo de porcentaje y las mayúsculas son bastante más anchos y
+   * tienen su propio peso en `pesoCaracter`.
    */
   anchoCaracter: 0.55,
   /** Fracción máxima del lienzo que puede ocupar la columna de etiquetas. */
@@ -177,11 +185,51 @@ const LIENZO = {
   normalPuntos: 120,
   /** Número máximo de marcadores con rótulo junto a la línea (por encima, van a la leyenda). */
   marcadoresEnSitio: 2,
+
+  // Curvas de Kaplan-Meier
+  /** Alto del área de trazado de las curvas de supervivencia. */
+  kmAlto: 240,
+  /** Media altura de la marca vertical de una censura. */
+  kmCensura: 5,
+  /** Separación entre el título del eje x y el rótulo de la tabla en riesgo. */
+  kmRiesgoSep: 18,
+  /** Alto de una fila de la tabla en riesgo con el rótulo en una sola línea. */
+  kmRiesgoFila: 19,
+  /** Alto de esa fila cuando algún rótulo de grupo ocupa dos líneas. */
+  kmRiesgoFilaDoble: 32,
+  /**
+   * Fracción del lienzo que puede ocupar la columna de rótulos de la tabla en
+   * riesgo. Es menor que la del bosque (0.42): aquí la columna no describe una
+   * fila entera, solo nombra el grupo, y todo lo que se lleve se lo quita al
+   * tiempo de seguimiento.
+   */
+  kmEtiquetaFraccion: 0.28,
 } as const;
+
+/**
+ * Ancho de un carácter como fracción del tamaño de letra.
+ *
+ * Medido sobre Inter (la fuente del sitio) con `getComputedTextLength` a 13 px
+ * y redondeado hacia arriba: dígito tabular 0.649, «%» 0.982, mayúscula hasta
+ * 0.710, coma, punto y espacio fino 0.268. Tratarlos a todos como prosa (0.55)
+ * subestimaba «100 %» en ocho unidades y el rótulo se salía del lienzo por la
+ * izquierda, que es justo donde no hay margen que lo absorba.
+ */
+function pesoCaracter(c: string): number {
+  if (c >= '0' && c <= '9') return 0.65;
+  if (c === '%') return 1;
+  if (c === '.' || c === ',' || c === ' ' || c === '\u202f' || c === '\u00a0') return 0.3;
+  if (c === '-' || c === '\u2212' || c === '\u2013' || c === '+' || c === '\u00d7' || c === '\u221e') return 0.7;
+  // Mayúscula de cualquier alfabeto (incluye Á, Ñ, Σ), no solo A-Z.
+  if (c !== c.toLowerCase() && c === c.toUpperCase()) return 0.75;
+  return LIENZO.anchoCaracter;
+}
 
 /** Ancho aproximado de un texto en unidades de usuario. */
 function anchoTexto(texto: string, fuente: number): number {
-  return texto.length * fuente * LIENZO.anchoCaracter;
+  let em = 0;
+  for (const c of texto) em += pesoCaracter(c);
+  return em * fuente;
 }
 
 /**
@@ -879,6 +927,21 @@ function curvas(g: GraficaCurvas, op: OpcionesGrafica): string {
     }
   }
 
+  // Referencia horizontal (p. ej. el poder objetivo): línea discontinua de
+  // borde a borde del área de trazado con su rótulo pegado al margen derecho,
+  // por encima de la línea; si la línea queda muy arriba, el rótulo va debajo.
+  const ry = g.referenciaY && Number.isFinite(g.referenciaY.valor) ? g.referenciaY : undefined;
+  if (ry) {
+    const cy = ey.mapear(ry.valor);
+    cuerpo.push(`<line class="bio-svg__ref" x1="${co(x0)}" y1="${co(cy)}" x2="${co(x1)}" y2="${co(cy)}" />`);
+    if (ry.etiqueta) {
+      const encima = cy - arriba > LIENZO.fuenteTick + 4;
+      cuerpo.push(
+        `<text class="bio-svg__marcador-texto" font-size="${LIENZO.fuenteTick}" x="${co(x1 - 4)}" y="${co(encima ? cy - 4 : cy + LIENZO.fuenteTick + 2)}" text-anchor="end">${esc(ry.etiqueta)}</text>`,
+      );
+    }
+  }
+
   if (m) {
     const cx = ex.mapear(m.x);
     cuerpo.push(
@@ -886,8 +949,18 @@ function curvas(g: GraficaCurvas, op: OpcionesGrafica): string {
     );
     if (m.etiqueta) {
       const derecha = cx > (x0 + x1) / 2;
+      // Una calculadora puede pedir un marcador fuera del dominio declarado (un
+      // tamaño de muestra por debajo del mínimo del método, por ejemplo). La
+      // línea se dibuja donde le corresponde, aunque quede fuera del área, pero
+      // el rótulo se recorta a los bordes: un texto a medio salir del lienzo no
+      // se puede leer y no dice nada que la línea no diga ya.
+      const w = Math.min(anchoTexto(m.etiqueta, LIENZO.fuenteTick), ancho);
+      const suelta = derecha ? cx - 5 : cx + 5;
+      const xTexto = derecha
+        ? Math.min(Math.max(suelta, w), ancho)
+        : Math.min(Math.max(suelta, 0), ancho - w);
       cuerpo.push(
-        `<text class="bio-svg__marcador-texto" font-size="${LIENZO.fuenteTick}" x="${co(derecha ? cx - 5 : cx + 5)}" y="${co(arriba - 5)}"${derecha ? ' text-anchor="end"' : ''}>${esc(m.etiqueta)}</text>`,
+        `<text class="bio-svg__marcador-texto" font-size="${LIENZO.fuenteTick}" x="${co(xTexto)}" y="${co(arriba - 5)}"${derecha ? ' text-anchor="end"' : ''}>${esc(m.etiqueta)}</text>`,
       );
     }
     for (const s of series) {
@@ -1332,6 +1405,293 @@ function histogramaBoxplot(g: GraficaHistogramaBoxplot, op: OpcionesGrafica): st
   return lienzoSvg(id, g.titulo, g.resumen, ancho, alto, cuerpo.join(''), defs);
 }
 
+// ---------------------------------------------------------------------------
+// km (Kaplan-Meier)
+// ---------------------------------------------------------------------------
+
+/** ¿Número dibujable? En esta sección `NaN` e `Infinity` significan «no definido». */
+function esFinito(v: number | undefined): v is number {
+  return typeof v === 'number' && Number.isFinite(v);
+}
+
+/**
+ * Polilínea ESCALONADA de una curva de supervivencia, en coordenadas de datos:
+ * de los pasos [(t0, s0), (t1, s1)…] salen los puntos (t0, s0), (t1, s0),
+ * (t1, s1), (t2, s1)… S(t) es constante entre dos eventos y cae de golpe en el
+ * evento; unir los pasos con segmentos inclinados dibujaría una caída gradual
+ * que no ocurrió.
+ *
+ * `tFin` prolonga el último tramo hasta el mayor tiempo observado de la curva:
+ * la última censura suele caer después del último evento y, sin esa cola, la
+ * curva terminaría antes que el seguimiento.
+ */
+function escalonesKm(pasos: PasoKm[], tFin: number): Array<[number, number]> {
+  const puntos: Array<[number, number]> = [];
+  pasos.forEach((p, i) => {
+    if (i > 0) puntos.push([p.t, pasos[i - 1].s]);
+    puntos.push([p.t, p.s]);
+  });
+  const ultimo = pasos[pasos.length - 1];
+  if (ultimo !== undefined && tFin > ultimo.t) puntos.push([tFin, ultimo.s]);
+  return puntos;
+}
+
+/** Un tramo de la banda de confianza: entre `t` y `t2` el intervalo vale [lo, hi]. */
+interface TramoKm {
+  t: number;
+  t2: number;
+  lo: number;
+  hi: number;
+}
+
+/**
+ * Tramos consecutivos con intervalo completo. Un paso sin `lo`/`hi` finitos (la
+ * cola donde Greenwood no está definido, o un grupo sin eventos) PARTE la banda
+ * en varios polígonos en lugar de cerrarla con una tapa recta que no existe.
+ */
+function bandasKm(pasos: PasoKm[], tFin: number): TramoKm[][] {
+  const salida: TramoKm[][] = [];
+  let actual: TramoKm[] = [];
+  pasos.forEach((p, i) => {
+    const siguiente = pasos[i + 1];
+    const t2 = Math.max(p.t, siguiente === undefined ? tFin : siguiente.t);
+    if (esFinito(p.lo) && esFinito(p.hi)) {
+      actual.push({ t: p.t, t2, lo: p.lo, hi: p.hi });
+    } else if (actual.length > 0) {
+      salida.push(actual);
+      actual = [];
+    }
+  });
+  if (actual.length > 0) salida.push(actual);
+  return salida;
+}
+
+/** Altura de la curva en `t`: el último escalón con tiempo ≤ t (S es continua por la derecha). */
+function valorEnKm(pasos: PasoKm[], t: number): number | undefined {
+  let s: number | undefined;
+  for (const p of pasos) {
+    if (p.t > t) break;
+    s = p.s;
+  }
+  return s;
+}
+
+/**
+ * Curvas de Kaplan-Meier: una polilínea escalonada por grupo, su banda de
+ * intervalo, las marcas de censura, los marcadores verticales de los tiempos de
+ * interés y la tabla de pacientes en riesgo bajo el eje.
+ *
+ * La tabla comparte la escala x con el trazado —cada número cae justo bajo su
+ * tiempo— y la columna de sus rótulos comparte el margen izquierdo con las
+ * marcas del eje y, que es el único sitio donde cabe sin robarle ancho al
+ * seguimiento.
+ */
+function km(g: GraficaKm, op: OpcionesGrafica): string {
+  const ancho = op.ancho ?? ANCHO_POR_DEFECTO;
+  const id = op.id ?? 'bio-grafica';
+  const fmt = op.fmt;
+
+  // Curvas saneadas: un paso o una censura no finitos se descartan en lugar de
+  // tumbar la gráfica entera, y cada curva se queda con el mayor tiempo que ha
+  // observado, hasta donde se prolongará su último tramo.
+  let secundarias = 0;
+  const series = g.curvas.map((c) => {
+    const pasos = (c.pasos ?? []).filter((p) => esFinito(p.t) && esFinito(p.s));
+    const censuras = (c.censuras ?? []).filter((t) => esFinito(t));
+    const indice = secundarias;
+    if (!c.destacada) secundarias += 1;
+    return {
+      curva: c,
+      pasos,
+      censuras,
+      // Con reduce y no con `Math.max(...)`: una columna pegada puede traer
+      // miles de tiempos y el operador de propagación los pasaría todos como
+      // argumentos de una sola llamada.
+      tFin: pasos.reduce((m, p) => Math.max(m, p.t), censuras.reduce((m, t) => Math.max(m, t), 0)),
+      clase: claseSerie('bio-svg__km-curva', c.destacada, indice),
+      claseBanda: c.destacada ? 'bio-svg__km-banda is-destacada' : 'bio-svg__km-banda',
+      claseCensura: claseSerie('bio-svg__km-censura', c.destacada, indice),
+      claseLeyenda: claseSerie('bio-svg__leyenda', c.destacada, indice),
+    };
+  });
+
+  // Eje del tiempo: de cero (todo el mundo está en riesgo en el origen) al mayor
+  // tiempo observado, nunca menos del dominio que declare la calculadora.
+  let tMax = esFinito(g.ejeX.dominio?.[1]) ? g.ejeX.dominio[1] : 0;
+  for (const s of series) tMax = Math.max(tMax, s.tFin);
+  const dx: [number, number] = [0, tMax > 0 ? tMax : 1];
+  const dy = dominioEje(g.ejeY);
+  const pistaY: Pista = g.ejeY.pista ?? 'pct0';
+  // Columnas de la tabla en riesgo: un tiempo fuera del dominio no tiene columna
+  // posible y se omite con su número.
+  const columnas = (g.tiemposRiesgo ?? [])
+    .map((t, i) => ({ t, i }))
+    .filter(({ t }) => esFinito(t) && t >= dx[0] && t <= dx[1]);
+  // Las marcas del eje del tiempo son los TIEMPOS DE LA TABLA cuando los hay y
+  // son pocos: así cada número en riesgo cae justo bajo el rótulo de su tiempo y
+  // las dos lecturas se comparan en la misma vertical, como en las figuras
+  // publicadas. Sin tabla utilizable (o con demasiadas columnas) el eje vuelve a
+  // sus marcas «bonitas».
+  const marcasX =
+    columnas.length >= 2 && columnas.length <= 9 ? columnas.map((c) => c.t) : ticksLineales(dx[0], dx[1], 6);
+  const marcasY = ticksLineales(dy[0], dy[1], 4);
+  const rotulosY = marcasY.map((v) => fmt.num(v, pistaY));
+  const anchoY = Math.max(...rotulosY.map((t) => anchoTexto(t, LIENZO.fuenteTick)), 0);
+
+  // La columna de rótulos de la tabla en riesgo y las marcas del eje y comparten
+  // el margen izquierdo. El canal se ensancha con la mitad del número más ancho,
+  // porque la columna de t = 0 se centra justo sobre el eje y su número asoma
+  // hacia la izquierda: sin ese hueco, «Tratamiento» y el 60 de su primera
+  // columna se leerían como una sola frase.
+  const presupuesto = ancho * LIENZO.kmEtiquetaFraccion;
+  const maxCaracteres = Math.max(6, Math.floor(presupuesto / (LIENZO.fuenteTick * LIENZO.anchoCaracter)));
+  const lineasRiesgo = g.curvas.map((c) => envolver(c.etiqueta, maxCaracteres));
+  const anchoRiesgo = Math.min(
+    presupuesto,
+    Math.max(...lineasRiesgo.flat().map((linea) => anchoTexto(linea, LIENZO.fuenteTick)), 0),
+  );
+  const numerosRiesgo = g.curvas.flatMap((c) => (c.enRiesgo ?? []).filter((n) => esFinito(n)).map((n) => fmt.num(n, 'int')));
+  const anchoNumero = Math.max(...numerosRiesgo.map((t) => anchoTexto(t, LIENZO.fuenteTick)), 0);
+  const canalRiesgo = LIENZO.canal + anchoNumero / 2;
+  const x0 = Math.round(Math.max(anchoY + LIENZO.canal, anchoRiesgo + canalRiesgo));
+  const x1 = ancho - LIENZO.margenDer;
+  const xEtiquetaRiesgo = x0 - canalRiesgo;
+
+  // Bandas apiladas de arriba abajo: título del eje y, leyenda (solo con más de
+  // un grupo: con uno repetiría el título de la gráfica), rótulos de los
+  // marcadores y, por fin, el área de trazado.
+  const yTitulo = LIENZO.fuenteTick + 2;
+  const y0Leyenda = yTitulo + 6;
+  const leyenda =
+    series.length > 1
+      ? leyendaSvg(
+          series.map((s) => ({ clase: s.claseLeyenda, texto: s.curva.etiqueta })),
+          ancho,
+          y0Leyenda,
+          'bio-svg__leyenda-texto',
+        )
+      : { svg: '', alto: 0 };
+  const marcadores = (g.marcadores ?? []).filter((m) => esFinito(m.x));
+  const bandasMarcador = Math.min(2, marcadores.filter((m) => m.etiqueta).length);
+  const arriba = y0Leyenda + leyenda.alto + 8 + bandasMarcador * LIENZO.marcadorAlto;
+  const abajo = arriba + LIENZO.kmAlto;
+  const ex = crearEscala(dx, [x0, x1]);
+  const ey = crearEscala(dy, [abajo, arriba]);
+
+  const cuerpo: string[] = [
+    `<text class="bio-svg__eje-titulo" font-size="${LIENZO.fuenteTick}" x="0" y="${co(yTitulo)}">${esc(g.ejeY.etiqueta)}</text>`,
+    leyenda.svg,
+    `<line class="bio-svg__eje" x1="${co(x0)}" y1="${co(arriba)}" x2="${co(x0)}" y2="${co(abajo)}" />`,
+    `<line class="bio-svg__eje" x1="${co(x0)}" y1="${co(abajo)}" x2="${co(x1)}" y2="${co(abajo)}" />`,
+  ];
+  marcasY.forEach((v, i) => {
+    const cy = ey.mapear(v);
+    cuerpo.push(
+      `<line class="bio-svg__tick" x1="${co(x0 - LIENZO.tickLargo)}" y1="${co(cy)}" x2="${co(x0)}" y2="${co(cy)}" />`,
+      `<text class="bio-svg__tick-texto" font-size="${LIENZO.fuenteTick}" x="${co(x0 - LIENZO.tickLargo - 4)}" y="${co(cy)}" text-anchor="end" dominant-baseline="middle">${esc(rotulosY[i])}</text>`,
+    );
+  });
+  for (const v of marcasX) {
+    const cx = ex.mapear(v);
+    cuerpo.push(
+      `<line class="bio-svg__tick" x1="${co(cx)}" y1="${co(abajo)}" x2="${co(cx)}" y2="${co(abajo + LIENZO.tickLargo)}" />`,
+      `<text class="bio-svg__tick-texto" font-size="${LIENZO.fuenteTick}" x="${co(cx)}" y="${co(abajo + LIENZO.tickTexto)}" text-anchor="middle">${esc(fmt.num(v, g.ejeX.pista))}</text>`,
+    );
+  }
+  const yTituloX = abajo + LIENZO.ejeAlto + LIENZO.tituloEjeAlto - 4;
+  cuerpo.push(
+    `<text class="bio-svg__eje-titulo" font-size="${LIENZO.fuenteTick}" x="${co((x0 + x1) / 2)}" y="${co(yTituloX)}" text-anchor="middle">${esc(g.ejeX.etiqueta)}</text>`,
+  );
+
+  // Marcadores (tiempos de interés): la línea cruza el área de trazado y el
+  // rótulo vive en su propia banda, sobre ella. El texto se va hacia dentro del
+  // lienzo y con dos marcadores las bandas se alternan, para que dos tiempos
+  // cercanos no se pisen.
+  marcadores.forEach((m, i) => {
+    const cx = ex.mapear(m.x);
+    cuerpo.push(`<line class="bio-svg__marcador" x1="${co(cx)}" y1="${co(arriba)}" x2="${co(cx)}" y2="${co(abajo)}" />`);
+    if (!m.etiqueta || bandasMarcador === 0) return;
+    const derecha = cx > (x0 + x1) / 2;
+    const banda = bandasMarcador - 1 - (i % bandasMarcador);
+    cuerpo.push(
+      `<text class="bio-svg__marcador-texto${m.destacada ? ' is-destacada' : ''}" font-size="${LIENZO.fuenteTick}"` +
+        ` x="${co(derecha ? cx - 5 : cx + 5)}" y="${co(arriba - 5 - banda * LIENZO.marcadorAlto)}"${derecha ? ' text-anchor="end"' : ''}>${esc(m.etiqueta)}</text>`,
+    );
+  });
+
+  // Bandas, curvas y censuras van recortadas al área: un intervalo que se sale
+  // por arriba (S = 1 con IC de 1.02) se corta en el techo en lugar de invadir
+  // la leyenda.
+  const recorte = `${id}-km-rec`;
+  const defs = `<clipPath id="${esc(recorte)}"><rect x="${co(x0)}" y="${co(arriba)}" width="${co(x1 - x0)}" height="${co(abajo - arriba)}" /></clipPath>`;
+  const dentro: string[] = [];
+  for (const s of series) {
+    for (const tramo of bandasKm(s.pasos, s.tFin)) {
+      const puntos = [
+        ...tramo.flatMap((r) => [
+          `${co(ex.mapear(r.t))},${co(ey.mapear(r.hi))}`,
+          `${co(ex.mapear(r.t2))},${co(ey.mapear(r.hi))}`,
+        ]),
+        ...[...tramo].reverse().flatMap((r) => [
+          `${co(ex.mapear(r.t2))},${co(ey.mapear(r.lo))}`,
+          `${co(ex.mapear(r.t))},${co(ey.mapear(r.lo))}`,
+        ]),
+      ];
+      dentro.push(`<polygon class="${s.claseBanda}" points="${puntos.join(' ')}" />`);
+    }
+  }
+  for (const s of series) {
+    const puntos = escalonesKm(s.pasos, s.tFin).map(([t, v]) => `${co(ex.mapear(t))},${co(ey.mapear(v))}`);
+    if (puntos.length > 1) dentro.push(`<polyline class="${s.clase}" points="${puntos.join(' ')}" />`);
+    for (const t of s.censuras) {
+      const v = valorEnKm(s.pasos, t);
+      if (v === undefined) continue;
+      const cx = ex.mapear(t);
+      const cy = ey.mapear(v);
+      dentro.push(
+        `<line class="${s.claseCensura}" x1="${co(cx)}" y1="${co(cy - LIENZO.kmCensura)}" x2="${co(cx)}" y2="${co(cy + LIENZO.kmCensura)}" />`,
+      );
+    }
+  }
+  cuerpo.push(`<g clip-path="url(#${esc(recorte)})">${dentro.join('')}</g>`);
+
+  // Tabla en riesgo: una fila por grupo, con su rótulo a la izquierda y el
+  // número centrado bajo cada tiempo, en la misma escala x que la curva.
+  let alto = yTituloX + 6;
+  if (series.length > 0 && columnas.length > 0) {
+    const yRotulo = yTituloX + LIENZO.kmRiesgoSep;
+    if (g.etiquetaRiesgo) {
+      cuerpo.push(
+        `<text class="bio-svg__panel-titulo" font-size="${LIENZO.fuentePanel}" x="0" y="${co(yRotulo)}">${esc(g.etiquetaRiesgo)}</text>`,
+      );
+    }
+    const filaAlto = lineasRiesgo.some((l) => l.length > 1) ? LIENZO.kmRiesgoFilaDoble : LIENZO.kmRiesgoFila;
+    const y0Tabla = yRotulo + 6;
+    series.forEach((s, f) => {
+      const cy = y0Tabla + f * filaAlto + filaAlto / 2;
+      const lineas = lineasRiesgo[f];
+      const yLinea = cy - ((lineas.length - 1) * LIENZO.lineaAlto) / 2;
+      cuerpo.push(
+        `<text class="bio-svg__etiqueta" font-size="${LIENZO.fuenteTick}" text-anchor="end" dominant-baseline="middle">` +
+          lineas
+            .map((linea, k) => `<tspan x="${co(xEtiquetaRiesgo)}" y="${co(yLinea + k * LIENZO.lineaAlto)}">${esc(linea)}</tspan>`)
+            .join('') +
+          '</text>',
+      );
+      for (const { t, i } of columnas) {
+        const n = s.curva.enRiesgo?.[i];
+        if (!esFinito(n)) continue;
+        cuerpo.push(
+          `<text class="bio-svg__km-riesgo" font-size="${LIENZO.fuenteTick}" x="${co(ex.mapear(t))}" y="${co(cy)}" text-anchor="middle" dominant-baseline="middle">${esc(fmt.num(n, 'int'))}</text>`,
+        );
+      }
+    });
+    alto = y0Tabla + series.length * filaAlto + 6;
+  }
+
+  return lienzoSvg(id, g.titulo, g.resumen, ancho, alto, cuerpo.join(''), defs);
+}
+
 /** Convierte la descripción declarativa de una gráfica en SVG. */
 export function renderGrafica(g: DatosGrafica, op: OpcionesGrafica): string {
   switch (g.tipo) {
@@ -1345,6 +1705,8 @@ export function renderGrafica(g: DatosGrafica, op: OpcionesGrafica): string {
       return barras(g, op);
     case 'histograma-boxplot':
       return histogramaBoxplot(g, op);
+    case 'km':
+      return km(g, op);
     default:
       throw new Error(`svg: tipo de gráfica no soportado «${String((g as { tipo: string }).tipo)}»`);
   }

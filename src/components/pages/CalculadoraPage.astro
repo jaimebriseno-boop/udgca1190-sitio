@@ -11,7 +11,13 @@ import { localePath, t, tPrefijo } from '../../i18n.mjs';
 import { paramsDeAvisos } from '../../lib/bioestadistica/nucleo/avisos.ts';
 import { codigoR } from '../../lib/bioestadistica/nucleo/codigoR.ts';
 import { crearFormateador } from '../../lib/bioestadistica/nucleo/formato.ts';
-import { parsearPegado, resumenPegado } from '../../lib/bioestadistica/nucleo/pegado.ts';
+import {
+  parsearPegado,
+  parsearTablaPegada,
+  resumenPegado,
+  resumenTabla,
+  textoDeTabla,
+} from '../../lib/bioestadistica/nucleo/pegado.ts';
 import { renderGrafica } from '../../lib/bioestadistica/nucleo/svg.ts';
 import type { Celda, Contexto, Entradas, Presentacion } from '../../lib/bioestadistica/nucleo/tipos.ts';
 import Base from '../../layouts/Base.astro';
@@ -26,6 +32,7 @@ import Exportar from '../bioestadistica/Exportar.astro';
 import Grafica from '../bioestadistica/Grafica.astro';
 import Interpretacion from '../bioestadistica/Interpretacion.astro';
 import PegarColumna from '../bioestadistica/PegarColumna.astro';
+import PegarTabla from '../bioestadistica/PegarTabla.astro';
 import Referencias from '../bioestadistica/Referencias.astro';
 import ResultadoCelda from '../bioestadistica/ResultadoCelda.astro';
 import Tabla2x2Input from '../bioestadistica/Tabla2x2Input.astro';
@@ -61,7 +68,7 @@ const url = new URL(localePath(rutaCanonica, lang), Astro.site).href;
 
 // Controles disponibles hoy. Un tipo sin control detiene el build antes que
 // publicar una calculadora a la que le falte un campo (misma política que Zod).
-const CONTROLES = new Set(['entero', 'decimal', 'proporcion', 'porcentaje', 'opcion', 'columna']);
+const CONTROLES = new Set(['entero', 'decimal', 'proporcion', 'porcentaje', 'opcion', 'columna', 'tabla']);
 const sinControl = datos.entradas.filter((e) => !e.derivado && !CONTROLES.has(e.tipo));
 if (sinControl.length > 0) {
   throw new Error(
@@ -94,6 +101,16 @@ const valorColumna = (id: string): string => {
   return Array.isArray(v) ? v.join('\n') : '';
 };
 
+/**
+ * Valor inicial de una tabla pegada: la lista plana del ejemplo repartida en
+ * filas de k celdas separadas por tabulador, tal como llega de una hoja de
+ * cálculo. El esquema Zod ya exige que el ejemplo de una `tabla` sea cuadrado.
+ */
+const valorTabla = (id: string): string => {
+  const v = datos.ejemplo[id];
+  return Array.isArray(v) ? textoDeTabla(v) : '';
+};
+
 const valoresTabla: Record<string, string> = {};
 for (const id of celdasTabla ?? []) valoresTabla[id] = valorEjemplo(id);
 
@@ -116,7 +133,7 @@ const avisosActivos = presentacion?.avisos ?? [];
 // el aviso del ejemplo salga ya relleno en el HTML, igual que lo pintará el
 // controlador («3 valores…», no «{n_atipicos} valores…»).
 const avisosParams = paramsDeAvisos(resultado?.avisos ?? []);
-const svg = presentacion?.grafica ? renderGrafica(presentacion.grafica, { fmt }) : '';
+const svg = presentacion?.grafica ? renderGrafica(presentacion.grafica, { fmt, id: `bio-grafica-${entry.id}` }) : '';
 // `Definicion.rScript` recibe también el nivel de confianza; la plantilla de R
 // solo pasa las entradas, así que se fija aquí el nivel de esta página.
 const rScript = def.rScript;
@@ -172,6 +189,7 @@ const payload = {
           </div>
         </div>
         <p class="print-url" data-print-url>{url}</p>
+        <p class="enlace-nota" data-enlace-nota hidden>{ui.url_sin_datos}</p>
 
         <div class="calc" id="calculadora" data-slug={entry.id} data-lang={lang}>
           <form class="calc__panel calc__entradas" novalidate>
@@ -202,6 +220,21 @@ const payload = {
                       ayuda={textos.ayudas[e.id]}
                       placeholder={ui.pegado_placeholder}
                       resumen={resumenPegado(parsearPegado(texto), ui, fmt)}
+                    />
+                  );
+                }
+                // Tabla de conteos: la misma área de pegado, con una fila de la
+                // tabla por línea y el tamaño leído de lo que se pegó.
+                if (e.tipo === 'tabla') {
+                  const texto = valorTabla(e.id);
+                  return (
+                    <PegarTabla
+                      id={e.id}
+                      etiqueta={textos.etiquetas[e.id] ?? e.id}
+                      valor={texto}
+                      ayuda={textos.ayudas[e.id]}
+                      placeholder={ui.tabla_placeholder}
+                      resumen={resumenTabla(parsearTablaPegada(texto), ui, fmt)}
                     />
                   );
                 }
@@ -338,6 +371,9 @@ const payload = {
 
   /* La URL con los datos solo se ve al imprimir. */
   .print-url { display: none; }
+  /* Nota persistente cuando los datos pegados no caben en la URL (la pinta el controlador). */
+  .enlace-nota { margin: var(--sp-2) 0 0; font-size: var(--fs-xs); color: var(--udg-gray-500); }
+  .enlace-nota[hidden] { display: none; }
 
   .calc { display: grid; gap: var(--sp-3); align-items: start; }
   @media (min-width: 1024px) {

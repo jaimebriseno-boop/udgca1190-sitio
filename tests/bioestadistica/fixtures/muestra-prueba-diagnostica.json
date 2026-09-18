@@ -1,0 +1,309 @@
+{
+  "generado_por": "scripts/bio-fixtures.mjs",
+  "meta": {
+    "calculadora": "muestra-prueba-diagnostica",
+    "generado": "2026-09-18T02:32:05.387Z",
+    "R": "R version 4.5.2 (2025-10-31)",
+    "plataforma": "aarch64-apple-darwin20",
+    "paquetes": {
+      "jsonlite": "2.0.0"
+    },
+    "plantilla_sha256": "cae6aec7aedb974f145a8cac875088be8a1170c486dca5b8470e626e944579e7"
+  },
+  "casos": [
+    {
+      "id": "ejemplo",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0.1
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_d": 195.9143998554,
+        "n_sn": 653.047999518001,
+        "n_nd": 72.9877175931884,
+        "n_sp": 104.268167990269,
+        "n_total": 653.047999518001,
+        "n_ajustado": 725.608888353334
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "sin_perdidas",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_d": 195.9143998554,
+        "n_sn": 653.047999518001,
+        "n_nd": 72.9877175931884,
+        "n_sp": 104.268167990269,
+        "n_total": 653.047999518001,
+        "n_ajustado": 653.047999518001
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "sn_alta",
+      "entradas": {
+        "sn": 0.98,
+        "sp": 0.9,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_d": 30.1170371542419,
+        "n_sn": 100.390123847473,
+        "n_nd": 138.292517544988,
+        "n_sp": 197.560739349983,
+        "n_total": 197.560739349983,
+        "n_ajustado": 197.560739349983
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "sp_alta",
+      "entradas": {
+        "sn": 0.8,
+        "sp": 0.99,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_d": 245.853364524424,
+        "n_sn": 819.511215081413,
+        "n_nd": 15.2121769299487,
+        "n_sp": 21.7316813284982,
+        "n_total": 819.511215081413,
+        "n_ajustado": 819.511215081413
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "prev_baja",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.02,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_d": 195.9143998554,
+        "n_sn": 9795.71999277001,
+        "n_nd": 72.9877175931884,
+        "n_sp": 74.4772628501922,
+        "n_total": 9795.71999277001,
+        "n_ajustado": 9795.71999277001
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "prev_alta",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.97,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_d": 195.9143998554,
+        "n_sn": 201.973608098351,
+        "n_nd": 72.9877175931884,
+        "n_sp": 2432.92391977294,
+        "n_total": 2432.92391977294,
+        "n_ajustado": 2432.92391977294
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "w_grande",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.15,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_d": 21.7682666506,
+        "n_sn": 72.5608888353334,
+        "n_nd": 8.10974639924316,
+        "n_sp": 11.5853519989188,
+        "n_total": 72.5608888353334,
+        "n_ajustado": 72.5608888353334
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "w_chica",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.01,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_d": 4897.85999638501,
+        "n_sn": 16326.19998795,
+        "n_nd": 1824.69293982971,
+        "n_sp": 2606.70419975673,
+        "n_total": 16326.19998795,
+        "n_ajustado": 16326.19998795
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "nivel_090",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.9,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 1.64485362695147,
+        "n_d": 137.982716158866,
+        "n_sn": 459.94238719622,
+        "n_nd": 51.4053256278128,
+        "n_sp": 73.4361794683041,
+        "n_total": 459.94238719622,
+        "n_ajustado": 459.94238719622
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "nivel_099",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.99,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 2.5758293035489,
+        "n_d": 338.379726652082,
+        "n_sn": 1127.93242217361,
+        "n_nd": 126.063035419403,
+        "n_sp": 180.090050599147,
+        "n_total": 1127.93242217361,
+        "n_ajustado": 1127.93242217361
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "nivel_0999",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.999,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 3.29052673149192,
+        "n_d": 552.205874703809,
+        "n_sn": 1840.6862490127,
+        "n_nd": 205.723757242596,
+        "n_sp": 293.891081775137,
+        "n_total": 1840.6862490127,
+        "n_ajustado": 1840.6862490127
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "equilibrada",
+      "entradas": {
+        "sn": 0.9,
+        "sp": 0.9,
+        "prev": 0.5,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_d": 138.292517544988,
+        "n_sn": 276.585035089977,
+        "n_nd": 138.292517544988,
+        "n_sp": 276.585035089977,
+        "n_total": 276.585035089977,
+        "n_ajustado": 276.585035089977
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0.5
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n_d": 195.9143998554,
+        "n_sn": 653.047999518001,
+        "n_nd": 72.9877175931884,
+        "n_sp": 104.268167990269,
+        "n_total": 653.047999518001,
+        "n_ajustado": 1306.095999036
+      },
+      "tol": "muestra-prueba-diagnostica"
+    },
+    {
+      "id": "n_diminuto",
+      "entradas": {
+        "sn": 1e-12,
+        "sp": 0.5,
+        "prev": 0.5,
+        "w": 0.5,
+        "nivel": 0.8,
+        "perdidas": 0
+      },
+      "esperado": {
+        "z": 1.2815515655446,
+        "n_d": 6.5694976605927e-12,
+        "n_sn": 1.31389953211854e-11,
+        "n_nd": 1.64237441514982,
+        "n_sp": 3.28474883029963,
+        "n_total": 3.28474883029963,
+        "n_ajustado": 3.28474883029963
+      },
+      "tol": "muestra-prueba-diagnostica"
+    }
+  ]
+}

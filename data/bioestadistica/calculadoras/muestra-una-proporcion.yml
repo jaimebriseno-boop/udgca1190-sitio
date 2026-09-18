@@ -1,0 +1,210 @@
+# Calculadora C1 · Tamaño de muestra para estimar una proporción con precisión
+# absoluta, con corrección por población finita, ajuste por pérdidas y modo
+# inverso (precisión alcanzable con un n ya disponible).
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: muestra
+orden: 1
+estado: activa
+motor: ts
+entradas:
+  - { id: p, tipo: proporcion, min: 0, max: 1 }
+  - { id: d, tipo: decimal, min: 0.001, max: 0.5, paso: 0.005 }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+  - { id: poblacion, tipo: entero, min: 0, requerido: false }
+  - { id: perdidas, tipo: proporcion, min: 0, max: 0.5, requerido: false }
+  - { id: n_dado, tipo: entero, min: 0, requerido: false }
+ejemplo: { p: 0.3, d: 0.05, nivel: 0.95, poblacion: 2000, perdidas: 0.1, n_dado: 0 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Sample size to estimate one proportion (absolute precision) - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    p <- {p}; d <- {d}; nivel <- {nivel}
+    poblacion <- {poblacion}   # size of the finite population; 0 = population not bounded
+    perdidas <- {perdidas}     # expected losses to follow-up, 0 to 0.5
+    n_dado <- {n_dado}         # inverse mode: sample size already available; 0 = not used
+
+    z <- qnorm(1 - (1 - nivel) / 2)
+    n0 <- z^2 * p * (1 - p) / d^2                                   # Cochran 1977
+    n <- if (poblacion >= 2) n0 / (1 + (n0 - 1) / poblacion) else n0     # finite population correction
+    n_ajustado <- n / (1 - perdidas)                                # Lwanga & Lemeshow 1991
+    # Inverse mode: the very same n(d) solved for d, with the same correction
+    n0_dado <- if (poblacion >= 2) n_dado * (poblacion - 1) / (poblacion - n_dado) else n_dado
+    d_dado <- if (n_dado >= 2) z * sqrt(p * (1 - p) / n0_dado) else NA_real_
+
+    res <- list(z = z, n0 = n0, n = n, n_ajustado = n_ajustado, d_dado = d_dado)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # The ceiling is applied once, by the interface: ceiling(n0), ceiling(n), ceiling(n_ajustado).
+    # Equivalent in RStudio (not run in the browser):
+    # presize::prec_prop(p, conf.width = 2 * d, conf.level = nivel, method = "wald")
+    # epiR::epi.sssimpleestb(N = poblacion, Py = p, epsilon = d, error = "absolute", conf.level = nivel)
+referencias:
+  - { key: cochran1977, rol: original }
+  - { key: lwanga1991, rol: original }
+  - { key: newcombe1998, rol: complementaria }
+  - { key: hulley2013, rol: didactica }
+  - { key: altman1991, rol: didactica }
+grafica: curvas
+es:
+  titulo: "Tamaño de muestra para estimar una proporción, con corrección por población finita"
+  titulo_corto: "Muestra para una proporción"
+  meta: "Calcula cuántos participantes hacen falta para estimar una proporción (prevalencia, frecuencia de un desenlace) con la precisión que elijas, con corrección por población finita, ajuste por pérdidas previstas y modo inverso. Muestra el código R equivalente y no envía tus datos a ningún servidor."
+  intro: "Indica la proporción que esperas encontrar y con cuánta precisión quieres estimarla; obtén el tamaño de muestra, el efecto de una población finita, el reclutamiento necesario si prevés pérdidas y la precisión que alcanzarías con un tamaño que ya tengas."
+  explicacion:
+    - "Cuando el objetivo del estudio es describir (qué proporción de pacientes febriles tiene dengue, qué porcentaje de una cohorte presenta una complicación), el tamaño de muestra no se calcula para detectar una diferencia sino para que el intervalo de confianza sea lo bastante estrecho. La precisión absoluta d es la semiamplitud de ese intervalo: con d = 0.05 la proporción quedará estimada con un margen de ±5 puntos porcentuales."
+    - "La fórmula necesita una proporción esperada p, que sale de estudios previos o de un piloto. Como la varianza de una proporción es p(1−p), el tamaño requerido es máximo cuando p = 0.5: si no hay información previa, usar 0.5 es la elección conservadora, porque ninguna otra proporción pedirá más muestra. Cuanto más se aleje p de 0.5, menos participantes hacen falta para la misma precisión."
+    - "Si la población de la que se muestrea es finita y conocida (los pacientes atendidos en un año, los expedientes de un servicio), la corrección por población finita reduce el tamaño: muestrear 300 de 2000 personas da más información que muestrear 300 de un millón. La corrección importa cuando la población no llega a diez veces el tamaño sin corregir; con poblaciones grandes es irrelevante y puede omitirse."
+    - "Dos ajustes cierran el cálculo. Las pérdidas previstas L elevan el reclutamiento a n/(1−L), para terminar con la muestra que se planeó. Y el modo inverso responde a la pregunta contraria, la más frecuente en la práctica: si ya dispongo de un número de participantes, ¿con qué precisión podré estimar la proporción? Todas las cifras de tamaño se redondean hacia arriba una sola vez, al final."
+  ecuaciones:
+    - id: n0
+      tex: 'n_0=\dfrac{z_{1-\alpha/2}^{2}\;p\,(1-p)}{d^{2}}'
+      simbolos:
+        - { s: 'p', def: "proporción esperada en la población (0.5 si se desconoce)" }
+        - { s: 'd', def: "precisión absoluta: semiamplitud del intervalo de confianza" }
+        - { s: 'z_{1-\alpha/2}', def: "cuantil normal del nivel de confianza (1.96 al 95 %)" }
+      nota: "Fórmula normal de Cochran (1977) para estimar una proporción con precisión absoluta."
+    - id: cpf
+      tex: 'n=\dfrac{n_0}{1+\dfrac{n_0-1}{N}}'
+      simbolos:
+        - { s: 'N', def: "tamaño de la población finita de la que se muestrea" }
+      nota: "Corrección por población finita; se aplica a n₀ sin redondear. Sin N declarada, n = n₀."
+    - id: perdidas
+      tex: 'n_{aj}=\left\lceil\dfrac{n}{1-L}\right\rceil'
+      simbolos:
+        - { s: 'L', def: "proporción de pérdidas previstas (0 a 0.5)" }
+      nota: "Ajuste por pérdidas previstas (Lwanga y Lemeshow 1991): el reclutamiento sube para terminar con n. El techo se aplica una sola vez, al final; el valor sin redondear se muestra en el detalle de la celda."
+    - id: inverso
+      tex: 'd(n)=z_{1-\alpha/2}\sqrt{\dfrac{p\,(1-p)}{n_0(n)}},\qquad n_0(n)=\dfrac{n\,(N-1)}{N-n}'
+      simbolos:
+        - { s: 'n_0(n)', def: "tamaño sin corregir equivalente a n en una población de N" }
+      nota: "Modo inverso: la misma relación n(d), despejada para d. Sin N declarada, n₀(n) = n."
+  etiquetas:
+    p: "Proporción esperada (p)"
+    d: "Precisión absoluta (d, semiamplitud del IC)"
+    nivel: "Nivel de confianza"
+    poblacion: "Población finita (N, opcional)"
+    perdidas: "Pérdidas previstas"
+    n_dado: "Tamaño ya disponible (n, opcional)"
+    z: "Cuantil normal (z)"
+    n0: "Tamaño sin corrección (n₀)"
+    n: "Tamaño necesario (n)"
+    n_ajustado: "Reclutamiento con pérdidas"
+    d_dado: "Precisión alcanzable con el n disponible"
+    exacto: "valor exacto"
+    nota_sin_n: "captura un tamaño disponible para calcularla"
+    eje_n: "Participantes (n)"
+    eje_d: "Semiamplitud del IC"
+    curva_d: "Precisión alcanzable"
+    marcador_n: "n calculado"
+    ref_objetivo: "precisión objetivo"
+  ayudas:
+    p: "Proporción que esperas encontrar, entre 0 y 1 (o en porcentaje). Si no tienes una estimación previa, usa 0.5: es el peor caso y pide la muestra más grande."
+    d: "Semiamplitud del intervalo de confianza que quieres obtener. Con d = 0.05 la proporción quedará estimada con un margen de ±5 puntos porcentuales."
+    nivel: "Habitualmente 95 %; también 90 % o 99 %."
+    poblacion: "Número de personas de la población de la que vas a muestrear, si es finita y conocida. Déjalo vacío (o en 0) si no lo es."
+    perdidas: "Proporción de participantes que esperas perder (abandono, pérdida de seguimiento, muestras no procesables). Déjalo vacío si no prevés pérdidas."
+    n_dado: "Modo inverso: si ya cuentas con un número de participantes, escríbelo aquí para ver qué precisión alcanzarías con él. Déjalo vacío (o en 0) si no lo usas."
+  interpretacion:
+    resumen: "Con {n_techo} participantes, una proporción observada cercana a {p} quedaría estimada con un intervalo de confianza del {nivel} de aproximadamente ±{d}."
+    cpf.con: "La población de origen tiene {poblacion} personas: la corrección por población finita baja el requisito de {n0_techo} a {n_techo} participantes."
+    cpf.sin: "Sin una población de origen acotada, el tamaño se queda en {n0_techo} participantes. Si muestrearas de una población finita que no fuera mucho mayor que esa cifra, capturarla reduciría el número necesario."
+    perdidas.con: "Con un {perdidas} de pérdidas previstas, hay que reclutar {n_ajustado_techo} participantes para terminar con {n_techo}."
+    perdidas.sin: "No se previeron pérdidas: la meta de reclutamiento coincide con los {n_techo} participantes calculados."
+    inverso.con: "Con los {n_dado} participantes de los que ya dispones, la precisión alcanzable sería de ±{d_dado}, frente a los ±{d} planteados."
+    inverso.sin: "Si ya cuentas con un número de participantes, escríbelo en «{n_dado_etiqueta}» para ver con qué precisión podrías estimar la proporción."
+    metodos_cpf.con: ", corregida para una población finita de {poblacion} personas"
+    metodos_cpf.sin: ", sin corrección por población finita"
+    metodos_perdidas.con: "; se añadió un {perdidas} por pérdidas previstas [{ref:lwanga1991}], con una meta de reclutamiento de {n_ajustado_techo} participantes."
+    metodos_perdidas.sin: "; no se previeron pérdidas de seguimiento."
+  avisos:
+    supuestos: "Las cifras dependen de los supuestos (proporción esperada, precisión) tomados de estudios previos o pilotos; documente su origen."
+    p_extrema: "La proporción esperada (p = {p}) está a menos de d = {d} de 0 o de 1: el intervalo de Wald se saldría del rango [0, 1] y la precisión real no sería simétrica."
+    wald_dudoso: "Con la proporción esperada indicada, la muestra calculada contendría menos de 5 casos en una de las dos categorías: la fórmula de Wald subestima el tamaño necesario; considere la precisión basada en Wilson (por ejemplo, con el paquete presize de R)."
+    supera_poblacion: "El reclutamiento con pérdidas supera la población declarada (N = {poblacion}): no se puede muestrear a más gente de la que hay. Baja la precisión pedida o las pérdidas previstas, o revisa si ese es el marco muestral."
+    cpf_importante: "La población declarada (N = {poblacion}) es menos de diez veces el tamaño sin corregir: la corrección por población finita cambia mucho el resultado. Comprueba que N sea realmente el marco del que vas a muestrear."
+  metodos: "El tamaño de muestra se calculó para estimar una proporción con precisión absoluta, suponiendo una proporción esperada de {p} y una semiamplitud del intervalo de {d}, con un nivel de confianza del {nivel}, mediante la fórmula normal de Cochran [{ref:cochran1977}]{frase_cpf}{frase_perdidas} Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificados con R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: estimar la prevalencia de dengue entre pacientes febriles, que se espera cercana al 30 %, con una precisión de ±5 puntos porcentuales, en un servicio que atiende a 2000 pacientes febriles al año y previendo un 10 % de pérdidas (datos ficticios)."
+  grafica_titulo: "Precisión alcanzable según el tamaño de muestra"
+en:
+  titulo: "Sample size to estimate one proportion, with finite population correction"
+  titulo_corto: "Sample size for one proportion"
+  meta: "Compute how many participants are needed to estimate a proportion (prevalence, frequency of an outcome) with the precision you choose, with finite population correction, adjustment for expected losses and an inverse mode. Shows the equivalent R code and never sends your data to a server."
+  intro: "Enter the proportion you expect to find and how precisely you want to estimate it; get the sample size, the effect of a finite population, the recruitment needed if you expect losses, and the precision you would reach with a sample size you already have."
+  explicacion:
+    - "When the aim of the study is descriptive (what proportion of febrile patients has dengue, what percentage of a cohort develops a complication), sample size is not computed to detect a difference but to make the confidence interval narrow enough. The absolute precision d is the half-width of that interval: with d = 0.05 the proportion will be estimated within ±5 percentage points."
+    - "The formula needs an expected proportion p, taken from previous studies or a pilot. Because the variance of a proportion is p(1−p), the required size is largest when p = 0.5: with no prior information, using 0.5 is the conservative choice, since no other proportion will demand a larger sample. The further p is from 0.5, the fewer participants are needed for the same precision."
+    - "If the population being sampled is finite and known (patients seen in a year, records in a department), the finite population correction reduces the size: sampling 300 out of 2,000 people carries more information than sampling 300 out of a million. The correction matters when the population is less than ten times the uncorrected size; with large populations it is irrelevant and can be left out."
+    - "Two adjustments close the calculation. Expected losses L raise recruitment to n/(1−L), so that the planned sample is the one that finishes. And the inverse mode answers the opposite question, the most common one in practice: if I already have a given number of participants, how precisely can I estimate the proportion? Every sample size is rounded up once, at the end."
+  ecuaciones:
+    - id: n0
+      tex: 'n_0=\dfrac{z_{1-\alpha/2}^{2}\;p\,(1-p)}{d^{2}}'
+      simbolos:
+        - { s: 'p', def: "expected proportion in the population (0.5 if unknown)" }
+        - { s: 'd', def: "absolute precision: half-width of the confidence interval" }
+        - { s: 'z_{1-\alpha/2}', def: "normal quantile for the confidence level (1.96 at 95%)" }
+      nota: "Cochran's (1977) normal formula for estimating a proportion with absolute precision."
+    - id: cpf
+      tex: 'n=\dfrac{n_0}{1+\dfrac{n_0-1}{N}}'
+      simbolos:
+        - { s: 'N', def: "size of the finite population being sampled" }
+      nota: "Finite population correction; applied to the unrounded n₀. With no N declared, n = n₀."
+    - id: perdidas
+      tex: 'n_{aj}=\left\lceil\dfrac{n}{1-L}\right\rceil'
+      simbolos:
+        - { s: 'L', def: "expected proportion of losses (0 to 0.5)" }
+      nota: "Adjustment for expected losses (Lwanga and Lemeshow 1991): recruitment rises so that n participants finish. The ceiling is applied once, at the end; the unrounded value is shown in the cell's detail."
+    - id: inverso
+      tex: 'd(n)=z_{1-\alpha/2}\sqrt{\dfrac{p\,(1-p)}{n_0(n)}},\qquad n_0(n)=\dfrac{n\,(N-1)}{N-n}'
+      simbolos:
+        - { s: 'n_0(n)', def: "uncorrected size equivalent to n in a population of N" }
+      nota: "Inverse mode: the same n(d) relationship solved for d. With no N declared, n₀(n) = n."
+  etiquetas:
+    p: "Expected proportion (p)"
+    d: "Absolute precision (d, half-width of the CI)"
+    nivel: "Confidence level"
+    poblacion: "Finite population (N, optional)"
+    perdidas: "Expected losses"
+    n_dado: "Sample size already available (n, optional)"
+    z: "Normal quantile (z)"
+    n0: "Uncorrected size (n₀)"
+    n: "Required size (n)"
+    n_ajustado: "Recruitment with losses"
+    d_dado: "Precision reachable with the available n"
+    exacto: "exact value"
+    nota_sin_n: "enter an available sample size to compute it"
+    eje_n: "Participants (n)"
+    eje_d: "Half-width of the CI"
+    curva_d: "Reachable precision"
+    marcador_n: "computed n"
+    ref_objetivo: "target precision"
+  ayudas:
+    p: "Proportion you expect to find, between 0 and 1 (or as a percentage). With no previous estimate, use 0.5: it is the worst case and demands the largest sample."
+    d: "Half-width of the confidence interval you want. With d = 0.05 the proportion will be estimated within ±5 percentage points."
+    nivel: "Usually 95%; 90% or 99% are also common."
+    poblacion: "Number of people in the population you will sample from, if it is finite and known. Leave it empty (or 0) otherwise."
+    perdidas: "Proportion of participants you expect to lose (dropout, loss to follow-up, unusable samples). Leave it empty if you expect none."
+    n_dado: "Inverse mode: if you already have a given number of participants, enter it here to see the precision you would reach. Leave it empty (or 0) if you are not using it."
+  interpretacion:
+    resumen: "With {n_techo} participants, an observed proportion near {p} would be estimated with a {nivel} confidence interval of about ±{d}."
+    cpf.con: "The source population has {poblacion} people: the finite population correction lowers the requirement from {n0_techo} to {n_techo} participants."
+    cpf.sin: "With no bounded source population, the size stays at {n0_techo} participants. If you were sampling from a finite population not much larger than that figure, entering it would reduce the number needed."
+    perdidas.con: "With {perdidas} expected losses, you need to recruit {n_ajustado_techo} participants so that {n_techo} finish."
+    perdidas.sin: "No losses were anticipated: the recruitment target equals the {n_techo} participants computed."
+    inverso.con: "With the {n_dado} participants you already have, the reachable precision would be ±{d_dado}, against the ±{d} you asked for."
+    inverso.sin: "If you already have a given number of participants, enter it under \"{n_dado_etiqueta}\" to see how precisely you could estimate the proportion."
+    metodos_cpf.con: ", corrected for a finite population of {poblacion} people"
+    metodos_cpf.sin: ", without finite population correction"
+    metodos_perdidas.con: "; {perdidas} was added for expected losses [{ref:lwanga1991}], giving a recruitment target of {n_ajustado_techo} participants."
+    metodos_perdidas.sin: "; no losses to follow-up were anticipated."
+  avisos:
+    supuestos: "The figures depend on the assumptions (expected proportion, precision) taken from previous studies or pilots; document where they come from."
+    p_extrema: "The expected proportion (p = {p}) is within d = {d} of 0 or 1: the Wald interval would fall outside [0, 1] and the actual precision would not be symmetric."
+    wald_dudoso: "With the expected proportion entered, the computed sample would hold fewer than 5 cases in one of the two categories: the Wald formula underestimates the size needed; consider Wilson-based precision (for example, with the R package presize)."
+    supera_poblacion: "Recruitment with losses exceeds the declared population (N = {poblacion}): you cannot sample more people than there are. Lower the precision demanded or the expected losses, or check whether that is the sampling frame."
+    cpf_importante: "The declared population (N = {poblacion}) is less than ten times the uncorrected size: the finite population correction changes the result substantially. Check that N really is the frame you will sample from."
+  metodos: "Sample size was computed to estimate a proportion with absolute precision, assuming an expected proportion of {p} and an interval half-width of {d}, with a confidence level of {nivel}, using Cochran's normal formula [{ref:cochran1977}]{frase_cpf}{frase_perdidas} Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: estimating the prevalence of dengue among febrile patients, expected to be around 30%, within ±5 percentage points, in a service that sees 2,000 febrile patients a year and anticipating 10% losses (fictitious data)."
+  grafica_titulo: "Reachable precision by sample size"

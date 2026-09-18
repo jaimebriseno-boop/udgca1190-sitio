@@ -178,3 +178,34 @@ test('comparar sobre un resultado sin valores no encuentra discrepancias', () =>
   assert.ok(informe.coincide);
   assert.equal(informe.resumen, 'Coincide en 0/0 campos');
 });
+
+// ---------------------------------------------------------------------------
+// Vectores de longitud variable (`Resultado.extras`): tabla de vida, curvas
+// ---------------------------------------------------------------------------
+
+test('los extras se comparan elemento a elemento con la tolerancia del campo', () => {
+  const base = { calculadora: 'x', version: 1 as const, entradas: {}, bandas: {}, avisos: [] };
+  const tol = { defecto: { rel: 1e-12, abs: 1e-14 } };
+  const ok = comparar(
+    { ...base, valores: { n: { valor: 3, metodo: 'puntual' } }, extras: { s: [1, 0.5, 0.25], t: [0, 2, 5] } },
+    { n: 3, s: [1, 0.5, 0.25], t: [0, 2, 5] },
+    tol,
+  );
+  assert.equal(ok.coincide, true, ok.discrepancias.map(describir).join('\n'));
+  // Un elemento fuera de tolerancia señala su índice.
+  const mal = comparar(
+    { ...base, valores: {}, extras: { s: [1, 0.5, 0.25] } },
+    { s: [1, 0.5, 0.2501] },
+    tol,
+  );
+  assert.equal(mal.coincide, false);
+  assert.match(mal.discrepancias.map(describir).join('\n'), /elemento 2/);
+  // Longitud distinta, vector ausente o escalar en R: discrepancia explícita.
+  assert.equal(comparar({ ...base, valores: {}, extras: { s: [1, 0.5] } }, { s: [1, 0.5, 0.25] }, tol).coincide, false);
+  assert.equal(comparar({ ...base, valores: {}, extras: { s: [1] } }, {}, tol).coincide, false);
+  assert.equal(comparar({ ...base, valores: {}, extras: { s: [1] } }, { s: 1 }, tol).coincide, false);
+  // NA/NaN también casan dentro de un vector (mediana no alcanzada, IC indefinido).
+  const nan = comparar({ ...base, valores: {}, extras: { lo: [0.9, Number.NaN] } }, { lo: [0.9, null] }, tol);
+  assert.equal(nan.coincide, true);
+});
+

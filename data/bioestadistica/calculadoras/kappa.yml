@@ -1,0 +1,348 @@
+# Calculadora D1 · Kappa de Cohen (simple y ponderada) a partir de una tabla k×k.
+# Primera calculadora con entrada de tipo `tabla`: la tabla viaja como una lista
+# plana de k² conteos por filas y el módulo deriva k con √(x.length).
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: acuerdo
+orden: 5
+estado: activa
+motor: ts
+entradas:
+  - { id: x, tipo: tabla }
+  - { id: k, tipo: entero, min: 2, max: 10, requerido: false, derivado: true }
+  - { id: ponderacion, tipo: opcion, opciones: [ninguna, lineal, cuadratica] }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+ejemplo:
+  x: [40, 8, 2, 6, 25, 4, 1, 3, 11]
+  k: 3
+  ponderacion: ninguna
+  nivel: 0.95
+r:
+  paquetes: [irr, jsonlite]
+  codigo: |
+    # Cohen's kappa (unweighted and weighted) for a k x k agreement table
+    #   - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(irr)
+    library(jsonlite)
+
+    # The pasted table, row by row: rows = rater A, columns = rater B,
+    # the same categories in the same order.
+    x <- matrix({x}, nrow = {k}, byrow = TRUE)
+    ponderacion <- {ponderacion}          # "ninguna" | "lineal" | "cuadratica"
+    nivel <- {nivel}
+    tipo <- switch(ponderacion, ninguna = "unweighted", lineal = "equal", cuadratica = "squared")
+
+    # A category nobody used (empty row AND empty column) is dropped first: it adds no
+    # agreement, and the weights depend on how many categories there are.
+    vacias <- rowSums(x) == 0 & colSums(x) == 0
+    x <- x[!vacias, !vacias, drop = FALSE]
+    k <- nrow(x); n <- sum(x)
+
+    # Agreement weights w_ij (Cohen 1968); with k = 2 the three schemes are the identity.
+    w <- switch(tipo, unweighted = diag(k), equal = 1 - abs(outer(1:k, 1:k, "-"))/(k - 1),
+                squared = 1 - (outer(1:k, 1:k, "-")/(k - 1))^2)
+    p <- x/n; pi <- rowSums(p); pj <- colSums(p)
+    po <- sum(w*p); pe <- sum(w*outer(pi, pj)); kappa <- (po - pe)/(1 - pe)
+
+    # Asymptotic standard error of Fleiss, Cohen & Everitt (1969), from the OBSERVED cells,
+    # and its Wald interval truncated to [-1, 1]. max(0, .) only absorbs the rounding of
+    # perfect agreement, where the radicand is 0 up to one ulp.
+    wi <- as.vector(w %*% pj); wj <- as.vector(t(w) %*% pi)   # weighted row and column means
+    ee <- sqrt(max(0, sum(p*(w - outer(wi, wj, "+")*(1 - kappa))^2) - (kappa - pe*(1 - kappa))^2))/((1 - pe)*sqrt(n))
+    z <- qnorm(1 - (1 - nivel)/2)
+    kappa_ic <- c(kappa, max(-1, kappa - z*ee), min(1, kappa + z*ee))
+
+    # z and p against kappa = 0 exactly as irr::kappa2, whose variance is the one under the
+    # null hypothesis of chance agreement (EXPECTED cells), not the one of the interval.
+    # kappa2 needs the ratings pair by pair, so they are rebuilt from the table; the
+    # categories are numbered from 11 because kappa2 sorts its levels as text, and with
+    # 1 to 10 it would read them "1", "10", "2" and shift the weights of a 10 x 10 table.
+    niveles <- 10 + 1:k
+    ratings <- cbind(rep(niveles, rowSums(x)), unlist(lapply(1:k, function(i) rep(niveles, x[i, ]))))
+    k2 <- kappa2(ratings, weight = tipo)
+
+    # Largest kappa these marginals allow. Unweighted that maximum is sum(min(pi, pj));
+    # with linear or quadratic weights the north-west corner rule reaches it, because
+    # |i - j| and (i - j)^2 satisfy Monge's condition.
+    esquina <- function(a, b) {
+      m <- matrix(0, length(a), length(b)); i <- 1; j <- 1
+      while (i <= length(a) && j <= length(b)) {
+        v <- min(a[i], b[j]); m[i, j] <- m[i, j] + v; a[i] <- a[i] - v; b[j] <- b[j] - v
+        if (a[i] <= 0) i <- i + 1 else j <- j + 1
+      }
+      m
+    }
+    po_max <- if (tipo == "unweighted") sum(pmin(pi, pj)) else sum(w*esquina(pi, pj))
+    kappa_max <- (po_max - pe)/(1 - pe)
+
+    # Only with two categories (Byrt, Bishop & Carlin 1993): PABAK removes the influence
+    # of prevalence and bias, and the two indices measure them.
+    pabak <- if (k == 2) 2*po - 1 else NA_real_
+    indice_prevalencia <- if (k == 2) abs(x[1, 1] - x[2, 2])/n else NA_real_
+    indice_sesgo <- if (k == 2) abs(x[1, 2] - x[2, 1])/n else NA_real_
+
+    res <- list(n = n, po = po, pe = pe, kappa = kappa_ic, ee = ee,
+                z_h0 = unname(k2$statistic), p_h0 = k2$p.value, kappa_max = kappa_max,
+                pabak = pabak, indice_prevalencia = indice_prevalencia,
+                indice_sesgo = indice_sesgo)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio (not run in the browser):
+    # DescTools::CohenKappa(x, weights = "Unweighted", conf.level = nivel)   # "Equal-Spacing", "Fleiss-Cohen"
+referencias:
+  - { key: cohen1960, rol: original }
+  - { key: cohen1968, rol: original }
+  - { key: fleiss1969, rol: original }
+  - { key: landis1977, rol: original }
+  - { key: byrt1993, rol: original }
+  - { key: fleiss1973, rol: complementaria }
+  - { key: gamer2019, rol: complementaria }
+  - { key: sim2005, rol: didactica }
+  - { key: altman1991, rol: didactica }
+grafica: ic-forest
+es:
+  titulo: "Kappa de Cohen, simple y ponderada: concordancia entre dos evaluadores con intervalo de confianza, PABAK e índices de Byrt"
+  titulo_corto: "Kappa de Cohen"
+  meta: "Pega la tabla de acuerdo entre dos evaluadores y obtén el acuerdo observado y esperado, la kappa de Cohen simple o ponderada (lineal y cuadrática) con su error estándar de Fleiss, Cohen y Everitt e intervalo de confianza, la prueba frente a κ = 0, el κ máximo que permiten los marginales y, con dos categorías, PABAK y los índices de prevalencia y de sesgo, con interpretación, código R y referencias. Los datos no salen del navegador."
+  intro: "Pega la tabla de acuerdo entre dos evaluadores, de 2 × 2 hasta 10 × 10, y obtén la kappa de Cohen con su intervalo de confianza, la banda de Landis y Koch, el κ máximo que permiten los marginales y, cuando hay dos categorías, PABAK y los índices de prevalencia y de sesgo que explican por qué un acuerdo alto puede dar una κ baja."
+  explicacion:
+    - "Dos personas clasifican los mismos casos y coinciden en el 90 % de ellos. ¿Es bueno ese acuerdo? Depende de cuánto habrían coincidido sin mirar: si el 95 % de los casos pertenece a una sola categoría, dos evaluadores que respondieran al azar con esas mismas frecuencias ya coincidirían casi siempre. La kappa de Cohen responde a eso: compara el acuerdo observado con el acuerdo esperado por azar y expresa cuánto del margen que quedaba se llegó a cubrir. Vale 1 con acuerdo perfecto, 0 cuando el acuerdo es el que cabría esperar por azar y menos de 0 cuando es peor que el azar."
+    - "Cuando las categorías están ordenadas (ausente, leve, moderado, grave) no todos los desacuerdos son iguales: confundir «leve» con «moderado» no es lo mismo que confundir «leve» con «grave». La kappa ponderada recoge esa idea dando un acuerdo parcial a las casillas cercanas a la diagonal. Con pesos lineales el crédito baja en proporción a la distancia entre categorías; con pesos cuadráticos los desacuerdos grandes pesan mucho más que los pequeños, y con categorías igualmente espaciadas esa versión coincide con el coeficiente de correlación intraclase. Ponderar categorías que no tienen orden (por ejemplo, tipos de germen) no significa nada: ahí la kappa correcta es la simple."
+    - "Kappa tiene una peculiaridad que conviene conocer antes de reportarla, la llamada paradoja de kappa. Cuando una categoría concentra casi todos los casos, el acuerdo esperado por azar sube tanto que κ se desploma aunque los evaluadores coincidan en casi todo. Dos índices de Byrt, Bishop y Carlin ayudan a diagnosticarlo con dos categorías: el índice de prevalencia mide cuán desiguales son las dos casillas de acuerdo, y el índice de sesgo, cuánto difieren los dos evaluadores en la frecuencia con que usan cada categoría. PABAK es la kappa que saldría si ambos índices fueran cero, es decir, el acuerdo observado reescalado, y se reporta junto a κ, nunca en su lugar."
+    - "El intervalo de confianza usa el error estándar asintótico de Fleiss, Cohen y Everitt (1969) y se trunca a [−1, 1]. La prueba frente a κ = 0 emplea otra varianza, la que corresponde a la hipótesis nula de acuerdo por azar, y es la que publica irr::kappa2 en R; responde solo a si hay acuerdo mayor que el azar, no a si el acuerdo es suficiente, así que con muestras grandes una κ pequeña también resulta significativa. Las bandas de Landis y Koch (pobre, leve, aceptable, moderado, sustancial y casi perfecta) son convenciones citadas desde 1977, no umbrales derivados de la teoría: léalas siempre con el intervalo al lado."
+  ecuaciones:
+    - id: pesos
+      tex: 'w_{ij}=1\ \mathrm{si}\ i=j,\ \ 0\ \mathrm{si}\ i\neq j;\qquad w^{\mathrm{L}}_{ij}=1-\frac{|i-j|}{k-1};\qquad w^{\mathrm{C}}_{ij}=1-\left(\frac{i-j}{k-1}\right)^{2}'
+      simbolos:
+        - { s: 'k', def: "número de categorías de la tabla (entre 2 y 10)" }
+        - { s: 'w_{ij}', def: "peso de acuerdo de la casilla fila i, columna j" }
+        - { s: 'w^{\mathrm{L}}_{ij}', def: "pesos lineales" }
+        - { s: 'w^{\mathrm{C}}_{ij}', def: "pesos cuadráticos" }
+      nota: "Pesos de acuerdo de Cohen (1968). Con dos categorías los tres esquemas coinciden con la identidad, así que la ponderación no cambia nada."
+    - id: kappa
+      tex: 'p_o=\sum_{i,j}w_{ij}\,p_{ij},\qquad p_e=\sum_{i,j}w_{ij}\,p_{i\cdot}\,p_{\cdot j},\qquad \hat\kappa_w=\frac{p_o-p_e}{1-p_e}'
+      simbolos:
+        - { s: 'p_{ij}', def: "proporción de casos en la casilla fila i, columna j" }
+        - { s: 'p_{i\cdot}', def: "marginal de la fila i (evaluador A)" }
+        - { s: 'p_{\cdot j}', def: "marginal de la columna j (evaluador B)" }
+        - { s: 'p_o', def: "acuerdo observado (ponderado)" }
+        - { s: 'p_e', def: "acuerdo esperado por azar (ponderado)" }
+      nota: "Kappa es la fracción del margen que quedaba por encima del azar y que efectivamente se cubrió."
+    - id: ee
+      tex: '\se(\hat\kappa_w)=\frac{\sqrt{\sum_{i,j}p_{ij}\left[w_{ij}-(\bar w_{i\cdot}+\bar w_{\cdot j})(1-\hat\kappa_w)\right]^{2}-\left[\hat\kappa_w-p_e(1-\hat\kappa_w)\right]^{2}}}{(1-p_e)\sqrt{n}}'
+      simbolos:
+        - { s: '\bar w_{i\cdot}', def: "media ponderada de la fila i, usando los marginales de columna como pesos" }
+        - { s: '\bar w_{\cdot j}', def: "media ponderada de la columna j, usando los marginales de fila como pesos" }
+        - { s: 'n', def: "número de casos clasificados por los dos evaluadores" }
+      nota: "Error estándar asintótico de Fleiss, Cohen y Everitt (1969), calculado con las casillas observadas. Con acuerdo perfecto vale 0."
+    - id: ic
+      tex: '\IC_{1-\alpha}(\hat\kappa_w)=\hat\kappa_w\pm z_{1-\alpha/2}\cdot\se(\hat\kappa_w),\qquad z_{H_0}=\frac{\hat\kappa_w}{\se_{0}(\hat\kappa_w)}'
+      simbolos:
+        - { s: 'z_{1-\alpha/2}', def: "cuantil de la normal estándar (1.96 al 95 %)" }
+        - { s: '\se_{0}', def: "error estándar bajo la hipótesis nula de acuerdo por azar" }
+      nota: "El intervalo se trunca a [−1, 1]. La prueba frente a κ = 0 usa otra varianza, la de la hipótesis nula, que es la que publica irr::kappa2."
+    - id: maximo
+      tex: '\kappa_{\max}=\frac{p_{o,\max}-p_e}{1-p_e};\qquad p_{o,\max}=\sum_{i}\min\left(p_{i\cdot},\,p_{\cdot i}\right)\;\text{(sin ponderar)},\qquad p_{o,\max}=\sum_{i,j}w_{ij}\,m_{ij}\;\text{(con pesos)}'
+      simbolos:
+        - { s: '\kappa_{\max}', def: "κ más alta compatible con los marginales observados" }
+        - { s: 'p_{o,\max}', def: "acuerdo máximo alcanzable con esos marginales" }
+        - { s: 'm_{ij}', def: "reparto de la esquina noroeste: la tabla con esos mismos marginales que maximiza el acuerdo ponderado" }
+      nota: "Sin ponderar, el máximo se alcanza llenando la diagonal todo lo que permiten los marginales. Con pesos lineales o cuadráticos lo alcanza la regla de la esquina noroeste, porque esos pesos cumplen la condición de Monge."
+    - id: byrt
+      tex: '\mathrm{PABAK}=2p_o-1,\qquad \mathrm{IP}=\frac{|a-d|}{n},\qquad \mathrm{IS}=\frac{|b-c|}{n}'
+      simbolos:
+        - { s: 'a,\ d', def: "casillas de acuerdo de una tabla 2 × 2" }
+        - { s: 'b,\ c', def: "casillas de desacuerdo de una tabla 2 × 2" }
+        - { s: '\mathrm{IP}', def: "índice de prevalencia" }
+        - { s: '\mathrm{IS}', def: "índice de sesgo" }
+      nota: "Byrt, Bishop y Carlin (1993); solo están definidos con dos categorías. PABAK es la κ que saldría si los dos índices valieran 0."
+  etiquetas:
+    x: "Tabla de acuerdo (filas: evaluador A; columnas: evaluador B)"
+    k: "Categorías (k)"
+    ponderacion: "Ponderación"
+    "ponderacion.ninguna": "Sin ponderar"
+    "ponderacion.lineal": "Lineal"
+    "ponderacion.cuadratica": "Cuadrática"
+    nivel: "Nivel de confianza"
+    n: "Casos clasificados (n)"
+    po: "Acuerdo observado (p₀)"
+    pe: "Acuerdo esperado por azar (pₑ)"
+    kappa: "Kappa de Cohen (κ)"
+    ee: "Error estándar de κ"
+    z_h0: "z frente a κ = 0"
+    p_h0: "p frente a κ = 0"
+    kappa_max: "κ máxima con estos marginales"
+    pabak: "PABAK"
+    indice_prevalencia: "Índice de prevalencia"
+    indice_sesgo: "Índice de sesgo"
+    banda_pobre: "pobre"
+    banda_leve: "leve"
+    banda_aceptable: "aceptable"
+    banda_moderado: "moderado"
+    banda_sustancial: "sustancial"
+    banda_casi_perfecto: "casi perfecto"
+    nota_fce: "Fleiss, Cohen y Everitt"
+    nota_k2: "varianza bajo κ = 0"
+    nota_marginales: "límite impuesto por los marginales"
+    nota_byrt: "Byrt, Bishop y Carlin"
+    nota_solo_k2: "solo con dos categorías"
+    grafica_referencia: "acuerdo por azar"
+  ayudas:
+    x: "Copia la tabla de conteos en tu hoja de cálculo y pégala aquí: una fila por renglón y las celdas separadas por tabuladores, comas, punto y coma o espacios, de modo que también sirve una tabla copiada de un PDF. Las filas son las categorías que asignó el evaluador A y las columnas, las del evaluador B, en el mismo orden. Si pegas los nombres de las categorías como primera fila o como primera columna, se omiten solos. Ojo con los miles: en una tabla separada por espacios el espacio separa casillas siempre, así que «1 234» se leería como dos celdas; escribe los miles sin separador (1234) o separa las casillas con tabuladores, comas o punto y coma. La tabla debe ser cuadrada, de 2 × 2 hasta 10 × 10."
+    ponderacion: "Sin ponderar, todo desacuerdo cuenta igual: es lo correcto con categorías nominales. Los pesos lineales y cuadráticos dan acuerdo parcial a las categorías vecinas y solo tienen sentido si las categorías están ordenadas."
+    nivel: "Nivel de confianza del intervalo de κ (95 % por omisión). No cambia la prueba frente a κ = 0."
+  interpretacion:
+    "resumen.simple": "Los evaluadores coincidieron en {po} de los {n} casos; el acuerdo esperado por azar era {pe}. κ = {kappa} (IC {nivel}: {kappa_ic}): acuerdo {banda} más allá del azar."
+    "resumen.ponderada": "Los evaluadores coincidieron exactamente en {po_diagonal} de los {n} casos. Con los pesos de acuerdo, que dan crédito parcial a las categorías vecinas, el acuerdo observado es {po} y el esperado por azar, {pe}. κ = {kappa} (IC {nivel}: {kappa_ic}): acuerdo {banda} más allá del azar."
+    "landis.pobre": "En las bandas de Landis y Koch, κ = {kappa} corresponde a un acuerdo pobre: los evaluadores no coinciden más de lo que cabría esperar si respondieran al azar con esas mismas frecuencias. El intervalo {kappa_ic} marca hasta dónde llega la incertidumbre; antes de repetir la medición, revise la definición de las categorías y el entrenamiento de quienes clasifican."
+    "landis.leve": "En las bandas de Landis y Koch, κ = {kappa} corresponde a un acuerdo leve (0 a 0.20): hay algo por encima del azar, pero muy poco. El intervalo {kappa_ic} marca hasta dónde llega la incertidumbre."
+    "landis.aceptable": "En las bandas de Landis y Koch, κ = {kappa} corresponde a un acuerdo aceptable (0.21 a 0.40): se distingue del azar, aunque queda lejos de lo que exige una medición que vaya a guiar decisiones. El intervalo {kappa_ic} marca hasta dónde llega la incertidumbre."
+    "landis.moderado": "En las bandas de Landis y Koch, κ = {kappa} corresponde a un acuerdo moderado (0.41 a 0.60). El intervalo {kappa_ic} marca hasta dónde llega la incertidumbre: compruebe si el límite inferior sigue siendo aceptable para el uso que va a darle a la medición."
+    "landis.sustancial": "En las bandas de Landis y Koch, κ = {kappa} corresponde a un acuerdo sustancial (0.61 a 0.80). El intervalo {kappa_ic} marca hasta dónde llega la incertidumbre."
+    "landis.casi_perfecto": "En las bandas de Landis y Koch, κ = {kappa} corresponde a un acuerdo casi perfecto (0.81 a 1). El intervalo {kappa_ic} marca hasta dónde llega la incertidumbre."
+    h0: "z = {z_h0}, p = {p_h0} frente a κ = 0. La prueba dice si hay acuerdo mayor que el azar, no si el acuerdo es suficiente: con muestras grandes, una κ pequeña también sale significativa."
+    maximo: "Con estos marginales, la κ máxima posible es {kappa_max}: ningún reparto de los mismos totales de fila y de columna daría más. Cuanto más se aleje de 1, más limita el resultado el hecho de que los dos evaluadores usen las categorías con frecuencias distintas."
+    "k2.si": "Con dos categorías se leen además PABAK = {pabak}, que es el acuerdo observado reescalado y no depende de la prevalencia, el índice de prevalencia {indice_prevalencia}, que mide cuán desiguales son las dos casillas de acuerdo, y el índice de sesgo {indice_sesgo}, que mide cuánto difieren los evaluadores en la frecuencia con que usan cada categoría. Reporte PABAK junto a κ, no en su lugar."
+    "k2.no": "PABAK y los índices de prevalencia y de sesgo solo están definidos con dos categorías; esta tabla tiene {k}."
+    "paradoja.si": "Atención: el acuerdo observado es {po} y aun así κ = {kappa}. Es la paradoja de kappa: una categoría concentra casi todos los casos, el acuerdo esperado por azar sube a {pe} y apenas queda margen por encima. Reporte el acuerdo observado junto a κ, y no lea esta κ baja como prueba de que la medición no sirve."
+    "paradoja.no": "El acuerdo observado ({po}) y κ ({kappa}) apuntan en el mismo sentido: no hay señal de la paradoja de kappa, que aparece cuando una categoría concentra casi todos los casos y el acuerdo esperado por azar se dispara."
+    "ponderacion.ninguna": "κ sin ponderar: todo desacuerdo cuenta igual, esté entre categorías vecinas o entre los extremos. Es lo correcto cuando las {k} categorías no tienen orden."
+    "ponderacion.lineal": "κ ponderada con pesos lineales: un desacuerdo entre categorías vecinas descuenta menos que uno entre los extremos, en proporción a la distancia. Solo tiene sentido si las {k} categorías están ordenadas y los pasos entre ellas son comparables."
+    "ponderacion.cuadratica": "κ ponderada con pesos cuadráticos: los desacuerdos grandes pesan mucho más que los pequeños. Solo tiene sentido si las {k} categorías están ordenadas; con categorías igualmente espaciadas, esta versión coincide con el coeficiente de correlación intraclase."
+    "metodos_ponderacion.ninguna": "sin ponderar"
+    "metodos_ponderacion.lineal": "con pesos lineales [{ref:cohen1968}]"
+    "metodos_ponderacion.cuadratica": "con pesos cuadráticos [{ref:cohen1968}]"
+    "metodos_byrt.si": "; con dos categorías se añadieron el índice kappa ajustado por prevalencia y sesgo (PABAK) y los índices de prevalencia y de sesgo [{ref:byrt1993}], y se reporta también la κ máxima compatible con los marginales observados"
+    "metodos_byrt.no": "; se reporta también la κ máxima compatible con los marginales observados"
+  avisos:
+    categoria_vacia: "Hay categorías sin ninguna observación, ni en su fila ni en su columna: se eliminaron antes de calcular κ y la tabla quedó de {k} × {k}. Los pesos de acuerdo dependen del número de categorías, así que conservarlas cambiaría el resultado."
+    paradoja: "Acuerdo observado alto y κ baja: es la paradoja de kappa, que aparece cuando una categoría concentra casi todos los casos y el acuerdo esperado por azar se dispara. Reporte el acuerdo observado junto a κ y, con dos categorías, PABAK, que corrige ese efecto; las cifras están en la interpretación."
+    ponderada_ordinal: "Los pesos de acuerdo suponen que las categorías están ordenadas: un desacuerdo entre vecinas cuenta como acuerdo parcial. Solo tiene sentido con categorías ordinales, como grados de gravedad; con categorías nominales, use κ sin ponderar."
+    n_pequeno: "Solo hay {n} casos: el error estándar de κ es asintótico, así que el intervalo es aproximado y muy ancho. Interprete con cautela."
+    cortes: "Las bandas de Landis y Koch (pobre, leve, aceptable, moderado, sustancial, casi perfecto) son cortes convencionales, no derivados de la teoría, y no marcan un umbral de validez. Interprete κ junto con su intervalo de confianza y con el acuerdo observado."
+  metodos: "La concordancia interobservador se evaluó con el coeficiente kappa de Cohen [{ref:cohen1960}] ({ponderacion_frase}) con IC {nivel} basado en el error estándar asintótico de Fleiss, Cohen y Everitt [{ref:fleiss1969}]; la magnitud se interpretó según Landis y Koch [{ref:landis1977}]{frase_byrt}. Se clasificaron {n} casos en {k} categorías y se obtuvo κ = {kappa} (IC {nivel} {kappa_ic}), con un acuerdo observado de {po}. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R (irr::kappa2)."
+  ejemplo_descripcion: "Ejemplo ilustrativo: dos clínicos clasifican por separado 100 casos de dengue en «sin signos de alarma», «con signos de alarma» y «grave» (datos ficticios, no reales)."
+  grafica_titulo: "Kappa de Cohen con su intervalo de confianza, frente al acuerdo por azar"
+en:
+  titulo: "Cohen's kappa, unweighted and weighted: agreement between two raters with confidence interval, PABAK and Byrt's indices"
+  titulo_corto: "Cohen's kappa"
+  meta: "Paste the agreement table of two raters and get observed and chance agreement, Cohen's kappa unweighted or weighted (linear and quadratic) with the standard error of Fleiss, Cohen and Everitt and its confidence interval, the test against κ = 0, the largest kappa the marginals allow and, with two categories, PABAK and the prevalence and bias indices, with an interpretation, R code and references. Data never leave the browser."
+  intro: "Paste the agreement table of two raters, from 2 × 2 up to 10 × 10, and get Cohen's kappa with its confidence interval, the Landis and Koch band, the largest kappa the marginals allow and, when there are two categories, the PABAK and the prevalence and bias indices that explain why high agreement can still give a low kappa."
+  explicacion:
+    - "Two people classify the same cases and agree on 90% of them. Is that good agreement? It depends on how much they would have agreed without looking: if 95% of the cases belong to a single category, two raters answering at random with those same frequencies would already agree almost always. Cohen's kappa answers exactly that: it compares observed agreement with the agreement expected by chance and expresses how much of the remaining room was actually covered. It is 1 for perfect agreement, 0 when agreement is what chance would produce, and below 0 when it is worse than chance."
+    - "When the categories are ordered (absent, mild, moderate, severe) not every disagreement is the same: confusing \"mild\" with \"moderate\" is not the same as confusing \"mild\" with \"severe\". Weighted kappa captures that idea by giving partial credit to the cells near the diagonal. With linear weights the credit falls in proportion to the distance between categories; with quadratic weights large disagreements count far more than small ones, and with equally spaced categories that version coincides with the intraclass correlation coefficient. Weighting categories that have no order (germ types, say) means nothing: there the right kappa is the unweighted one."
+    - "Kappa has a quirk worth knowing before you report it, the so-called kappa paradox. When one category holds almost every case, the agreement expected by chance rises so much that kappa collapses even though the raters agree on nearly everything. Two indices from Byrt, Bishop and Carlin help diagnose it with two categories: the prevalence index measures how unequal the two agreement cells are, and the bias index, how much the two raters differ in how often they use each category. PABAK is the kappa you would get if both indices were zero, that is, the observed agreement rescaled, and it is reported alongside kappa, never instead of it."
+    - "The confidence interval uses the asymptotic standard error of Fleiss, Cohen and Everitt (1969) and is truncated to [−1, 1]. The test against κ = 0 uses a different variance, the one that corresponds to the null hypothesis of chance agreement, and it is the one irr::kappa2 reports in R; it answers only whether agreement exceeds chance, not whether agreement is good enough, so with large samples a small kappa also comes out significant. The Landis and Koch bands (poor, slight, fair, moderate, substantial and almost perfect) are conventions quoted since 1977, not thresholds derived from theory: always read them with the interval alongside."
+  ecuaciones:
+    - id: pesos
+      tex: 'w_{ij}=1\ \mathrm{if}\ i=j,\ \ 0\ \mathrm{if}\ i\neq j;\qquad w^{\mathrm{L}}_{ij}=1-\frac{|i-j|}{k-1};\qquad w^{\mathrm{Q}}_{ij}=1-\left(\frac{i-j}{k-1}\right)^{2}'
+      simbolos:
+        - { s: 'k', def: "number of categories in the table (from 2 to 10)" }
+        - { s: 'w_{ij}', def: "agreement weight of the cell in row i, column j" }
+        - { s: 'w^{\mathrm{L}}_{ij}', def: "linear weights" }
+        - { s: 'w^{\mathrm{Q}}_{ij}', def: "quadratic weights" }
+      nota: "Cohen's agreement weights (1968). With two categories the three schemes coincide with the identity, so the weighting changes nothing."
+    - id: kappa
+      tex: 'p_o=\sum_{i,j}w_{ij}\,p_{ij},\qquad p_e=\sum_{i,j}w_{ij}\,p_{i\cdot}\,p_{\cdot j},\qquad \hat\kappa_w=\frac{p_o-p_e}{1-p_e}'
+      simbolos:
+        - { s: 'p_{ij}', def: "proportion of cases in the cell in row i, column j" }
+        - { s: 'p_{i\cdot}', def: "marginal of row i (rater A)" }
+        - { s: 'p_{\cdot j}', def: "marginal of column j (rater B)" }
+        - { s: 'p_o', def: "observed (weighted) agreement" }
+        - { s: 'p_e', def: "agreement expected by chance (weighted)" }
+      nota: "Kappa is the fraction of the room left above chance that was actually covered."
+    - id: ee
+      tex: '\se(\hat\kappa_w)=\frac{\sqrt{\sum_{i,j}p_{ij}\left[w_{ij}-(\bar w_{i\cdot}+\bar w_{\cdot j})(1-\hat\kappa_w)\right]^{2}-\left[\hat\kappa_w-p_e(1-\hat\kappa_w)\right]^{2}}}{(1-p_e)\sqrt{n}}'
+      simbolos:
+        - { s: '\bar w_{i\cdot}', def: "weighted mean of row i, using the column marginals as weights" }
+        - { s: '\bar w_{\cdot j}', def: "weighted mean of column j, using the row marginals as weights" }
+        - { s: 'n', def: "number of cases classified by both raters" }
+      nota: "Asymptotic standard error of Fleiss, Cohen and Everitt (1969), computed from the observed cells. It is 0 under perfect agreement."
+    - id: ic
+      tex: '\CI_{1-\alpha}(\hat\kappa_w)=\hat\kappa_w\pm z_{1-\alpha/2}\cdot\se(\hat\kappa_w),\qquad z_{H_0}=\frac{\hat\kappa_w}{\se_{0}(\hat\kappa_w)}'
+      simbolos:
+        - { s: 'z_{1-\alpha/2}', def: "standard normal quantile (1.96 at 95%)" }
+        - { s: '\se_{0}', def: "standard error under the null hypothesis of chance agreement" }
+      nota: "The interval is truncated to [−1, 1]. The test against κ = 0 uses a different variance, the null one, which is what irr::kappa2 reports."
+    - id: maximo
+      tex: '\kappa_{\max}=\frac{p_{o,\max}-p_e}{1-p_e};\qquad p_{o,\max}=\sum_{i}\min\left(p_{i\cdot},\,p_{\cdot i}\right)\;\text{(unweighted)},\qquad p_{o,\max}=\sum_{i,j}w_{ij}\,m_{ij}\;\text{(weighted)}'
+      simbolos:
+        - { s: '\kappa_{\max}', def: "highest kappa compatible with the observed marginals" }
+        - { s: 'p_{o,\max}', def: "maximum agreement attainable with those marginals" }
+        - { s: 'm_{ij}', def: "north-west corner allocation: the table with those same marginals that maximises weighted agreement" }
+      nota: "Unweighted, the maximum is reached by filling the diagonal as far as the marginals allow. With linear or quadratic weights the north-west corner rule reaches it, because those weights satisfy Monge's condition."
+    - id: byrt
+      tex: '\mathrm{PABAK}=2p_o-1,\qquad \mathrm{PI}=\frac{|a-d|}{n},\qquad \mathrm{BI}=\frac{|b-c|}{n}'
+      simbolos:
+        - { s: 'a,\ d', def: "agreement cells of a 2 × 2 table" }
+        - { s: 'b,\ c', def: "disagreement cells of a 2 × 2 table" }
+        - { s: '\mathrm{PI}', def: "prevalence index" }
+        - { s: '\mathrm{BI}', def: "bias index" }
+      nota: "Byrt, Bishop and Carlin (1993); they are defined only with two categories. PABAK is the kappa you would get if both indices were 0."
+  etiquetas:
+    x: "Agreement table (rows: rater A; columns: rater B)"
+    k: "Categories (k)"
+    ponderacion: "Weighting"
+    "ponderacion.ninguna": "Unweighted"
+    "ponderacion.lineal": "Linear"
+    "ponderacion.cuadratica": "Quadratic"
+    nivel: "Confidence level"
+    n: "Cases classified (n)"
+    po: "Observed agreement (p₀)"
+    pe: "Agreement expected by chance (pₑ)"
+    kappa: "Cohen's kappa (κ)"
+    ee: "Standard error of κ"
+    z_h0: "z against κ = 0"
+    p_h0: "p against κ = 0"
+    kappa_max: "Largest κ these marginals allow"
+    pabak: "PABAK"
+    indice_prevalencia: "Prevalence index"
+    indice_sesgo: "Bias index"
+    banda_pobre: "poor"
+    banda_leve: "slight"
+    banda_aceptable: "fair"
+    banda_moderado: "moderate"
+    banda_sustancial: "substantial"
+    banda_casi_perfecto: "almost perfect"
+    nota_fce: "Fleiss, Cohen and Everitt"
+    nota_k2: "variance under κ = 0"
+    nota_marginales: "limit imposed by the marginals"
+    nota_byrt: "Byrt, Bishop and Carlin"
+    nota_solo_k2: "two categories only"
+    grafica_referencia: "chance agreement"
+  ayudas:
+    x: "Copy the table of counts in your spreadsheet and paste it here: one table row per line, cells separated by tabs, commas, semicolons or spaces, so a table copied from a PDF works too. Rows are the categories assigned by rater A and columns those of rater B, in the same order. If you paste the category names as a first row or a first column, they are dropped for you. A note on thousands: in a space-separated table a space always separates cells, so \"1 234\" would read as two cells; write thousands with no separator (1234), or separate the cells with tabs, commas or semicolons. The table must be square, from 2 × 2 up to 10 × 10."
+    ponderacion: "Unweighted, every disagreement counts the same: that is the right choice for nominal categories. Linear and quadratic weights give partial credit to neighbouring categories and only make sense if the categories are ordered."
+    nivel: "Confidence level of the interval for κ (95% by default). It does not change the test against κ = 0."
+  interpretacion:
+    "resumen.simple": "The raters agreed on {po} of the {n} cases; the agreement expected by chance was {pe}. κ = {kappa} ({nivel} CI: {kappa_ic}): {banda} agreement beyond chance."
+    "resumen.ponderada": "The raters agreed exactly on {po_diagonal} of the {n} cases. With the agreement weights, which give partial credit to neighbouring categories, observed agreement is {po} and chance agreement is {pe}. κ = {kappa} ({nivel} CI: {kappa_ic}): {banda} agreement beyond chance."
+    "landis.pobre": "On the Landis and Koch bands, κ = {kappa} is poor agreement: the raters do not agree more than they would if they answered at random with those same frequencies. The interval {kappa_ic} shows how far the uncertainty reaches; before repeating the measurement, review the definition of the categories and the training of those who classify."
+    "landis.leve": "On the Landis and Koch bands, κ = {kappa} is slight agreement (0 to 0.20): there is something above chance, but very little. The interval {kappa_ic} shows how far the uncertainty reaches."
+    "landis.aceptable": "On the Landis and Koch bands, κ = {kappa} is fair agreement (0.21 to 0.40): it stands apart from chance, but falls well short of what a measurement meant to guide decisions requires. The interval {kappa_ic} shows how far the uncertainty reaches."
+    "landis.moderado": "On the Landis and Koch bands, κ = {kappa} is moderate agreement (0.41 to 0.60). The interval {kappa_ic} shows how far the uncertainty reaches: check whether the lower limit is still acceptable for the use you have in mind."
+    "landis.sustancial": "On the Landis and Koch bands, κ = {kappa} is substantial agreement (0.61 to 0.80). The interval {kappa_ic} shows how far the uncertainty reaches."
+    "landis.casi_perfecto": "On the Landis and Koch bands, κ = {kappa} is almost perfect agreement (0.81 to 1). The interval {kappa_ic} shows how far the uncertainty reaches."
+    h0: "z = {z_h0}, p = {p_h0} against κ = 0. The test says whether agreement exceeds chance, not whether agreement is good enough: with large samples a small kappa also comes out significant."
+    maximo: "With these marginals the largest possible κ is {kappa_max}: no arrangement of the same row and column totals would give more. The further it falls below 1, the more the result is limited by the two raters using the categories with different frequencies."
+    "k2.si": "With two categories you can also read PABAK = {pabak}, the observed agreement rescaled, which does not depend on prevalence; the prevalence index {indice_prevalencia}, which measures how unequal the two agreement cells are; and the bias index {indice_sesgo}, which measures how much the raters differ in how often they use each category. Report PABAK alongside κ, not instead of it."
+    "k2.no": "PABAK and the prevalence and bias indices are defined only with two categories; this table has {k}."
+    "paradoja.si": "Careful: observed agreement is {po} and still κ = {kappa}. This is the kappa paradox: one category holds almost every case, the agreement expected by chance rises to {pe} and barely any room is left above it. Report observed agreement alongside κ, and do not read this low κ as proof that the measurement is useless."
+    "paradoja.no": "Observed agreement ({po}) and κ ({kappa}) point the same way: there is no sign of the kappa paradox, which appears when one category holds almost every case and chance agreement shoots up."
+    "ponderacion.ninguna": "Unweighted κ: every disagreement counts the same, whether between neighbouring categories or between the extremes. That is the right choice when the {k} categories have no order."
+    "ponderacion.lineal": "κ weighted with linear weights: a disagreement between neighbouring categories costs less than one between the extremes, in proportion to the distance. It only makes sense if the {k} categories are ordered and the steps between them are comparable."
+    "ponderacion.cuadratica": "κ weighted with quadratic weights: large disagreements count far more than small ones. It only makes sense if the {k} categories are ordered; with equally spaced categories this version coincides with the intraclass correlation coefficient."
+    "metodos_ponderacion.ninguna": "unweighted"
+    "metodos_ponderacion.lineal": "with linear weights [{ref:cohen1968}]"
+    "metodos_ponderacion.cuadratica": "with quadratic weights [{ref:cohen1968}]"
+    "metodos_byrt.si": "; with two categories the prevalence-adjusted bias-adjusted kappa (PABAK) and the prevalence and bias indices were added [{ref:byrt1993}], and the largest κ compatible with the observed marginals is also reported"
+    "metodos_byrt.no": "; the largest κ compatible with the observed marginals is also reported"
+  avisos:
+    categoria_vacia: "Some categories have no observation at all, neither in their row nor in their column: they were dropped before computing κ and the table came down to {k} × {k}. The agreement weights depend on how many categories there are, so keeping them would change the result."
+    paradoja: "High observed agreement with a low κ: this is the kappa paradox, which appears when one category holds almost every case and chance agreement shoots up. Report observed agreement alongside κ and, with two categories, PABAK, which corrects for that effect; the figures are in the interpretation."
+    ponderada_ordinal: "Agreement weights assume the categories are ordered: a disagreement between neighbours counts as partial agreement. That only makes sense with ordinal categories, such as grades of severity; with nominal categories, use unweighted κ."
+    n_pequeno: "Only {n} cases: the standard error of κ is asymptotic, so the interval is approximate and very wide. Interpret with caution."
+    cortes: "The Landis and Koch bands (poor, slight, fair, moderate, substantial, almost perfect) are conventional cut-offs, not derived from theory, and they mark no threshold of validity. Interpret κ together with its confidence interval and with the observed agreement."
+  metodos: "Interobserver agreement was assessed with Cohen's kappa coefficient [{ref:cohen1960}] ({ponderacion_frase}) with a {nivel} CI based on the asymptotic standard error of Fleiss, Cohen and Everitt [{ref:fleiss1969}]; its magnitude was interpreted following Landis and Koch [{ref:landis1977}]{frase_byrt}. {n} cases were classified into {k} categories and κ = {kappa} ({nivel} CI {kappa_ic}) was obtained, with an observed agreement of {po}. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R (irr::kappa2)."
+  ejemplo_descripcion: "Illustrative example: two clinicians independently classify 100 dengue cases as \"no warning signs\", \"with warning signs\" and \"severe\" (fictitious data, not real)."
+  grafica_titulo: "Cohen's kappa with its confidence interval, against chance agreement"

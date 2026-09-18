@@ -216,3 +216,23 @@ test('el CSV neutraliza fórmulas de hoja de cálculo sin tocar los valores form
   // Un intervalo o un número negativo formateados por la calculadora no son fórmulas.
   assert.deepEqual(fila.slice(5), ['-2.9 % a 19.0 %', '−2.9 % a 19.0 %', '85.0 %', '-0.5']);
 });
+
+test('el Markdown avisa bajo el enlace cuando los datos pegados no cupieron en la URL', () => {
+  const base = {
+    titulo: 'Kaplan-Meier',
+    url: 'https://udgca1190.com.mx/herramientas/bioestadistica/kaplan-meier/?nivel=0.95',
+    entradas: [] as Array<[string, string]>,
+    resumen: [] as Array<[string, string, string]>,
+    interpretacion: [],
+    metodos: '',
+    codigoR: '',
+    ui,
+    cita: '',
+  };
+  const sin = aMarkdown(base);
+  const con = aMarkdown({ ...base, notaUrl: 'Este enlace no incluye los datos pegados: son demasiado largos para una URL.' });
+  assert.ok(!sin.includes('no incluye los datos pegados'));
+  const i = con.indexOf('<https://udgca1190.com.mx/herramientas/bioestadistica/kaplan-meier/?nivel=0.95>');
+  const j = con.indexOf('Este enlace no incluye los datos pegados');
+  assert.ok(i >= 0 && j > i, 'la nota va justo después del enlace');
+});

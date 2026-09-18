@@ -4,7 +4,12 @@
 #
 # Cada archivo de `r/generado/<slug>/` es, byte a byte, el código que ve el
 # usuario en la página: aquí solo se ejecuta con `source()` y se captura lo que
-# imprime por stdout (un único JSON). No se transforma nada.
+# imprime por stdout (un único JSON). No se transforma nada: el texto del JSON
+# se comprueba (debe ser legible) y se copia TAL CUAL dentro de `casos`, sin
+# releerlo ni reescribirlo. Antes se releía con `fromJSON(simplifyVector = TRUE)`
+# y se reescribía con `toJSON`, y en ese viaje un vector de longitud 1 (`[4]`)
+# se volvía el escalar `4`, que `comparar()` rechaza (hallazgo de la revisión
+# de H3); releerlo con `simplifyVector = FALSE` cambiaba los `null` por "NA".
 #
 #   --dir       directorio con los snippets; por omisión `r/generado/<slug>`.
 #               `scripts/bio-fixtures.mjs --check` apunta a un directorio temporal.
@@ -66,18 +71,23 @@ correr <- function(ruta, id) {
     stop("el snippet ", id, " no imprimió nada; se esperaba una línea `cat(toJSON(res, ...))`", call. = FALSE)
   }
   tryCatch(
-    jsonlite::fromJSON(texto, simplifyVector = TRUE),
+    jsonlite::fromJSON(texto, simplifyVector = FALSE),
     error = function(e) stop("el snippet ", id, " no imprimió un JSON legible:\n  ", conditionMessage(e),
                              "\n  salida: ", substr(texto, 1L, 200L), call. = FALSE)
   )
+  # Validado: se devuelve el texto original, no el objeto releído.
+  trimws(texto)
 }
 
 suppressPackageStartupMessages(library(jsonlite))
 
-casos <- list()
+casos_texto <- character(length(archivos))
 for (i in seq_along(archivos)) {
-  casos[[ids[i]]] <- correr(archivos[i], ids[i])
+  casos_texto[i] <- correr(archivos[i], ids[i])
 }
+# Los ids vienen del nombre del archivo y `scripts/bio-fixtures.mjs` solo admite
+# `[a-z0-9_]+`, así que pueden ir como claves JSON sin escapar.
+if (any(!grepl("^[a-z0-9_]+$", ids))) stop("id de caso con caracteres no admitidos: ", paste(ids[!grepl("^[a-z0-9_]+$", ids)], collapse = ", "), call. = FALSE)
 
 # ---------------------------------------------------------------------------
 # Metadatos de reproducibilidad
@@ -108,5 +118,8 @@ meta <- list(
   paquetes = versiones
 )
 
-cat(toJSON(list(meta = meta, casos = casos), auto_unbox = TRUE, digits = NA, pretty = TRUE))
-cat("\n")
+# Se ensambla a mano: `meta` con toJSON y cada caso con el texto literal que
+# imprimió su snippet. Node lo vuelve a leer con JSON.parse y lo indenta.
+cat('{"meta": ', toJSON(meta, auto_unbox = TRUE, digits = NA), ', "casos": {',
+    paste0('"', ids, '": ', casos_texto, collapse = ", "),
+    '}}\n', sep = "")

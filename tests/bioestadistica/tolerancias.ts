@@ -16,7 +16,7 @@
  * | `cuantil`    | 1e-9  | 1e-12 | `qnorm`, `qt`, `qbeta`, `qchisq`: inversión por Brent y funciones incompletas. |
  * | `exacto`     | 1e-8  | 1e-15 | p-valores exactos (Fisher, McNemar exacto): sumas de pmf en escala logarítmica. |
  * | `fisher_or`  | 5e-4  | 1e-6  | OR condicional de `fisher.test`: R resuelve con `uniroot` a tol ≈ 1.2e-4. |
- * | `potencia`   | 1e-6  | 1e-8  | `power.*.test` y `pwr::*`: iterativos en ambos lados.         |
+ * | `potencia`   | 1e-8  | 1e-8  | `power.*.test` y `pwr::*`: iterativos en ambos lados (uniroot con tol 1e-10). |
  * | `modelo`     | 1e-6  | 1e-8  | glm, coxph y lm: `epsilon` de IRLS en R.                      |
  * | `shapiro`    | 1e-10 | 1e-12 | W de Shapiro-Wilk y su p: port de AS R94 (Royston 1995) con los polinomios publicados; medido 6.7e-16 en W y 2.2e-13 en p sobre 44 columnas (n de 3 a 5,000). |
  */
@@ -35,7 +35,12 @@ export const exacto: Tolerancia = { rel: 1e-8, abs: 1e-15 };
 export const fisher_or: Tolerancia = { rel: 5e-4, abs: 1e-6 };
 
 /** Tamaños de muestra y potencia resueltos por iteración. */
-export const potencia: Tolerancia = { rel: 1e-6, abs: 1e-8 };
+// La revisión de H3 midió el uso real de este perfil sobre los fixtures: la
+// diferencia máxima TS-vs-R de todo lo resuelto por uniroot es 1.4e-10 (0.0001 %
+// de un presupuesto de 1e-6). Con 1e-8 el peor caso usa un 1.4 % y una regresión
+// del buscador de raíces ya no pasa inadvertida. Apretar una tolerancia sí está
+// permitido; aflojarla, nunca.
+export const potencia: Tolerancia = { rel: 1e-8, abs: 1e-8 };
 
 /** Coeficientes de modelos ajustados por IRLS o Newton-Raphson. */
 export const modelo: Tolerancia = { rel: 1e-6, abs: 1e-8 };
@@ -121,4 +126,32 @@ export const TOL: Record<string, PerfilTolerancia> = {
   'ic-media': { defecto: cuantil, campos: { eem: cerrado } },
   'media-desde-mediana': { defecto: cerrado },
   descriptivos: { defecto: cerrado, campos: { media: cuantil, sw_w: shapiro, sw_p: shapiro } },
+  // Tamaño de muestra (H3). Las fórmulas cerradas con un `qnorm` van en `cerrado`;
+  // lo que en R resuelve `uniroot` (`power.prop.test`, `power.t.test` con
+  // `tol = 1e-10`, `pwr.r.test` con su tolerancia por omisión) va en `potencia`,
+  // y lo que pasa por `qt` o `pnt`, en `cuantil`.
+  'muestra-una-proporcion': { defecto: cerrado },
+  'muestra-una-media': { defecto: cerrado, campos: { n_t: cuantil } },
+  'muestra-dos-proporciones': { defecto: cerrado, campos: { n_ppt: potencia, n_pwr_h: potencia } },
+  'muestra-dos-medias': {
+    defecto: potencia,
+    campos: { z_alfa: cerrado, z_beta: cerrado, d_cohen: cerrado, n1_normal: cerrado, n2_normal: cerrado, poder_dado_normal: cerrado },
+  },
+  'muestra-medias-pareadas': {
+    defecto: potencia,
+    campos: { z_alfa: cerrado, z_beta: cerrado, de_dif: cerrado, n_normal: cerrado, poder_dado_normal: cerrado },
+  },
+  'muestra-prueba-diagnostica': { defecto: cerrado },
+  'muestra-correlacion': { defecto: cerrado, campos: { n_pwr: potencia } },
+  // Concordancia y supervivencia (H3, segunda oleada): κ, su EE de Fleiss-Cohen-
+  // Everitt, PABAK y los índices de Byrt son forma cerrada; el p frente a κ = 0
+  // pasa por `pnorm`. Kaplan-Meier: productos y Greenwood en doble; el IC
+  // log-log usa un `qnorm`; el p del log-rank pasa por `pchisq`.
+  // z_h0 y p_h0 (prueba frente a κ = 0 como `irr::kappa2`) son una resta de
+  // cantidades casi iguales y con p_e → 1 amplificaban un ulp hasta 1.5e-8; la
+  // revisión de H3 propuso un perfil propio, pero el constructor reprodujo la
+  // agrupación de sumas de kappa2 (conteos enteros, división entre n al final)
+  // y los dos casos `pe_casi_uno*` coinciden bit a bit: todo sigue en `cerrado`.
+  kappa: { defecto: cerrado },
+  'kaplan-meier': { defecto: cerrado, campos: { p_logrank: cuantil } },
 };

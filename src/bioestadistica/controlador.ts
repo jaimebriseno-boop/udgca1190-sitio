@@ -14,7 +14,13 @@ import { codigoR } from '../lib/bioestadistica/nucleo/codigoR.ts';
 import { parsearNumero, validarEntrada } from '../lib/bioestadistica/nucleo/entrada.ts';
 import { aCSV, aMarkdown, columnasOmitidas } from '../lib/bioestadistica/nucleo/exportar.ts';
 import { crearFormateador } from '../lib/bioestadistica/nucleo/formato.ts';
-import { parsearPegado, resumenPegado } from '../lib/bioestadistica/nucleo/pegado.ts';
+import {
+  parsearPegado,
+  parsearTablaPegada, esCuadrada,
+  resumenPegado,
+  resumenTabla,
+  textoDeTabla,
+} from '../lib/bioestadistica/nucleo/pegado.ts';
 import { renderGrafica } from '../lib/bioestadistica/nucleo/svg.ts';
 import type {
   Aviso,
@@ -56,7 +62,7 @@ export interface DatosPagina {
   url: string;
 }
 
-/** Un `<textarea>` es el control de una columna pegada; los demás tipos, `<input>` o `<select>`. */
+/** Un `<textarea>` es el control de una columna o una tabla pegadas; los demás tipos, `<input>` o `<select>`. */
 type Control = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 interface Campo {
@@ -153,6 +159,34 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
         }
         continue;
       }
+      if (d.tipo === 'tabla') {
+        const r = parsearTablaPegada(bruto);
+        const resumen = $<HTMLElement>(`[data-pegado-resumen="${d.id}"]`);
+        if (resumen) resumen.textContent = resumenTabla(r, ui, fmt);
+        // La tabla viaja aplanada por filas, como la codifica la URL, y se
+        // registra siempre —también vacía— por lo mismo que la columna.
+        entradas[d.id] = r.filas.flat();
+        if (r.filas.length === 0) {
+          if (bruto.trim() === '') {
+            if (d.requerido) errores[d.id] = 'err_requerido';
+          } else errores[d.id] = 'err_sin_datos';
+        } else if (r.irregular) {
+          // Una tabla con filas de distinta longitud no tiene forma: aplanarla
+          // daría una lista sin significado.
+          errores[d.id] = 'err_tabla_forma';
+        } else if (!esCuadrada(r.filas)) {
+          // La forma no sobrevive al aplanado: una fila de cuatro celdas (1 × 4)
+          // o una tabla de 2 × 8 tienen un número cuadrado de celdas y
+          // `validar()` las tomaría por 2 × 2 o 4 × 4. Si además se descartó
+          // alguna fila incompleta, la causa probable es ese hueco y el error
+          // lo nombra; el tamaño admitido (2–10) sigue siendo cosa de `validar()`.
+          errores[d.id] = r.filasDescartadas > 0 ? 'err_tabla_incompleta' : 'err_tabla_cuadrada';
+        } else if (d.min !== undefined && r.filas.flat().length < d.min) {
+          // En una tabla, `min` cuenta celdas.
+          errores[d.id] = 'err_n_min';
+        }
+        continue;
+      }
       const codigo = validarEntrada(bruto, d);
       if (codigo) {
         errores[d.id] = codigo;
@@ -180,8 +214,8 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
   /** Valor de `min`/`max` en el mensaje de error, con el formato del tipo de campo. */
   function limite(d: EntradaDef, v: number): string {
     if (d.tipo === 'proporcion') return fmt.nivel(v);
-    // El `min` de una columna cuenta valores, no mide la variable.
-    if (d.tipo === 'entero' || d.tipo === 'columna') return fmt.entero(v);
+    // El `min` de una columna o de una tabla cuenta valores, no mide la variable.
+    if (d.tipo === 'entero' || d.tipo === 'columna' || d.tipo === 'tabla') return fmt.entero(v);
     return fmt.num(v, 'dec3');
   }
 
@@ -293,7 +327,9 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
       return;
     }
     try {
-      hueco.innerHTML = renderGrafica(p.grafica, { fmt });
+      // El id entra en el `clipPath` y en los `aria-labelledby` del SVG: por
+      // calculadora, para que dos gráficas en una misma página no los compartan.
+      hueco.innerHTML = renderGrafica(p.grafica, { fmt, id: `bio-grafica-${datos.slug}` });
       if (figura) figura.hidden = false;
     } catch (e) {
       // Una gráfica que no se puede trazar (p. ej. escala logarítmica con un
@@ -344,9 +380,19 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
     if (pildora) pildora.hidden = !mismasEntradas(entradas, datos.ejemplo, derivadas);
   }
 
+  /**
+   * URL de impresión y nota persistente del enlace. Si los datos pegados no
+   * caben en la URL (`columnasOmitidas`), quien imprime, comparte o copia el
+   * Markdown debe saber que el enlace lleva la calculadora y no sus datos; el
+   * botón «Compartir enlace» lo avisa solo al pulsarlo, así que la nota se
+   * pinta siempre que la condición se cumpla.
+   */
   function pintarUrlImpresion(entradas: Entradas): void {
+    const omitidas = columnasOmitidas(entradas, defs);
     const el = $<HTMLElement>('[data-print-url]');
-    if (el) el.textContent = urlConEstado(entradas, defs);
+    if (el) el.textContent = omitidas && ui.url_sin_datos ? `${urlConEstado(entradas, defs)} · ${ui.url_sin_datos}` : urlConEstado(entradas, defs);
+    const nota = $<HTMLElement>('[data-enlace-nota]');
+    if (nota) nota.hidden = !omitidas;
   }
 
   // -------------------------------------------------------------------------
@@ -419,10 +465,16 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
   // Escritura de los campos
   // -------------------------------------------------------------------------
 
-  /** Valor de entrada → texto del campo, con el formato que la persona espera ver. */
-  function aTextoCampo(v: ValorEntrada | undefined): string {
+  /**
+   * Valor de entrada → texto del campo, con el formato que la persona espera
+   * ver. La definición de la entrada es opcional porque no siempre se conoce
+   * (el resumen de Markdown solo maneja valores), pero hace falta para
+   * distinguir una lista que es una columna (un número por línea) de una que es
+   * una tabla (una fila por línea).
+   */
+  function aTextoCampo(v: ValorEntrada | undefined, d?: EntradaDef): string {
     if (v === undefined || v === null) return '';
-    if (Array.isArray(v)) return v.join('\n');
+    if (Array.isArray(v)) return d?.tipo === 'tabla' ? textoDeTabla(v) : v.join('\n');
     if (typeof v === 'boolean') return v ? '1' : '0';
     if (typeof v === 'string') return v;
     // Los números se escriben sin formato de presentación: el campo se vuelve a
@@ -434,7 +486,7 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
   /** Rótulo de una opción añadida al vuelo a un `<select>` (p. ej. un nivel de confianza inusual). */
   function rotuloOpcion(d: EntradaDef, v: number): string {
     if (d.tipo === 'proporcion') return fmt.nivel(v);
-    if (d.tipo === 'entero' || d.tipo === 'columna') return fmt.entero(v);
+    if (d.tipo === 'entero' || d.tipo === 'columna' || d.tipo === 'tabla') return fmt.entero(v);
     return fmt.num(v, 'dec3');
   }
 
@@ -469,7 +521,7 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
         el.value = '';
         continue;
       }
-      const texto = aTextoCampo(v);
+      const texto = aTextoCampo(v, d);
       if (el instanceof HTMLSelectElement) asignarSelect(d, el, texto, v);
       else el.value = texto;
     }
@@ -516,7 +568,7 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
       // interno: en el resumen debe decir «Wilson», no «wilson». La clave es la
       // misma cadena con la que el valor viaja en la URL.
       if (d.opciones) {
-        const texto = aTextoCampo(v);
+        const texto = aTextoCampo(v, d);
         pares.push([rotulo, datos.textos.etiquetas[`${d.id}.${texto}`] ?? texto]);
         continue;
       }
@@ -541,6 +593,7 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
     return aMarkdown({
       titulo: datos.textos.titulo,
       url: urlConEstado(ultima.entradas, defs),
+      notaUrl: columnasOmitidas(ultima.entradas, defs) ? ui.url_sin_datos : undefined,
       entradas: entradasLegibles(ultima.entradas),
       resumen: ultima.presentacion.resumen,
       interpretacion: ultima.presentacion.interpretacion,

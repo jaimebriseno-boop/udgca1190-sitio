@@ -25,6 +25,7 @@ import type {
   GraficaFagan,
   GraficaForest,
   GraficaHistogramaBoxplot,
+  GraficaKm,
 } from '../../src/lib/bioestadistica/nucleo/tipos.ts';
 
 const fmt = crearFormateador('es');
@@ -502,6 +503,27 @@ test('el texto de las curvas se escapa', () => {
   assert.ok(svg.includes('p &lt; 0.05 &amp; «x»'));
 });
 
+test('curvas: la referencia horizontal se dibuja solo si se declara y lleva su rótulo', () => {
+  const potencia: GraficaCurvas = {
+    tipo: 'curvas',
+    titulo: 'Poder frente a n',
+    resumen: 'Poder 80 % con 100 por grupo',
+    curvas: [{ id: 'poder', etiqueta: 'Poder', puntos: [[10, 0.2], [50, 0.6], [100, 0.8], [200, 0.95]], destacada: true }],
+    ejeX: { etiqueta: 'n por grupo', dominio: [10, 200], pista: 'int' },
+    ejeY: { etiqueta: 'Poder', dominio: [0, 1], pista: 'pct0' },
+    marcador: { x: 100, etiqueta: 'n = 100', valores: { poder: 0.8 } },
+    referenciaY: { valor: 0.8, etiqueta: 'Poder objetivo 80 %' },
+  };
+  const svg = renderGrafica(potencia, { fmt });
+  assert.equal(svg.match(/class="bio-svg__ref"/g)?.length, 1);
+  assert.ok(svg.includes('>Poder objetivo 80 %</text>'));
+  const sinRef = renderGrafica({ ...potencia, referenciaY: undefined }, { fmt });
+  assert.equal(sinRef.match(/class="bio-svg__ref"/g), null);
+  // Un valor no finito no dibuja nada ni lanza.
+  const nan = renderGrafica({ ...potencia, referenciaY: { valor: Number.NaN, etiqueta: 'x' } }, { fmt });
+  assert.equal(nan.match(/class="bio-svg__ref"/g), null);
+});
+
 // ---------------------------------------------------------------------------
 // barras
 // ---------------------------------------------------------------------------
@@ -968,8 +990,416 @@ test('histograma: el texto se escapa y el prefijo de identificadores es configur
   assert.match(svg, /<clipPath id="g3-hist-rec">/);
 });
 
+// ---------------------------------------------------------------------------
+// km (Kaplan-Meier)
+// ---------------------------------------------------------------------------
+
+/** Dos grupos de un ensayo: cuatro escalones con IC, censuras y tabla en riesgo cada 7 días. */
+function km(extra: Partial<GraficaKm> = {}): GraficaKm {
+  return {
+    tipo: 'km',
+    titulo: 'Supervivencia según el grupo',
+    resumen: 'Mediana de 21 días con tratamiento frente a 20 en control',
+    curvas: [
+      {
+        id: 'tratamiento',
+        etiqueta: 'Tratamiento',
+        pasos: [
+          { t: 0, s: 1 },
+          { t: 7, s: 0.9, lo: 0.73, hi: 0.97 },
+          { t: 14, s: 0.8, lo: 0.6, hi: 0.9 },
+          { t: 21, s: 0.65, lo: 0.42, hi: 0.81 },
+        ],
+        censuras: [10, 18, 26],
+        enRiesgo: [20, 18, 15, 11, 6],
+        destacada: true,
+      },
+      {
+        id: 'control',
+        etiqueta: 'Control',
+        pasos: [
+          { t: 0, s: 1 },
+          { t: 5, s: 0.85, lo: 0.66, hi: 0.94 },
+          { t: 12, s: 0.6, lo: 0.39, hi: 0.76 },
+          { t: 20, s: 0.4, lo: 0.2, hi: 0.59 },
+        ],
+        censuras: [9, 24],
+        enRiesgo: [20, 16, 12, 7, 3],
+      },
+    ],
+    ejeX: { etiqueta: 'Tiempo (días)', dominio: [0, 28], pista: 'int' },
+    ejeY: { etiqueta: 'Supervivencia', dominio: [0, 1], pista: 'pct0' },
+    tiemposRiesgo: [0, 7, 14, 21, 28],
+    etiquetaRiesgo: 'En riesgo',
+    marcadores: [
+      { id: 'mediana', etiqueta: 'Mediana 21 d', x: 21, destacada: true },
+      { id: 'hito', etiqueta: 'Día 7', x: 7 },
+    ],
+    ...extra,
+  };
+}
+
+/** Eje del tiempo: la segunda línea de eje es la horizontal; el dominio es [0, 28]. */
+function ejeXKm(svg: string, tMax = 28): (t: number) => number {
+  const ejes = [...svg.matchAll(/class="bio-svg__eje" x1="([\d.]+)" y1="([\d.]+)" x2="([\d.]+)" y2="([\d.]+)"/g)];
+  assert.equal(ejes.length, 2, 'se esperaban dos líneas de eje');
+  const horizontal = ejes[1];
+  assert.equal(horizontal[2], horizontal[4], 'el segundo eje debería ser el horizontal');
+  const x0 = Number(horizontal[1]);
+  const x1 = Number(horizontal[3]);
+  return (t) => x0 + (t / tMax) * (x1 - x0);
+}
+
+/** Pares «x,y» de una polilínea o de un polígono. */
+function pares(atributo: string): Array<[number, number]> {
+  return atributo
+    .split(' ')
+    .filter((p) => p !== '')
+    .map((p) => {
+      const [x, y] = p.split(',').map(Number);
+      return [x, y] as [number, number];
+    });
+}
+
+function curvasKm(svg: string): Array<[number, number][]> {
+  return [...svg.matchAll(/<polyline class="bio-svg__km-curva[^"]*" points="([^"]+)"/g)].map((m) => pares(m[1]));
+}
+
+function censurasKm(svg: string): Array<{ x: number; y1: number; y2: number }> {
+  return [
+    ...svg.matchAll(/class="bio-svg__km-censura[^"]*" x1="([\d.]+)" y1="([\d.]+)" x2="[\d.]+" y2="([\d.]+)"/g),
+  ].map((m) => ({ x: Number(m[1]), y1: Number(m[2]), y2: Number(m[3]) }));
+}
+
+test('km: el SVG lleva título, descripción y viewBox con el alto real', () => {
+  const svg = renderGrafica(km(), { fmt });
+  assert.match(svg, /<title id="bio-grafica-t">Supervivencia según el grupo<\/title>/);
+  assert.match(svg, /<desc id="bio-grafica-d">Mediana de 21 días con tratamiento frente a 20 en control<\/desc>/);
+  assert.match(svg, new RegExp(`viewBox="0 0 ${ANCHO_POR_DEFECTO} \\d+(\\.\\d+)?"`));
+  // 240 del área de trazado, más la leyenda, las dos bandas de marcadores, el
+  // eje con su título y las dos filas de la tabla en riesgo.
+  const alto = altoDe(svg);
+  assert.ok(alto > 400 && alto < 480, `alto inesperado: ${alto}`);
+});
+
+test('km: los dos ejes llevan su título y sus marcas', () => {
+  const svg = renderGrafica(km(), { fmt });
+  assert.ok(svg.includes('>Tiempo (días)</text>'));
+  assert.ok(svg.includes('>Supervivencia</text>'));
+  for (const v of [0, 0.25, 0.5, 0.75, 1]) {
+    assert.ok(svg.includes(`>${fmt.num(v, 'pct0')}</text>`), `falta la marca ${v} del eje de S(t)`);
+  }
+  // Las marcas del tiempo son las columnas de la tabla en riesgo: cada número
+  // en riesgo cae bajo el rótulo de su tiempo.
+  for (const t of [0, 7, 14, 21, 28]) {
+    assert.ok(svg.includes(`>${fmt.num(t, 'int')}</text>`), `falta la marca ${t} del eje del tiempo`);
+  }
+  // Sin tabla utilizable el eje vuelve a sus marcas «bonitas».
+  const sinTabla = renderGrafica(
+    km({ tiemposRiesgo: [], curvas: km().curvas.map((c) => ({ ...c, enRiesgo: [] })) }),
+    { fmt },
+  );
+  for (const t of [0, 5, 10, 15, 20, 25]) {
+    assert.ok(sinTabla.includes(`>${fmt.num(t, 'int')}</text>`), `falta la marca ${t} del eje del tiempo`);
+  }
+  assert.equal(sinTabla.match(/class="bio-svg__km-riesgo"/g), null);
+});
+
+test('km: cada grupo es una polilínea escalonada con su propio trazo', () => {
+  const svg = renderGrafica(km(), { fmt });
+  assert.equal(svg.match(/<polyline class="bio-svg__km-curva/g)?.length, 2);
+  assert.equal(svg.match(/<polyline class="bio-svg__km-curva is-destacada"/g)?.length, 1);
+  assert.equal(svg.match(/<polyline class="bio-svg__km-curva is-secundaria"/g)?.length, 1);
+  const [tratamiento] = curvasKm(svg);
+  // Cuatro escalones → 2·4 − 1 = 7 puntos, más uno de la cola hasta la última
+  // censura (26 d), que cae después del último evento (21 d).
+  assert.equal(tratamiento.length, 8);
+  // Escalonada: entre dos puntos consecutivos cambia la x o la y, nunca las dos
+  // (un tramo inclinado dibujaría una caída gradual que no ocurrió).
+  for (let i = 1; i < tratamiento.length; i++) {
+    const mismaX = tratamiento[i][0] === tratamiento[i - 1][0];
+    const mismaY = tratamiento[i][1] === tratamiento[i - 1][1];
+    assert.ok(mismaX !== mismaY, `el tramo ${i} no es horizontal ni vertical`);
+  }
+});
+
+test('km: la curva arranca en S = 1 y se prolonga hasta el último tiempo observado', () => {
+  const svg = renderGrafica(km(), { fmt });
+  const y = ejeY(svg);
+  const x = ejeXKm(svg);
+  const [tratamiento] = curvasKm(svg);
+  assert.ok(Math.abs(tratamiento[0][0] - x(0)) < 0.01, `arranque en t = 0: ${tratamiento[0][0]} ≠ ${x(0)}`);
+  assert.ok(Math.abs(tratamiento[0][1] - y(1)) < 0.01, `arranque en S = 1: ${tratamiento[0][1]} ≠ ${y(1)}`);
+  const ultimo = tratamiento[tratamiento.length - 1];
+  assert.ok(Math.abs(ultimo[0] - x(26)) < 0.01, `cola hasta la última censura: ${ultimo[0]} ≠ ${x(26)}`);
+  assert.ok(Math.abs(ultimo[1] - y(0.65)) < 0.01, `la cola conserva S = 0.65: ${ultimo[1]} ≠ ${y(0.65)}`);
+  // Sin censuras posteriores al último evento no hay cola: 2·4 − 1 puntos.
+  const sinCola = renderGrafica(
+    km({ curvas: [{ ...km().curvas[0], censuras: [10] }] }),
+    { fmt },
+  );
+  assert.equal(curvasKm(sinCola)[0].length, 7);
+});
+
+test('km: la banda de intervalo aparece solo donde hay IC y se recorta al área', () => {
+  const svg = renderGrafica(km(), { fmt });
+  assert.equal(svg.match(/<polygon class="bio-svg__km-banda/g)?.length, 2);
+  assert.equal(svg.match(/<polygon class="bio-svg__km-banda is-destacada"/g)?.length, 1);
+  assert.match(svg, /<clipPath id="bio-grafica-km-rec">/);
+  assert.match(svg, /<g clip-path="url\(#bio-grafica-km-rec\)">/);
+  // Tres escalones con IC (el arranque en S = 1 no trae): 3 tramos × 2 puntos
+  // por borde × 2 bordes.
+  const puntos = pares(/<polygon class="bio-svg__km-banda is-destacada" points="([^"]+)"/.exec(svg)?.[1] ?? '');
+  assert.equal(puntos.length, 12);
+  const y = ejeY(svg);
+  assert.ok(Math.abs(puntos[0][1] - y(0.97)) < 0.01, `el borde superior empieza en hi: ${puntos[0][1]} ≠ ${y(0.97)}`);
+  assert.ok(Math.abs(puntos[11][1] - y(0.73)) < 0.01, `el borde inferior acaba en lo: ${puntos[11][1]} ≠ ${y(0.73)}`);
+  // Sin intervalos declarados no hay banda, pero las curvas siguen.
+  const sinIc = renderGrafica(
+    km({ curvas: km().curvas.map((c) => ({ ...c, pasos: c.pasos.map((p) => ({ t: p.t, s: p.s })) })) }),
+    { fmt },
+  );
+  assert.equal(sinIc.match(/<polygon class="bio-svg__km-banda/g), null);
+  assert.equal(sinIc.match(/<polyline class="bio-svg__km-curva/g)?.length, 2);
+});
+
+test('km: cada censura es una marca vertical a la altura de la curva', () => {
+  const svg = renderGrafica(km(), { fmt });
+  const marcas = censurasKm(svg);
+  assert.equal(marcas.length, 5);
+  const y = ejeY(svg);
+  const x = ejeXKm(svg);
+  // La primera censura del grupo destacado es el día 10, cuando S vale 0.9.
+  assert.ok(Math.abs(marcas[0].x - x(10)) < 0.01, `t de la censura: ${marcas[0].x} ≠ ${x(10)}`);
+  assert.ok(Math.abs((marcas[0].y1 + marcas[0].y2) / 2 - y(0.9)) < 0.01, 'la marca no está sobre la curva');
+  assert.ok(marcas[0].y2 - marcas[0].y1 > 0, 'la marca debería ser un segmento vertical con altura');
+  assert.equal(svg.match(/class="bio-svg__km-censura is-destacada"/g)?.length, 3);
+});
+
+test('km: la leyenda solo aparece con más de una curva', () => {
+  const svg = renderGrafica(km(), { fmt });
+  assert.equal(svg.match(/class="bio-svg__leyenda /g)?.length, 2);
+  assert.equal(svg.match(/class="bio-svg__leyenda-texto"/g)?.length, 2);
+  const una = renderGrafica(km({ curvas: [km().curvas[0]] }), { fmt });
+  assert.equal(una.match(/class="bio-svg__leyenda /g), null);
+  assert.equal(una.match(/class="bio-svg__leyenda-texto"/g), null);
+});
+
+test('km: los marcadores cruzan el área y llevan su rótulo', () => {
+  const svg = renderGrafica(km(), { fmt });
+  assert.equal(svg.match(/class="bio-svg__marcador"/g)?.length, 2);
+  assert.ok(svg.includes('>Mediana 21 d</text>'));
+  assert.ok(svg.includes('>Día 7</text>'));
+  // Dos marcadores: los rótulos se reparten en dos bandas para no pisarse.
+  const rotulos = [...svg.matchAll(/class="bio-svg__marcador-texto[^"]*"[^>]* y="([\d.]+)"/g)].map((m) => Number(m[1]));
+  assert.equal(rotulos.length, 2);
+  assert.notEqual(rotulos[0], rotulos[1]);
+  const sinMarcadores = renderGrafica(km({ marcadores: undefined }), { fmt });
+  assert.equal(sinMarcadores.match(/class="bio-svg__marcador"/g), null);
+});
+
+test('km: la tabla en riesgo trae un número por grupo y tiempo, y omite los tiempos fuera del eje', () => {
+  const svg = renderGrafica(km(), { fmt });
+  assert.ok(svg.includes('>En riesgo</text>'));
+  assert.equal(svg.match(/class="bio-svg__km-riesgo"/g)?.length, 10);
+  // El rótulo de cada grupo va a la izquierda de la tabla, además de en la leyenda.
+  assert.ok(svg.includes('>Tratamiento</tspan>'));
+  assert.ok(svg.includes('>Control</tspan>'));
+  const x = ejeXKm(svg);
+  const columnas = [...svg.matchAll(/class="bio-svg__km-riesgo" font-size="\d+" x="([\d.]+)"/g)].map((m) => Number(m[1]));
+  for (const t of [0, 7, 14, 21, 28]) {
+    assert.ok(columnas.some((cx) => Math.abs(cx - x(t)) < 0.01), `falta la columna de t = ${t}`);
+  }
+  // Un tiempo de riesgo más allá del dominio no tiene columna posible.
+  const fuera = renderGrafica(
+    km({
+      tiemposRiesgo: [0, 7, 14, 21, 28, 60],
+      curvas: km().curvas.map((c) => ({ ...c, enRiesgo: [...c.enRiesgo, 0] })),
+    }),
+    { fmt },
+  );
+  assert.equal(fuera.match(/class="bio-svg__km-riesgo"/g)?.length, 10);
+});
+
+test('km: un paso o una censura no finitos no rompen la gráfica', () => {
+  const svg = renderGrafica(
+    km({
+      curvas: [
+        {
+          id: 'unico',
+          etiqueta: 'Único',
+          pasos: [
+            { t: 0, s: 1 },
+            { t: Number.NaN, s: 0.9 },
+            { t: 14, s: Number.NaN },
+            { t: 21, s: 0.65, lo: Number.NaN, hi: 0.81 },
+          ],
+          censuras: [Number.POSITIVE_INFINITY, 10, Number.NaN],
+          enRiesgo: [20, 18, 15, 11, Number.NaN],
+          destacada: true,
+        },
+      ],
+    }),
+    { fmt },
+  );
+  assert.ok(!svg.includes('NaN'));
+  assert.ok(!svg.includes('Infinity'));
+  // Quedan dos escalones utilizables → 2·2 − 1 = 3 puntos, y una sola censura.
+  assert.equal(curvasKm(svg)[0].length, 3);
+  assert.equal(censurasKm(svg).length, 1);
+  assert.equal(svg.match(/<polygon class="bio-svg__km-banda/g), null);
+  // El «en riesgo» no finito se calla; los otros cuatro siguen.
+  assert.equal(svg.match(/class="bio-svg__km-riesgo"/g)?.length, 4);
+});
+
+test('km: el texto se escapa y el prefijo de identificadores es configurable', () => {
+  const svg = renderGrafica(
+    km({
+      titulo: 'Supervivencia <b>',
+      ejeX: { etiqueta: 't > 0 & «días»', dominio: [0, 28], pista: 'int' },
+      etiquetaRiesgo: 'En riesgo "n"',
+      curvas: [{ ...km().curvas[0], etiqueta: 'A & B' }],
+      marcadores: [{ id: 'm', etiqueta: 'p < 0.05', x: 21 }],
+    }),
+    { fmt, id: 'g4' },
+  );
+  assert.ok(!svg.includes('<b>'));
+  assert.ok(svg.includes('Supervivencia &lt;b&gt;'));
+  assert.ok(svg.includes('t &gt; 0 &amp; «días»'));
+  assert.ok(svg.includes('En riesgo &quot;n&quot;'));
+  assert.ok(svg.includes('A &amp; B'));
+  assert.ok(svg.includes('p &lt; 0.05'));
+  assert.match(svg, /aria-labelledby="g4-t g4-d"/);
+  assert.match(svg, /<clipPath id="g4-km-rec">/);
+});
+
 test('un tipo de gráfica no implementado se detiene con un mensaje claro', () => {
-  // `km` (Kaplan-Meier) está declarada en `TipoGrafica` pero aún no se dibuja.
-  const falsa = { ...grafica(), tipo: 'km' } as unknown as DatosGrafica;
-  assert.throws(() => renderGrafica(falsa, { fmt }), /km/);
+  // `potencia` está declarada en `TipoGrafica` pero aún no se dibuja.
+  const falsa = { ...grafica(), tipo: 'potencia' } as unknown as DatosGrafica;
+  assert.throws(() => renderGrafica(falsa, { fmt }), /potencia/);
+});
+
+// ---------------------------------------------------------------------------
+// Ningún rótulo se sale del lienzo
+// ---------------------------------------------------------------------------
+
+/**
+ * Ancho real de un texto en Inter, la fuente del sitio: medido en Chrome con
+ * `getComputedTextLength` a 13 px (dígito tabular 0.649 em, «%» 0.982,
+ * mayúscula 0.710, punto, coma y espacio fino 0.268, minúscula 0.50).
+ *
+ * La prueba mide con estos pesos y NO con los del renderizador: si la
+ * estimación de `svg.ts` vuelve a quedarse corta, el rótulo se saldrá del
+ * `viewBox` y esto lo detecta. Así se descubrió que «100 %» se leía «.00 %».
+ */
+function anchoReal(texto: string, fuente: number): number {
+  let em = 0;
+  for (const c of texto) {
+    if (c >= '0' && c <= '9') em += 0.649;
+    else if (c === '%') em += 0.982;
+    else if ('.,   '.includes(c)) em += 0.268;
+    else if ('-−–+×'.includes(c)) em += 0.649;
+    else if (c === '∞') em += 0.9;
+    else if (c !== c.toLowerCase() && c === c.toUpperCase()) em += 0.71;
+    else em += 0.5;
+  }
+  return em * fuente;
+}
+
+interface TextoSvg {
+  x: number;
+  anchor: string;
+  fuente: number;
+  texto: string;
+}
+
+function desescapar(s: string): string {
+  return s
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&');
+}
+
+/** Cada texto dibujado, con su ancla; los rótulos partidos en `tspan` cuentan uno por línea. */
+function textosDelSvg(svg: string): TextoSvg[] {
+  const salida: TextoSvg[] = [];
+  for (const m of svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)) {
+    const atributos = m[1];
+    const fuente = Number(/font-size="([\d.]+)"/.exec(atributos)?.[1] ?? 13);
+    const anchor = /text-anchor="(\w+)"/.exec(atributos)?.[1] ?? 'start';
+    const tspans = [...m[2].matchAll(/<tspan x="(-?[\d.]+)"[^>]*>([^<]*)<\/tspan>/g)];
+    if (tspans.length > 0) {
+      for (const t of tspans) salida.push({ x: Number(t[1]), anchor, fuente, texto: desescapar(t[2]) });
+    } else {
+      salida.push({
+        x: Number(/\sx="(-?[\d.]+)"/.exec(atributos)?.[1] ?? 0),
+        anchor,
+        fuente,
+        texto: desescapar(m[2]),
+      });
+    }
+  }
+  return salida;
+}
+
+/** Borde izquierdo y derecho que ocupa un texto, según su ancla. */
+function bordes(t: TextoSvg): [number, number] {
+  const w = anchoReal(t.texto, t.fuente);
+  const izq = t.anchor === 'end' ? t.x - w : t.anchor === 'middle' ? t.x - w / 2 : t.x;
+  return [izq, izq + w];
+}
+
+function anchoDe(svg: string): number {
+  return Number(/viewBox="0 0 ([\d.]+) [\d.]+"/.exec(svg)?.[1]);
+}
+
+test('ningún rótulo se sale del lienzo, en ninguna de las seis gráficas', () => {
+  const casos: Array<[string, DatosGrafica]> = [
+    ['ic-forest', grafica()],
+    ['ic-forest con paneles', forestDoble()],
+    ['fagan', fagan()],
+    ['curvas', curvas()],
+    ['barras', barras()],
+    ['histograma-boxplot', hist()],
+    ['km', km()],
+  ];
+  for (const [nombre, g] of casos) {
+    const svg = renderGrafica(g, { fmt });
+    const ancho = anchoDe(svg);
+    for (const t of textosDelSvg(svg)) {
+      const [izq, der] = bordes(t);
+      assert.ok(izq >= -0.5, `${nombre}: «${t.texto}» empieza en ${izq.toFixed(1)}, fuera del lienzo`);
+      // Por la derecha se tolera un par de unidades: el último rótulo del eje va
+      // centrado sobre su marca y asoma dentro del bearing lateral del «%».
+      assert.ok(der <= ancho + 2, `${nombre}: «${t.texto}» termina en ${der.toFixed(1)} y el lienzo mide ${ancho}`);
+    }
+  }
+});
+
+test('el rótulo de 100 % del eje vertical cabe entero en los dos idiomas', () => {
+  for (const lang of ['es', 'en'] as const) {
+    const f = crearFormateador(lang);
+    const svg = renderGrafica(curvas(), { fmt: f });
+    const cien = textosDelSvg(svg).filter((t) => t.anchor === 'end' && t.texto.includes('100'));
+    assert.equal(cien.length, 1, `${lang}: se esperaba un solo rótulo de 100 % en el eje vertical`);
+    const [izq] = bordes(cien[0]);
+    assert.ok(izq >= 0, `${lang}: «${cien[0].texto}» empieza en ${izq.toFixed(1)} y se recorta contra el borde`);
+  }
+});
+
+test('un marcador fuera del dominio no saca su rótulo del lienzo', () => {
+  // El caso real: una calculadora de tamaño de muestra pidió el marcador en
+  // n = 3.33 con el eje declarado desde 4, y el rótulo empezaba en x = −54.
+  for (const x of [-0.5, 1.6]) {
+    const svg = renderGrafica(curvas({ marcador: { x, etiqueta: 'Tamaño calculado' } }), { fmt });
+    const ancho = anchoDe(svg);
+    for (const t of textosDelSvg(svg)) {
+      const [izq, der] = bordes(t);
+      assert.ok(
+        izq >= -0.5 && der <= ancho + 2,
+        `marcador en ${x}: «${t.texto}» ocupa de ${izq.toFixed(1)} a ${der.toFixed(1)} en un lienzo de ${ancho}`,
+      );
+    }
+  }
 });

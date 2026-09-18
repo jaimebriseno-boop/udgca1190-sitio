@@ -1,0 +1,377 @@
+# Calculadora E3 · Curva de Kaplan-Meier, mediana de supervivencia y prueba de log-rank.
+# Primera calculadora con TRES columnas pegadas (tiempo, evento y grupo opcional)
+# y primera con la gráfica `km`. El oráculo es el paquete `survival`: cada regla
+# que TypeScript reproduce (empates, n.risk, escala del EE, regla de la mediana)
+# está escrita en el snippet y comprobada contra `survfit`/`survdiff`.
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: modelos
+orden: 1
+estado: activa
+motor: ts
+entradas:
+  - { id: tiempo, tipo: columna, min: 2 }
+  - { id: evento, tipo: columna, min: 2 }
+  - { id: grupo, tipo: columna, requerido: false }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+  - { id: tipo_ic, tipo: opcion, opciones: [log-log, log] }
+  - { id: t1, tipo: decimal, min: 0, requerido: false }
+  - { id: t2, tipo: decimal, min: 0, requerido: false }
+ejemplo:
+  tiempo: [2, 5, 3, 7, 3, 7, 4, 9, 4, 10, 5, 11, 5, 12, 6, 13, 6, 14, 7, 16,
+           8, 16, 9, 18, 12, 19, 14, 20, 18, 21]
+  evento: [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,
+           1, 1, 1, 1, 0, 1, 1, 0, 0, 0]
+  grupo: [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
+          0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
+  nivel: 0.95
+  tipo_ic: log-log
+  t1: 7
+  t2: 14
+r:
+  paquetes: [survival, jsonlite]
+  codigo: |
+    # Kaplan-Meier survival curves and the log-rank test - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(survival)
+    library(jsonlite)
+
+    # The three pasted columns, one row per patient:
+    tiempo <- {tiempo}
+    evento <- {evento}
+    grupo <- {grupo}
+    nivel <- {nivel}
+    tipo_ic <- {tipo_ic}
+    t1 <- {t1}   # first time of interest; 0 = none asked for
+    t2 <- {t2}   # second time of interest; 0 = none asked for
+
+    if (length(grupo) == 0) grupo <- rep(0, length(tiempo))   # no group column: a single curve
+    codigos <- sort(unique(grupo))                            # group 1 is the lowest numeric code
+    d <- data.frame(tiempo, evento, grupo = factor(grupo, levels = codigos))
+    etiquetas <- levels(d$grupo)
+    k <- length(etiquetas)
+
+    # conf.type is explicit: R defaults to "log", papers usually report "log-log"
+    sf <- survfit(Surv(tiempo, evento) ~ grupo, data = d, conf.type = tipo_ic, conf.int = nivel)
+
+    # survfit drops $strata when the grouping factor has a single level
+    filas <- if (is.null(sf$strata)) list(seq_along(sf$time)) else split(seq_along(sf$time), rep(1:k, sf$strata))
+
+    # Median survival with its CI (Brookmeyer-Crowley; the rule of quantile.survfit:
+    # first time with S < 0.5, midpoint of the plateau when S is exactly 0.5)
+    q <- quantile(sf, 0.5)
+    mediana <- function(g) {
+      if (g > k) return(c(NA_real_, NA_real_, NA_real_))
+      if (k == 1) c(q$quantile[[1]], q$lower[[1]], q$upper[[1]]) else c(q$quantile[g, 1], q$lower[g, 1], q$upper[g, 1])
+    }
+
+    # S(t*) with its CI. t = 0 means no time of interest was asked for (S(0) = 1
+    # is trivial), and past the last observed time of the group S(t) is not
+    # defined, although extend = TRUE would prolong the curve
+    s_en <- function(g, t) {
+      if (g > k || t <= 0 || t > max(d$tiempo[d$grupo == etiquetas[g]])) return(c(NA_real_, NA_real_, NA_real_))
+      s <- summary(sf, times = t, extend = TRUE)
+      j <- if (is.null(s$strata)) 1 else which(as.integer(s$strata) == g)
+      c(s$surv[j], s$lower[j], s$upper[j])
+    }
+
+    # Log-rank test (rho = 0, Mantel-Haenszel). It needs two groups, and it is NOT
+    # defined when the variance of the statistic is 0: survdiff then either stops
+    # with a singular system (every event tied at one time, or no group at risk
+    # when the events happen) or reports "on 0 degrees of freedom" with chisq = 0.
+    # In both situations chi2, the degrees of freedom and p are NA, not 0 and 1.
+    chi2 <- NA_real_; gl <- NA_real_; p <- NA_real_
+    if (k == 2) {
+      lr <- tryCatch(survdiff(Surv(tiempo, evento) ~ grupo, data = d, rho = 0), error = function(err) NULL)
+      if (!is.null(lr) && lr$var[1, 1] > 0) {
+        chi2 <- lr$chisq
+        gl <- length(lr$n) - 1
+        p <- pchisq(chi2, gl, lower.tail = FALSE)
+      }
+    }
+
+    n_de <- function(g) if (g > k) NA_real_ else sum(d$grupo == etiquetas[g])
+    ev_de <- function(g) if (g > k) NA_real_ else sum(d$evento[d$grupo == etiquetas[g]])
+    # Life table of one group, as survfit reports it (std.err is the SE of log S)
+    col <- function(g, campo) if (g > k) numeric(0) else sf[[campo]][filas[[g]]]
+
+    res <- list(n_1 = n_de(1), eventos_1 = ev_de(1), mediana_1 = mediana(1),
+                s_t1_1 = s_en(1, t1), s_t2_1 = s_en(1, t2),
+                n_2 = n_de(2), eventos_2 = ev_de(2), mediana_2 = mediana(2),
+                s_t1_2 = s_en(2, t1), s_t2_2 = s_en(2, t2),
+                chi2_logrank = chi2, gl = gl, p_logrank = p,
+                t_1 = I(col(1, "time")), riesgo_1 = I(col(1, "n.risk")), ev_1 = I(col(1, "n.event")),
+                cens_1 = I(col(1, "n.censor")), s_1 = I(col(1, "surv")), ee_1 = I(col(1, "std.err")),
+                lo_1 = I(col(1, "lower")), hi_1 = I(col(1, "upper")),
+                t_2 = I(col(2, "time")), riesgo_2 = I(col(2, "n.risk")), ev_2 = I(col(2, "n.event")),
+                cens_2 = I(col(2, "n.censor")), s_2 = I(col(2, "surv")), ee_2 = I(col(2, "std.err")),
+                lo_2 = I(col(2, "lower")), hi_2 = I(col(2, "upper")))
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio: survminer::ggsurvplot(sf, risk.table = TRUE)
+referencias:
+  - { key: kaplan1958, rol: original }
+  - { key: greenwood1926, rol: original }
+  - { key: mantel1966, rol: original }
+  - { key: peto1972, rol: original }
+  - { key: brookmeyer1982, rol: original }
+  - { key: kalbfleisch2002, rol: complementaria }
+  - { key: therneau2024, rol: complementaria }
+  - { key: bland1998, rol: didactica }
+  - { key: bland2004, rol: didactica }
+grafica: km
+es:
+  titulo: "Curva de Kaplan-Meier, mediana de supervivencia y prueba de log-rank"
+  titulo_corto: "Kaplan-Meier y log-rank"
+  meta: "Pega las columnas de tiempo, evento y grupo y obtén la curva de Kaplan-Meier con intervalos de Greenwood, la mediana de supervivencia con su intervalo de confianza, la supervivencia en dos tiempos de interés, la prueba de log-rank y la tabla de pacientes en riesgo, con gráfica, interpretación, código R y referencias. Los datos no salen del navegador."
+  intro: "Pega el tiempo de seguimiento, el indicador de evento y (si las hay) la variable de grupo, y obtén la curva de Kaplan-Meier con su banda de confianza, la mediana de supervivencia, la supervivencia en los tiempos que te interesen y la comparación entre dos curvas con la prueba de log-rank."
+  explicacion:
+    - "El análisis de supervivencia responde a una pregunta que una proporción no puede responder: cuánto tarda en ocurrir algo. El «evento» no tiene que ser la muerte; puede ser la defervescencia, el alta, la recaída, la seroconversión o el fracaso de un catéter. Lo que caracteriza a estos datos es la censura: al cerrar el estudio hay pacientes que todavía no han presentado el evento, y otros que se perdieron antes de presentarlo. Esos pacientes no son fracasos ni éxitos: aportan la información de que estuvieron libres del evento hasta el día en que dejamos de verlos, y descartarlos sesgaría el resultado."
+    - "El estimador de Kaplan-Meier (1958) aprovecha esa información. En cada tiempo en el que ocurre al menos un evento calcula la probabilidad condicional de pasarlo sin evento, 1 − dᵢ/nᵢ, donde nᵢ son los pacientes todavía en riesgo justo antes de ese momento, y multiplica esas probabilidades una tras otra. El resultado es la curva escalonada: baja solo cuando hay eventos y se mantiene plana cuando solo hay censuras, aunque cada censura reduzca el número en riesgo y haga que los escalones siguientes sean más grandes. Por eso la tabla de pacientes en riesgo que va debajo de la gráfica no es decorativa: la cola de la curva, donde quedan dos o tres personas, es la parte menos fiable y la que más engaña a simple vista."
+    - "La anchura de la banda de confianza sale de la fórmula de Greenwood (1926), que acumula la incertidumbre de cada escalón. Se calcula en la escala logarítmica y de ahí se lleva a la escala de la supervivencia: por omisión con la transformación log-log de Kalbfleisch y Prentice, que garantiza que los límites se queden entre 0 y 1 y se comporta mejor en las colas, y como alternativa con la escala log, que es la que R usa por omisión y la que aparece en muchos manuales. Es la misma diferencia que en R distingue `conf.type = \"log-log\"` de `conf.type = \"log\"`, y por eso el selector viaja al código."
+    - "La mediana de supervivencia es el tiempo en el que la curva cruza el 50 %. Se prefiere a la media porque no depende de la cola censurada, y puede no existir: si la curva termina por encima de 0.5, la mediana «no se alcanza» y así hay que reportarla, nunca como el último tiempo observado. Su intervalo de confianza sigue el criterio de Brookmeyer y Crowley (1982): se aplica la misma regla a las bandas inferior y superior, de modo que el límite inferior sale de la banda que baja más deprisa. Cuando la curva se queda exactamente en 0.5 durante un tramo, la mediana es el punto medio de ese tramo; es la regla de `quantile.survfit`, y esta calculadora la reproduce paso por paso."
+    - "La prueba de log-rank (Mantel 1966; Peto y Peto 1972) compara dos curvas completas, no dos porcentajes en un momento concreto. En cada tiempo de evento cuenta cuántos eventos habría cabido esperar en un grupo si las dos curvas fueran iguales, acumula la diferencia entre lo observado y lo esperado y la convierte en un χ² con un grado de libertad. Tiene una condición de lectura importante: supone que la diferencia entre los grupos va en la misma dirección todo el tiempo. Si las curvas se cruzan, el log-rank pierde poder y un solo cociente de riesgos deja de resumir lo que pasa; en ese caso conviene comparar la supervivencia en tiempos concretos y decirlo en el manuscrito."
+  ecuaciones:
+    - id: km
+      tex: '\hat S(t)=\prod_{t_i\le t}\left(1-\frac{d_i}{n_i}\right)'
+      simbolos:
+        - { s: 'd_i', def: "eventos ocurridos exactamente en el tiempo t_i" }
+        - { s: 'n_i', def: "pacientes en riesgo justo antes de t_i (los que tienen tiempo mayor o igual que t_i)" }
+        - { s: '\hat S(t)', def: "probabilidad estimada de seguir libre del evento en t" }
+      nota: "Estimador del producto límite de Kaplan y Meier (1958). En un empate entre un evento y una censura, el evento va primero: los dos se cuentan en el mismo tiempo y el número en riesgo incluye a ambos."
+    - id: greenwood
+      tex: '\var\left[\ln\hat S(t)\right]=g(t)=\sum_{t_i\le t}\frac{d_i}{n_i\,(n_i-d_i)},\qquad \se\left[\ln\hat S(t)\right]=\sqrt{g(t)}'
+      simbolos:
+        - { s: 'g(t)', def: "suma de Greenwood acumulada hasta t" }
+      nota: "Fórmula de Greenwood (1926). El error estándar es el de ln S(t), no el de S(t): es lo que devuelve sf$std.err en el código R de esta página, y en esa escala se construye el intervalo antes de llevarlo a la de la supervivencia."
+    - id: ic_loglog
+      tex: '\IC_{1-\alpha}\left[\hat S(t)\right]=\left[\hat S(t)^{\exp(z\,\se_{\ell})},\;\hat S(t)^{\exp(-z\,\se_{\ell})}\right],\qquad \se_{\ell}=\frac{\sqrt{g(t)}}{\left|\ln\hat S(t)\right|}'
+      simbolos:
+        - { s: 'z', def: "cuantil normal del nivel de confianza elegido" }
+        - { s: '\se_{\ell}', def: "error estándar en la escala log-log" }
+      nota: "Intervalo log-log de Kalbfleisch y Prentice, el de conf.type = \"log-log\" y el que esta calculadora usa por omisión: los límites se quedan siempre dentro de 0 y 1 sin necesidad de recortarlos. Con S(t) = 0 o S(t) = 1 no está definido."
+    - id: ic_log
+      tex: '\IC_{1-\alpha}\left[\hat S(t)\right]=\left[\hat S(t)\,e^{-z\sqrt{g(t)}},\;\min\left(1,\;\hat S(t)\,e^{z\sqrt{g(t)}}\right)\right]'
+      simbolos:
+        - { s: '\sqrt{g(t)}', def: "error estándar de ln S(t), la raíz de la suma de Greenwood" }
+      nota: "Intervalo en la escala logarítmica, el de conf.type = \"log\" y el que R usa por omisión. Aquí el límite superior sí puede pasarse de 1 y hay que recortarlo; con S(t) = 0 los dos límites quedan sin definir."
+    - id: mediana
+      tex: 'm=\frac{t_{1}+t_{2}}{2},\qquad t_{1}=\min\left\{t:\hat S(t)\le\tfrac{1}{2}\right\},\qquad t_{2}=\min\left\{t:\hat S(t)<\tfrac{1}{2}\right\}'
+      simbolos:
+        - { s: 'm', def: "mediana de supervivencia" }
+        - { s: 't_{1}', def: "primer tiempo en el que la curva llega al 50 %" }
+        - { s: 't_{2}', def: "primer tiempo en el que la curva baja del 50 %" }
+      nota: "Es la regla de quantile.survfit, no el «primer tiempo por debajo de 0.5» a secas. Cuando la curva cruza el 50 % de golpe, t₁ y t₂ son el mismo tiempo y la mediana es ese tiempo; cuando se queda exactamente en 0.5 durante un tramo, la mediana es el punto medio del tramo. Si la curva termina en 0.5 sin bajar de ahí, el último tiempo observado ocupa el lugar de t₂, y si nunca llega al 50 %, la mediana no está definida. El intervalo aplica la misma regla a las bandas inferior y superior (Brookmeyer y Crowley 1982)."
+    - id: logrank
+      tex: '\chi^{2}_{\mathrm{LR}}=\frac{(O_1-E_1)^{2}}{V},\qquad E_1=\sum_i\frac{d_i\,n_{1i}}{n_i},\qquad V=\sum_i\frac{n_{1i}\,n_{0i}\,d_i\,(n_i-d_i)}{n_i^{2}\,(n_i-1)}'
+      simbolos:
+        - { s: 'O_1', def: "eventos observados en el primer grupo" }
+        - { s: 'E_1', def: "eventos esperados en el primer grupo si las dos curvas fueran iguales" }
+        - { s: 'n_{1i}', def: "pacientes del primer grupo en riesgo justo antes de t_i" }
+      nota: "Prueba de log-rank con ponderación rho = 0 (Mantel-Haenszel), la de survdiff. Con dos grupos tiene un grado de libertad."
+  etiquetas:
+    tiempo: "Tiempo de seguimiento (una columna)"
+    evento: "Evento (una columna de 0 y 1)"
+    grupo: "Grupo (una columna, opcional)"
+    nivel: "Nivel de confianza"
+    tipo_ic: "Escala del intervalo de confianza"
+    "tipo_ic.log-log": "log-log (Kalbfleisch-Prentice)"
+    "tipo_ic.log": "logarítmica"
+    t1: "Primer tiempo de interés"
+    t2: "Segundo tiempo de interés"
+    n_1: "Pacientes de la primera curva"
+    eventos_1: "Eventos de la primera curva"
+    mediana_1: "Mediana de supervivencia (primera curva)"
+    s_t1_1: "Supervivencia en el primer tiempo (primera curva)"
+    s_t2_1: "Supervivencia en el segundo tiempo (primera curva)"
+    n_2: "Pacientes de la segunda curva"
+    eventos_2: "Eventos de la segunda curva"
+    mediana_2: "Mediana de supervivencia (segunda curva)"
+    s_t1_2: "Supervivencia en el primer tiempo (segunda curva)"
+    s_t2_2: "Supervivencia en el segundo tiempo (segunda curva)"
+    chi2_logrank: "Log-rank (χ²)"
+    gl: "Grados de libertad"
+    p_logrank: "Log-rank (p)"
+    grupo_nombre: "grupo {codigo}"
+    no_alcanzada: "no alcanzada"
+    nota_greenwood: "Greenwood"
+    nota_mediana: "regla de quantile.survfit"
+    nota_logrank: "log-rank, rho = 0"
+    nota_sin_logrank: "la prueba no está definida con estos datos"
+    nota_sin_grupo: "no se capturó un segundo grupo"
+    nota_sin_tiempo: "no se pidió este tiempo"
+    nota_fuera: "más allá del seguimiento observado"
+    eje_x: "Tiempo de seguimiento"
+    eje_y: "Supervivencia libre del evento"
+    grafica_riesgo: "En riesgo"
+    grafica_eventos: "eventos"
+    grafica_mediana: "mediana"
+    grafica_t1: "t₁"
+    grafica_t2: "t₂"
+  ayudas:
+    tiempo: "Copia la columna de tiempos de seguimiento de tu hoja de cálculo: un valor por renglón, en las unidades que uses (días, meses, años). Es el tiempo hasta el evento en quien lo presentó y el tiempo hasta la última observación en quien no."
+    evento: "Una columna con el mismo número de renglones que la de tiempos: 1 si el paciente presentó el evento y 0 si se censuró (seguimiento cerrado o perdido sin que ocurriera)."
+    grupo: "Opcional. Una columna de códigos numéricos con el mismo número de renglones que las otras dos: sin ella se dibuja una sola curva; con ella, una curva por grupo y la prueba de log-rank. Por ahora se admiten como máximo dos grupos."
+    nivel: "Nivel de confianza de la banda de la curva, de la mediana y de S(t). No cambia la prueba de log-rank."
+    tipo_ic: "Escala en la que se construye el intervalo de Greenwood. La log-log (opción por omisión aquí) mantiene los límites entre 0 y 1 y se comporta mejor en las colas; la logarítmica es la que R usa por omisión."
+    t1: "Opcional. Tiempo en el que quieres leer la supervivencia, en las mismas unidades que la columna de tiempos (por ejemplo, 7 días). Déjalo vacío o en 0 si no quieres leer ningún tiempo. Más allá del último tiempo observado de un grupo, S(t) no está definida."
+    t2: "Opcional. Un segundo tiempo de lectura, igual o posterior al primero; vacío o 0 si no lo necesitas."
+  interpretacion:
+    "resumen.uno": "En el {grupo_1}, el número de pacientes seguidos fue {n_1} y el de eventos observados, {eventos_1}; el seguimiento más largo llegó a {seguimiento_1}.{frase_t1}{frase_t2}"
+    "resumen.dos": "Se compararon dos curvas: en el {grupo_1}, el número de pacientes fue {n_1} y el de eventos, {eventos_1}; en el {grupo_2}, {n_2} y {eventos_2}.{frase_t1}{frase_t2}"
+    "tiempo.uno": " En el tiempo {t}, la probabilidad estimada de seguir libre del evento fue {s_1}{ic_1} en el {grupo_1}."
+    "tiempo.dos": " En el tiempo {t}, la probabilidad estimada de seguir libre del evento fue {s_1}{ic_1} en el {grupo_1} y {s_2}{ic_2} en el {grupo_2}."
+    "tiempo.parcial": " En el tiempo {t}, la probabilidad estimada de seguir libre del evento fue {s_1}{ic_1} en el {grupo_1}; en el {grupo_2} ese tiempo ya queda más allá del seguimiento observado."
+    "tiempo.fuera": " En el tiempo {t} no hay estimación: ese tiempo queda más allá del seguimiento observado, y prolongar la curva hasta ahí sería inventar datos."
+    "mediana.uno": "Mediana de supervivencia en el {grupo_1}: {mediana_1}. Es el tiempo en el que la curva cruza el 50 %, y se reporta en lugar de la media porque no depende de la cola censurada."
+    "mediana.dos": "Mediana de supervivencia: {mediana_1} en el {grupo_1} y {mediana_2} en el {grupo_2}. Es el tiempo en el que cada curva cruza el 50 %; cuando una curva termina por encima de 0.5 la mediana no se alcanza y así debe reportarse, nunca como el último tiempo observado."
+    "logrank.rechaza": "Prueba de log-rank: χ² = {chi2_logrank} con {gl} grado de libertad, p = {p_logrank}. Con α = 0.05 se rechaza la hipótesis nula de que las dos curvas son iguales. El valor p dice que la diferencia observada sería rara si no hubiera ninguna, pero no dice cuán grande es: eso lo dicen las medianas, la supervivencia en los tiempos de interés y la separación de las curvas."
+    "logrank.no_rechaza": "Prueba de log-rank: χ² = {chi2_logrank} con {gl} grado de libertad, p = {p_logrank}. Con α = 0.05 no se rechaza la hipótesis nula de que las dos curvas son iguales. «No significativo» no equivale a «iguales»: con pocos eventos el intervalo de las medianas es ancho y una diferencia importante puede pasar inadvertida."
+    "logrank.indefinido": "La prueba de log-rank no está definida con estos datos: la varianza del estadístico es 0, es decir, no hay ningún tiempo en el que las dos curvas tengan sujetos en riesgo a la vez y eventos que repartir entre ellas. Eso pasa cuando todos los eventos caen en un mismo tiempo o cuando un grupo deja de seguirse antes de que ocurra el primer evento del otro. Describa las curvas y los tiempos de seguimiento en lugar de buscar un valor p."
+    "logrank.uno": "No hay prueba de log-rank: se capturó un solo grupo. Para comparar hace falta una columna de grupo con dos códigos distintos."
+    "censura.no": "No hubo censuras: se siguió a los {n_tot} pacientes hasta el evento, así que la cola de la curva no descansa en ningún supuesto sobre las pérdidas de seguimiento."
+    "censura.si": "El seguimiento se censuró en {censuras_tot} de {n_tot} pacientes ({pct_censura}); el reparto por curva fue {detalle_censura}. La censura es informativa solo si no guarda relación con el pronóstico: una pérdida de seguimiento concentrada en los pacientes que iban peor sesga la curva hacia arriba, y conviene decir en el manuscrito por qué se perdió el seguimiento."
+    "cruce.si": "Las curvas se cruzan dentro del seguimiento común. Cuando eso ocurre, la prueba de log-rank pierde poder porque las diferencias de un tramo cancelan a las del otro, y un solo cociente de riesgos deja de resumir lo que pasa. Compare la supervivencia en tiempos concretos y describa el cruce en lugar de reducirlo a un número."
+    "cruce.no": "Las curvas no se cruzan dentro del seguimiento común, que es la situación en la que la prueba de log-rank y un cociente de riesgos único se leen sin reservas."
+    "escala.log-log": "log-log de Kalbfleisch y Prentice [{ref:kalbfleisch2002}]"
+    "escala.log": "logarítmica"
+    metodos_logrank: " y las curvas se compararon con la prueba de log-rank [{ref:mantel1966},{ref:peto1972}]"
+  avisos:
+    "pocos_eventos.uno": "La curva tiene menos de {minimo} eventos (en total, {eventos}): la curva, su banda de confianza y la mediana son muy inestables. Interprete con cautela y reporte el número de eventos junto a la estimación."
+    "pocos_eventos.dos": "Alguna curva tiene menos de {minimo} eventos (la más escasa tiene {eventos}): las curvas, sus bandas y las medianas son muy inestables, y la prueba de log-rank tiene poco poder. Interprete con cautela y reporte el número de eventos, no solo el valor p."
+    logrank_indefinido: "La prueba de log-rank no está definida con estos datos: la varianza de su estadístico es 0. R se detiene con un sistema singular o reporta cero grados de libertad, así que χ², los grados de libertad y el valor p se reportan como no definidos."
+    curvas_cruzan: "Las curvas se cruzan: la prueba de log-rank pierde poder y el cociente de riesgos no resume bien la diferencia. Compare la supervivencia en tiempos concretos."
+    mediana_no_alcanzada: "En algún grupo la curva no baja de 0.5 durante el seguimiento: la mediana no se alcanzó y se reporta como no definida. No la sustituya por el último tiempo observado."
+    t_fuera: "Estos tiempos de interés quedan más allá del seguimiento de alguna curva: {tiempos}. Último tiempo observado por código de grupo: {detalle}. Donde no hay seguimiento la supervivencia no está definida, porque prolongar la curva más allá del último dato no añade información."
+    un_grupo: "Se está estimando una sola curva: sin columna de grupo (o con un solo código) no hay prueba de log-rank ni segunda curva que comparar."
+    censura_alta: "Más de la mitad del seguimiento está censurado ({censuras} de {n} pacientes): la cola de la curva descansa en muy pocos casos y la mediana puede no alcanzarse. Revise la tabla de pacientes en riesgo antes de interpretar el tramo final."
+  metodos: "Las funciones de supervivencia se estimaron con el método de Kaplan-Meier [{ref:kaplan1958}] con IC {nivel} basados en la fórmula de Greenwood [{ref:greenwood1926}] en la escala {escala_frase}; la mediana y su IC siguen a Brookmeyer y Crowley [{ref:brookmeyer1982}]{frase_logrank}. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra el paquete survival de R [{ref:therneau2024}] (survfit, quantile.survfit y survdiff)."
+  ejemplo_descripcion: "Ejemplo ilustrativo: 30 pacientes con dengue seguidos hasta la defervescencia (el evento), 15 con antígeno NS1 negativo (grupo 0) y 15 con NS1 positivo (grupo 1), con seis pérdidas de seguimiento censuradas; los tiempos están en días (datos ficticios, no reales). Ojo al leer la curva: aquí el evento es deseable, así que S(t) es la proporción de pacientes que SIGUE con fiebre y una caída rápida es una buena noticia."
+  grafica_titulo: "Curvas de Kaplan-Meier por grupo con su banda de confianza, las marcas de censura y la tabla de pacientes en riesgo"
+en:
+  titulo: "Kaplan-Meier curve, median survival and the log-rank test"
+  titulo_corto: "Kaplan-Meier and log-rank"
+  meta: "Paste the time, event and group columns and get the Kaplan-Meier curve with Greenwood confidence bands, median survival with its confidence interval, survival at two times of interest, the log-rank test and the numbers-at-risk table, with a plot, an interpretation, R code and references. Data never leave the browser."
+  intro: "Paste the follow-up time, the event indicator and (if you have one) the group variable, and get the Kaplan-Meier curve with its confidence band, median survival, survival at the times you care about, and the comparison of two curves with the log-rank test."
+  explicacion:
+    - "Survival analysis answers a question a proportion cannot: how long something takes to happen. The \"event\" need not be death; it can be defervescence, discharge, relapse, seroconversion or catheter failure. What makes these data special is censoring: when the study closes, some patients have not had the event yet, and others were lost before having it. Those patients are neither failures nor successes: they contribute the information that they were event-free up to the day we stopped seeing them, and dropping them would bias the result."
+    - "The Kaplan-Meier estimator (1958) uses that information. At each time with at least one event it computes the conditional probability of getting through it event-free, 1 − dᵢ/nᵢ, where nᵢ is the number still at risk just before that moment, and multiplies those probabilities one after another. The result is the step curve: it drops only when events occur and stays flat when there are only censorings, even though every censoring shrinks the risk set and makes later steps larger. That is why the numbers-at-risk table under the plot is not decoration: the tail of the curve, where two or three people are left, is the least reliable part and the most misleading at a glance."
+    - "The width of the confidence band comes from Greenwood's formula (1926), which accumulates the uncertainty of every step. It is computed on the log scale and then carried back to the survival scale: by default with the log-log transformation of Kalbfleisch and Prentice, which keeps the limits between 0 and 1 and behaves better in the tails, and alternatively on the log scale, which is R's own default and the one many textbooks show. It is the same difference that in R separates `conf.type = \"log-log\"` from `conf.type = \"log\"`, which is why the selector travels into the code."
+    - "Median survival is the time at which the curve crosses 50%. It is preferred over the mean because it does not depend on the censored tail, and it may not exist: if the curve ends above 0.5, the median is \"not reached\" and must be reported that way, never as the last observed time. Its confidence interval follows Brookmeyer and Crowley (1982): the same rule is applied to the lower and upper bands, so the lower limit comes from the band that falls fastest. When the curve sits at exactly 0.5 over a stretch, the median is the midpoint of that stretch; that is the rule of `quantile.survfit`, and this calculator reproduces it step by step."
+    - "The log-rank test (Mantel 1966; Peto and Peto 1972) compares two whole curves, not two percentages at one moment. At each event time it counts how many events would have been expected in one group if the two curves were identical, accumulates the difference between observed and expected, and turns it into a χ² with one degree of freedom. It comes with an important reading condition: it assumes the difference between groups points the same way throughout. If the curves cross, the log-rank loses power and a single hazard ratio stops summarising what happens; in that case compare survival at specific times and say so in the manuscript."
+  ecuaciones:
+    - id: km
+      tex: '\hat S(t)=\prod_{t_i\le t}\left(1-\frac{d_i}{n_i}\right)'
+      simbolos:
+        - { s: 'd_i', def: "events occurring exactly at time t_i" }
+        - { s: 'n_i', def: "patients at risk just before t_i (those with time greater than or equal to t_i)" }
+        - { s: '\hat S(t)', def: "estimated probability of still being event-free at t" }
+      nota: "The product-limit estimator of Kaplan and Meier (1958). When an event and a censoring tie, the event comes first: both are counted at the same time and the risk set includes both."
+    - id: greenwood
+      tex: '\var\left[\ln\hat S(t)\right]=g(t)=\sum_{t_i\le t}\frac{d_i}{n_i\,(n_i-d_i)},\qquad \se\left[\ln\hat S(t)\right]=\sqrt{g(t)}'
+      simbolos:
+        - { s: 'g(t)', def: "Greenwood sum accumulated up to t" }
+      nota: "Greenwood's formula (1926). The standard error is that of ln S(t), not of S(t): it is what sf$std.err returns in the R code on this page, and the interval is built on that scale before being carried back to the survival scale."
+    - id: ic_loglog
+      tex: '\CI_{1-\alpha}\left[\hat S(t)\right]=\left[\hat S(t)^{\exp(z\,\se_{\ell})},\;\hat S(t)^{\exp(-z\,\se_{\ell})}\right],\qquad \se_{\ell}=\frac{\sqrt{g(t)}}{\left|\ln\hat S(t)\right|}'
+      simbolos:
+        - { s: 'z', def: "normal quantile of the chosen confidence level" }
+        - { s: '\se_{\ell}', def: "standard error on the log-log scale" }
+      nota: "The log-log interval of Kalbfleisch and Prentice, the one behind conf.type = \"log-log\" and this calculator's default: the limits always stay within 0 and 1 without any clipping. It is undefined when S(t) = 0 or S(t) = 1."
+    - id: ic_log
+      tex: '\CI_{1-\alpha}\left[\hat S(t)\right]=\left[\hat S(t)\,e^{-z\sqrt{g(t)}},\;\min\left(1,\;\hat S(t)\,e^{z\sqrt{g(t)}}\right)\right]'
+      simbolos:
+        - { s: '\sqrt{g(t)}', def: "standard error of ln S(t), the square root of the Greenwood sum" }
+      nota: "The interval on the logarithmic scale, the one behind conf.type = \"log\" and R's own default. Here the upper limit can exceed 1 and has to be clipped; when S(t) = 0 both limits are undefined."
+    - id: mediana
+      tex: 'm=\frac{t_{1}+t_{2}}{2},\qquad t_{1}=\min\left\{t:\hat S(t)\le\tfrac{1}{2}\right\},\qquad t_{2}=\min\left\{t:\hat S(t)<\tfrac{1}{2}\right\}'
+      simbolos:
+        - { s: 'm', def: "median survival" }
+        - { s: 't_{1}', def: "first time the curve reaches 50%" }
+        - { s: 't_{2}', def: "first time the curve drops below 50%" }
+      nota: "This is the rule of quantile.survfit, not simply \"the first time below 0.5\". When the curve crosses 50% in one step, t₁ and t₂ are the same time and the median is that time; when it sits at exactly 0.5 over a stretch, the median is the midpoint of that stretch. If the curve ends at 0.5 without dropping below it, the last observed time takes the place of t₂, and if it never reaches 50% the median is undefined. The interval applies the same rule to the lower and upper bands (Brookmeyer and Crowley 1982)."
+    - id: logrank
+      tex: '\chi^{2}_{\mathrm{LR}}=\frac{(O_1-E_1)^{2}}{V},\qquad E_1=\sum_i\frac{d_i\,n_{1i}}{n_i},\qquad V=\sum_i\frac{n_{1i}\,n_{0i}\,d_i\,(n_i-d_i)}{n_i^{2}\,(n_i-1)}'
+      simbolos:
+        - { s: 'O_1', def: "events observed in the first group" }
+        - { s: 'E_1', def: "events expected in the first group if the two curves were identical" }
+        - { s: 'n_{1i}', def: "patients of the first group at risk just before t_i" }
+      nota: "The log-rank test with weight rho = 0 (Mantel-Haenszel), the one survdiff runs. With two groups it has one degree of freedom."
+  etiquetas:
+    tiempo: "Follow-up time (one column)"
+    evento: "Event (a column of 0s and 1s)"
+    grupo: "Group (one column, optional)"
+    nivel: "Confidence level"
+    tipo_ic: "Confidence interval scale"
+    "tipo_ic.log-log": "log-log (Kalbfleisch-Prentice)"
+    "tipo_ic.log": "logarithmic"
+    t1: "First time of interest"
+    t2: "Second time of interest"
+    n_1: "Patients in the first curve"
+    eventos_1: "Events in the first curve"
+    mediana_1: "Median survival (first curve)"
+    s_t1_1: "Survival at the first time (first curve)"
+    s_t2_1: "Survival at the second time (first curve)"
+    n_2: "Patients in the second curve"
+    eventos_2: "Events in the second curve"
+    mediana_2: "Median survival (second curve)"
+    s_t1_2: "Survival at the first time (second curve)"
+    s_t2_2: "Survival at the second time (second curve)"
+    chi2_logrank: "Log-rank (χ²)"
+    gl: "Degrees of freedom"
+    p_logrank: "Log-rank (p)"
+    grupo_nombre: "group {codigo}"
+    no_alcanzada: "not reached"
+    nota_greenwood: "Greenwood"
+    nota_mediana: "quantile.survfit rule"
+    nota_logrank: "log-rank, rho = 0"
+    nota_sin_logrank: "the test is not defined for these data"
+    nota_sin_grupo: "no second group was entered"
+    nota_sin_tiempo: "this time was not requested"
+    nota_fuera: "beyond the observed follow-up"
+    eje_x: "Follow-up time"
+    eje_y: "Event-free survival"
+    grafica_riesgo: "At risk"
+    grafica_eventos: "events"
+    grafica_mediana: "median"
+    grafica_t1: "t₁"
+    grafica_t2: "t₂"
+  ayudas:
+    tiempo: "Copy the follow-up time column from your spreadsheet: one value per row, in whatever units you use (days, months, years). It is the time to the event for whoever had it and the time to the last observation for whoever did not."
+    evento: "A column with as many rows as the time column: 1 if the patient had the event and 0 if they were censored (follow-up closed or lost without the event occurring)."
+    grupo: "Optional. A column of numeric codes with as many rows as the other two: without it a single curve is drawn; with it, one curve per group and the log-rank test. At most two groups are supported for now."
+    nivel: "Confidence level of the band around the curve, of the median and of S(t). It does not change the log-rank test."
+    tipo_ic: "Scale on which the Greenwood interval is built. The log-log scale (the default here) keeps the limits between 0 and 1 and behaves better in the tails; the logarithmic scale is R's own default."
+    t1: "Optional. The time at which you want to read survival, in the same units as the time column (7 days, for instance). Leave it empty or at 0 if you do not want to read any time. Beyond the last observed time of a group, S(t) is undefined."
+    t2: "Optional. A second reading time, equal to or later than the first; empty or 0 if you do not need it."
+  interpretacion:
+    "resumen.uno": "In {grupo_1}, the number of patients followed was {n_1} and the number of events observed was {eventos_1}; the longest follow-up reached {seguimiento_1}.{frase_t1}{frase_t2}"
+    "resumen.dos": "Two curves were compared: in {grupo_1} the number of patients was {n_1} and the number of events {eventos_1}; in {grupo_2}, {n_2} and {eventos_2}.{frase_t1}{frase_t2}"
+    "tiempo.uno": " At time {t}, the estimated probability of still being event-free was {s_1}{ic_1} in {grupo_1}."
+    "tiempo.dos": " At time {t}, the estimated probability of still being event-free was {s_1}{ic_1} in {grupo_1} and {s_2}{ic_2} in {grupo_2}."
+    "tiempo.parcial": " At time {t}, the estimated probability of still being event-free was {s_1}{ic_1} in {grupo_1}; in {grupo_2} that time is already beyond the observed follow-up."
+    "tiempo.fuera": " There is no estimate at time {t}: it lies beyond the observed follow-up, and extending the curve that far would be inventing data."
+    "mediana.uno": "Median survival in {grupo_1}: {mediana_1}. It is the time at which the curve crosses 50%, and it is reported instead of the mean because it does not depend on the censored tail."
+    "mediana.dos": "Median survival: {mediana_1} in {grupo_1} and {mediana_2} in {grupo_2}. It is the time at which each curve crosses 50%; when a curve ends above 0.5 the median is not reached and must be reported that way, never as the last observed time."
+    "logrank.rechaza": "Log-rank test: χ² = {chi2_logrank} with {gl} degree of freedom, p = {p_logrank}. At α = 0.05 the null hypothesis that the two curves are identical is rejected. The p value says the observed difference would be rare if there were none, but not how large it is: that is what the medians, the survival at the times of interest and the gap between the curves say."
+    "logrank.no_rechaza": "Log-rank test: χ² = {chi2_logrank} with {gl} degree of freedom, p = {p_logrank}. At α = 0.05 the null hypothesis that the two curves are identical is not rejected. \"Not significant\" is not the same as \"identical\": with few events the interval around the medians is wide and an important difference can go unnoticed."
+    "logrank.indefinido": "The log-rank test is not defined for these data: the variance of the statistic is 0, that is, there is no time at which both curves have subjects at risk and events to share between them. That happens when every event falls at the same time, or when one group stops being followed before the first event of the other. Describe the curves and the follow-up times instead of looking for a p value."
+    "logrank.uno": "There is no log-rank test: a single group was entered. Comparing requires a group column with two distinct codes."
+    "censura.no": "There were no censorings: all {n_tot} patients were followed to the event, so the tail of the curve does not rest on any assumption about losses to follow-up."
+    "censura.si": "Follow-up was censored in {censuras_tot} of {n_tot} patients ({pct_censura}); the split by curve was {detalle_censura}. Censoring is informative only if it is unrelated to prognosis: loss to follow-up concentrated among the patients who were doing worse biases the curve upwards, and the manuscript should say why follow-up was lost."
+    "cruce.si": "The curves cross within the common follow-up. When that happens the log-rank test loses power, because differences in one stretch cancel those in the other, and a single hazard ratio stops summarising what happens. Compare survival at specific times and describe the crossing instead of reducing it to one number."
+    "cruce.no": "The curves do not cross within the common follow-up, which is the situation in which the log-rank test and a single hazard ratio can be read without reservations."
+    "escala.log-log": "log-log of Kalbfleisch and Prentice [{ref:kalbfleisch2002}]"
+    "escala.log": "logarithmic"
+    metodos_logrank: " and the curves were compared with the log-rank test [{ref:mantel1966},{ref:peto1972}]"
+  avisos:
+    "pocos_eventos.uno": "The curve has fewer than {minimo} events ({eventos} in total): the curve, its confidence band and the median are very unstable. Interpret with caution and report the number of events alongside the estimate."
+    "pocos_eventos.dos": "Some curve has fewer than {minimo} events (the sparsest has {eventos}): the curves, their bands and the medians are very unstable, and the log-rank test has little power. Interpret with caution and report the number of events, not just the p value."
+    logrank_indefinido: "The log-rank test is not defined for these data: the variance of its statistic is 0. R either stops with a singular system or reports zero degrees of freedom, so χ², the degrees of freedom and the p value are reported as undefined."
+    curvas_cruzan: "The curves cross: the log-rank test loses power and the hazard ratio does not summarise the difference well. Compare survival at specific times."
+    mediana_no_alcanzada: "In some group the curve never drops below 0.5 during follow-up: the median was not reached and is reported as undefined. Do not replace it with the last observed time."
+    t_fuera: "These times of interest lie beyond the follow-up of at least one curve: {tiempos}. Last observed time by group code: {detalle}. Where there is no follow-up, survival is undefined, because extending the curve past the last data point adds no information."
+    un_grupo: "A single curve is being estimated: without a group column (or with a single code) there is no log-rank test and no second curve to compare."
+    censura_alta: "More than half of the follow-up is censored ({censuras} of {n} patients): the tail of the curve rests on very few cases and the median may not be reached. Check the numbers-at-risk table before interpreting the final stretch."
+  metodos: "Survival functions were estimated with the Kaplan-Meier method [{ref:kaplan1958}] with {nivel} CIs based on Greenwood's formula [{ref:greenwood1926}] on the {escala_frase} scale; the median and its CI follow Brookmeyer and Crowley [{ref:brookmeyer1982}]{frase_logrank}. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R's survival package [{ref:therneau2024}] (survfit, quantile.survfit and survdiff)."
+  ejemplo_descripcion: "Illustrative example: 30 patients with dengue followed to defervescence (the event), 15 with a negative NS1 antigen (group 0) and 15 with a positive one (group 1), with six censored losses to follow-up; times are in days (fictitious data, not real). Careful when reading the curve: here the event is a good outcome, so S(t) is the proportion of patients still febrile and a fast drop is good news."
+  grafica_titulo: "Kaplan-Meier curves by group with their confidence band, censoring marks and the numbers-at-risk table"

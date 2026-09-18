@@ -34,6 +34,7 @@
  * J R Stat Soc 1912;75:579-652 · Cohen J. Statistical Power Analysis for the
  * Behavioral Sciences, 2.ª ed., 1988.
  */
+import { uniroot } from '../primitivas/raices.ts';
 import { dhyper, pchisq, phyper } from '../primitivas/distribuciones.ts';
 import { validarCeldas } from './razones.ts';
 import type { Tabla2x2 } from './razones.ts';
@@ -196,97 +197,11 @@ export function sentidoPhi(phi: number): SentidoAsociacion {
 // ---------------------------------------------------------------------------
 
 /**
- * Tolerancia por omisión de `uniroot` en R (`.Machine$double.eps^0.25`,
- * exactamente 2⁻¹³). No se afina a propósito: la estimación y el intervalo que
- * publica `fisher.test` están definidos POR esta tolerancia. Resolver la misma
- * ecuación con más precisión da un número distinto del de R (hasta 1.8 % en el
- * límite inferior de una tabla muy desequilibrada como 2/50/30/3), y el oráculo
- * de esta calculadora es R, no la raíz exacta.
+ * Tolerancia por omisión de `uniroot` en R (`.Machine$double.eps^0.25`): la que
+ * usa `fisher.test` y con la que hay que resolver para reproducir sus cifras.
+ * La traducción de `R_zeroin2` vive en `primitivas/raices.ts` (`uniroot`).
  */
-export const TOL_UNIROOT = Math.pow(Number.EPSILON, 0.25);
-
-/** Tope de iteraciones de `uniroot` en R (`maxiter = 1000`). */
-const MAXIT_UNIROOT = 1000;
-
-/**
- * `uniroot(f, c(a, b))` de R: traducción literal de `R_zeroin2`
- * (`src/library/stats/src/zeroin.c`), que es el zeroin de Forsythe, Malcolm y
- * Moler (1977) con la interpolación cuadrática inversa de Brent.
- *
- * No se usa `primitivas/raices.ts::brent` (la variante «zbrent» de Numerical
- * Recipes) aunque resuelva el mismo problema: las dos difieren en qué paso
- * previo vigilan para aceptar la interpolación, y con la tolerancia gruesa de
- * `uniroot` esa diferencia mueve el punto de parada dentro de la banda de
- * ±tol/2. Medido con los casos de esta calculadora, `brent` se aparta de R
- * hasta 1.3e-3 en términos relativos (tabla 2/50/30/3) y esta traducción
- * coincide con R en ~1e-15. La raíz «verdadera» no es el objetivo: el objetivo
- * es el número que imprime R.
- */
-function uniroot(f: (t: number) => number, ax: number, bx: number): number {
-  let a = ax;
-  let b = bx;
-  let c = a;
-  let fa = f(a);
-  let fb = f(b);
-  let fc = fa;
-  if (Number.isNaN(fa) || Number.isNaN(fb)) {
-    throw new RangeError(`uniroot: f no está definida en los extremos (f(${a}) = ${fa}, f(${b}) = ${fb})`);
-  }
-  if (fa === 0) return a;
-  if (fb === 0) return b;
-  if ((fa > 0 && fb > 0) || (fa < 0 && fb < 0)) {
-    throw new RangeError(`uniroot: no hay cambio de signo en [${ax}, ${bx}] (f(a) = ${fa}, f(b) = ${fb})`);
-  }
-
-  for (let iter = 0; iter <= MAXIT_UNIROOT; iter += 1) {
-    const pasoPrevio = b - a;
-    if (Math.abs(fc) < Math.abs(fb)) {
-      a = b;
-      b = c;
-      c = a;
-      fa = fb;
-      fb = fc;
-      fc = fa;
-    }
-    const tolAct = 2 * Number.EPSILON * Math.abs(b) + TOL_UNIROOT / 2;
-    let paso = (c - b) / 2;
-    if (Math.abs(paso) <= tolAct || fb === 0) return b;
-
-    // Interpolación (lineal con dos puntos, cuadrática inversa con tres) solo
-    // si el paso anterior fue suficientemente grande y |f| está bajando.
-    if (Math.abs(pasoPrevio) >= tolAct && Math.abs(fa) > Math.abs(fb)) {
-      const cb = c - b;
-      let p: number;
-      let q: number;
-      if (a === c) {
-        const t1 = fb / fa;
-        p = cb * t1;
-        q = 1 - t1;
-      } else {
-        const q0 = fa / fc;
-        const t1 = fb / fc;
-        const t2 = fb / fa;
-        p = t2 * (cb * q0 * (q0 - t1) - (b - a) * (t1 - 1));
-        q = (q0 - 1) * (t1 - 1) * (t2 - 1);
-      }
-      if (p > 0) q = -q;
-      else p = -p;
-      if (p < 0.75 * cb * q - Math.abs(tolAct * q) / 2 && p < Math.abs((pasoPrevio * q) / 2)) paso = p / q;
-    }
-    if (Math.abs(paso) < tolAct) paso = paso > 0 ? tolAct : -tolAct;
-
-    a = b;
-    fa = fb;
-    b += paso;
-    fb = f(b);
-    if (Number.isNaN(fb)) throw new RangeError(`uniroot: f devolvió NaN en x = ${b}`);
-    if ((fb > 0 && fc > 0) || (fb < 0 && fc < 0)) {
-      c = a;
-      fc = fa;
-    }
-  }
-  return b;
-}
+export { TOL_UNIROOT } from '../primitivas/raices.ts';
 
 /**
  * Núcleo condicional de `fisher.test`: el soporte de a dados los márgenes y la

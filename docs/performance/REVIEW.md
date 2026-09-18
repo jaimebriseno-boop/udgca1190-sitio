@@ -113,6 +113,16 @@ los datos de las otras herramientas, queda registrada en
 - Revisión de código independiente en H0, H1 y H2 con todos los hallazgos corregidos
   antes de cada commit (detalle en `docs/bioestadistica/DECISIONES.md`).
 
+H3 (nueve calculadoras más: tamaño de muestra y poder, kappa y Kaplan-Meier; 19 en
+total, 40 páginas de la sección, 73 en el sitio) repitió la misma secuencia antes de
+pedir el visto bueno: `npm run build` 73 páginas; `npm run check` 0 errores y 0
+advertencias (124 hints preexistentes); `npm run test` 4 + 1,833 pruebas;
+`npm run fixtures:bio:check` 302 casos de 19 calculadoras sin deriva;
+`npm run barrido:bio` 75,039 combinaciones × 2 idiomas y 150,078 SVG sin problemas;
+`npm run audit:performance` sin recursos externos ni faltantes (111 páginas HTML
+auditadas); capturas ES/EN de las nueve páginas nuevas y del índice; dos revisiones de
+código independientes (detalle en `docs/bioestadistica/PROGRESO.md`).
+
 La sección no carga recursos externos: webR (R en el navegador) llegará en H4 solo por
 `import()` dinámico tras consentimiento explícito, sin declararse en HTML ni CSS, para
 que esta auditoría siga en verde.

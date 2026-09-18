@@ -1,0 +1,240 @@
+# Calculadora C2 · Tamaño de muestra para estimar una media con precisión
+# absoluta: variante normal, variante t por punto fijo, corrección por población
+# finita, ajuste por pérdidas y modo inverso.
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: muestra
+orden: 2
+estado: activa
+motor: ts
+entradas:
+  - { id: sigma, tipo: decimal, min: 0.000001 }
+  - { id: d, tipo: decimal, min: 0.000001 }
+  - { id: nivel, tipo: proporcion, min: 0.8, max: 0.999, requerido: false }
+  - { id: poblacion, tipo: entero, min: 0, requerido: false }
+  - { id: perdidas, tipo: proporcion, min: 0, max: 0.5, requerido: false }
+  - { id: n_dado, tipo: entero, min: 0, requerido: false }
+ejemplo: { sigma: 60, d: 10, nivel: 0.95, poblacion: 0, perdidas: 0.1, n_dado: 0 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Sample size to estimate one mean (absolute precision) - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    sigma <- {sigma}; d <- {d}; nivel <- {nivel}
+    poblacion <- {poblacion}   # size of the finite population; 0 = population not bounded
+    perdidas <- {perdidas}     # expected losses to follow-up, 0 to 0.5
+    n_dado <- {n_dado}         # inverse mode: sample size already available; 0 = not used
+
+    z <- qnorm(1 - (1 - nivel) / 2)
+    n_z <- (z * sigma / d)^2                                        # Cochran 1977
+    # t variant (Student 1908): the SMALLEST integer n >= 2 with n >= (t_{n-1} * sigma / d)^2.
+    # Searched one by one from max(2, ceiling(n_z)), a lower bound because t > z; the
+    # condition is monotone, so the first n that meets it is the minimum.
+    # NOT a fixed point: iterating n <- (t_{ceiling(n)-1} * sigma / d)^2 falls into a
+    # period-2 cycle and can publish a size BELOW the minimum (sigma = 1, d = 0.36,
+    # nivel = 0.80 gives 14, but 14 subjects reach only 0.3608, not 0.36).
+    n_t <- NA_real_
+    n_i <- max(2, ceiling(n_z))
+    for (i in 1:64) {
+      cumple <- n_i >= (qt(1 - (1 - nivel) / 2, max(1, n_i - 1)) * sigma / d)^2
+      if (cumple || n_i + 1 == n_i) { n_t <- n_i; break }   # above 2^53, +1 leaves the double unchanged
+      n_i <- n_i + 1
+    }
+    n <- if (poblacion >= 2) n_z / (1 + (n_z - 1) / poblacion) else n_z   # finite population correction
+    n_ajustado <- n / (1 - perdidas)                                # Lwanga & Lemeshow 1991
+    # Inverse mode: the very same n(d) solved for d, with the same correction
+    n_efectivo <- if (poblacion >= 2) n_dado * (poblacion - 1) / (poblacion - n_dado) else n_dado
+    d_dado <- if (n_dado >= 2) z * sigma / sqrt(n_efectivo) else NA_real_
+
+    res <- list(z = z, n_z = n_z, n_t = n_t, n = n, n_ajustado = n_ajustado, d_dado = d_dado)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # n_t is already an integer; the interface applies the ceiling once to the rest:
+    # ceiling(n_z), ceiling(n), ceiling(n_ajustado).
+    # Equivalent in RStudio (not run in the browser):
+    # presize::prec_mean(mean = 0, sd = sigma, conf.width = 2 * d, conf.level = nivel)
+    # epiR::epi.sssimpleestc(N = poblacion, xbar = 0, sigma = sigma, epsilon = d, error = "absolute", conf.level = nivel)
+referencias:
+  - { key: cochran1977, rol: original }
+  - { key: student1908, rol: original }
+  - { key: lwanga1991, rol: complementaria }
+  - { key: hulley2013, rol: didactica }
+  - { key: altman1991, rol: didactica }
+grafica: curvas
+es:
+  titulo: "Tamaño de muestra para estimar una media, con variante t y corrección por población finita"
+  titulo_corto: "Muestra para una media"
+  meta: "Calcula cuántos sujetos hacen falta para estimar una media con la precisión que elijas, con la variante t de Student, corrección por población finita, ajuste por pérdidas previstas y modo inverso. Muestra el código R equivalente y no envía tus datos a ningún servidor."
+  intro: "Indica la desviación estándar que esperas y con cuánta precisión quieres estimar la media; obtén el tamaño de muestra por la fórmula normal y por la variante t, el efecto de una población finita, el reclutamiento necesario si prevés pérdidas y la precisión que alcanzarías con un tamaño que ya tengas."
+  explicacion:
+    - "Para estimar una media (plaquetas, edad, días de estancia) el tamaño de muestra se calcula de modo que el intervalo de confianza sea lo bastante estrecho. La precisión absoluta d es la semiamplitud de ese intervalo, en las mismas unidades que la variable: con d = 10 la media quedará estimada con un margen de ±10 unidades."
+    - "La fórmula necesita la desviación estándar esperada σ, que sale de estudios previos, de un piloto o, en el peor de los casos, de una aproximación como el rango dividido entre cuatro. El tamaño crece con el cuadrado de σ y decrece con el cuadrado de d: duplicar la precisión exigida cuadruplica la muestra, y errar σ por un 20 % cambia el tamaño en casi un 50 %."
+    - "La variante t reconoce que, al estimar también la desviación estándar, el cuantil correcto no es el normal sino el de la t de Student con n−1 grados de libertad. Como ese cuantil depende del propio n, no hay fórmula cerrada: se busca el menor tamaño entero que cumple la condición, empezando por el resultado normal y subiendo de uno en uno. La diferencia es despreciable con muestras grandes y llega a ser decisiva por debajo de 30 sujetos, donde la fórmula normal se queda corta."
+    - "Tres ajustes cierran el cálculo. Si se muestrea de una población finita y conocida, la corrección por población finita reduce el tamaño. Las pérdidas previstas L elevan el reclutamiento a n/(1−L). Y el modo inverso responde a la pregunta contraria: con los sujetos de los que ya dispongo, ¿con qué precisión podré estimar la media? Todas las cifras se redondean hacia arriba una sola vez, al final. Si la variable es muy asimétrica, conviene transformarla o describirla con la mediana."
+  ecuaciones:
+    - id: n_z
+      tex: 'n_z=\left(\dfrac{z_{1-\alpha/2}\,\sigma}{d}\right)^{2}'
+      simbolos:
+        - { s: '\sigma', def: "desviación estándar esperada de la variable" }
+        - { s: 'd', def: "precisión absoluta: semiamplitud del intervalo de confianza" }
+        - { s: 'z_{1-\alpha/2}', def: "cuantil normal del nivel de confianza (1.96 al 95 %)" }
+      nota: "Fórmula normal de Cochran (1977) para estimar una media con precisión absoluta."
+    - id: n_t
+      tex: 'n_t=\min\left\{\,n\in\mathbb{Z},\ n\ge 2\ :\ n\ge\left(\dfrac{t_{n-1,\;1-\alpha/2}\,\sigma}{d}\right)^{2}\right\}'
+      simbolos:
+        - { s: 't_{\nu,\;1-\alpha/2}', def: "cuantil de la t de Student con ν grados de libertad" }
+      nota: "Variante t (Student 1908): el menor tamaño entero que cumple la condición, buscado de uno en uno desde ⌈n_z⌉. No se resuelve por punto fijo, que puede quedarse por debajo del mínimo."
+    - id: cpf
+      tex: 'n=\dfrac{n_z}{1+\dfrac{n_z-1}{N}}'
+      simbolos:
+        - { s: 'N', def: "tamaño de la población finita de la que se muestrea" }
+      nota: "Corrección por población finita; se aplica a n_z sin redondear. Sin N declarada, n = n_z."
+    - id: perdidas
+      tex: 'n_{aj}=\left\lceil\dfrac{n}{1-L}\right\rceil'
+      simbolos:
+        - { s: 'L', def: "proporción de pérdidas previstas (0 a 0.5)" }
+      nota: "Ajuste por pérdidas previstas (Lwanga y Lemeshow 1991): el reclutamiento sube para terminar con n. El techo se aplica una sola vez, al final; el valor sin redondear se muestra en el detalle de la celda."
+    - id: inverso
+      tex: 'd(n)=\dfrac{z_{1-\alpha/2}\,\sigma}{\sqrt{n_z(n)}},\qquad n_z(n)=\dfrac{n\,(N-1)}{N-n}'
+      simbolos:
+        - { s: 'n_z(n)', def: "tamaño sin corregir equivalente a n en una población de N" }
+      nota: "Modo inverso: la misma relación n(d), despejada para d. Sin N declarada, n_z(n) = n."
+  etiquetas:
+    sigma: "Desviación estándar esperada (σ)"
+    d: "Precisión absoluta (d, semiamplitud del IC)"
+    nivel: "Nivel de confianza"
+    poblacion: "Población finita (N, opcional)"
+    perdidas: "Pérdidas previstas"
+    n_dado: "Tamaño ya disponible (n, opcional)"
+    z: "Cuantil normal (z)"
+    n_z: "Tamaño con la normal (n_z)"
+    n_t: "Tamaño con la t de Student (n_t)"
+    n: "Tamaño necesario (n)"
+    n_ajustado: "Reclutamiento con pérdidas"
+    d_dado: "Precisión alcanzable con el n disponible"
+    exacto: "valor exacto"
+    alcanzada: "semiamplitud alcanzada"
+    nota_sin_n: "captura un tamaño disponible para calcularla"
+    eje_n: "Sujetos (n)"
+    eje_d: "Semiamplitud del IC"
+    curva_d: "Precisión alcanzable"
+    marcador_n: "n calculado"
+    ref_objetivo: "precisión objetivo"
+  ayudas:
+    sigma: "Desviación estándar que esperas en la variable, tomada de un estudio previo o de un piloto. Si solo conoces el rango, una aproximación burda es rango/4."
+    d: "Semiamplitud del intervalo de confianza que quieres obtener, en las mismas unidades que la variable."
+    nivel: "Habitualmente 95 %; también 90 % o 99 %."
+    poblacion: "Número de sujetos de la población de la que vas a muestrear, si es finita y conocida. Déjalo vacío (o en 0) si no lo es."
+    perdidas: "Proporción de sujetos que esperas perder (abandono, pérdida de seguimiento, muestras no procesables). Déjalo vacío si no prevés pérdidas."
+    n_dado: "Modo inverso: si ya cuentas con un número de sujetos, escríbelo aquí para ver qué precisión alcanzarías con él. Déjalo vacío (o en 0) si no lo usas."
+  interpretacion:
+    resumen: "Con {n_techo} sujetos, y si la desviación estándar real es {sigma}, la media quedaría estimada con un intervalo de confianza del {nivel} de aproximadamente ±{d} unidades."
+    variante_t: "Con el cuantil de la t de Student en lugar del normal, el requisito sube a {n_t_minimo} sujetos: {n_t_diferencia} más que con la fórmula normal, porque estimar también la desviación estándar cuesta precisión."
+    cpf.con: "La población de origen tiene {poblacion} sujetos: la corrección por población finita baja el requisito de {n_z_techo} a {n_techo}."
+    cpf.sin: "Sin una población de origen acotada, el tamaño se queda en {n_z_techo} sujetos. Si muestrearas de una población finita que no fuera mucho mayor que esa cifra, capturarla reduciría el número necesario."
+    perdidas.con: "Con un {perdidas} de pérdidas previstas, hay que reclutar {n_ajustado_techo} sujetos para terminar con {n_techo}."
+    perdidas.sin: "No se previeron pérdidas: la meta de reclutamiento coincide con los {n_techo} sujetos calculados."
+    inverso.con: "Con los {n_dado} sujetos de los que ya dispones, la precisión alcanzable sería de ±{d_dado} unidades, frente a los ±{d} planteados."
+    inverso.sin: "Si ya cuentas con un número de sujetos, escríbelo en «{n_dado_etiqueta}» para ver con qué precisión podrías estimar la media."
+    metodos_cpf.con: ", corregida para una población finita de {poblacion} sujetos"
+    metodos_cpf.sin: ", sin corrección por población finita"
+    metodos_perdidas.con: "; se añadió un {perdidas} por pérdidas previstas [{ref:lwanga1991}], con una meta de reclutamiento de {n_ajustado_techo} sujetos."
+    metodos_perdidas.sin: "; no se previeron pérdidas de seguimiento."
+  avisos:
+    supuestos: "Las cifras dependen de los supuestos (desviación estándar esperada, precisión) tomados de estudios previos o pilotos; documente su origen."
+    n_pequeno: "El tamaño calculado con la fórmula normal es menor que 30: use la variante t (fila «n_t»), que es la que corresponde cuando la desviación estándar también se estima."
+    asimetria: "La fórmula supone una variable aproximadamente simétrica. Si la suya es muy asimétrica, considere transformarla (logaritmo) o describirla con la mediana en vez de la media."
+    supera_poblacion: "El reclutamiento con pérdidas supera la población declarada (N = {poblacion}): no se puede muestrear a más sujetos de los que hay. Baja la precisión pedida o las pérdidas previstas, o revisa si ese es el marco muestral."
+    cpf_importante: "La población declarada (N = {poblacion}) es menos de diez veces el tamaño sin corregir: la corrección por población finita cambia mucho el resultado. Comprueba que N sea realmente el marco del que vas a muestrear."
+  metodos: "El tamaño de muestra se calculó para estimar una media con precisión absoluta, suponiendo una desviación estándar de {sigma} y una semiamplitud del intervalo de {d}, con un nivel de confianza del {nivel}, mediante la fórmula normal de Cochran [{ref:cochran1977}]{frase_cpf}, con la variante iterativa basada en la t de Student [{ref:student1908}] como comprobación ({n_t_minimo} sujetos){frase_perdidas} Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificados con R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: estimar la cifra media de plaquetas (×10³/µL) en pacientes con dengue, suponiendo una desviación estándar de 60, con una precisión de ±10 y previendo un 10 % de pérdidas (datos ficticios)."
+  grafica_titulo: "Precisión alcanzable según el tamaño de muestra"
+en:
+  titulo: "Sample size to estimate one mean, with t variant and finite population correction"
+  titulo_corto: "Sample size for one mean"
+  meta: "Compute how many subjects are needed to estimate a mean with the precision you choose, with Student's t variant, finite population correction, adjustment for expected losses and an inverse mode. Shows the equivalent R code and never sends your data to a server."
+  intro: "Enter the standard deviation you expect and how precisely you want to estimate the mean; get the sample size from the normal formula and from the t variant, the effect of a finite population, the recruitment needed if you expect losses, and the precision you would reach with a sample size you already have."
+  explicacion:
+    - "To estimate a mean (platelets, age, length of stay) the sample size is computed so that the confidence interval is narrow enough. The absolute precision d is the half-width of that interval, in the units of the variable: with d = 10 the mean will be estimated within ±10 units."
+    - "The formula needs the expected standard deviation σ, taken from previous studies, from a pilot or, at worst, from an approximation such as the range divided by four. The size grows with the square of σ and falls with the square of d: doubling the precision demanded quadruples the sample, and getting σ wrong by 20% changes the size by almost 50%."
+    - "The t variant recognises that, when the standard deviation is also estimated, the right quantile is not the normal one but Student's t with n−1 degrees of freedom. Since that quantile depends on n itself, there is no closed form: the calculator searches for the smallest whole size that meets the condition, starting from the normal result and stepping up one at a time. The difference is negligible in large samples and becomes decisive below 30 subjects, where the normal formula falls short."
+    - "Three adjustments close the calculation. If you sample from a finite, known population, the finite population correction reduces the size. Expected losses L raise recruitment to n/(1−L). And the inverse mode answers the opposite question: with the subjects I already have, how precisely can I estimate the mean? Every figure is rounded up once, at the end. If the variable is markedly skewed, transform it or describe it with the median instead."
+  ecuaciones:
+    - id: n_z
+      tex: 'n_z=\left(\dfrac{z_{1-\alpha/2}\,\sigma}{d}\right)^{2}'
+      simbolos:
+        - { s: '\sigma', def: "expected standard deviation of the variable" }
+        - { s: 'd', def: "absolute precision: half-width of the confidence interval" }
+        - { s: 'z_{1-\alpha/2}', def: "normal quantile for the confidence level (1.96 at 95%)" }
+      nota: "Cochran's (1977) normal formula for estimating a mean with absolute precision."
+    - id: n_t
+      tex: 'n_t=\min\left\{\,n\in\mathbb{Z},\ n\ge 2\ :\ n\ge\left(\dfrac{t_{n-1,\;1-\alpha/2}\,\sigma}{d}\right)^{2}\right\}'
+      simbolos:
+        - { s: 't_{\nu,\;1-\alpha/2}', def: "quantile of Student's t with ν degrees of freedom" }
+      nota: "The t variant (Student 1908): the smallest whole size that meets the condition, searched one by one from ⌈n_z⌉. Not solved by fixed point, which can land below the minimum."
+    - id: cpf
+      tex: 'n=\dfrac{n_z}{1+\dfrac{n_z-1}{N}}'
+      simbolos:
+        - { s: 'N', def: "size of the finite population being sampled" }
+      nota: "Finite population correction; applied to the unrounded n_z. With no N declared, n = n_z."
+    - id: perdidas
+      tex: 'n_{aj}=\left\lceil\dfrac{n}{1-L}\right\rceil'
+      simbolos:
+        - { s: 'L', def: "expected proportion of losses (0 to 0.5)" }
+      nota: "Adjustment for expected losses (Lwanga and Lemeshow 1991): recruitment rises so that n subjects finish. The ceiling is applied once, at the end; the unrounded value is shown in the cell's detail."
+    - id: inverso
+      tex: 'd(n)=\dfrac{z_{1-\alpha/2}\,\sigma}{\sqrt{n_z(n)}},\qquad n_z(n)=\dfrac{n\,(N-1)}{N-n}'
+      simbolos:
+        - { s: 'n_z(n)', def: "uncorrected size equivalent to n in a population of N" }
+      nota: "Inverse mode: the same n(d) relationship solved for d. With no N declared, n_z(n) = n."
+  etiquetas:
+    sigma: "Expected standard deviation (σ)"
+    d: "Absolute precision (d, half-width of the CI)"
+    nivel: "Confidence level"
+    poblacion: "Finite population (N, optional)"
+    perdidas: "Expected losses"
+    n_dado: "Sample size already available (n, optional)"
+    z: "Normal quantile (z)"
+    n_z: "Size with the normal formula (n_z)"
+    n_t: "Size with Student's t (n_t)"
+    n: "Required size (n)"
+    n_ajustado: "Recruitment with losses"
+    d_dado: "Precision reachable with the available n"
+    exacto: "exact value"
+    alcanzada: "half-width achieved"
+    nota_sin_n: "enter an available sample size to compute it"
+    eje_n: "Subjects (n)"
+    eje_d: "Half-width of the CI"
+    curva_d: "Reachable precision"
+    marcador_n: "computed n"
+    ref_objetivo: "target precision"
+  ayudas:
+    sigma: "Standard deviation you expect in the variable, taken from a previous study or a pilot. If you only know the range, a rough approximation is range/4."
+    d: "Half-width of the confidence interval you want, in the units of the variable."
+    nivel: "Usually 95%; 90% or 99% are also common."
+    poblacion: "Number of subjects in the population you will sample from, if it is finite and known. Leave it empty (or 0) otherwise."
+    perdidas: "Proportion of subjects you expect to lose (dropout, loss to follow-up, unusable samples). Leave it empty if you expect none."
+    n_dado: "Inverse mode: if you already have a given number of subjects, enter it here to see the precision you would reach. Leave it empty (or 0) if you are not using it."
+  interpretacion:
+    resumen: "With {n_techo} subjects, and if the true standard deviation is {sigma}, the mean would be estimated with a {nivel} confidence interval of about ±{d} units."
+    variante_t: "Using Student's t quantile instead of the normal one, the requirement rises to {n_t_minimo} subjects: {n_t_diferencia} more than with the normal formula, because estimating the standard deviation as well costs precision."
+    cpf.con: "The source population has {poblacion} subjects: the finite population correction lowers the requirement from {n_z_techo} to {n_techo}."
+    cpf.sin: "With no bounded source population, the size stays at {n_z_techo} subjects. If you were sampling from a finite population not much larger than that figure, entering it would reduce the number needed."
+    perdidas.con: "With {perdidas} expected losses, you need to recruit {n_ajustado_techo} subjects so that {n_techo} finish."
+    perdidas.sin: "No losses were anticipated: the recruitment target equals the {n_techo} subjects computed."
+    inverso.con: "With the {n_dado} subjects you already have, the reachable precision would be ±{d_dado} units, against the ±{d} you asked for."
+    inverso.sin: "If you already have a given number of subjects, enter it under \"{n_dado_etiqueta}\" to see how precisely you could estimate the mean."
+    metodos_cpf.con: ", corrected for a finite population of {poblacion} subjects"
+    metodos_cpf.sin: ", without finite population correction"
+    metodos_perdidas.con: "; {perdidas} was added for expected losses [{ref:lwanga1991}], giving a recruitment target of {n_ajustado_techo} subjects."
+    metodos_perdidas.sin: "; no losses to follow-up were anticipated."
+  avisos:
+    supuestos: "The figures depend on the assumptions (expected standard deviation, precision) taken from previous studies or pilots; document where they come from."
+    n_pequeno: "The size from the normal formula is below 30: use the t variant (row \"n_t\"), which is the right one when the standard deviation is estimated as well."
+    asimetria: "The formula assumes an approximately symmetric variable. If yours is markedly skewed, consider transforming it (logarithm) or describing it with the median rather than the mean."
+    supera_poblacion: "Recruitment with losses exceeds the declared population (N = {poblacion}): you cannot sample more subjects than there are. Lower the precision demanded or the expected losses, or check whether that is the sampling frame."
+    cpf_importante: "The declared population (N = {poblacion}) is less than ten times the uncorrected size: the finite population correction changes the result substantially. Check that N really is the frame you will sample from."
+  metodos: "Sample size was computed to estimate a mean with absolute precision, assuming a standard deviation of {sigma} and an interval half-width of {d}, with a confidence level of {nivel}, using Cochran's normal formula [{ref:cochran1977}]{frase_cpf}, with the iterative variant based on Student's t [{ref:student1908}] as a check ({n_t_minimo} subjects){frase_perdidas} Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: estimating the mean platelet count (×10³/µL) in patients with dengue, assuming a standard deviation of 60, within ±10 and anticipating 10% losses (fictitious data)."
+  grafica_titulo: "Reachable precision by sample size"

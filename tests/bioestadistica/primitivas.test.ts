@@ -578,3 +578,37 @@ test('resumen: número de comparaciones realizadas', () => {
     `se esperaban más de 10 000 comparaciones y se hicieron ${comparaciones}`);
   console.log(`  · ${comparaciones} comparaciones contra ${String(fixture.meta.R)}`);
 });
+
+// ---------------------------------------------------------------------------
+// qt con grados de libertad grandes (hallazgo de la revisión de H3): invertir
+// pt() con Brent se apartaba de R en 3.5e-9 con ν = 1e9 y en 7 % con ν = 1e16.
+// Desde 1e5 se usa la expansión de Cornish-Fisher y por encima de 1e20 qnorm,
+// como R. Valores de referencia: R 4.5.2, `qt(p, df)` con 17 cifras.
+// ---------------------------------------------------------------------------
+
+test('qt coincide con R con grados de libertad de 1e5 a 1e30 (expansión de Cornish-Fisher)', () => {
+  const ref: Array<[number, number, number]> = [
+    [0.975, 1000000000.0, 1.9599639869123247],
+    [0.975, 100000000000.0, 1.959963984563776],
+    [0.975, 10000000000000.0, 1.9599639845402905],
+    [0.975, 1e+16, 1.9599639845400536],
+    [0.995, 316000000.0, 2.5758293191075947],
+    [1e-10, 1000000.0, -6.3614068488767428],
+    [0.999999, 10000000.0, 4.7534271127497645],
+    [0.6, 1e+21, 0.25334710313579978],
+    [9.999999999999998e-101, 100000.0, -21.297598389715315],
+    [0.975, 99999.0, 1.9599877077718439],
+    [0.9, 1e+30, 1.2815515655446006],
+  ];
+  for (const [p, df, r] of ref) {
+    const t = qt(p, df);
+    assert.ok(iguales(t, r, { rel: 1e-12, abs: 0 }), `qt(${p}, ${df}) = ${t} frente a R ${r}`);
+    assert.ok(iguales(qt(p, df, false), -t, { rel: 1e-14, abs: 0 }), 'cola superior simétrica');
+  }
+  // Continuidad en el cambio de método (Brent por debajo de 1e5, expansión desde 1e5).
+  const a = qt(0.975, 99999);
+  const b = qt(0.975, 1e5);
+  assert.ok(Math.abs(a - b) < 1e-9, `salto en 1e5: ${a} frente a ${b}`);
+  // Por encima de 1e20 es exactamente el cuantil normal.
+  assert.equal(qt(0.975, 1e21), qnorm(0.975));
+});

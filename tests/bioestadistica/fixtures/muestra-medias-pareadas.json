@@ -1,0 +1,353 @@
+{
+  "generado_por": "scripts/bio-fixtures.mjs",
+  "meta": {
+    "calculadora": "muestra-medias-pareadas",
+    "generado": "2026-09-17T23:32:06.227Z",
+    "R": "R version 4.5.2 (2025-10-31)",
+    "plataforma": "aarch64-apple-darwin20",
+    "paquetes": {
+      "jsonlite": "2.0.0"
+    },
+    "plantilla_sha256": "23b776cef9dbaac73e439bca7e1be3d5b973bd8fdfc5b9bcce7fd447ae0997c4"
+  },
+  "casos": [
+    {
+      "id": "ejemplo",
+      "entradas": {
+        "delta": 0.5,
+        "de_dif": 1.5,
+        "sigma": 0,
+        "rho": 0,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 1.5,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n": 72.5840748637569,
+        "n_normal": 72.5606470194889,
+        "n_ajustado": 80.648972070841,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "desde_rho",
+      "entradas": {
+        "delta": 0.5,
+        "de_dif": 0,
+        "sigma": 1.5,
+        "rho": 0.5,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 1.5,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n": 72.5840748637569,
+        "n_normal": 72.5606470194889,
+        "n_ajustado": 72.5840748637569,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "rho_alta",
+      "entradas": {
+        "delta": 0.5,
+        "de_dif": 0,
+        "sigma": 1.5,
+        "rho": 0.9,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 0.670820393249937,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.74535599249993,
+        "n": 16.1535528634112,
+        "n_normal": 16.0487129321754,
+        "n_ajustado": 16.1535528634112,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "rho_cero",
+      "entradas": {
+        "delta": 0.5,
+        "de_dif": 0,
+        "sigma": 1.5,
+        "rho": 0,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 2.12132034355964,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.235702260395516,
+        "n": 143.212435307224,
+        "n_normal": 143.200564628631,
+        "n_ajustado": 143.212435307224,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "unilateral",
+      "entradas": {
+        "delta": 0.5,
+        "de_dif": 1.5,
+        "sigma": 0,
+        "rho": 0,
+        "alfa": 0.05,
+        "lateralidad": "unilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 1.5,
+        "z_alfa": 1.64485362695147,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n": 57.0204759623964,
+        "n_normal": 56.9957868152256,
+        "n_ajustado": 57.0204759623964,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "poder_090",
+      "entradas": {
+        "delta": 0.5,
+        "de_dif": 1.5,
+        "sigma": 0,
+        "rho": 0,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.9,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 1.5,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 1.2815515655446,
+        "d_cohen": 0.333333333333333,
+        "n": 96.5080465270818,
+        "n_normal": 96.4875369633126,
+        "n_ajustado": 96.5080465270818,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "alfa_001",
+      "entradas": {
+        "delta": 0.5,
+        "de_dif": 1.5,
+        "sigma": 0,
+        "rho": 0,
+        "alfa": 0.01,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 1.5,
+        "z_alfa": 2.5758293035489,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n": 108.44318883166,
+        "n_normal": 108.428161863578,
+        "n_ajustado": 108.44318883166,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "efecto_grande",
+      "entradas": {
+        "delta": 1.5,
+        "de_dif": 1.5,
+        "sigma": 0,
+        "rho": 0,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 1.5,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 1,
+        "n": 9.93786356626228,
+        "n_normal": 9.76960914469615,
+        "n_ajustado": 9.93786356626228,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "efecto_pequeno",
+      "entradas": {
+        "delta": 0.1,
+        "de_dif": 1,
+        "sigma": 0,
+        "rho": 0,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 1,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.1,
+        "n": 786.810862705611,
+        "n_normal": 786.808702845256,
+        "n_ajustado": 786.810862705611,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "delta_negativa",
+      "entradas": {
+        "delta": -0.5,
+        "de_dif": 1.5,
+        "sigma": 0,
+        "rho": 0,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 1.5,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n": 72.5840748637569,
+        "n_normal": 72.5606470194889,
+        "n_ajustado": 80.648972070841,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "con_n_dado",
+      "entradas": {
+        "delta": 0.5,
+        "de_dif": 1.5,
+        "sigma": 0,
+        "rho": 0,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 50
+      },
+      "esperado": {
+        "de_dif": 1.5,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n": 72.5840748637569,
+        "n_normal": 72.5606470194889,
+        "n_ajustado": 72.5840748637569,
+        "poder_dado": 0.637084584596049,
+        "poder_dado_normal": 0.654337883048977
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": {
+        "delta": 0.5,
+        "de_dif": 1.5,
+        "sigma": 0,
+        "rho": 0,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 1.5,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n": 72.5840748637569,
+        "n_normal": 72.5606470194889,
+        "n_ajustado": 145.168149727514,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    },
+    {
+      "id": "n_pequeno",
+      "entradas": {
+        "delta": 3,
+        "de_dif": 1.5,
+        "sigma": 0,
+        "rho": 0,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "de_dif": 1.5,
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 2,
+        "n": 4.2207194036814,
+        "n_normal": 3.88294934393433,
+        "n_ajustado": 4.2207194036814,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-medias-pareadas"
+    }
+  ]
+}

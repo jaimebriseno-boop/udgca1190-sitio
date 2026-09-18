@@ -9,7 +9,7 @@
 import type { Formateador, Lang, Pista } from './tipos.ts';
 
 const LOCALE: Record<Lang, string> = { es: 'es-MX', en: 'en-US' };
-const NO_DEFINIDO: Record<Lang, string> = { es: 'no definido', en: 'undefined' };
+const NO_DEFINIDO: Record<Lang, string> = { es: 'no definido', en: 'not defined' };
 const CONECTOR_IC: Record<Lang, string> = { es: ' a ', en: ' to ' };
 const SIGNO_PCT: Record<Lang, string> = { es: ' %', en: '%' };
 

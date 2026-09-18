@@ -1,0 +1,376 @@
+{
+  "generado_por": "scripts/bio-fixtures.mjs",
+  "meta": {
+    "calculadora": "muestra-una-proporcion",
+    "generado": "2026-09-18T02:33:19.365Z",
+    "R": "R version 4.5.2 (2025-10-31)",
+    "plataforma": "aarch64-apple-darwin20",
+    "paquetes": {
+      "jsonlite": "2.0.0"
+    },
+    "plantilla_sha256": "9e13b23a9734eb2e5ee0ad81160e9ad0994d54e6e964639b223673f42d323871"
+  },
+  "casos": [
+    {
+      "id": "ejemplo",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 2000,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 322.682540938306,
+        "n": 277.973009012588,
+        "n_ajustado": 308.858898902876,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "sin_poblacion",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 322.682540938306,
+        "n": 322.682540938306,
+        "n_ajustado": 322.682540938306,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "p_05",
+      "entradas": {
+        "p": 0.5,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 384.145882069412,
+        "n": 384.145882069412,
+        "n_ajustado": 384.145882069412,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "p_extrema",
+      "entradas": {
+        "p": 0.02,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 30.1170371542419,
+        "n": 30.1170371542419,
+        "n_ajustado": 30.1170371542419,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "wald_dudoso",
+      "entradas": {
+        "p": 0.05,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 72.9877175931883,
+        "n": 72.9877175931883,
+        "n_ajustado": 72.9877175931883,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "cpf_fuerte",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 500,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 322.682540938306,
+        "n": 196.354750686211,
+        "n_ajustado": 196.354750686211,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "poblacion_chica",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 100,
+        "perdidas": 0,
+        "n_dado": 50
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 322.682540938306,
+        "n": 76.5226229713684,
+        "n_ajustado": 76.5226229713684,
+        "d_dado": 0.0902693137981761
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "poblacion_uno",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 1,
+        "perdidas": 0,
+        "n_dado": 1
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 322.682540938306,
+        "n": 322.682540938306,
+        "n_ajustado": 322.682540938306,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "nivel_090",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.9,
+        "poblacion": 2000,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.64485362695147,
+        "n0": 227.265650144014,
+        "n": 204.16759350288,
+        "n_ajustado": 226.852881669867,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "nivel_099",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.99,
+        "poblacion": 2000,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 2.5758293035489,
+        "n0": 557.331314485781,
+        "n": 436.03996972348,
+        "n_ajustado": 484.488855248311,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "nivel_0999",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.999,
+        "poblacion": 2000,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 3.29052673149192,
+        "n0": 909.515558335686,
+        "n": 625.415639073377,
+        "n_ajustado": 694.906265637085,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "d_grande",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.2,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 20.1676588086441,
+        "n": 20.1676588086441,
+        "n_ajustado": 20.1676588086441,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "d_chica",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.01,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 8067.06352345766,
+        "n": 8067.06352345766,
+        "n_ajustado": 8067.06352345766,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 2000,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 322.682540938306,
+        "n": 277.973009012588,
+        "n_ajustado": 555.946018025176,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "supera_poblacion",
+      "entradas": {
+        "p": 0.5,
+        "d": 0.01,
+        "nivel": 0.95,
+        "poblacion": 10,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 9603.64705173531,
+        "n": 9.99063733438712,
+        "n_ajustado": 19.9812746687742,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "con_n_dado",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 2000,
+        "perdidas": 0.1,
+        "n_dado": 400
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 322.682540938306,
+        "n": 277.973009012588,
+        "n_ajustado": 308.858898902876,
+        "d_dado": 0.0401773544997531
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "n_dado_sin_poblacion",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 0,
+        "perdidas": 0,
+        "n_dado": 100
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 322.682540938306,
+        "n": 322.682540938306,
+        "n_ajustado": 322.682540938306,
+        "d_dado": 0.0898168331854205
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "n_dado_censo",
+      "entradas": {
+        "p": 0.3,
+        "d": 0.05,
+        "nivel": 0.95,
+        "poblacion": 500,
+        "perdidas": 0,
+        "n_dado": 500
+      },
+      "esperado": {
+        "z": 1.95996398454005,
+        "n0": 322.682540938306,
+        "n": 196.354750686211,
+        "n_ajustado": 196.354750686211,
+        "d_dado": 0
+      },
+      "tol": "muestra-una-proporcion"
+    },
+    {
+      "id": "n_diminuto",
+      "entradas": {
+        "p": 1e-10,
+        "d": 0.5,
+        "nivel": 0.8,
+        "poblacion": 0,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z": 1.2815515655446,
+        "n0": 6.56949765994232e-10,
+        "n": 6.56949765994232e-10,
+        "n_ajustado": 7.29944184438035e-10,
+        "d_dado": "NA"
+      },
+      "tol": "muestra-una-proporcion"
+    }
+  ]
+}

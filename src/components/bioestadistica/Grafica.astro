@@ -81,6 +81,7 @@ const { svg, titulo } = Astro.props;
      trazo distinto cada una: la gráfica tiene que leerse igual impresa en
      blanco y negro. Nunca rojo junto al navy en el mismo componente. */
   .bio-svg__curva,
+  .bio-svg__km-curva,
   .bio-svg__leyenda,
   .bio-svg__fagan-linea {
     fill: none;
@@ -90,24 +91,28 @@ const { svg, titulo } = Astro.props;
     stroke-linejoin: round;
   }
   .bio-svg__curva.is-destacada,
+  .bio-svg__km-curva.is-destacada,
   .bio-svg__leyenda.is-destacada,
   .bio-svg__fagan-linea.is-destacada {
     stroke: var(--udg-navy-700);
     stroke-width: 2.5;
   }
   .bio-svg__curva.is-secundaria,
+  .bio-svg__km-curva.is-secundaria,
   .bio-svg__leyenda.is-secundaria,
   .bio-svg__fagan-linea.is-secundaria {
     stroke: var(--udg-gray-700);
     stroke-dasharray: 7 4;
   }
   .bio-svg__curva.is-trazo-2,
+  .bio-svg__km-curva.is-trazo-2,
   .bio-svg__leyenda.is-trazo-2,
   .bio-svg__fagan-linea.is-trazo-2 {
     stroke: var(--udg-gray-500);
     stroke-dasharray: 1 5;
   }
   .bio-svg__curva.is-trazo-3,
+  .bio-svg__km-curva.is-trazo-3,
   .bio-svg__leyenda.is-trazo-3,
   .bio-svg__fagan-linea.is-trazo-3 {
     stroke: var(--udg-gray-500);
@@ -257,5 +262,41 @@ const { svg, titulo } = Astro.props;
     fill: none;
     stroke: var(--udg-gray-700);
     stroke-width: 1.5;
+  }
+
+  /* Curvas de Kaplan-Meier. La curva escalonada (`.bio-svg__km-curva`) comparte
+     familia de clases con `.bio-svg__curva`, arriba: destacada sólida en navy y
+     secundarias en gris con un patrón de trazo distinto cada una, porque los
+     grupos también tienen que distinguirse impresos en blanco y negro. */
+
+  /* Banda del intervalo: relleno muy tenue y sin trazo, para que la curva se
+     siga leyendo por encima y dos bandas superpuestas no parezcan una tercera
+     curva. La del grupo destacado va en navy, igual de tenue. */
+  .bio-svg__km-banda {
+    fill: var(--udg-gray-300);
+    fill-opacity: 0.35;
+    stroke: none;
+  }
+  .bio-svg__km-banda.is-destacada {
+    fill: var(--udg-navy-700);
+    fill-opacity: 0.12;
+  }
+
+  /* Marcas de censura: segmentos verticales cortos sobre la curva, siempre
+     sólidos (un trazo discontinuo de cinco unidades no se vería) y del color de
+     su grupo. */
+  .bio-svg__km-censura {
+    stroke: var(--udg-gray-700);
+    stroke-width: 1.5;
+  }
+  .bio-svg__km-censura.is-destacada {
+    stroke: var(--udg-navy-700);
+  }
+
+  /* Números de la tabla en riesgo: cifras tabulares para que las columnas
+     queden alineadas bajo las marcas del eje del tiempo. */
+  .bio-svg__km-riesgo {
+    fill: var(--udg-gray-700);
+    font-variant-numeric: tabular-nums;
   }
 </style>

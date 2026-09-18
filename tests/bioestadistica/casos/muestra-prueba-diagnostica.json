@@ -1,0 +1,161 @@
+{
+  "calculadora": "muestra-prueba-diagnostica",
+  "casos": [
+    {
+      "id": "sin_perdidas",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "nota": "El ejemplo sin previsión de perdidas: n_ajustado debe coincidir exactamente con n_total."
+    },
+    {
+      "id": "sn_alta",
+      "entradas": {
+        "sn": 0.98,
+        "sp": 0.9,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "nota": "Sensibilidad de 98 %: la varianza de Wald casi se anula, manda la especificidad y salta wald_subestima."
+    },
+    {
+      "id": "sp_alta",
+      "entradas": {
+        "sn": 0.8,
+        "sp": 0.99,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "nota": "Especificidad de 99 %: el brazo de los sanos casi desaparece y manda claramente la sensibilidad."
+    },
+    {
+      "id": "prev_baja",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.02,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "nota": "Prevalencia del 2 %: N_Sn se multiplica por cincuenta (aviso prevalencia_baja)."
+    },
+    {
+      "id": "prev_alta",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.97,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "nota": "Prevalencia del 97 %: ahora son los sanos los que escasean y manda N_Sp (aviso prevalencia_alta)."
+    },
+    {
+      "id": "w_grande",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.15,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "nota": "Semiamplitud de 0.15: intervalo de 30 puntos de ancho, n muy pequeno (aviso w_grande)."
+    },
+    {
+      "id": "w_chica",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.01,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "nota": "Semiamplitud de 0.01: n crece con 1/w^2, veinticinco veces el del ejemplo."
+    },
+    {
+      "id": "nivel_090",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.9,
+        "perdidas": 0
+      },
+      "nota": "Confianza del 90 %: z = 1.6449, otro cuantil normal en la misma formula."
+    },
+    {
+      "id": "nivel_099",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.99,
+        "perdidas": 0
+      },
+      "nota": "Confianza del 99 %: z = 2.5758, el caso mas exigente de los tres niveles habituales."
+    },
+    {
+      "id": "nivel_0999",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.999,
+        "perdidas": 0
+      },
+      "nota": "El nivel maximo admitido. Es donde mas se separan las dos formas de escribir el cuantil: qnorm(1-(1-nivel)/2) y qnorm((1-nivel)/2, lower=FALSE) difieren 9.4e-15, y al cuadrado dan 1.9e-14 en n_sn. Ata que TS use la misma forma que el snippet."
+    },
+    {
+      "id": "equilibrada",
+      "entradas": {
+        "sn": 0.9,
+        "sp": 0.9,
+        "prev": 0.5,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0
+      },
+      "nota": "Diseno simetrico: Sn = Sp y prevalencia del 50 %, asi que N_Sn = N_Sp y el empate lo resuelve la sensibilidad."
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": {
+        "sn": 0.85,
+        "sp": 0.95,
+        "prev": 0.3,
+        "w": 0.05,
+        "nivel": 0.95,
+        "perdidas": 0.5
+      },
+      "nota": "Perdidas del 50 %, el maximo admitido: n_ajustado es exactamente el doble de n_total."
+    },
+    {
+      "id": "n_diminuto",
+      "entradas": {
+        "sn": 1e-12,
+        "sp": 0.5,
+        "prev": 0.5,
+        "w": 0.5,
+        "nivel": 0.8,
+        "perdidas": 0
+      },
+      "nota": "Sensibilidad de 1e-12 con la semiamplitud maxima: n_d sale 6.6e-12, positivo pero diminuto. ceiling() de R da 1 y la presentacion tiene que dar 1, no 0."
+    }
+  ]
+}

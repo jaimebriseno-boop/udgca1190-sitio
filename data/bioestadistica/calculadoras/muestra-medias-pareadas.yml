@@ -1,0 +1,285 @@
+# Calculadora C5 · Tamaño de muestra para comparar medias pareadas (antes/después), t no central.
+# Bloque neutro (entradas, ejemplo, R, referencias) + bloques es:/en: de forma idéntica.
+grupo: muestra
+orden: 5
+estado: activa
+motor: ts
+entradas:
+  - { id: delta, tipo: decimal }
+  - { id: de_dif, tipo: decimal, min: 0, requerido: false }
+  - { id: sigma, tipo: decimal, min: 0, requerido: false }
+  - { id: rho, tipo: proporcion, min: 0, max: 0.98, requerido: false }
+  - { id: alfa, tipo: decimal, min: 0.001, max: 0.2 }
+  - { id: lateralidad, tipo: opcion, opciones: [bilateral, unilateral] }
+  - { id: poder, tipo: proporcion, min: 0.5, max: 0.99 }
+  - { id: perdidas, tipo: proporcion, min: 0, max: 0.5, requerido: false }
+  - { id: n_dado, tipo: entero, min: 0, requerido: false }
+ejemplo: { delta: 0.5, de_dif: 1.5, sigma: 0, rho: 0, alfa: 0.05, lateralidad: bilateral, poder: 0.8, perdidas: 0.1, n_dado: 0 }
+r:
+  paquetes: [jsonlite]
+  codigo: |
+    # Sample size for paired means, exact non-central t - Bioestadistica abierta, UDG-CA-1190
+    # Runs as is in R, RStudio or webR; prints the results as JSON at the end.
+    library(jsonlite)
+
+    delta       <- {delta}         # mean of the within-pair differences that matters
+    de_dif      <- {de_dif}        # SD of the DIFFERENCES; 0 = not captured, then it is derived below
+    sigma       <- {sigma}         # SD of each measurement; only used when de_dif is not given (0 = not captured)
+    rho         <- {rho}           # correlation between the two measurements; only used together with sigma
+    alfa        <- {alfa}
+    lateralidad <- {lateralidad}   # "bilateral" or "unilateral"
+    poder       <- {poder}         # target power (1 - beta)
+    perdidas    <- {perdidas}      # expected losses, 0 to 0.5
+    n_dado      <- {n_dado}        # inverse mode: pairs already available; 0 = not given
+
+    # The paired t test only needs the SD of the differences. When it is not reported,
+    # it follows from the SD of each measurement and their correlation: var(A - B) = 2*sigma^2*(1 - rho).
+    de_dif <- if (de_dif > 0) de_dif else sigma * sqrt(2 * (1 - rho))
+
+    tside   <- if (lateralidad == "bilateral") 2 else 1
+    z_alfa  <- qnorm(alfa/tside, lower.tail = FALSE)
+    z_beta  <- qnorm(poder)
+    d_cohen <- abs(delta)/de_dif
+
+    # Exact power of the paired t test: non-central t with nu = n - 1 and ncp = sqrt(n)*|delta|/de_dif.
+    # It is the body power.t.test evaluates with type = "paired" (tsample = 1).
+    poder_de <- function(n) {
+      nu <- pmax(1e-07, n - 1)
+      pt(qt(alfa/tside, nu, lower.tail = FALSE), nu, ncp = sqrt(n) * abs(delta)/de_dif, lower.tail = FALSE)
+    }
+
+    # Smallest number of PAIRS reaching the target power. Two guards before calling R:
+    # fewer than 2 pairs is not a sample size, and an effect so small that even 1e7 pairs
+    # falls short is reported as "not defined" instead of a made-up number.
+    n <- if (poder_de(2) >= poder) 2 else
+         if (poder_de(1e7) < poder) NA_real_ else
+         power.t.test(delta = abs(delta), sd = de_dif, sig.level = alfa, power = poder,
+                      type = "paired",
+                      alternative = if (tside == 2) "two.sided" else "one.sided",
+                      tol = 1e-10)$n
+
+    # Classical normal approximation with Guenther's (1981) one-sample correction, as a teaching row
+    n_normal <- (z_alfa + z_beta)^2 * de_dif^2 / delta^2 + z_alfa^2/2
+
+    n_ajustado <- n / (1 - perdidas)   # Lwanga & Lemeshow 1991; the interface takes the ceiling
+
+    # Inverse mode: power actually reached with n_dado pairs
+    poder_dado <- if (n_dado >= 2) poder_de(n_dado) else NA_real_
+    poder_dado_normal <- if (n_dado >= 2)
+      pnorm(sqrt(n_dado) * abs(delta)/de_dif - z_alfa) else NA_real_
+
+    res <- list(de_dif = de_dif, z_alfa = z_alfa, z_beta = z_beta, d_cohen = d_cohen,
+                n = n, n_normal = n_normal, n_ajustado = n_ajustado,
+                poder_dado = poder_dado, poder_dado_normal = poder_dado_normal)
+    cat(toJSON(res, auto_unbox = TRUE, digits = NA))
+
+    # Equivalent in RStudio (not run here): pwr::pwr.t.test(d = d_cohen, power = poder, type = "paired")
+referencias:
+  - { key: student1908, rol: original }
+  - { key: guenther1981, rol: original }
+  - { key: cohen1988, rol: complementaria }
+  - { key: altman1991, rol: didactica }
+  - { key: hulley2013, rol: didactica }
+grafica: curvas
+es:
+  titulo: "Tamaño de muestra para comparar medias pareadas (antes y después)"
+  titulo_corto: "Muestra para medias pareadas"
+  meta: "Calcula cuántos pares hacen falta para detectar un cambio medio en un diseño de medidas repetidas, con el método exacto de la t no central idéntico a power.t.test(type = \"paired\"), a partir de la DE de las diferencias o de la DE de cada medición y su correlación. Los datos no salen del navegador."
+  intro: "Indica el cambio medio que quieres poder detectar y la variabilidad de las diferencias (directamente, o a partir de la desviación estándar de cada medición y la correlación entre ambas), y obtén cuántos pares hacen falta, con la curva de poder, la interpretación en lenguaje llano y el código de R equivalente."
+  explicacion:
+    - "En un diseño pareado cada participante es su propio control: se mide antes y después, o con las dos técnicas que se comparan. Lo que se analiza no son dos grupos, sino una sola columna de diferencias, y la prueba t de una muestra contrasta si su media es cero. Por eso el tamaño de muestra se cuenta en PARES, no en mediciones."
+    - "La cantidad que manda no es la variabilidad de las mediciones, sino la de las diferencias. Si las dos mediciones de una misma persona se parecen mucho, las diferencias varían poco y hacen falta muy pocos pares; si son casi independientes, el diseño pareado pierde su ventaja. La relación entre ambas es σ_d = σ·√(2(1 − ρ)): con ρ = 0.5 la desviación de las diferencias coincide con la de cada medición, y por encima de 0.5 el pareo empieza a rendir."
+    - "Esta calculadora acepta las dos rutas. Si el artículo del que partes reporta la desviación estándar de las diferencias, escríbela: es el dato exacto y manda sobre cualquier otra cosa. Si solo reporta la desviación de cada medición, captúrala junto con la correlación supuesta y la calculadora deriva σ_d. Ese ρ es un supuesto, no un dato, y conviene justificarlo y poner a prueba el resultado con valores vecinos."
+    - "El resultado principal es la solución exacta basada en la distribución t no central, la misma que devuelve power.t.test(type = \"paired\") en R. La aproximación normal con la corrección de Guenther (1981) se muestra al lado como fila didáctica; su corrección es la mitad de la de dos muestras porque aquí solo hay una varianza que estimar. Y como en cualquier estudio habrá pares incompletos, el ajuste por pérdidas divide el total entre (1 − L)."
+  ecuaciones:
+    - id: exacta
+      tex: '1-\beta \;=\; P\!\left(T''_{n-1,\lambda} > t_{n-1,\;1-\alpha/k}\right), \qquad \lambda = \frac{\sqrt{n}\,|\delta|}{\sigma_d}'
+      simbolos:
+        - { s: '\delta', def: "media de las diferencias que se quiere detectar" }
+        - { s: '\sigma_d', def: "desviación estándar de las diferencias" }
+        - { s: 'n', def: "número de pares" }
+        - { s: '\lambda', def: "parámetro de no centralidad" }
+        - { s: 'T''_{n-1,\lambda}', def: "distribución t no central con n − 1 grados de libertad" }
+        - { s: 'k', def: "2 si el contraste es bilateral, 1 si es unilateral" }
+      nota: "Solución exacta: n es el menor número de pares que cumple la igualdad. Coincide con power.t.test(type = \"paired\", tol = 1e-10) de R, que resuelve esta misma ecuación."
+    - id: sigma_d
+      tex: '\sigma_d \;=\; \sigma\sqrt{2\,(1-\rho)}'
+      simbolos:
+        - { s: '\sigma', def: "desviación estándar de cada medición" }
+        - { s: '\rho', def: "correlación entre las dos mediciones" }
+      nota: "Ruta alternativa cuando el estudio de partida no reporta la desviación de las diferencias. Con ρ = 0.5 resulta σ_d = σ; con ρ → 1 las diferencias se anulan, y por eso se bloquea ρ ≥ 0.99."
+    - id: guenther
+      tex: '\begin{gathered} n \;=\; \frac{\left(z_{1-\alpha/k}+z_{1-\beta}\right)^2\sigma_d^2}{\delta^2} \;+\; \frac{z_{1-\alpha/k}^2}{2}, \qquad 1-\beta \;\approx\; \Phi\!\left(\frac{\sqrt{n}\,|\delta|}{\sigma_d} - z_{1-\alpha/k}\right) \\ n_{aj} \;=\; \left\lceil\frac{n}{1-L}\right\rceil \end{gathered}'
+      simbolos:
+        - { s: 'z_{1-\alpha/k}', def: "cuantil normal del nivel de significación" }
+        - { s: 'z_{1-\beta}', def: "cuantil normal del poder" }
+        - { s: '\Phi', def: "función de distribución normal estándar" }
+        - { s: 'k', def: "2 si el contraste es bilateral, 1 si es unilateral" }
+        - { s: 'L', def: "proporción de pérdidas previstas" }
+        - { s: 'n_{aj}', def: "pares ajustados por pérdidas" }
+        - { s: '\lceil\;\rceil', def: "techo: el redondeo hacia arriba se aplica una sola vez, al final" }
+      nota: "Aproximación normal de Guenther (1981) para una muestra y su modo inverso. El ajuste por pérdidas sigue a Lwanga y Lemeshow (1991); el techo se aplica una sola vez, al final, y el valor sin redondear queda en el detalle de la celda. Los pares son un solo grupo, así que aquí no hay techos que sumar."
+  etiquetas:
+    delta: "Cambio medio que importa (Δ)"
+    de_dif: "DE de las diferencias (σ_d)"
+    sigma: "DE de cada medición (σ)"
+    rho: "Correlación entre mediciones (ρ)"
+    alfa: "Nivel de significación (α)"
+    lateralidad: "Contraste"
+    lateralidad.bilateral: "Bilateral"
+    lateralidad.unilateral: "Unilateral"
+    poder: "Poder (1 − β)"
+    perdidas: "Pérdidas previstas"
+    n_dado: "Modo inverso: pares ya disponibles"
+    z_alfa: "z del nivel de significación"
+    z_beta: "z del poder"
+    d_cohen: "d de Cohen (Δ/σ_d)"
+    n: "Pares necesarios"
+    n_normal: "Pares (aproximación normal)"
+    n_ajustado: "Pares ajustados por pérdidas"
+    poder_dado: "Poder con los pares disponibles"
+    poder_dado_normal: "Poder con los pares disponibles (aproximación normal)"
+    exacto: "sin redondear"
+    no_aplica: "no aplica"
+    nota_exacta: "t no central"
+    nota_normal: "normal con corrección de Guenther"
+    nota_directa: "capturada"
+    nota_derivada: "derivada de σ y ρ"
+    eje_n: "Pares"
+    eje_poder: "Poder"
+    curva_poder: "Poder exacto (t no central)"
+    marcador_n: "n elegido"
+    referencia_poder: "Poder objetivo"
+  ayudas:
+    delta: "El cambio medio más pequeño, entre la primera y la segunda medición, que cambiaría una decisión clínica. El signo no altera el resultado."
+    de_dif: "Desviación estándar de las diferencias dentro de cada par. Es el dato que manda: si lo tienes, deja vacíos σ y ρ."
+    sigma: "Desviación estándar de cada medición por separado. Solo se usa si no capturaste la DE de las diferencias, y entonces hace falta también la correlación."
+    rho: "Correlación esperada entre la primera y la segunda medición del mismo participante. Solo se usa junto con σ. Admite de 0 a 0.98."
+    alfa: "Probabilidad de concluir que hay cambio cuando no lo hay. Convencionalmente 0.05; admite de 0.001 a 0.20."
+    lateralidad: "Bilateral detecta cambios en cualquier dirección y es lo habitual. Unilateral solo tiene sentido si una sola dirección es de interés y se decidió antes de ver los datos."
+    poder: "Probabilidad de detectar el cambio si realmente existe. Convencionalmente 0.80 o 0.90; admite de 0.50 a 0.99."
+    perdidas: "Proporción de pares que se espera perder (una de las dos mediciones falta). El total se divide entre (1 − pérdidas)."
+    n_dado: "Opcional. Si ya sabes cuántos pares completos vas a tener, escríbelo y la calculadora te dirá qué poder alcanzarías. Déjalo vacío (o en 0) para el cálculo normal."
+  interpretacion:
+    resumen: "Para detectar un cambio medio de {delta} (en las unidades de la escala; d de Cohen = {d_cohen}) con poder {poder} y α = {alfa} ({lateralidad_texto}) se requieren {n_techo} pares."
+    de_dif.directa: "La desviación estándar de las diferencias se tomó directamente de lo capturado: {de_dif}."
+    de_dif.derivada: "La desviación estándar de las diferencias, {de_dif}, se derivó de una DE por medición de {sigma} y una correlación supuesta de {rho}."
+    aproximacion: "La fórmula normal con la corrección de Guenther da {n_normal_techo} pares; se reporta la solución exacta de la t no central, idéntica a power.t.test(type = \"paired\") de R, que es la que sostiene el cálculo."
+    perdidas.con: "Previendo {perdidas} de pérdidas, conviene reclutar {n_ajustado_techo} pares para terminar el estudio con los {n_techo} que exige el cálculo."
+    perdidas.sin: "El cálculo no prevé pérdidas: si esperas pares incompletos, captúralas para que el total incluya el reemplazo."
+    inverso.con: "Con los {n_dado} pares que ya tienes, el poder real sería {poder_dado}; la aproximación normal daría {poder_dado_normal}."
+    inverso.sin: "Si ya sabes cuántos pares completos vas a tener, escríbelo en «modo inverso» y verás qué poder alcanzarías con esa cifra."
+    metodos_de.directa: "se tomó una desviación estándar de las diferencias de {de_dif}"
+    metodos_de.derivada: "se derivó la desviación estándar de las diferencias ({de_dif}) a partir de una DE por medición de {sigma} y una correlación supuesta de {rho}"
+    metodos_perdidas.con: "Se añadió {perdidas} por pérdidas previstas, de modo que el total de pares a reclutar asciende a {n_ajustado_techo}."
+    metodos_perdidas.sin: "No se previeron pérdidas durante el seguimiento."
+  avisos:
+    supuestos: "Las cifras dependen por completo de los supuestos que capturaste (el cambio que importa y la variabilidad de las diferencias): tómalos de estudios previos o de un piloto y declara su origen en el protocolo."
+    rho_supuesta: "La desviación estándar de las diferencias se derivó de la correlación ρ = {rho}, que es un supuesto y no un dato. Si no conoces ρ, 0.5 es el valor habitual de partida, pero debe justificarse; conviene repetir el cálculo con valores vecinos y reportar el rango."
+    n_pequeno: "El cálculo pide menos de 10 pares ({n}): con muestras tan pequeñas la prueba t depende mucho del supuesto de normalidad de las diferencias, y conviene revisar los supuestos antes de fijar el tamaño."
+    unilateral: "El contraste es unilateral: solo tiene sentido si una sola dirección del cambio es de interés y así se decidió antes de recoger los datos. Declararlo después de ver los resultados es una práctica cuestionable."
+    delta_grande: "El cambio que pides detectar supera dos desviaciones estándar de las diferencias: es un efecto enorme, poco frecuente en investigación clínica. Revisa que el cambio y la desviación estándar estén en las mismas unidades."
+  metodos: "El tamaño de muestra se calculó para detectar un cambio medio de {delta} (en las unidades de la escala) en un diseño de medidas pareadas, donde {de_frase} (d de Cohen = {d_cohen}), con α = {alfa} ({lateralidad_texto}) y un poder de {poder}, mediante la solución exacta basada en la distribución t no central [{ref:student1908}], equivalente a power.t.test(type = \"paired\") de R; la aproximación normal con la corrección de Guenther [{ref:guenther1981}] se reporta como comparación y la convención de tamaños del efecto sigue a Cohen [{ref:cohen1988}]. Se requieren {n_techo} pares. {perdidas_frase} El procedimiento sigue las recomendaciones habituales de diseño [{ref:altman1991}, {ref:hulley2013}]. Los cálculos se realizaron con la calculadora «{titulo_corto}» de Bioestadística abierta (Cuerpo Académico UDG-CA-1190, {url}), verificada contra R."
+  ejemplo_descripcion: "Ejemplo ilustrativo: detectar un descenso medio de 0.5 puntos en una escala clínica medida antes y después, con una desviación estándar de las diferencias de 1.5 puntos, α = 0.05 bilateral, poder 0.80 y 10 % de pérdidas previstas (datos ficticios)."
+  grafica_titulo: "Poder frente al número de pares"
+en:
+  titulo: "Sample size for comparing paired means (before and after)"
+  titulo_corto: "Sample size for paired means"
+  meta: "Compute how many pairs are needed to detect a mean change in a repeated-measures design, with the exact non-central t method identical to power.t.test(type = \"paired\"), from the SD of the differences or from the SD of each measurement and their correlation. Data never leave the browser."
+  intro: "Enter the mean change you want to be able to detect and the variability of the differences (directly, or from the standard deviation of each measurement and the correlation between them), and get how many pairs are needed, with the power curve, a plain-language interpretation and the equivalent R code."
+  explicacion:
+    - "In a paired design each participant is their own control: measured before and after, or with the two techniques being compared. What gets analysed is not two groups but a single column of differences, and the one-sample t test asks whether their mean is zero. That is why the sample size is counted in PAIRS, not in measurements."
+    - "The quantity that rules is not the variability of the measurements but that of the differences. If the two measurements on the same person are very alike, the differences vary little and very few pairs are needed; if they are nearly independent, the paired design loses its advantage. The link between them is σ_d = σ·√(2(1 − ρ)): at ρ = 0.5 the SD of the differences equals the SD of each measurement, and above 0.5 the pairing starts to pay off."
+    - "This calculator accepts both routes. If the paper you start from reports the standard deviation of the differences, type it in: it is the exact figure and it overrides anything else. If it only reports the SD of each measurement, enter it together with the assumed correlation and the calculator derives σ_d. That ρ is an assumption, not a datum, so justify it and stress-test the result with neighbouring values."
+    - "The main result is the exact solution based on the non-central t distribution, the same one power.t.test(type = \"paired\") returns in R. The normal approximation with Guenther's (1981) correction is shown next to it as a teaching row; its correction is half the two-sample one because here there is only one variance to estimate. And since any study will have incomplete pairs, the adjustment for losses divides the total by (1 − L)."
+  ecuaciones:
+    - id: exacta
+      tex: '1-\beta \;=\; P\!\left(T''_{n-1,\lambda} > t_{n-1,\;1-\alpha/k}\right), \qquad \lambda = \frac{\sqrt{n}\,|\delta|}{\sigma_d}'
+      simbolos:
+        - { s: '\delta', def: "mean of the differences to be detected" }
+        - { s: '\sigma_d', def: "standard deviation of the differences" }
+        - { s: 'n', def: "number of pairs" }
+        - { s: '\lambda', def: "non-centrality parameter" }
+        - { s: 'T''_{n-1,\lambda}', def: "non-central t distribution with n − 1 degrees of freedom" }
+        - { s: 'k', def: "2 if the test is two-sided, 1 if it is one-sided" }
+      nota: "Exact solution: n is the smallest number of pairs satisfying the equality. It matches R's power.t.test(type = \"paired\", tol = 1e-10), which solves this same equation."
+    - id: sigma_d
+      tex: '\sigma_d \;=\; \sigma\sqrt{2\,(1-\rho)}'
+      simbolos:
+        - { s: '\sigma', def: "standard deviation of each measurement" }
+        - { s: '\rho', def: "correlation between the two measurements" }
+      nota: "Alternative route when the source study does not report the SD of the differences. At ρ = 0.5 it gives σ_d = σ; as ρ → 1 the differences vanish, which is why ρ ≥ 0.99 is blocked."
+    - id: guenther
+      tex: '\begin{gathered} n \;=\; \frac{\left(z_{1-\alpha/k}+z_{1-\beta}\right)^2\sigma_d^2}{\delta^2} \;+\; \frac{z_{1-\alpha/k}^2}{2}, \qquad 1-\beta \;\approx\; \Phi\!\left(\frac{\sqrt{n}\,|\delta|}{\sigma_d} - z_{1-\alpha/k}\right) \\ n_{aj} \;=\; \left\lceil\frac{n}{1-L}\right\rceil \end{gathered}'
+      simbolos:
+        - { s: 'z_{1-\alpha/k}', def: "normal quantile of the significance level" }
+        - { s: 'z_{1-\beta}', def: "normal quantile of the power" }
+        - { s: '\Phi', def: "standard normal distribution function" }
+        - { s: 'k', def: "2 if the test is two-sided, 1 if it is one-sided" }
+        - { s: 'L', def: "proportion of expected losses" }
+        - { s: 'n_{aj}', def: "pairs adjusted for losses" }
+        - { s: '\lceil\;\rceil', def: "ceiling: rounding up is applied only once, at the end" }
+      nota: "Guenther's (1981) one-sample normal approximation and its inverse mode. The adjustment for losses follows Lwanga and Lemeshow (1991); the ceiling is applied only once, at the end, and the unrounded value stays in the cell detail. Pairs are a single group, so there are no ceilings to add up here."
+  etiquetas:
+    delta: "Mean change that matters (Δ)"
+    de_dif: "SD of the differences (σ_d)"
+    sigma: "SD of each measurement (σ)"
+    rho: "Correlation between measurements (ρ)"
+    alfa: "Significance level (α)"
+    lateralidad: "Test"
+    lateralidad.bilateral: "Two-sided"
+    lateralidad.unilateral: "One-sided"
+    poder: "Power (1 − β)"
+    perdidas: "Expected losses"
+    n_dado: "Inverse mode: pairs already available"
+    z_alfa: "z of the significance level"
+    z_beta: "z of the power"
+    d_cohen: "Cohen's d (Δ/σ_d)"
+    n: "Pairs needed"
+    n_normal: "Pairs (normal approximation)"
+    n_ajustado: "Pairs adjusted for losses"
+    poder_dado: "Power with the available pairs"
+    poder_dado_normal: "Power with the available pairs (normal approximation)"
+    exacto: "unrounded"
+    no_aplica: "not applicable"
+    nota_exacta: "non-central t"
+    nota_normal: "normal with Guenther's correction"
+    nota_directa: "entered"
+    nota_derivada: "derived from σ and ρ"
+    eje_n: "Pairs"
+    eje_poder: "Power"
+    curva_poder: "Exact power (non-central t)"
+    marcador_n: "chosen n"
+    referencia_poder: "Target power"
+  ayudas:
+    delta: "The smallest mean change between the first and the second measurement that would alter a clinical decision. The sign does not change the result."
+    de_dif: "Standard deviation of the within-pair differences. This is the figure that rules: if you have it, leave σ and ρ empty."
+    sigma: "Standard deviation of each measurement on its own. It is only used if you did not enter the SD of the differences, and then the correlation is needed too."
+    rho: "Expected correlation between the first and the second measurement on the same participant. Only used together with σ. Values from 0 to 0.98 are allowed."
+    alfa: "Probability of concluding there is a change when there is none. Conventionally 0.05; values from 0.001 to 0.20 are allowed."
+    lateralidad: "Two-sided detects changes in either direction and is the usual choice. One-sided only makes sense if a single direction is of interest and that was decided before seeing the data."
+    poder: "Probability of detecting the change if it really exists. Conventionally 0.80 or 0.90; values from 0.50 to 0.99 are allowed."
+    perdidas: "Proportion of pairs expected to be lost (one of the two measurements missing). The total is divided by (1 − losses)."
+    n_dado: "Optional. If you already know how many complete pairs you will have, type it in and the calculator will tell you what power you would reach. Leave it empty (or 0) for the usual calculation."
+  interpretacion:
+    resumen: "To detect a mean change of {delta} (in the units of the scale; Cohen's d = {d_cohen}) with {poder} power and α = {alfa} ({lateralidad_texto}), {n_techo} pairs are required."
+    de_dif.directa: "The standard deviation of the differences was taken directly from what you entered: {de_dif}."
+    de_dif.derivada: "The standard deviation of the differences, {de_dif}, was derived from an SD per measurement of {sigma} and an assumed correlation of {rho}."
+    aproximacion: "The normal formula with Guenther's correction gives {n_normal_techo} pairs; the exact non-central t solution, identical to R's power.t.test(type = \"paired\"), is the one reported and the one the calculation rests on."
+    perdidas.con: "Allowing for {perdidas} losses, you should recruit {n_ajustado_techo} pairs to finish the study with the {n_techo} the calculation requires."
+    perdidas.sin: "The calculation assumes no losses: if you expect incomplete pairs, enter them so the total includes the replacements."
+    inverso.con: "With the {n_dado} pairs you already have, the actual power would be {poder_dado}; the normal approximation would give {poder_dado_normal}."
+    inverso.sin: "If you already know how many complete pairs you will have, type it into \"inverse mode\" and you will see what power that figure would reach."
+    metodos_de.directa: "a standard deviation of the differences of {de_dif} was assumed"
+    metodos_de.derivada: "the standard deviation of the differences ({de_dif}) was derived from an SD per measurement of {sigma} and an assumed correlation of {rho}"
+    metodos_perdidas.con: "A further {perdidas} was added for expected losses, bringing the total number of pairs to recruit up to {n_ajustado_techo}."
+    metodos_perdidas.sin: "No losses to follow-up were anticipated."
+  avisos:
+    supuestos: "The figures depend entirely on the assumptions you entered (the change that matters and the variability of the differences): take them from previous studies or a pilot and state their origin in the protocol."
+    rho_supuesta: "The standard deviation of the differences was derived from the correlation ρ = {rho}, which is an assumption and not a datum. If you do not know ρ, 0.5 is the usual starting value, but it must be justified; it is worth repeating the calculation with neighbouring values and reporting the range."
+    n_pequeno: "The calculation asks for fewer than 10 pairs ({n}): with samples that small the t test leans heavily on the normality assumption for the differences, and the assumptions deserve a second look before fixing the sample size."
+    unilateral: "The test is one-sided: this only makes sense if a single direction of change is of interest and that was decided before collecting the data. Declaring it after seeing the results is a questionable practice."
+    delta_grande: "The change you are asking to detect exceeds two standard deviations of the differences: that is an enormous effect, rarely seen in clinical research. Check that the change and the standard deviation are in the same units."
+  metodos: "The sample size was computed to detect a mean change of {delta} (in the units of the scale) in a paired design, where {de_frase} (Cohen's d = {d_cohen}), with α = {alfa} ({lateralidad_texto}) and {poder} power, using the exact solution based on the non-central t distribution [{ref:student1908}], equivalent to R's power.t.test(type = \"paired\"); the normal approximation with Guenther's correction [{ref:guenther1981}] is reported for comparison and the effect-size convention follows Cohen [{ref:cohen1988}]. This requires {n_techo} pairs. {perdidas_frase} The procedure follows standard design recommendations [{ref:altman1991}, {ref:hulley2013}]. Calculations used the \"{titulo_corto}\" calculator of Bioestadística abierta (Research Group UDG-CA-1190, {url}), verified against R."
+  ejemplo_descripcion: "Illustrative example: detecting a mean drop of 0.5 points on a clinical scale measured before and after, with a standard deviation of the differences of 1.5 points, α = 0.05 two-sided, 80% power and 10% expected losses (fictitious data)."
+  grafica_titulo: "Power against the number of pairs"

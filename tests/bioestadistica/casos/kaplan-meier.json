@@ -1,0 +1,304 @@
+{
+  "calculadora": "kaplan-meier",
+  "casos": [
+    {
+      "id": "un_grupo",
+      "entradas": {
+        "tiempo": [2, 5, 3, 7, 3, 7, 4, 9, 4, 10, 5, 11, 5, 12, 6, 13, 6, 14, 7, 16, 8, 16, 9, 18, 12, 19, 14, 20, 18, 21],
+        "evento": [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0],
+        "grupo": [],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 7,
+        "t2": 14
+      },
+      "nota": "Las 30 filas del ejemplo sin columna de grupo: una sola curva. survfit deja $strata en NULL y survdiff no se puede llamar, asi que el log-rank y todas las salidas _2 son NA y los vectores _2 quedan vacios."
+    },
+    {
+      "id": "sin_censuras",
+      "entradas": {
+        "tiempo": [1, 2, 3, 4, 5, 6, 7, 8],
+        "evento": [1, 1, 1, 1, 1, 1, 1, 1],
+        "grupo": [],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 3,
+        "t2": 6
+      },
+      "nota": "Sin censuras la curva llega a S = 0 en el ultimo tiempo: ahi la suma de Greenwood se va a Inf (n = d), std.err es Inf y los dos limites del IC son NA."
+    },
+    {
+      "id": "sin_censuras_log",
+      "entradas": {
+        "tiempo": [1, 2, 3, 4, 5, 6, 7, 8],
+        "evento": [1, 1, 1, 1, 1, 1, 1, 1],
+        "grupo": [],
+        "nivel": 0.95,
+        "tipo_ic": "log",
+        "t1": 3,
+        "t2": 6
+      },
+      "nota": "El mismo caso en escala log: survfit_confint pone NA en los dos limites cuando S = 0 (no 0 en el inferior) y recorta el superior a 1 en el resto de la curva."
+    },
+    {
+      "id": "todo_censurado_tras_ultimo_evento",
+      "entradas": {
+        "tiempo": [2, 4, 6, 8, 10],
+        "evento": [1, 0, 0, 0, 0],
+        "grupo": [],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 2,
+        "t2": 10
+      },
+      "nota": "Un solo evento y despues solo censuras: la curva se queda en 0.8 y la mediana no se alcanza (NA), aunque el limite inferior de su intervalo si existe porque la banda inferior si baja de 0.5."
+    },
+    {
+      "id": "empates_evento_censura",
+      "entradas": {
+        "tiempo": [2, 3, 3, 3, 5, 5, 7, 9, 9, 12],
+        "evento": [1, 1, 0, 1, 0, 0, 1, 1, 0, 0],
+        "grupo": [],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 3,
+        "t2": 9
+      },
+      "nota": "Empates de todo tipo: en t = 3 hay dos eventos y una censura (n.risk = 9, los eventos van antes) y en t = 5 solo censuras, un tiempo que survfit incluye igualmente en $time con n.event = 0."
+    },
+    {
+      "id": "grupo_sin_eventos",
+      "entradas": {
+        "tiempo": [2, 4, 6, 8, 3, 5, 7, 9],
+        "evento": [1, 1, 1, 0, 0, 0, 0, 0],
+        "grupo": [0, 0, 0, 0, 1, 1, 1, 1],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 4,
+        "t2": 8
+      },
+      "nota": "El segundo grupo no tiene ningun evento: su curva es la meseta en 1 con std.err = 0 y limites 1 y 1 (la rama se == 0 de survfit_confint), su mediana es NA y el log-rank da chisq = 3."
+    },
+    {
+      "id": "n_2",
+      "entradas": {
+        "tiempo": [3, 5],
+        "evento": [1, 0],
+        "grupo": [],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 3,
+        "t2": 5
+      },
+      "nota": "El minimo admitido (n = 1 no pasa min: 2). La curva termina justo en 0.5, asi que findq no encuentra el tiempo siguiente y usa el ultimo observado: la mediana es (3 + 5)/2 = 4."
+    },
+    {
+      "id": "meseta_05",
+      "entradas": {
+        "tiempo": [2, 4, 5, 9],
+        "evento": [1, 1, 0, 0],
+        "grupo": [],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 4,
+        "t2": 9
+      },
+      "nota": "Meseta exacta en S = 0.5 desde t = 4 hasta el final del seguimiento: la regla de quantile.survfit promedia el primer tiempo con S = 0.5 y el ultimo observado, (4 + 9)/2 = 6.5."
+    },
+    {
+      "id": "s_fuera",
+      "entradas": {
+        "tiempo": [2, 5, 3, 7, 3, 7, 4, 9, 4, 10, 5, 11, 5, 12, 6, 13, 6, 14, 7, 16, 8, 16, 9, 18, 12, 19, 14, 20, 18, 21],
+        "evento": [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0],
+        "grupo": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 19,
+        "t2": 25
+      },
+      "nota": "Tiempos de interes fuera del seguimiento: t1 = 19 pasa del ultimo tiempo del grupo 0 (18) pero no del grupo 1 (21), y t2 = 25 pasa de los dos. Donde no hay seguimiento S(t) es NA, aunque extend = TRUE prolongaria la meseta."
+    },
+    {
+      "id": "ic_log",
+      "entradas": {
+        "tiempo": [2, 5, 3, 7, 3, 7, 4, 9, 4, 10, 5, 11, 5, 12, 6, 13, 6, 14, 7, 16, 8, 16, 9, 18, 12, 19, 14, 20, 18, 21],
+        "evento": [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0],
+        "grupo": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+        "nivel": 0.95,
+        "tipo_ic": "log",
+        "t1": 7,
+        "t2": 14
+      },
+      "nota": "El ejemplo en la escala logaritmica, la que R usa por omision: cambian los limites de la curva, los de S(t) y los del intervalo de la mediana, no la estimacion ni el log-rank."
+    },
+    {
+      "id": "nivel_090",
+      "entradas": {
+        "tiempo": [2, 5, 3, 7, 3, 7, 4, 9, 4, 10, 5, 11, 5, 12, 6, 13, 6, 14, 7, 16, 8, 16, 9, 18, 12, 19, 14, 20, 18, 21],
+        "evento": [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0],
+        "grupo": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+        "nivel": 0.9,
+        "tipo_ic": "log-log",
+        "t1": 7,
+        "t2": 14
+      },
+      "nota": "Nivel 90 %: comprueba que conf.int viaja al z de survfit_confint y que el intervalo de la mediana se estrecha con la banda."
+    },
+    {
+      "id": "nivel_099",
+      "entradas": {
+        "tiempo": [2, 5, 3, 7, 3, 7, 4, 9, 4, 10, 5, 11, 5, 12, 6, 13, 6, 14, 7, 16, 8, 16, 9, 18, 12, 19, 14, 20, 18, 21],
+        "evento": [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0],
+        "grupo": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+        "nivel": 0.99,
+        "tipo_ic": "log-log",
+        "t1": 7,
+        "t2": 14
+      },
+      "nota": "Nivel 99 %: el extremo opuesto del anterior; con la banda mas ancha el limite superior de la mediana puede dejar de existir."
+    },
+    {
+      "id": "censura_alta",
+      "entradas": {
+        "tiempo": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "evento": [1, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+        "grupo": [],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 5,
+        "t2": 10
+      },
+      "nota": "Siete censuras de diez: la curva solo baja tres veces, la mediana no se alcanza y se activan los avisos censura_alta, pocos_eventos y mediana_no_alcanzada."
+    },
+    {
+      "id": "cruce",
+      "entradas": {
+        "tiempo": [1, 2, 3, 10, 11, 12, 13, 14, 4, 5, 6, 7, 8, 9, 10, 11],
+        "evento": [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+        "grupo": [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 5,
+        "t2": 10
+      },
+      "nota": "Curvas que se cruzan: el grupo 0 tiene todos sus eventos al principio y luego se aplana, el grupo 1 no tiene ninguno hasta t = 8 y despues cae a 0. El log-rank pierde poder y se activa el aviso curvas_cruzan."
+    },
+    {
+      "id": "codigos_10_y_2",
+      "entradas": {
+        "tiempo": [3, 5, 7, 9, 2, 4, 6, 8],
+        "evento": [1, 1, 0, 1, 1, 0, 1, 1],
+        "grupo": [10, 10, 10, 10, 2, 2, 2, 2],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 4,
+        "t2": 8
+      },
+      "nota": "Codigos de grupo 10 y 2: el orden es numerico, asi que la primera curva es la del 2. factor(grupo) a secas ordenaria los niveles como texto y pondria el 10 primero; el snippet fija levels = sort(unique(grupo)) para que R y TypeScript numeren igual."
+    },
+    {
+      "id": "sin_tiempos",
+      "entradas": {
+        "tiempo": [2, 5, 3, 7, 3, 7, 4, 9, 4, 10, 5, 11, 5, 12, 6, 13, 6, 14, 7, 16, 8, 16, 9, 18, 12, 19, 14, 20, 18, 21],
+        "evento": [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0],
+        "grupo": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 0,
+        "t2": 0
+      },
+      "nota": "Sin tiempos de interes: 0 es el convenio de «no se pidio» (S(0) = 1 es trivial y los casos de fixture son JSON, que no admite NaN). Las cuatro salidas de S(t) son NA y la grafica no lleva marcadores."
+    },
+    {
+      "id": "solo_t2",
+      "entradas": {
+        "tiempo": [2, 5, 3, 7, 3, 7, 4, 9, 4, 10, 5, 11, 5, 12, 6, 13, 6, 14, 7, 16, 8, 16, 9, 18, 12, 19, 14, 20, 18, 21],
+        "evento": [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0],
+        "grupo": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 0,
+        "t2": 14
+      },
+      "nota": "Solo el segundo tiempo: t1 = 0 no se lee y t2 = 14 si. Comprueba que la regla t1 <= t2 no rechaza un tiempo sin pedir y que la grafica dibuja un solo marcador."
+    },
+    {
+      "id": "logrank_singular",
+      "entradas": {
+        "tiempo": [1, 2, 3, 3],
+        "evento": [0, 0, 1, 1],
+        "grupo": [0, 1, 0, 1],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 3,
+        "t2": 0
+      },
+      "nota": "Varianza 0 del log-rank: los dos eventos caen en el mismo tiempo, uno por grupo, y survdiff se detiene con «Lapack routine dgesv: system is exactly singular». Sin tryCatch el snippet terminaba sin imprimir JSON. chi2, gl y p son NA en los dos lados."
+    },
+    {
+      "id": "logrank_singular_empate",
+      "entradas": {
+        "tiempo": [4, 4, 4, 4],
+        "evento": [1, 1, 1, 1],
+        "grupo": [0, 0, 1, 1],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 4,
+        "t2": 0
+      },
+      "nota": "Todos los eventos en un unico tiempo: no hay ningun instante con n > d, la varianza hipergeometrica es 0 y survdiff vuelve a ser singular. La curva si existe y baja a 0."
+    },
+    {
+      "id": "grupo_nunca_en_riesgo",
+      "entradas": {
+        "tiempo": [2, 3, 4, 5, 6, 7],
+        "evento": [0, 0, 0, 1, 1, 1],
+        "grupo": [0, 0, 0, 1, 1, 1],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 4,
+        "t2": 6
+      },
+      "nota": "El grupo 0 se censura entero antes del primer evento del grupo 1: survdiff NO falla, devuelve chisq = 0 e imprime «on 0 degrees of freedom», pero length(lr$n) - 1 vale 1. Con var[1,1] = 0 el snippet reporta NA en chi2, gl y p, igual que TypeScript."
+    },
+    {
+      "id": "ic_mediana_no_monotona",
+      "entradas": {
+        "tiempo": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "evento": [1, 1, 0, 1, 1, 1, 0, 1, 1, 0],
+        "grupo": [],
+        "nivel": 0.999,
+        "tipo_ic": "log-log",
+        "t1": 5,
+        "t2": 0
+      },
+      "nota": "La banda inferior de S no es monotona al principio (1 - lower empieza en 0.9412 y baja a 0.8994): approx() de R ordena los nodos antes de interpolar. Sin ordenar, el limite inferior de la mediana salia 1 donde R da 2."
+    },
+    {
+      "id": "ic_mediana_no_monotona_099",
+      "entradas": {
+        "tiempo": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "evento": [1, 1, 0, 1, 1, 1, 0, 1, 1, 0],
+        "grupo": [],
+        "nivel": 0.99,
+        "tipo_ic": "log-log",
+        "t1": 5,
+        "t2": 0
+      },
+      "nota": "El mismo defecto con nivel 0.99, el otro nivel en el que la revision lo encontro."
+    },
+    {
+      "id": "t_iguales",
+      "entradas": {
+        "tiempo": [2, 5, 3, 7, 3, 7, 4, 9, 4, 10, 5, 11, 5, 12, 6, 13, 6, 14, 7, 16, 8, 16, 9, 18, 12, 19, 14, 20, 18, 21],
+        "evento": [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0],
+        "grupo": [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+        "nivel": 0.95,
+        "tipo_ic": "log-log",
+        "t1": 10,
+        "t2": 10
+      },
+      "nota": "t1 = t2 (el limite de la validacion t1 <= t2) y una censura del ejemplo convertida en evento: las dos columnas de S(t) coinciden y la grafica dibuja un solo marcador."
+    }
+  ]
+}

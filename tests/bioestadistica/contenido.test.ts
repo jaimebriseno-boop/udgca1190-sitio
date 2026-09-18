@@ -267,6 +267,7 @@ function textosDeGrafica(g: DatosGrafica): string[] {
       out.push(g.ejeX.etiqueta, g.ejeY.etiqueta);
       for (const curva of g.curvas) out.push(curva.etiqueta);
       if (g.marcador?.etiqueta !== undefined) out.push(g.marcador.etiqueta);
+      if (g.referenciaY?.etiqueta !== undefined) out.push(g.referenciaY.etiqueta);
       break;
     case 'barras':
       out.push(g.ejeY.etiqueta);
@@ -278,6 +279,11 @@ function textosDeGrafica(g: DatosGrafica): string[] {
       out.push(g.ejeX.etiqueta);
       if (g.etiquetaFrecuencia !== undefined) out.push(g.etiquetaFrecuencia);
       if (g.normal !== undefined) out.push(g.normal.etiqueta);
+      for (const marcador of g.marcadores ?? []) out.push(marcador.etiqueta);
+      break;
+    case 'km':
+      out.push(g.ejeX.etiqueta, g.ejeY.etiqueta, g.etiquetaRiesgo);
+      for (const curva of g.curvas) out.push(curva.etiqueta);
       for (const marcador of g.marcadores ?? []) out.push(marcador.etiqueta);
       break;
   }
@@ -312,6 +318,24 @@ for (const slug of SLUGS) {
 
     test('los bloques es y en tienen la misma forma', () => {
       assert.deepEqual(ordenado(Object.keys(yml.es)), ordenado(Object.keys(yml.en)));
+    });
+
+    // Dentro de comillas dobles, YAML convierte «\a», «\b», «\e», «\f», «\t», «\v» o «\0»
+    // en caracteres de control sin quejarse: "z_{1-\alpha}" se publicó una vez
+    // como «z_{1-» + BEL + «lpha}» y solo se vio en la captura. Un escape
+    // desconocido («\c») sí aborta la carga, pero estos no; de ahí la guarda.
+    test('ningún texto del YAML trae caracteres de control (escape de LaTeX entre comillas dobles)', () => {
+      const CONTROL = /[\u0000-\u0009\u000B\u000C\u000E-\u001F\u007F]/;
+      const malos: string[] = [];
+      const andar = (v: unknown, ruta: string): void => {
+        if (typeof v === 'string') {
+          const m = v.match(CONTROL);
+          if (m) malos.push(`${ruta}: U+${m[0].charCodeAt(0).toString(16).padStart(4, '0')} en «${v.slice(0, 80)}»`);
+        } else if (Array.isArray(v)) v.forEach((x, i) => andar(x, `${ruta}[${i}]`));
+        else if (v && typeof v === 'object') for (const k of Object.keys(v)) andar((v as Record<string, unknown>)[k], `${ruta}.${k}`);
+      };
+      andar(yml, slug);
+      assert.deepEqual(malos, [], `usa comillas simples o «\\\\» para el LaTeX en def:/nota: → ${malos.join(' · ')}`);
     });
 
     test('etiquetas, ayudas, interpretación y avisos traen las mismas claves en ambos idiomas', () => {
@@ -644,6 +668,23 @@ for (const slug of SLUGS) {
             }
             break;
           }
+          case 'km':
+            assert.ok(datos.curvas.length > 0, `${lang}: la gráfica no tiene curvas`);
+            for (const curva of datos.curvas) {
+              assert.ok(curva.pasos.length > 0, `${lang}: la curva «${curva.id}» no tiene escalones`);
+              // Toda curva de Kaplan-Meier arranca en (0, 1): antes del primer
+              // evento nadie ha fallado y el escalón inicial no es opcional.
+              assert.ok(
+                curva.pasos[0].t === 0 && curva.pasos[0].s === 1,
+                `${lang}: la curva «${curva.id}» no arranca en (0, 1)`,
+              );
+              assert.equal(
+                curva.enRiesgo.length,
+                datos.tiemposRiesgo.length,
+                `${lang}: la curva «${curva.id}» no trae un número en riesgo por tiempo de la tabla`,
+              );
+            }
+            break;
         }
         for (const texto of textosDeGrafica(datos)) {
           assert.ok(texto.trim().length > 0, `${lang}: la gráfica tiene un texto vacío (etiqueta, eje o rótulo)`);

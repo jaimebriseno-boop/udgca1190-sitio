@@ -105,7 +105,7 @@ test('lr escribe el infinito con el símbolo y NaN con el texto del idioma', () 
   assert.equal(en.num(Infinity, 'lr'), '∞');
   assert.equal(es.num(-Infinity, 'lr'), '−∞');
   assert.equal(es.num(Number.NaN, 'lr'), 'no definido');
-  assert.equal(en.num(Number.NaN, 'lr'), 'undefined');
+  assert.equal(en.num(Number.NaN, 'lr'), 'not defined');
 });
 
 test('x añade el signo de multiplicación', () => {
@@ -128,7 +128,7 @@ test('entero pone separador de miles en los dos idiomas', () => {
 test('entero delega los valores no finitos en num', () => {
   assert.equal(es.entero(Infinity), '∞');
   assert.equal(es.entero(Number.NaN), 'no definido');
-  assert.equal(en.entero(Number.NaN), 'undefined');
+  assert.equal(en.entero(Number.NaN), 'not defined');
 });
 
 // ---------------------------------------------------------------------------

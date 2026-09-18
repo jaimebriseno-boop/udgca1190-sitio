@@ -97,6 +97,13 @@ export interface Resultado<C extends string = string> {
   version: 1;
   entradas: Entradas;
   valores: Record<string, Estimacion>;
+  /**
+   * Vectores de longitud variable que también imprime el snippet de R (p. ej.
+   * la tabla de vida de Kaplan-Meier: tiempos, en riesgo, S(t), IC). El
+   * comparador los coteja elemento a elemento con la tolerancia del campo; la
+   * interfaz los usa para la gráfica, no para las celdas.
+   */
+  extras?: Record<string, number[]>;
   /** Bandas categóricas que eligen la variante de interpretación (p. ej. 'lr_pos' → 'grande'). */
   bandas: Record<string, string>;
   avisos: Aviso[];
@@ -285,6 +292,8 @@ export interface GraficaCurvas extends GraficaBase {
    * interpola sobre la polilínea).
    */
   marcador?: { x: number; etiqueta?: string; valores?: Record<string, number> };
+  /** Línea horizontal de referencia (p. ej. el poder objetivo 0.80) con rótulo opcional. */
+  referenciaY?: { valor: number; etiqueta?: string };
 }
 
 /** Una serie de la gráfica de barras (p. ej. «observado» y «esperado»). */
@@ -364,8 +373,48 @@ export interface GraficaHistogramaBoxplot extends GraficaBase {
   marcadores?: MarcadorX[];
 }
 
+/** Un escalón de una curva de supervivencia: en `t` la curva vale `s` (con su IC opcional). */
+export interface PasoKm {
+  t: number;
+  s: number;
+  lo?: number;
+  hi?: number;
+}
+
+/** Una curva de Kaplan-Meier (un grupo). */
+export interface CurvaKm {
+  id: string;
+  etiqueta: string;
+  /** Escalones en orden creciente de t; el primero es (0, 1). */
+  pasos: PasoKm[];
+  /** Tiempos de censura, dibujados como marcas sobre la curva. */
+  censuras: number[];
+  /** Número en riesgo en cada tiempo de `GraficaKm.tiemposRiesgo` (misma longitud). */
+  enRiesgo: number[];
+  destacada?: boolean;
+}
+
+/**
+ * Curvas de Kaplan-Meier escalonadas por grupo, con banda de IC, marcas de
+ * censura, marcadores verticales opcionales (tiempos de interés) y la tabla de
+ * pacientes en riesgo debajo del eje.
+ */
+export interface GraficaKm extends GraficaBase {
+  tipo: 'km';
+  curvas: CurvaKm[];
+  /** Eje del tiempo (dominio desde 0 hasta el último tiempo observado). */
+  ejeX: EjeGrafica;
+  /** Eje de S(t); dominio [0, 1], pista `pct0`. */
+  ejeY: EjeGrafica;
+  /** Columnas de la tabla en riesgo (p. ej. 0, 7, 14, 21, 28). */
+  tiemposRiesgo: number[];
+  /** Rótulo de la fila de la tabla en riesgo («En riesgo»). */
+  etiquetaRiesgo: string;
+  marcadores?: MarcadorX[];
+}
+
 /** Descripción declarativa de la gráfica; `nucleo/svg.ts` la convierte en SVG (cadena, sin DOM). */
-export type DatosGrafica = GraficaForest | GraficaFagan | GraficaCurvas | GraficaBarras | GraficaHistogramaBoxplot;
+export type DatosGrafica = GraficaForest | GraficaFagan | GraficaCurvas | GraficaBarras | GraficaHistogramaBoxplot | GraficaKm;
 
 /**
  * Contexto que la página entrega a `presentar()`. El código R relleno NO forma

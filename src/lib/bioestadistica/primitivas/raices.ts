@@ -185,3 +185,103 @@ export function expandirIntervalo(
     `expandirIntervalo: no se encontró cambio de signo desde ${x0} hacia ${direccion > 0 ? '+∞' : '−∞'}`,
   );
 }
+
+// ---------------------------------------------------------------------------
+// uniroot de R (zeroin de Forsythe, Malcolm y Moler)
+// ---------------------------------------------------------------------------
+
+/** Tolerancia por omisión de `uniroot` en R: `.Machine$double.eps^0.25` ≈ 1.22e-4. */
+export const TOL_UNIROOT = Math.pow(Number.EPSILON, 0.25);
+
+/** Opciones de `uniroot`. */
+export interface OpcionesUniroot {
+  /** `tol` de R (por omisión `TOL_UNIROOT`; `power.*.test` se llaman con 1e-10). */
+  tol?: number;
+  /** `maxiter` de R (por omisión 1000). */
+  maxIter?: number;
+}
+
+/**
+ * `uniroot(f, c(a, b), tol)` de R: traducción literal de `R_zeroin2`
+ * (`src/library/stats/src/zeroin.c`), el zeroin de Forsythe, Malcolm y Moler
+ * (1977) con la interpolación cuadrática inversa de Brent.
+ *
+ * Existe además de `brent` (la variante «zbrent» de Numerical Recipes) porque
+ * las dos difieren en qué paso previo vigilan para aceptar la interpolación y,
+ * con la tolerancia gruesa de `uniroot`, esa diferencia mueve el punto de
+ * parada dentro de la banda de ±tol/2: en el OR condicional de `fisher.test`
+ * `brent` se apartaba de R hasta 1.3e-3 y esta traducción coincide en ~1e-15.
+ * Se usa siempre que el oráculo es una función de R que resuelve con `uniroot`
+ * (`fisher.test`, `power.prop.test`, `power.t.test`, `pwr::pwr.r.test`): el
+ * objetivo no es la raíz «verdadera», sino el número que imprime R.
+ *
+ * @throws {RangeError} si `f` no está definida en los extremos, si no cambia de
+ *   signo en `[a, b]` o si devuelve NaN por el camino.
+ */
+export function uniroot(f: (t: number) => number, ax: number, bx: number, opciones: OpcionesUniroot = {}): number {
+  const tol = opciones.tol ?? TOL_UNIROOT;
+  const maxIter = opciones.maxIter ?? 1000;
+  let a = ax;
+  let b = bx;
+  let c = a;
+  let fa = f(a);
+  let fb = f(b);
+  let fc = fa;
+  if (Number.isNaN(fa) || Number.isNaN(fb)) {
+    throw new RangeError(`uniroot: f no está definida en los extremos (f(${a}) = ${fa}, f(${b}) = ${fb})`);
+  }
+  if (fa === 0) return a;
+  if (fb === 0) return b;
+  if ((fa > 0 && fb > 0) || (fa < 0 && fb < 0)) {
+    throw new RangeError(`uniroot: no hay cambio de signo en [${ax}, ${bx}] (f(a) = ${fa}, f(b) = ${fb})`);
+  }
+
+  for (let iter = 0; iter <= maxIter; iter += 1) {
+    const pasoPrevio = b - a;
+    if (Math.abs(fc) < Math.abs(fb)) {
+      a = b;
+      b = c;
+      c = a;
+      fa = fb;
+      fb = fc;
+      fc = fa;
+    }
+    const tolAct = 2 * Number.EPSILON * Math.abs(b) + tol / 2;
+    let paso = (c - b) / 2;
+    if (Math.abs(paso) <= tolAct || fb === 0) return b;
+
+    // Interpolación (lineal con dos puntos, cuadrática inversa con tres) solo
+    // si el paso anterior fue suficientemente grande y |f| está bajando.
+    if (Math.abs(pasoPrevio) >= tolAct && Math.abs(fa) > Math.abs(fb)) {
+      const cb = c - b;
+      let p: number;
+      let q: number;
+      if (a === c) {
+        const t1 = fb / fa;
+        p = cb * t1;
+        q = 1 - t1;
+      } else {
+        const q0 = fa / fc;
+        const t1 = fb / fc;
+        const t2 = fb / fa;
+        p = t2 * (cb * q0 * (q0 - t1) - (b - a) * (t1 - 1));
+        q = (q0 - 1) * (t1 - 1) * (t2 - 1);
+      }
+      if (p > 0) q = -q;
+      else p = -p;
+      if (p < 0.75 * cb * q - Math.abs(tolAct * q) / 2 && p < Math.abs((pasoPrevio * q) / 2)) paso = p / q;
+    }
+    if (Math.abs(paso) < tolAct) paso = paso > 0 ? tolAct : -tolAct;
+
+    a = b;
+    fa = fb;
+    b += paso;
+    fb = f(b);
+    if (Number.isNaN(fb)) throw new RangeError(`uniroot: f devolvió NaN en x = ${b}`);
+    if ((fb > 0 && fc > 0) || (fb < 0 && fc < 0)) {
+      c = a;
+      fc = fa;
+    }
+  }
+  return b;
+}

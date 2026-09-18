@@ -1,0 +1,173 @@
+{
+  "calculadora": "muestra-correlacion",
+  "casos": [
+    {
+      "id": "r_negativa",
+      "entradas": {
+        "r": -0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Correlacion negativa: C cambia de signo pero n es identico al de r = 0.30 (la formula usa C^2)."
+    },
+    {
+      "id": "unilateral",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "unilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Hipotesis unilateral: z_alfa pasa a qnorm(1 - alfa) y pwr.r.test usa alternative = \"greater\"."
+    },
+    {
+      "id": "unilateral_negativa",
+      "entradas": {
+        "r": -0.3,
+        "alfa": 0.05,
+        "lateralidad": "unilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Unilateral con r negativa: pwr.r.test toma alternative = \"less\", que invierte el signo de r dentro del cuerpo."
+    },
+    {
+      "id": "r_pequena",
+      "entradas": {
+        "r": 0.04,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Correlacion de 0.04: casi cinco mil pares (aviso r_pequena) y los techos de las dos rutas difieren en 1."
+    },
+    {
+      "id": "r_grande",
+      "entradas": {
+        "r": 0.8,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.9,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Correlacion de 0.80 con poder del 90 %: n cerca del minimo, donde el cuantil t de pwr pesa mas."
+    },
+    {
+      "id": "r_extrema",
+      "entradas": {
+        "r": 0.98,
+        "alfa": 0.01,
+        "lateralidad": "bilateral",
+        "poder": 0.95,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "El extremo admitido (|r| = 0.98): C se dispara y n roza el minimo de cuatro pares."
+    },
+    {
+      "id": "pwr_sin_solucion",
+      "entradas": {
+        "r": 0.98,
+        "alfa": 0.05,
+        "lateralidad": "unilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "r = 0.98 unilateral con poder del 80 %: los cuatro pares minimos ya superan ese poder, el uniroot de pwr.r.test no encuentra cambio de signo y n_pwr sale NA."
+    },
+    {
+      "id": "poder_090",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.9,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Poder del 90 %: z_beta = 1.2816 en la misma formula."
+    },
+    {
+      "id": "poder_095",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.95,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Poder del 95 %: z_beta = 1.6449, el mas exigente de los habituales."
+    },
+    {
+      "id": "alfa_001",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.01,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Alfa de 0.01: z_alfa = 2.5758 y el tamano sube casi un 50 %."
+    },
+    {
+      "id": "con_n_dado",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 50
+      },
+      "nota": "Modo inverso con 50 pares: poder_dado = pnorm(|C| * sqrt(47) - z_alfa), muy por debajo del 80 % buscado."
+    },
+    {
+      "id": "n_dado_corto",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 2
+      },
+      "nota": "Dos pares disponibles: por debajo de los cuatro que admite la z de Fisher, asi que R devuelve NA en poder_dado y la calculadora lo explica con un aviso, sin rechazar el campo."
+    },
+    {
+      "id": "n_dado_minimo",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0,
+        "n_dado": 4
+      },
+      "nota": "El minimo que admite la z de Fisher: con n = 4 el radicando es 1 y el poder queda por debajo de alfa."
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": {
+        "r": 0.3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "nota": "Perdidas del 50 %, el maximo admitido: n_ajustado es exactamente el doble de n_clasico."
+    }
+  ]
+}

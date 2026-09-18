@@ -1,0 +1,215 @@
+{
+  "calculadora": "muestra-dos-medias",
+  "casos": [
+    {
+      "id": "unilateral",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "unilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "nota": "Contraste unilateral: tside pasa de 2 a 1, z_alfa baja de 1.96 a 1.645 y n1 cae de 142 a 112. Comprueba que la lateralidad viaja igual a qt(), a qnorm() y a power.t.test(alternative = \"one.sided\")."
+    },
+    {
+      "id": "r_2",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 2,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Dos participantes del grupo 2 por cada uno del grupo 1: power.t.test no aplica (n_ptt debe venir NA) y n1 se resuelve con nu = n1*(1+r) - 2 y ncp con 1/n1 + 1/(2*n1). El total supera al de grupos iguales."
+    },
+    {
+      "id": "r_05",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 0.5,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Razon de asignacion menor que 1 (el grupo 2 es la mitad del grupo 1): caso espejo de r_2, con n1 el doble aproximadamente y n_ptt tambien NA."
+    },
+    {
+      "id": "poder_090",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.9,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Poder 0.90: z_beta sube de 0.842 a 1.282 y n1 crece respecto al ejemplo. Monotonia del poder frente a n."
+    },
+    {
+      "id": "poder_095",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.95,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Poder 0.95, el extremo alto que la especificacion admite; la cola de la t no central queda lejos del parametro de no centralidad, que es donde AS 243 es menos precisa."
+    },
+    {
+      "id": "alfa_001",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.01,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "Alfa 0.01: z_alfa sube a 2.576 y el valor critico de qt se aleja; n1 crece. Cubre la ruta alfa/tside con tside = 2."
+    },
+    {
+      "id": "efecto_grande",
+      "entradas": {
+        "delta": 3,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "d de Cohen = 1 (efecto grande): n1 ronda 17 por grupo y la aproximacion normal de Guenther se queda un par de unidades por debajo, que es justo lo que la fila didactica debe mostrar."
+    },
+    {
+      "id": "efecto_pequeno",
+      "entradas": {
+        "delta": 0.2,
+        "sigma": 1,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "d de Cohen = 0.2 (efecto pequeno): n1 ronda 394 por grupo. Con n grande la t no central se acerca a la normal y las dos filas casi coinciden."
+    },
+    {
+      "id": "delta_negativa",
+      "entradas": {
+        "delta": -1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "nota": "Diferencia negativa: el signo no debe cambiar nada porque el parametro de no centralidad entra como |delta|. Todas las salidas deben coincidir con las del ejemplo."
+    },
+    {
+      "id": "con_n_dado",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 100
+      },
+      "nota": "Modo inverso con 100 por grupo, por debajo de los 143 que exige el poder 0.80: poder_dado debe quedar claramente bajo 0.80 y por encima del poder_dado_normal."
+    },
+    {
+      "id": "n_dado_r2",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 2,
+        "perdidas": 0,
+        "n_dado": 80
+      },
+      "nota": "Modo inverso con grupos desiguales: 80 en el grupo 1 y 160 en el grupo 2. Comprueba que el poder inverso usa nu = n_dado*(1+r) - 2 y el error estandar con 1/n1 + 1/(r*n1)."
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "nota": "Perdidas en el maximo admitido (50 %): el total ajustado duplica al total exacto. Frontera superior de validarComun."
+    },
+    {
+      "id": "n_pequeno",
+      "entradas": {
+        "delta": 5,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "d de Cohen = 1.667: n1 ronda 7 por grupo, por debajo de 10, y dispara el aviso n_pequeno. Con nu tan bajo la t no central y la normal se separan al maximo."
+    },
+    {
+      "id": "sigma_enorme",
+      "entradas": {
+        "delta": 1,
+        "sigma": 1000,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "d de Cohen = 0.001: ni con 1e7 por grupo se alcanza el poder, asi que n1 y n_ptt deben venir NA. Sin la guarda, power.t.test extiende el corchete (extendInt = \"upX\") y devuelve 21655135.05 mientras la ecuacion general se detiene en 1e7: hallazgo ALTO de la revision."
+    },
+    {
+      "id": "efecto_enorme",
+      "entradas": {
+        "delta": 1000,
+        "sigma": 0.001,
+        "alfa": 0.2,
+        "lateralidad": "unilateral",
+        "poder": 0.5,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "nota": "d de Cohen = 1e6: con dos por grupo ya se supera el poder, asi que n1 y n_ptt deben valer 2. Sin la guarda, power.t.test baja a 1.000770, que no es un tamano de muestra: el otro hallazgo ALTO de la revision."
+    }
+  ]
+}

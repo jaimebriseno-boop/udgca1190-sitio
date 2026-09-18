@@ -1,0 +1,463 @@
+{
+  "generado_por": "scripts/bio-fixtures.mjs",
+  "meta": {
+    "calculadora": "muestra-dos-medias",
+    "generado": "2026-09-18T02:26:16.143Z",
+    "R": "R version 4.5.2 (2025-10-31)",
+    "plataforma": "aarch64-apple-darwin20",
+    "paquetes": {
+      "jsonlite": "2.0.0"
+    },
+    "plantilla_sha256": "3a4594e1bc94bb3fea2d235587aecc1443308d76907f031f90c6c1b44847922e"
+  },
+  "casos": [
+    {
+      "id": "ejemplo",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n1": 142.246595844377,
+        "n2": 142.246595844377,
+        "n_total": 284.493191688754,
+        "n_ptt": 142.246595844356,
+        "n1_normal": 142.240199923457,
+        "n2_normal": 142.240199923457,
+        "n_ajustado": 316.103546320837,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "unilateral",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "unilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.64485362695147,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n1": 111.96859697205,
+        "n2": 111.96859697205,
+        "n_total": 223.937193944101,
+        "n_ptt": 111.968596972062,
+        "n1_normal": 111.96241603988,
+        "n2_normal": 111.96241603988,
+        "n_ajustado": 248.819104382334,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "r_2",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 2,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n1": 106.603910388397,
+        "n2": 213.207820776794,
+        "n_total": 319.811731165191,
+        "n_ptt": "NA",
+        "n1_normal": 106.920241118886,
+        "n2_normal": 213.840482237772,
+        "n_ajustado": 319.811731165191,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "r_05",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 0.5,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n1": 213.2078207768,
+        "n2": 106.6039103884,
+        "n_total": 319.8117311652,
+        "n_ptt": "NA",
+        "n1_normal": 212.880117532599,
+        "n2_normal": 106.440058766299,
+        "n_ajustado": 319.8117311652,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "poder_090",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.9,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 1.2815515655446,
+        "d_cohen": 0.333333333333333,
+        "n1": 190.099125296369,
+        "n2": 190.099125296369,
+        "n_total": 380.198250592737,
+        "n_ptt": 190.099125296333,
+        "n1_normal": 190.093979811105,
+        "n2_normal": 190.093979811105,
+        "n_ajustado": 380.198250592737,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "poder_095",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.95,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 1.64485362695147,
+        "d_cohen": 0.333333333333333,
+        "n1": 234.869550430366,
+        "n2": 234.869550430366,
+        "n_total": 469.739100860732,
+        "n_ptt": 234.869550430264,
+        "n1_normal": 234.865144923324,
+        "n2_normal": 234.865144923324,
+        "n_ajustado": 469.739100860732,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "alfa_001",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.01,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 2.5758293035489,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n1": 211.886048603366,
+        "n2": 211.886048603366,
+        "n_total": 423.772097206733,
+        "n_ptt": 211.886048603442,
+        "n1_normal": 211.88015127639,
+        "n2_normal": 211.88015127639,
+        "n_ajustado": 423.772097206733,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "efecto_grande",
+      "entradas": {
+        "delta": 3,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 1,
+        "n1": 16.7147598311522,
+        "n2": 16.7147598311522,
+        "n_total": 33.4295196623045,
+        "n_ptt": 16.7147598311522,
+        "n1_normal": 16.6581241738717,
+        "n2_normal": 16.6581241738717,
+        "n_ajustado": 33.4295196623045,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "efecto_pequeno",
+      "entradas": {
+        "delta": 0.2,
+        "sigma": 1,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.2,
+        "n1": 393.406656228198,
+        "n2": 393.406656228198,
+        "n_total": 786.813312456397,
+        "n_ptt": 393.40665622823,
+        "n1_normal": 393.404351422628,
+        "n2_normal": 393.404351422628,
+        "n_ajustado": 786.813312456397,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "delta_negativa",
+      "entradas": {
+        "delta": -1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0.1,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n1": 142.246595844377,
+        "n2": 142.246595844377,
+        "n_total": 284.493191688754,
+        "n_ptt": 142.246595844356,
+        "n1_normal": 142.240199923457,
+        "n2_normal": 142.240199923457,
+        "n_ajustado": 316.103546320837,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "con_n_dado",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 100
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n1": 142.246595844377,
+        "n2": 142.246595844377,
+        "n_total": 284.493191688754,
+        "n_ptt": 142.246595844356,
+        "n1_normal": 142.240199923457,
+        "n2_normal": 142.240199923457,
+        "n_ajustado": 284.493191688754,
+        "poder_dado": 0.650108691364332,
+        "poder_dado_normal": 0.654337883048977
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "n_dado_r2",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 2,
+        "perdidas": 0,
+        "n_dado": 80
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n1": 106.603910388397,
+        "n2": 213.207820776794,
+        "n_total": 319.811731165191,
+        "n_ptt": "NA",
+        "n1_normal": 106.920241118886,
+        "n2_normal": 213.840482237772,
+        "n_ajustado": 319.811731165191,
+        "poder_dado": 0.678864436565196,
+        "poder_dado_normal": 0.682377856842266
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "perdidas_max",
+      "entradas": {
+        "delta": 1,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0.5,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.333333333333333,
+        "n1": 142.246595844377,
+        "n2": 142.246595844377,
+        "n_total": 284.493191688754,
+        "n_ptt": 142.246595844356,
+        "n1_normal": 142.240199923457,
+        "n2_normal": 142.240199923457,
+        "n_ajustado": 568.986383377508,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "n_pequeno",
+      "entradas": {
+        "delta": 5,
+        "sigma": 3,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 1.66666666666667,
+        "n1": 6.76093409766842,
+        "n2": 6.76093409766842,
+        "n_total": 13.5218681953368,
+        "n_ptt": 6.76093409766843,
+        "n1_normal": 6.61155811390487,
+        "n2_normal": 6.61155811390487,
+        "n_ajustado": 13.5218681953368,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "sigma_enorme",
+      "entradas": {
+        "delta": 1,
+        "sigma": 1000,
+        "alfa": 0.05,
+        "lateralidad": "bilateral",
+        "poder": 0.8,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 1.95996398454005,
+        "z_beta": 0.841621233572914,
+        "d_cohen": 0.001,
+        "n1": "NA",
+        "n2": "NA",
+        "n_total": "NA",
+        "n_ptt": "NA",
+        "n1_normal": 15697760.4290629,
+        "n2_normal": 15697760.4290629,
+        "n_ajustado": "NA",
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    },
+    {
+      "id": "efecto_enorme",
+      "entradas": {
+        "delta": 1000,
+        "sigma": 0.001,
+        "alfa": 0.2,
+        "lateralidad": "unilateral",
+        "poder": 0.5,
+        "r": 1,
+        "perdidas": 0,
+        "n_dado": 0
+      },
+      "esperado": {
+        "z_alfa": 0.841621233572914,
+        "z_beta": 0,
+        "d_cohen": 1000000,
+        "n1": 2,
+        "n2": 2,
+        "n_total": 4,
+        "n_ptt": 2,
+        "n1_normal": 0.177081575201615,
+        "n2_normal": 0.177081575201615,
+        "n_ajustado": 4,
+        "poder_dado": "NA",
+        "poder_dado_normal": "NA"
+      },
+      "tol": "muestra-dos-medias"
+    }
+  ]
+}

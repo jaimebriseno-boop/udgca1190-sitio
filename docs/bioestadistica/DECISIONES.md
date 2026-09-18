@@ -378,3 +378,337 @@ hace. (3) El camino SSR de los avisos (`Avisos.astro` + `CalculadoraPage`) y el 
 del controlador (`pintarAvisos`) no tienen prueba de DOM: solo los cubren la prueba de
 interpolación de `contenido.test.ts` y el `build` (H3 puede abrir un arnés de DOM
 mínimo). (4) `docs/performance/baseline.json` sigue sin actualizar (ajeno a la sección).
+
+## H3 · Por patrón: tamaño de muestra, kappa y Kaplan-Meier (en construcción, 17 de septiembre de 2026)
+
+**Alcance acordado.** Dos oleadas sobre la misma rama: (1) las siete calculadoras de
+tamaño de muestra y poder (`muestra-una-proporcion`, `muestra-una-media`,
+`muestra-dos-proporciones`, `muestra-dos-medias`, `muestra-medias-pareadas`,
+`muestra-prueba-diagnostica`, `muestra-correlacion`), que solo necesitan campos y
+selectores existentes; (2) `kappa` (tabla k×k pegada) y `kaplan-meier` (tres columnas
+pegadas), que necesitan un control nuevo y una gráfica nueva. `curva-roc` (opcional en
+el PLAN) queda para después.
+
+**Decisiones y desviaciones respecto a los diseños, con motivo.**
+
+- La gráfica `potencia` del PLAN no es un renderizador nuevo: es `curvas` con una
+  `referenciaY` (línea horizontal en el poder o la precisión objetivo), campo añadido a
+  `GraficaCurvas`. Un renderizador aparte habría duplicado ejes, leyenda y marcador.
+- `uniroot` de R (traducción literal de `R_zeroin2`, escrita en H2 dentro de
+  `independencia.ts`) pasa a `primitivas/raices.ts` como `uniroot(f, a, b, { tol })`,
+  junto a `brent`: lo usan el OR condicional de Fisher y ahora `power.prop.test`,
+  `power.t.test` (con `tol = 1e-10`) y `pwr.r.test` (tolerancia por omisión). Regla: cuando
+  el oráculo es una función de R que resuelve con `uniroot`, TypeScript resuelve con la
+  misma rutina y los mismos corchetes; el objetivo es el número que imprime R.
+- Convenio «0 = sin dato» para las entradas numéricas opcionales del grupo `muestra`
+  (`n_dado` del modo inverso, `poblacion` de la CPF, `de_dif`/`sigma`/`rho` de C5) y para
+  `t1`/`t2` de Kaplan-Meier, en vez de `NaN → NA`: `contenido.test.ts` exige que todo
+  marcador del snippet esté en `ejemplo` (Zod `z.number()`, sin NaN) y el generador de
+  fixtures rellena la plantilla con las entradas crudas de cada caso JSON (sin NaN ni
+  null). Es el patrón de `valores-predictivos`; `NaN → NA` queda para
+  `media-desde-mediana`, cuyo ejemplo y casos traen siempre los cinco números.
+- Bloque común C0: las salidas viajan sin redondear y la presentación aplica el techo una
+  sola vez en el titular (`techo()` de `metodos/muestra-comun.ts`, con tolerancia de 1e-9
+  para no convertir 322.00000000001 en 323); el ajuste por pérdidas es n/(1 − L) sobre el
+  n sin redondear; `alfa`/`lateralidad`/`poder`/`r` comparten rangos y `zAlfa` respeta la
+  lateralidad como `qnorm(sig.level/tside, lower.tail = FALSE)` en R.
+- C3: `power.prop.test` y `pwr.2p.test` solo existen para r = 1; con r ≠ 1 manda la fórmula
+  cerrada de Fleiss (matemáticamente idéntica a la que `power.prop.test` invierte con r = 1)
+  y los campos de comparación viajan como `NA`. C4/C5: la ecuación exacta de la t no
+  central se escribe en el propio snippet con `uniroot(tol = 1e-10)` para que el fixture la
+  valide también con r ≠ 1, y `power.t.test` se añade como comparación cuando r = 1.
+- `Resultado.extras` (vectores de longitud variable) y su comparación elemento a elemento
+  en `comparar.ts`: la tabla de vida de Kaplan-Meier (tiempos, en riesgo, eventos,
+  censuras, S, EE de log S, IC) se valida entera contra `survfit`, no solo los escalares.
+- Kaplan-Meier en H3 admite un máximo de dos grupos y tres columnas pegadas por separado
+  (`tiempo`, `evento`, `grupo`): las salidas deben tener ids fijos y el pegado de una tabla
+  con roles (`parsearTablaPegada` de MOTOR §5.1 con `datos.csv`) es infraestructura de H5. El
+  log-rank de k grupos y los grupos ≥ 3 llegan con esa infraestructura.
+- Kappa recibe la tabla k×k como texto pegado (`tipo: tabla`, lista plana por filas con k
+  derivado por `derivar()`), no como rejilla editable: reutiliza el analizador de pegado y
+  la codificación de la URL ya existente para `tabla`. La gráfica es un bosque (κ y, con
+  k = 2, PABAK) con referencia en 0, no el mapa de calor de la especificación: un mapa de
+  calor sería un renderizador más para una sola calculadora.
+- Kaplan-Meier, renderizador `km` (`nucleo/svg.ts`): las marcas del eje del tiempo son los
+  `tiemposRiesgo` cuando hay entre 2 y 9 dentro del dominio (y solo si no, `ticksLineales`),
+  para que cada número de la tabla en riesgo caiga bajo el rótulo de su tiempo, como en las
+  figuras publicadas; la banda de IC se recorta con `clipPath` y se parte en varios polígonos
+  si un paso no trae IC, en vez de cerrarla con una tapa recta; con dos marcadores el lado del
+  rótulo lo decide la posición (como en `curvas`) y lo que alterna es la banda; el margen
+  izquierdo lo comparten las marcas de S y los rótulos de grupo de la tabla en riesgo.
+- C3 (`muestra-dos-proporciones`): `pwr` no admite `alternative = "one.sided"`, así que la
+  comparación unilateral se le pide con `"greater"` y `abs(h)`; los totales del titular son la
+  suma de los dos grupos ya redondeados (268 = 134 + 134), porque el techo se aplica por grupo,
+  mientras las salidas crudas siguen siendo n₁ + n₂ y n/(1 − L), idénticas a R; el snippet
+  envuelve las dos llamadas de comparación en `tryCatch` para que un diseño irresoluble devuelva
+  `NA_real_` en vez de detener el script; el caso `diferencia_minima` (0.50 frente a 0.505)
+  dispara el aviso de diferencia pequeña porque 0.50 frente a 0.52 no cruza el corte de 0.01.
+- Barrido (`scripts/bio-barrido.mjs`) ampliado a las 19 calculadoras con dos garantías nuevas:
+  cuenta los casos que superan `validar()` por calculadora y falla si alguna queda en cero (un
+  bloque con un id cambiado dejaría una calculadora sin ejercer en silencio), y barre los campos
+  `requerido: false` también en blanco (`undefined`, como los entrega el controlador cuando el
+  cuadro está vacío), porque el convenio «0 = sin dato» lo aplica `derivar()` y solo se
+  comprueba si el vacío llega hasta él.
+- C1/C2 (`muestra-una-proporcion`, `muestra-una-media`): el módulo común `muestra-estimacion.ts`
+  exporta `SIN_DATO = 0` y `hayDato(x) = x ≥ 2`; el umbral es 2 y no 1 porque ni una población
+  ni una muestra de un individuo admiten corrección ni intervalo, así que 0 y 1 significan lo
+  mismo (caso `poblacion_uno` fijado contra R en las dos). El detalle de cada celda de tamaño
+  usa `dec2` (con un decimal, 277.97 se escribía «278.0», igual que el techo) y σ y las
+  precisiones de C2 se formatean con `sig4`, como `descriptivos`, para que 60 no se lea
+  «60.000». La comprobación manual del encargo traía 279 y 310 para el ejemplo de C1; R da
+  277.973 → 278 y 308.859 → 309, y eso es lo que se publica.
+- C4/C5 (`muestra-dos-medias`, `muestra-medias-pareadas`): `derivar()` no calcula la DE de la
+  diferencia; la regla σ_d = σ·√(2(1 − ρ)) vive en `calcular()` y en el snippet, idéntica en
+  los dos lados, para que `de_dif` siga siendo una salida que R valida (`desde_rho`,
+  `rho_alta`, `rho_cero`) y se conserve la distinción directa/derivada de los textos. Dos
+  guardas explícitas en TypeScript y en los snippets: si con n = 2 ya se supera el poder, la
+  respuesta es 2; si ni con 10⁷ se alcanza, es `NA`; sin ellas `uniroot` falla por falta de
+  cambio de signo y `power.t.test` con `extendInt = "upX"` devolvería tamaños menores que 2.
+  `n_dado` admite 0 y 1 como «sin modo inverso» y los opcionales llevan `min: 0` (con
+  `min: 2` el ejemplo publicaba un error rojo en el campo).
+- C6/C7 (`muestra-prueba-diagnostica`, `muestra-correlacion`): de 1 a 3 pares en `n_dado` se
+  explica con el aviso `n_dado_corto` (parámetro `{minimo}`) y no con un error de campo;
+  cuando `pwr.r.test` se detiene (r = 0.98 unilateral con poder 0.80 no baja del mínimo de
+  cuatro pares) el snippet lo envuelve en `tryCatch` y devuelve `NA`, TypeScript `NaN`, y la
+  banda `pwr` (`comparacion.con|sin`, `metodos_pwr.con|sin`) lo redacta; en la gráfica de C7,
+  si el n clásico cae por debajo de cuatro pares, el marcador se lleva al mínimo del método,
+  que es el techo que muestra la tabla, porque su rótulo se dibujaba fuera del lienzo.
+- D1 (`kappa`): z y p se calculan como `irr::kappa2`, con la varianza bajo H0 (celdas
+  esperadas `outer(pi, pj)`), portada literal de su `body()`; el EE del intervalo es el de
+  Fleiss, Cohen y Everitt con las celdas observadas y `sqrt(max(0, ·))` para que el acuerdo
+  perfecto dé 0 y no `NaN` por un ulp. `kappa2` ordena sus niveles como texto y con k = 10
+  desplaza los pesos («1», «10», «2»: κ lineal 0.5944 en vez de 0.6109), así que el snippet
+  numera las categorías desde 11 (caso `k10_lineal`). La κ máxima con pesos no es Σ mín(p_i·,
+  p·_i), que puede quedar por debajo de la propia κ: se usa el óptimo del problema de transporte
+  (Σ mín sin ponderar; esquina noroeste con pesos lineales o cuadráticos, exacta por la
+  condición de Monge y contrastada con `lpSolve::lp.transport` en 600 tablas, diferencia 0).
+  `{pabak}` viaja como «—» cuando k ≠ 2 y `metodos_byrt.no` menciona la κ máxima en vez de
+  callar, porque Zod exige textos no vacíos.
+- E3 (`kaplan-meier`): el snippet fija `factor(grupo, levels = sort(unique(grupo)))`, porque
+  `factor()` ordena como texto y pondría el código 10 antes que el 2, numerando los grupos al
+  revés que TypeScript (caso `codigos_10_y_2`); con el convenio 0 la regla t₁ ≤ t₂ solo se
+  exige cuando los dos son > 0 (pedir solo el primer tiempo no puede ser `err_rango`) y el
+  snippet guarda `t <= 0` en `s_en` (casos `sin_tiempos` y `solo_t2`); claves de
+  interpretación añadidas al contrato: `tiempo.uno|dos|fuera` (la frase de S(t) que
+  `resumen.uno|dos` interpola) y `metodos_logrank`. Limitación conocida: con un solo paciente
+  por grupo la interpretación dice «1 pacientes (1 eventos)»; no hay mecanismo de plurales y
+  solo aparece en una entrada degenerada.
+- `svg.ts`, `curvas`: el rótulo «100 %» del eje Y se recortaba por arriba en las gráficas de
+  poder (lo detectó C6/C7 en sus capturas); el margen superior se corrigió en el renderizador
+  compartido, sin cambiar la geometría de las gráficas publicadas en H1/H2 más que en ese margen.
+- Guarda nueva en `contenido.test.ts`: ningún texto de un YAML puede traer caracteres de
+  control. Entre comillas dobles YAML convierte `\a`, `\b`, `\e`, `\f`, `\v` o `\0` en
+  caracteres de control sin quejarse («z_{1-\alpha}» se publicó una vez como «z_{1-» + BEL +
+  «lpha}» y solo se vio en la captura); un escape desconocido como `\c` sí aborta la carga y
+  tumbó el build y `astro check` de todo el equipo hasta que su dueño lo pasó a comillas simples.
+  Regla: en `simbolos`, `def:` y `nota:` el texto va en prosa o entre comillas simples.
+- `techo()` y los tamaños minúsculos (hallazgo del barrido en C2, corregido por su constructor): la
+  tolerancia de 1e-9 con la que `techo()` evita convertir 322.00000000001 en 323 hundía a 0 un tamaño
+  positivo pero diminuto (σ = 10⁻⁶ frente a d = 0.1 da n_z = 1.6 × 10⁻¹⁰), el marcador de la gráfica
+  caía en n = 0 y la curva de precisión lanzaba `RangeError`; en R `ceiling(1.6e-10)` es 1, así que la
+  página además contradecía al `ceiling()` que documenta el snippet. C1 y C2 pasan toda la presentación
+  y la gráfica por un helper `participantes(n)` que aplica `techo()` una sola vez y pone un suelo de 1
+  cuando n > 0 (casos `n_diminuto` con p = 10⁻¹⁰ y con σ = 10⁻⁶, más pruebas de regresión que
+  comprueban que `techo()` solo daría 0 y que ningún punto de la curva cae en n = 0). `validar()` no
+  cambia: un cociente σ/d diminuto tiene respuesta legítima («un sujeto») y el aviso `n_pequeno` ya se
+  activa ahí. El detalle del valor exacto usa cifras significativas por debajo de 1 (con `dec2` decía
+  «0.00»).
+- Formato del detalle «valor exacto» en el grupo `muestra` (decisión de integración, unificada en las
+  siete): `dec2` por encima de 1 y `sig3` por debajo de 1. C0 decía un decimal, pero con `dec1` un
+  crudo de 277.97 se lee «278.0», idéntico al techo, y el detalle deja de explicar de dónde sale la
+  cifra; por debajo de 1, `dec2` escribía «0.00» y hacía creer que no hace falta nadie. Los valores
+  crudos y los fixtures no cambian; solo la cadena de la celda y los «exacto» de interpretación y
+  Métodos. C6 aplica el mismo suelo de 1 participante que C1/C2 (caso `n_diminuto`, 13 casos); C7 no
+  lo necesita porque n = ((z_α + z_β)/C)² + 3 nunca baja de 3 y el n de `pwr` sale de un `uniroot`
+  acotado en 4, fijado con un barrido de 216 extremos del dominio en su prueba.
+
+**Revisión independiente de H3 (dos partes: A, kappa/Kaplan-Meier/infraestructura, con
+sub-revisiones de interfaz y de contenido; B, las siete de tamaño de muestra).** Lo corregido en
+infraestructura, con motivo:
+
+- Forma de la tabla pegada (hallazgo alto): el controlador aplanaba las filas y `validar()` de kappa
+  solo miraba √(celdas), así que una fila de cuatro conteos (1 × 4), una columna (4 × 1) o una tabla de
+  2 × 8 pasaban como 2 × 2 o 4 × 4 y publicaban una κ de una tabla que nadie pegó. Ahora
+  `esCuadrada(filas)` (`pegado.ts`) se comprueba ANTES de aplanar: `err_tabla_cuadrada` si la forma no
+  es k × k, `err_tabla_incompleta` (clave nueva) si además se descartó alguna fila con celdas vacías o no
+  numéricas (el error nombra la causa probable en vez de culpar a la cuadratura), y `err_n_min` si la
+  tabla trae menos celdas que `min` (antes `min: 4` era declaración muerta en la rama `tabla`).
+- `parsearTabla` pasa a llamarse `parsearTablaPegada`: MOTOR §5.1 reserva `parsearTabla(texto, {sep,
+  decimal})` → `{columnas, filas, tipos, avisos}` (con cabecera obligatoria y guardas de tamaño) para el
+  pegado con roles de H5; la función de H3 tiene otra firma y otro contrato y no debía usurpar el nombre.
+- En una tabla de CONTEOS, «10,2» sin espacio ya no se lee como el decimal 10.2: si nada más separa y
+  toda coma parte enteros no negativos, la coma separa casillas (una tabla 2 × 2 escrita a mano). En una
+  columna sigue rigiendo la coma decimal. Documentado en la ayuda por su constructor.
+- El enlace sin los datos pegados avisa ahora en todas partes, no solo en el botón «Compartir enlace»:
+  nota persistente bajo la barra de herramientas mientras `columnasOmitidas()` sea cierto, la misma nota
+  en la URL de impresión y bajo el enlace del Markdown exportado (`DatosMarkdown.notaUrl`), y el texto
+  del botón en plural neutro («sin los datos pegados»: Kaplan-Meier omite tres columnas a la vez).
+- Los `id` del SVG (`clipPath` del `km`, `aria-labelledby`) se derivan del slug (`bio-grafica-<slug>`)
+  en SSR y en el controlador, para que dos gráficas en una misma página no los compartan (latente hoy).
+- La guarda de caracteres de control cubre también `\t` (U+0009): `\times` y `\text{}` entre comillas
+  dobles son los escapes más probables en esta sección y no aparecen en ningún YAML actual.
+- `referencias.bib`: `gamer2019` y `therneau2024` citan ahora las versiones que validaron los fixtures
+  (irr 0.85 y survival 3.8-6, ambas de 2026); las claves conservan su nombre para no tocar los YAML que
+  las citan mientras sus constructores los corrigen, aunque su año ya no coincida con la clave.
+- Resúmenes del pegado sin plural forzado («filas descartadas: 1») y «encabezado o rótulos omitidos»
+  cuando lo retirado es una columna de rótulos.
+- Pendientes no bloqueantes que la revisión deja anotados: no hay arnés de DOM para el controlador (se
+  replicó `leer()` en Node); no existe `politica.test.ts` (la política de «ningún recurso externo» la
+  vigila `audit:performance`, no una prueba); el `wrap="off"` del textarea de tabla en pantallas de 400
+  px y el corte de `max-height` al imprimir no se comprobaron en navegador.
+- Rótulo inglés de un valor no definido (hallazgo alto de la parte B): `NO_DEFINIDO.en` de
+  `formato.ts` y `bio.ui.no_definido` decían «undefined», y como el modo inverso llega apagado, la
+  celda de precisión o de poder del ejemplo cargado publicaba literalmente «undefined» en las siete
+  páginas inglesas del grupo (en C4/C5 incluso en una frase: «undefined participants are required…»).
+  Pasa a «not defined» (y `sin_ic` a «CI not defined»); las diez calculadoras de H0–H2 lo heredan. El
+  barrido añade la regla «un texto que sea exactamente “undefined” es una fuga» en los dos idiomas (la
+  palabra sigue siendo prosa legítima en inglés dentro de frases como «the geometric mean is undefined»).
+- Kappa tras la revisión de contenido: `resumen` se parte en `resumen.simple` y `resumen.ponderada`
+  (con pesos, «coincidieron en {po}» era falso: p₀ ponderado 86.5 % frente a 76 de 100 coincidencias
+  exactas; la variante ponderada expone `{po_diagonal}`, el acuerdo exacto, y `paradoja.si` habla de
+  «acuerdo observado»); el `tex` de la κ máxima publica las dos ramas (Σ mín sin ponderar; Σ w·m con m
+  el reparto de la esquina noroeste); Cohen 1968 se cita solo con pesos; el aviso `paradoja` deja de
+  llevar cifras (los parámetros de un aviso salen de `calcular()` sin formateador ni idioma, así que no
+  pueden ir como «85.0 %»; remite a la interpretación, que sí pasa por `fmt`), y los otros dos avisos con
+  parámetros solo llevan enteros; la ayuda de la tabla menciona los espacios y que los nombres de
+  categoría pegados se omiten; `min: 4` retirado del YAML.
+- Parte B de la revisión (tamaño de muestra), hallazgos numéricos y su regla:
+  - CRÍTICO, C2: la variante t se resolvía por punto fijo con el techo dentro del bucle y entraba en un
+    ciclo de periodo 2; se publicaba la fase en la que caía la pasada 50, no el menor n que cumple la
+    condición, y R y TypeScript caían en la misma fase, así que el fixture validaba un número
+    equivocado (σ = 1, d = 0.36, 80 %: publicaba 14 cuando con 14 la semiamplitud es 0.3608 y hace falta
+    15; error siempre por defecto, 28 % de los casos con n entre 2 y 9). Regla: n_t es el MENOR entero
+    n ≥ 2 con n ≥ (t_{n−1,1−α/2}·σ/d)², por búsqueda directa, en TypeScript y en el snippet a la vez, con
+    prueba de mínimo (se cumple en n y no en n − 1). Lección: que TS y R coincidan no demuestra que el
+    número sea el correcto cuando ambos implementan el mismo algoritmo; las propiedades matemáticas
+    (mínimo, monotonía) necesitan su propia prueba.
+  - ALTO, C3: `nPowerPropTest` buscaba la raíz en [1, 1e7] sin el `extendInt = "upX"` de
+    `power.prop.test`, devolvía NaN donde R devuelve 392 443 982 (0.50 frente a 0.5001) y la nota lo
+    atribuía a «solo con grupos iguales». Regla: reproducir la extensión del corchete de R o poner en el
+    snippet la misma guarda; una nota por causa («solo con grupos iguales» ≠ «fuera del rango que R
+    resuelve»).
+  - ALTO, C4: `n_ptt` del snippet no llevaba las dos guardas que sí lleva `n1` (2 si con 2 ya se
+    supera el poder; NA más allá de 10⁷), así que R y TS divergían en las dos direcciones (δ 1, σ 1000 →
+    R 21 655 135, TS NaN; δ 1000, σ 0.001 → R 1.0008, TS 2). Regla: toda guarda del motor va también en
+    el snippet, con caso de fixture en cada extremo.
+  - ALTO, C4: `n_ajustado` era el techo de la suma (317) mientras `n_total` y la regla de C3 suman los
+    techos por grupo (159 + 159 = 318; 317 repartido deja a un grupo en 142.2 < 143). Regla del grupo:
+    los totales del titular son sumas de techos por grupo; el crudo n/(1 − L) queda en el detalle y en R.
+  - ALTO, transversal: «undefined» visible en inglés (ver arriba).
+  - ALTO, primitiva `qt`: invertir `pt()` con Brent pierde exactitud con grados de libertad grandes
+    (la cola de `pt()` deja de resolver cuando t²/(ν + t²) se acerca al epsilon): 3.5e-9 relativo con
+    ν = 1e9, 2.7e-6 con 1e11, 7 % con 1e16, muy por encima del perfil `cuantil`; alcanzable desde C2
+    con d ≪ σ (σ = 60, d = 1e-6 daba n_t un 20 % distinto de R). Ahora `qt` devuelve el cuantil normal
+    por encima de 1e20 (como `qt.c` de R) y, desde 1e5, la expansión de Cornish-Fisher de la t en
+    potencias de 1/ν con cuatro términos (Fisher 1925; Abramowitz y Stegun 26.7.5), exacta a ~1e-16 en
+    ese rango; por debajo de 1e5 sigue Brent sobre `pt()`, que ahí resuelve. Contrastado con R en 153
+    puntos (p de 1e-100 a 0.999999, ν de 99 999 a 1e30), ver la prueba nueva de `primitivas.test.ts`.
+  - MEDIO, esquina de `pnt` (documentada, no corregida): con ν = 0.2 (n_dado = 2, r = 0.1) y un cuantil
+    crítico de 2.4 × 10¹⁴, TypeScript da poder 0 exacto y R 6.4e-8; pero el valor central `pt(q, 0.2,
+    lower = FALSE)` es 5.0e-4 y la no centralidad es 1.4e-4, así que la cifra de R es también un
+    artefacto de su `pnt` con ν < 1 (la cola no central no puede ser 8 000 veces menor que la central).
+    Ambos se leen «0.0 %»; no se añade ese caso al fixture y queda anotado como límite de ambos lados.
+  - MEDIO, `zNivel` duplicada en C6 con la forma `qnorm(a, lower = FALSE)` mientras el snippet escribe
+    `qnorm(1 − a)`: 140 ulp de diferencia; se importa la de `proporciones.ts` (corrección de C6/C7).
+  - MEDIO, ecuaciones con `z_{1−α/2}` aunque el contraste sea unilateral (C3, C4, C5, C7): se escribe
+    `z_{1−α/k}` con k = 2 bilateral / 1 unilateral en los símbolos (corrección de sus constructores).
+  - Sugerencias aceptadas: el perfil `potencia` pasa de 1e-6 a 1e-8 relativo (uso real máximo 1.4e-10;
+    apretar sí, aflojar nunca); `n_aj = ⌈n/(1 − L)⌉` con techo explícito en las siete ecuaciones;
+    aviso `supera_poblacion` en C1/C2 cuando el reclutamiento supera el censo; comentarios de C5 sobre
+    `rho` corregidos («0 = sin dato», no `NaN`); prueba tautológica de C2 sustituida por la de mínimo.
+    No aceptadas: renombrar las claves `chow2018` (año real 2017) y `gamer2019`/`therneau2024` (ahora
+    2026) del .bib, porque tocaría los YAML de varios constructores por un detalle cosmético; `neyman1933`
+    se declara en C4.
+  - Cierre de C3 tras la revisión: `extenderUpX()` en `metodos/muestra-proporciones.ts` traduce
+    literalmente la extensión de corchete de `uniroot(extendInt = "upX")` (paso inicial 0.01·máx(1e-4,
+    |extremo|), duplicado en cada intento, primero el extremo inferior y luego el superior; un NaN detiene
+    el bucle), porque el corchete final decide dónde para `zeroin` y de ahí que TS imprima el mismo número
+    que R y no otra raíz igual de válida. Sobre 22 848 combinaciones con solución cerrada: 0 discrepancias
+    por encima de 1e-6 (peor 2.5e-11) y 14 sin resolver que también fallan en R («did not succeed
+    extending the interval endpoints», n < 0.37 participantes). Rótulos separados `nota_comparacion`
+    («solo con grupos iguales») y `nota_sin_solucion` («fuera del rango que R resuelve»), tercera variante
+    `comparacion.sin_solucion`, casos `diferencia_minuscula` (n_ppt = 392 443 981.61) y
+    `pwr_fuera_de_rango` (n_ppt 5.25e10, `pwr` en NA porque se detiene en 1e9 sin extender); la h de
+    Cohen usa cifras significativas por debajo de 0.1 («−0.0002» en vez de «0.000»).
+  - Cierre de C2 tras la revisión: `n_t` = menor entero n ≥ 2 con n ≥ (t_{n−1,1−α/2}·σ/d)², buscado de
+    uno en uno desde máx(2, ⌈n_z⌉) (cota inferior porque t > z; la condición es monótona, así que el
+    primero que la cumple es el mínimo), con tope de 64 pasos y NA si se agotan, y guarda para el
+    régimen por encima de 2⁵³ donde sumar uno no cambia el doble (R hace lo mismo). Al comparar las dos
+    definiciones en R también cambiaron tres casos del fixture (`n_muy_pequeno` 6 → 7, `gl_minimo` 2 → 4,
+    `n_diminuto` 1 → 2); caso nuevo `ciclo_periodo_2` (σ = 1, d = 0.36, 80 % → 15); 19 casos. Como `n_t`
+    ya es entero, el detalle de su celda muestra la semiamplitud alcanzada con ese tamaño,
+    t_{n−1}·σ/√n (141 sujetos alcanzan 9.99 frente a los 10 pedidos), que es lo que hace comprobable el
+    mínimo. El titular `n`, la CPF y el modo inverso siguen sobre el cuantil normal, como fija el
+    contrato del grupo; la ecuación y la explicación ya no hablan de «repetir el cálculo 50 veces».
+  - Cierre de C4/C5 tras la revisión: `n_ptt` del snippet lleva las mismas dos guardas que `n1`
+    (`if (poder_de(2) >= poder) 2 else if (poder_de(1e7) < poder) NA_real_ else power.t.test(...)$n`),
+    con lo que δ = 1, σ = 1000 da NA en los dos lados y δ = 1000, σ = 0.001 da 2 en los dos (casos
+    `sigma_enorme` y `efecto_enorme`; 16 casos); el titular a reclutar es la suma de techos por grupo
+    (159 + 159 = 318) y la interpretación explica el reparto; C5 queda fijado en una prueba (un solo
+    grupo: ambas vías dan 81); «no aplica» se reserva a r ≠ 1 y el diseño irresoluble se lee «no
+    definido», como n₁.
+  - Kaplan-Meier ata la cadena prohibida de su prueba A3 al formateador (`ctx.fmt.ic([NaN, NaN])`), de
+    modo que un cambio futuro del rótulo no deja la prueba vigilando una cadena muerta; comprobó con una
+    mutación que la prueba falla cuando el defecto vuelve.
+  - Cierre de C6/C7 y C4/C5 (segunda tanda): `zNivel` única (la de `proporciones.ts`, forma literal del
+    snippet); la diferencia de 2.18e-14 que citaba la revisión aparece al 99.9 % (donde las dos formas del
+    cuantil divergen 9.4e-15), no en los niveles del fixture, cuyo 3.6e-15 residual es el ruido de las 15
+    cifras de jsonlite en un n de cuatro dígitos enteros; caso nuevo `nivel_0999` (C6, 14 casos) con
+    prueba de que `n_sn` queda por debajo de 2e-15 respecto a R y prueba de igualdad exacta de `zNivel`
+    con `qnorm(1 − (1 − nivel)/2)`. `z_{1−α/k}` con k declarado en las diez apariciones de C4, las diez
+    de C5 y las dos de C7 (fórmula clásica e inversa); `n_aj = ⌈n₁/(1−L)⌉ + ⌈n₂/(1−L)⌉` en C4 y
+    `⌈n/(1−L)⌉` en C5; `neyman1933` citado en Métodos de C4 donde aparece el poder.
+- Parte A de la revisión (numérica de kappa y Kaplan-Meier), hallazgos y regla:
+  - ALTO, Kaplan-Meier: el snippet abortaba («system is exactly singular») donde TypeScript degradaba a
+    NaN, con varianza nula del log-rank (p. ej. t = (5, 5), eventos (1, 1), grupos (0, 1)); quien copie
+    el código a RStudio, o webR en H4, vería un error en vez de un resultado. Regla: `tryCatch` alrededor
+    de `survdiff` y `NA_real_` en χ², p y gl, también cuando la varianza es 0 sin error (un grupo que
+    nunca está en riesgo cuando ocurren los eventos daba χ² = 0, p = 1 y gl = 1 en R frente a NaN en TS).
+  - ALTO, Kaplan-Meier: el límite inferior del IC de la mediana no reproducía `quantile.survfit` porque
+    `approxConstante` suponía nodos ordenados y `approx()` de R los ordena antes de interpolar (la banda
+    inferior de Ŝ no es monótona al principio de la curva): 238 de 2 999 curvas aleatorias discrepaban,
+    todas log-log con nivel 0.99 o 0.999. Regla: ordenar los nodos como `approx`, caso de fixture con el
+    reproductor (tiempos 1..10, eventos 1,1,0,1,1,1,0,1,1,0, 99.9 %: R [2, NA], TS daba [1, NaN]).
+  - MEDIO, kappa: `z_h0` y `p_h0` son una resta de cantidades casi iguales y con p_e → 1 la cancelación
+    amplificaba un ulp de diferencia hasta 1.5e-8 relativo ([9998, 1, 1, 0]). La revisión proponía un
+    perfil propio; el constructor lo corrigió de raíz: `kappa2` hace toda su aritmética con los conteos
+    enteros y divide entre n lo más tarde posible, y TypeScript partía de p = x/n; la función `pruebaH0()`
+    reproduce esa agrupación paso a paso (solo para la prueba frente a cero; el resto conserva la del
+    snippet, que es la que la página muestra) y los casos `pe_casi_uno_k2` y `pe_casi_uno` coinciden bit a
+    bit con `cerrado`. El perfil `kappaH0` que se había preparado se retiró: no había nada que aflojar.
+  - MEDIO, tubería de fixtures: `correr_casos.R` releía el JSON del snippet con `simplifyVector = TRUE` y
+    un vector de longitud 1 (`"t_1": [4]`) volvía a escribirse como el escalar `4`, que `comparar()`
+    rechaza; releerlo con `simplifyVector = FALSE` cambiaba los `null` por "NA" (102 diferencias en
+    Kaplan-Meier). Ahora `correr_casos.R` solo comprueba que el texto sea JSON legible y lo copia TAL
+    CUAL dentro de `casos` (Node lo relee e indenta): «no se transforma nada», literalmente. Los 19
+    fixtures se regeneran idénticos.
+  - Cierre de C3 (segunda tanda): `z_{1−α/k}` en Fleiss, el modo inverso y la h de Cohen, con k definido
+    en cada ecuación; la ecuación de pérdidas escribe `⌈n₁/(1−L)⌉ + ⌈n₂/(1−L)⌉` (dos grupos, techo por
+    grupo: 298 y no el 297 del techo de la suma); caso `extension_por_debajo` (0.001 frente a 0.998,
+    α 0.20, poder 0.50: n_ppt = 0.826 en R y en TS); 19 casos.
+  - Cierre de Kaplan-Meier (numérica): `survdiff` va en `tryCatch(..., error = function(err) NULL)` y sus
+    resultados solo se leen si `lr$var[1, 1] > 0`; `chi2`, `gl` y `p` arrancan en `NA_real_` y TypeScript
+    devuelve NaN también en `gl` con varianza nula (casos `logrank_singular`, `logrank_singular_empate`,
+    `grupo_nunca_en_riesgo`). `approxConstante` ordena los pares por el nodo y promedia los repetidos,
+    como `regularize.values` dentro de `approx()` con `ties = mean`, comprueba el rango con mínimo y máximo
+    y trunca el índice al indexar (`x[2.5]` es `x[2]` en R): el reproductor pasa de [1, NaN] a [2, NaN]
+    (casos `ic_mediana_no_monotona` al 99.9 % y al 99 %). Consecuencia que arrastró la decisión: con χ² y p
+    en NaN, `decisionP(NaN)` habría publicado «no se rechaza la hipótesis nula, p = no definido»; se añade
+    la banda `logrank: indefinido`, la clave `logrank.indefinido`, el aviso `logrank_indefinido` y la
+    etiqueta `nota_sin_logrank` (las tres celdas del contraste muestran «—» con su nota). Cada regresión
+    se probó por mutación (sin el `.sort()` fallan 4 de 93; con `gl: 1` sin varianza fallan 5; el snippet
+    sin `tryCatch` sale de Rscript con código 1 y sin JSON). 24 casos, 93 pruebas.
+  - Cierre de C1/C2 (segunda tanda): aviso `supera_poblacion` (con la población como único parámetro,
+    entero) cuando hay población declarada y el reclutamiento con pérdidas la supera, con caso de fixture
+    por calculadora; `n_aj = ⌈n/(1 − L)⌉` en las ecuaciones; la prueba tautológica del punto fijo se
+    sustituyó por tres (propiedad de mínimo sobre una rejilla y sobre cada caso del fixture, el caso del
+    ciclo con sus cifras, y la cota de arranque más el régimen enorme). 19 y 20 casos; 119 pruebas.
+  - Kaplan-Meier, últimos retoques de la revisión: la ecuación `mediana` publica la regla real de
+    `quantile.survfit` (m = (t₁ + t₂)/2 con t₁ = mín{t : Ŝ(t) ≤ ½} y t₂ = mín{t : Ŝ(t) < ½}; la nota
+    explica el cruce de golpe, la meseta, el final exacto en 0.5 y la curva que nunca baja del 50 %) en
+    vez de la definición ingenua `inf{t : Ŝ(t) < 0.5}` que el código no ejecutaba; ecuación `ic_log`
+    propia para la otra escala del selector, con su nota. La prueba de los escenarios obligatorios de MOTOR
+    §1.6 declara explícitamente sus dos sustituciones: «n = 1» se cubre con `n_2` porque una columna de un
+    solo valor no pasa `N_MIN_KM = 2` (una curva de un paciente no tiene nada que estimar), y «tres grupos
+    (gl = 2)» queda para el log-rank de k grupos de H5 (`MAX_GRUPOS_KM = 2`); ambos límites están anclados
+    en la prueba con el mensaje del caso que habrá que añadir el día que cambien. 24 casos, 94 pruebas.

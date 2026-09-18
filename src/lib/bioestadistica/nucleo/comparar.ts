@@ -160,6 +160,28 @@ export function comparar(
     const est = resultado.valores[campo] as Estimacion;
     filas.push(...filasDeEstimacion(campo, est, esperadoR[campo], tolerancia(tol, campo)));
   }
+  // Vectores de longitud variable (tabla de vida, curva): mismo largo y cada
+  // elemento dentro de la tolerancia del campo. El índice viaja en `componente`
+  // como `valor` y en la nota, para que `describir` señale el elemento.
+  const extras = resultado.extras ?? {};
+  for (const campo of Object.keys(extras)) {
+    campos.push(campo);
+    const ts = extras[campo];
+    const crudo = esperadoR[campo];
+    const tolCampo = tolerancia(tol, campo);
+    if (!Array.isArray(crudo)) {
+      filas.push({ campo, componente: 'valor', ts: ts.length, r: null, difRel: Number.NaN, coincide: false, nota: crudo === undefined ? 'ausente en la salida de R' : `se esperaba un vector y R devolvió ${JSON.stringify(crudo)}` });
+      continue;
+    }
+    if (crudo.length !== ts.length) {
+      filas.push({ campo, componente: 'valor', ts: ts.length, r: crudo.length, difRel: Number.NaN, coincide: false, nota: `longitud distinta: TS ${ts.length}, R ${crudo.length}` });
+      continue;
+    }
+    ts.forEach((v, i) => {
+      const f = fila(campo, 'valor', v, crudo[i], tolCampo);
+      filas.push(f.coincide ? f : { ...f, nota: `${f.nota ?? 'difiere'} (elemento ${i})` });
+    });
+  }
   for (const campo of Object.keys(esperadoR)) {
     if (campos.includes(campo)) continue;
     filas.push({

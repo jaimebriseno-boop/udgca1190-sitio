@@ -316,15 +316,18 @@
   orden: 5
   nombre: "Bioestadística abierta: modelos de regresión y supervivencia"
   tipo: estadistica
-  estado: desarrollo
+  estado: beta
   seccion: bioestadistica
-  resumen: "Regresión logística, Cox, Kaplan-Meier con log-rank y regresión lineal, con R real ejecutado en el navegador (webR)."
+  resumen: "Kaplan-Meier con IC de Greenwood, mediana y log-rank, ya disponible; regresión logística, Cox y lineal con R en el navegador (webR), en preparación."
   descripcion: |
-    Modelos multivariables sencillos ajustados con R dentro del navegador
-    (webR): regresión logística binaria con OR e IC, Hosmer-Lemeshow y AUC;
-    riesgos proporcionales de Cox con prueba de proporcionalidad; curvas de
-    Kaplan-Meier con log-rank; regresión lineal múltiple. Los datos pegados
-    nunca salen del navegador. Bilingüe.
+    Supervivencia y modelos multivariables sencillos. Disponible: curvas de
+    Kaplan-Meier a partir de columnas pegadas (tiempo, evento y hasta dos
+    grupos) con IC log-log de Greenwood, mediana de supervivencia, tabla en
+    riesgo y prueba de log-rank, calculadas en TypeScript y validadas contra
+    survival de R. En preparación, con R dentro del navegador (webR):
+    regresión logística binaria con OR e IC, Hosmer-Lemeshow y AUC; riesgos
+    proporcionales de Cox con prueba de proporcionalidad; regresión lineal
+    múltiple. Los datos pegados nunca salen del navegador. Bilingüe.
   tecnologias: ["TypeScript", "R", "webR"]
   linea: clinica-epidemiologica-traslacional
   enlace_app: "/herramientas/bioestadistica#modelos"

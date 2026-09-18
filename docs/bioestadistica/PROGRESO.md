@@ -1,6 +1,6 @@
 # Progreso — Bioestadística abierta
 
-Actualizado: 17 de septiembre de 2026 (cierre de H2). Leer después [HANDOFF.md](HANDOFF.md).
+Actualizado: 17 de septiembre de 2026 (cierre de H3, pendiente de visto bueno y publicación). Leer después [HANDOFF.md](HANDOFF.md).
 
 ## Estado del corte
 
@@ -16,11 +16,81 @@ construyen igual en esta rama y se publican con cada visto bueno.
 | H0 · Cimientos + calculadora «IC de una proporción» | Terminado y verificado | `e69d80b` |
 | H1 · Vertical completa: prueba diagnóstica 2×2, posprueba (Fagan), valores predictivos | Terminado, verificado y **publicado** (17-sep-2026) | `2c37184` (+ `033f464`) |
 | H2 · Asociación 2×2 (RR/OR/RRA/NNT, χ²/Fisher, McNemar) + columnas pegadas (descriptivos, IC media, media desde mediana) | Terminado, verificado y **publicado** (17-sep-2026) | `1772462`, `e02aa46`, `08a3d94`, `35bffcb` |
-| H3 · Tamaño de muestra (C1–C7), kappa, Kaplan-Meier (opcional ROC) | **En curso (siguiente)** | — |
-| H4 · webR («Verificar con R», consentimiento, ClientRouter, política de hosts) | Pendiente | — |
+| H3 · Tamaño de muestra (C1–C7), kappa, Kaplan-Meier | Terminado y verificado; **pendiente de visto bueno y publicación** (ROC opcional queda para después) | commit `BIOESTADISTICA: H3 …` (ver `git log --oneline -3`) |
+| H4 · webR («Verificar con R», consentimiento, ClientRouter, política de hosts) | **Siguiente** | — |
 | H5 · Modelos (logística, Cox, lineal, ICC) con webR | Pendiente | — |
 | H6 · Enlace con Propedéutica (`?signo=`) | Pendiente | — |
 | H7 · Documentación (README, COMO_AÑADIR, CHANGELOG de fixtures) | Pendiente | — |
+
+## Hecho en H3
+
+- Nueve calculadoras bilingües con YAML + módulo puro + casos + fixture de R + prueba (19 en total).
+  Grupo «Tamaño de muestra y poder» completo: `muestra-una-proporcion` (Cochran, corrección por
+  población finita, modo inverso «precisión con el n disponible»), `muestra-una-media` (z y t iterada por
+  punto fijo, CPF, inverso), `muestra-dos-proporciones` (Fleiss con y sin corrección de continuidad,
+  `power.prop.test` y `pwr.2p.test` con h de Cohen como comparación, razón de asignación r),
+  `muestra-dos-medias` y `muestra-medias-pareadas` (t no central exacta idéntica a
+  `power.t.test(tol = 1e-10)`, aproximación de Guenther, inverso; C5 desde σ_d o desde σ y ρ),
+  `muestra-prueba-diagnostica` (Buderer 1996, curva frente a la prevalencia) y `muestra-correlacion`
+  (z de Fisher, `pwr.r.test`, inverso). Todas con el bloque común C0 (α uni/bilateral, poder, pérdidas
+  n/(1 − L), techo una sola vez al final) y curva de poder o de precisión con línea de referencia.
+  Grupo «Concordancia»: `kappa` (tabla k×k pegada, 2 ≤ k ≤ 10; κ simple, lineal y cuadrática; EE de
+  Fleiss, Cohen y Everitt; z y p como `irr::kappa2`; κ máxima; PABAK e índices de Byrt con k = 2).
+  Grupo «Modelos»: `kaplan-meier` (tres columnas pegadas, hasta dos grupos; Greenwood log-log o log;
+  mediana con la regla de `quantile.survfit` e IC de Brookmeyer-Crowley; S(t) en dos tiempos opcionales;
+  log-rank; tabla de vida completa validada contra `survfit`).
+- Métodos nuevos en `src/lib/bioestadistica/metodos/`: `muestra-comun`, `muestra-estimacion`,
+  `muestra-proporciones`, `muestra-medias`, `muestra-diagnostica`, `muestra-correlacion`, `kappa`,
+  `supervivencia`; `uniroot` (traducción de `R_zeroin2`) pasa a `primitivas/raices.ts`.
+- Infraestructura: `PegarTabla.astro` + `parsearTablaPegada`/`resumenTabla`/`textoDeTabla` + rama `tabla` del
+  controlador; `Resultado.extras` (vectores de longitud variable) comparados elemento a elemento;
+  `GraficaCurvas.referenciaY`; renderizador `km` (escalones, banda de IC recortada, censuras, marcadores
+  t₁/t₂, tabla en riesgo alineada con las marcas del eje); convenio «0 = sin dato» para las entradas
+  opcionales; guarda de caracteres de control en los YAML; barrido ampliado a las 19 calculadoras con
+  contador por calculadora y opcionales en blanco; 31 referencias nuevas (89 en total); claves
+  `bio.ui.*` de tabla y de grupos; tarjeta `bio-modelos` en beta.
+- Pruebas nuevas: `muestra-una-proporcion` y `muestra-una-media` (119), `muestra-dos-proporciones` (67),
+  `muestra-dos-medias` y `muestra-medias-pareadas` (94), `muestra-prueba-diagnostica` y
+  `muestra-correlacion` (93), `kappa` (67), `kaplan-meier` (94), `primitivas` (+1, `qt` con ν grande
+  contra R), `svg` (+10 del `km`, referenciaY), `comparar` (extras), `pegado` (tabla, forma cuadrada,
+  coma en tablas de conteos), `exportar` (nota del enlace), `contenido.test.ts` (km, caracteres de
+  control); 159 casos de fixture nuevos (302 en total, 19 calculadoras).
+- Docs: DECISIONES (sección H3 con las desviaciones de cada constructor), PROGRESO, HANDOFF (H3 hecho,
+  plan de H4, reglas del entorno compartido y trampas nuevas).
+
+## Verificación conservada (H3)
+
+`npm run build` 73 páginas (40 de la sección: índice + 19 calculadoras × 2 idiomas) · `npm run check` 0
+errores / 0 advertencias (124 hints preexistentes) · `npm run test` 4 + 1,833 pruebas en verde ·
+`npm run fixtures:bio:check` sin deriva (19 calculadoras, 302 casos) · `npm run barrido:bio` 75,039
+combinaciones × 2 idiomas con 150,078 SVG y 0 problemas (contador por calculadora: ninguna en cero; con
+las ramas que la revisión vio sin ejercer: paradoja de kappa, Landis «moderado», p_e ≈ 1, censura > 50 %,
+log-rank con varianza nula, grupo nunca en riesgo, IC de la mediana con nodos no monótonos) ·
+`npm run audit:performance` sin recursos externos ni faltantes (`after.json` restaurado) · capturas de
+las nueve páginas nuevas en ES y EN a 1280 px y del índice, revisadas (celdas, avisos, interpretación,
+ecuaciones, gráficas con marcador y referencia, banda y tabla en riesgo de Kaplan-Meier) · cada agente
+constructor contrastó su calculadora con R en sus propios casos límite y dejó capturas propias ·
+revisión de código independiente en dos partes, todas las correcciones aplicadas antes del commit y
+registradas en DECISIONES «H3». Parte A (kappa, Kaplan-Meier e infraestructura; agente `code-reviewer` con
+dos sub-revisiones): numérica fuera de los fixtures con 128 casos nuevos de kappa (1 664 valores) y 55 de
+Kaplan-Meier (6 484 valores), más oráculos que no comparten código con el proyecto (`DescTools::CohenKappa`
+y `vcd::Kappa` para el EE de kappa, 7.3e-13 y 1.1e-15; `lpSolve::lp.transport` para la κ máxima en 647
+pares de marginales, déficit 0) y 13 DOI y 7 PMID recomprobados; dos altos (el snippet abortaba con
+varianza nula del log-rank; el IC de la mediana no ordenaba los nodos como `approx`), tres medios (grupo
+nunca en riesgo, `z_h0`/`p_h0` mal condicionados con p_e → 1, la tubería de fixtures perdía la forma de un
+vector de longitud 1) y siete bajos; sub-revisión de interfaz: un alto (una tabla regular no cuadrada
+pasaba como k × k), cinco medios y seis bajos; sub-revisión de contenido bilingüe: un crítico (la frase
+«coincidieron en {po}» era falsa con ponderación), cinco altos (κ máxima con pesos sin ecuación, `t_fuera`
+con el seguimiento del grupo más corto, «IC no definido a no definido», texto alternativo de la gráfica,
+Cohen 1968 citado sin ponderar), ocho medios y ocho bajos. Parte B (las siete de tamaño de muestra): 30 636
+casos nuevos TS-vs-R (uso máximo de tolerancia 0.44 %), `pnt` frente a `pt(ncp=)` en 704 combinaciones
+(3e-10), fórmulas contra las fuentes originales, 7 PMID y 10 DOI; un crítico (la variante t de una media
+publicaba un n por debajo del mínimo real, con R y TS en la misma fase de un ciclo de periodo 2), cinco
+altos («undefined» visible en inglés, `power.prop.test` sin `extendInt`, `n_ptt` sin las guardas del
+snippet, total ajustado como techo de la suma, `qt` inexacta con ν ≥ 1e8), cuatro medios y siete
+sugerencias (perfil `potencia` apretado a 1e-8; techo explícito en las ecuaciones de pérdidas; aviso
+`supera_poblacion`). Sin corregir, por decisión documentada: la esquina de `pnt` con ν < 1 (R también da un
+artefacto) y las claves del `.bib` cuyo año ya no coincide con el nombre.
 
 ## Hecho en H2
 
