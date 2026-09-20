@@ -163,6 +163,16 @@ const UI = {
     'viro.meta': 'Herramienta docente de virología médica: árboles taxonómicos interactivos y 28 fichas de familia con figuras propias (CA UDG-CA-1190).',
     'viro.use_heading': 'Uso docente',
     'viro.use_text': 'Diseñada para la unidad de aprendizaje Microbiología II (CUTlajomulco, UdeG) y de uso libre para cualquier curso de virología o repaso de consejo. Cada ficha declara al pie sus fuentes (Mandell PPID 10.ª ed. y guías citadas).',
+    // ---- Diagnóstico microbiológico médico (Microbiología I) ----
+    'micro.kicker': 'Herramienta docente · Microbiología I',
+    'micro.title': 'Diagnóstico microbiológico médico',
+    'micro.intro': 'Material didáctico interactivo de la unidad de aprendizaje Microbiología I (I8581): muestras, frotis, tinciones de Gram y Ziehl-Neelsen, medios de cultivo, siembra, identificación, antibiograma, serología, PCR y pruebas rápidas. Siete módulos y 48 secciones con simulador de tinción de Gram, animación de Ziehl-Neelsen, galerías de morfología y medios, juego «¿qué medio siembro?», árbol de decisión por foco, cuatro casos integradores, autoevaluación de doce preguntas, tarjetas de repaso y glosario.',
+    'micro.iframe_title': 'Material interactivo de diagnóstico microbiológico médico',
+    'micro.fullscreen': 'Abrir en pantalla completa ↗',
+    'micro.note': 'El índice lateral sigue el recorrido por módulos y marca las secciones vistas. El avance se guarda en este navegador, no en un servidor: abre siempre el mismo enlace en el mismo dispositivo y evita la ventana de incógnito. Si el visor te queda pequeño, usa «Abrir en pantalla completa».',
+    'micro.meta': 'Material didáctico interactivo de diagnóstico microbiológico médico para Microbiología I: toma de muestra, tinciones, cultivos, antibiograma y métodos rápidos, con simuladores, casos y autoevaluación (CA UDG-CA-1190).',
+    'micro.use_heading': 'Uso docente',
+    'micro.use_text': 'Diseñado para la unidad de aprendizaje Microbiología I (CUTlajomulco, UdeG) y de uso libre bajo licencia CC BY-NC-SA 4.0 para cualquier curso de microbiología médica. Al terminar, el alumno genera en «Comprobante y calificación» un texto con sus resultados y un código de verificación para entregarlo en Classroom; la calificación sugerida pondera autoevaluación, juego de medios y secciones revisadas. Las fuentes (CDC, OMS, CLSI, EUCAST y manuales de laboratorio) se declaran en el módulo 7.',
 
     // ---- Sección Laboratorio (serie «Del tubo al diagnóstico») ----
     'tools.general.kicker': 'Métodos y aplicaciones',
@@ -512,6 +522,16 @@ const UI = {
     'viro.meta': 'A teaching tool for medical virology: interactive taxonomic trees and 28 family study cards with original figures (UDG-CA-1190 Research Group).',
     'viro.use_heading': 'Teaching use',
     'viro.use_text': 'Designed for the Microbiology II course (CUTlajomulco, University of Guadalajara) and free to use for any virology course or board review. Every card states its sources at the footer (Mandell PPID 10th ed. and the cited guidelines). Content is in Spanish.',
+    // ---- Medical microbiological diagnosis (Microbiology I) ----
+    'micro.kicker': 'Teaching tool · Microbiology I',
+    'micro.title': 'Medical microbiological diagnosis',
+    'micro.intro': 'An interactive course material for Microbiology I (I8581): specimens, smears, Gram and Ziehl-Neelsen stains, culture media, plating, identification, antimicrobial susceptibility testing, serology, PCR and rapid tests. Seven modules and 48 sections with a Gram-stain simulator, a Ziehl-Neelsen animation, morphology and media galleries, a “which medium do I plate?” game, a decision tree by site of infection, four integrative cases, a twelve-question self-assessment, review flashcards and a glossary.',
+    'micro.iframe_title': 'Interactive medical microbiological diagnosis material',
+    'micro.fullscreen': 'Open full screen ↗',
+    'micro.note': 'The side index follows the module sequence and marks the sections already viewed. Progress is stored in this browser, not on a server: always open the same link on the same device and avoid private windows. If the viewer feels small, use “Open full screen”. Content is in Spanish.',
+    'micro.meta': 'An interactive course material on medical microbiological diagnosis for Microbiology I: specimen collection, stains, cultures, susceptibility testing and rapid methods, with simulators, cases and self-assessment (UDG-CA-1190 Research Group).',
+    'micro.use_heading': 'Teaching use',
+    'micro.use_text': 'Designed for the Microbiology I course (CUTlajomulco, University of Guadalajara) and free to use under a CC BY-NC-SA 4.0 licence for any medical microbiology course. On completion, students generate in “Comprobante y calificación” a text with their results and a verification code to hand in through Classroom; the suggested grade weights the self-assessment, the media game and the sections reviewed. Sources (CDC, WHO, CLSI, EUCAST and laboratory manuals) are stated in module 7. Content is in Spanish.',
 
     // ---- Laboratory section («Del tubo al diagnóstico» series) ----
     'tools.general.kicker': 'Methods and applications',
