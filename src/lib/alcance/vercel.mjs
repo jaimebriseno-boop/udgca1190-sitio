@@ -44,9 +44,12 @@ export async function resolverTeamId({ token, projectId, fetchImpl = fetch }) {
 export async function consultarAlcance({ token, projectId, teamId, hoy = new Date(), fetchImpl = fetch }) {
   const team = teamId || (await resolverTeamId({ token, projectId, fetchImpl }));
   const hasta = fechaISO(hoy);
+  // `until` se pasa con el día siguiente: con la fecha de hoy Vercel recorta el
+  // día en curso (lo ajusta a la primera hora). El plan Pro solo entrega los
+  // últimos 366 días, así que ninguna consulta pide más de 365.
+  const hastaConsulta = fechaISO(Date.parse(hasta) + MS_DIA);
   const desde30 = fechaISO(Date.parse(hasta) - 29 * MS_DIA);
   const desde365 = fechaISO(Date.parse(hasta) - 364 * MS_DIA);
-  const desde24m = fechaISO(Date.parse(hasta) - 730 * MS_DIA);
 
   const consulta = async (ruta, extra) => {
     const p = new URLSearchParams({ projectId, ...extra });
@@ -59,14 +62,14 @@ export async function consultarAlcance({ token, projectId, teamId, hoy = new Dat
     }
     return (await r.json()).data;
   };
-  const agregado = (extra) => consulta('/v1/query/web-analytics/visits/aggregate', { until: hasta, limit: '100', ...extra });
+  const agregado = (extra) => consulta('/v1/query/web-analytics/visits/aggregate', { until: hastaConsulta, limit: '100', ...extra });
 
   const [total, paises, dias, rutas, meses] = await Promise.all([
     consulta('/v1/query/web-analytics/visits/count', {}),
     agregado({ by: 'country', since: desde365 }),
     agregado({ by: 'day', since: desde30 }),
     agregado({ by: 'requestPath', since: desde30, limit: '40' }),
-    agregado({ by: 'month', since: desde24m }),
+    agregado({ by: 'month', since: desde365 }),
   ]);
   return construirResumen({ total, paises, dias, rutas, meses, rangoPaises: { desde: desde365, hasta } }, hoy);
 }

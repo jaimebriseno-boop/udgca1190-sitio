@@ -70,11 +70,11 @@ test('consultarAlcance hace las cinco consultas con los parámetros correctos', 
   }
   const porBy = Object.fromEntries(llamadas.filter((l) => l.url.pathname.endsWith('/aggregate')).map((l) => [l.url.searchParams.get('by'), l.url.searchParams]));
   assert.equal(porBy.country.get('since'), '2025-09-21');
-  assert.equal(porBy.country.get('until'), '2026-09-20');
+  assert.equal(porBy.country.get('until'), '2026-09-21'); // día siguiente: incluye hoy completo
   assert.equal(porBy.country.get('limit'), '100');
   assert.equal(porBy.day.get('since'), '2026-08-22');
   assert.equal(porBy.requestPath.get('limit'), '40');
-  assert.equal(porBy.month.get('since'), '2024-09-20');
+  assert.equal(porBy.month.get('since'), '2025-09-21'); // el plan Pro solo da 366 días
   assert.deepEqual(r.total, { visitas: 60, paginas: 100 });
   assert.deepEqual(r.paises, [{ cc: 'MX', visitas: 40, paginas: 70 }]);
   assert.deepEqual(r.otros, { visitas: 1, paginas: 2 });
