@@ -15,6 +15,7 @@
     "fixtures:bio": "node scripts/bio-fixtures.mjs",
     "fixtures:bio:check": "node scripts/bio-fixtures.mjs --check",
     "barrido:bio": "node scripts/bio-barrido.mjs",
+    "humo:webr": "node scripts/bio-humo-webr.mjs",
     "audit:performance": "python3 scripts/audit-performance.py",
     "dev": "astro dev",
     "build": "npm run tokens && astro build",

@@ -1,13 +1,13 @@
 # Handoff — Bioestadística abierta
 
-Fecha: 17 de septiembre de 2026 (H3 publicado; siguiente H4). Para continuar en un contexto nuevo, en ESTA carpeta:
+Fecha: 20 de septiembre de 2026 (H4 construido y verificado, pendiente del visto bueno para publicar; siguiente H5). Para continuar en un contexto nuevo, en ESTA carpeta:
 `/Users/judithcita/orca/workspaces/UDG-CA-1190/Bioestadistica-abierta` (worktree de Orca; no hacer
 `cd` al checkout principal `/Volumes/Bioinformatics/Programacion/UDG-CA-1190`, que está en `main`).
 
 ## Leer primero
 
 1. [PROGRESO.md](PROGRESO.md): estado por hito y verificación conservada.
-2. [DECISIONES.md](DECISIONES.md): desviaciones respecto a los diseños (H0–H3) y convenciones fijadas.
+2. [DECISIONES.md](DECISIONES.md): desviaciones respecto a los diseños (H0–H4) y convenciones fijadas.
 3. [PLAN.md](PLAN.md): plan maestro (catálogo de 24 calculadoras, slugs, hitos, riesgos).
 4. Según el hito, las secciones pertinentes de [ESPECIFICACION.md](ESPECIFICACION.md) (estadística),
    [ARQUITECTURA.md](ARQUITECTURA.md) (Astro/cliente) y [MOTOR.md](MOTOR.md) (R, fixtures, webR).
@@ -27,6 +27,8 @@ Fecha: 17 de septiembre de 2026 (H3 publicado; siguiente H4). Para continuar en 
    (bloque común C0 en `metodos/muestra-comun.ts`; `power.prop.test`/`power.t.test` replicados con
    `uniroot`); para una tabla k×k pegada (`tipo: tabla`, `k` derivado), `kappa`; para varias columnas
    pegadas con grupos, `Resultado.extras` (vectores validados contra R) y la gráfica `km`, `kaplan-meier`.
+   Para webR: `src/lib/bioestadistica/webr.ts` (adaptador con dependencias inyectables), el bloque
+   «Verificar con R» de `controlador.ts`, `CodigoR.astro` (panel) y [EXTERNOS.md](EXTERNOS.md) (opt-in).
 
 ## Pedido y decisiones del dueño (Dr. Jaime Briseño Ramírez, 16-sep-2026)
 
@@ -64,6 +66,10 @@ Decisiones cerradas (no volver a preguntarlas):
   `main`) puede quedar atrasado: `git pull` allí cuando haga falta; el trabajo sigue en este worktree.
   H3 = `f04f4dd` + `c1ff89f`, PUBLICADOS el 17-sep-2026 con el visto bueno del dueño («publicalo»):
   `main` avanzó por fast-forward de `ef95363` a `c1ff89f` y Vercel desplegó las 19 calculadoras.
+  H4 (webR) = commit `BIOESTADISTICA: H4 …` del 20-sep-2026 (ver `git log --oneline -3`), pendiente
+  del visto bueno para el fast-forward a `main`. Tras publicar, comprobar en producción la cabecera
+  `Content-Security-Policy` (`curl -sI https://udgca1190.com.mx/herramientas/bioestadistica/ic-proporcion/`)
+  y una verificación completa en Chrome y Safari.
 - Remoto `https://github.com/jaimebriseno-boop/udgca1190-sitio.git`; `main` despliega en Vercel.
 - Antes de cambiar nada: `git status --short --branch`, `git log --oneline -3`, y comprobar que `main`
   no avanzó (`git fetch && git log --oneline HEAD..origin/main`); si avanzó, `git merge origin/main`
@@ -78,17 +84,21 @@ Decisiones cerradas (no volver a preguntarlas):
 | `src/lib/bioestadistica/nucleo/tipos.ts` | Contrato: `Estimacion`, `Resultado`, `Definicion`, `Presentacion`, `Contexto`, `DatosGrafica` (unión `ic-forest` con `paneles` · `fagan` · `curvas` con `referenciaY` · `barras` · `histograma-boxplot` · `km`); `Resultado.extras` (vectores de longitud variable comparados elemento a elemento) |
 | `src/lib/bioestadistica/primitivas/` | erf/lgamma/beta y gamma incompletas, Brent y `uniroot` (traducción literal del `R_zeroin2` de R, para reproducir lo que R resuelve con `uniroot`), distribuciones (p/q/d, incluida la t no central `pnt`) validadas contra R |
 | `src/lib/bioestadistica/metodos/` | `proporciones` (seis IC), `razones` (log-Wald: Simel, Woolf, Haldane), `diagnostico` (núcleo 2×2), `bayes` (momios), `predictivos` (Mercaldo), `efecto` (RR, OR, RRA Newcombe 10/Wald, RRR, NNT), `independencia` (χ², Yates, N−1, Fisher minlike, OR condicional, φ), `pareadas` (McNemar, δ pareada, OR pareado), `medias` (IC t, IC χ² de la DE), `resumenes` (Luo, Wan, Hozo), `descriptivos` (momentos, cuantiles tipo 7, Tukey, Sturges), `shapiro` (AS R94), `muestra-comun` (C0: zAlfa, zPoder, pérdidas, techo), `muestra-estimacion` (C1/C2: Cochran, CPF, t iterada, `SIN_DATO`/`hayDato`), `muestra-proporciones` (C3: Fleiss ± corrección, `power.prop.test`, h de Cohen), `muestra-medias` (C4/C5: t no central como `power.t.test`, Guenther), `muestra-diagnostica` (C6: Buderer), `muestra-correlacion` (C7: z de Fisher, `pwr.r.test`), `kappa` (κ simple/ponderada, EE de Fleiss-Cohen-Everitt, z/p como `irr::kappa2`, κ máxima por transporte, PABAK/Byrt), `supervivencia` (Kaplan-Meier, Greenwood log-log/log, mediana `quantile.survfit`, log-rank) |
-| `src/lib/bioestadistica/nucleo/` | `formato`, `plantillas`, `bandas`, `macros` (KaTeX), `codigoR` (vectores → `c(...)`, `NaN` → `NA`), `comparar`, `svg` (bosque con paneles, fagan, curvas con línea de referencia, barras, histograma-boxplot, `km` con banda, censuras y tabla en riesgo), `entrada`, `pegado` (`parsearPegado`, `resumenPegado`, `parsearTablaPegada`, `resumenTabla`, `textoDeTabla`), `avisos` (`interpolar`, `paramsDeAvisos`), `exportar` |
+| `src/lib/bioestadistica/nucleo/` | `formato`, `plantillas`, `bandas`, `macros` (KaTeX), `codigoR` (vectores → `c(...)`, `NaN` → `NA`), `comparar`, `tolerancias` (perfiles por calculadora + `perfilPara(slug, entradas)`; `tests/bioestadistica/tolerancias.ts` reexporta), `svg` (bosque con paneles, fagan, curvas con línea de referencia, barras, histograma-boxplot, `km` con banda, censuras y tabla en riesgo), `entrada`, `pegado` (`parsearPegado`, `resumenPegado`, `parsearTablaPegada`, `resumenTabla`, `textoDeTabla`), `avisos` (`interpolar`, `paramsDeAvisos`), `exportar` |
+| `src/lib/bioestadistica/webr.ts` | Adaptador de webR 0.6.0 (H4): constantes de hosts y versión (ÚNICO archivo de `src/` que nombra `r-wasm.org`), consentimiento (`localStorage` + visita), `iniciarR` memorizado, `instalar` + `requireNamespace`, `ejecutarJSON` (cola, `captureR`), `cerrarR`, `verificarConR` (snippet tal cual → `comparar()` con el perfil). Solo se carga con `import()` desde el controlador. `configurar()` inyecta `import()`/almacén/reloj para `webr.test.ts` |
 | `src/lib/bioestadistica/calculadoras/<slug>.ts` | `definicion` pura: `claves`, `avisos`, `salidas`, `derivar?`, `validar`, `calcular`, `presentar`, `grafica` |
-| `src/bioestadistica/` | Navegador: `montar` (re-entrante), `controlador` (ciclo genérico + totales `[data-total]` + rótulos de opciones), `estado-url`, `dom`, `cita`, `registro` |
-| `src/components/bioestadistica/` | `Tabla2x2Input`, `CampoOpcion`, `CampoNumero`, `PegarColumna` (textarea + resumen del pegado), `PegarTabla` (tabla k×k pegada, aplanada por filas), `ResultadoCelda`, `Interpretacion`, `Avisos` (con `params` para el SSR), `Ecuacion`, `Grafica` (estilos globales de los SVG), `CodigoR`, `Exportar`, `Referencias`, `Autoria`, `Cita`, `CardCalculadora` |
-| `src/components/pages/CalculadoraPage.astro`, `BioestadisticaIndexPage.astro` | Página de calculadora (SSR del ejemplo + `#bio-datos`; reparte tabla/selectores/campos) e índice por grupos |
+| `src/bioestadistica/` | Navegador: `montar` (re-entrante), `controlador` (ciclo genérico + totales `[data-total]` + rótulos de opciones + bloque «Verificar con R»: consentimiento, etapas, tabla, errores, obsolescencia, «Liberar memoria»), `estado-url`, `dom`, `cita`, `registro` |
+| `src/components/bioestadistica/` | `Tabla2x2Input`, `CampoOpcion`, `CampoNumero`, `PegarColumna` (textarea + resumen del pegado), `PegarTabla` (tabla k×k pegada, aplanada por filas), `ResultadoCelda`, `Interpretacion`, `Avisos` (con `params` para el SSR), `Ecuacion`, `Grafica` (estilos globales de los SVG), `CodigoR` (código + botón «Verificar con R» + panel completo servido oculto: `[data-verificar*]`), `Exportar`, `Referencias`, `Autoria`, `Cita`, `CardCalculadora` |
+| `src/components/pages/CalculadoraPage.astro`, `BioestadisticaIndexPage.astro` | Página de calculadora (SSR del ejemplo + `#bio-datos`; reparte tabla/selectores/campos) e índice por grupos; ambas con `<ClientRouter slot="head" />` (`Base.astro` tiene el `<slot name="head">` y un drawer re-entrante) |
+| `vercel.json`, `astro.config.mjs` | CSP de la sección (solo los dos orígenes de webR; ARQUITECTURA §6.8) y, para que no la rompa nada, `build.inlineStylesheets: 'never'` + `vite.build.assetsInlineLimit: 0` (sin scripts ni estilos incrustados en todo el sitio) |
 | `src/pages/herramientas/bioestadistica{.astro,/[slug].astro}` y `src/pages/en/...` | Rutas (`getStaticPaths` desde la colección) |
 | `src/i18n.mjs` | Claves `tools.bio.*`, `bio.*`, `bio.ui.*` en ES y EN; `tPrefijo(lang, 'bio.ui.')` |
 | `scripts/bio-fixtures.mjs` | Casos + YAML → snippets `.R` → `Rscript` → `tests/bioestadistica/fixtures/<slug>.json` (`--solo`, `--check`) |
 | `scripts/bio-barrido.mjs` | Barrido de `presentar()`/`grafica()` en ES/EN sobre ~75k combinaciones de las 19 calculadoras (lista `SLUGS` fija + un bloque de combinaciones por calculadora; cuenta los casos válidos por calculadora y falla si alguna queda en cero); compuerta de cierre de hito |
-| `tests/bioestadistica/` | `casos/`, `r/` (instalar, correr_casos, primitivas), `r/generado/` (commiteado), `fixtures/`, `tolerancias.ts`, `util.ts` (`leerYaml`, `leerFixture`, `contextoDePrueba`, `conDerivadas`), `*.test.ts` |
-| `docs/bioestadistica/` | PLAN, ESPECIFICACION, ARQUITECTURA, MOTOR, DECISIONES, PROGRESO, HANDOFF |
+| `scripts/bio-humo-webr.mjs` | Prueba de humo de «Verificar con R» (`npm run humo:webr`): sirve `dist/` con las cabeceras de `vercel.json`, Chrome headless por CDP, consentimiento real (`--capturas`), primera verificación con descarga, navegación con `ClientRouter` + segunda verificación sin reiniciar R, drawer a 400 px, bytes por host, violaciones de CSP; sale con 2 si el CDN no responde |
+| `scripts/audit-performance.py` | Auditoría del build; desde H4 rechaza también `r-wasm.org` como recurso declarado |
+| `tests/bioestadistica/` | `casos/`, `r/` (instalar, correr_casos, primitivas), `r/generado/` (commiteado), `fixtures/`, `tolerancias.ts` (reexporta), `util.ts` (`leerYaml`, `leerFixture`, `contextoDePrueba`, `conDerivadas`), `*.test.ts` (incluidos `webr`, `politica`, `tolerancias`) |
+| `docs/bioestadistica/` | PLAN, ESPECIFICACION, ARQUITECTURA, MOTOR, DECISIONES, PROGRESO, HANDOFF, EXTERNOS (opt-in de webR) |
 
 ## Cómo se añade una calculadora (patrón H0/H1)
 
@@ -144,6 +154,7 @@ npm run fixtures:bio     # regenera fixtures con Rscript (solo si cambian planti
 npm run fixtures:bio:check
 npm run barrido:bio      # presentar()/grafica() de las 19 calculadoras sobre ~75k combinaciones × 2 idiomas (~4 min); compuerta de cierre de hito, sale con 1 si hay problemas o si una calculadora queda sin casos válidos
 npm run audit:performance          # sin --check-data-baseline (ver pendiente ajeno); restaurar luego docs/performance/after.json
+npm run humo:webr -- --capturas <dir> --verbose   # humo de «Verificar con R» contra dist/ con la CSP de vercel.json (necesita red y Chrome; ~1–2 min; exit 2 = CDN caído)
 npm run preview -- --host 127.0.0.1 --port 4321
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars \
   --window-size=1280,3400 --virtual-time-budget=5000 --screenshot=/tmp/calc.png \
@@ -170,10 +181,18 @@ npm run preview -- --host 127.0.0.1 --port 4321
 - Textos de interfaz solo por `t()`/`tPrefijo()`/YAML; paridad ES/EN vigilada por `contenido.test.ts` e
   `i18n.test.ts`. Tokens `--udg-*`; nunca rojo y navy en un mismo componente; sin botón primario rojo;
   series de las gráficas distinguibles por trazo (no solo por color) para imprimir en blanco y negro.
-- Nada de la sección bajo una ruta con segmento `/data/`; ningún recurso externo declarado en HTML/CSS
-  (webR solo por `import()` tras consentimiento, H4).
-- Una sola región `aria-live` (interpretación + avisos; los `<output>` de totales van con
-  `aria-live="off"`); estado en la URL con `replaceState(history.state, …)`.
+- Nada de la sección bajo una ruta con segmento `/data/`; ningún recurso externo declarado en HTML/CSS.
+  webR solo por `import()` tras consentimiento; `r-wasm.org` aparece ÚNICAMENTE en `webr.ts` (ni en
+  `i18n.mjs`: los textos interpolan `{webr}`/`{repo}`), y la CSP de `vercel.json` permite solo esos dos
+  orígenes (`politica.test.ts` vigila las cuatro capas). Como la CSP no admite `'unsafe-inline'`, el sitio
+  entero se construye sin scripts ni estilos incrustados (`astro.config.mjs`): no reactivar la
+  incrustación ni añadir `is:inline` ejecutables o atributos `style=` en la sección.
+- Una sola región `aria-live` para lo que cambia al teclear (interpretación + avisos; los `<output>` de
+  totales van con `aria-live="off"`); la única excepción es el `role="status"` del panel de verificación,
+  que solo cambia tras un clic (DECISIONES «H4»). Estado en la URL con `replaceState(history.state, …)`.
+- La sesión de R es un singleton por documento y el `ClientRouter` la conserva entre páginas de la
+  sección: todo `<script>` de la sección debe ser re-entrante (`astro:page-load` + guarda por `dataset`
+  + `AbortController`), y toda escritura al DOM tras un `await` debe comprobar `señal.aborted`.
 - Fixtures y `.R` generados se commitean junto con el cambio de plantilla o de casos
   (`fixtures:bio:check` y `plantilla_sha256` lo obligan).
 - Convenio «0 = sin dato» para las entradas numéricas OPCIONALES (`requerido: false`, `min: 0`): el
@@ -211,25 +230,41 @@ Pendientes documentados que NO bloquean: `curva-roc` (opcional del PLAN); log-ra
 pegado de una tabla con roles (H5); mecanismo de plurales («1 pacientes»); p unilateral de Fisher, mid-p
 de McNemar, opciones D6 y Shi 2020 (H2); `docs/performance/baseline.json` desactualizado (ajeno).
 
-## H4 · webR (siguiente)
+## H4 · webR (hecho el 20-sep-2026; pendiente de publicar)
 
-Entregables (PLAN «Hitos» H4; MOTOR §3–§4 y ARQUITECTURA §7 para el detalle):
+Entregado (detalle en PROGRESO «Hecho en H4» y DECISIONES «H4»): `webr.ts`, panel «Verificar con R» en
+`CodigoR.astro` + `controlador.ts`, `ClientRouter` en las dos páginas, política de hosts en cuatro capas
+(hosts solo en `webr.ts`, aserción de la auditoría, CSP en `vercel.json`, sitio sin scripts/estilos
+incrustados), `tolerancias.ts` en la biblioteca con `perfilPara`, pruebas `webr`/`politica`/`tolerancias`,
+humo `npm run humo:webr`, EXTERNOS.md, README, MOTOR §4.5, ARQUITECTURA §6.8/§7.
 
-1. Botón «Verificar con R» en cada calculadora: carga de webR por `import()` dinámico desde el CDN con
-   versión fijada (`https://webr.r-wasm.org/v0.6.0/`, paquetes desde `https://repo.r-wasm.org`) SOLO tras
-   un consentimiento explícito (diálogo con lo que se descarga y desde dónde; recordar la decisión en
-   `localStorage`); ningún recurso externo declarado en HTML/CSS (`audit:performance` lo vigila).
-2. Ejecutar el snippet visible tal cual (el mismo que corre `Rscript` en el fixture), capturar el JSON,
-   normalizarlo con `normalizarR` y compararlo con `comparar()` usando el perfil de `tolerancias.ts` de
-   esa calculadora; panel con la tabla de coincidencias/discrepancias y un aviso claro si un paquete no
-   está disponible en webR (comprobar `binom`, `PropCIs`, `exact2x2`, `irr`, `pwr`, `survival`).
-3. Política de hosts y CSP del sitio (Vercel): permitir solo los dos orígenes de webR; documentar en
-   ARQUITECTURA. `ClientRouter`/estado: el worker de webR debe sobrevivir a la navegación entre
-   calculadoras o reiniciarse limpio; los datos pegados nunca salen del navegador (webR corre local).
-4. Pruebas: unitarias del adaptador (mock de webR), una prueba de humo con Chrome headless que cargue una
-   calculadora, acepte el consentimiento y compare (marcarla como lenta/opcional si el CDN no responde).
-5. Cierre como H1–H3: verificación completa (incluido `npm run barrido:bio`), capturas, revisión
-   independiente, commit `BIOESTADISTICA: H4 …`, vista previa y fast-forward a `main` con visto bueno.
+Pendientes documentados que NO bloquean: autoalojar webR y una imagen de biblioteca `rwasm` (MOTOR §4.4
+opción c) cuando se congele el conjunto de paquetes; service worker cache-first para uso sin conexión;
+humo semanal en la Mac mini (MOTOR §6.6); Safari solo se ha probado por lectura de la API (el humo usa
+Chrome): pedir al dueño una verificación en Safari tras publicar.
+
+## H5 · Modelos (siguiente)
+
+Entregables (PLAN «Hitos» H5; MOTOR §5 y ESPECIFICACION E1, E2, E4 y D2 para el detalle):
+
+1. Cuatro calculadoras `motor: webr`: `regresion-logistica` (E1), `regresion-cox` (E2), `regresion-lineal`
+   (E4) e `icc` (D2). Sin `calcular()` en TS: el controlador ya devuelve sin pintar cuando falta
+   (`recalcular`), y la página muestra el ejemplo resuelto en build a partir del fixture; en el
+   navegador el resultado llega de `verificarConR()`/`ejecutarJSON()` y `Definicion.parsearR(json)` lo
+   convierte en `Resultado` para `presentar()`. Decidir y documentar cómo se resuelve el ejemplo en SSR
+   sin R (leer el fixture del caso `ejemplo` en el frontmatter es la opción prevista en MOTOR §5.5).
+2. Entrada multicolumna con roles (`PegarColumna` de varias columnas o una tabla con encabezados;
+   MOTOR §5.1–§5.2): la tabla pegada se escribe en webR como `/home/web_user/datos.csv` y el snippet
+   siempre hace `read.csv("datos.csv")`; botón «Descargar datos.csv» junto al código para RStudio
+   (MOTOR §5.3, regla de oro intacta: el snippet que se ve es el que corre).
+3. Guardas antes de ajustar: EPV < 10, separación (logística), `cox.zph` (Cox), colinealidad; avisos
+   con parámetros. Bosque de coeficientes (`ic-forest` con escala log para OR/HR) y, en Cox, `km` por
+   grupo si procede.
+4. Fixtures con `casos/datos/*.csv` (`bio-fixtures.mjs` debe aprender a escribir el CSV junto al
+   snippet), perfil `modelo` de `tolerancias.ts` (1e-6 / 1e-8), comparación con R local.
+5. Cierre como H1–H4: build, check, test, fixtures, barrido (añadir los cuatro bloques a `SLUGS`),
+   `npm run humo:webr` (ampliar a una calculadora `motor: webr`), capturas, revisión independiente,
+   commit `BIOESTADISTICA: H5 …`, vista previa y fast-forward a `main` con visto bueno.
 
 ## Flujo de trabajo que funcionó (H0–H3) y trampas
 
@@ -328,5 +363,28 @@ Entregables (PLAN «Hitos» H4; MOTOR §3–§4 y ARQUITECTURA §7 para el detal
   ataca primero reproduciendo la AGRUPACIÓN de operaciones del oráculo (kappa2 trabaja con conteos y
   divide entre n al final: con eso la diferencia bajó de 1.5e-8 a 0); solo si eso es imposible se le da
   un perfil propio y documentado en `tolerancias.ts`, nunca un `cerrado` aflojado para todos.
+- H4: Astro incrusta en el HTML los scripts y hojas menores de 4 KB (`vite.build.assetsInlineLimit`,
+  `build.inlineStylesheets: 'auto'`): con una CSP sin `'unsafe-inline'` el script del menú de
+  `Base.astro` quedaba bloqueado en producción y en `astro preview` no se nota nada (no aplica
+  `vercel.json`). Por eso el humo sirve `dist/` con las cabeceras reales. Un `grep 'style="'` en `dist/`
+  da falsos positivos por `displaystyle="true"` del MathML de KaTeX: buscar ` style="` con espacio.
+- H4: Chrome headless con `--window-size=400,…` recorta el lado derecho también en producción (la
+  captura sale de 400 px pero el viewport no baja de ~500): para móvil de verdad usar CDP
+  (`Emulation.setDeviceMetricsOverride`, como hace `bio-humo-webr.mjs`).
+- H4: `webr::install()` solo AVISA si un paquete no está en `repo.r-wasm.org`; comprobar después con
+  `requireNamespace()`. webR 0.6.0 trae R 4.6.0 (fixtures locales: R 4.5.2). `captureR` devuelve las
+  condiciones (`warning`/`message`) como proxies de objeto R (`toJs()`), no como texto. Con el canal
+  `PostMessage` no hay interrupción: un snippet colgado solo se para con `webR.close()`. Un proxy de
+  objeto R de webR NO se convierte a cadena (`String(proxy)` lanza) y `toJs()` falla con condiciones
+  que llevan `call`: leer `get('message')` → `toArray()`. webR corre también en Node (`baseUrl` = ruta
+  local del paquete npm desempaquetado) y es la forma rápida de ver la salida real de un snippet.
+- H4: `politica.test.ts` prohíbe `r-wasm.org` fuera de `webr.ts` INCLUIDOS los comentarios, los YAML de
+  `data/bioestadistica/` (una referencia con esa URL saldría en el HTML) y todo `public/`: escribir
+  «los hosts del CDN» en vez del nombre. La CSP lleva `'unsafe-eval'` porque el núcleo de webR lo
+  necesita al arrancar: la revisión estática dijo que no y el humo real dijo que sí (R se descarga y el
+  worker se cuelga 180 s con un `EvalError` que NO aparece como violación de CSP). Una CSP se demuestra
+  con `npm run humo:webr` contra el build, nunca leyendo el fuente; cualquier paquete nuevo se prueba igual. `sintaxis.test.ts` excluye `webr.ts` del recorrido, pero
+  `webr.test.ts` sí lo importa en Node: nada de efectos al importar (ni `localStorage` ni `navigator`
+  fuera de funciones con guarda).
 - Memoria persistente del asistente: `~/.claude/projects/-Volumes-Bioinformatics-Programacion-UDG-CA-1190/memory/`
   (`project-bioestadistica-abierta.md`) apunta a estos archivos.

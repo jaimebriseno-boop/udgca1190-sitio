@@ -523,6 +523,58 @@ Consecuencias que hay que implementar (todas pequeñas y verificables):
 
 Alternativas descartadas: una sola página con navegación interna (pierde URL por calculadora, `hreflang`, impresión y SEO), un `SharedWorker` con R (nested workers y soporte en Safari/Android inconsistentes). Si en H4 el `ClientRouter` diera problemas, el respaldo es aceptar el reinicio de R por página (coste acotado a quien pulsa «Verificar con R» o usa el grupo E) y agrupar los cuatro modelos del grupo E en una sola página con pestañas y `?modelo=`.
 
+### 6.8 Política de hosts y CSP de la sección (H4, implementado el 20-sep-2026)
+
+Los dos únicos orígenes externos que la sección puede contactar son los de webR, y solo
+después del consentimiento. La política tiene cuatro capas, cada una con su prueba:
+
+1. **Código**: `src/lib/bioestadistica/webr.ts` es el único archivo de `src/` que nombra
+   `r-wasm.org` (`WEBR_ORIGEN`, `REPO_ORIGEN`, `WEBR_VERSION = '0.6.0'`, `ORIGENES_EXTERNOS`).
+   El controlador lo carga con `import()` al pulsar «Verificar con R» (chunk `webr.*.js`
+   aparte); el texto del consentimiento (`bio.ui.webr_consentimiento`) lleva marcadores
+   `{webr}`/`{repo}` que se interpolan desde esas constantes, para que ni `i18n.mjs` ni los
+   componentes contengan el host. `tests/bioestadistica/politica.test.ts` recorre `src/` y
+   `data/bioestadistica/` y todo `public/` (menos binarios) y falla ante cualquier otra aparición
+   o ante una importación estática de `webr.ts`.
+2. **HTML/CSS generados**: `scripts/audit-performance.py` rechaza `r-wasm.org` como recurso
+   declarado (además de `fonts.googleapis.com`).
+3. **Cabeceras (Vercel)**: `vercel.json` sirve `/herramientas/bioestadistica/:path*` y
+   `/en/herramientas/bioestadistica/:path*` con
+   `Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' 'unsafe-eval' https://webr.r-wasm.org; worker-src 'self' blob:; child-src 'self' blob:; connect-src 'self' https://webr.r-wasm.org https://repo.r-wasm.org; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'`.
+   Por qué cada pieza: el `import()` de `webr.mjs` y el `importScripts()` de `R.js` dentro
+   del worker necesitan el origen del núcleo en `script-src`; `WebAssembly.instantiate`
+   necesita `'wasm-unsafe-eval'`; webR descarga `webr-worker.js` con XHR (`connect-src`) y lo
+   envuelve en un `Blob` porque un `Worker` cross-origin no está permitido (`worker-src
+   blob:`); los `.wasm`, los datos del sistema de archivos y los paquetes viajan por
+   `fetch`/XHR (`connect-src` a los dos orígenes); el `ClientRouter` pide las páginas con
+   `fetch` (`connect-src 'self'`); `child-src blob:` es el respaldo para los navegadores que
+   ignoran `worker-src` (Safari anterior a 15.4). `'unsafe-eval'` es obligatorio: el cargador de
+   Emscripten del núcleo de webR (`R.js`) evalúa cadenas al arrancar dentro del worker de blob, que
+   hereda esta CSP; la prueba de humo lo demostró (sin él, R se descarga entero y el arranque agota
+   los 180 s sin generar ninguna violación declarada: el `EvalError` es mudo). Lo que sigue cerrado
+   es `'unsafe-inline'`, que es la protección que importa contra HTML inyectado. `politica.test.ts`
+   comprueba que las dos entradas existen y son idénticas, que no permiten ningún otro origen
+   externo, que `script-src` lleva `'unsafe-eval'` y no `'unsafe-inline'`, que los patrones `source` casan con
+   el índice y las calculadoras con y sin barra final, y que ninguna otra ruta del sitio lleva esa
+   CSP. La cobertura real de las rutas se confirma en producción con `curl -sI` (índice, una
+   calculadora, con y sin barra, ES y EN).
+4. **Sin scripts ni estilos en línea**: una CSP sin `'unsafe-inline'` ni hashes bloquea
+   cualquier `<script>` o `<style>` incrustado. Astro incrusta por omisión los scripts y
+   hojas menores de 4 KB (el script del menú de `Base.astro` lo era), así que
+   `astro.config.mjs` fija `build.inlineStylesheets: 'never'` y
+   `vite.build.assetsInlineLimit: 0` para todo el sitio: mismo contenido, servido como
+   archivos con hash y caché inmutable (una petición más por archivo pequeño). Los
+   `<script type="application/json">` (`#bio-datos`) y `application/ld+json` no se
+   ejecutan y la CSP no los evalúa. El `security.csp` nativo de Astro se descartó: emite
+   `<meta>` con hashes para todo el sitio y su documentación declara que no es compatible
+   con el `ClientRouter`.
+
+La prueba de humo `scripts/bio-humo-webr.mjs` (`npm run humo:webr`) sirve `dist/` con las
+cabeceras de `vercel.json` (convierte cada `source` a RegExp) y pulsa «Verificar con R» en
+Chrome headless por el protocolo DevTools: una violación de la CSP (`Log.entryAdded` con
+`source: security`) hace fallar la prueba, de modo que la política se ejercita contra el
+build real y no solo contra el código fuente.
+
 ---
 
 ## 7. Pruebas y verificación
@@ -539,6 +591,8 @@ Alternativas descartadas: una sola página con navegación interna (pierde URL p
   2. `contenido.test.ts`: carga cada YAML con `js-yaml`, importa su `definicion`, y comprueba: `es`/`en` con el mismo conjunto de claves; `interpretacion`/`avisos` ⊇ `definicion.claves`; `ejemplo` cubre las `entradas` requeridas y valida; `referencias` existen en el `.bib`; `rellenarR` no deja marcadores sin resolver con el ejemplo y el texto contiene `res <- list(` y `cat(toJSON(res`; y las salidas del módulo, las claves de `etiquetas` de salida y las claves de `esperado` del caso ejemplo del fixture son el mismo conjunto.
   3. `i18n.test.ts`: toda clave `bio.*` y `tools.bio.*` existe en `UI.es` y `UI.en` (importa `src/i18n.mjs`, que lee `data/sitio.yml` con `process.cwd()`; correr desde la raíz).
   4. `pegado.test.ts`, `formato.test.ts`, `plantillas.test.ts`, `estado-url.test.ts` (este último con `URLSearchParams`, sin DOM).
+  5. `webr.test.ts` (H4): el adaptador con un webR simulado inyectado por `configurar()` (consentimiento, arranque memorizado, instalación y comprobación de paquetes, captura del JSON y de los avisos, timeouts que cierran la sesión, cola, `verificarConR()`); `politica.test.ts` (hosts en un solo archivo, CSP de `vercel.json`, `ClientRouter` en las dos páginas); `tolerancias.test.ts` (todo slug con perfil, `perfilPara()` reproduce el `tol` de cada caso del fixture).
+  6. Prueba de humo en navegador (`npm run humo:webr`, fuera de `npm test` porque necesita red y Chrome): consentimiento, primera verificación con descarga, navegación con `ClientRouter` y segunda verificación sin reiniciar R (cero peticiones al origen del núcleo), drawer móvil tras la navegación, bytes por host y violaciones de la CSP.
 - **Verde permanente**: `npm run check` (0 errores, 0 advertencias; los 73 hints previos no cuentan), `npm run build`, `npm run test`, `npm run audit:performance`. La auditoría pasa sin baseline nueva porque no se publica ningún JSON bajo `/data/`; `docs/performance/after.json` se reescribe en cada ejecución y solo se versiona en un commit deliberado. `--check-data-baseline` sigue exigiendo que `signos.json` y los JSON de dengue no cambien, y esta sección no los toca.
 - **Captura**: `npm run preview -- --host 127.0.0.1 --port 4321` y
   ```

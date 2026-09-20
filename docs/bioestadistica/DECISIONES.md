@@ -712,3 +712,114 @@ infraestructura, con motivo:
     solo valor no pasa `N_MIN_KM = 2` (una curva de un paciente no tiene nada que estimar), y «tres grupos
     (gl = 2)» queda para el log-rank de k grupos de H5 (`MAX_GRUPOS_KM = 2`); ambos límites están anclados
     en la prueba con el mensaje del caso que habrá que añadir el día que cambien. 24 casos, 94 pruebas.
+
+## H4 · webR: «Verificar con R» en el navegador (20 de septiembre de 2026)
+
+Desviaciones y decisiones respecto a MOTOR §4, ARQUITECTURA §6.6–§6.7 y PLAN «H4», con su motivo:
+
+- **Versión de R.** webR 0.6.0 (fijado en `WEBR_VERSION`; el CDN lo publica desde el 19 de mayo de
+  2026) trae R 4.6.0, mientras que los fixtures se generaron con R 4.5.2 en la Mac. El panel muestra
+  siempre la versión de R de la sesión («R 4.6.0 · webR 0.6.0 · 3.2 s»), como pedía PLAN «Riesgos»
+  («la UI muestra ambos valores»); una discrepancia entre TS y webR que no aparezca frente a
+  `Rscript` señalaría un cambio de método entre versiones de R o de un paquete, y es información,
+  no ruido. Los siete paquetes del catálogo están en `repo.r-wasm.org` para R 4.6 (comprobado).
+- **Tamaño anunciado.** `R.wasm` viaja comprimido (12.3 MB, `content-encoding: gzip`) más `R.js`,
+  BLAS/LAPACK y el sistema de archivos perezoso; el consentimiento dice «unos 20 MB» (`DESCARGA_MB`)
+  en vez de los «≈ 15 MB» del diseño, y añade «más los paquetes», que se nombran uno por uno.
+- **Paquete ausente.** `webr::install()` solo avisa cuando un paquete no está en el repositorio y
+  `library()` fallaría después con un mensaje de R menos claro; `instalar()` comprueba con
+  `requireNamespace()` tras instalar y `verificarConR()` se detiene con `paquete_faltante` antes de
+  ejecutar nada, con el texto «no está disponible en webR… (sí en R o RStudio)».
+- **Hosts en un solo archivo, también en los textos.** El texto del consentimiento no contiene los
+  nombres de host: lleva `{webr}`/`{repo}`/`{version}`/`{mb}`/`{paquetes}` y el controlador los
+  interpola desde las constantes de `webr.ts` al pulsar el botón. Así `politica.test.ts` puede
+  exigir que `r-wasm.org` no aparezca en ningún otro archivo de `src/` (ni `i18n.mjs`, ni
+  componentes, ni comentarios) y la regla sigue siendo binaria.
+- **Consentimiento de la visita.** Además del recordado en `localStorage` (`bio.webr.consentimiento
+  = v1`), un consentimiento sin «recordar» vive en memoria del módulo (`concederConsentimiento(false)`)
+  mientras dure el documento: con el `ClientRouter` sobrevive al cambio de calculadora, igual que
+  la sesión de R, y no se vuelve a preguntar en cada página.
+- **Segunda región viva.** La barra de estado del panel es `role="status"` (una región viva
+  `polite` más, además de la de interpretación y avisos). La regla «una sola región aria-live»
+  existe para no anunciar dos veces cada repintado al teclear; el estado de la verificación solo
+  cambia tras un clic y sus etapas («Descargando R…», «Verificación terminada · Coincide en 11/11
+  campos», o el motivo del error) son precisamente lo que una persona con lector de pantalla
+  necesita oír. La revisión de H4 detectó que la primera versión reescribía la región cada segundo
+  con el cronómetro (180 anuncios en el peor caso) y que el veredicto quedaba fuera de ella: ahora
+  la región lleva solo el nombre de la etapa (se escribe únicamente cuando cambia) más el veredicto
+  o el error al terminar, y el cronómetro vive en un `<span aria-hidden="true">` hermano. Al cancelar
+  o liberar R el foco vuelve al botón «Verificar con R»; al aceptar, pasa al panel (`tabindex="-1"`)
+  porque el botón que lo tenía se oculta. Los totales siguen con `aria-live="off"`.
+- **Toda llamada al worker lleva temporizador.** La revisión señaló que `new Shelter()` y `purge()`
+  eran las únicas operaciones sin `conTimeout`: un worker muerto (sin memoria, el caso que anticipa
+  el aviso) dejaba la cola parada para siempre y, con el `ClientRouter`, para todas las calculadoras
+  del documento. Ahora ambas vencen (`timeout_eval`; la purga con tope de 10 s) y cierran la sesión;
+  el código `sesion_cerrada` (texto propio ES/EN) sustituye al `sin_consentimiento` que se lanzaba
+  cuando una verificación encolada llegaba a una sesión ya cerrada.
+- **CSP por cabecera, no `security.csp` de Astro.** El `security.csp` nativo emite `<meta>` con
+  hashes para todo el sitio y su documentación declara que no es compatible con el `ClientRouter`;
+  se usa una `Content-Security-Policy` en `vercel.json` acotada a las dos rutas de la sección
+  (ES/EN), con `script-src 'self' 'wasm-unsafe-eval' https://webr.r-wasm.org`, `worker-src 'self'
+  blob:` (webR envuelve su worker cross-origin en un blob) y `connect-src` a los dos orígenes.
+  Consecuencia global: Astro incrustaba en el HTML los scripts y hojas menores de 4 KB (el script
+  del menú de `Base.astro`, dos hojas pequeñas) y una CSP sin `'unsafe-inline'` los bloquearía, así
+  que `astro.config.mjs` fija `build.inlineStylesheets: 'never'` y `vite.build.assetsInlineLimit:
+  0` para todo el sitio (mismo contenido, servido como archivos con hash y caché inmutable). Se
+  prefirió eso a abrir `'unsafe-inline'` o a mantener hashes a mano en `vercel.json`.
+- **Tolerancias en la biblioteca.** `tests/bioestadistica/tolerancias.ts` pasó a
+  `src/lib/bioestadistica/nucleo/tolerancias.ts` (el navegador necesita el mismo perfil que las
+  pruebas) con `perfilPara(slug, entradas)`, que reproduce la única regla que hoy elige otro
+  perfil (`prueba-diagnostica-2x2` con Clopper-Pearson o Jeffreys → `-beta`); `tolerancias.test.ts`
+  comprueba contra TODOS los casos de los fixtures que `perfilPara` devuelve el `tol` declarado, de
+  modo que añadir una regla de `tol` a un caso sin actualizar `perfilPara` falla. El archivo de
+  `tests/` reexporta y las 22 pruebas que lo importan no cambiaron.
+- **Obsolescencia del veredicto.** El resultado de una verificación vale para el código R que se
+  ejecutó (`codigoVerificado`); si las entradas cambian, el panel se atenúa y dice «Las entradas
+  cambiaron después de esta verificación» en vez de borrarse (el valor de R sigue siendo verdad
+  para aquellas entradas) y el botón pasa a «Verificar de nuevo».
+- **Formato de la tabla.** Los valores de TS y R se muestran sin locale y con hasta ocho cifras
+  significativas (`toPrecision(8)`), la diferencia relativa en notación científica de un decimal y
+  las filas de IC como «Sensibilidad (límite inferior)» con el id `sn.lo` en monoespaciada: es una
+  lectura técnica de comprobación, no una cifra para el manuscrito (esas siguen en las celdas).
+- **Sin transformación del snippet.** `verificarConR()` recibe `ultima.codigo`, el mismo texto que
+  el controlador escribe en `<code data-codigo-r>` y que `Rscript` ejecuta para el fixture; el
+  adaptador lo pasa a `captureR()` tal cual (`webr.test.ts` lo comprueba byte a byte).
+- **Timeouts.** 180 s para descargar y arrancar R, 120 s por paquete, 60 s por snippet; el de
+  ejecución cierra la sesión (`cerrarR()`) porque el canal `PostMessage` no admite interrupción, y
+  el siguiente intento reinicia R (la descarga vuelve de la caché HTTP). Los temporizadores se
+  limpian siempre (en Node, un `setTimeout` de tres minutos sin limpiar mantenía viva la prueba).
+- **Prueba de humo fuera de `npm test`.** `npm run humo:webr` (`scripts/bio-humo-webr.mjs`) necesita
+  red, el CDN y Chrome; sale con 2 (omitida) si el CDN no responde. Sirve `dist/` con las cabeceras
+  de `vercel.json` para que la CSP se pruebe contra el build real y no solo en el código.
+- **Revisión independiente de H4** (agente `code-reviewer`: 3 altos, 6 medios, 4 bajos; todos
+  atendidos antes del commit). Además de los dos primeros puntos de esta sección (región viva y
+  temporizadores): `child-src 'self' blob:` en la CSP como respaldo de `worker-src` (Safari < 15.4)
+  y prueba de que las dos cadenas ES/EN son idénticas y de que los `source` casan con el índice y
+  las calculadoras con y sin barra; `politica.test.ts` recorre también `data/bioestadistica/` y
+  todo `public/` (el host podía colarse en una referencia bibliográfica que acaba en el HTML sin ser
+  «recurso declarado»); botón «Olvidar mi decisión» (`retirarConsentimiento()`) para que el opt-in
+  sea reversible desde la página como promete EXTERNOS.md; botón «Cancelar la verificación» y
+  `cancelar()` en el adaptador (rechaza las operaciones en espera con `cancelado` y cierra R) más un
+  plazo compartido entre la descarga del módulo y el arranque (antes podían sumar 2 × 180 s sin
+  salida); si `codigoR()` lanza en el primer repintado, «Verificar con R» ejecuta el texto que está
+  en pantalla (`<code data-codigo-r>`) y no una cadena vacía; `onProgreso` comprueba `señal.aborted`
+  antes de tocar el DOM (la promesa sobrevive a la navegación, el DOM no); el módulo `webr.ts` se
+  guarda a nivel de módulo del controlador para que la página siguiente pueda ofrecer «Liberar
+  memoria» sin verificar; claves `bio.ui.verificando`, `r_listo` y `r_error` retiradas (muertas);
+  el supuesto «una sola línea JSON por snippet» queda escrito en MOTOR §4 con su prueba. Dos
+  matices de redacción en inglés («this very code» → «the exact code») aplicados.
+- **`'unsafe-eval'` en la CSP: la prueba de humo corrigió a la revisión.** La revisión estática
+  leyó `R.js` y concluyó que solo los paquetes con `EM_ASM`/`EM_JS` necesitaban `eval`; la primera
+  corrida real de `npm run humo:webr` con la CSP de `vercel.json` falló siempre (R descargado entero,
+  worker colgado hasta el timeout de 180 s, `EvalError` mudo sin violación declarada) y pasó en 1.7 s
+  con `'unsafe-eval'` añadido. Se añade esa palabra clave y solo esa; `politica.test.ts` la exige
+  ahora y sigue prohibiendo `'unsafe-inline'`. Lección registrada en HANDOFF: una CSP se demuestra
+  con el binario corriendo, no leyendo su fuente.
+- **Condiciones de R como proxies.** El humo en inglés con `kappa` (`library(irr)` emite el mensaje
+  «Loading required package: lpSolve») falló con «Cannot convert object to primitive value»: webR
+  entrega la condición como proxy de objeto R cuyo `toJs()` lanza (el elemento `call` no es
+  convertible) y que tampoco admite `String()`. `textoDeCondicion` lee ahora `get('message')` →
+  `toArray()` (forma real reproducida en Node con el paquete de webR), cae a `toJs()` y, si nada
+  sirve, a un texto fijo; los flujos `stdout`/`stderr` tampoco se convierten a ciegas. Se conserva
+  `captureConditions: true` porque los mensajes de carga de paquetes son información útil en el
+  panel («Avisos de R»); con `false` desaparecen sin más.

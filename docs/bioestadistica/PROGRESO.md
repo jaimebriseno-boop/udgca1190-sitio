@@ -1,6 +1,6 @@
 # Progreso — Bioestadística abierta
 
-Actualizado: 17 de septiembre de 2026 (H3 publicado). Leer después [HANDOFF.md](HANDOFF.md).
+Actualizado: 20 de septiembre de 2026 (H4 construido y verificado; pendiente del visto bueno para publicar). Leer después [HANDOFF.md](HANDOFF.md).
 
 ## Estado del corte
 
@@ -19,10 +19,77 @@ publican con cada visto bueno.
 | H1 · Vertical completa: prueba diagnóstica 2×2, posprueba (Fagan), valores predictivos | Terminado, verificado y **publicado** (17-sep-2026) | `2c37184` (+ `033f464`) |
 | H2 · Asociación 2×2 (RR/OR/RRA/NNT, χ²/Fisher, McNemar) + columnas pegadas (descriptivos, IC media, media desde mediana) | Terminado, verificado y **publicado** (17-sep-2026) | `1772462`, `e02aa46`, `08a3d94`, `35bffcb` |
 | H3 · Tamaño de muestra (C1–C7), kappa, Kaplan-Meier | Terminado, verificado y **publicado** (17-sep-2026; ROC opcional queda para después) | `f04f4dd`, `c1ff89f` |
-| H4 · webR («Verificar con R», consentimiento, ClientRouter, política de hosts) | **Siguiente** | — |
-| H5 · Modelos (logística, Cox, lineal, ICC) con webR | Pendiente | — |
+| H4 · webR («Verificar con R», consentimiento, ClientRouter, política de hosts y CSP) | Terminado y verificado; **pendiente de visto bueno** | — |
+| H5 · Modelos (logística, Cox, lineal, ICC) con webR | **Siguiente** | — |
 | H6 · Enlace con Propedéutica (`?signo=`) | Pendiente | — |
 | H7 · Documentación (README, COMO_AÑADIR, CHANGELOG de fixtures) | Pendiente | — |
+
+## Hecho en H4
+
+- «Verificar con R» en las 19 calculadoras (`motor: ts`): botón navy en el bloque «Código R»,
+  panel de consentimiento (qué se descarga, desde dónde, qué paquetes; casilla «Recordar mi
+  decisión»; aviso de poca memoria), barra de estado por etapas con cronómetro (Descargando R →
+  Iniciando R → Instalando <paquete> → Ejecutando → Comparando), veredicto «Coincide en k/m
+  campos» con píldora, tabla plegable campo por campo (valor de la calculadora, valor de R,
+  diferencia relativa, estado; filas de IC como «límite inferior/superior» con su id), avisos de R,
+  versiones y tiempo («R 4.6.0 · webR 0.6.0 · 3.2 s»), obsolescencia cuando cambian las entradas,
+  «Verificar de nuevo» y «Liberar memoria de R». Errores con texto propio por código
+  (`carga`, `timeout_init`, `timeout_instalar`, `timeout_eval`, `paquete_faltante`, `error_r`, `sin_json`).
+- `src/lib/bioestadistica/webr.ts`: adaptador singleton de webR 0.6.0 (versión fijada, canal
+  `PostMessage`, `import()` dinámico solo tras consentimiento), instalación por paquete con
+  comprobación `requireNamespace()`, `captureR` con captura de stdout/condiciones, cola de una
+  ejecución a la vez, timeouts que se limpian siempre y cierran R cuando el snippet no termina,
+  `verificarConR()` que ejecuta el snippet byte a byte y compara con `comparar()` y el perfil de
+  `tolerancias.ts`. Dependencias inyectables (`configurar()`) para probarlo en Node.
+- `ClientRouter` de Astro en las dos páginas de la sección (`<slot name="head">` nuevo en
+  `Base.astro`; drawer del menú re-entrante): la sesión de R y el consentimiento de la visita
+  sobreviven al cambiar de calculadora; hacia el resto del sitio el router cae a navegación completa.
+- Política de hosts en cuatro capas (ARQUITECTURA §6.8): hosts solo en `webr.ts` (los textos del
+  consentimiento interpolan `{webr}`/`{repo}`), aserción anti `r-wasm.org` en
+  `audit-performance.py`, CSP por cabecera en `vercel.json` para `/herramientas/bioestadistica/*` y
+  `/en/...` (solo los dos orígenes de webR; `'wasm-unsafe-eval'`; `worker-src blob:`), y
+  `astro.config.mjs` sin scripts ni estilos incrustados en todo el sitio para que la CSP no bloquee
+  nada. `docs/bioestadistica/EXTERNOS.md` documenta el opt-in y la ruta a autoalojar.
+- `tolerancias.ts` pasa a la biblioteca pura con `perfilPara(slug, entradas)` (reexportado desde
+  `tests/`): el navegador juzga con el mismo perfil que las pruebas.
+- Pruebas nuevas: `webr.test.ts` (22, con webR simulado), `politica.test.ts` (8) y
+  `tolerancias.test.ts` (5): 1,869 pruebas en total. Prueba de humo en navegador
+  `scripts/bio-humo-webr.mjs` (`npm run humo:webr`): sirve `dist/` con las cabeceras de
+  `vercel.json`, Chrome headless por protocolo DevTools, consentimiento real, primera verificación
+  con descarga, navegación interna y segunda verificación sin reiniciar R, drawer móvil, bytes por
+  host y violaciones de la CSP; sale con 2 si el CDN no responde.
+- Claves `bio.ui.webr_*` ES/EN (se retiró `verificar_pendiente`); README, MOTOR §4.5 (nota de
+  implementación), ARQUITECTURA §6.8 y §7, DECISIONES «H4», HANDOFF.
+
+## Verificación conservada (H4)
+
+`npm run build` 73 páginas (40 de la sección) sin ningún `<script>` ejecutable ni `<style>` en línea en
+las páginas de la sección · `npm run check` 0 errores / 0 advertencias (124 hints preexistentes) ·
+`npm run test` 4 + 1,878 pruebas en verde (36 nuevas: `webr` 29 con webR simulado, `politica` 10,
+`tolerancias` 5; menos las reubicadas) · `npm run fixtures:bio:check` sin deriva (19 calculadoras,
+302 casos) · `npm run barrido:bio` 75,039 combinaciones × 2 idiomas, 150,078 SVG, 0 problemas ·
+`npm run audit:performance` sin recursos externos ni faltantes (111 páginas HTML), con la aserción
+nueva contra los hosts de webR · **`npm run humo:webr`** contra `dist/` servido con las cabeceras de
+`vercel.json` (CSP incluida), Chrome headless por CDP, cuatro corridas registradas:
+
+| Corrida | Primera verificación | Navegación interna + segunda | Descarga | CSP |
+|---|---|---|---|---|
+| ES `ic-proporcion` → `prueba-diagnostica-2x2`, con consentimiento real y capturas | 1.8 s, coincide en 7/7 campos (19 valores) | R sobrevive (0 peticiones al núcleo): 0.10 s, 11/11 campos (31 valores) | 13.2 MB núcleo + 2.6 MB paquetes | 0 violaciones |
+| EN `kappa` → `kaplan-meier` | 2.5 s, 11/11 campos, aviso de R «Loading required package: lpSolve» mostrado | 2.8 s (instala `survival`), 29/29 campos (217 valores, tabla de vida entera) | 13.2 MB + 14.3 MB paquetes | 0 violaciones |
+| ES con la CSP inicial (sin `'unsafe-eval'`) | FALLA: R descargado, worker colgado hasta el timeout de 180 s | — | 13.2 MB | 0 violaciones declaradas (el `EvalError` es mudo) |
+| ES `--sin-csp` (diagnóstico) | 1.8 s, 7/7 | 0.10 s, 11/11 | igual | n/a |
+
+Cajón de navegación móvil (400 px, `Emulation.setDeviceMetricsOverride`) abre y cierra tras la
+navegación interna en todas las corridas que pasan; el único ruido de consola es «Refused to get
+unsafe header "Content-Encoding"» de la XHR de Emscripten contra el CDN (inocuo, siempre presente).
+Capturas revisadas: consentimiento, progreso con barra y «Cancelar la verificación», tabla de
+comparación con rótulo humano + id monoespaciado y píldoras, segunda calculadora y cajón a 400 px;
+además capturas estáticas de escritorio ES/EN del bloque «Código R» con el botón navy. Revisión de
+código independiente (agente `code-reviewer`, 3 altos / 6 medios / 4 bajos) con todos los hallazgos
+corregidos antes del commit y registrados en DECISIONES «H4»; la prueba de humo corrigió a su vez a la
+revisión en un punto (`'unsafe-eval'`) y destapó otro que ninguna prueba en Node veía (condiciones
+de R como proxies no convertibles). Pendiente de comprobar tras publicar: la cabecera CSP en
+producción (`curl -sI`, índice y una calculadora, con y sin barra, ES y EN) y una verificación en Safari.
 
 ## Hecho en H3
 
@@ -195,8 +262,10 @@ Pendiente ajeno a la sección: `audit:performance -- --check-data-baseline` sigu
 
 ## Siguiente paso
 
-1. H3 según [HANDOFF.md](HANDOFF.md) («H3 · Por patrón»): tamaño de muestra y poder (C1–C7, bloque
-   común C0, gráfica `potencia`), `kappa` (tabla k×k) y `kaplan-meier` (pegado multicolumna, gráfica
-   `km`); opcional `curva-roc`. Cierre con la misma secuencia (build, check, test, fixtures, barrido,
-   capturas, revisión independiente) y publicación con el visto bueno del dueño.
-2. Pendientes ajenos: `docs/performance/baseline.json` (signos.json de propedéutica).
+1. Publicar H4 con el visto bueno del dueño (fast-forward de la rama a `main`, como H1–H3) y
+   comprobar en producción: cabecera `Content-Security-Policy` en una página de la sección (`curl -sI`),
+   «Verificar con R» de punta a punta en Chrome y Safari, y `Actividades`/resto del sitio sin cambios.
+2. H5 según [HANDOFF.md](HANDOFF.md) («H5 · Modelos»): `regresion-logistica`, `regresion-cox`,
+   `regresion-lineal` e `icc` con `motor: webr` (MOTOR §5), pegado multicolumna con roles,
+   `datos.csv` para RStudio, bosque de coeficientes y guardas (EPV, separación, `cox.zph`).
+3. Pendientes ajenos: `docs/performance/baseline.json` (signos.json de propedéutica).

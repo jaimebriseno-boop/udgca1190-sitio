@@ -123,9 +123,31 @@ advertencias (124 hints preexistentes); `npm run test` 4 + 1,833 pruebas;
 auditadas); capturas ES/EN de las nueve páginas nuevas y del índice; dos revisiones de
 código independientes (detalle en `docs/bioestadistica/PROGRESO.md`).
 
-La sección no carga recursos externos: webR (R en el navegador) llegará en H4 solo por
-`import()` dinámico tras consentimiento explícito, sin declararse en HTML ni CSS, para
-que esta auditoría siga en verde.
+H4 (20 de septiembre de 2026; «Verificar con R» con webR en el navegador) mantiene la
+auditoría en verde y le añade una aserción: ningún host de webR puede aparecer como
+recurso declarado en HTML o CSS (`r-wasm.org`). El adaptador `webr.ts` es un chunk
+aparte de 7.5 KB (3.3 KB gzip) que la página solo pide con `import()` al pulsar el
+botón, y la descarga de R (≈ 12 MB comprimidos más paquetes) ocurre únicamente tras un
+consentimiento explícito. Dos cambios de entrega afectan a todo el sitio y se registran
+aquí porque cambian las cifras de esta revisión sin cambiar el contenido:
+
+- `vercel.json` sirve `/herramientas/bioestadistica/*` y `/en/herramientas/bioestadistica/*`
+  con una `Content-Security-Policy` estricta (`script-src 'self' 'wasm-unsafe-eval'` más el
+  origen de webR, `connect-src` a los dos orígenes de webR, `worker-src blob:`,
+  `style-src 'self'`, sin `'unsafe-inline'`); el resto del sitio no lleva CSP.
+- Para que esa CSP no bloquee nada, `astro.config.mjs` desactiva la incrustación de
+  scripts y hojas de estilo pequeños (`vite.build.assetsInlineLimit: 0`,
+  `build.inlineStylesheets: 'never'`). Antes Astro incrustaba en cada página el script
+  del menú lateral (560 bytes) y una o dos hojas de menos de 4 KB; ahora se sirven como
+  archivos con hash bajo `/_astro/` con la caché anual, así que cada página hace una o
+  dos peticiones más la primera vez y ninguna después. Las páginas de la sección quedan
+  sin ningún `<script>` ejecutable ni `<style>` en línea (los `application/json` y
+  `application/ld+json` no se ejecutan).
+
+La política se prueba contra el build real: `npm run humo:webr` sirve `dist/` aplicando
+las cabeceras de `vercel.json`, pulsa «Verificar con R» en Chrome headless y falla ante
+cualquier violación de la CSP; su resultado queda en `docs/bioestadistica/PROGRESO.md`
+(«Verificación conservada (H4)»).
 
 ## Siguientes prioridades
 

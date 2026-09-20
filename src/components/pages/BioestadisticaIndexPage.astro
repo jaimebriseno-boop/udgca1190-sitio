@@ -4,6 +4,7 @@
 // todavía no tienen ninguna se anuncian en lugar de esconderse, para que se vea
 // el mapa completo de la sección.
 import { getCollection } from 'astro:content';
+import { ClientRouter } from 'astro:transitions';
 import { t, tPrefijo } from '../../i18n.mjs';
 import Base from '../../layouts/Base.astro';
 import Autoria from '../bioestadistica/Autoria.astro';
@@ -32,6 +33,8 @@ const porGrupo = GRUPOS.map((grupo) => ({
 ---
 
 <Base titulo={t(lang, 'bio.index.title')} descripcion={t(lang, 'bio.index.meta')} lang={lang}>
+  {/* Mismo router que las páginas de calculadora: ir del índice a una calculadora no reinicia R. */}
+  <ClientRouter slot="head" />
   <div class="tool-page">
     <PageHeader
       eyebrow={t(lang, 'bio.kicker')}

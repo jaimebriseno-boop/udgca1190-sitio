@@ -6,6 +6,7 @@
 // en un buscador encuentra números reales, no huecos. El controlador solo
 // repinta esos mismos ganchos `data-*` cuando algo cambia.
 import type { CollectionEntry } from 'astro:content';
+import { ClientRouter } from 'astro:transitions';
 import { cargarDefinicion } from '../../bioestadistica/registro.ts';
 import { localePath, t, tPrefijo } from '../../i18n.mjs';
 import { paramsDeAvisos } from '../../lib/bioestadistica/nucleo/avisos.ts';
@@ -174,6 +175,8 @@ const payload = {
 ---
 
 <Base titulo={textos.titulo} descripcion={textos.meta} lang={lang}>
+  {/* Navegación same-document dentro de la sección: la sesión de R de «Verificar con R» sobrevive al cambiar de calculadora (ARQUITECTURA §6.7). */}
+  <ClientRouter slot="head" />
   <div class="tool-page">
     <PageHeader eyebrow={t(lang, 'bio.kicker')} title={textos.titulo} description={textos.intro} />
     <section class="section">
@@ -315,7 +318,7 @@ const payload = {
           {textos.ecuaciones.map((e) => <Ecuacion ecuacion={e} />)}
         </section>
 
-        <CodigoR codigo={rCodigo} lang={lang} />
+        <CodigoR codigo={rCodigo} lang={lang} verificable={datos.motor === 'ts'} />
 
         <section class="bloque" aria-labelledby="metodos-titulo" data-obsolescible>
           <div class="bloque__cabecera">

@@ -24,6 +24,7 @@ npm run tokens     # regenera src/styles/tokens.css desde design/tokens/*.json
 npm run check      # valida Astro/TypeScript
 npm run test:performance   # regresiones de reutilización y actualización de gráficas
 npm run test:bio           # pruebas de Bioestadística abierta (node --test sobre .ts; no necesita R)
+npm run humo:webr          # prueba de humo de «Verificar con R» en Chrome headless (necesita red y Chrome; sale con 2 si el CDN no responde)
 npm run test               # ambas suites
 npm run fixtures:bio       # regenera los fixtures de Bioestadística abierta con R (Rscript)
 npm run fixtures:bio:check # detecta deriva entre plantillas R, casos y fixtures (sale con 1 si la hay)
@@ -51,7 +52,13 @@ originales) son páginas nativas de Astro: cada calculadora es un YAML en
 módulo puro en `src/lib/bioestadistica/calculadoras/<slug>.ts`; sus referencias
 viven en `data/bioestadistica/referencias.bib`. El código R que se muestra es el
 mismo que `scripts/bio-fixtures.mjs` ejecuta con `Rscript` para generar los fixtures
-que validan TypeScript. Plan, diseños y decisiones en [`docs/bioestadistica/`](docs/bioestadistica/).
+que validan TypeScript. Las calculadoras funcionan sin red; «Verificar con R» descarga,
+solo si la persona lo pide y acepta el aviso, R compilado a WebAssembly (webR 0.6.0, versión
+fijada) y sus paquetes desde los dos orígenes de webR, lo ejecuta en el navegador y compara
+cada valor con la calculadora; los datos nunca salen del navegador y ninguna página declara
+recursos externos (`npm run audit:performance` y `tests/bioestadistica/politica.test.ts` lo
+vigilan; detalle en [`docs/bioestadistica/EXTERNOS.md`](docs/bioestadistica/EXTERNOS.md)).
+Plan, diseños y decisiones en [`docs/bioestadistica/`](docs/bioestadistica/).
 La caché anual se aplica únicamente a archivos con hash en el nombre; los datos
 y recursos sin versión conservan la revalidación.
 

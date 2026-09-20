@@ -3,28 +3,122 @@
 // oráculo, ya relleno con las entradas que se están mostrando. Se copia tal cual
 // y se ejecuta en R o RStudio.
 //
-// El botón «Verificar con R» (webR en el navegador) llega en un hito posterior;
-// hasta entonces se explica dónde ejecutar el código, sin prometer nada que la
-// página todavía no haga.
+// «Verificar con R» (H4) ejecuta ese mismo texto con webR dentro del navegador y
+// compara cada valor con el de la calculadora. Todo el panel se sirve en el HTML
+// (oculto) y el controlador solo alterna `hidden` y escribe texto: el
+// consentimiento se rellena al pulsar (los hosts del CDN viven únicamente en
+// `src/lib/bioestadistica/webr.ts`, que se importa bajo demanda) y ningún recurso
+// externo se declara aquí, así que la auditoría no ve host alguno del CDN
+// (`politica.test.ts` falla si ese nombre aparece fuera de `webr.ts`).
+//
+// El componente no mezcla rojo y navy: el botón es `.btn--secondary` (navy) y
+// las píldoras de estado usan los tokens `--udg-ok-*`/`--udg-err-*`
+// (ARQUITECTURA §5).
 import { t } from '../../i18n.mjs';
 
 interface Props {
   codigo: string;
   lang: 'es' | 'en';
+  /** `true` en las calculadoras `motor: ts` (las de `motor: webr` calculan con R, no verifican). */
+  verificable?: boolean;
 }
-const { codigo, lang } = Astro.props;
+const { codigo, lang, verificable = true } = Astro.props;
+const ui = (clave: string): string => t(lang, `bio.ui.${clave}`);
 ---
 
 <section class="bloque" id="codigo-r" aria-labelledby="codigo-r-titulo" data-obsolescible>
   <div class="bloque__cabecera">
-    <h2 class="bloque__titulo" id="codigo-r-titulo">{t(lang, 'bio.ui.codigo_r')}</h2>
-    <button type="button" class="btn btn--ghost" data-accion="copiar" data-copiar="r">
-      {t(lang, 'bio.ui.copiar')}
-    </button>
+    <h2 class="bloque__titulo" id="codigo-r-titulo">{ui('codigo_r')}</h2>
+    <div class="bloque__acciones">
+      <button type="button" class="btn btn--ghost" data-accion="copiar" data-copiar="r">
+        {ui('copiar')}
+      </button>
+      {
+        verificable && (
+          <button type="button" class="btn btn--secondary" data-accion="verificar-r">
+            {ui('verificar_r')}
+          </button>
+        )
+      }
+    </div>
   </div>
   <pre class="codigo"><code data-codigo-r>{codigo}</code></pre>
-  <p class="nota">{t(lang, 'bio.ui.codigo_r_nota')}</p>
-  <p class="nota nota--pendiente">{t(lang, 'bio.ui.verificar_pendiente')}</p>
+  <p class="nota">{ui('codigo_r_nota')}</p>
+  {
+    verificable && (
+      <>
+        <p class="nota">{ui('verificar_nota')}</p>
+        <div class="verificar" data-verificar tabindex="-1" hidden>
+          <div class="verificar__consentimiento" data-verificar-consentimiento hidden>
+            <h3 class="verificar__titulo">{ui('webr_consentimiento_titulo')}</h3>
+            <p class="verificar__texto" data-verificar-consentimiento-texto />
+            <p class="verificar__memoria" data-verificar-memoria hidden>
+              {ui('webr_poca_memoria')}
+            </p>
+            <label class="verificar__recordar">
+              <input type="checkbox" data-verificar-recordar />
+              {ui('webr_recordar')}
+            </label>
+            <div class="verificar__acciones">
+              <button type="button" class="btn btn--secondary" data-accion="verificar-aceptar">
+                {ui('webr_aceptar')}
+              </button>
+              <button type="button" class="btn btn--ghost" data-accion="verificar-cancelar">
+                {ui('webr_cancelar')}
+              </button>
+            </div>
+          </div>
+
+          <div class="verificar__progreso" data-verificar-progreso hidden>
+            <p class="verificar__estado" data-verificar-estado role="status" />
+            <span class="verificar__cronometro" data-verificar-cronometro aria-hidden="true" />
+            <button type="button" class="btn btn--ghost verificar__cancelar" data-accion="cancelar-r" hidden>
+              {ui('webr_cancelar_r')}
+            </button>
+          </div>
+          <p class="verificar__error" data-verificar-error hidden />
+
+          <div class="verificar__resultado" data-verificar-resultado hidden>
+            <p class="verificar__veredicto">
+              <span class="verificar__pill" data-verificar-pill />
+              <span data-verificar-veredicto />
+            </p>
+            <p class="verificar__obsoleto" data-verificar-obsoleto hidden>{ui('webr_obsoleto')}</p>
+            <details class="verificar__detalle" data-verificar-detalle>
+              <summary class="verificar__resumen" data-verificar-resumen />
+              <div class="verificar__marco">
+                <table class="verificar__tabla" data-verificar-tabla>
+                  <thead>
+                    <tr>
+                      <th scope="col">{ui('webr_col_campo')}</th>
+                      <th scope="col">{ui('webr_col_ts')}</th>
+                      <th scope="col">{ui('webr_col_r')}</th>
+                      <th scope="col">{ui('webr_col_dif')}</th>
+                      <th scope="col">{ui('webr_col_estado')}</th>
+                    </tr>
+                  </thead>
+                  <tbody />
+                </table>
+              </div>
+            </details>
+            <div class="verificar__avisos-marco" data-verificar-avisos-marco hidden>
+              <p class="verificar__avisos-titulo">{ui('webr_avisos_r')}</p>
+              <ul class="verificar__avisos" data-verificar-avisos />
+            </div>
+            <p class="verificar__meta" data-verificar-meta />
+            <p class="nota">{ui('webr_meta_nota')}</p>
+          </div>
+
+          <div class="verificar__acciones verificar__pie" data-verificar-pie hidden>
+            <button type="button" class="btn btn--ghost" data-accion="liberar-r" hidden>{ui('webr_liberar')}</button>
+            <button type="button" class="btn btn--ghost" data-accion="olvidar-consentimiento" hidden>
+              {ui('webr_olvidar')}
+            </button>
+          </div>
+        </div>
+      </>
+    )
+  }
 </section>
 
 <style>
@@ -38,6 +132,7 @@ const { codigo, lang } = Astro.props;
     margin-bottom: var(--sp-2);
   }
   .bloque__titulo { font-size: var(--fs-s1); margin: 0; }
+  .bloque__acciones { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
   .codigo {
     margin: 0;
     padding: var(--sp-3);
@@ -58,7 +153,186 @@ const { codigo, lang } = Astro.props;
     line-height: var(--lh-normal);
     max-width: var(--grid-prose);
   }
-  .nota--pendiente { color: var(--udg-gray-700); }
   /* Código que ya no corresponde a lo capturado (captura inválida). */
   .bloque.is-obsoleto .codigo { opacity: 0.45; }
+
+  /* ---- Panel «Verificar con R» ---- */
+  .verificar {
+    margin-top: var(--sp-3);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-md);
+    background: #fff;
+  }
+  .verificar[hidden],
+  .verificar [hidden] { display: none; }
+  .verificar__titulo { font-size: var(--fs-base); margin: 0 0 var(--sp-1); color: var(--udg-navy-900); }
+  .verificar__texto {
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed);
+    color: var(--udg-gray-700);
+    max-width: var(--grid-prose);
+  }
+  .verificar__memoria {
+    margin-top: var(--sp-2);
+    padding: var(--sp-1) var(--sp-2);
+    border: 1px solid var(--udg-warn-fg);
+    border-radius: var(--radius-md);
+    background: var(--udg-warn-bg);
+    color: var(--udg-warn-fg);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-normal);
+  }
+  .verificar__recordar {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-1);
+    margin-top: var(--sp-2);
+    font-size: var(--fs-sm);
+    color: var(--udg-gray-900);
+  }
+  .verificar__acciones { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-3); }
+
+  /* Estado por etapas: la región viva (`role="status"`) solo lleva el nombre de la
+     etapa y se reescribe al cambiar de etapa; el cronómetro va aparte y oculto a
+     los lectores de pantalla para no anunciar cada segundo. Barra indeterminada
+     mientras R trabaja (webR no expone bytes). */
+  .verificar__progreso {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--sp-2);
+    padding-bottom: var(--sp-1);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-700);
+  }
+  .verificar__estado { margin: 0; flex: 1 1 auto; }
+  .verificar__cronometro { color: var(--udg-gray-500); font-variant-numeric: tabular-nums; }
+  .verificar__cancelar { height: 32px; padding: 0 var(--sp-2); font-size: var(--fs-xs); }
+  .verificar__progreso::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background: var(--udg-gray-200);
+    overflow: hidden;
+  }
+  .verificar__progreso[data-etapa='descargando']::after,
+  .verificar__progreso[data-etapa='iniciando']::after,
+  .verificar__progreso[data-etapa='instalando']::after,
+  .verificar__progreso[data-etapa='ejecutando']::after,
+  .verificar__progreso[data-etapa='comparando']::after {
+    background: linear-gradient(90deg, var(--udg-gray-200) 0 30%, var(--udg-navy-700) 30% 55%, var(--udg-gray-200) 55%);
+    background-size: 200% 100%;
+    animation: verificar-barra 1.4s linear infinite;
+  }
+  @keyframes verificar-barra {
+    from { background-position: 100% 0; }
+    to { background-position: -100% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .verificar__progreso::after { animation: none !important; }
+  }
+  .verificar:focus { outline: none; }
+  .verificar:focus-visible { outline: 2px solid var(--udg-navy-700); outline-offset: 2px; }
+
+  .verificar__error {
+    margin-top: var(--sp-2);
+    padding: var(--sp-1) var(--sp-2);
+    border: 1px solid var(--udg-err-fg);
+    border-radius: var(--radius-md);
+    background: var(--udg-err-bg);
+    color: var(--udg-err-fg);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-normal);
+    overflow-wrap: anywhere;
+  }
+
+  .verificar__resultado { margin-top: var(--sp-2); }
+  .verificar__resultado.is-obsoleto .verificar__veredicto,
+  .verificar__resultado.is-obsoleto .verificar__detalle { opacity: 0.45; }
+  .verificar__veredicto {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-1);
+    flex-wrap: wrap;
+    margin: 0;
+    font-size: var(--fs-base);
+    font-weight: var(--fw-semibold);
+    color: var(--udg-navy-900);
+  }
+  .verificar__obsoleto { margin-top: var(--sp-1); font-size: var(--fs-sm); color: var(--udg-warn-fg); }
+  .verificar__detalle { margin-top: var(--sp-2); }
+  .verificar__resumen {
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--udg-navy-700);
+  }
+  .verificar__marco { margin-top: var(--sp-2); overflow-x: auto; }
+  .verificar__tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Las filas del cuerpo las crea el controlador en el navegador: no llevan el
+     atributo de ámbito de Astro, así que sus selectores van en :global(). */
+  .verificar__tabla :global(th),
+  .verificar__tabla :global(td) {
+    padding: 6px var(--sp-1);
+    border-bottom: 1px solid var(--udg-gray-200);
+    text-align: left;
+    vertical-align: top;
+    white-space: nowrap;
+  }
+  .verificar__tabla :global(thead th) {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: var(--fw-medium);
+    color: var(--udg-gray-500);
+  }
+  .verificar__tabla :global(tbody th) { font-weight: var(--fw-medium); color: var(--udg-gray-900); white-space: normal; }
+  .verificar__tabla :global(tbody th code) {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-regular);
+    color: var(--udg-gray-500);
+  }
+  .verificar__tabla :global(td.num) { font-family: var(--font-mono); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; }
+  .verificar__tabla :global(tr[data-coincide='0'] td.num) { color: var(--udg-err-fg); }
+  .verificar__tabla :global(td.nota-r) { white-space: normal; font-size: var(--fs-xs); color: var(--udg-gray-700); }
+  .verificar__avisos-marco { margin-top: var(--sp-2); }
+  .verificar__avisos-titulo {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--udg-gray-500);
+    margin: 0 0 var(--sp-1);
+  }
+  .verificar__avisos { margin: 0; padding-left: 1.2em; font-size: var(--fs-sm); color: var(--udg-gray-700); }
+  .verificar__avisos :global(li) { overflow-wrap: anywhere; }
+  .verificar__meta {
+    margin-top: var(--sp-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--udg-gray-500);
+  }
+  .verificar__pie { padding-top: var(--sp-2); border-top: 1px solid var(--udg-gray-200); }
+
+  @media print {
+    .bloque__acciones,
+    .verificar__consentimiento,
+    .verificar__acciones,
+    .verificar__progreso::after { display: none !important; }
+    .verificar__detalle { break-inside: avoid; }
+  }
 </style>

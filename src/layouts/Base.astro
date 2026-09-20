@@ -58,6 +58,8 @@ const jsonLd = {
     {descripcion && <meta name="twitter:description" content={descripcion} />}
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {/* Extras de <head> por página (p. ej. <ClientRouter /> en Bioestadística abierta); las demás páginas no lo usan. */}
+    <slot name="head" />
   </head>
   <body>
     <a class="skip-link" href="#main">{t(lang, 'skip')}</a>
@@ -71,15 +73,26 @@ const jsonLd = {
       </main>
     </div>
     <script>
-      const tg = document.getElementById('navToggle');
-      const ov = document.getElementById('navOverlay');
-      const close = () => { document.body.classList.remove('nav-open'); tg?.setAttribute('aria-expanded', 'false'); };
-      tg?.addEventListener('click', () => {
-        const open = document.body.classList.toggle('nav-open');
-        tg.setAttribute('aria-expanded', String(open));
-      });
-      ov?.addEventListener('click', close);
-      document.querySelectorAll('#sidebar a').forEach((a) => a.addEventListener('click', close));
+      // Drawer de navegación. Re-entrante: bajo el `ClientRouter` de
+      // Bioestadística abierta los scripts corren una sola vez por documento y
+      // cada navegación intercambia el DOM, así que el botón ☰ nuevo se conecta
+      // en `astro:page-load` (idempotente por `dataset`). En el resto del sitio
+      // el evento no se dispara y todo sigue como antes.
+      function conectarNav(): void {
+        const tg = document.getElementById('navToggle');
+        const ov = document.getElementById('navOverlay');
+        if (!tg || !ov || tg.dataset.navConectado === '1') return;
+        tg.dataset.navConectado = '1';
+        const close = () => { document.body.classList.remove('nav-open'); tg.setAttribute('aria-expanded', 'false'); };
+        tg.addEventListener('click', () => {
+          const open = document.body.classList.toggle('nav-open');
+          tg.setAttribute('aria-expanded', String(open));
+        });
+        ov.addEventListener('click', close);
+        document.querySelectorAll('#sidebar a').forEach((a) => a.addEventListener('click', close));
+      }
+      conectarNav();
+      document.addEventListener('astro:page-load', conectarNav);
     </script>
   </body>
 </html>

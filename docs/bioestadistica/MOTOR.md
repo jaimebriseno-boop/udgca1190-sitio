@@ -416,6 +416,34 @@ El módulo es un singleton (promesa memoizada `inicio`, cola `cola`) que solo se
 - `scripts/audit-performance.py`: añadir una aserción nueva `assert not [e for e in external if 'r-wasm.org' in e['url']]` para garantizar que los hosts opt-in **jamás aparecen como recurso declarado** en HTML o CSS (solo dentro de `webr.ts`, vía `import()` dinámico que la auditoría no ve). Y un test Node (`tests/bioestadistica/politica.test.ts`) que recorre `src/` y `public/herramientas/bioestadistica/` y falla si `r-wasm.org` aparece fuera de `webr.ts`.
 - Nada de la sección se publica bajo una ruta con el segmento `/data/` (evita el anclaje por hash de `--check-data-baseline`); los ejemplos van en TS (`ejemplos/`).
 
+**Implementado en H4 (20-sep-2026), desviaciones respecto a §4.1–§4.5:** webR 0.6.0 trae R
+4.6.0 (los fixtures se generaron con R 4.5.2 local: el panel muestra la versión de R de la
+sesión); el núcleo pesa 12.3 MB comprimido (`R.wasm`) más `R.js`, BLAS/LAPACK y el sistema
+de archivos perezoso, y el texto del consentimiento dice «unos 20 MB» (`DESCARGA_MB`);
+`installPackages()` mantiene la firma `(paquetes, { repos, mount, quiet })` y `captureR()`
+devuelve `output: {type, data}[]` como se supuso, pero `webr::install()` solo AVISA cuando
+un paquete no está en el repositorio, así que `instalar()` comprueba después con
+`requireNamespace()` y devuelve los faltantes (`paquete_faltante` antes de ejecutar nada);
+las condiciones capturadas (`warning`, `message`) llegan como proxies de objeto R y se
+leen con `toJs()`; `captureGraphics: false` evita abrir un dispositivo canvas; el
+consentimiento de una visita sin «recordar» vive en memoria del módulo
+(`concederConsentimiento(false)`); las dependencias con efectos (`import()`, almacén,
+reloj, memoria) se inyectan con `configurar()` para probar el módulo en Node; y la política
+de hosts añade una CSP por cabecera en `vercel.json` (ARQUITECTURA §6.8) que obligó a
+desactivar la incrustación de scripts y estilos de Astro. Los siete paquetes del catálogo
+(`binom`, `PropCIs`, `exact2x2`, `irr`, `pwr`, `survival`, `jsonlite`) están en
+`repo.r-wasm.org` para R 4.6 (comprobado el 20-sep-2026).
+
+Supuestos que fija la revisión de H4 y que las pruebas vigilan: (1) todo snippet imprime
+exactamente una línea JSON y nada más (`cat(toJSON(res, auto_unbox = TRUE, digits = NA))`
+al final, sin `print` previos): `webr.ts` une los trozos de stdout con `\n` y `correr_casos.R`
+con `""`, y ambas tuberías coinciden solo bajo ese supuesto (`contenido.test.ts` exige el `cat`;
+`webr.test.ts` fija que un JSON troceado por líneas se recompone); (2) `new Shelter()`,
+`captureR()`, `purge()`, `installPackages()`, `evalRRaw()`, `import()` e `init()` llevan
+temporizador (un worker muerto no deja la cola parada) y `cancelar()` rechaza lo pendiente y
+cierra R; (3) la CSP lleva `'unsafe-eval'` porque el núcleo de webR lo necesita al arrancar
+(medido por la prueba de humo, EXTERNOS.md) y mantiene cerrado `'unsafe-inline'`.
+
 ## 5. Modelos en webR (fase 2)
 
 ### 5.1 Entrada de datos

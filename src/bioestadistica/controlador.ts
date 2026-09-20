@@ -22,6 +22,9 @@ import {
   textoDeTabla,
 } from '../lib/bioestadistica/nucleo/pegado.ts';
 import { renderGrafica } from '../lib/bioestadistica/nucleo/svg.ts';
+import { perfilPara } from '../lib/bioestadistica/nucleo/tolerancias.ts';
+import type { Fila } from '../lib/bioestadistica/nucleo/comparar.ts';
+import type { Progreso, Verificacion } from '../lib/bioestadistica/webr.ts';
 import type {
   Aviso,
   ContenidoLang,
@@ -46,6 +49,22 @@ const NIVEL_POR_DEFECTO = 0.95;
 
 /** Total que no se puede sumar: ni «0» ni un hueco, que se leerían como una cuenta. */
 const SIN_DATO = '–';
+
+/**
+ * Adaptador de webR, tipado desde su módulo pero cargado SOLO con `import()` al
+ * pulsar «Verificar con R»: chunk aparte que la página no pide hasta entonces.
+ * Importar el módulo no descarga nada del CDN; eso solo ocurre tras el
+ * consentimiento, dentro de `iniciarR()`.
+ */
+type Adaptador = typeof import('../lib/bioestadistica/webr.ts');
+
+/**
+ * Módulo `webr.ts` una vez cargado. Vive fuera de `iniciar()` porque con el
+ * `ClientRouter` cada calculadora monta de nuevo pero el documento (y la sesión
+ * de R) es el mismo: así la página siguiente puede ofrecer «Liberar memoria»
+ * sin volver a pedir el chunk. Nulo hasta el primer clic en «Verificar con R».
+ */
+let adaptador: Adaptador | null = null;
 
 /** Datos que la página inyecta en `<script type="application/json" id="bio-datos">`. */
 export interface DatosPagina {
@@ -115,8 +134,8 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
     if (temporizadorUrl) window.clearTimeout(temporizadorUrl);
     temporizadorUrl = 0;
   });
-  /** Última presentación válida; la usan «Copiar como Markdown» y «Descargar CSV». */
-  let ultima: { entradas: Entradas; presentacion: Presentacion; codigo: string } | null = null;
+  /** Última presentación válida; la usan «Copiar como Markdown», «Descargar CSV» y «Verificar con R». */
+  let ultima: { entradas: Entradas; presentacion: Presentacion; codigo: string; resultado: Resultado } | null = null;
 
   // -------------------------------------------------------------------------
   // Leer
@@ -359,8 +378,11 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
       if (hueco) hueco.textContent = codigo;
     } catch (e) {
       // Un marcador sin entrada es un error de contenido, no algo que la
-      // persona pueda corregir: se conserva el código anterior y se registra.
+      // persona pueda corregir: se registra y se conserva lo que está en
+      // pantalla (el código anterior o, en el primer repintado, el que Astro
+      // resolvió en build), que es lo que «Verificar con R» debe ejecutar.
       console.error('bioestadistica: no se pudo rellenar el código R', e);
+      codigo = hueco?.textContent ?? codigo;
     }
     return codigo;
   }
@@ -369,10 +391,12 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
     for (const el of $$<HTMLElement>('[data-resultados], [data-obsolescible]')) {
       el.classList.toggle('is-obsoleto', obsoleto);
     }
-    // Sin resultado vigente no hay nada que exportar ni compartir.
+    // Sin resultado vigente no hay nada que exportar, compartir ni verificar.
     for (const boton of $$<HTMLButtonElement>('[data-accion="csv"], [data-copiar="markdown"], [data-copiar="enlace"]')) {
       boton.disabled = obsoleto;
     }
+    const verificar = $<HTMLButtonElement>('[data-accion="verificar-r"]');
+    if (verificar) verificar.disabled = obsoleto || verificando;
   }
 
   function pintarPildoraEjemplo(entradas: Entradas): void {
@@ -424,6 +448,7 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
       pintarPildoraEjemplo(entradas);
       pintarUrlImpresion(entradas);
       ultima = null;
+      marcarVerificacionObsoleta(true);
       return;
     }
     marcarObsoleto(false);
@@ -457,7 +482,10 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
     pintarPildoraEjemplo(entradas);
     pintarUrlImpresion(entradas);
 
-    ultima = { entradas, presentacion, codigo };
+    ultima = { entradas, presentacion, codigo, resultado };
+    // Una verificación con R vale para el código que se verificó, no para el
+    // que se muestra ahora: si cambió, el veredicto se atenúa y lo dice.
+    marcarVerificacionObsoleta(codigo !== codigoVerificado);
     if (opciones.escribirUrl) programarUrl(entradas);
   }
 
@@ -630,6 +658,353 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
   }
 
   // -------------------------------------------------------------------------
+  // Verificar con R (webR)
+  // -------------------------------------------------------------------------
+
+  /** Código R de la última verificación terminada; `null` si no hay ninguna en pantalla. */
+  let codigoVerificado: string | null = null;
+  let verificando = false;
+  /** Temporizador del cronómetro de la barra de estado. */
+  let cronometro = 0;
+  señal.addEventListener('abort', () => {
+    if (cronometro) window.clearInterval(cronometro);
+    cronometro = 0;
+  });
+
+  async function cargarAdaptador(): Promise<Adaptador> {
+    adaptador ??= await import('../lib/bioestadistica/webr.ts');
+    return adaptador;
+  }
+
+  /** Valor numérico de la tabla de comparación, compacto y sin locale (es una lectura técnica). */
+  function textoValorR(x: number | null): string {
+    if (x === null) return ui.webr_na ?? 'NA';
+    if (Number.isNaN(x)) return ui.no_definido ?? 'NaN';
+    if (x === Number.POSITIVE_INFINITY) return '∞';
+    if (x === Number.NEGATIVE_INFINITY) return '−∞';
+    if (Number.isInteger(x) && Math.abs(x) < 1e15) return String(x);
+    return String(Number(x.toPrecision(8)));
+  }
+
+  function textoDifRel(d: number): string {
+    if (Number.isNaN(d)) return '—';
+    if (d === 0) return '0';
+    return d.toExponential(1);
+  }
+
+  function filaTabla(f: Fila): HTMLTableRowElement {
+    const tr = document.createElement('tr');
+    tr.dataset.campo = f.componente === 'valor' ? f.campo : `${f.campo}.${f.componente}`;
+    tr.dataset.coincide = f.coincide ? '1' : '0';
+    const th = document.createElement('th');
+    th.scope = 'row';
+    const etiqueta = datos.textos.etiquetas[f.campo] ?? f.campo;
+    const sufijo = f.componente === 'lo' ? ui.webr_lo : f.componente === 'hi' ? ui.webr_hi : undefined;
+    th.append(sufijo ? `${etiqueta} (${sufijo})` : etiqueta);
+    const code = document.createElement('code');
+    code.textContent = tr.dataset.campo;
+    th.append(code);
+    tr.append(th);
+    for (const texto of [textoValorR(f.ts), textoValorR(f.r), textoDifRel(f.difRel)]) {
+      const td = document.createElement('td');
+      td.className = 'num';
+      td.textContent = texto;
+      tr.append(td);
+    }
+    const estado = document.createElement('td');
+    const pill = document.createElement('span');
+    pill.className = f.coincide ? 'pill-ok' : 'pill-err';
+    pill.textContent = f.coincide ? (ui.webr_coincide ?? 'ok') : (ui.webr_no_coincide ?? 'error');
+    estado.append(pill);
+    if (f.nota) {
+      estado.className = 'nota-r';
+      estado.append(` ${f.nota}`);
+    }
+    tr.append(estado);
+    return tr;
+  }
+
+  function mostrarPanelVerificacion(): HTMLElement | null {
+    const panel = $<HTMLElement>('[data-verificar]');
+    if (panel) panel.hidden = false;
+    return panel;
+  }
+
+  /**
+   * Estado de la verificación. `[data-verificar-estado]` es la región viva
+   * (`role="status"`): solo lleva el nombre de la etapa y se reescribe cuando
+   * la etapa cambia, para que un lector de pantalla oiga «Descargando R…» una
+   * vez y no cada segundo. El cronómetro va en un elemento aparte, oculto a la
+   * accesibilidad, que sí se repinta cada segundo.
+   */
+  function escribirEstado(etapa: string, texto: string): void {
+    const marco = $<HTMLElement>('[data-verificar-progreso]');
+    if (marco) {
+      marco.hidden = false;
+      marco.dataset.etapa = etapa;
+    }
+    const el = $<HTMLElement>('[data-verificar-estado]');
+    if (!el) return;
+    el.dataset.etapa = etapa;
+    if (el.textContent !== texto) el.textContent = texto;
+  }
+
+  function pintarEtapa(p: Progreso, t0: number): void {
+    escribirEstado(p.estado, interpolar(ui[`webr_etapa_${p.estado}`] ?? p.estado, { paquete: p.paquete ?? '' }));
+    const crono = $<HTMLElement>('[data-verificar-cronometro]');
+    if (crono) {
+      const s = Math.max(0, Math.round((performance.now() - t0) / 1000));
+      crono.textContent = interpolar(ui.webr_segundos ?? '{s} s', { s });
+    }
+  }
+
+  function pintarErrorVerificacion(e: unknown, a: Adaptador | null): void {
+    const el = $<HTMLElement>('[data-verificar-error]');
+    if (!el) return;
+    let codigo = 'desconocido';
+    let detalle = e instanceof Error ? e.message : String(e);
+    if (a && e instanceof a.ErrorWebR) {
+      codigo = e.codigo;
+      detalle = e.detalle;
+    }
+    const mensaje = interpolar(ui[`webr_err_${codigo}`] ?? ui.webr_err_desconocido ?? codigo, { detalle });
+    el.textContent = mensaje;
+    el.hidden = false;
+    // La región viva anuncia también el motivo: el aviso rojo no es vivo.
+    escribirEstado('error', `${ui.webr_etapa_error ?? 'error'} · ${mensaje}`);
+    console.error('bioestadistica: la verificación con R falló', e);
+  }
+
+  function marcarVerificacionObsoleta(obsoleta: boolean): void {
+    if (codigoVerificado === null) return;
+    const cont = $<HTMLElement>('[data-verificar-resultado]');
+    if (cont) cont.classList.toggle('is-obsoleto', obsoleta);
+    const nota = $<HTMLElement>('[data-verificar-obsoleto]');
+    if (nota) nota.hidden = !obsoleta;
+  }
+
+  function pintarVerificacion(v: Verificacion): void {
+    const cont = $<HTMLElement>('[data-verificar-resultado]');
+    if (!cont) return;
+    const { informe } = v;
+    const campos = new Set(informe.filas.map((f) => f.campo)).size;
+    const fallados = new Set(informe.discrepancias.map((f) => f.campo)).size;
+
+    const pill = $<HTMLElement>('[data-verificar-pill]');
+    if (pill) {
+      pill.className = `verificar__pill ${informe.coincide ? 'pill-ok' : 'pill-err'}`;
+      pill.textContent = informe.coincide ? (ui.webr_coincide ?? 'ok') : (ui.webr_no_coincide ?? 'error');
+    }
+    let textoVeredicto = interpolar(ui.r_coincide ?? '{k}/{m}', { k: campos - fallados, m: campos });
+    const primera = informe.discrepancias[0];
+    if (primera) {
+      const donde = primera.componente === 'valor' ? primera.campo : `${primera.campo}.${primera.componente}`;
+      textoVeredicto += ` · ${interpolar(ui.r_difiere ?? '{campo}: {ts} / {r}', { campo: donde, ts: textoValorR(primera.ts), r: textoValorR(primera.r) })}`;
+    }
+    const veredicto = $<HTMLElement>('[data-verificar-veredicto]');
+    if (veredicto) veredicto.textContent = textoVeredicto;
+    // El veredicto es lo que importa oír: va también a la región viva.
+    escribirEstado('listo', `${ui.webr_etapa_listo ?? ''} · ${textoVeredicto}`);
+
+    const tabla = $<HTMLTableElement>('[data-verificar-tabla]');
+    const cuerpo = tabla ? $<HTMLTableSectionElement>('tbody', tabla) : null;
+    if (cuerpo) cuerpo.replaceChildren(...informe.filas.map(filaTabla));
+    const detalle = $<HTMLDetailsElement>('[data-verificar-detalle]');
+    if (detalle) detalle.open = !informe.coincide;
+    const resumen = $<HTMLElement>('[data-verificar-resumen]');
+    if (resumen) resumen.textContent = interpolar(ui.webr_tabla_resumen ?? '{n}', { n: informe.filas.length });
+
+    const avisosMarco = $<HTMLElement>('[data-verificar-avisos-marco]');
+    const avisos = $<HTMLElement>('[data-verificar-avisos]');
+    if (avisosMarco && avisos) {
+      avisos.replaceChildren(
+        ...v.avisosR.map((texto) => {
+          const li = document.createElement('li');
+          li.textContent = texto;
+          return li;
+        }),
+      );
+      avisosMarco.hidden = v.avisosR.length === 0;
+    }
+
+    const meta = $<HTMLElement>('[data-verificar-meta]');
+    if (meta) meta.textContent = interpolar(ui.webr_meta ?? 'R {r} · webR {version} · {s} s', { r: v.versiones.r, version: v.versiones.webr, s: (v.ms / 1000).toFixed(1) });
+
+    cont.dataset.veredicto = informe.coincide ? 'coincide' : 'difiere';
+    cont.hidden = false;
+  }
+
+  function mostrarConsentimiento(a: Adaptador): void {
+    const cons = $<HTMLElement>('[data-verificar-consentimiento]');
+    if (!cons) return;
+    const texto = $<HTMLElement>('[data-verificar-consentimiento-texto]');
+    if (texto) {
+      texto.textContent = interpolar(ui.webr_consentimiento ?? '', {
+        mb: a.DESCARGA_MB,
+        webr: new URL(a.WEBR_BASE_URL).host,
+        repo: new URL(a.REPO_URL).host,
+        version: a.WEBR_VERSION,
+        paquetes: datos.r.paquetes.join(', '),
+      });
+    }
+    const memoria = $<HTMLElement>('[data-verificar-memoria]');
+    if (memoria) memoria.hidden = !a.pocaMemoria();
+    cons.hidden = false;
+    $<HTMLButtonElement>('[data-accion="verificar-aceptar"]')?.focus();
+  }
+
+  function ocultarConsentimiento(): void {
+    const cons = $<HTMLElement>('[data-verificar-consentimiento]');
+    if (cons) cons.hidden = true;
+  }
+
+  /**
+   * Pie del panel: «Liberar memoria de R» mientras haya sesión y «Olvidar mi
+   * decisión» mientras el consentimiento esté recordado en el navegador. Se
+   * repinta al terminar cada verificación y al montar la página (la sesión y
+   * el consentimiento sobreviven a la navegación dentro de la sección).
+   */
+  function pintarPie(): void {
+    const pie = $<HTMLElement>('[data-verificar-pie]');
+    if (!pie) return;
+    const conSesion = adaptador?.hayR() ?? false;
+    const recordado = adaptador?.hayConsentimientoRecordado() ?? false;
+    const liberar = $<HTMLButtonElement>('[data-accion="liberar-r"]', pie);
+    if (liberar) liberar.hidden = !conSesion;
+    const olvidar = $<HTMLButtonElement>('[data-accion="olvidar-consentimiento"]', pie);
+    if (olvidar) olvidar.hidden = !recordado;
+    pie.hidden = !(conSesion || recordado);
+    if (!pie.hidden) mostrarPanelVerificacion();
+  }
+
+  function pintarCancelar(visible: boolean): void {
+    const boton = $<HTMLButtonElement>('[data-accion="cancelar-r"]');
+    if (boton) boton.hidden = !visible;
+  }
+
+  async function ejecutarVerificacion(a: Adaptador): Promise<void> {
+    if (verificando || !ultima) return;
+    verificando = true;
+    const { codigo, resultado, entradas } = ultima;
+    const boton = $<HTMLButtonElement>('[data-accion="verificar-r"]');
+    if (boton) boton.disabled = true;
+    const error = $<HTMLElement>('[data-verificar-error]');
+    if (error) error.hidden = true;
+    const cont = $<HTMLElement>('[data-verificar-resultado]');
+    if (cont) {
+      cont.hidden = true;
+      delete cont.dataset.veredicto;
+    }
+    const pie = $<HTMLElement>('[data-verificar-pie]');
+    if (pie) pie.hidden = true;
+
+    const t0 = performance.now();
+    let etapa: Progreso = { estado: 'descargando' };
+    const repintar = (): void => pintarEtapa(etapa, t0);
+    repintar();
+    pintarCancelar(true);
+    cronometro = window.setInterval(repintar, 1000);
+    try {
+      const v = await a.verificarConR({
+        codigo,
+        paquetes: datos.r.paquetes,
+        resultado,
+        perfil: perfilPara(datos.slug, entradas),
+        onProgreso: (p) => {
+          // La promesa sobrevive a la navegación; el DOM de esta página, no.
+          if (señal.aborted) return;
+          etapa = p;
+          repintar();
+        },
+      });
+      if (señal.aborted) return;
+      // El cronómetro se detiene antes de escribir el veredicto: no debe pisarlo.
+      window.clearInterval(cronometro);
+      cronometro = 0;
+      codigoVerificado = codigo;
+      pintarVerificacion(v);
+      marcarVerificacionObsoleta(ultima?.codigo !== codigo);
+    } catch (e) {
+      if (señal.aborted) return;
+      pintarErrorVerificacion(e, a);
+    } finally {
+      window.clearInterval(cronometro);
+      cronometro = 0;
+      verificando = false;
+      if (!señal.aborted) {
+        pintarCancelar(false);
+        if (boton) {
+          boton.disabled = ultima === null;
+          boton.textContent = codigoVerificado !== null ? (ui.verificar_otra_vez ?? boton.textContent) : (ui.verificar_r ?? boton.textContent);
+        }
+        pintarPie();
+      }
+    }
+  }
+
+  async function verificar(): Promise<void> {
+    if (verificando || !ultima) return;
+    if (!mostrarPanelVerificacion()) return;
+    let a: Adaptador;
+    try {
+      a = await cargarAdaptador();
+    } catch (e) {
+      if (!señal.aborted) pintarErrorVerificacion(e, null);
+      return;
+    }
+    if (señal.aborted) return;
+    if (!a.hayConsentimiento()) {
+      mostrarConsentimiento(a);
+      return;
+    }
+    await ejecutarVerificacion(a);
+  }
+
+  async function aceptarConsentimiento(): Promise<void> {
+    const a = adaptador ?? (await cargarAdaptador());
+    if (señal.aborted) return;
+    const recordar = $<HTMLInputElement>('[data-verificar-recordar]')?.checked ?? false;
+    a.concederConsentimiento(recordar);
+    ocultarConsentimiento();
+    // El botón que tenía el foco desaparece: el foco pasa al panel, que es
+    // donde ocurre lo que sigue (el estado se anuncia por la región viva).
+    $<HTMLElement>('[data-verificar]')?.focus();
+    await ejecutarVerificacion(a);
+  }
+
+  function cancelarConsentimiento(): void {
+    ocultarConsentimiento();
+    // Sin verificación previa el panel no tiene nada que mostrar.
+    const panel = $<HTMLElement>('[data-verificar]');
+    if (panel && codigoVerificado === null) panel.hidden = true;
+    $<HTMLButtonElement>('[data-accion="verificar-r"]')?.focus();
+  }
+
+  function liberarR(): void {
+    adaptador?.cerrarR();
+    escribirEstado('cerrado', ui.webr_cerrado ?? '');
+    const crono = $<HTMLElement>('[data-verificar-cronometro]');
+    if (crono) crono.textContent = '';
+    pintarPie();
+    $<HTMLButtonElement>('[data-accion="verificar-r"]')?.focus();
+  }
+
+  /** Cancela la verificación en curso: el adaptador rechaza lo pendiente y cierra R. */
+  function cancelarR(): void {
+    if (!verificando) return;
+    adaptador?.cancelar();
+  }
+
+  function olvidarConsentimiento(): void {
+    adaptador?.retirarConsentimiento();
+    escribirEstado('cerrado', ui.webr_olvidado ?? '');
+    const crono = $<HTMLElement>('[data-verificar-cronometro]');
+    if (crono) crono.textContent = '';
+    pintarPie();
+    $<HTMLButtonElement>('[data-accion="verificar-r"]')?.focus();
+  }
+
+  // -------------------------------------------------------------------------
   // Oyentes
   // -------------------------------------------------------------------------
 
@@ -671,6 +1046,24 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
       } else if (accion === 'imprimir') {
         ev.preventDefault();
         window.print();
+      } else if (accion === 'verificar-r') {
+        ev.preventDefault();
+        void verificar();
+      } else if (accion === 'verificar-aceptar') {
+        ev.preventDefault();
+        void aceptarConsentimiento();
+      } else if (accion === 'verificar-cancelar') {
+        ev.preventDefault();
+        cancelarConsentimiento();
+      } else if (accion === 'liberar-r') {
+        ev.preventDefault();
+        liberarR();
+      } else if (accion === 'cancelar-r') {
+        ev.preventDefault();
+        cancelarR();
+      } else if (accion === 'olvidar-consentimiento') {
+        ev.preventDefault();
+        olvidarConsentimiento();
       }
     },
     { signal: señal },
@@ -709,4 +1102,7 @@ export function iniciar(def: Definicion, datos: DatosPagina, señal: AbortSignal
     // no se toca la URL corta que la persona acaba de abrir o compartir.
     cargarEjemplo({ escribirUrl: false });
   }
+  // Si ya hubo una verificación en este documento (otra calculadora, con el
+  // `ClientRouter`), la sesión de R sigue viva: se ofrece liberarla desde aquí.
+  if (adaptador) pintarPie();
 }

@@ -98,6 +98,9 @@ assert not missing, f'Missing local resources: {missing}'
 assert all(count == 3 for count in hero.values()), hero
 assert logo and max(logo.values()) < 110_000, logo
 assert not [e for e in external if 'fonts.googleapis.com' in e['url']], external
+# webR (Bioestadística abierta) se carga solo tras consentimiento, con import() dinámico desde
+# src/lib/bioestadistica/webr.ts: sus hosts jamás deben aparecer como recurso declarado en HTML o CSS.
+assert not [e for e in external if 'r-wasm.org' in e['url']], external
 if '--check-data-baseline' in sys.argv:
     assert all(data_unchanged.values()), data_unchanged
 print(json.dumps({k: v for k, v in report.items() if k != 'files'}, indent=2, ensure_ascii=False))
