@@ -3,6 +3,7 @@ import Home from '../../layouts/Home.astro';
 import LangSwitcher from '../LangSwitcher.astro';
 import Footer from '../Footer.astro';
 import Kpis from '../Kpis.astro';
+import Alcance from '../Alcance.astro';
 import { Picture, getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { ImageMetadata } from 'astro';
@@ -276,6 +277,9 @@ const pubsRecientes = produccion
         <a class="home-pub__more" href={localePath('/produccion', lang)}>{t(lang, 'home.pubs.more')}</a>
       </div>
     </section>
+
+    {/* e. Alcance: visitas por país (Vercel Web Analytics); oculto sin datos */}
+    <Alcance lang={lang} />
   </main>
 
   <Footer lang={lang} />

@@ -1,0 +1,202 @@
+---
+// Sección «Alcance» de la portada: visitas, países (con bandera) y páginas más
+// vistas, con los datos de Vercel Web Analytics que sirve /api/stats. El HTML
+// sale oculto y solo se muestra cuando llegan datos: sin token, sin visitas o
+// sin conexión, la portada se ve exactamente igual que antes.
+import { getCollection } from 'astro:content';
+import { t, localize } from '../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+// Nombres legibles de las rutas más visitadas (es y en se funden en la ruta base).
+const nombres: Record<string, string> = {
+  '/': t(lang, 'nav.home'),
+  '/integrantes': t(lang, 'nav.members'),
+  '/lineas': t(lang, 'nav.lines'),
+  '/produccion': t(lang, 'nav.production'),
+  '/herramientas': t(lang, 'nav.tools'),
+  '/actividades': t(lang, 'nav.activities'),
+  '/contacto': t(lang, 'nav.contact'),
+  '/herramientas/laboratorio': t(lang, 'lab.index.title'),
+  '/herramientas/bioestadistica': t(lang, 'tools.bio.title'),
+};
+for (const h of await getCollection('herramientas')) {
+  const d: any = localize('herramientas', h.id, h.data, lang);
+  const ruta = typeof d.enlace_app === 'string' ? d.enlace_app.replace(/^\/en(?=\/|$)/, '') : '';
+  if (ruta.startsWith('/')) nombres[ruta] = d.nombre;
+}
+for (const c of await getCollection('calculadoras')) {
+  const datos: any = c.data;
+  const titulo = datos?.[lang]?.titulo_corto || datos?.es?.titulo_corto;
+  if (titulo) nombres[`/herramientas/bioestadistica/${c.id}`] = titulo;
+}
+for (const e of await getCollection('estudios')) nombres[`/estudios/${e.id}`] = e.data.nombre_corto;
+
+const textos = {
+  desde: t(lang, 'alcance.desde'),
+  otros: t(lang, 'alcance.paises.otros'),
+};
+---
+<section class="alcance" id="alcance" hidden data-lang={lang} data-nombres={JSON.stringify(nombres)} data-textos={JSON.stringify(textos)}>
+  <div class="container">
+    <p class="kicker">{t(lang, 'alcance.kicker')}</p>
+    <h2 class="alcance__title">{t(lang, 'alcance.title')}</h2>
+    <p class="alcance__desde" data-desde></p>
+
+    <div class="kpis alcance__kpis">
+      <div class="kpi">
+        <div class="kpi__num" data-total></div>
+        <div class="kpi__label">{t(lang, 'alcance.kpi.visitas')}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__num" data-30></div>
+        <div class="kpi__label">{t(lang, 'alcance.kpi.30')}</div>
+        <svg class="alcance__spark" viewBox="0 0 300 34" preserveAspectRatio="none" aria-hidden="true">
+          <polyline data-spark fill="none" stroke="var(--udg-navy-700)" stroke-width="1.6" stroke-linejoin="round" points="0,31 300,31" />
+          <circle data-spark-fin r="2.4" fill="var(--udg-navy-700)" cx="300" cy="31" />
+        </svg>
+      </div>
+      <div class="kpi">
+        <div class="kpi__num" data-paises></div>
+        <div class="kpi__label">{t(lang, 'alcance.kpi.paises')}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__num" data-mx></div>
+        <div class="kpi__label">{t(lang, 'alcance.kpi.mx')}</div>
+      </div>
+    </div>
+
+    <div class="alcance__grid">
+      <div class="alcance__panel">
+        <div class="alcance__panel-head">
+          <h3>{t(lang, 'alcance.paises.title')}</h3>
+          <span>{t(lang, 'alcance.paises.rango')}</span>
+        </div>
+        <ol class="alcance__paises" data-lista-paises></ol>
+      </div>
+      <div class="alcance__lado">
+        <div class="alcance__panel">
+          <div class="alcance__panel-head">
+            <h3>{t(lang, 'alcance.rutas.title')}</h3>
+            <span>{t(lang, 'alcance.rutas.rango')}</span>
+          </div>
+          <ol class="alcance__rutas" data-lista-rutas></ol>
+        </div>
+        <p class="alcance__privacidad">{t(lang, 'alcance.privacidad')}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  /* Global a propósito: las filas de países y páginas se crean en el navegador y
+     no llevarían el atributo de ámbito de Astro. Todo va prefijado con .alcance. */
+  .alcance { background: var(--c-bg); padding-block: var(--sp-8); border-top: 1px solid var(--udg-gray-200); }
+  @media (min-width: 768px) { .alcance { padding-block: var(--sp-12); } }
+  .alcance[hidden] { display: none; }
+  .alcance__title { font-size: var(--fs-s2); font-weight: var(--fw-semibold); margin-top: var(--sp-1); }
+  .alcance__desde { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-gray); margin-top: var(--sp-1); }
+  .alcance__desde:empty { display: none; }
+  .alcance__kpis { margin-top: var(--sp-4); }
+  .alcance__spark { display: block; width: 100%; height: 34px; margin-top: var(--sp-1); }
+  .alcance__grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--sp-3); margin-top: var(--sp-3); }
+  @media (max-width: 860px) { .alcance__grid { grid-template-columns: 1fr; } }
+  .alcance__panel { border: 1px solid var(--udg-gray-200); background: var(--c-bg); }
+  .alcance__panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-2); padding: 14px 18px 10px; border-bottom: 1px solid var(--udg-gray-200); }
+  .alcance__panel-head h3 { font-size: var(--fs-sm); font-weight: var(--fw-semibold); margin: 0; }
+  .alcance__panel-head span { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--c-gray); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+  .alcance__paises, .alcance__rutas { list-style: none; margin: 0; padding: 6px 18px 10px; }
+  .alcance__pais { display: grid; grid-template-columns: 22px minmax(0, 1fr) 64px; align-items: center; gap: 12px; padding: 7px 0; border-top: 1px solid var(--udg-gray-100); }
+  .alcance__pais:first-child { border-top: 0; }
+  .alcance__bandera { width: 22px; height: 16px; display: block; border: 1px solid rgba(20, 24, 31, 0.12); object-fit: cover; }
+  .alcance__bandera--otros { background: var(--udg-gray-100); }
+  .alcance__pais-meta { display: grid; gap: 4px; min-width: 0; }
+  .alcance__pais-meta b { font-weight: var(--fw-medium); font-size: var(--fs-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .alcance__barra { height: 4px; background: var(--udg-gray-100); }
+  .alcance__barra i { display: block; height: 100%; background: var(--udg-navy-700); }
+  .alcance__pais--otros b { color: var(--c-gray); }
+  .alcance__pais--otros .alcance__barra i { background: var(--udg-navy-300); }
+  .alcance__pct { font-family: var(--font-mono); font-size: var(--fs-sm); text-align: right; font-variant-numeric: tabular-nums; }
+  .alcance__lado { display: grid; gap: var(--sp-3); align-content: start; }
+  .alcance__ruta { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--udg-gray-100); font-size: var(--fs-sm); }
+  .alcance__ruta:first-child { border-top: 0; }
+  .alcance__ruta-nombre { font-weight: var(--fw-medium); min-width: 0; }
+  .alcance__ruta-n { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--c-gray); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .alcance__privacidad { font-size: var(--fs-sm); color: var(--c-gray); line-height: var(--lh-relaxed); padding: 14px 18px; background: var(--udg-gray-50); border: 1px solid var(--udg-gray-200); margin: 0; }
+</style>
+
+<script>
+  import { cargarAlcance, nombrePais, numero, porcentaje, bandera, mesLargo, puntosSerie } from '../lib/alcance/cliente.mjs';
+
+  const sec = document.getElementById('alcance');
+  if (sec) {
+    const lang = sec.dataset.lang || 'es';
+    const nombres: Record<string, string> = JSON.parse(sec.dataset.nombres || '{}');
+    const T: Record<string, string> = JSON.parse(sec.dataset.textos || '{}');
+    const $ = (s: string) => sec.querySelector(s) as HTMLElement;
+    const el = (tag: string, cls?: string, txt?: string) => {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (txt != null) e.textContent = txt;
+      return e;
+    };
+    const filaPais = (cc: string | null, nombre: string, visitas: number, total: number, otros: boolean) => {
+      const li = el('li', 'alcance__pais' + (otros ? ' alcance__pais--otros' : ''));
+      if (cc) {
+        const img = el('img', 'alcance__bandera') as HTMLImageElement;
+        img.src = bandera(cc); img.alt = ''; img.width = 22; img.height = 16; img.loading = 'lazy';
+        li.append(img);
+      } else {
+        li.append(el('span', 'alcance__bandera alcance__bandera--otros'));
+      }
+      const meta = el('div', 'alcance__pais-meta');
+      meta.append(el('b', undefined, nombre));
+      const barra = el('div', 'alcance__barra');
+      const relleno = el('i');
+      relleno.style.width = total ? `${(100 * visitas) / total}%` : '0';
+      barra.append(relleno);
+      meta.append(barra);
+      li.append(meta, el('span', 'alcance__pct', porcentaje(visitas, total, lang, 1)));
+      return li;
+    };
+
+    cargarAlcance().then((d: any) => {
+      if (!d || !d.total || !(d.total.visitas > 0)) return;
+      $('[data-total]').textContent = numero(d.total.visitas, lang);
+      $('[data-30]').textContent = numero(d.ultimos30.visitas, lang);
+
+      const paises: any[] = d.paises || [];
+      const enPaises = paises.reduce((a, p) => a + p.visitas, 0) + (d.otros?.visitas || 0);
+      $('[data-paises]').textContent = numero(paises.length, lang) + (d.otros ? '+' : '');
+      const mx = paises.find((p) => p.cc === 'MX');
+      $('[data-mx]').textContent = enPaises ? porcentaje(mx?.visitas || 0, enPaises, lang, 0) : '–';
+      if (d.desde) $('[data-desde]').textContent = (T.desde || '').replace('{fecha}', mesLargo(d.desde, lang));
+
+      const pts = puntosSerie(d.dias || []);
+      if (pts.length) {
+        $('[data-spark]').setAttribute('points', pts.join(' '));
+        const [fx, fy] = pts[pts.length - 1].split(',');
+        $('[data-spark-fin]').setAttribute('cx', fx);
+        $('[data-spark-fin]').setAttribute('cy', fy);
+      }
+
+      const lista = $('[data-lista-paises]');
+      for (const p of paises.slice(0, 8)) lista.append(filaPais(p.cc, nombrePais(p.cc, lang), p.visitas, enPaises, false));
+      const resto = paises.slice(8);
+      const restoVisitas = resto.reduce((a, p) => a + p.visitas, 0) + (d.otros?.visitas || 0);
+      if (restoVisitas > 0) {
+        const n = numero(resto.length, lang) + (d.otros ? '+' : '');
+        lista.append(filaPais(null, (T.otros || '{n}').replace('{n}', n), restoVisitas, enPaises, true));
+      }
+
+      const rutas = $('[data-lista-rutas]');
+      for (const r of (d.rutas || []).slice(0, 6)) {
+        const li = el('li', 'alcance__ruta');
+        li.append(el('span', 'alcance__ruta-nombre', nombres[r.ruta] || r.ruta), el('span', 'alcance__ruta-n', numero(r.visitas, lang)));
+        rutas.append(li);
+      }
+      sec.hidden = false;
+    });
+  }
+</script>

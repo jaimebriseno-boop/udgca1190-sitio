@@ -1,0 +1,59 @@
+---
+// Micro-contador de la barra lateral (páginas internas): total de visitas,
+// cinco banderas con porcentaje y enlace a la sección «Alcance» de la portada.
+// Oculto hasta que /api/stats responda con datos.
+import { t, localePath } from '../i18n.mjs';
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+const textos = { desde: t(lang, 'alcance.sidebar.desde'), paises: t(lang, 'alcance.sidebar.paises') };
+---
+<div class="sidebar__visitas" id="visitasSidebar" hidden data-lang={lang} data-textos={JSON.stringify(textos)}>
+  <p class="kicker sidebar__visitas-k"><span>{t(lang, 'alcance.sidebar.kicker')}</span><span data-desde></span></p>
+  <p class="sidebar__visitas-n"><span data-total></span><small data-paises></small></p>
+  <ul class="sidebar__banderas" data-banderas></ul>
+  <a class="sidebar__visitas-mas" href={`${localePath('/', lang)}#alcance`}>{t(lang, 'alcance.sidebar.mas')}</a>
+</div>
+
+<style is:global>
+  /* Global a propósito (las banderas se crean en el navegador); prefijo sidebar__visitas / sidebar__banderas. */
+  .sidebar__visitas { border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: var(--sp-3); margin-top: var(--sp-3); display: grid; gap: var(--sp-1); }
+  .sidebar__visitas[hidden] { display: none; }
+  .sidebar__visitas-k { display: flex; justify-content: space-between; gap: var(--sp-1); }
+  .sidebar__visitas-n { font-family: var(--font-mono); font-size: var(--fs-s1); color: #fff; line-height: 1; font-variant-numeric: tabular-nums; }
+  .sidebar__visitas-n small { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-300); margin-left: var(--sp-1); letter-spacing: 0.04em; text-transform: uppercase; }
+  .sidebar__banderas { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .sidebar__banderas li { display: grid; gap: 3px; justify-items: center; }
+  .sidebar__banderas img { width: 22px; height: 16px; display: block; border: 1px solid rgba(255, 255, 255, 0.25); object-fit: cover; }
+  .sidebar__banderas em { font-style: normal; font-family: var(--font-mono); font-size: 10.5px; color: var(--udg-navy-300); font-variant-numeric: tabular-nums; }
+  .sidebar__visitas-mas { display: inline-block; font-family: var(--font-mono); font-size: var(--fs-xs); letter-spacing: 0.04em; color: #fff; text-decoration: none; opacity: 0.85; }
+  .sidebar__visitas-mas:hover { opacity: 1; text-decoration: underline; }
+</style>
+
+<script>
+  import { cargarAlcance, numero, porcentaje, bandera, mesCorto } from '../lib/alcance/cliente.mjs';
+
+  const caja = document.getElementById('visitasSidebar');
+  if (caja) {
+    const lang = caja.dataset.lang || 'es';
+    const T: Record<string, string> = JSON.parse(caja.dataset.textos || '{}');
+    cargarAlcance().then((d: any) => {
+      if (!d || !d.total || !(d.total.visitas > 0)) return;
+      const paises: any[] = d.paises || [];
+      const enPaises = paises.reduce((a, p) => a + p.visitas, 0) + (d.otros?.visitas || 0);
+      (caja.querySelector('[data-total]') as HTMLElement).textContent = numero(d.total.visitas, lang);
+      (caja.querySelector('[data-paises]') as HTMLElement).textContent = `· ${numero(paises.length, lang)}${d.otros ? '+' : ''} ${T.paises || ''}`;
+      if (d.desde) (caja.querySelector('[data-desde]') as HTMLElement).textContent = `${T.desde || ''} ${mesCorto(d.desde, lang)}`;
+      const ul = caja.querySelector('[data-banderas]') as HTMLElement;
+      for (const p of paises.slice(0, 5)) {
+        const li = document.createElement('li');
+        const img = document.createElement('img');
+        img.src = bandera(p.cc); img.alt = p.cc; img.width = 22; img.height = 16; img.loading = 'lazy';
+        const em = document.createElement('em');
+        em.textContent = porcentaje(p.visitas, enPaises, lang, 0);
+        li.append(img, em);
+        ul.append(li);
+      }
+      caja.hidden = false;
+    });
+  }
+</script>

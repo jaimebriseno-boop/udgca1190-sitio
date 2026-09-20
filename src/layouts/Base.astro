@@ -4,6 +4,7 @@ import '../styles/fonts.css';
 import '../styles/base.css';
 import '../styles/grid.css';
 import '../styles/editorial.css';
+import Analytics from '@vercel/analytics/astro';
 import Sidebar from '../components/Sidebar.astro';
 import Footer from '../components/Footer.astro';
 import { t, altPaths } from '../i18n.mjs';
@@ -58,6 +59,8 @@ const jsonLd = {
     {descripcion && <meta name="twitter:description" content={descripcion} />}
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {/* Vercel Web Analytics: sin cookies; alimenta la sección «Alcance» */}
+    <Analytics />
   </head>
   <body>
     <a class="skip-link" href="#main">{t(lang, 'skip')}</a>

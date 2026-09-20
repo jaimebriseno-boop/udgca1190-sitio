@@ -64,6 +64,20 @@ y recursos sin versión conservan la revalidación.
 Auditoría transversal, mediciones y siguientes prioridades:
 [`docs/performance/REVIEW.md`](docs/performance/REVIEW.md).
 
+## Alcance (contador de visitas por país)
+
+La portada cierra con la sección **Alcance** y las páginas internas llevan un
+micro-contador en la barra lateral: visitas, últimos 30 días, países con bandera y
+páginas más visitadas. Los datos vienen de **Vercel Web Analytics** (sin cookies) a
+través de su API pública, leída por la función `api/stats.js` con un token que
+solo existe en las variables de entorno del proyecto (`VERCEL_ANALYTICS_TOKEN`;
+`VERCEL_PROJECT_ID` la pone Vercel y `VERCEL_TEAM_ID` es opcional). La respuesta se
+cachea 15 min en el CDN. Sin token, sin Web Analytics activado o sin visitas, los
+módulos quedan ocultos y el sitio se ve igual. Las banderas son los SVG de
+`flag-icons` (MIT) copiados a `public/flags/` por `scripts/prepare-flags.mjs` en
+cada `dev`/`build`. Lógica pura en `src/lib/alcance/` con pruebas en
+`tests/alcance/` (`npm run test:alcance`).
+
 ## Cómo editar contenido (sin tocar código)
 
 Todo el contenido vive en `data/` (YAML) y en un BibTeX. **No** se edita HTML/JS.

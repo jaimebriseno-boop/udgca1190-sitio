@@ -6,6 +6,7 @@ dist/
 *.log
 .vercel/
 /public/fonts/
+/public/flags/
 /src/styles/fonts.css
 
 # Material privado (no publicar): CVs y roster con datos personales

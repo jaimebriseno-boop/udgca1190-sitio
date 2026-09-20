@@ -5,6 +5,7 @@ import '../styles/base.css';
 import '../styles/grid.css';
 import '../styles/editorial.css';
 import '../styles/dimension.css';
+import Analytics from '@vercel/analytics/astro';
 import { altPaths } from '../i18n.mjs';
 
 interface Props {
@@ -69,6 +70,8 @@ const jsonLd = {
     {descripcion && <meta name="twitter:description" content={descripcion} />}
     <meta name="twitter:image" content={ogImage} />
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {/* Vercel Web Analytics: sin cookies; alimenta la sección «Alcance» */}
+    <Analytics />
   </head>
   <body class="home">
     <slot />
