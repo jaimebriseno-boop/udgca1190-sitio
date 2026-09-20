@@ -1,10 +1,15 @@
 /** Ayudas del navegador para el módulo «Alcance» (portada y barra lateral). */
 let promesa = null;
 
-/** Una sola petición a /api/stats por página; null si no hay datos. */
+/**
+ * Una sola petición por página; null si no hay datos. La URL cambia cada cinco
+ * minutos (`v`) para que el CDN no siga sirviendo una copia vieja del resumen
+ * más allá de ese lapso, sin llamar a la función en cada visita.
+ */
 export function cargarAlcance() {
   if (!promesa) {
-    promesa = fetch('/api/stats', { headers: { accept: 'application/json' } })
+    const v = Math.floor(Date.now() / 300_000);
+    promesa = fetch(`/api/stats?v=${v}`, { headers: { accept: 'application/json' } })
       .then((r) => (r.ok ? r.json() : null))
       .catch(() => null);
   }

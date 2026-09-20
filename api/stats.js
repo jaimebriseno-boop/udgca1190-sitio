@@ -25,8 +25,8 @@ export default async function handler(req, res) {
   }
   try {
     const resumen = await consultarAlcance({ token, projectId, teamId: process.env.VERCEL_TEAM_ID });
-    // 15 min en el CDN de Vercel; sirve la copia anterior mientras se renueva.
-    res.setHeader('Cache-Control', 'public, s-maxage=900, stale-while-revalidate=3600');
+    // 5 min en el CDN de Vercel (la página rota la URL cada 5 min, ver cliente.mjs).
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=300');
     res.status(200).json(resumen);
   } catch (e) {
     console.error('alcance:', e?.message || e);
