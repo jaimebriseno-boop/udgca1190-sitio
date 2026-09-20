@@ -71,6 +71,31 @@
   captura: "/herramientas/placeholder.svg"
   destacado: true
 
+- id: diagnostico-microbiologico
+  nombre: "Diagnóstico microbiológico médico"
+  tipo: docente
+  estado: activa
+  resumen: "Material interactivo de Microbiología I: de la muestra al resultado, con simuladores, casos y autoevaluación."
+  descripcion: |
+    Material didáctico interactivo para la unidad de aprendizaje Microbiología I
+    (I8581): toma y transporte de muestras, frotis, tinción de Gram y
+    Ziehl-Neelsen, medios de cultivo, siembra e incubación, lectura de colonias,
+    pruebas bioquímicas, MALDI-TOF, antibiograma, serología, PCR y pruebas en el
+    punto de atención. Siete módulos y 48 secciones con simulador de tinción de
+    Gram, animación de Ziehl-Neelsen, galerías de morfología y medios, juego
+    «¿qué medio siembro?», árbol de decisión por foco infeccioso, cuatro casos
+    integradores, autoevaluación de doce preguntas, tarjetas de repaso y
+    glosario. Registra el avance en el navegador y genera un comprobante con
+    código de verificación para entregar en Classroom. Fuentes: CDC, OMS, CLSI,
+    EUCAST y manuales de laboratorio citados en el módulo 7.
+  tecnologias: ["HTML", "SVG", "JavaScript"]
+  linea: epidemiologia-infecciosas
+  enlace_app: "/herramientas/diagnostico-microbiologico"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: true
+
 - id: wisca-bayesiano
   nombre: "WISCA bayesiano"
   tipo: estadistica

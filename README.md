@@ -44,6 +44,12 @@ diagnóstico») es un mini-sitio en `public/herramientas/laboratorio/app/` que
 HTML de trabajo de la autora (paleta UdeG, fuentes locales, enlaces de ida y
 vuelta con el índice). Sus tarjetas llevan `seccion: laboratorio` en
 `data/herramientas.yml`.
+La herramienta docente **Diagnóstico microbiológico médico**
+(`/herramientas/diagnostico-microbiologico`, Microbiología I) es un HTML único con
+63 fotografías en `public/herramientas/diagnostico-microbiologico/app/` que **no se
+edita a mano**: `scripts/microbiologia_publicar.py` lo copia desde la carpeta de
+trabajo de los autores en Google Drive (fuentes locales, carga diferida de imágenes,
+cita canónica y sin la clave docente en el HTML publicado).
 La sección **Bioestadística abierta** (`/herramientas/bioestadistica`: calculadoras
 estadísticas explicadas, bilingües, con ecuación, interpretación, código R y fuentes
 originales) son páginas nativas de Astro: cada calculadora es un YAML en

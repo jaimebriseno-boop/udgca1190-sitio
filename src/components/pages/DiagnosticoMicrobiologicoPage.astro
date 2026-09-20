@@ -1,0 +1,91 @@
+---
+// Página de la herramienta docente «Diagnóstico microbiológico médico»
+// (Microbiología I): marco institucional del sitio (Base + PageHeader) con el
+// material estático embebido por iframe. El material vive en
+// public/herramientas/diagnostico-microbiologico/app/ (un solo HTML con índice
+// lateral, 48 secciones y progreso en localStorage) y se genera con
+// scripts/microbiologia_publicar.py a partir de la carpeta de trabajo de los
+// autores. Como Virología y Laboratorio, tiene navegación propia, por lo que el
+// iframe usa altura fija con desplazamiento interno (no el postMessage de altura
+// de los visores de una sola vista).
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
+import { t } from '../../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+const appBase = '/herramientas/diagnostico-microbiologico/app/';
+// Se apunta al archivo, no al directorio: el servidor de desarrollo de Astro no
+// resuelve «.../app/» a su index.html, aunque Vercel sí lo haga en producción.
+const embedSrc = `${appBase}index.html`;
+const fullSrc = `${appBase}index.html`;
+---
+<Base titulo={t(lang, 'micro.title')} descripcion={t(lang, 'micro.meta')} lang={lang}>
+  <PageHeader eyebrow={t(lang, 'micro.kicker')} title={t(lang, 'micro.title')} description={t(lang, 'micro.intro')} />
+  <section class="section">
+    <div class="container">
+      <div class="tool-toolbar">
+        <a class="fullscreen-link" href={fullSrc} target="_blank" rel="noopener">{t(lang, 'micro.fullscreen')}</a>
+      </div>
+      <div class="viewer-frame">
+        <iframe
+          id="microFrame"
+          src={embedSrc}
+          title={t(lang, 'micro.iframe_title')}
+          loading="lazy"
+          referrerpolicy="no-referrer"></iframe>
+      </div>
+      <p class="viewer-note">{t(lang, 'micro.note')}</p>
+
+      <aside class="uso" aria-label={t(lang, 'micro.use_heading')}>
+        <h2 class="uso__title">{t(lang, 'micro.use_heading')}</h2>
+        <p class="uso__text">{t(lang, 'micro.use_text')}</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section { padding-block-start: var(--sp-6); }
+  .tool-toolbar { display: flex; justify-content: flex-end; margin-bottom: var(--sp-2); }
+  .fullscreen-link { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); }
+  .fullscreen-link:hover { color: var(--udg-red-600); }
+  .viewer-frame {
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--udg-gray-50);
+  }
+  #microFrame {
+    display: block;
+    width: 100%;
+    border: 0;
+    /* material con índice lateral y desplazamiento propio: visor alto con scroll interno */
+    height: min(82vh, 1000px);
+  }
+  .viewer-note {
+    margin-top: var(--sp-2);
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+  }
+  .uso {
+    margin-top: var(--sp-4);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-left: 3px solid var(--udg-red-600);
+    border-radius: var(--radius-md, 8px);
+    background: var(--udg-gray-50, #f7f7f8);
+  }
+  .uso__title {
+    font-size: var(--fs-s1);
+    font-weight: var(--fw-semibold);
+    margin: 0 0 var(--sp-2);
+  }
+  .uso__text {
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed, 1.6);
+    margin: 0;
+  }
+</style>

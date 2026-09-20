@@ -228,6 +228,20 @@ herramientas:
       with their diagnostic windows and performance). Content referenced to
       Mandell PPID 10th edition and the guidelines cited at the footer of each
       card. Content is in Spanish.
+  diagnostico-microbiologico:
+    nombre: Medical microbiological diagnosis
+    enlace_app: /en/herramientas/diagnostico-microbiologico
+    resumen: An interactive Microbiology I course material, from specimen to result, with simulators, cases and self-assessment.
+    descripcion: >-
+      An interactive course material for Microbiology I (I8581): specimen collection and
+      transport, smears, Gram and Ziehl-Neelsen stains, culture media, plating and incubation,
+      colony reading, biochemical tests, MALDI-TOF, antimicrobial susceptibility testing,
+      serology, PCR and point-of-care tests. Seven modules and 48 sections with a Gram-stain
+      simulator, a Ziehl-Neelsen animation, morphology and media galleries, a "which medium do
+      I plate?" game, a decision tree by site of infection, four integrative cases, a
+      twelve-question self-assessment, review flashcards and a glossary. Progress is stored in
+      the browser and a receipt with a verification code is generated for Classroom. Sources:
+      CDC, WHO, CLSI, EUCAST and the laboratory manuals cited in module 7. Content is in Spanish.
   propedeutica-basada-en-evidencia:
     nombre: Evidence-based physical diagnosis
     enlace_app: /en/herramientas/propedeutica
