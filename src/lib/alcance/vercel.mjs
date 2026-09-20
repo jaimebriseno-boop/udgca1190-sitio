@@ -52,7 +52,11 @@ export async function consultarAlcance({ token, projectId, teamId, hoy = new Dat
     const p = new URLSearchParams({ projectId, ...extra });
     if (team) p.set('teamId', team);
     const r = await fetchImpl(`${API}${ruta}?${p}`, cabeceras(token));
-    if (!r.ok) throw new Error(`Vercel ${ruta} → HTTP ${r.status}`);
+    if (!r.ok) {
+      let codigo = '';
+      try { codigo = (await r.json())?.error?.code || ''; } catch { /* sin cuerpo JSON */ }
+      throw new Error(`Vercel ${ruta} → HTTP ${r.status}${codigo ? ` (${codigo})` : ''}`);
+    }
     return (await r.json()).data;
   };
   const agregado = (extra) => consulta('/v1/query/web-analytics/visits/aggregate', { until: hasta, limit: '100', ...extra });
