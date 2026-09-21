@@ -9,6 +9,8 @@ Fecha: 2026-09-16. Repositorio: `/Volumes/Bioinformatics/Programacion/UDG-CA-119
 3. [Inventario de faltantes](docs/propedeutica/faltantes.csv).
 4. [Revisión histórica](docs/propedeutica/REVISION_2026-09-16.md) y
    [guía de regeneración](scripts/propedeutica_REGENERATE.md).
+5. Otros frentes, cada uno con su propio progreso: [Bioestadística](docs/bioestadistica/PROGRESO.md),
+   [Microbiología I](docs/microbiologia/PROGRESO.md) y [Alcance](docs/alcance/PROGRESO.md) (2026-09-20).
 
 ## Objetivo y autorización
 

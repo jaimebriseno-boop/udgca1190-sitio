@@ -55,3 +55,9 @@ verificadas también en producción (español e inglés).
 URL: <https://udgca1190.com.mx/herramientas/propedeutica>.
 SHA-256 del catálogo actualizado:
 `83762d828880bddf24693038c30d5bb326d7373cf6c432ee26702974eda0cc1e`.
+
+## Otros frentes del sitio
+
+- [Bioestadística abierta](docs/bioestadistica/PROGRESO.md).
+- [Diagnóstico microbiológico médico (Microbiología I)](docs/microbiologia/PROGRESO.md), publicado el 2026-09-20.
+- [Alcance: contador de visitas por país](docs/alcance/PROGRESO.md), en producción desde el 2026-09-20.
