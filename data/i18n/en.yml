@@ -264,12 +264,15 @@ herramientas:
       response (EWARS). Preprint under peer review (Briseño-Ramírez et al., Research Square 2026).
   wisca-bayesiano:
     nombre: Bayesian WISCA
-    resumen: Weighted-incidence syndromic combination antibiograms (WISCA) with Bayesian modeling.
+    enlace_app: /en/herramientas/wisca
+    resumen: Weighted-incidence syndromic combination antibiograms (WISCA) with Bayesian modeling — the right antibiotic from the first dose.
     descripcion: >-
       Estimation of empirical coverage using weighted-incidence syndromic combination antibiograms (WISCA)
-      with Bayesian partial pooling. Applied to endocarditis, invasive candidiasis, community-acquired urinary
-      tract infection, ventilator-associated pneumonia, and septic arthritis, it estimates coverage by
-      syndrome and across community-acquired and healthcare-associated strata.
+      with Bayesian partial pooling. Interactive material "WISCA tailored to us": a WISCA calculator, a
+      Bayesian uncertainty lab, information borrowing across hospitals, a scenario explorer with local
+      microbiology (community-onset UTI, ventilator-associated pneumonia, septic arthritis of the knee,
+      endocarditis and invasive candidiasis) and six steps to adapt a guideline to one's own data. Content
+      is in Spanish.
   genomica-wgs:
     nombre: Microbial genomics pipeline (WGS)
     resumen: Assembly, typing, and genotypic resistance from sequencing data.

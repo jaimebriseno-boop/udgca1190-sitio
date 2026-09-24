@@ -163,6 +163,16 @@ const UI = {
     'viro.meta': 'Herramienta docente de virología médica: árboles taxonómicos interactivos y 28 fichas de familia con figuras propias (CA UDG-CA-1190).',
     'viro.use_heading': 'Uso docente',
     'viro.use_text': 'Diseñada para la unidad de aprendizaje Microbiología II (CUTlajomulco, UdeG) y de uso libre para cualquier curso de virología o repaso de consejo. Cada ficha declara al pie sus fuentes (Mandell PPID 10.ª ed. y guías citadas).',
+    // ---- WISCA a nuestra medida ----
+    'wisca.kicker': 'Herramienta docente · Resistencia antimicrobiana',
+    'wisca.title': 'WISCA a nuestra medida',
+    'wisca.intro': 'El antibiótico correcto desde la primera dosis: del antibiograma acumulado al antibiograma sindrómico ponderado por incidencia (WISCA) con modelo bayesiano. Incluye calculadora WISCA, laboratorio bayesiano de la incertidumbre, préstamo de información entre hospitales y un explorador de escenarios con datos locales de IVU comunitaria, neumonía asociada a ventilador, artritis séptica de rodilla, endocarditis y candidiasis invasiva.',
+    'wisca.iframe_title': 'Material interactivo WISCA a nuestra medida',
+    'wisca.fullscreen': 'Abrir en pantalla completa ↗',
+    'wisca.note': 'El material es una sola página con desplazamiento propio y funciona sin conexión una vez cargado. Las calculadoras se ejecutan en el navegador; nada se envía a un servidor. Si el visor te queda pequeño, usa «Abrir en pantalla completa».',
+    'wisca.meta': 'Material interactivo sobre antibiogramas sindrómicos ponderados por incidencia (WISCA) bayesianos para elegir la terapia empírica con microbiología local (CA UDG-CA-1190).',
+    'wisca.use_heading': 'Uso docente',
+    'wisca.use_text': 'Pensado para clínicos, residentes y estudiantes que ajustan guías de terapia empírica a su propia microbiología. Los umbrales de cobertura son orientativos y se definen por consenso local; las cifras de cada escenario citan su fuente y las referencias completas están al final del material.',
     // ---- Diagnóstico microbiológico médico (Microbiología I) ----
     'micro.kicker': 'Herramienta docente · Microbiología I',
     'micro.title': 'Diagnóstico microbiológico médico',
@@ -497,6 +507,16 @@ const UI = {
     'viro.meta': 'A teaching tool for medical virology: interactive taxonomic trees and 28 family study cards with original figures (UDG-CA-1190 Research Group).',
     'viro.use_heading': 'Teaching use',
     'viro.use_text': 'Designed for the Microbiology II course (CUTlajomulco, University of Guadalajara) and free to use for any virology course or board review. Every card states its sources at the footer (Mandell PPID 10th ed. and the cited guidelines). Content is in Spanish.',
+    // ---- WISCA tailored to us ----
+    'wisca.kicker': 'Teaching tool · Antimicrobial resistance',
+    'wisca.title': 'WISCA tailored to us',
+    'wisca.intro': 'The right antibiotic from the first dose: from the cumulative antibiogram to the Bayesian weighted-incidence syndromic combination antibiogram (WISCA). Includes a WISCA calculator, a Bayesian uncertainty lab, information borrowing across hospitals and a scenario explorer with local data on community-onset UTI, ventilator-associated pneumonia, septic arthritis of the knee, endocarditis and invasive candidiasis.',
+    'wisca.iframe_title': 'Interactive material WISCA tailored to us',
+    'wisca.fullscreen': 'Open full screen ↗',
+    'wisca.note': 'The material is a single page with its own scrolling and works offline once loaded. Calculators run in the browser; nothing is sent to a server. If the viewer feels small, use “Open full screen”. Content is in Spanish.',
+    'wisca.meta': 'Interactive material on Bayesian weighted-incidence syndromic combination antibiograms (WISCA) to choose empirical therapy with local microbiology (UDG-CA-1190 Research Group).',
+    'wisca.use_heading': 'Teaching use',
+    'wisca.use_text': 'Intended for clinicians, residents and students who adapt empirical therapy guidelines to their own microbiology. Coverage thresholds are indicative and set by local consensus; each scenario cites its source and full references are at the end of the material. Content is in Spanish.',
     // ---- Medical microbiological diagnosis (Microbiology I) ----
     'micro.kicker': 'Teaching tool · Microbiology I',
     'micro.title': 'Medical microbiological diagnosis',

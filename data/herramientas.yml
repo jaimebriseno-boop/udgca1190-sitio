@@ -100,16 +100,18 @@
   nombre: "WISCA bayesiano"
   tipo: estadistica
   estado: activa
-  resumen: "Antibiograma de incidencia ponderada por síndrome (modelo bayesiano)."
+  resumen: "Antibiograma de incidencia ponderada por síndrome (modelo bayesiano): el antibiótico correcto desde la primera dosis."
   descripcion: |
     Estimación de cobertura empírica mediante antibiogramas acumulados ponderados
     (Weighted-Incidence Syndromic Combination Antibiogram) con agrupamiento parcial
-    bayesiano. Aplicado a endocarditis, candidosis invasiva, ITU comunitaria,
-    neumonía asociada a ventilador y artritis séptica; estima cobertura por síndrome
-    y estratos comunitario/asociado a la atención.
-  tecnologias: ["R", "brms", "Stan"]
+    bayesiano. Material interactivo «WISCA a nuestra medida»: calculadora WISCA,
+    laboratorio bayesiano de la incertidumbre, préstamo de información entre
+    hospitales, explorador de escenarios con microbiología local (IVU comunitaria,
+    neumonía asociada a ventilador, artritis séptica de rodilla, endocarditis y
+    candidiasis invasiva) y seis pasos para ajustar una guía a los datos propios.
+  tecnologias: ["R", "brms", "Stan", "HTML", "JavaScript"]
   linea: epidemiologia-infecciosas
-  enlace_app: ""
+  enlace_app: "/herramientas/wisca"
   repositorio: ""
   doi: ""
   captura: "/herramientas/placeholder.svg"
