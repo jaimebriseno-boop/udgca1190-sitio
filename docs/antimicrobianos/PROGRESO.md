@@ -1,6 +1,8 @@
 # Progreso — sección «Antibióticos y resistencia antimicrobiana»
 
-Actualizado: 2026-10-28. Estado: **construida y verificada en local; pendiente de publicar**.
+Actualizado: 2026-10-28. Estado: **publicada** (commit `cc84219`) en
+<https://udgca1190.com.mx/herramientas/resistencia-antimicrobiana> (y `/en/…`), sección en
+<https://udgca1190.com.mx/herramientas#antimicrobianos>.
 
 ## Qué es
 
@@ -68,9 +70,16 @@ de cierre; la fotografía del ponente; la infografía de la OMS (citada, «Adapt
 - Vista previa: página es/en, sección en `/herramientas` y `/en/herramientas`, iframe a
   390 px sin desplazamiento horizontal.
 
+- Producción (Vercel, tras el push de `cc84219`): páginas es/en, `/herramientas` y
+  `/en/herramientas` con la sección, logotipos y fuentes en 200. La plática servida es
+  idéntica byte por byte a la local (SHA-256
+  `9890d1861f55915f52901a9fa63318a5fe7dd47bf66499fb9eeec241924f5771`); las páginas de Astro
+  solo difieren en el script de Vercel Analytics que inyecta su compilación.
+- Push: este equipo no tenía credenciales de GitHub; el usuario inició sesión con
+  `gh auth login --web` (entra a GitHub con Google) y `gh auth setup-git`.
+
 ## Pendientes
 
-- Publicar (commit y push a `main`) cuando el usuario lo autorice, y cotejar el HTML servido.
 - Decidir si «Sesión académica · Hospital Civil de Oriente» se queda en la portada.
 - Siguientes materiales de la sección; con más de dos o tres, considerar una página índice
   (`/herramientas/antimicrobianos`) y si «WISCA bayesiano» se traslada aquí.

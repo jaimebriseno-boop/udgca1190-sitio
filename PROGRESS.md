@@ -61,4 +61,4 @@ SHA-256 del catálogo actualizado:
 - [Bioestadística abierta](docs/bioestadistica/PROGRESO.md).
 - [Diagnóstico microbiológico médico (Microbiología I)](docs/microbiologia/PROGRESO.md), publicado el 2026-09-20.
 - [Alcance: contador de visitas por país](docs/alcance/PROGRESO.md), en producción desde el 2026-09-20.
-- [Antibióticos y resistencia antimicrobiana](docs/antimicrobianos/PROGRESO.md): sección nueva con la plática introductoria, construida el 2026-10-28.
+- [Antibióticos y resistencia antimicrobiana](docs/antimicrobianos/PROGRESO.md): sección nueva con la plática introductoria, publicada el 2026-10-28.
