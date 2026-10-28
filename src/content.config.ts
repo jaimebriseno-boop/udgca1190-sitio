@@ -59,8 +59,9 @@ const herramientas = defineCollection({
     destacado: z.boolean().default(false),
     // Agrupación en la página de Herramientas: sin valor = rejilla general;
     // 'laboratorio' = sección «Laboratorio» (serie «Del tubo al diagnóstico»);
-    // 'bioestadistica' = sección «Bioestadística abierta» (calculadoras).
-    seccion: z.enum(['laboratorio', 'bioestadistica']).optional(),
+    // 'bioestadistica' = sección «Bioestadística abierta» (calculadoras);
+    // 'antimicrobianos' = sección «Antibióticos y resistencia antimicrobiana».
+    seccion: z.enum(['laboratorio', 'bioestadistica', 'antimicrobianos']).optional(),
     // Orden dentro de su sección (menor primero); sin valor = al final, por id.
     orden: z.number().optional(),
   }),

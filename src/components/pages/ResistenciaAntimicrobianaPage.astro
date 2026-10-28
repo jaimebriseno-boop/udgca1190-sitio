@@ -1,0 +1,95 @@
+---
+// Página de la plática introductoria de la sección «Antibióticos y resistencia
+// antimicrobiana»: marco institucional del sitio (Base + PageHeader) con la
+// presentación reveal.js embebida por iframe. La presentación vive en
+// public/herramientas/resistencia-antimicrobiana/app/ (un solo HTML, diapositivas
+// de 1280×720 que reveal.js escala al visor) y se genera con
+// scripts/ram_publicar.py a partir del archivo del autor. El visor guarda la
+// proporción 16:9 para que la diapositiva ocupe todo el marco.
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../PageHeader.astro';
+import { t } from '../../i18n.mjs';
+
+interface Props { lang?: 'es' | 'en' }
+const { lang = 'es' } = Astro.props;
+
+// Se apunta al archivo, no al directorio: el servidor de desarrollo de Astro no
+// resuelve «.../app/» a su index.html, aunque Vercel sí lo haga en producción.
+const src = '/herramientas/resistencia-antimicrobiana/app/index.html';
+---
+<Base titulo={t(lang, 'ram.title')} descripcion={t(lang, 'ram.meta')} lang={lang}>
+  <PageHeader eyebrow={t(lang, 'ram.kicker')} title={t(lang, 'ram.title')} description={t(lang, 'ram.intro')} />
+  <section class="section">
+    <div class="container">
+      <div class="tool-toolbar">
+        <a class="fullscreen-link" href={src} target="_blank" rel="noopener">{t(lang, 'ram.fullscreen')}</a>
+      </div>
+      <div class="viewer-frame">
+        <iframe
+          id="ramFrame"
+          src={src}
+          title={t(lang, 'ram.iframe_title')}
+          loading="lazy"
+          allow="fullscreen"
+          allowfullscreen
+          referrerpolicy="no-referrer"></iframe>
+      </div>
+      <p class="viewer-note">{t(lang, 'ram.note')}</p>
+
+      <aside class="uso" aria-label={t(lang, 'ram.about_heading')}>
+        <h2 class="uso__title">{t(lang, 'ram.about_heading')}</h2>
+        <p class="uso__text">{t(lang, 'ram.about_text')}</p>
+      </aside>
+
+      <aside class="cite" aria-label={t(lang, 'ram.cite_heading')}>
+        <h2 class="cite__title">{t(lang, 'ram.cite_heading')}</h2>
+        <p class="cite__text">{t(lang, 'ram.cite')}</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .section { padding-block-start: var(--sp-6); }
+  .tool-toolbar { display: flex; justify-content: flex-end; margin-bottom: var(--sp-2); }
+  .fullscreen-link { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--udg-navy-700); }
+  .fullscreen-link:hover { color: var(--udg-red-600); }
+  .viewer-frame {
+    border: 1px solid var(--udg-gray-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #fff;
+  }
+  #ramFrame {
+    display: block;
+    width: 100%;
+    border: 0;
+    /* diapositivas 16:9: el visor guarda la proporción, sin barras ni scroll */
+    aspect-ratio: 16 / 9;
+  }
+  .viewer-note {
+    margin-top: var(--sp-2);
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+  }
+  .uso, .cite {
+    margin-top: var(--sp-4);
+    padding: var(--sp-3);
+    border: 1px solid var(--udg-gray-200);
+    border-left: 3px solid var(--udg-navy-700);
+    border-radius: var(--radius-md, 8px);
+    background: var(--udg-gray-50, #f7f7f8);
+  }
+  .cite { border-left-color: var(--udg-red-600); }
+  .uso__title, .cite__title {
+    font-size: var(--fs-s1);
+    font-weight: var(--fw-semibold);
+    margin: 0 0 var(--sp-2);
+  }
+  .uso__text, .cite__text {
+    color: var(--c-gray);
+    font-size: var(--fs-sm);
+    line-height: var(--lh-relaxed, 1.6);
+    margin: 0;
+  }
+</style>

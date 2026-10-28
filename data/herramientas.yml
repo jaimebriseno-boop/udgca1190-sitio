@@ -4,7 +4,8 @@
 # linea:  id de una LGAC (data/lineas.yml)
 # seccion: (opcional) laboratorio → se agrupa en la sección «Laboratorio» de la
 #          página de Herramientas; bioestadistica → sección «Bioestadística
-#          abierta»; `orden` (1, 2, 3…) fija su posición dentro de su sección.
+#          abierta»; antimicrobianos → sección «Antibióticos y resistencia
+#          antimicrobiana»; `orden` (1, 2, 3…) fija su posición dentro de su sección.
 
 - id: propedeutica-basada-en-evidencia
   nombre: "Propedéutica médica basada en evidencia"
@@ -362,3 +363,32 @@
   doi: ""
   captura: "/herramientas/placeholder.svg"
   destacado: false
+
+# ── Sección «Antibióticos y resistencia antimicrobiana» ──────────────────────
+# Abre con la plática introductoria (presentación reveal.js) publicada en
+# public/herramientas/resistencia-antimicrobiana/app/ con scripts/ram_publicar.py.
+# Autoría: Briseño-Ramírez J · octubre 2026.
+
+- id: ram-introduccion
+  orden: 1
+  nombre: "Resistencia antimicrobiana"
+  tipo: docente
+  estado: activa
+  seccion: antimicrobianos
+  resumen: "Del pasado dorado de los antibióticos al futuro que todavía podemos cambiar. Plática introductoria e interactiva: cómo llegamos aquí, quién genera la resistencia, qué tan grave es y qué hacemos en cada paciente."
+  descripcion: |
+    Sesión académica de 60 minutos en nueve bloques: la época dorada y la
+    primera resistencia, el pipeline vacío, mecanismos y elementos genéticos
+    móviles, uso de antibióticos por ámbito, una sola salud y el caso MCR-1,
+    carga global y en México (GRAM, CDC 2026, PUCRA), estrategias de la OMS,
+    la ONU y México, la evidencia de los esquemas cortos («shorter is better»)
+    y el algoritmo de los cuatro momentos con espectro estrecho. Incluye
+    preguntas al público, casos, línea del tiempo y gráficas interactivas,
+    notas del ponente y 175 referencias verificadas al 28 de octubre de 2026.
+  tecnologias: ["HTML", "reveal.js", "Chart.js"]
+  linea: epidemiologia-infecciosas
+  enlace_app: "/herramientas/resistencia-antimicrobiana"
+  repositorio: ""
+  doi: ""
+  captura: "/herramientas/placeholder.svg"
+  destacado: true

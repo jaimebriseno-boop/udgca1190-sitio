@@ -242,6 +242,18 @@ herramientas:
       twelve-question self-assessment, review flashcards and a glossary. Progress is stored in
       the browser and a receipt with a verification code is generated for Classroom. Sources:
       CDC, WHO, CLSI, EUCAST and the laboratory manuals cited in module 7. Content is in Spanish.
+  ram-introduccion:
+    nombre: "Antimicrobial resistance"
+    enlace_app: /en/herramientas/resistencia-antimicrobiana
+    resumen: "From the golden age of antibiotics to the future we can still change. An interactive introductory talk: how we got here, who drives resistance, how serious it is and what we do for each patient."
+    descripcion: >-
+      A 60-minute grand-rounds session in nine blocks: the golden age and the first resistance,
+      the empty pipeline, mechanisms and mobile genetic elements, antibiotic use by setting,
+      One Health and the MCR-1 case, global and Mexican burden (GRAM, CDC 2026, PUCRA), WHO,
+      UN and Mexican strategies, the evidence for short courses ("shorter is better") and the
+      four-moments algorithm with narrow spectrum. Includes audience questions, cases, an
+      interactive timeline and charts, speaker notes and 175 references verified on 28 October
+      2026. Content is in Spanish.
   propedeutica-basada-en-evidencia:
     nombre: Evidence-based physical diagnosis
     enlace_app: /en/herramientas/propedeutica

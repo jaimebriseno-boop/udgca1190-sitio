@@ -50,6 +50,15 @@ La herramienta docente **Diagnóstico microbiológico médico**
 edita a mano**: `scripts/microbiologia_publicar.py` lo copia desde la carpeta de
 trabajo de los autores en Google Drive (fuentes locales, carga diferida de imágenes,
 cita canónica y sin la clave docente en el HTML publicado).
+La sección **Antibióticos y resistencia antimicrobiana** (`seccion: antimicrobianos`
+en `data/herramientas.yml`) abre con la plática introductoria **Resistencia
+antimicrobiana** (`/herramientas/resistencia-antimicrobiana`): una presentación
+reveal.js en `public/herramientas/resistencia-antimicrobiana/app/` que **no se edita
+a mano**: `scripts/ram_publicar.py` la genera desde el HTML autocontenido del autor
+(copia de trabajo en `herramientas/Resistencia_antimicrobiana/`, ignorada por Git),
+con la identidad del sitio: sin la plantilla ni los logotipos del Hospital Civil,
+logotipo del CA y paleta UdeG, fuentes locales. Detalles en
+[`docs/antimicrobianos/PROGRESO.md`](docs/antimicrobianos/PROGRESO.md).
 La sección **Bioestadística abierta** (`/herramientas/bioestadistica`: calculadoras
 estadísticas explicadas, bilingües, con ecuación, interpretación, código R y fuentes
 originales) son páginas nativas de Astro: cada calculadora es un YAML en

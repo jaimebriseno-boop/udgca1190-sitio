@@ -26,6 +26,11 @@ const laboratorio = todas
 const bioestadistica = todas
   .filter((h) => h.seccion === 'bioestadistica')
   .sort((a, b) => (a.orden ?? 99) - (b.orden ?? 99));
+// Sección «Antibióticos y resistencia antimicrobiana»: abre con la plática
+// introductoria; por `orden`.
+const antimicrobianos = todas
+  .filter((h) => h.seccion === 'antimicrobianos')
+  .sort((a, b) => (a.orden ?? 99) - (b.orden ?? 99));
 
 const intro = getSitioL(lang).page_intros?.tools || '';
 ---
@@ -79,6 +84,21 @@ const intro = getSitioL(lang).page_intros?.tools || '';
       </div>
     </section>
   )}
+
+  {antimicrobianos.length > 0 && (
+    <section class="section section--lab" id="antimicrobianos">
+      <div class="container">
+        <div class="group-head group-head--lab">
+          <p class="kicker">{t(lang, 'tools.ram.kicker')}</p>
+          <h2 class="group-head__title">{t(lang, 'tools.ram.title')}</h2>
+          <p class="group-head__desc">{t(lang, 'tools.ram.intro')}</p>
+        </div>
+        <div class="tools-grid">
+          {antimicrobianos.map((h) => <CardHerramienta data={h} lineasMap={lineasMap} lang={lang} />)}
+        </div>
+      </div>
+    </section>
+  )}
 </Base>
 
 <style>
@@ -91,7 +111,7 @@ const intro = getSitioL(lang).page_intros?.tools || '';
   }
   /* Bioestadística abierta: mismas reglas que Laboratorio; se distingue por el
      kicker y el enlace al índice. Orden en la página: general → Laboratorio →
-     Bioestadística. */
+     Bioestadística → Antibióticos y resistencia (de nuevo en gris, alternando). */
   .section--bio { background: #fff; }
   .group-head { margin-bottom: var(--sp-4); }
   .group-head__title {
