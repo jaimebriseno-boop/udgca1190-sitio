@@ -227,7 +227,11 @@ herramientas:
       diagnostics section (ten techniques, from PCR and viral load to culture,
       with their diagnostic windows and performance). Content referenced to
       Mandell PPID 10th edition and the guidelines cited at the footer of each
-      card. Content is in Spanish.
+      card. It adds the HIV/AIDS 2026 topic, a lecture in interactive slide
+      format: epidemiology, the virus, transmission, natural history,
+      diagnosis, antiretroviral therapy and combination prevention, with
+      deep-dive layers for residents and a self-assessment. Content is in
+      Spanish.
   diagnostico-microbiologico:
     nombre: Medical microbiological diagnosis
     enlace_app: /en/herramientas/diagnostico-microbiologico

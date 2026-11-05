@@ -316,6 +316,10 @@
   .tree-door .go { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em;
     text-transform:uppercase; color:var(--navy); margin-top:.45rem; display:inline-block; }
   a.tree-door.rna .go { color:var(--rust); }
+  /* clase en formato de presentación: banner a todo lo ancho bajo los árboles */
+  a.tree-door.clase { grid-column:1 / -1; border-top-color:var(--gold); }
+  a.tree-door.clase .nm, a.tree-door.clase .go { color:var(--gold); }
+  a.tree-door.clase .ds { max-width:92ch; }
 </style>
 </head>
 <body>
@@ -325,7 +329,7 @@
   <p class="sub">El recorrido parte de los dos árboles taxonómicos y baja hasta veintiocho fichas de estudio, una por familia. Cada ficha despliega historia, taxonomía, microbiología, fisiopatología, cuadro clínico, diagnóstico y tratamiento, con figuras propias.</p>
 </header>
 
-<nav class="portal" aria-label="Árboles taxonómicos">
+<nav class="portal" aria-label="Árboles taxonómicos y secciones">
   <a class="tree-door" href="virus-dna.html">
     <svg viewBox="0 0 74 64" fill="none" aria-hidden="true">
       <path d="M8 32 H22 M22 32 V14 H38 M22 32 V50 H38 M38 14 V6 H54 M38 14 V22 H54 M38 50 V42 H54 M38 50 V58 H54"
@@ -370,6 +374,24 @@
       <span class="nm">Herramientas diagnósticas</span>
       <span class="ds">10 técnicas: de la PCR y la carga viral al cultivo · ventanas y desempeño en las 28 familias</span>
       <span class="go">Entrar a la sección →</span>
+    </span>
+  </a>
+  <a class="tree-door clase" href="temas/vih-sida-2026/index.html">
+    <svg viewBox="0 0 74 64" fill="none" aria-hidden="true">
+      <circle cx="37" cy="32" r="17" stroke="#8a5c0a" stroke-width="2"/>
+      <path d="M31 24 L43 24 L39 40 L35 40 Z" stroke="#701d14" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M37 15 V9 M37 49 V55 M20 32 H14 M54 32 H60 M25 20 L21 16 M49 44 L53 48 M49 20 L53 16 M25 44 L21 48"
+            stroke="#8a5c0a" stroke-width="1.8" stroke-linecap="round"/>
+      <circle cx="37" cy="8" r="2.6" fill="#8a5c0a"/><circle cx="37" cy="56" r="2.6" fill="#8a5c0a"/>
+      <circle cx="13" cy="32" r="2.6" fill="#8a5c0a"/><circle cx="61" cy="32" r="2.6" fill="#8a5c0a"/>
+      <circle cx="20" cy="15" r="2.6" fill="#8a5c0a"/><circle cx="54" cy="49" r="2.6" fill="#8a5c0a"/>
+      <circle cx="54" cy="15" r="2.6" fill="#8a5c0a"/><circle cx="20" cy="49" r="2.6" fill="#8a5c0a"/>
+    </svg>
+    <span>
+      <span class="k">Tema · clase interactiva 2026</span>
+      <span class="nm">VIH/SIDA 2026</span>
+      <span class="ds">Del virión a la inyección semestral: epidemiología mundial, nacional y de Jalisco, el virus, transmisión, historia natural, diagnóstico, tratamiento antirretroviral y prevención combinada · 39 diapositivas y 12 «Profundizar» para residentes · autoevaluación al cierre</span>
+      <span class="go">Ver la clase →</span>
     </span>
   </a>
 </nav>
@@ -436,7 +458,7 @@
 </div>
 
 <footer class="pf2">
-  <span>28 de 28 fichas publicadas</span>
+  <span>28 de 28 fichas publicadas · tema VIH/SIDA 2026</span>
   <span>UDG-CA-1190 · Microbiología II · UdeG</span>
 </footer>
 <script>
