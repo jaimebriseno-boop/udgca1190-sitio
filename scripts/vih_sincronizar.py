@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """Publica la clase «VIH/SIDA 2026» dentro de la herramienta de Virología.
 
-La clase se edita y se ensambla fuera de este repositorio (carpeta «VIH SIDA
-2026», `python3 fuente/build.py`), que produce un único HTML con imágenes y
+La clase se edita y se ensambla fuera de este repositorio (carpeta
+«Clases /Infecto/platica_vih» de Google Drive, `python3 fuente/build.py`), que produce un único HTML con imágenes y
 fuentes incrustadas en base64 (~2.2 MB). Este script toma ese HTML ya
 ensamblado y genera la copia del sitio:
 
@@ -19,7 +19,7 @@ se descarga en paralelo y queda en caché. Lo único que se añade es el enlace
 
 Uso:
   python3 fuente/build.py                       # en la carpeta de la clase
-  python3 scripts/vih_sincronizar.py ["<carpeta VIH SIDA 2026>"]
+  python3 scripts/vih_sincronizar.py ["<carpeta de la clase>"]
 
 Idempotente: borra solo las imágenes y fuentes que dejó de usar la clase.
 """
@@ -30,7 +30,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 ORIGEN_POR_OMISION = Path('/Volumes/Bioinformatics/GoogleDrive-jaime.briseno@academicos.udg.mx'
-                          '/Clases /Infecto/VIH SIDA 2026')
+                          '/Clases /Infecto/platica_vih')
 DESTINO = RAIZ / 'public/herramientas/virologia/app/temas/vih-sida-2026'
 
 # Enlace de regreso al índice de Virología, como primer control de la barra.
