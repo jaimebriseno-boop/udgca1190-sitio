@@ -1,5 +1,40 @@
 # Progreso — sección «Antibióticos y resistencia antimicrobiana»
 
+## Actualización 2026-11-23 — «Uso racional de los antibióticos»
+
+Por petición del usuario, la plática publicada se reemplazó por su versión más reciente,
+**Uso racional de los antibióticos: rol estratégico en el profesional de salud** (Sesión
+General Académica del 19 de noviembre de 2026, Semana Mundial de Concienciación sobre la
+RAM): 40 minutos, 34 diapositivas, 3 de respaldo y 13 de referencias (50 en total), 178
+referencias verificadas al 18 de noviembre de 2026, superíndices con clic que muestran la
+referencia completa, contador de muertes atribuibles en el cierre y guía del ponente (G).
+Misma ruta (`/herramientas/resistencia-antimicrobiana`), mismo criterio: **sin logotipos
+del Hospital Civil y con el diseño del sitio**.
+
+- Origen (no se edita): `RAM_sesion_general_autocontenido.html` en la carpeta del autor
+  (`Clases /Infecto/Platica resistencia antimicrobiana/sesion_general_hospitalaria/` en
+  Google Drive), SHA-256
+  `4218260b90cc317cd734a7cb3831abaf281980d3b639225d3c62d725d7996e14`. Copia de trabajo en
+  `herramientas/Resistencia_antimicrobiana/` (ignorada por Git).
+- `scripts/ram_publicar.py` se adaptó a la nueva versión (la anterior queda en `cc84219`):
+  el mismo marco, paleta, fuentes y portada con el logotipo vertical del CA; además, la
+  ventana de las citas y el contador con tonos UdeG (dorado sobre navy) y en Inter, el
+  espacio no separable antes de «%» también en las cifras «antes → después», el indicador
+  de pasos recorrido para no encimarse con el número de diapositiva, y se retira de las
+  notas la mención al archivo local `RAM_sesion_general_referencias.md` (14 frases).
+- Publicado: 0.88 MB (origen 1.58 MB), SHA-256 `031f2b65657e318409db722e24bd955259b17014a082d18dfd7763dd2a806967`;
+  salida determinista.
+- Textos de la página, tarjeta y traducción al inglés actualizados (`src/i18n.mjs`,
+  `data/herramientas.yml`, `data/i18n/en.yml`); el título de la página pasa a «Uso
+  racional de los antibióticos».
+- Verificación: las 50 diapositivas en Chrome headless (`?static`), ventana de cita y
+  portada frente al original; `npm run check` 0 errores; `npm run build` 79 páginas;
+  `npm run test` 1847 pruebas correctas.
+- Se conservan como texto: «Sesión General Académica · Hospital Civil de Oriente» en la
+  portada y «Director del Hospital Civil de Oriente» en la portada y el cierre.
+
+Lo que sigue describe la publicación original (octubre de 2026).
+
 Actualizado: 2026-10-28. Estado: **publicada** (commit `cc84219`) en
 <https://udgca1190.com.mx/herramientas/resistencia-antimicrobiana> (y `/en/…`), sección en
 <https://udgca1190.com.mx/herramientas#antimicrobianos>.

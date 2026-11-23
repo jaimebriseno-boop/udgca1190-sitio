@@ -51,8 +51,8 @@ edita a mano**: `scripts/microbiologia_publicar.py` lo copia desde la carpeta de
 trabajo de los autores en Google Drive (fuentes locales, carga diferida de imágenes,
 cita canónica y sin la clave docente en el HTML publicado).
 La sección **Antibióticos y resistencia antimicrobiana** (`seccion: antimicrobianos`
-en `data/herramientas.yml`) abre con la plática introductoria **Resistencia
-antimicrobiana** (`/herramientas/resistencia-antimicrobiana`): una presentación
+en `data/herramientas.yml`) abre con la plática introductoria **Uso racional
+de los antibióticos** (versión de noviembre de 2026; `/herramientas/resistencia-antimicrobiana`): una presentación
 reveal.js en `public/herramientas/resistencia-antimicrobiana/app/` que **no se edita
 a mano**: `scripts/ram_publicar.py` la genera desde el HTML autocontenido del autor
 (copia de trabajo en `herramientas/Resistencia_antimicrobiana/`, ignorada por Git),

@@ -61,5 +61,5 @@ SHA-256 del catálogo actualizado:
 - [Bioestadística abierta](docs/bioestadistica/PROGRESO.md).
 - [Diagnóstico microbiológico médico (Microbiología I)](docs/microbiologia/PROGRESO.md), publicado el 2026-09-20.
 - [Alcance: contador de visitas por país](docs/alcance/PROGRESO.md), en producción desde el 2026-09-20.
-- [Antibióticos y resistencia antimicrobiana](docs/antimicrobianos/PROGRESO.md): sección nueva con la plática introductoria, publicada el 2026-10-28.
+- [Antibióticos y resistencia antimicrobiana](docs/antimicrobianos/PROGRESO.md): sección nueva con la plática introductoria, publicada el 2026-10-28 y reemplazada el 2026-11-23 por la versión «Uso racional de los antibióticos» (sesión general de 40 minutos).
 - [Virología: tema «VIH/SIDA 2026»](HANDOFF.md): clase interactiva dentro de la herramienta de Virología, publicada el 2026-11-05 (`78013f5`).

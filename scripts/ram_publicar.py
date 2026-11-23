@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
-"""Publica la plática «Resistencia antimicrobiana: del pasado dorado de los
-antibióticos al futuro que todavía podemos cambiar» (presentación reveal.js
-autocontenida) en public/herramientas/resistencia-antimicrobiana/app/, con la
-identidad del sitio. El original NO se modifica.
+"""Publica la plática «Uso racional de los antibióticos: rol estratégico en el
+profesional de salud» (versión de 40 minutos de la plática de resistencia
+antimicrobiana, Sesión General Académica del 19 de noviembre de 2026;
+presentación reveal.js autocontenida) en
+public/herramientas/resistencia-antimicrobiana/app/, con la identidad del
+sitio. El original NO se modifica.
+
+La versión anterior (RAM_platica_HCO_autocontenido.html, 68 diapositivas,
+octubre de 2026) se publicó con este mismo script en el commit cc84219.
 
 Uso:
   python3 scripts/ram_publicar.py [--origen ARCHIVO] [--salida DIR]
@@ -26,7 +31,8 @@ Transformaciones (cada una se comprueba con assert):
     (/fonts/fonts.css): Inter en el cuerpo y los títulos, Source Serif 4 en la
     portada y los divisores, IBM Plex Mono en etiquetas.
   - Radios planos y sin sombras, como el resto del sitio.
-  - Se retira de las notas del ponente la ruta a su archivo de trabajo local.
+  - Se retira de las notas del ponente la mención a su archivo local de
+    referencias (RAM_sesion_general_referencias.md), que no se publica.
   - Enlace «← Herramientas» visible solo al abrir la plática fuera del visor.
   - Comentario de procedencia al inicio del archivo.
 
@@ -38,7 +44,7 @@ import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-ORIGEN_DEFAULT = RAIZ / 'herramientas/Resistencia_antimicrobiana/RAM_platica_HCO_autocontenido.html'
+ORIGEN_DEFAULT = RAIZ / 'herramientas/Resistencia_antimicrobiana/RAM_sesion_general_autocontenido.html'
 SALIDA_DEFAULT = RAIZ / 'public/herramientas/resistencia-antimicrobiana/app'
 LOGO_H = '/logos/UDG-CA-1190_logo_horizontal.png'
 LOGO_V = '/logos/UDG-CA-1190_logo_vertical.png'
@@ -58,6 +64,8 @@ PALETA = {
     '#c8452c': '#A61E12', '#f9e1db': '#FBEAE8',
     '#e08a2c': '#C9962E', '#9a5a12': '#8A5C0A', '#fbebd8': '#FBF3DD', '#fff4e5': '#FBF3DD',
     '#2e8b6a': '#1A6B42', '#e9f6f0': '#E7F2EC', '#ddf1e8': '#E7F2EC',
+    # tonos claros sobre navy (contador del cierre, ventana de la cita)
+    '#9ad4e8': '#FDCF85', '#cfe6f0': '#DDE1E8',
 }
 RGBA = {'rgba(2,43,73,': 'rgba(20,24,31,'}
 # Radios: el sistema del sitio es plano (2–6 px); píldoras (999px) y círculos (50%) se conservan.
@@ -100,6 +108,14 @@ CSS_SITIO = f"""<style>
 .reveal .progress{{color:var(--red)}}
 .reveal .slide-number{{font-family:var(--mono)}}
 .reveal .slide-number a{{text-decoration:none}}
+/* Indicador de pasos: se recorre para no encimarse con el número de diapositiva en IBM Plex Mono */
+#stepind{{left:92px!important}}
+/* Ventana de la cita: número en dorado (el tinte claro no daba contraste con texto navy) */
+#cita-pop{{border-radius:4px}}
+#cita-pop .n{{background:var(--gold);border-radius:2px}}
+#cita-pop .x{{border-radius:2px}}
+.reveal sup.cita{{border-radius:0}}
+.reveal .contador{{border-radius:0}}
 /* Portada: logotipo vertical del CA en lugar de la fotografía */
 .reveal section.s-title .t-logo{{position:absolute;right:104px;top:118px;height:470px;width:auto}}
 .reveal .slides section.chrome.s-title::before{{background:
@@ -170,22 +186,31 @@ def portada(s: str) -> str:
 
 def svg_fuentes(s: str) -> str:
     s, n = re.subn(r'font-family="Fira Sans, sans-serif"', 'font-family="Inter, system-ui, sans-serif"', s)
-    assert n == 2, f'diagramas SVG con Fira Sans: {n}'
+    assert n == 1, f'diagramas SVG con Fira Sans: {n}'
     return s
+
+
+def estilos_sesion(css: str) -> str:
+    """Estilos propios de la sesión general (superíndices de cita, contador, mensajes)."""
+    assert css.count('font-family:"Fira Sans",system-ui,sans-serif') == 1, 'fuente de la ventana de cita'
+    return radios(css.replace('font-family:"Fira Sans",system-ui,sans-serif', f'font-family:{FUENTE_SANS}', 1))
 
 
 def cifras(s: str) -> str:
     """Espacio no separable antes de «%» en las cifras grandes: con Inter, «14.6 %» se partía en dos líneas."""
     def rep(m):
         return m.group(1) + m.group(2).replace(' %', '&nbsp;%') + m.group(3)
-    s, n = re.subn(r'(<span class="num[^"]*">)([^<]*)(</span>)', rep, s)
-    assert n > 50, f'cifras grandes: {n}'
+    # .num: cifras de las tarjetas; .a/.b: el «antes → después» de .ba
+    s, n = re.subn(r'(<span class="(?:num[^"]*|a|b)">)([^<]*)(</span>)', rep, s)
+    assert n > 40, f'cifras grandes: {n}'
     return s
 
 
 def notas(s: str) -> str:
-    s, n = re.subn(r' El documento base completo \(366 referencias verificadas\) está en investigacion/RAM_investigacion_base\.md\.', '', s)
-    assert n == 11, f'ruta local en las notas: {n}'
+    s, n = re.subn(r' El documento RAM_sesion_general_referencias\.md trae, para cada una, las frases textuales que respaldan cada dato\.', '', s)
+    assert n == 13, f'archivo local en las notas (referencias): {n}'
+    s, n = re.subn(r' El documento <i>RAM_sesion_general_referencias\.md</i> trae las 178 referencias con las frases textuales que respaldan cada dato\.', '', s)
+    assert n == 1, f'archivo local en las notas (cierre): {n}'
     return s
 
 
@@ -206,8 +231,8 @@ def scripts_propios(js: str) -> str:
 
 
 def procedencia(h: str) -> str:
-    aviso = ('<!-- Generado por scripts/ram_publicar.py a partir de RAM_platica_HCO_autocontenido.html '
-             '(octubre de 2026). No editar a mano: regenerar. -->\n')
+    aviso = ('<!-- Generado por scripts/ram_publicar.py a partir de RAM_sesion_general_autocontenido.html '
+             '(noviembre de 2026). No editar a mano: regenerar. -->\n')
     assert h.startswith('<!doctype html>\n')
     return h.replace('<!doctype html>\n', '<!doctype html>\n' + aviso, 1)
 
@@ -222,17 +247,18 @@ def publicar(origen: Path, salida: Path) -> None:
     h = origen.read_text(encoding='utf-8')
 
     # Segmentos propios del deck (de atrás hacia delante para no mover posiciones).
-    a, b = segmento(h, '<script>\n/* Modo presentador con guía', '</html>')
+    a, b = segmento(h, '<script>\n/* ?tab=N', '</html>')
     h = h[:a] + recolorear(scripts_propios(h[a:b])) + h[b:]
     a, b = segmento(h, '<div class="reveal">\n<div class="slides">', '<script>')
     h = h[:a] + recolorear(notas(cifras(svg_fuentes(portada(h[a:b]))))) + h[b:]
     a, b = segmento(h, '<style>\n  html,body{background:#fff}', '</style>')
-    h = h[:a] + recolorear(h[a:b]) + h[b:]
+    h = h[:a] + recolorear(estilos_sesion(h[a:b])) + h[b:]
     a, b = segmento(h, '<style>\n/* ===== Identidad HCO', '</style>')
     h = h[:a] + recolorear(radios(marco(fuentes(h[a:b])))) + h[b:]
 
-    assert h.count('<title>Resistencia antimicrobiana — HCO</title>') == 1
-    h = h.replace('<title>Resistencia antimicrobiana — HCO</title>', '<title>Resistencia antimicrobiana · UDG-CA-1190</title>', 1)
+    titulo = '<title>Uso racional de los antibióticos — Sesión General Académica, Hospital Civil de Oriente</title>'
+    assert h.count(titulo) == 1, 'título'
+    h = h.replace(titulo, '<title>Uso racional de los antibióticos · UDG-CA-1190</title>', 1)
     vp = '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
     assert h.count(vp) == 1
     h = h.replace(vp, vp + '<link rel="stylesheet" href="/fonts/fonts.css">\n', 1)
@@ -242,7 +268,8 @@ def publicar(origen: Path, salida: Path) -> None:
     texto = sin_datos(h)
     restos = [texto[max(0, m.start() - 60):m.end() + 30] for m in re.finditer(r'HCO|Fira Sans|Montserrat|Avenir', texto)]
     assert not restos, f'restos de la plantilla: {restos}'
-    assert h.count('data:image/png') == 3 and h.count('data:image/jpeg') == 1, 'imágenes incrustadas'  # 2 iconos de reveal + OMS; foto del ponente
+    # solo quedan los 2 iconos y el indicador de carga de reveal.js
+    assert h.count('data:image/png') == 2 and h.count('data:image/jpeg') == 0 and h.count('data:image/gif') == 1, 'imágenes incrustadas'
     restos = [c for c in PALETA if c in texto.lower()]
     # reveal.js y Chart.js no usan la paleta de la plantilla: cualquier resto es del deck
     assert not restos, f'colores sin trasladar: {restos}'
